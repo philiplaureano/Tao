@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<project name="Tao" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
+	<property name="build.dir" value="build" />
+	<property name="nant.settings.currentframework" value="net-3.5" />
+
+	<!-- User targets -->
+	<target name="clean" description="Delete Automated Build artifacts">
+		<delete dir="${build.dir}" if="${directory::exists(build.dir)}"/>
+	</target>
+
+	<target name="compile" description="Compiles using the AutomatedDebug Configuration">
+		<msbuild project="src\Tao.sln">
+			<property name="Configuration" value="AutomatedDebug" />
+		</msbuild>
+	</target>
+
+	<target name="test" depends="compile, run-unit-tests" 
+		description="Compile and Run Tests" />
+		
+	<target name="full" depends="clean, test, dist"	description="Compiles, tests, and produces distributions" />
+
+	<!-- Internal targets -->
+  <target name="run-unit-tests" depends="compile-unit-tests">
+
+    <property name="debug.dir" value="${build.dir}\Debug"/>
+    <property name="unittest.dir" value="${debug.dir}\UnitTests"/>
+    <mkdir dir="${build.dir}\test-reports" />
+
+    <exec program="tools\nunit\nunit-console.exe" workingdir="${build.dir}\Debug\UnitTests">
+      <arg value="&quot;Tao.UnitTests.dll&quot; &quot;/xml:..\..\test-reports\UnitTests.xml&quot; &quot;/nologo&quot;"/>
+    </exec>
+    <delete dir="${unittest.dir}" if="${directory::exists(unittest.dir)}"/>
+  </target>
+	
+	<target name="dist">
+		<copy todir="${build.dir}\dist">
+			<fileset basedir="${build.dir}\Debug\Tao">
+				<include name="**\*"/>
+				<exclude name="**\*.pdb" />
+			</fileset>
+		</copy>
+		<zip zipfile="${build.dir}\Tao.zip">
+			<fileset basedir="${build.dir}\dist">
+				<include name="**\*" />
+			</fileset>
+		</zip>
+	</target>
+	
+</project>
+
