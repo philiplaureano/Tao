@@ -1,15 +1,13 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaoConsole", "TaoConsole\TaoConsole.csproj", "{A9E0D8F2-CD0B-405E-852A-02EEBFF176BE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{65FE5A41-370E-498E-B27B-2479BB1F2AD8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{9BEF4693-849E-4EF0-908D-5C866D06E363}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0691ABF2-B3C7-43BF-9862-2D8D1299CE58}"
 	ProjectSection(SolutionItems) = preProject
-		..\Tao.build = ..\Tao.build
 		..\go.bat = ..\go.bat
+		..\Tao.build = ..\Tao.build
 	EndProjectSection
 EndProject
 Global
@@ -19,12 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A9E0D8F2-CD0B-405E-852A-02EEBFF176BE}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
-		{A9E0D8F2-CD0B-405E-852A-02EEBFF176BE}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
-		{A9E0D8F2-CD0B-405E-852A-02EEBFF176BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A9E0D8F2-CD0B-405E-852A-02EEBFF176BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A9E0D8F2-CD0B-405E-852A-02EEBFF176BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A9E0D8F2-CD0B-405E-852A-02EEBFF176BE}.Release|Any CPU.Build.0 = Release|Any CPU	
 		{65FE5A41-370E-498E-B27B-2479BB1F2AD8}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
 		{65FE5A41-370E-498E-B27B-2479BB1F2AD8}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
 		{65FE5A41-370E-498E-B27B-2479BB1F2AD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
