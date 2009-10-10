@@ -2,23 +2,85 @@
 <project name="Tao" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
 	<property name="build.dir" value="build" />
 	<property name="nant.settings.currentframework" value="net-3.5" />
-
+  <property name="library.dir" value="lib"/>
+  <property name="debug" value="true"/>
+  <property name="target.framework" value="net-3.5"/>
+  
 	<!-- User targets -->
 	<target name="clean" description="Delete Automated Build artifacts">
 		<delete dir="${build.dir}" if="${directory::exists(build.dir)}"/>
 	</target>
 
-	<target name="compile" description="Compiles using the AutomatedDebug Configuration">
-		<msbuild project="src\Tao.sln">
-			<property name="Configuration" value="AutomatedDebug" />
-		</msbuild>
-	</target>
+  <target name="compile-core"  description="Compiles the core project assembly">
+    <mkdir dir="${build.dir}" unless="${directory::exists(build.dir)}"/>
+    <property name="output.dir" value="${build.dir}\${target.framework}"/>
 
-	<target name="test" depends="compile, run-unit-tests" 
+    <mkdir dir="${output.dir}" unless="${directory::exists(output.dir)}"/>
+    <csc target="library" doc="${output.dir}\Tao.Core.xml" noconfig="true" output="${output.dir}\Tao.Core.dll" debug="${debug}">
+      <sources>
+        <include name="src/Core/**/*.cs" />
+      </sources>
+      <references>
+        <include name="System.dll" />
+        <include name="System.Core.dll" if="${target.framework == 'net-3.5'}"/>
+        <include name="System.Data.dll"/>
+        <include name="System.Xml.dll" />
+        <include name="${library.dir}\LinqBridge.dll" if="${target.framework == 'net-2.0'}"/>
+      </references>
+    </csc>
+    <copy todir="${output.dir}">
+      <fileset basedir="${library.dir}">
+        <include name="LinqBridge.dll" if="${target.framework == 'net-2.0'}"/>
+      </fileset>
+    </copy>
+  </target>
+
+	<target name="test" depends="compile-core, run-unit-tests" 
 		description="Compile and Run Tests" />
 		
 	<target name="full" depends="clean, test, dist"	description="Compiles, tests, and produces distributions" />
 
+  <target name="compile-unit-tests" depends="compile-core" description="Compiles the unit tests for the core assembly">
+    <property name="debug.dir" value="${build.dir}\Debug"/>
+    <property name="unittest.dir" value="${debug.dir}\UnitTests"/>
+    <property name="unittest.source.dir" value="${build.dir}\..\src\UnitTests"/>
+    <property name="output.dir" value="${build.dir}\${target.framework}"/>
+
+    <mkdir dir="${build.dir}" unless="${directory::exists(build.dir)}"/>
+    <mkdir dir="${debug.dir}" unless="${directory::exists(debug.dir)}"/>
+    <mkdir dir="${unittest.dir}" unless="${directory::exists(unittest.dir)}"/>
+
+    <csc target="library" noconfig="true" output="${unittest.dir}\Tao.UnitTests.dll" debug="${debug}">
+      <sources>
+        <include name="src/UnitTests/**/*.cs" /> Unit
+      </sources>
+      <references>
+        <include name="System.dll" />
+        <include name="System.Core.dll"/>
+        <include name="System.Data.dll"/>
+        <include name="System.Xml.dll" />
+        <include name="${output.dir}\Tao.Core.dll"/>
+        <include name="${library.dir}\nunit.framework.dll"/>
+      </references>
+    </csc>
+    <copy todir="${unittest.dir}">
+      <fileset basedir="${library.dir}">
+        <include name="nunit.framework.dll"/>
+      </fileset>
+    </copy>
+    <copy todir="${unittest.dir}">
+      <fileset basedir="${unittest.source.dir}">
+        <include name="skeleton.exe"/>
+      </fileset>
+    </copy>
+    
+    <copy todir="${unittest.dir}">
+      <fileset basedir="${output.dir}">
+        <include name="Tao.Core.dll"/>
+      </fileset>
+    </copy>
+  </target>
+  
 	<!-- Internal targets -->
   <target name="run-unit-tests" depends="compile-unit-tests">
 
