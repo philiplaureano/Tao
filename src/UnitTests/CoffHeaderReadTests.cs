@@ -46,7 +46,7 @@ namespace Tao.UnitTests
                 var header = new COFFHeader();
                 header.Read(fileStream);
 
-                Assert.AreEqual(MachineType.ImageFileMachineI386, header.MachineType);
+                Assert.AreEqual(ImageFileMachineType.I386, header.MachineType);
             }
         }
 
@@ -72,11 +72,68 @@ namespace Tao.UnitTests
                 var header = new COFFHeader();
                 header.Read(fileStream);
 
+                // '0x4acfddbc' is the hardcoded creation date
+                // of skeleton.exe
                 var expectedTimeStamp = 0x4acfddbc;
                 Assert.AreEqual(expectedTimeStamp, header.TimeDateStamp);
             }
         }
 
+        [Test]
+        public void ShouldReadPointerToSymbolTable()
+        {
+            using (var fileStream = OpenSampleAssembly())
+            {
+                fileStream.Seek(0x80, SeekOrigin.Begin);
+                var header = new COFFHeader();
+                header.Read(fileStream);
+
+                Assert.AreEqual(0, header.PointerToSymbolTable);
+            }
+        }
+
+        [Test]
+        public void ShouldReadNumberOfSymbols()
+        {
+            using (var fileStream = OpenSampleAssembly())
+            {
+                fileStream.Seek(0x80, SeekOrigin.Begin);
+                var header = new COFFHeader();
+                header.Read(fileStream);
+
+                Assert.AreEqual(0, header.NumberOfSymbols);
+            }
+        }
+
+        [Test]
+        public void ShouldReadSizeOfOptionalHeader()
+        {
+            using (var fileStream = OpenSampleAssembly())
+            {
+                fileStream.Seek(0x80, SeekOrigin.Begin);
+                var header = new COFFHeader();
+                header.Read(fileStream);
+
+                var expectedSize = 0xE0;
+                Assert.AreEqual(expectedSize, header.OptionalHeaderSize);
+            }
+        }
+
+        [Test]
+        public void ShouldReadCharacteristics()
+        {
+            using (var fileStream = OpenSampleAssembly())
+            {
+                fileStream.Seek(0x80, SeekOrigin.Begin);
+                var header = new COFFHeader();
+                header.Read(fileStream);
+
+                ImageFileCharacteristics expectedCharacteristics = ImageFileCharacteristics.ThirtyTwoBitMachine |
+                                                           ImageFileCharacteristics.ExecutableImage;
+
+                Assert.AreEqual(expectedCharacteristics, header.Characteristics);
+            }
+        }
         private FileStream OpenSampleAssembly()
         {
             var file = new FileStream(_fullPath, FileMode.Open, FileAccess.Read);

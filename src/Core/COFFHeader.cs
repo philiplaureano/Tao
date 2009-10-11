@@ -21,13 +21,24 @@ namespace Tao.Core
             ReadPESignature(binaryReader);
 
             // Read the target machine type
-            MachineType = (MachineType)binaryReader.ReadInt16();
+            MachineType = (ImageFileMachineType)binaryReader.ReadInt16();
 
             // Read the section count
             NumberOfSections = binaryReader.ReadInt16();
 
             // Read the time stamp
             TimeDateStamp = binaryReader.ReadInt32();
+
+            // Read the pointer to the signature table
+            PointerToSymbolTable = binaryReader.ReadInt32();
+
+            // Read the number of symbols
+            NumberOfSymbols = binaryReader.ReadInt32();
+
+            // Read the optional header size
+            OptionalHeaderSize = binaryReader.ReadUInt16();
+
+            Characteristics = (ImageFileCharacteristics) binaryReader.ReadInt16();
         }
 
         /// <summary>
@@ -48,7 +59,8 @@ namespace Tao.Core
         /// <value>A boolean flag that determines whether or not the previously read stream contains a PE signature.</value>
         public bool HasPortableExecutableSignature
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -57,16 +69,18 @@ namespace Tao.Core
         /// <value>The size of the section table.</value>
         public int NumberOfSections
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
         /// Gets the value indicating the target <see cref="MachineType"/> for the given PE header.
         /// </summary>
         /// <value>The machine type of the target image.</value>
-        public MachineType MachineType
+        public ImageFileMachineType MachineType
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -75,7 +89,44 @@ namespace Tao.Core
         /// <value>The number of seconds that have elapsed since 00:00 January 1, 1970.</value>
         public int TimeDateStamp
         {
-            get; private set;
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the value indicating the pointer to the symbol table.
+        /// </summary>
+        /// <value>The pointer to the symbol table.</value>
+        public int PointerToSymbolTable
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the value indicating the number of entries in the symbol table.
+        /// </summary>
+        /// <value>The number of entries in the symbol table.</value>
+        public int NumberOfSymbols
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the value indicating the size of the optional header.
+        /// </summary>
+        /// <value>The optional header size.</value>
+        public int OptionalHeaderSize
+        {
+            get;
+            private set;
+        }
+
+        public ImageFileCharacteristics Characteristics
+        {
+            get;
+            private set;
         }
     }
 }
