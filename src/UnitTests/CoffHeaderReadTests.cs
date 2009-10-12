@@ -72,9 +72,9 @@ namespace Tao.UnitTests
                 var header = new COFFHeader();
                 header.Read(fileStream);
 
-                // '0x4acfddbc' is the hardcoded creation date
+                // Use the hardcoded creation date
                 // of skeleton.exe
-                var expectedTimeStamp = 0x4acfddbc;
+                var expectedTimeStamp = 0x4ad286dd;
                 Assert.AreEqual(expectedTimeStamp, header.TimeDateStamp);
             }
         }
