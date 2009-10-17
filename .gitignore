@@ -1,0 +1,5 @@
+*.pdb
+*.suo
+*.vspcc
+*resharper*
+.svn
