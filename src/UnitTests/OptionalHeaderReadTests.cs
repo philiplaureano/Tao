@@ -210,6 +210,55 @@ namespace Tao.UnitTests
             Assert.AreEqual(ImageSubsystem.WindowsCui, header.Subsystem);
         }
 
+        [Test]
+        public void ShouldBeAbleToReadDllCharacteristics()
+        {
+            var header = GetHeader();
+            Assert.AreEqual(0x8540, Convert.ToUInt16(header.DLLCharacteristics));
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadSizeOfStackReserve()
+        {
+            var header = GetHeader();
+            Assert.AreEqual(0x00100000, header.SizeOfStackReserve);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadSizeOfStackCommit()
+        {
+            var header = GetHeader();
+            Assert.AreEqual(0x00001000, header.SizeOfStackCommit);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadSizeOfHeapReserve()
+        {
+            var header = GetHeader();
+            Assert.AreEqual(0x00100000, header.SizeOfHeapReserve);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadSizeOfHeapCommit()
+        {
+            var header = GetHeader();
+            Assert.AreEqual(0x00001000, header.SizeOfHeapCommit);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadLoaderFlags()
+        {
+            var header = GetHeader();
+            Assert.AreEqual(0, header.LoaderFlags);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadNumberOfDirectories()
+        {
+            var header = GetHeader();
+            Assert.AreEqual(0x10, header.NumberOfDirectories);
+        }
+
         private OptionalHeader GetHeader()
         {
             var stream = OpenSampleAssembly();

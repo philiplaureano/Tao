@@ -236,7 +236,71 @@ namespace Tao.Core
         /// Gets the value indicating the windows subsystem required to run the target image.
         /// </summary>
         /// <value>The windows subsystem required to run the target image.</value>
-        public ImageSubsystem Subsystem
+        public ImageSubsystem? Subsystem
+        {
+            get; private set;
+        }
+
+        /// <summary>
+        /// Gets the value indicating the <see cref="DLLCharacteristics"/> for the target image.
+        /// </summary>
+        /// <value>The <see cref="DllCharacteristics"/> of the target image.</value>
+        public DllCharacteristics? DLLCharacteristics
+        {
+            get; private set;
+        }
+
+        /// <summary>
+        /// Gets the value indicating the size of the stack to reserve.
+        /// </summary>
+        /// <remarks>Only the Stack Commit Size is committed; the rest is made available one page at a time, until reserve size is reached.</remarks>
+        public uint? SizeOfStackReserve
+        {
+            get; private set;
+        }
+
+
+        /// <summary>
+        /// Gets the value indicating the size of local heap space to reserve.
+        /// </summary>
+        /// <value>The size of the local heap to reserve.</value>
+        public uint? SizeOfHeapReserve
+        {
+            get; private set;
+        }
+
+        /// <summary>
+        /// Gets the value indicating the size of local heap space to commit.
+        /// </summary>
+        /// <value>The size of local heap space to commit.</value>
+        public uint? SizeOfHeapCommit
+        {
+            get; private set;
+        }
+
+        /// <summary>
+        /// Gets the value indicating the size of stack to commit.
+        /// </summary>
+        /// <value>The stack size to commit.</value>
+        public uint? SizeOfStackCommit
+        {
+            get; private set;
+        }
+
+        /// <summary>
+        /// Gets the value indicating the loader flags for the current image.
+        /// </summary>
+        /// <value>Reserved. This value must be zero.</value>
+        public uint? LoaderFlags
+        {
+            get; private set;
+        }
+
+        /// <summary>
+        /// Gets the value indicating the number of data directories that the image contains.
+        /// </summary>
+        /// <value>The number of data directories.</value>
+        public uint? NumberOfDirectories
         {
             get; private set;
         }
@@ -268,6 +332,16 @@ namespace Tao.Core
 
             CheckSum = reader.ReadUInt32();
             Subsystem = (ImageSubsystem)reader.ReadUInt16();
+            DLLCharacteristics = (DllCharacteristics) reader.ReadUInt16();
+
+            SizeOfStackReserve = reader.ReadUInt32();
+            SizeOfStackCommit = reader.ReadUInt32();
+
+            SizeOfHeapReserve = reader.ReadUInt32();
+            SizeOfHeapCommit = reader.ReadUInt32();
+
+            LoaderFlags = reader.ReadUInt32();
+            NumberOfDirectories = reader.ReadUInt32();
         }
 
         /// <summary>

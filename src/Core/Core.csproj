@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BinaryReader.cs" />
+    <Compile Include="DllCharacteristics.cs" />
     <Compile Include="IBinaryReader.cs" />
     <Compile Include="ImageFileCharacteristics.cs" />
     <Compile Include="ImageFileMachineType.cs" />
