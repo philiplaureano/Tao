@@ -24,7 +24,7 @@
         <include name="System.dll" />
         <include name="System.Core.dll" if="${target.framework == 'net-3.5'}"/>
         <include name="System.Data.dll"/>
-        <include name="System.Xml.dll" />
+        <include name="System.Xml.dll" />        
         <include name="${library.dir}\LinqBridge.dll" if="${target.framework == 'net-2.0'}"/>
       </references>
     </csc>
@@ -60,12 +60,14 @@
         <include name="System.Data.dll"/>
         <include name="System.Xml.dll" />
         <include name="${output.dir}\Tao.Core.dll"/>
+        <include name="${library.dir}\Moq.dll"/>
         <include name="${library.dir}\nunit.framework.dll"/>
       </references>
     </csc>
     <copy todir="${unittest.dir}">
       <fileset basedir="${library.dir}">
         <include name="nunit.framework.dll"/>
+        <include name="moq.dll"/>
       </fileset>
     </copy>
     <copy todir="${unittest.dir}">

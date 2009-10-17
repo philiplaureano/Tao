@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Tao.Core
@@ -48,6 +47,24 @@ namespace Tao.Core
         public int ReadInt32()
         {
             return _actualReader.ReadInt32();
+        }
+
+        /// <summary>
+        /// Reads the next byte from the current stream and advances the current position of the stream by one byte.
+        /// </summary>
+        /// <returns>The next byte read from the current stream.</returns>
+        public byte ReadByte()
+        {
+            return _actualReader.ReadByte();
+        }
+
+        /// <summary>
+        /// Reads a 4-byte unsigned integer from the current stream and advances the position of the stream by four bytes.
+        /// </summary>
+        /// <returns>A 4-byte unsigned integer read from this stream.</returns>
+        public uint ReadUInt32()
+        {
+            return _actualReader.ReadUInt32();
         }
     }
 }

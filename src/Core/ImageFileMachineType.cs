@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Tao.Core
@@ -11,7 +10,7 @@ namespace Tao.Core
     public enum ImageFileMachineType : ushort 
     {
         /// <summary>
-        /// Contents assumed to be applicable to any machine type.
+        /// Contents assumed to be applicable to any machine type.git tag
         /// </summary>
         MachineUnknown = 0x0,
 

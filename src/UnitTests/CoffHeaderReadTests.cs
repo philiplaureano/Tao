@@ -8,17 +8,8 @@ using BinaryReader=Tao.Core.BinaryReader;
 namespace Tao.UnitTests
 {
     [TestFixture]
-    public class CoffHeaderReadTests
+    public class CoffHeaderReadTests : BaseHeaderReadTest
     {
-        private readonly string _inputFile;
-        private readonly string _fullPath;
-
-        public CoffHeaderReadTests()
-        {
-            _inputFile = "skeleton.exe";
-            _fullPath = Path.GetFullPath(_inputFile);
-        }
-
         [Test]
         public void ShouldBeAbleToFindSampleAssemblyImage()
         {
@@ -150,12 +141,6 @@ namespace Tao.UnitTests
 
                 Assert.AreEqual(expectedCharacteristics, header.Characteristics);
             }
-        }
-        private FileStream OpenSampleAssembly()
-        {
-            var file = new FileStream(_fullPath, FileMode.Open, FileAccess.Read);
-
-            return file;
         }
     }
 }

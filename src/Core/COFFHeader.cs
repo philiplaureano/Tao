@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Tao.Core
@@ -26,13 +25,13 @@ namespace Tao.Core
             NumberOfSections = binaryReader.ReadUInt16();
 
             // Read the time stamp
-            TimeDateStamp = binaryReader.ReadInt32();
+            TimeDateStamp = binaryReader.ReadUInt32();
 
             // Read the pointer to the signature table
-            PointerToSymbolTable = binaryReader.ReadInt32();
+            PointerToSymbolTable = binaryReader.ReadUInt32();
 
             // Read the number of symbols
-            NumberOfSymbols = binaryReader.ReadInt32();
+            NumberOfSymbols = binaryReader.ReadUInt32();
 
             // Read the optional header size
             OptionalHeaderSize = binaryReader.ReadUInt16();
@@ -66,7 +65,7 @@ namespace Tao.Core
         /// Gets the value indicating the size of the section table.
         /// </summary>
         /// <value>The size of the section table.</value>
-        public int NumberOfSections
+        public uint? NumberOfSections
         {
             get;
             private set;
@@ -76,7 +75,7 @@ namespace Tao.Core
         /// Gets the value indicating the target <see cref="MachineType"/> for the given PE header.
         /// </summary>
         /// <value>The machine type of the target image.</value>
-        public ImageFileMachineType MachineType
+        public ImageFileMachineType? MachineType
         {
             get;
             private set;
@@ -86,7 +85,7 @@ namespace Tao.Core
         /// Gets the value indicating the number of seconds since 00:00 January 1, 1970 when the file was created.
         /// </summary>
         /// <value>The number of seconds that have elapsed since 00:00 January 1, 1970.</value>
-        public int TimeDateStamp
+        public uint? TimeDateStamp
         {
             get;
             private set;
@@ -96,7 +95,7 @@ namespace Tao.Core
         /// Gets the value indicating the pointer to the symbol table.
         /// </summary>
         /// <value>The pointer to the symbol table.</value>
-        public int PointerToSymbolTable
+        public uint? PointerToSymbolTable
         {
             get;
             private set;
@@ -106,7 +105,7 @@ namespace Tao.Core
         /// Gets the value indicating the number of entries in the symbol table.
         /// </summary>
         /// <value>The number of entries in the symbol table.</value>
-        public int NumberOfSymbols
+        public uint? NumberOfSymbols
         {
             get;
             private set;
@@ -116,7 +115,7 @@ namespace Tao.Core
         /// Gets the value indicating the size of the optional header.
         /// </summary>
         /// <value>The optional header size.</value>
-        public int OptionalHeaderSize
+        public uint? OptionalHeaderSize
         {
             get;
             private set;
@@ -125,7 +124,7 @@ namespace Tao.Core
         /// <summary>
         /// Gets or sets the value indicating the <see cref="ImageFileCharacteristics"/> of the COFF header.
         /// </summary>
-        public ImageFileCharacteristics Characteristics
+        public ImageFileCharacteristics? Characteristics
         {
             get;
             private set;

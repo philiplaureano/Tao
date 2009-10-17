@@ -57,7 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="BaseHeaderReadTest.cs" />
     <Compile Include="CoffHeaderReadTests.cs" />
+    <Compile Include="OptionalHeaderReadTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
