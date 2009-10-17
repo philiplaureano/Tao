@@ -53,6 +53,7 @@
     <Compile Include="ImageFileCharacteristics.cs" />
     <Compile Include="ImageFileMachineType.cs" />
     <Compile Include="COFFHeader.cs" />
+    <Compile Include="ImageSubsystem.cs" />
     <Compile Include="OptionalHeader.cs" />
     <Compile Include="PEFormat.cs" />
   </ItemGroup>

@@ -196,6 +196,20 @@ namespace Tao.UnitTests
             Assert.AreEqual(0x00000200, header.SizeOfHeaders);
         }
 
+        [Test]
+        public void ShouldBeAbleToReadCheckSum()
+        {
+            var header = GetHeader();
+            Assert.AreEqual(0, header.CheckSum);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadSubsystem()
+        {
+            var header = GetHeader();
+            Assert.AreEqual(ImageSubsystem.WindowsCui, header.Subsystem);
+        }
+
         private OptionalHeader GetHeader()
         {
             var stream = OpenSampleAssembly();

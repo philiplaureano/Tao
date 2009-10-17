@@ -128,7 +128,8 @@ namespace Tao.Core
         /// <value>The file alignment factor, expressed in bytes.</value>
         public uint? FileAlignment
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -137,7 +138,8 @@ namespace Tao.Core
         /// <value>The major version number of the required operating system.</value>
         public ushort? MajorOSVersion
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -156,7 +158,8 @@ namespace Tao.Core
         /// <value>The major version number of the target image.</value>
         public ushort? MajorImageVersion
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -195,7 +198,8 @@ namespace Tao.Core
         /// <value>This value is reserved and must be zero.</value>
         public uint? Win32VersionValue
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -204,14 +208,35 @@ namespace Tao.Core
         /// <value>The size of the image.</value>
         public uint? SizeOfImage
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
         /// Gets the value indicating the combined size of the MS-DOS stub, PE header, and section headers rounded up to a multiple of <see cref="FileAlignment"/>.
         /// </summary>
         /// <value>The combined size of all file headers.</value>
-        public uint SizeOfHeaders
+        public uint? SizeOfHeaders
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the value indicating the image file checksum.
+        /// </summary>
+        /// <value>The image file checksum.</value>
+        public uint? CheckSum
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the value indicating the windows subsystem required to run the target image.
+        /// </summary>
+        /// <value>The windows subsystem required to run the target image.</value>
+        public ImageSubsystem Subsystem
         {
             get; private set;
         }
@@ -227,7 +252,7 @@ namespace Tao.Core
             ImageBase = reader.ReadUInt32();
             SectionAlignment = reader.ReadUInt32();
             FileAlignment = reader.ReadUInt32();
-            
+
             MajorOSVersion = reader.ReadUInt16();
             MinorOSVersion = reader.ReadUInt16();
 
@@ -240,6 +265,9 @@ namespace Tao.Core
             Win32VersionValue = reader.ReadUInt32();
             SizeOfImage = reader.ReadUInt32();
             SizeOfHeaders = reader.ReadUInt32();
+
+            CheckSum = reader.ReadUInt32();
+            Subsystem = (ImageSubsystem)reader.ReadUInt16();
         }
 
         /// <summary>
