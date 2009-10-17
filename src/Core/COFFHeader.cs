@@ -10,21 +10,20 @@ namespace Tao.Core
     /// Represents a class that reads the PR File header from a Portable Executable file.
     /// </summary>
     public class COFFHeader
-    {
+    {       
         /// <summary>
-        /// Parses the PR file header from the given input <paramref name="stream"/>.
+        /// Parses the PR file header from the given input <paramref name="binaryReader"/>.
         /// </summary>
-        /// <param name="stream">The input stream that contains the PR file header.</param>
-        public void Read(Stream stream)
+        /// <param name="binaryReader">The binary reader.</param>
+        public void ReadFrom(IBinaryReader binaryReader)
         {
-            var binaryReader = new BinaryReader(stream);
             ReadPESignature(binaryReader);
 
             // Read the target machine type
-            MachineType = (ImageFileMachineType)binaryReader.ReadInt16();
+            MachineType = (ImageFileMachineType)binaryReader.ReadUInt16();
 
             // Read the section count
-            NumberOfSections = binaryReader.ReadInt16();
+            NumberOfSections = binaryReader.ReadUInt16();
 
             // Read the time stamp
             TimeDateStamp = binaryReader.ReadInt32();
@@ -38,16 +37,16 @@ namespace Tao.Core
             // Read the optional header size
             OptionalHeaderSize = binaryReader.ReadUInt16();
 
-            Characteristics = (ImageFileCharacteristics) binaryReader.ReadInt16();
+            Characteristics = (ImageFileCharacteristics) binaryReader.ReadUInt16();
         }
 
         /// <summary>
         /// Reads the PE signature from the binary stream.
         /// </summary>
         /// <param name="binaryReader">The reader that contains the stream with the PE signature.</param>
-        private void ReadPESignature(BinaryReader binaryReader)
+        private void ReadPESignature(IBinaryReader binaryReader)
         {
-            var bytes = binaryReader.ReadBytes(4);
+            byte[] bytes = binaryReader.ReadBytes(4);
 
             var text = Encoding.ASCII.GetString(bytes);
             HasPortableExecutableSignature = text == "PE\0\0";
@@ -123,6 +122,9 @@ namespace Tao.Core
             private set;
         }
 
+        /// <summary>
+        /// Gets or sets the value indicating the <see cref="ImageFileCharacteristics"/> of the COFF header.
+        /// </summary>
         public ImageFileCharacteristics Characteristics
         {
             get;

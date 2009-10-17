@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using NUnit.Framework;
 using Tao.Core;
+using BinaryReader=Tao.Core.BinaryReader;
 
 namespace Tao.UnitTests
 {
@@ -32,7 +33,8 @@ namespace Tao.UnitTests
             var header = new COFFHeader();
             stream.Seek(0x80, SeekOrigin.Begin);
 
-            header.Read(stream);
+            var reader = new BinaryReader(stream);
+            header.ReadFrom(reader);
 
             Assert.IsTrue(header.HasPortableExecutableSignature);
         }
@@ -44,7 +46,9 @@ namespace Tao.UnitTests
             {
                 fileStream.Seek(0x80, SeekOrigin.Begin);
                 var header = new COFFHeader();
-                header.Read(fileStream);
+                var reader = new BinaryReader(fileStream);
+
+                header.ReadFrom(reader); ;
 
                 Assert.AreEqual(ImageFileMachineType.I386, header.MachineType);
             }
@@ -53,11 +57,14 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldReadNumberOfSections()
         {
+            
             using (var fileStream = OpenSampleAssembly())
             {
                 fileStream.Seek(0x80, SeekOrigin.Begin);
                 var header = new COFFHeader();
-                header.Read(fileStream);    
+                var reader = new BinaryReader(fileStream);
+
+                header.ReadFrom(reader); ;
 
                 Assert.AreEqual(2, header.NumberOfSections);
             }
@@ -70,7 +77,9 @@ namespace Tao.UnitTests
             {
                 fileStream.Seek(0x80, SeekOrigin.Begin);
                 var header = new COFFHeader();
-                header.Read(fileStream);
+                var reader = new BinaryReader(fileStream);
+
+                header.ReadFrom(reader); ; ;
 
                 // Use the hardcoded creation date
                 // of skeleton.exe
@@ -86,7 +95,9 @@ namespace Tao.UnitTests
             {
                 fileStream.Seek(0x80, SeekOrigin.Begin);
                 var header = new COFFHeader();
-                header.Read(fileStream);
+                var reader = new BinaryReader(fileStream);
+
+                header.ReadFrom(reader); ; ;
 
                 Assert.AreEqual(0, header.PointerToSymbolTable);
             }
@@ -99,7 +110,9 @@ namespace Tao.UnitTests
             {
                 fileStream.Seek(0x80, SeekOrigin.Begin);
                 var header = new COFFHeader();
-                header.Read(fileStream);
+                var reader = new BinaryReader(fileStream);
+
+                header.ReadFrom(reader); ;
 
                 Assert.AreEqual(0, header.NumberOfSymbols);
             }
@@ -112,7 +125,9 @@ namespace Tao.UnitTests
             {
                 fileStream.Seek(0x80, SeekOrigin.Begin);
                 var header = new COFFHeader();
-                header.Read(fileStream);
+                var reader = new BinaryReader(fileStream);
+
+                header.ReadFrom(reader); ;
 
                 var expectedSize = 0xE0;
                 Assert.AreEqual(expectedSize, header.OptionalHeaderSize);
@@ -126,7 +141,9 @@ namespace Tao.UnitTests
             {
                 fileStream.Seek(0x80, SeekOrigin.Begin);
                 var header = new COFFHeader();
-                header.Read(fileStream);
+                var reader = new BinaryReader(fileStream);
+
+                header.ReadFrom(reader); ;
 
                 ImageFileCharacteristics expectedCharacteristics = ImageFileCharacteristics.ThirtyTwoBitMachine |
                                                            ImageFileCharacteristics.ExecutableImage;
