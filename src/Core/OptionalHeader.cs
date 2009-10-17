@@ -9,6 +9,24 @@ namespace Tao.Core
     /// </summary>
     public class OptionalHeader
     {
+        private IDataDirectoryReader _dataDirectoryReader;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataDirectoryReader"/> class.
+        /// </summary>
+        public OptionalHeader() : this(new DataDirectoryReader())
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataDirectoryReader"/> class.
+        /// </summary>
+        /// <param name="dataDirectoryReader">The data directory reader that will be used to read the data directories from the image stream.</param>
+        public OptionalHeader(IDataDirectoryReader dataDirectoryReader)
+        {
+            _dataDirectoryReader = dataDirectoryReader;    
+        }
+
         #region Standard Fields
         /// <summary>
         /// Gets the value indicating the <see cref="PEFormat"/> of the PE file.
@@ -313,6 +331,15 @@ namespace Tao.Core
         {
             ReadStandardFields(reader);
 
+            ReadWindowSpecificFields(reader);
+        }
+
+        /// <summary>
+        /// Reads the Windows-specific fields from the Optional Header in the portable executable file.
+        /// </summary>
+        /// <param name="reader">The binary reader.</param>
+        private void ReadWindowSpecificFields(IBinaryReader reader)
+        {
             ImageBase = reader.ReadUInt32();
             SectionAlignment = reader.ReadUInt32();
             FileAlignment = reader.ReadUInt32();
@@ -342,6 +369,12 @@ namespace Tao.Core
 
             LoaderFlags = reader.ReadUInt32();
             NumberOfDirectories = reader.ReadUInt32();
+
+            if (_dataDirectoryReader == null)
+                return;
+
+            var directoryCount = Convert.ToInt32(NumberOfDirectories);
+            _dataDirectoryReader.ReadDirectories(directoryCount, reader);
         }
 
         /// <summary>

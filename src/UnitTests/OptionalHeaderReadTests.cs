@@ -11,255 +11,198 @@ using BinaryReader = Tao.Core.BinaryReader;
 namespace Tao.UnitTests
 {
     [TestFixture]
-    public class OptionalHeaderReadTests : BaseHeaderReadTest
+    public partial class OptionalHeaderReadTests : BaseHeaderReadTest
     {
-        #region Standard Field Headers
         [Test]
-        public void ShouldBeAbleToReadMagicNumber()
+        public void ShouldReadExportDataDirectory()
         {
-            OptionalHeader header = GetHeader();
-
-            Assert.AreEqual(header.MagicNumber, PEFormat.PE32);
+            TestEmptyDirectoryRead(0xF8);
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
-        public void ShouldThrowNotSupportedExceptionIfImageHasInvalidMagicNumber()
+        public void ShouldReadImportTableDataDirectory()
         {
-            var reader = new Mock<IBinaryReader>();
+            TestDirectoryRead(0x100, 0x0000217c, 0x0000004f);
+        }
+
+        [Test]
+        public void ShouldReadResourceDirectory()
+        {
+            TestEmptyDirectoryRead(0x108);
+        }
+
+        [Test]
+        public void ShouldReadExceptionDirectory()
+        {
+            TestEmptyDirectoryRead(0x110);
+        }
+
+        [Test]
+        public void ShouldReadSecurityDirectory()
+        {
+            TestEmptyDirectoryRead(0x110);
+        }
+
+        [Test]
+        public void ShouldReadCertificateDirectory()
+        {
+            TestEmptyDirectoryRead(0x118);
+        }
+
+        [Test]
+        public void ShouldReadBaseRelocationTableDirectory()
+        {
+            TestDirectoryRead(0x120, 0x4000, 0xC);
+        }
+
+        [Test]
+        public void ShouldReadDebugDirectory()
+        {
+            TestEmptyDirectoryRead(0x128);
+        }
+
+        [Test]
+        public void ShouldReadCopyrightDirectory()
+        {
+            TestEmptyDirectoryRead(0x130);
+        }
+
+        [Test]
+        public void ShouldReadGlobalPtrDirectory()
+        {
+            TestEmptyDirectoryRead(0x138);
+        }
+
+        [Test]
+        public void ShouldReadTLSTableDirectory()
+        {
+            TestEmptyDirectoryRead(0x140);
+        }
+
+        [Test]
+        public void ShouldReadLoadConfigDirectory()
+        {
+            TestEmptyDirectoryRead(0x148);
+        }
+
+        [Test]
+        public void ShouldReadBoundImportDirectory()
+        {
+            TestEmptyDirectoryRead(0x150);
+        }
+
+        [Test]
+        public void ShouldReadIATDirectory()
+        {
+            TestDirectoryRead(0x158, 0x2000, 8);
+        }
+
+        [Test]
+        public void ShouldReadDelayImportDescriptorDirectory()
+        {
+            TestEmptyDirectoryRead(0x160);
+        }
+
+        [Test]
+        public void ShouldReadCLIHeaderDirectory()
+        {
+            TestDirectoryRead(0x168, 0x2008, 0x48);
+        }
+
+        [Test]
+        public void ShouldReadReservedDirectory()
+        {
+            TestEmptyDirectoryRead(0x170);
+        }
+
+        [Test]
+        public void ShouldReadAllDataDirectories()
+        {
+            var stream = OpenSampleAssembly();
+            var reader = new BinaryReader(stream);
+            const int startingOffset = 0xF8;
+
+            stream.Seek(startingOffset, SeekOrigin.Begin);
+
+            const int directoryCount = 0x10;
+            var directoryReader = new DataDirectoryReader();
+            var directories = directoryReader.ReadDirectories(directoryCount, reader);
+
+            // Map the directory index to the directory sizes
+            VerifyDataDirectories(directories);
+        }
+
+        [Test]
+        public void ShouldUseDataDirectoryReaderInterfaceWhenReadingOptionalHeader()
+        {
+            var directoryReader = new Mock<IDataDirectoryReader>();
+            directoryReader.Expect(reader => reader.ReadDirectories(0x10, It.IsAny<IBinaryReader>())).Returns(new List<DataDirectory>());
+
+            var header = new OptionalHeader(directoryReader.Object);
+            ReadOptionalHeaderFromSampleAssembly(header);
+
+            directoryReader.VerifyAll();
+        }
+
+        #region Helper methods
+        private void TestEmptyDirectoryRead(int startingOffset)
+        {
+            TestDirectoryRead(startingOffset, 0, 0);
+        }
+
+        private void TestDirectoryRead(int startingOffset, uint virtualAddress, uint size)
+        {
+            var stream = OpenSampleAssembly();
+            var reader = new BinaryReader(stream);
+
+            stream.Seek(startingOffset, SeekOrigin.Begin);
+
+            var directory = new DataDirectory();
+            directory.ReadFrom(reader);
+
+            Assert.AreEqual(virtualAddress, directory.VirtualAddress);
+            Assert.AreEqual(size, directory.Size);
+        }
+
+        private void VerifyDataDirectories(IList<DataDirectory> directories)
+        {
+            var sizes = new Dictionary<int, int>();
+            sizes[1] = 0x4f;
+            sizes[5] = 0xC;
+            sizes[12] = 8;
+            sizes[14] = 0x48;
+
+            var virtualAddresses = new Dictionary<int, int>();
+            virtualAddresses[1] = 0x217c;
+            virtualAddresses[5] = 0x4000;
+            virtualAddresses[12] = 0x2000;
+            virtualAddresses[14] = 0x2008;
+
+
+            var currentIndex = 0;
+            foreach (var directory in directories)
+            {
+                var isEmpty = !sizes.ContainsKey(currentIndex);
+                var expectedRVA = isEmpty ? 0 : virtualAddresses[currentIndex];
+                var expectedSize = isEmpty ? 0 : sizes[currentIndex];
+
+                Assert.AreEqual(expectedRVA, directory.VirtualAddress);
+                Assert.AreEqual(expectedSize, directory.Size);
+
+                currentIndex++;
+            }
+        }
+
+        protected virtual OptionalHeader GetHeader()
+        {
             var header = new OptionalHeader();
 
-            // Return an invalid magic value
-            reader.Expect(r => r.ReadUInt16()).Returns(0xFF);
-            header.ReadFrom(reader.Object);
-            reader.VerifyAll();
+            ReadOptionalHeaderFromSampleAssembly(header);
+
+            return header;
         }
 
-        [Test]
-        [ExpectedException(typeof(NotSupportedException))]
-        public void ShouldThrowNotSupportedExceptionIfImageMagicNumberIsPE32Plus()
-        {
-            var reader = new Mock<IBinaryReader>();
-            var header = new OptionalHeader();
-
-            // Return an invalid magic value
-            reader.Expect(r => r.ReadUInt16()).Returns(Convert.ToUInt16(PEFormat.PE32Plus));
-            header.ReadFrom(reader.Object);
-            reader.VerifyAll();
-        }
-
-        [Test]
-        public void ShouldReadMajorLinkerVersion()
-        {
-            var header = GetHeader();
-
-            Assert.AreEqual(0x08, header.MajorLinkerVersion);
-        }
-
-        [Test]
-        public void ShouldReadMinorLinkerVersion()
-        {
-            var header = GetHeader();
-
-            Assert.AreEqual(0, header.MinorLinkerVersion);
-        }
-
-        [Test]
-        public void ShouldReadSizeOfCode()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x200, header.SizeOfCode);
-        }
-
-        [Test]
-        public void ShouldReadSizeOfInitializedData()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x200, header.SizeOfInitializedData);
-        }
-
-        [Test]
-        public void ShouldReadSizeOfUninitializedData()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0, header.SizeOfUninitializedData);
-        }
-
-        [Test]
-        public void ShouldReadAddressOfEntryPoint()
-        {
-            var header = GetHeader();
-
-            Assert.AreEqual(0x000021ce, header.AddressOfEntryPoint);
-        }
-
-        [Test]
-        public void ShouldReadBaseOfCode()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x00002000, header.BaseOfCode);
-        }
-
-        [Test]
-        public void ShouldReadBaseOfDataIfHeaderImageIsPE32()
-        {
-            var header = GetHeader();
-
-            if (header.MagicNumber != PEFormat.PE32)
-                return;
-
-            Assert.AreEqual(0x4000, header.BaseOfData);
-        }
-        #endregion
-
-        [Test]
-        public void ShouldBeAbleToReadImageBase()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x00400000, header.ImageBase);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadSectionAlignment()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x00002000, header.SectionAlignment);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadFileAlignment()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x00000200, header.FileAlignment);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadMajorOSVersion()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x0004, header.MajorOSVersion);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadMinorOSVersion()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x0000, header.MinorOSVersion);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadMajorImageVersion()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x0000, header.MajorImageVersion);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadMinorImageVersion()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x0000, header.MinorImageVersion);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadMajorSubsystemVersion()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x0004, header.MajorSubsystemVersion);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadMinorSubsystemVersion()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x0000, header.MinorSubsystemVersion);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadWin32VersionValue()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0, header.Win32VersionValue);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadSizeOfImage()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x00006000, header.SizeOfImage);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadSizeOfHeaders()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x00000200, header.SizeOfHeaders);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadCheckSum()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0, header.CheckSum);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadSubsystem()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(ImageSubsystem.WindowsCui, header.Subsystem);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadDllCharacteristics()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x8540, Convert.ToUInt16(header.DLLCharacteristics));
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadSizeOfStackReserve()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x00100000, header.SizeOfStackReserve);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadSizeOfStackCommit()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x00001000, header.SizeOfStackCommit);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadSizeOfHeapReserve()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x00100000, header.SizeOfHeapReserve);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadSizeOfHeapCommit()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x00001000, header.SizeOfHeapCommit);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadLoaderFlags()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0, header.LoaderFlags);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadNumberOfDirectories()
-        {
-            var header = GetHeader();
-            Assert.AreEqual(0x10, header.NumberOfDirectories);
-        }
-
-        private OptionalHeader GetHeader()
+        private void ReadOptionalHeaderFromSampleAssembly(OptionalHeader header)
         {
             var stream = OpenSampleAssembly();
             var reader = new BinaryReader(stream);
@@ -267,10 +210,8 @@ namespace Tao.UnitTests
             const int optionalHeaderOffset = 0x98;
             stream.Seek(optionalHeaderOffset, SeekOrigin.Begin);
 
-            var header = new OptionalHeader();
-
             header.ReadFrom(reader);
-            return header;
         }
+        #endregion
     }
 }
