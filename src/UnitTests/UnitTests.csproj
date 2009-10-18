@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BaseHeaderReadTest.cs" />
+    <Compile Include="CLIHeaderReadTests.cs" />
     <Compile Include="CoffHeaderReadTests.cs" />
     <Compile Include="ImportAddressTableReadTests.cs" />
     <Compile Include="OptionalHeaderReadTests.cs" />

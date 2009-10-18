@@ -39,5 +39,11 @@ namespace Tao.Core
         /// </summary>
         /// <returns>A 4-byte unsigned integer read from this stream.</returns>
         uint ReadUInt32();
+
+        /// <summary>
+        /// Reads a 8-byte unsigned integer from the current stream and advances the position of the stream by eight bytes.
+        /// </summary>
+        /// <returns>A 8-byte unsigned integer read from this stream.</returns>
+        ulong ReadUInt64();
     }
 }

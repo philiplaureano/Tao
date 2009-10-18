@@ -66,5 +66,15 @@ namespace Tao.Core
         {
             return _actualReader.ReadUInt32();
         }
+
+
+        /// <summary>
+        /// Reads a 8-byte unsigned integer from the current stream and advances the position of the stream by eight bytes.
+        /// </summary>
+        /// <returns>A 8-byte unsigned integer read from this stream.</returns>
+        public ulong ReadUInt64()
+        {
+            return _actualReader.ReadUInt64();
+        }
     }
 }

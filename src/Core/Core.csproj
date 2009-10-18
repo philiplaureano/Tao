@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BinaryReader.cs" />
+    <Compile Include="CLIHeader.cs" />
     <Compile Include="DataDirectory.cs" />
     <Compile Include="DataDirectoryReader.cs" />
     <Compile Include="DllCharacteristics.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="ImportAddressTable.cs" />
     <Compile Include="OptionalHeader.cs" />
     <Compile Include="PEFormat.cs" />
+    <Compile Include="RuntimeFlags.cs" />
     <Compile Include="SectionFlags.cs" />
     <Compile Include="SectionHeader.cs" />
     <Compile Include="SectionHeaderReader.cs" />
