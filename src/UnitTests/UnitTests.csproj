@@ -62,6 +62,7 @@
     <Compile Include="OptionalHeaderReadTests.cs" />
     <Compile Include="OptionalHeaderReadTests.StandardFields.cs" />
     <Compile Include="OptionalHeaderReadTests.WindowsSpecificFields.cs" />
+    <Compile Include="SectionHeaderReadTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

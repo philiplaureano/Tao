@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace Tao.Core
 {
+    /// <summary>
+    /// Represents a type that can read the data directories from a given binary reader.
+    /// </summary>
     public interface IDataDirectoryReader
     {
         /// <summary>

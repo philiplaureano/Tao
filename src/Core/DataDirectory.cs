@@ -28,7 +28,7 @@ namespace Tao.Core
         }
 
         /// <summary>
-        /// Reads the directory from the target binary <see cref="reader"/>.
+        /// Reads the directory from the target binary <paramref name="reader"/>
         /// </summary>
         /// <param name="reader">The binary reader.</param>
         public void ReadFrom(IBinaryReader reader)

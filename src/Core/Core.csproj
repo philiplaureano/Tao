@@ -60,9 +60,9 @@
     <Compile Include="ImageSubsystem.cs" />
     <Compile Include="OptionalHeader.cs" />
     <Compile Include="PEFormat.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
+    <Compile Include="SectionFlags.cs" />
+    <Compile Include="SectionHeader.cs" />
+    <Compile Include="SectionHeaderReader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

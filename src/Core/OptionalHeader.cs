@@ -121,6 +121,7 @@ namespace Tao.Core
         }
         #endregion
 
+        #region Windows-Specific Fields
         /// <summary>
         /// Gets the value indicating the preferred address of the first byte of the image when loaded into memory.
         /// </summary>
@@ -323,6 +324,8 @@ namespace Tao.Core
         {
             get; private set;
         }
+
+        #endregion
 
         /// <summary>
         /// Gets the value indicating the data directories that currently reside within the image.
