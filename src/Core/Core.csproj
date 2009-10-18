@@ -58,6 +58,7 @@
     <Compile Include="ImageFileMachineType.cs" />
     <Compile Include="COFFHeader.cs" />
     <Compile Include="ImageSubsystem.cs" />
+    <Compile Include="ImportAddressTable.cs" />
     <Compile Include="OptionalHeader.cs" />
     <Compile Include="PEFormat.cs" />
     <Compile Include="SectionFlags.cs" />

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using Tao.Core;
+using BinaryReader=Tao.Core.BinaryReader;
 
 namespace Tao.UnitTests
 {
@@ -12,9 +15,15 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldBeAbleToReadIAT()
         {
-            // Notes: 
-            // File Offset = RVA - (Section Alignment * section number)
-            throw new NotImplementedException();
+            var stream = OpenSampleAssembly();
+            stream.Seek(0x200, SeekOrigin.Begin);
+
+            var reader = new BinaryReader(stream);
+            
+            var importAddressTable = new ImportAddressTable();
+            importAddressTable.ReadFrom(reader);
+
+            Assert.AreEqual(0x21b0, importAddressTable.HintNameTableRVA);            
         }
     }
 }
