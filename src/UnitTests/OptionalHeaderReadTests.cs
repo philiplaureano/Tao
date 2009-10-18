@@ -128,7 +128,6 @@ namespace Tao.UnitTests
             var directoryReader = new DataDirectoryReader();
             var directories = directoryReader.ReadDirectories(directoryCount, reader);
 
-            // Map the directory index to the directory sizes
             VerifyDataDirectories(directories);
         }
 
@@ -143,7 +142,7 @@ namespace Tao.UnitTests
 
             directoryReader.VerifyAll();
         }
-
+        
         [Test]
         public void ShouldReadDataDirectoriesUsingOptionalHeader()
         {
