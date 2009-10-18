@@ -144,6 +144,13 @@ namespace Tao.UnitTests
             directoryReader.VerifyAll();
         }
 
+        [Test]
+        public void ShouldReadDataDirectoriesUsingOptionalHeader()
+        {
+            var header = GetHeader();
+
+            VerifyDataDirectories(header.DataDirectories);
+        }
         #region Helper methods
         private void TestEmptyDirectoryRead(int startingOffset)
         {

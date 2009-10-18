@@ -9,7 +9,8 @@ namespace Tao.Core
     /// </summary>
     public class OptionalHeader
     {
-        private IDataDirectoryReader _dataDirectoryReader;
+        private readonly IDataDirectoryReader _dataDirectoryReader;
+        private readonly List<DataDirectory> _dataDirectories = new List<DataDirectory>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataDirectoryReader"/> class.
@@ -324,13 +325,24 @@ namespace Tao.Core
         }
 
         /// <summary>
+        /// Gets the value indicating the data directories that currently reside within the image.
+        /// </summary>
+        /// <value>The list of data directories.</value>
+        public IList<DataDirectory> DataDirectories
+        {
+            get
+            {
+                return _dataDirectories;
+            }
+        }
+
+        /// <summary>
         /// Reads the data from the given <paramref name="reader"/>.
         /// </summary>
         /// <param name="reader">The binary reader.</param>
         public void ReadFrom(IBinaryReader reader)
         {
             ReadStandardFields(reader);
-
             ReadWindowSpecificFields(reader);
         }
 
@@ -373,8 +385,16 @@ namespace Tao.Core
             if (_dataDirectoryReader == null)
                 return;
 
+            ReadDataDirectories(reader);
+        }
+
+        private void ReadDataDirectories(IBinaryReader reader)
+        {
+            _dataDirectories.Clear();
             var directoryCount = Convert.ToInt32(NumberOfDirectories);
-            _dataDirectoryReader.ReadDirectories(directoryCount, reader);
+            var directories = _dataDirectoryReader.ReadDirectories(directoryCount, reader);
+
+            _dataDirectories.AddRange(directories);
         }
 
         /// <summary>
