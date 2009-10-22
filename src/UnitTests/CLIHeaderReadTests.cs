@@ -92,26 +92,12 @@ namespace Tao.UnitTests
 
         private void AssertEquals<TValue>(TValue expected, Func<CLIHeader, TValue> getActualValue)
         {
-            Test(header => Assert.AreEqual(expected, getActualValue(header)));
+            AssertEquals<CLIHeader, TValue>(expected, getActualValue);
         }
 
-        private void Test(Action<CLIHeader> doTest)
+        protected override void SetStreamPosition(Stream stream)
         {
-            var header = GetHeader();
-            doTest(header);
-        }
-
-        private CLIHeader GetHeader()
-        {
-            var stream = OpenSampleAssembly();
             stream.Seek(0x208, SeekOrigin.Begin);
-
-            var reader = new BinaryReader(stream);
-
-            var header = new CLIHeader();
-            header.ReadFrom(reader);
-
-            return header;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the CLI header that contains all of the runtime-specific data entries to run managed code.
     /// </summary>
-    public class CLIHeader
+    public class CLIHeader : IHeader
     {
         /// <summary>
         /// Gets the value indicating the size of the header in bytes.

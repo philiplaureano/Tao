@@ -61,6 +61,7 @@
     <Compile Include="CLIHeaderReadTests.cs" />
     <Compile Include="CoffHeaderReadTests.cs" />
     <Compile Include="ImportAddressTableReadTests.cs" />
+    <Compile Include="MetadataRootReadTests.cs" />
     <Compile Include="OptionalHeaderReadTests.cs" />
     <Compile Include="OptionalHeaderReadTests.StandardFields.cs" />
     <Compile Include="OptionalHeaderReadTests.WindowsSpecificFields.cs" />

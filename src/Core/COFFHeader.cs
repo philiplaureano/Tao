@@ -8,7 +8,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a class that reads the PR File header from a Portable Executable file.
     /// </summary>
-    public class COFFHeader
+    public class COFFHeader : IHeader
     {       
         /// <summary>
         /// Parses the PR file header from the given input <paramref name="binaryReader"/>.

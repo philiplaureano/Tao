@@ -7,7 +7,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the Optional Header of a Portable Executable file.
     /// </summary>
-    public class OptionalHeader
+    public class OptionalHeader : IHeader
     {
         private readonly IDataDirectoryReader _dataDirectoryReader;
         private readonly List<DataDirectory> _dataDirectories = new List<DataDirectory>();

@@ -15,15 +15,13 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldBeAbleToReadIAT()
         {
-            var stream = OpenSampleAssembly();
+            Func<ImportAddressTable, uint?> getActualValue = h => h.HintNameTableRVA;
+            AssertEquals<ImportAddressTable,uint?>(0x21b0, getActualValue);
+        }
+
+        protected override void SetStreamPosition(Stream stream)
+        {
             stream.Seek(0x200, SeekOrigin.Begin);
-
-            var reader = new BinaryReader(stream);
-            
-            var importAddressTable = new ImportAddressTable();
-            importAddressTable.ReadFrom(reader);
-
-            Assert.AreEqual(0x21b0, importAddressTable.HintNameTableRVA);            
         }
     }
 }

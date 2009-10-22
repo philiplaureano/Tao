@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Tao.Core
@@ -45,5 +46,18 @@ namespace Tao.Core
         /// </summary>
         /// <returns>A 8-byte unsigned integer read from this stream.</returns>
         ulong ReadUInt64();
+
+        /// <summary>
+        /// Gets the current stream position of the reader, in bytes.
+        /// </summary>
+        /// <returns>The current stream position.</returns>
+        long GetPosition();
+
+        /// <summary>
+        /// Sets the current stream position of the reader, in bytes.
+        /// </summary>
+        /// <param name="offset">The target offset.</param>
+        /// <param name="origin">The <see cref="SeekOrigin"/> that describes the relative position of the target offset.</param>
+        void Seek(long offset, SeekOrigin origin);
     }
 }

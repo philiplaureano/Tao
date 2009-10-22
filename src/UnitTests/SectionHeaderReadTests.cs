@@ -149,6 +149,11 @@ namespace Tao.UnitTests
             sectionHeader.ReadFrom(reader);
             return sectionHeader;
         }
+
+        protected override void SetStreamPosition(Stream stream)
+        {
+            stream.Seek(0x178, SeekOrigin.Begin);
+        }
         #endregion
     }
 }

@@ -7,7 +7,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the IAT in a portable executable file.
     /// </summary>
-    public class ImportAddressTable
+    public class ImportAddressTable : IHeader
     {
         /// <summary>
         /// Gets the value indicating the relative virtual address that points to the Hint/Name Table.

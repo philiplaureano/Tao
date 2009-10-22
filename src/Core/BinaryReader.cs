@@ -76,5 +76,26 @@ namespace Tao.Core
         {
             return _actualReader.ReadUInt64();
         }
+
+        /// <summary>
+        /// Gets the current stream position of the reader, in bytes.
+        /// </summary>
+        /// <returns>The current stream position.</returns>
+        public long GetPosition()
+        {
+            var stream = _actualReader.BaseStream;
+            return stream.Position;
+        }
+
+        /// <summary>
+        /// Sets the current stream position of the reader, in bytes.
+        /// </summary>
+        /// <param name="offset">The target offset.</param>
+        /// <param name="origin">The <see cref="SeekOrigin"/> that describes the relative position of the target offset.</param>
+        public void Seek(long offset, SeekOrigin origin)
+        {
+            var stream = _actualReader.BaseStream;
+            stream.Seek(offset, origin);
+        }
     }
 }

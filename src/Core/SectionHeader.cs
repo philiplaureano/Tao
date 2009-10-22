@@ -7,7 +7,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a class that describes the sections that reside within a given portable executable image file.
     /// </summary>
-    public class SectionHeader
+    public class SectionHeader : IHeader
     {
         /// <summary>
         /// Gets the value indicating the name of the current section.

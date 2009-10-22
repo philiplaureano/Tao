@@ -142,6 +142,11 @@ namespace Tao.UnitTests
                 Assert.AreEqual(expectedCharacteristics, header.Characteristics);
             }
         }
+
+        protected override void SetStreamPosition(Stream stream)
+        {
+            stream.Seek(0x80, SeekOrigin.Begin);
+        }
     }
 }
 

@@ -151,6 +151,12 @@ namespace Tao.UnitTests
             VerifyDataDirectories(header.DataDirectories);
         }
         #region Helper methods
+
+        protected override void SetStreamPosition(Stream stream)
+        {
+            stream.Seek(0xF8, SeekOrigin.Begin);
+        }
+
         private void TestEmptyDirectoryRead(int startingOffset)
         {
             TestDirectoryRead(startingOffset, 0, 0);
