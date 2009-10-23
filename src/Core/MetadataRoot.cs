@@ -7,7 +7,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the root of the physical metadata.
     /// </summary>
-    public class MetadataRoot : IHeader
+    public class MetadataRoot : IMetadataRoot
     {
         /// <summary>
         /// Gets the value indicating the signature of the metadata root.

@@ -7,7 +7,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a class that reads a set of stream headers from a binary reader.
     /// </summary>
-    public class StreamHeaderReader
+    public class StreamHeaderReader : IHeaderReader<IStreamHeader>
     {
         /// <summary>
         /// Reads the specified number of headers from the given binary reader.
@@ -15,9 +15,9 @@ namespace Tao.Core
         /// <param name="headerCount">The number of stream headers to read.</param>
         /// <param name="reader">The binary reader.</param>
         /// <returns>The list of stream headers that were read from the binary reader.</returns>
-        public IList<StreamHeader> ReadFrom(int headerCount, IBinaryReader reader)
+        public IEnumerable<IStreamHeader> ReadFrom(int headerCount, IBinaryReader reader)
         {
-            var results = new List<StreamHeader>();
+            var results = new List<IStreamHeader>();
             for (var i = 0; i < headerCount; i++)
             {
                 var header = new StreamHeader();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Moq;
 using NUnit.Framework;
 using Tao.Core;
 using BinaryReader = Tao.Core.BinaryReader;
@@ -12,6 +13,52 @@ namespace Tao.UnitTests
     [TestFixture]
     public class CLIHeaderReadTests : BaseHeaderReadTest
     {
+        [Test]
+        public void ShouldBeAbleToReadCLIHeaderFromStream()
+        {
+            var stream = OpenSampleAssembly();
+            var reader = new BinaryReader(stream);
+            var header = new CLIHeader();
+            header.ReadFrom(reader);
+
+            return;
+        }
+
+        [Test]
+        public void ShouldUseOptionalHeaderToFindTheCLIHeaderOffset()
+        {
+            var stream = OpenSampleAssembly();
+            SetStreamPosition(stream);
+
+            // Use an actual optional header instance to calculate the file position
+            var actualOptionalHeader = new OptionalHeader();
+            actualOptionalHeader.ReadFrom(new BinaryReader(stream));
+
+            // Read the data directories from the given stream
+            var directories = new List<IDataDirectory>(actualOptionalHeader.DataDirectories);
+
+            // Use a dummy directory in place of the CLI header directory to ensure
+            // that it's used by the CLI header itself
+            var mockCLIDirectory = new Mock<IDataDirectory>();
+            mockCLIDirectory.Expect(d => d.VirtualAddress).Returns(0x2008);
+
+            directories[14] = mockCLIDirectory.Object;
+
+            var reader = new BinaryReader(stream);
+            var optionalHeader = new Mock<IOptionalHeader>();
+            optionalHeader.Expect(h => h.ReadFrom(reader));
+            optionalHeader.Expect(h => h.FileAlignment).Returns(actualOptionalHeader.FileAlignment);
+            optionalHeader.Expect(h => h.SectionAlignment).Returns(actualOptionalHeader.SectionAlignment);
+            optionalHeader.Expect(h => h.DataDirectories).Returns(directories);
+
+
+            var targetHeader = new CLIHeader(optionalHeader.Object);
+            targetHeader.ReadFrom(reader);
+
+            optionalHeader.VerifyAll();
+            mockCLIDirectory.VerifyAll();
+        }
+
         [Test]
         public void ShouldReadHeaderSize()
         {

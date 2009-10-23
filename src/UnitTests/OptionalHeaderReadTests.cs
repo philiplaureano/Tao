@@ -14,6 +14,23 @@ namespace Tao.UnitTests
     public partial class OptionalHeaderReadTests : BaseHeaderReadTest
     {
         [Test]
+        public void ShouldUseCOFFHeaderWhenReadingTheOptionalHeader()
+        {
+            var stream = OpenSampleAssembly();
+            stream.Seek(0x98, SeekOrigin.Begin);
+
+            var binaryReader = new BinaryReader(stream);
+            var coffHeader = new Mock<IHeader>();
+            coffHeader.Expect(h => h.ReadFrom(binaryReader));
+
+            var optionalHeader = new OptionalHeader(coffHeader.Object);
+
+            optionalHeader.ReadFrom(binaryReader);
+            coffHeader.VerifyAll();
+        }
+
+        #region Data Directory Tests
+        [Test]
         public void ShouldReadExportDataDirectory()
         {
             TestEmptyDirectoryRead(0xF8);
@@ -126,7 +143,7 @@ namespace Tao.UnitTests
 
             const int directoryCount = 0x10;
             var directoryReader = new DataDirectoryReader();
-            var directories = directoryReader.ReadDirectories(directoryCount, reader);
+            var directories = directoryReader.ReadFrom(directoryCount, reader);
 
             VerifyDataDirectories(directories);
         }
@@ -134,15 +151,15 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldUseDataDirectoryReaderInterfaceWhenReadingOptionalHeader()
         {
-            var directoryReader = new Mock<IDataDirectoryReader>();
-            directoryReader.Expect(reader => reader.ReadDirectories(0x10, It.IsAny<IBinaryReader>())).Returns(new List<DataDirectory>());
+            var directoryReader = new Mock<IHeaderReader<IDataDirectory>>();
+            directoryReader.Expect(reader => reader.ReadFrom(0x10, It.IsAny<IBinaryReader>())).Returns(new List<IDataDirectory>());
 
             var header = new OptionalHeader(directoryReader.Object);
             ReadOptionalHeaderFromSampleAssembly(header);
 
             directoryReader.VerifyAll();
         }
-        
+
         [Test]
         public void ShouldReadDataDirectoriesUsingOptionalHeader()
         {
@@ -150,6 +167,7 @@ namespace Tao.UnitTests
 
             VerifyDataDirectories(header.DataDirectories);
         }
+        #endregion
         #region Helper methods
 
         protected override void SetStreamPosition(Stream stream)
@@ -176,8 +194,9 @@ namespace Tao.UnitTests
             Assert.AreEqual(size, directory.Size);
         }
 
-        private void VerifyDataDirectories(IList<DataDirectory> directories)
+        private void VerifyDataDirectories(IEnumerable<IDataDirectory> directoryEntries)
         {
+            var directories = new List<IDataDirectory>(directoryEntries);
             var sizes = new Dictionary<int, int>();
             sizes[1] = 0x4f;
             sizes[5] = 0xC;

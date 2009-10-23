@@ -43,7 +43,8 @@ namespace Tao.UnitTests
 
             var streamReader = new StreamHeaderReader();
             const int headerCount = 5;
-            IList<StreamHeader> streamHeaders = streamReader.ReadFrom(headerCount, reader);
+            var streamHeadersRead = streamReader.ReadFrom(headerCount, reader);
+            var streamHeaders = new List<IStreamHeader>(streamHeadersRead);
 
             Assert.IsNotNull(streamHeaders);
             Assert.IsTrue(streamHeaders.Count == 5);

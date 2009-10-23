@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{65FE5A41-370E-498E-B27B-2479BB1F2AD8}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -53,14 +53,23 @@
     <Compile Include="DataDirectory.cs" />
     <Compile Include="DataDirectoryReader.cs" />
     <Compile Include="DllCharacteristics.cs" />
-    <Compile Include="IBinaryReader.cs" />
-    <Compile Include="IDataDirectoryReader.cs" />
-    <Compile Include="IHeader.cs" />
+    <Compile Include="DOSHeader.cs" />
+    <Compile Include="Interfaces\IBinaryReader.cs" />
+    <Compile Include="Interfaces\ICLIHeader.cs" />
+    <Compile Include="Interfaces\ICOFFHeader.cs" />
+    <Compile Include="Interfaces\IDataDirectory.cs" />
+    <Compile Include="Interfaces\IHeader.cs" />
+    <Compile Include="Interfaces\IHeaderReader.cs" />
+    <Compile Include="Interfaces\IImportAddressTable.cs" />
     <Compile Include="ImageFileCharacteristics.cs" />
     <Compile Include="ImageFileMachineType.cs" />
     <Compile Include="COFFHeader.cs" />
     <Compile Include="ImageSubsystem.cs" />
+    <Compile Include="Interfaces\IMetadataRoot.cs" />
     <Compile Include="ImportAddressTable.cs" />
+    <Compile Include="Interfaces\IOptionalHeader.cs" />
+    <Compile Include="Interfaces\ISectionHeader.cs" />
+    <Compile Include="Interfaces\IStreamHeader.cs" />
     <Compile Include="MetadataRoot.cs" />
     <Compile Include="OptionalHeader.cs" />
     <Compile Include="PEFormat.cs" />

@@ -8,7 +8,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a single metadata data stream header.
     /// </summary>
-    public class StreamHeader : IHeader
+    public class StreamHeader : IStreamHeader
     {
         /// <summary>
         /// Gets the value indicating the memory offset from the start of the metadata root.

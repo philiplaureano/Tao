@@ -8,14 +8,36 @@ namespace Tao.Core
     /// <summary>
     /// Represents a class that reads the PR File header from a Portable Executable file.
     /// </summary>
-    public class COFFHeader : IHeader
-    {       
+    public class COFFHeader : ICOFFHeader
+    {
+        private readonly IHeader _dosHeader;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="COFFHeader"/> class.
+        /// </summary>
+        public COFFHeader()
+            : this(new DOSHeader())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="COFFHeader"/> class.
+        /// </summary>
+        /// <param name="dosHeader">The DOS header that will determine the starting offset of the COFF header.</param>
+        public COFFHeader(IHeader dosHeader)
+        {
+            _dosHeader = dosHeader;
+        }
+
         /// <summary>
         /// Parses the PR file header from the given input <paramref name="binaryReader"/>.
         /// </summary>
         /// <param name="binaryReader">The binary reader.</param>
         public void ReadFrom(IBinaryReader binaryReader)
         {
+            if (_dosHeader != null)
+                _dosHeader.ReadFrom(binaryReader);
+
             ReadPESignature(binaryReader);
 
             // Read the target machine type
@@ -36,7 +58,7 @@ namespace Tao.Core
             // Read the optional header size
             OptionalHeaderSize = binaryReader.ReadUInt16();
 
-            Characteristics = (ImageFileCharacteristics) binaryReader.ReadUInt16();
+            Characteristics = (ImageFileCharacteristics)binaryReader.ReadUInt16();
         }
 
         /// <summary>

@@ -1,15 +1,32 @@
 using System;
 using System.IO;
-using System.Text;
+using System;
+using Moq;
 using NUnit.Framework;
 using Tao.Core;
-using BinaryReader=Tao.Core.BinaryReader;
+using BinaryReader = Tao.Core.BinaryReader;
 
 namespace Tao.UnitTests
 {
     [TestFixture]
     public class CoffHeaderReadTests : BaseHeaderReadTest
     {
+        [Test]
+        public void ShouldReadFromDOSHeaderIfDOSHeaderIsPresent()
+        {
+            var stream = OpenSampleAssembly();
+            SetStreamPosition(stream);
+
+            var reader = new BinaryReader(stream);
+            var dosHeader = new Mock<IHeader>();
+            dosHeader.Expect(h => h.ReadFrom(reader));
+
+            var header = new COFFHeader(dosHeader.Object);
+            header.ReadFrom(reader);
+
+            dosHeader.VerifyAll();
+        }
+
         [Test]
         public void ShouldBeAbleToFindSampleAssemblyImage()
         {
@@ -39,7 +56,7 @@ namespace Tao.UnitTests
                 var header = new COFFHeader();
                 var reader = new BinaryReader(fileStream);
 
-                header.ReadFrom(reader); ;
+                header.ReadFrom(reader);
 
                 Assert.AreEqual(ImageFileMachineType.I386, header.MachineType);
             }
@@ -48,14 +65,14 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldReadNumberOfSections()
         {
-            
+
             using (var fileStream = OpenSampleAssembly())
             {
                 fileStream.Seek(0x80, SeekOrigin.Begin);
                 var header = new COFFHeader();
                 var reader = new BinaryReader(fileStream);
 
-                header.ReadFrom(reader); ;
+                header.ReadFrom(reader);
 
                 Assert.AreEqual(2, header.NumberOfSections);
             }
@@ -70,11 +87,11 @@ namespace Tao.UnitTests
                 var header = new COFFHeader();
                 var reader = new BinaryReader(fileStream);
 
-                header.ReadFrom(reader); ; ;
+                header.ReadFrom(reader);
 
                 // Use the hardcoded creation date
                 // of skeleton.exe
-                var expectedTimeStamp = 0x4ad286dd;
+                const int expectedTimeStamp = 0x4ad286dd;
                 Assert.AreEqual(expectedTimeStamp, header.TimeDateStamp);
             }
         }
@@ -88,7 +105,7 @@ namespace Tao.UnitTests
                 var header = new COFFHeader();
                 var reader = new BinaryReader(fileStream);
 
-                header.ReadFrom(reader); ; ;
+                header.ReadFrom(reader);
 
                 Assert.AreEqual(0, header.PointerToSymbolTable);
             }
@@ -103,7 +120,7 @@ namespace Tao.UnitTests
                 var header = new COFFHeader();
                 var reader = new BinaryReader(fileStream);
 
-                header.ReadFrom(reader); ;
+                header.ReadFrom(reader);
 
                 Assert.AreEqual(0, header.NumberOfSymbols);
             }
@@ -118,9 +135,9 @@ namespace Tao.UnitTests
                 var header = new COFFHeader();
                 var reader = new BinaryReader(fileStream);
 
-                header.ReadFrom(reader); ;
+                header.ReadFrom(reader);
 
-                var expectedSize = 0xE0;
+                const int expectedSize = 0xE0;
                 Assert.AreEqual(expectedSize, header.OptionalHeaderSize);
             }
         }
@@ -134,10 +151,10 @@ namespace Tao.UnitTests
                 var header = new COFFHeader();
                 var reader = new BinaryReader(fileStream);
 
-                header.ReadFrom(reader); ;
+                header.ReadFrom(reader);
 
-                ImageFileCharacteristics expectedCharacteristics = ImageFileCharacteristics.ThirtyTwoBitMachine |
-                                                           ImageFileCharacteristics.ExecutableImage;
+                const ImageFileCharacteristics expectedCharacteristics = ImageFileCharacteristics.ThirtyTwoBitMachine |
+                                                                         ImageFileCharacteristics.ExecutableImage;
 
                 Assert.AreEqual(expectedCharacteristics, header.Characteristics);
             }

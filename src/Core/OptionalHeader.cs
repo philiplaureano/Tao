@@ -7,25 +7,47 @@ namespace Tao.Core
     /// <summary>
     /// Represents the Optional Header of a Portable Executable file.
     /// </summary>
-    public class OptionalHeader : IHeader
+    public class OptionalHeader : IOptionalHeader
     {
-        private readonly IDataDirectoryReader _dataDirectoryReader;
-        private readonly List<DataDirectory> _dataDirectories = new List<DataDirectory>();
+        private readonly IHeaderReader<IDataDirectory> _dataDirectoryReader;
+        private readonly List<IDataDirectory> _dataDirectories = new List<IDataDirectory>();
+        private readonly IHeader _coffHeader;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataDirectoryReader"/> class.
+        /// Initializes a new instance of the <see cref="OptionalHeader"/> class.
         /// </summary>
-        public OptionalHeader() : this(new DataDirectoryReader())
-        {            
+        public OptionalHeader()
+            : this(new DataDirectoryReader())
+        {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataDirectoryReader"/> class.
+        /// Initializes a new instance of the <see cref="OptionalHeader"/> class.
         /// </summary>
         /// <param name="dataDirectoryReader">The data directory reader that will be used to read the data directories from the image stream.</param>
-        public OptionalHeader(IDataDirectoryReader dataDirectoryReader)
+        public OptionalHeader(IHeaderReader<IDataDirectory> dataDirectoryReader)
+            : this(new COFFHeader(), dataDirectoryReader)
         {
-            _dataDirectoryReader = dataDirectoryReader;    
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionalHeader"/> class.
+        /// </summary>
+        /// <param name="coffHeader">The coff header that will be used to determine the position of the optional header.</param>
+        /// <param name="dataDirectoryReader">The data directory reader that will be used to read the data directories from the image stream.</param>
+        public OptionalHeader(IHeader coffHeader, IHeaderReader<IDataDirectory> dataDirectoryReader)
+        {
+            _dataDirectoryReader = dataDirectoryReader;
+            _coffHeader = coffHeader;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionalHeader"/> class.
+        /// </summary>
+        /// <param name="coffHeader">The coff header that will be used to determine the position of the optional header.</param>
+        public OptionalHeader(IHeader coffHeader)
+            : this(coffHeader, new DataDirectoryReader())
+        {
         }
 
         #region Standard Fields
@@ -258,7 +280,8 @@ namespace Tao.Core
         /// <value>The windows subsystem required to run the target image.</value>
         public ImageSubsystem? Subsystem
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -267,7 +290,8 @@ namespace Tao.Core
         /// <value>The <see cref="DllCharacteristics"/> of the target image.</value>
         public DllCharacteristics? DLLCharacteristics
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -276,7 +300,8 @@ namespace Tao.Core
         /// <remarks>Only the Stack Commit Size is committed; the rest is made available one page at a time, until reserve size is reached.</remarks>
         public uint? SizeOfStackReserve
         {
-            get; private set;
+            get;
+            private set;
         }
 
 
@@ -286,7 +311,8 @@ namespace Tao.Core
         /// <value>The size of the local heap to reserve.</value>
         public uint? SizeOfHeapReserve
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -295,7 +321,8 @@ namespace Tao.Core
         /// <value>The size of local heap space to commit.</value>
         public uint? SizeOfHeapCommit
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -304,7 +331,8 @@ namespace Tao.Core
         /// <value>The stack size to commit.</value>
         public uint? SizeOfStackCommit
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -313,7 +341,8 @@ namespace Tao.Core
         /// <value>Reserved. This value must be zero.</value>
         public uint? LoaderFlags
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -322,7 +351,8 @@ namespace Tao.Core
         /// <value>The number of data directories.</value>
         public uint? NumberOfDirectories
         {
-            get; private set;
+            get;
+            private set;
         }
 
         #endregion
@@ -331,7 +361,7 @@ namespace Tao.Core
         /// Gets the value indicating the data directories that currently reside within the image.
         /// </summary>
         /// <value>The list of data directories.</value>
-        public IList<DataDirectory> DataDirectories
+        public IEnumerable<IDataDirectory> DataDirectories
         {
             get
             {
@@ -345,6 +375,9 @@ namespace Tao.Core
         /// <param name="reader">The binary reader.</param>
         public void ReadFrom(IBinaryReader reader)
         {
+            if (_coffHeader != null)
+                _coffHeader.ReadFrom(reader);
+
             ReadStandardFields(reader);
             ReadWindowSpecificFields(reader);
         }
@@ -374,7 +407,7 @@ namespace Tao.Core
 
             CheckSum = reader.ReadUInt32();
             Subsystem = (ImageSubsystem)reader.ReadUInt16();
-            DLLCharacteristics = (DllCharacteristics) reader.ReadUInt16();
+            DLLCharacteristics = (DllCharacteristics)reader.ReadUInt16();
 
             SizeOfStackReserve = reader.ReadUInt32();
             SizeOfStackCommit = reader.ReadUInt32();
@@ -395,7 +428,7 @@ namespace Tao.Core
         {
             _dataDirectories.Clear();
             var directoryCount = Convert.ToInt32(NumberOfDirectories);
-            var directories = _dataDirectoryReader.ReadDirectories(directoryCount, reader);
+            var directories = _dataDirectoryReader.ReadFrom(directoryCount, reader);
 
             _dataDirectories.AddRange(directories);
         }

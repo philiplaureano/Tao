@@ -7,7 +7,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a structure that gives the address and size of a table or string used by Windows.
     /// </summary>
-    public class DataDirectory : IHeader
+    public class DataDirectory : IDataDirectory
     {
         /// <summary>
         /// Gets the value indicating the RVA of the data directory.

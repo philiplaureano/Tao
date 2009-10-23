@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Tao.Core
@@ -7,8 +8,27 @@ namespace Tao.Core
     /// <summary>
     /// Represents the CLI header that contains all of the runtime-specific data entries to run managed code.
     /// </summary>
-    public class CLIHeader : IHeader
+    public class CLIHeader : ICLIHeader
     {
+        private readonly IOptionalHeader _optionalHeader;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CLIHeader"/> class.
+        /// </summary>
+        public CLIHeader()
+            : this(new OptionalHeader())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CLIHeader"/> class.
+        /// </summary>
+        /// <param name="optionalHeader">The optional header that will determine the position of the CLI header.</param>
+        public CLIHeader(IOptionalHeader optionalHeader)
+        {
+            _optionalHeader = optionalHeader;
+        }
+
         /// <summary>
         /// Gets the value indicating the size of the header in bytes.
         /// </summary>
@@ -146,6 +166,8 @@ namespace Tao.Core
         /// <param name="reader">The binary reader.</param>
         public void ReadFrom(IBinaryReader reader)
         {
+            GetCLIHeaderPosition(reader);
+
             SizeOfHeader = reader.ReadUInt32();
             MajorRuntimeVersion = reader.ReadUInt16();
             MinorRuntimeVersion = reader.ReadUInt16();
@@ -163,6 +185,30 @@ namespace Tao.Core
 
             ExportAddressTableJumps = reader.ReadUInt64();
             ManagedNativeHeader = reader.ReadUInt64();
+        }
+
+        /// <summary>
+        /// Determines the CLI header position using the data from the given binary reader.
+        /// </summary>
+        /// <param name="reader">The binary reader.</param>
+        private void GetCLIHeaderPosition(IBinaryReader reader)
+        {
+            // Use the optional header to find the CLI header
+            // file position
+            if (_optionalHeader == null)
+                return;
+
+            _optionalHeader.ReadFrom(reader);
+
+            var directories = new List<IDataDirectory>(_optionalHeader.DataDirectories);
+            var cliHeaderDirectory = directories[14];
+
+            var rva = cliHeaderDirectory.VirtualAddress;
+            var sectionAlignment = _optionalHeader.SectionAlignment;
+            var fileAlignment = _optionalHeader.FileAlignment;
+
+            var fileOffset = rva.Value - sectionAlignment.Value + fileAlignment.Value;
+            reader.Seek(fileOffset, SeekOrigin.Begin);
         }
     }
 }
