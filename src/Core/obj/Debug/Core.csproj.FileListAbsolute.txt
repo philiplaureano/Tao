@@ -1,5 +1,0 @@
-I:\Tao\src\Core\bin\Debug\Tao.Core.dll
-I:\Tao\src\Core\bin\Debug\Tao.Core.pdb
-I:\Tao\src\Core\obj\Debug\ResolveAssemblyReference.cache
-I:\Tao\src\Core\obj\Debug\Tao.Core.dll
-I:\Tao\src\Core\obj\Debug\Tao.Core.pdb

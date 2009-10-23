@@ -86,7 +86,7 @@ namespace Tao.UnitTests
             var reader = new BinaryReader(stream);
             var sectionHeaderReader = new SectionHeaderReader();
 
-            IList<SectionHeader> sections = sectionHeaderReader.ReadSections(sectionCount, reader);
+            IList<SectionHeader> sections = sectionHeaderReader.ReadFrom(sectionCount, reader);
 
             VerifySectionHeaders(sections);
         }
