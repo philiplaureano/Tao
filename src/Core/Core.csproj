@@ -83,6 +83,7 @@
     <Compile Include="SectionHeaders.cs" />
     <Compile Include="StreamHeader.cs" />
     <Compile Include="StreamHeaderReader.cs" />
+    <Compile Include="StreamHeaders.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

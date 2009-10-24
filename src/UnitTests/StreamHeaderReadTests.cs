@@ -13,7 +13,31 @@ namespace Tao.UnitTests
 {
     [TestFixture]
     public class StreamHeaderReadTests : BaseHeaderReadTest
-    {        
+    {
+        [Test]
+        public void ShouldBeAbleToUseStreamHeadersWithoutExplicitlyInstantiatingOtherHeaders()
+        {
+            var reader = new BinaryReader(OpenSampleAssembly());
+            var headers = new StreamHeaders();
+
+            headers.ReadFrom(reader);
+            Verify(headers);
+        }
+
+        [Test]
+        public void ShouldBeAbleToUseMetadataRootToGetMultipleStreamHeaders()
+        {
+            var reader = new BinaryReader(OpenSampleAssembly());
+            var root = new Mock<IMetadataRoot>();
+            root.Expect(r => r.NumberOfStreams).Returns(5);
+            root.Expect(r => r.ReadFrom(reader));
+
+            var headers = new StreamHeaders(root.Object);
+            headers.ReadFrom(reader);
+
+            root.VerifyAll();
+        }
+
         [Test]
         public void ShouldBeAbleToReadOffset()
         {
@@ -47,6 +71,11 @@ namespace Tao.UnitTests
             var streamHeaders = new List<IStreamHeader>(streamHeadersRead);
 
             Assert.IsNotNull(streamHeaders);
+            Verify(streamHeaders);
+        }
+
+        private void Verify(IList<IStreamHeader> streamHeaders)
+        {
             Assert.IsTrue(streamHeaders.Count == 5);
 
             // Check the ~ stream header

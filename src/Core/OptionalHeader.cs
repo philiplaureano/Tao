@@ -424,6 +424,10 @@ namespace Tao.Core
             ReadDataDirectories(reader);
         }
 
+        /// <summary>
+        /// Reads the data directories from the given binary reader.
+        /// </summary>
+        /// <param name="reader">The binary reader.</param>
         private void ReadDataDirectories(IBinaryReader reader)
         {
             _dataDirectories.Clear();
