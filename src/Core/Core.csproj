@@ -23,6 +23,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Debug\Tao.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -76,7 +78,9 @@
     <Compile Include="RuntimeFlags.cs" />
     <Compile Include="SectionFlags.cs" />
     <Compile Include="SectionHeader.cs" />
+    <Compile Include="SectionHeaderList.cs" />
     <Compile Include="SectionHeaderReader.cs" />
+    <Compile Include="SectionHeaders.cs" />
     <Compile Include="StreamHeader.cs" />
     <Compile Include="StreamHeaderReader.cs" />
   </ItemGroup>

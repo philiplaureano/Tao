@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Moq;
 using NUnit.Framework;
 using Tao.Core;
 using BinaryReader=Tao.Core.BinaryReader;
@@ -75,6 +76,43 @@ namespace Tao.UnitTests
             TestHeader(header => Assert.AreEqual(expectedFlags, header.Characteristics));
         }
         #endregion
+
+        [Test]
+        public void ShouldBeAbleToReadMultipleSectionHeadersWithoutExplicitlyInstantiatingOtherHeaders()
+        {
+            var reader = new BinaryReader(OpenSampleAssembly());
+            var headers = new SectionHeaders();
+            headers.ReadFrom(reader);
+
+            Assert.AreEqual(2, headers.Count);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadMultipleSectionHeadersUsingTheGivenCoffHeaderAndSectionHeaderReader()
+        {
+            // Setup the mock coff header
+            var reader = new BinaryReader(OpenSampleAssembly());
+            var coffHeader = new Mock<ICOFFHeader>();
+            coffHeader.Expect(h => h.NumberOfSections).Returns(2);
+            coffHeader.Expect(h => h.ReadFrom(reader));
+            coffHeader.Expect(h => h.OptionalHeaderSize).Returns(0);
+
+            var mockItem = new Mock<ISectionHeader>();
+            var mockResult = new [] {mockItem.Object};
+            var sectionReader = new Mock<IHeaderReader<ISectionHeader>>();
+
+            // Return the mock section header array once the section reader is called
+            sectionReader.Expect(sr => sr.ReadFrom(2, reader));
+            sectionReader.Expect(sr => sr.ReadFrom(2, reader)).Returns(mockResult);
+
+            var sectionHeaders = new SectionHeaders(coffHeader.Object, sectionReader.Object);
+            sectionHeaders.ReadFrom(reader);
+
+            Assert.IsTrue(sectionHeaders.Count == 1);
+
+            coffHeader.VerifyAll();
+            sectionReader.VerifyAll();            
+        }
 
         [Test]
         public void ShouldReadSectionHeadersFromSkeletonFile()

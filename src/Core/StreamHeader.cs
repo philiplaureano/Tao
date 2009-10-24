@@ -9,7 +9,7 @@ namespace Tao.Core
     /// Represents a single metadata data stream header.
     /// </summary>
     public class StreamHeader : IStreamHeader
-    {
+    {       
         /// <summary>
         /// Gets the value indicating the memory offset from the start of the metadata root.
         /// </summary>
@@ -45,11 +45,11 @@ namespace Tao.Core
         /// </summary>
         /// <param name="reader">The binary reader.</param>
         public void ReadFrom(IBinaryReader reader)
-        {
+        {       
             Offset = reader.ReadUInt32();
             Size = reader.ReadUInt32();
             ReadName(reader);
-        }
+        }        
 
         /// <summary>
         /// Reads the name of the stream from the given binary reader.

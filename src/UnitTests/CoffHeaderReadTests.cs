@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System;
 using Moq;
 using NUnit.Framework;
 using Tao.Core;
@@ -11,6 +10,16 @@ namespace Tao.UnitTests
     [TestFixture]
     public class CoffHeaderReadTests : BaseHeaderReadTest
     {
+        [Test]
+        public void ShouldBeAbleToReadUsingOnlyTheCoffHeader()
+        {
+            var stream = OpenSampleAssembly();
+            var reader = new BinaryReader(stream);
+
+            var header = new COFFHeader();
+            header.ReadFrom(reader);
+        }
+
         [Test]
         public void ShouldReadFromDOSHeaderIfDOSHeaderIsPresent()
         {

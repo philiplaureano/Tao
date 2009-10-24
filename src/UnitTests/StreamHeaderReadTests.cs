@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Moq;
 using NUnit.Framework;
 using Tao.Core;
 
@@ -12,7 +13,7 @@ namespace Tao.UnitTests
 {
     [TestFixture]
     public class StreamHeaderReadTests : BaseHeaderReadTest
-    {
+    {        
         [Test]
         public void ShouldBeAbleToReadOffset()
         {
@@ -30,7 +31,6 @@ namespace Tao.UnitTests
         {
             AssertEquals<StreamHeader, string>("#~", header=>header.Name);
         }
-
 
         [Test]
         public void ShouldBeAbleToReadMultipleStreamHeaders()

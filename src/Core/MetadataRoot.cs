@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Tao.Core
@@ -9,6 +10,27 @@ namespace Tao.Core
     /// </summary>
     public class MetadataRoot : IMetadataRoot
     {
+        private readonly ICLIHeader _cliHeader;
+        private readonly IOptionalHeader _optionalHeader;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetadataRoot"/> class.
+        /// </summary>
+        public MetadataRoot() : this(new OptionalHeader(), new CLIHeader())
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetadataRoot"/> class.
+        /// </summary>
+        /// <param name="optionalHeader">The optional header.</param>
+        /// <param name="cliHeader">The CLI header that points to the metadata root.</param>
+        public MetadataRoot(IOptionalHeader optionalHeader, ICLIHeader cliHeader)
+        {
+            _optionalHeader = optionalHeader;
+            _cliHeader = cliHeader;
+        }
+
         /// <summary>
         /// Gets the value indicating the signature of the metadata root.
         /// </summary>
@@ -74,6 +96,9 @@ namespace Tao.Core
         /// <param name="reader">The binary reader.</param>
         public void ReadFrom(IBinaryReader reader)
         {
+            if (_cliHeader != null)
+                SeekCLIHeaderPosition(reader);
+
             Signature = reader.ReadUInt32();
             MajorVersion = reader.ReadUInt16();
             MinorVersion = reader.ReadUInt16();
@@ -88,6 +113,23 @@ namespace Tao.Core
             reader.ReadUInt16();
 
             NumberOfStreams = reader.ReadUInt16();
+        }
+        
+        /// <summary>
+        /// Ensures that the given binary reader is pointing towards the first byte of the CLI header.
+        /// </summary>
+        /// <param name="reader">The binary reader.</param>
+        private void SeekCLIHeaderPosition(IBinaryReader reader)
+        {
+            _optionalHeader.ReadFrom(reader);
+            _cliHeader.ReadFrom(reader);
+
+            var sectionAlignment = _optionalHeader.SectionAlignment;
+            var fileAlignment = _optionalHeader.FileAlignment;
+            var rva = _cliHeader.MetadataRva;
+            var fileOffset = rva.Value - sectionAlignment.Value + fileAlignment.Value;
+
+            reader.Seek(fileOffset, SeekOrigin.Begin);
         }
 
         /// <summary>
