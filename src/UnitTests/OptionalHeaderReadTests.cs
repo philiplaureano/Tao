@@ -14,6 +14,16 @@ namespace Tao.UnitTests
     public partial class OptionalHeaderReadTests : BaseHeaderReadTest
     {
         [Test]
+        public void ShouldBeAbleToUseOptionalHeaderWithoutExplicitlyCreatingOtherHeaders()
+        {
+            var binaryReader = new BinaryReader(OpenSampleAssembly());
+            var optionalHeader = new OptionalHeader();
+            optionalHeader.ReadFrom(binaryReader);
+
+            VerifyDataDirectories(optionalHeader.DataDirectories);
+        }
+
+        [Test]
         public void ShouldUseCOFFHeaderWhenReadingTheOptionalHeader()
         {
             var stream = OpenSampleAssembly();
@@ -203,6 +213,8 @@ namespace Tao.UnitTests
             sizes[12] = 8;
             sizes[14] = 0x48;
 
+            // Compare the RVAs of the data directories read from the file
+            // versus the values read from the assembly using ILdasm
             var virtualAddresses = new Dictionary<int, int>();
             virtualAddresses[1] = 0x217c;
             virtualAddresses[5] = 0x4000;
