@@ -150,7 +150,7 @@ namespace Tao.UnitTests
             Assert.AreEqual(expectedTextSectionCharacteristics, textSection.Characteristics);
 
 
-            // Verify the section section
+            // Verify the second section
             var relocSection = sections[1];
             Assert.AreEqual(0xC, relocSection.VirtualSize);
             Assert.AreEqual(0x4000, relocSection.VirtualAddress);
@@ -171,6 +171,7 @@ namespace Tao.UnitTests
             var sectionHeader = GetSectionHeader();
             doTest(sectionHeader);
         }
+
         #region Helper methods
         private SectionHeader GetSectionHeader()
         {

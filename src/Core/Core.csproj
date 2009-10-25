@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <DocumentationFile>bin\Debug\Tao.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -73,6 +73,7 @@
     <Compile Include="Interfaces\ISectionHeader.cs" />
     <Compile Include="Interfaces\IStreamHeader.cs" />
     <Compile Include="MetadataRoot.cs" />
+    <Compile Include="MetadataStream.cs" />
     <Compile Include="OptionalHeader.cs" />
     <Compile Include="PEFormat.cs" />
     <Compile Include="RuntimeFlags.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="StreamHeader.cs" />
     <Compile Include="StreamHeaderReader.cs" />
     <Compile Include="StreamHeaders.cs" />
+    <Compile Include="TableId.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
