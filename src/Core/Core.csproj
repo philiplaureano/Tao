@@ -56,6 +56,7 @@
     <Compile Include="DataDirectoryReader.cs" />
     <Compile Include="DllCharacteristics.cs" />
     <Compile Include="DOSHeader.cs" />
+    <Compile Include="Interfaces\IMetadataStream.cs" />
     <Compile Include="Interfaces\IBinaryReader.cs" />
     <Compile Include="Interfaces\ICLIHeader.cs" />
     <Compile Include="Interfaces\ICOFFHeader.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Interfaces\IOptionalHeader.cs" />
     <Compile Include="Interfaces\ISectionHeader.cs" />
     <Compile Include="Interfaces\IStreamHeader.cs" />
+    <Compile Include="Interfaces\IStreamHeaders.cs" />
     <Compile Include="MetadataRoot.cs" />
     <Compile Include="MetadataStream.cs" />
     <Compile Include="OptionalHeader.cs" />

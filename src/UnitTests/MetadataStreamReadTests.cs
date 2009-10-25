@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Moq;
 using NUnit.Framework;
 using Tao.Core;
 using BinaryReader = Tao.Core.BinaryReader;
@@ -12,6 +13,15 @@ namespace Tao.UnitTests
     [TestFixture]
     public class MetadataStreamReadTests : BaseHeaderReadTest
     {
+        [Test]
+        public void ShouldBeAbleToUseMetadataStreamWithoutInstantiatingOtherHeaders()
+        {
+            var reader = new BinaryReader(OpenSampleAssembly());
+
+            var metadataStream = new MetadataStream();
+            metadataStream.ReadFrom(reader);
+        }
+
         [Test]
         public void ShouldReadMajorVersion()
         {

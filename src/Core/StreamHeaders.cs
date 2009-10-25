@@ -7,7 +7,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the stream headers in a .NET portable executable.
     /// </summary>
-    public class StreamHeaders : List<IStreamHeader>, IHeader
+    public class StreamHeaders : List<IStreamHeader>, IStreamHeaders
     {
         private readonly IMetadataRoot _root;
         private readonly IHeaderReader<IStreamHeader> _streamHeaderReader;

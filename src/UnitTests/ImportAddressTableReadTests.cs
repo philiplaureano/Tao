@@ -13,6 +13,16 @@ namespace Tao.UnitTests
     public class ImportAddressTableReadTests : BaseHeaderReadTest
     {
         [Test]
+        public void ShouldBeAbleToReadIATWithoutCreatingOtherHeadersAndWithoutUsingAHardcodedSeekOperation()
+        {
+            var reader = new BinaryReader(OpenSampleAssembly());
+            var iat = new ImportAddressTable();
+            iat.ReadFrom(reader);
+
+            Assert.AreEqual(0x21b0, iat.HintNameTableRVA);
+        }
+
+        [Test]
         public void ShouldBeAbleToReadIAT()
         {
             Func<ImportAddressTable, uint?> getActualValue = h => h.HintNameTableRVA;
