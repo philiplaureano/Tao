@@ -7,13 +7,13 @@ namespace Tao.Core
     /// <summary>
     /// Represents an index that points to the #Strings heap.
     /// </summary>
-    public class StringsHeapIndex : HeapIndex
+    public class StringHeapIndex : HeapIndex
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StringsHeapIndex"/> class.
+        /// Initializes a new instance of the <see cref="StringHeapIndex"/> class.
         /// </summary>
         /// <param name="metadataStream">The metadata stream.</param>
-       public StringsHeapIndex(IMetadataStream metadataStream) : base(0, metadataStream)
+       public StringHeapIndex(IMetadataStream metadataStream) : base(0, metadataStream)
        {           
        }
     }

@@ -159,11 +159,8 @@ namespace Tao.Core
         /// <param name="reader">The binary reader.</param>
         private void SeekMetadataStreamPosition(IBinaryReader reader)
         {
-            var rootRva = _cliHeader.MetadataRva;
-            var sectionAlignment = _optionalHeader.SectionAlignment;
-            var fileAlignment = _optionalHeader.FileAlignment;
-
-            var rootFileOffset = rootRva.Value % sectionAlignment.Value + fileAlignment.Value;
+            var rootRva = (uint) _cliHeader.MetadataRva;           
+            var rootFileOffset = _optionalHeader.GetFileOffset(rootRva);
 
             // Get the offset of the #~ stream
             var targetStreamHeader = GetMetadataStreamHeader(reader);

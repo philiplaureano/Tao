@@ -57,16 +57,7 @@ namespace Tao.Core
         /// <param name="reader">The binary reader.</param>
         private void ReadName(IBinaryReader reader)
         {
-            var name = string.Empty;
-            byte currentByte = reader.ReadByte();
-            var encoding = Encoding.UTF8;
-            while (currentByte != 0)
-            {
-                name += encoding.GetString(new byte[] { currentByte });
-                currentByte = reader.ReadByte();
-            }
-
-            Name = name;
+            Name = reader.ReadNullTerminatedString();
 
             const int byteAlignment = 4;
             Realign(reader, byteAlignment);

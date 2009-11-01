@@ -18,7 +18,7 @@ namespace Tao.Core
             if (metadataStream == null)
                 throw new ArgumentNullException("metadataStream");
 
-            NameIndex = new StringsHeapIndex(metadataStream);
+            NameIndex = new StringHeapIndex(metadataStream);
             Mvid = new GuidHeapIndex(metadataStream);
             EncId = new GuidHeapIndex(metadataStream);
             EncBaseId = new GuidHeapIndex(metadataStream);

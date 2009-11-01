@@ -74,6 +74,7 @@
     <Compile Include="PEReadTests\StreamHeaderReadTests.cs" />
     <Compile Include="HeapIndexReadTests.cs" />
     <Compile Include="StringHeapIndexReadTests.cs" />
+    <Compile Include="StringHeapReadTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

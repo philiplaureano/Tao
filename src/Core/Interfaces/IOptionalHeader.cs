@@ -195,5 +195,12 @@ namespace Tao.Core
         /// </summary>
         /// <value>The list of data directories.</value>
         IEnumerable<IDataDirectory> DataDirectories { get; }
+
+        /// <summary>
+        /// Calculates the actual file offset from the given relative virtual address.
+        /// </summary>
+        /// <param name="rva">The target RVA that will be converted into a file offset.</param>
+        /// <returns>The file offset.</returns>
+        uint GetFileOffset(uint rva);
     }
 }

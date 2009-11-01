@@ -60,7 +60,6 @@ namespace Tao.UnitTests
 
         protected abstract byte GetHeapSizesForSingleWordReads();
         protected abstract byte GetHeapSizesForDoubleWordReads();
-        protected abstract HeapIndex CreateHeapIndex(Mock<IMetadataStream> metadataStream);
-        
+        protected abstract HeapIndex CreateHeapIndex(Mock<IMetadataStream> metadataStream);        
     }
 }

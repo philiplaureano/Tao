@@ -24,31 +24,7 @@ namespace Tao.UnitTests
 
             return;
         }
-
-        [Test]
-        public void ShouldUseCLIHeaderToFindTheMetadataRootPosition()
-        {            
-            var stream = OpenSampleAssembly();
-            var reader = new BinaryReader(stream);
-
-            SetStreamPosition(stream);
-
-            // Ensure that the metadata root reads from the optional header
-            var optionalHeader = new Mock<IOptionalHeader>();
-            optionalHeader.Expect(h => h.SectionAlignment).Returns(0x2000);
-            optionalHeader.Expect(h => h.FileAlignment).Returns(0x200);
-            optionalHeader.Expect(h => h.ReadFrom(reader));
-
-            var cliHeader = new Mock<ICLIHeader>();
-            cliHeader.Expect(h => h.MetadataRva).Returns(0x2060);
-            cliHeader.Expect(h => h.ReadFrom(reader));
-            var root = new MetadataRoot(optionalHeader.Object, cliHeader.Object);
-
-            root.ReadFrom(reader);
-
-            cliHeader.VerifyAll();
-            optionalHeader.VerifyAll();
-        }
+        
         [Test]
         public void ShouldBeAbleToReadMetadataSignature()
         {            

@@ -27,12 +27,10 @@ namespace Tao.Core
             var directories = new List<IDataDirectory>(optionalHeader.DataDirectories);
             var targetDirectory = directories[headerIndex];
 
-            var rva = targetDirectory.VirtualAddress;
-            var sectionAlignment = optionalHeader.SectionAlignment;
-            var fileAlignment = optionalHeader.FileAlignment;
 
-            var fileOffset = rva.Value - sectionAlignment.Value + fileAlignment.Value;
+            var rva = (uint)targetDirectory.VirtualAddress;
+            var fileOffset = optionalHeader.GetFileOffset(rva);
             reader.Seek(fileOffset, SeekOrigin.Begin);
-        }
+        }        
     }
 }

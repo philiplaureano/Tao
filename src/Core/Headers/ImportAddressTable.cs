@@ -73,12 +73,10 @@ namespace Tao.Core
             var iatDataDirectory = directoryList[12];
 
             // Calculate the file offset of the IAT table
-            var sectionAlignment = _optionalHeader.SectionAlignment;
-            var fileAlignment = _optionalHeader.FileAlignment;
-            var iatRva = iatDataDirectory.VirtualAddress;
+            var iatRva = (uint)iatDataDirectory.VirtualAddress;
 
-            var targetAddress = iatRva % sectionAlignment + fileAlignment;
-            var targetOffset = Convert.ToInt64(targetAddress.GetValueOrDefault());
+            var targetAddress = _optionalHeader.GetFileOffset(iatRva);
+            var targetOffset = Convert.ToInt64(targetAddress);
             reader.Seek(targetOffset, SeekOrigin.Begin);
         }
     }

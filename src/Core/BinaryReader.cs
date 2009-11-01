@@ -78,6 +78,24 @@ namespace Tao.Core
         }
 
         /// <summary>
+        /// Reads a null-terminated UTF8 string.
+        /// </summary>
+        /// <returns>A null-terminated UTF8 string.</returns>
+        public string ReadNullTerminatedString()
+        {
+            var result = string.Empty;
+            var currentByte = ReadByte();
+            var encoding = Encoding.UTF8;
+            while (currentByte != 0)
+            {
+                result += encoding.GetString(new byte[] { currentByte });
+                currentByte = ReadByte();
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets the current stream position of the reader, in bytes.
         /// </summary>
         /// <returns>The current stream position.</returns>

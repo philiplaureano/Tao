@@ -48,6 +48,12 @@ namespace Tao.Core
         ulong ReadUInt64();
 
         /// <summary>
+        /// Reads a null-terminated UTF8 string.
+        /// </summary>
+        /// <returns>A null-terminated UTF8 string.</returns>
+        string ReadNullTerminatedString();
+
+        /// <summary>
         /// Gets the current stream position of the reader, in bytes.
         /// </summary>
         /// <returns>The current stream position.</returns>

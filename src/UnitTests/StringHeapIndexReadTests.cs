@@ -13,7 +13,7 @@ namespace Tao.UnitTests
     {
         protected override HeapIndex CreateHeapIndex(Mock<IMetadataStream> metadataStream)
         {
-            return new StringsHeapIndex(metadataStream.Object);
+            return new StringHeapIndex(metadataStream.Object);
         }
 
         protected override byte GetHeapSizesForSingleWordReads()

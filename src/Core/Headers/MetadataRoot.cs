@@ -16,8 +16,9 @@ namespace Tao.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="MetadataRoot"/> class.
         /// </summary>
-        public MetadataRoot() : this(new OptionalHeader(), new CLIHeader())
-        {            
+        public MetadataRoot()
+            : this(new OptionalHeader(), new CLIHeader())
+        {
         }
 
         /// <summary>
@@ -114,7 +115,7 @@ namespace Tao.Core
 
             NumberOfStreams = reader.ReadUInt16();
         }
-        
+
         /// <summary>
         /// Ensures that the given binary reader is pointing towards the first byte of the metadata root.
         /// </summary>
@@ -124,10 +125,8 @@ namespace Tao.Core
             _optionalHeader.ReadFrom(reader);
             _cliHeader.ReadFrom(reader);
 
-            var sectionAlignment = _optionalHeader.SectionAlignment;
-            var fileAlignment = _optionalHeader.FileAlignment;
-            var rva = _cliHeader.MetadataRva;
-            var fileOffset = rva.Value % sectionAlignment.Value + fileAlignment.Value;
+            var rva = (uint)_cliHeader.MetadataRva;
+            var fileOffset = _optionalHeader.GetFileOffset(rva);
 
             reader.Seek(fileOffset, SeekOrigin.Begin);
         }

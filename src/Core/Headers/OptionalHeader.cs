@@ -480,5 +480,18 @@ namespace Tao.Core
 
             throw new NotSupportedException("Unsupported image type; Tao only supports 32-bit images.");
         }
+
+        /// <summary>
+        /// Calculates the actual file offset from the given relative virtual address.
+        /// </summary>
+        /// <param name="rva">The target RVA that will be converted into a file offset.</param>
+        /// <returns>The file offset.</returns>
+        public uint GetFileOffset(uint rva)
+        {
+            var sectionAlignment = (uint)SectionAlignment;
+            var fileAlignment = (uint)FileAlignment;
+
+            return rva % sectionAlignment + fileAlignment;
+        }
     }
 }

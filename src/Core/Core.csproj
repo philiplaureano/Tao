@@ -96,7 +96,8 @@
     <Compile Include="Headers\StreamHeader.cs" />
     <Compile Include="Headers\StreamHeaderReader.cs" />
     <Compile Include="Headers\StreamHeaders.cs" />
-    <Compile Include="Indices\StringsHeapIndex.cs" />
+    <Compile Include="Indices\StringHeapIndex.cs" />
+    <Compile Include="StringHeap.cs" />
     <Compile Include="TableId.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
