@@ -7,7 +7,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents an index that points to a metadata heap in a .NET portable executable image.
     /// </summary>
-    public class HeapIndex : IReader, IHeapIndex
+    public class HeapIndex : IHeapIndex
     {
         private readonly IMetadataStream _metadataStream;
         private readonly byte _targetBit;

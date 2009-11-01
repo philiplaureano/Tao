@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Interfaces\IModuleTableRow.cs" />
     <Compile Include="Indices\BlobHeapIndex.cs" />
     <Compile Include="Indices\GuidHeapIndex.cs" />
     <Compile Include="Headers\BaseHeader.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Headers\MetadataStream.cs" />
     <Compile Include="Headers\OptionalHeader.cs" />
     <Compile Include="ModuleTable.cs" />
+    <Compile Include="ModuleTableRow.cs" />
     <Compile Include="PEFormat.cs" />
     <Compile Include="RuntimeFlags.cs" />
     <Compile Include="SectionFlags.cs" />
