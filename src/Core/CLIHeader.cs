@@ -8,7 +8,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the CLI header that contains all of the runtime-specific data entries to run managed code.
     /// </summary>
-    public class CLIHeader : ICLIHeader
+    public class CLIHeader : BaseHeader, ICLIHeader
     {
         private readonly IOptionalHeader _optionalHeader;
 
@@ -164,7 +164,7 @@ namespace Tao.Core
         /// Reads the CLI header from the given <paramref name="reader"/>.
         /// </summary>
         /// <param name="reader">The binary reader.</param>
-        public void ReadFrom(IBinaryReader reader)
+        public override void ReadFrom(IBinaryReader reader)
         {
             GetCLIHeaderPosition(reader);
 
@@ -198,17 +198,11 @@ namespace Tao.Core
             if (_optionalHeader == null)
                 return;
 
-            _optionalHeader.ReadFrom(reader);
+            var optionalHeader = _optionalHeader;
+            optionalHeader.ReadFrom(reader);
 
-            var directories = new List<IDataDirectory>(_optionalHeader.DataDirectories);
-            var cliHeaderDirectory = directories[14];
-
-            var rva = cliHeaderDirectory.VirtualAddress;
-            var sectionAlignment = _optionalHeader.SectionAlignment;
-            var fileAlignment = _optionalHeader.FileAlignment;
-
-            var fileOffset = rva.Value - sectionAlignment.Value + fileAlignment.Value;
-            reader.Seek(fileOffset, SeekOrigin.Begin);
-        }
+            const int headerIndex = 14;
+            SeekHeader(optionalHeader, reader, headerIndex);
+        }        
     }
 }

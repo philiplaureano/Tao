@@ -61,6 +61,7 @@
     <Compile Include="CLIHeaderReadTests.cs" />
     <Compile Include="CoffHeaderReadTests.cs" />
     <Compile Include="ImportAddressTableReadTests.cs" />
+    <Compile Include="ImportTableReadTests.cs" />
     <Compile Include="MetadataRootReadTests.cs" />
     <Compile Include="MetadataStreamReadTests.cs" />
     <Compile Include="OptionalHeaderReadTests.cs" />

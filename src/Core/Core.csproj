@@ -50,12 +50,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="BaseHeader.cs" />
     <Compile Include="BinaryReader.cs" />
     <Compile Include="CLIHeader.cs" />
     <Compile Include="DataDirectory.cs" />
     <Compile Include="DataDirectoryReader.cs" />
     <Compile Include="DllCharacteristics.cs" />
     <Compile Include="DOSHeader.cs" />
+    <Compile Include="ImportTable.cs" />
     <Compile Include="Interfaces\IMetadataStream.cs" />
     <Compile Include="Interfaces\IBinaryReader.cs" />
     <Compile Include="Interfaces\ICLIHeader.cs" />
