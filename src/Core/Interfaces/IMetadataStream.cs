@@ -5,7 +5,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the metadata stream in a .NET portable executable image.
     /// </summary>
-    public interface IMetadataStream : IHeader
+    public interface IMetadataStream : IReader
     {
         /// <summary>
         /// Gets the value indicating the major version of the table schemata

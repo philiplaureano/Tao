@@ -11,7 +11,7 @@ namespace Tao.Core
     {
         private readonly IHeaderReader<IDataDirectory> _dataDirectoryReader;
         private readonly List<IDataDirectory> _dataDirectories = new List<IDataDirectory>();
-        private readonly IHeader _coffHeader;
+        private readonly IReader _coffHeader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionalHeader"/> class.
@@ -35,7 +35,7 @@ namespace Tao.Core
         /// </summary>
         /// <param name="coffHeader">The coff header that will be used to determine the position of the optional header.</param>
         /// <param name="dataDirectoryReader">The data directory reader that will be used to read the data directories from the image stream.</param>
-        public OptionalHeader(IHeader coffHeader, IHeaderReader<IDataDirectory> dataDirectoryReader)
+        public OptionalHeader(IReader coffHeader, IHeaderReader<IDataDirectory> dataDirectoryReader)
         {
             _dataDirectoryReader = dataDirectoryReader;
             _coffHeader = coffHeader;
@@ -45,7 +45,7 @@ namespace Tao.Core
         /// Initializes a new instance of the <see cref="OptionalHeader"/> class.
         /// </summary>
         /// <param name="coffHeader">The coff header that will be used to determine the position of the optional header.</param>
-        public OptionalHeader(IHeader coffHeader)
+        public OptionalHeader(IReader coffHeader)
             : this(coffHeader, new DataDirectoryReader())
         {
         }

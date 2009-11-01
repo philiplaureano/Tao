@@ -3,7 +3,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the Import Address Table of a portable executable file.
     /// </summary>
-    public interface IImportAddressTable : IHeader
+    public interface IImportAddressTable : IReader
     {
         /// <summary>
         /// Gets the value indicating the relative virtual address that points to the Hint/Name Table.

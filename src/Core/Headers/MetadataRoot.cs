@@ -6,7 +6,7 @@ using System.Text;
 namespace Tao.Core
 {
     /// <summary>
-    /// Represents the root of the physical metadata.
+    /// Represents the root of the physical CLI metadata.
     /// </summary>
     public class MetadataRoot : IMetadataRoot
     {
@@ -97,7 +97,7 @@ namespace Tao.Core
         public void ReadFrom(IBinaryReader reader)
         {
             if (_cliHeader != null)
-                SeekCLIHeaderPosition(reader);
+                SeekMetadataRootPosition(reader);
 
             Signature = reader.ReadUInt32();
             MajorVersion = reader.ReadUInt16();
@@ -116,10 +116,10 @@ namespace Tao.Core
         }
         
         /// <summary>
-        /// Ensures that the given binary reader is pointing towards the first byte of the CLI header.
+        /// Ensures that the given binary reader is pointing towards the first byte of the metadata root.
         /// </summary>
         /// <param name="reader">The binary reader.</param>
-        private void SeekCLIHeaderPosition(IBinaryReader reader)
+        private void SeekMetadataRootPosition(IBinaryReader reader)
         {
             _optionalHeader.ReadFrom(reader);
             _cliHeader.ReadFrom(reader);
@@ -127,7 +127,7 @@ namespace Tao.Core
             var sectionAlignment = _optionalHeader.SectionAlignment;
             var fileAlignment = _optionalHeader.FileAlignment;
             var rva = _cliHeader.MetadataRva;
-            var fileOffset = rva.Value - sectionAlignment.Value + fileAlignment.Value;
+            var fileOffset = rva.Value % sectionAlignment.Value + fileAlignment.Value;
 
             reader.Seek(fileOffset, SeekOrigin.Begin);
         }

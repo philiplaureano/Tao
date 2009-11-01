@@ -58,17 +58,22 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BaseHeaderReadTest.cs" />
-    <Compile Include="CLIHeaderReadTests.cs" />
-    <Compile Include="CoffHeaderReadTests.cs" />
-    <Compile Include="ImportAddressTableReadTests.cs" />
-    <Compile Include="ImportTableReadTests.cs" />
-    <Compile Include="MetadataRootReadTests.cs" />
-    <Compile Include="MetadataStreamReadTests.cs" />
-    <Compile Include="OptionalHeaderReadTests.cs" />
-    <Compile Include="OptionalHeaderReadTests.StandardFields.cs" />
-    <Compile Include="OptionalHeaderReadTests.WindowsSpecificFields.cs" />
-    <Compile Include="SectionHeaderReadTests.cs" />
-    <Compile Include="StreamHeaderReadTests.cs" />
+    <Compile Include="BlobHeapIndexReadTests.cs" />
+    <Compile Include="GuidHeapIndexReadTests.cs" />
+    <Compile Include="ModuleTableReadTests.cs" />
+    <Compile Include="PEReadTests\CLIHeaderReadTests.cs" />
+    <Compile Include="PEReadTests\CoffHeaderReadTests.cs" />
+    <Compile Include="PEReadTests\ImportAddressTableReadTests.cs" />
+    <Compile Include="PEReadTests\ImportTableReadTests.cs" />
+    <Compile Include="PEReadTests\MetadataRootReadTests.cs" />
+    <Compile Include="PEReadTests\MetadataStreamReadTests.cs" />
+    <Compile Include="PEReadTests\OptionalHeaderReadTests.cs" />
+    <Compile Include="PEReadTests\OptionalHeaderReadTests.StandardFields.cs" />
+    <Compile Include="PEReadTests\OptionalHeaderReadTests.WindowsSpecificFields.cs" />
+    <Compile Include="PEReadTests\SectionHeaderReadTests.cs" />
+    <Compile Include="PEReadTests\StreamHeaderReadTests.cs" />
+    <Compile Include="HeapIndexReadTests.cs" />
+    <Compile Include="StringHeapIndexReadTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

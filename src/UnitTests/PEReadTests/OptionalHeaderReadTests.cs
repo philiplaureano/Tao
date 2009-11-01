@@ -30,7 +30,7 @@ namespace Tao.UnitTests
             stream.Seek(0x98, SeekOrigin.Begin);
 
             var binaryReader = new BinaryReader(stream);
-            var coffHeader = new Mock<IHeader>();
+            var coffHeader = new Mock<IReader>();
             coffHeader.Expect(h => h.ReadFrom(binaryReader));
 
             var optionalHeader = new OptionalHeader(coffHeader.Object);

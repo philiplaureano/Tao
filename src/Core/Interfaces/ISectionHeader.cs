@@ -3,7 +3,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the section header of a portable executable file.
     /// </summary>
-    public interface ISectionHeader : IHeader
+    public interface ISectionHeader : IReader
     {
         /// <summary>
         /// Gets the value indicating the name of the current section.

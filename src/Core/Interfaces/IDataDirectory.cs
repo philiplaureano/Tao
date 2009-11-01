@@ -3,7 +3,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a data directory in a portable executable file.
     /// </summary>
-    public interface IDataDirectory : IHeader
+    public interface IDataDirectory : IReader
     {
         /// <summary>
         /// Gets the value indicating the RVA of the data directory.

@@ -8,7 +8,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a rudimentary implementation of a DOS header.
     /// </summary>
-    public class DOSHeader : IHeader
+    public class DOSHeader : IReader
     {
         /// <summary>
         /// Reads the DOS header from the given binary reader.

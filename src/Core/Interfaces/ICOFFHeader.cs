@@ -3,7 +3,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the Coff header in a portable executable file.
     /// </summary>
-    public interface ICOFFHeader : IHeader
+    public interface ICOFFHeader : IReader
     {
         /// <summary>
         /// Gets the value indicating whether or not the previously read stream contains a PE signature.

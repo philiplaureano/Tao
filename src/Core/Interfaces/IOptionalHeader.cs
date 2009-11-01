@@ -7,7 +7,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the optional header of a given portable executable file.
     /// </summary>
-    public interface IOptionalHeader : IHeader
+    public interface IOptionalHeader : IReader
     {
         /// <summary>
         /// Gets the value indicating the <see cref="PEFormat"/> of the PE file.

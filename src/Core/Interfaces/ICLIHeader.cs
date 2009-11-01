@@ -3,7 +3,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a CLI header type.
     /// </summary>
-    public interface ICLIHeader : IHeader
+    public interface ICLIHeader : IReader
     {
         /// <summary>
         /// Gets the value indicating the size of the header in bytes.

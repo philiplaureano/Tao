@@ -8,7 +8,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the basic implementation of a PE header.
     /// </summary>
-    public abstract class BaseHeader : IHeader
+    public abstract class BaseHeader : IReader
     {
         /// <summary>
         /// Reads data from the given <paramref name="reader"/>.

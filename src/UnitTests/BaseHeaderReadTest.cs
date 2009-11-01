@@ -25,13 +25,13 @@ namespace Tao.UnitTests
         }
 
         protected void AssertEquals<TTarget, TValue>(TValue expected, Func<TTarget, TValue> getActualValue)
-            where TTarget : IHeader, new()
+            where TTarget : IReader, new()
         {
             Test<TTarget>(header => Assert.AreEqual(expected, getActualValue(header)));
         }
 
         private void Test<TTarget>(Action<TTarget> doTest)
-            where TTarget : IHeader, new()
+            where TTarget : IReader, new()
         {
             var stream = OpenSampleAssembly();
             SetStreamPosition(stream);

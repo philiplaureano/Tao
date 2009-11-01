@@ -10,7 +10,7 @@ namespace Tao.Core
     /// </summary>
     public class COFFHeader : ICOFFHeader
     {
-        private readonly IHeader _dosHeader;
+        private readonly IReader _dosHeader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="COFFHeader"/> class.
@@ -24,7 +24,7 @@ namespace Tao.Core
         /// Initializes a new instance of the <see cref="COFFHeader"/> class.
         /// </summary>
         /// <param name="dosHeader">The DOS header that will determine the starting offset of the COFF header.</param>
-        public COFFHeader(IHeader dosHeader)
+        public COFFHeader(IReader dosHeader)
         {
             _dosHeader = dosHeader;
         }

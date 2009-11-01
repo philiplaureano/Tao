@@ -27,7 +27,7 @@ namespace Tao.UnitTests
             SetStreamPosition(stream);
 
             var reader = new BinaryReader(stream);
-            var dosHeader = new Mock<IHeader>();
+            var dosHeader = new Mock<IReader>();
             dosHeader.Expect(h => h.ReadFrom(reader));
 
             var header = new COFFHeader(dosHeader.Object);

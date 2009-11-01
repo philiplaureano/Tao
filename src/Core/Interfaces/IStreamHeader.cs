@@ -3,7 +3,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a metadata stream header in a .NET portable executable file.
     /// </summary>
-    public interface IStreamHeader : IHeader
+    public interface IStreamHeader : IReader
     {
         /// <summary>
         /// Gets the value indicating the memory offset from the start of the metadata root.

@@ -23,7 +23,7 @@ namespace Tao.UnitTests
         [ExpectedException(typeof(NotSupportedException))]
         public void ShouldThrowNotSupportedExceptionIfImageHasInvalidMagicNumber()
         {
-            IHeader dummyHeader = null;
+            IReader dummyHeader = null;
             var reader = new Mock<IBinaryReader>();
             var header = new OptionalHeader(dummyHeader);
 
@@ -38,7 +38,7 @@ namespace Tao.UnitTests
         [ExpectedException(typeof(NotSupportedException))]
         public void ShouldThrowNotSupportedExceptionIfImageMagicNumberIsPE32Plus()
         {
-            IHeader dummyHeader = null;            
+            IReader dummyHeader = null;            
             var reader = new Mock<IBinaryReader>();
             var header = new OptionalHeader(dummyHeader);
 

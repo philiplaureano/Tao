@@ -222,6 +222,9 @@ namespace Tao.Core
         /// <returns>The number of rows for the given table.</returns>
         public uint GetRowCount(TableId tableId)
         {
+            if (!_rowCounts.ContainsKey(tableId))
+                return 0;
+
             return _rowCounts[tableId];
         }
     }

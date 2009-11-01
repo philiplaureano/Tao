@@ -7,7 +7,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a type that can read from a binary stream.
     /// </summary>
-    public interface IHeader
+    public interface IReader
     {
         /// <summary>
         /// Reads data from the given <paramref name="reader"/>.

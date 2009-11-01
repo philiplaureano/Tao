@@ -3,7 +3,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the CLI metadata root of a portable executable file.
     /// </summary>
-    public interface IMetadataRoot : IHeader
+    public interface IMetadataRoot : IReader
     {
         /// <summary>
         /// Gets the value indicating the signature of the metadata root.

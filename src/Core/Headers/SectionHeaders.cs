@@ -8,7 +8,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a collection of section headers.
     /// </summary>
-    public class SectionHeaders : List<ISectionHeader>, IHeader
+    public class SectionHeaders : List<ISectionHeader>, IReader
     {
         private readonly ICOFFHeader _coffHeader;
         private readonly IHeaderReader<ISectionHeader> _sectionHeaderReader;
