@@ -3,3 +3,6 @@
 *.vspcc
 *resharper*
 .svn
+bin
+Debug
+Release
