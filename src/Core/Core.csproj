@@ -84,6 +84,7 @@
     <Compile Include="Headers\MetadataRoot.cs" />
     <Compile Include="Headers\MetadataStream.cs" />
     <Compile Include="Headers\OptionalHeader.cs" />
+    <Compile Include="Interfaces\IStringHeap.cs" />
     <Compile Include="ModuleTable.cs" />
     <Compile Include="ModuleTableRow.cs" />
     <Compile Include="PEFormat.cs" />

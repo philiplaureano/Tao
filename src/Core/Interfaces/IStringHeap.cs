@@ -2,9 +2,6 @@ using System.Collections.Generic;
 
 namespace Tao.Core
 {
-    /// <summary>
-    /// Represents the #Strings heap in a .NET assembly.
-    /// </summary>
     public interface IStringHeap : IReader
     {
         /// <summary>
