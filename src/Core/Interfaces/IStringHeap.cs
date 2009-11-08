@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace Tao.Core
 {
+    /// <summary>
+    /// Represents the metadata string heap.
+    /// </summary>
     public interface IStringHeap : IReader
     {
         /// <summary>

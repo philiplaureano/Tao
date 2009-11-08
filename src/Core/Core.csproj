@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Interfaces\IStringHeapIndex.cs" />
     <Compile Include="Interfaces\IModuleTableRow.cs" />
     <Compile Include="Indices\BlobHeapIndex.cs" />
     <Compile Include="Indices\GuidHeapIndex.cs" />

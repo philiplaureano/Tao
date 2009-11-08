@@ -15,7 +15,7 @@ namespace Tao.Core
         /// Gets the value indicating the name of the target module.
         /// </summary>
         /// <value>The name of the target module.</value>
-        IHeapIndex NameIndex { get; }
+        IStringHeapIndex NameIndex { get; }
 
         /// <summary>
         /// Gets the value indicating the Mvid of the target module.

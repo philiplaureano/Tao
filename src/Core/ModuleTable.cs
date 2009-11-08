@@ -10,12 +10,13 @@ namespace Tao.Core
     public class ModuleTable : IReader
     {
         private readonly IMetadataStream _metadataStream;
+        private readonly IStringHeap _stringHeap;
         private readonly List<IModuleTableRow> _rows = new List<IModuleTableRow>();
         
         /// <summary>
         /// Initializes a new instance of the <see cref="ModuleTable"/> class.
         /// </summary>
-        public ModuleTable() : this(new MetadataStream())
+        public ModuleTable() : this(new MetadataStream(), new StringHeap())
         {            
         }
 
@@ -23,12 +24,17 @@ namespace Tao.Core
         /// Initializes a new instance of the <see cref="ModuleTable"/> class.
         /// </summary>
         /// <param name="metadataStream">The metadata stream that contains the information that describes the module table.</param>
-        public ModuleTable(IMetadataStream metadataStream)
+        /// <param name="stringHeap">The string heap.</param>
+        public ModuleTable(IMetadataStream metadataStream, IStringHeap stringHeap)
         {
             if (metadataStream == null)
                 throw new ArgumentNullException("metadataStream");
 
-            _metadataStream = metadataStream;           
+            if (stringHeap == null)
+                throw new ArgumentNullException("stringHeap");
+
+            _metadataStream = metadataStream;
+            _stringHeap = stringHeap;
         }
 
         /// <summary>
@@ -49,12 +55,13 @@ namespace Tao.Core
         /// <param name="reader">The binary reader.</param>
         public void ReadFrom(IBinaryReader reader)
         {
+            _stringHeap.ReadFrom(reader);
             _metadataStream.ReadFrom(reader);
 
             var rowCount = _metadataStream.GetRowCount(TableId.Module);
             for(var i = 0;  i < rowCount; i++)
             {
-                var row = new ModuleTableRow(_metadataStream);
+                var row = new ModuleTableRow(_metadataStream, _stringHeap);
                 row.ReadFrom(reader);
 
                 Rows.Add(row);

@@ -13,7 +13,8 @@ namespace Tao.Core
         /// Initializes a new instance of the <see cref="ModuleTableRow"/> class.
         /// </summary>
         /// <param name="metadataStream">The metadata stream that contains information about the module table row.</param>
-        public ModuleTableRow(IMetadataStream metadataStream)
+        /// <param name="stringHeap">The string heap.</param>
+        public ModuleTableRow(IMetadataStream metadataStream, IStringHeap stringHeap)
         {
             if (metadataStream == null)
                 throw new ArgumentNullException("metadataStream");
@@ -38,7 +39,7 @@ namespace Tao.Core
         /// Gets the value indicating the name of the target module.
         /// </summary>
         /// <value>The name of the target module.</value>
-        public IHeapIndex NameIndex
+        public IStringHeapIndex NameIndex
         {
             get;
             private set;
