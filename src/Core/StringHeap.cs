@@ -8,18 +8,15 @@ namespace Tao.Core
     /// <summary>
     /// Represents the #Strings heap in a .NET assembly.
     /// </summary>
-    public class StringHeap : IStringHeap
+    public class StringHeap : Heap, IStringHeap
     {
         private readonly List<string> _strings = new List<string>();
-        private readonly ICLIHeader _cliHeader;
-        private readonly IStreamHeaders _streamHeaders;
-        private readonly IOptionalHeader _optionalHeader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StringHeap"/> class.
         /// </summary>
         public StringHeap()
-            : this(new OptionalHeader(), new CLIHeader(), new StreamHeaders())
+            : base(new OptionalHeader(), new CLIHeader(), new StreamHeaders())
         {
         }
 
@@ -30,10 +27,8 @@ namespace Tao.Core
         /// <param name="cliHeader">The CLI header that determines the position of the metadata root.</param>
         /// <param name="streamHeaders">The collection of metadata stream headers that determine the position of the string heap itself.</param>
         public StringHeap(IOptionalHeader optionalHeader, ICLIHeader cliHeader, IStreamHeaders streamHeaders)
+            : base(optionalHeader, cliHeader, streamHeaders)
         {
-            _streamHeaders = streamHeaders;
-            _cliHeader = cliHeader;
-            _optionalHeader = optionalHeader;
         }
 
         /// <summary>
@@ -49,51 +44,12 @@ namespace Tao.Core
         }
 
         /// <summary>
-        /// Reads the #String heap from the binary reader.
-        /// </summary>
-        /// <param name="reader">The binary reader.</param>
-        public void ReadFrom(IBinaryReader reader)
-        {
-            _optionalHeader.ReadFrom(reader);
-            _cliHeader.ReadFrom(reader);
-            _streamHeaders.ReadFrom(reader);
-            
-            IStreamHeader stringStreamHeader = GetStringStreamHeader();
-
-            ReadStrings(reader, stringStreamHeader);
-        }
-
-        /// <summary>
-        /// Gets the stream header of the #String heap.
-        /// </summary>
-        /// <returns>The #String stream header.</returns>
-        private IStreamHeader GetStringStreamHeader()
-        {
-            IStreamHeader stringStreamHeader = null;
-            foreach (var streamHeader in _streamHeaders)
-            {
-                if (streamHeader.Name != "#Strings")
-                    continue;
-
-                stringStreamHeader = streamHeader;
-                break;
-            }
-
-            if (stringStreamHeader == null)
-                throw new InvalidOperationException("Unable to find the #String stream header");
-
-            return stringStreamHeader;
-        }
-
-        /// <summary>
         /// Reads the strings from the given binary reader and string stream reader.
         /// </summary>
         /// <param name="reader">The binary reader.</param>
         /// <param name="stringStreamHeader">The string stream header reader.</param>
         private void ReadStrings(IBinaryReader reader, IStreamHeader stringStreamHeader)
         {
-            SeekStringHeapStartingPosition(reader, stringStreamHeader);
-
             var streamSize = (uint)stringStreamHeader.Size;
             var startingPosition = reader.GetPosition();
             long bytesRead = 0;
@@ -106,19 +62,23 @@ namespace Tao.Core
         }
 
         /// <summary>
-        /// Locates the starting position of the #String stream.
+        /// Reads the stream header from the given binary reader.
         /// </summary>
-        /// <param name="reader">The binary reader.</param>
-        /// <param name="stringStreamHeader">The string stream header.</param>
-        private void SeekStringHeapStartingPosition(IBinaryReader reader, IStreamHeader stringStreamHeader)
+        /// <param name="reader">The binary reader that contains the stream to be read.</param>
+        /// <param name="streamHeader">The stream header that describes the target stream.</param>
+        protected override void ReadFrom(IBinaryReader reader, IStreamHeader streamHeader)
         {
-            var metadataRva = (uint)_cliHeader.MetadataRva;
-            var rootFileOffset = _optionalHeader.GetFileOffset(metadataRva);
-            var stringStreamOffset = (uint)stringStreamHeader.Offset;
+            ReadStrings(reader, streamHeader);
+        }
 
-            var stringStreamFileOffset = rootFileOffset + stringStreamOffset;
 
-            reader.Seek(stringStreamFileOffset, SeekOrigin.Begin);
+        /// <summary>
+        /// Determines the name of the metadata stream to be read from a portable executable file.
+        /// </summary>
+        /// <returns>The name of the metadata stream.</returns>
+        protected override string GetStreamName()
+        {
+            return "#Strings";
         }
     }
 }

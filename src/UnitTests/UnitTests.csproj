@@ -59,6 +59,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BaseHeaderReadTest.cs" />
     <Compile Include="BlobHeapIndexReadTests.cs" />
+    <Compile Include="BlobHeapReadTests.cs" />
     <Compile Include="GuidHeapIndexReadTests.cs" />
     <Compile Include="ModuleTableReadTests.cs" />
     <Compile Include="PEReadTests\CLIHeaderReadTests.cs" />

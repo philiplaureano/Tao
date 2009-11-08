@@ -5,7 +5,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents the metadata string heap.
     /// </summary>
-    public interface IStringHeap : IReader
+    public interface IStringHeap
     {
         /// <summary>
         /// Gets the value indicating the list of strings that currently reside within the string heap.
