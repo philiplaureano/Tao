@@ -9,6 +9,8 @@ namespace Tao.Core
     /// </summary>
     public class ModuleTableRow : IModuleTableRow
     {
+        private IStringHeap _heap;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ModuleTableRow"/> class.
         /// </summary>
@@ -23,8 +25,29 @@ namespace Tao.Core
             Mvid = new GuidHeapIndex(metadataStream);
             EncId = new GuidHeapIndex(metadataStream);
             EncBaseId = new GuidHeapIndex(metadataStream);
+
+            _heap = stringHeap;
         }
 
+        /// <summary>
+        /// Gets the value indicating the name of the target module.
+        /// </summary>
+        /// <value>The name of the target module.</value>
+        public string ModuleName
+        {
+            get
+            {
+                if (NameIndex == null || NameIndex.Value == null)
+                    throw new InvalidOperationException("Named string index cannot be null");
+
+                if (_heap == null)
+                    throw new InvalidOperationException("Invalid string heap");
+
+                var index = NameIndex.Value;
+                var indexValue = index.Value;
+                return _heap.GetStringFromOffset(indexValue);
+            }
+        }
         /// <summary>
         /// Gets the value indicating the generation of the module.
         /// </summary>

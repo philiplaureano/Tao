@@ -11,6 +11,7 @@ namespace Tao.Core
     public class StringHeap : Heap, IStringHeap
     {
         private readonly List<string> _strings = new List<string>();
+        private readonly Dictionary<long, string> _stringMap = new Dictionary<long, string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StringHeap"/> class.
@@ -57,7 +58,14 @@ namespace Tao.Core
             {
                 var currentString = reader.ReadNullTerminatedString();
                 Strings.Add(currentString);
-                bytesRead = reader.GetPosition() - startingPosition;
+                
+                var currentPosition = reader.GetPosition();
+                
+                // Map the current position to the current string                
+                bytesRead = currentPosition - startingPosition;
+
+                var stringPosition = bytesRead - currentString.Length;
+                _stringMap[stringPosition] = currentString;
             }
         }
 
@@ -79,6 +87,29 @@ namespace Tao.Core
         protected override string GetStreamName()
         {
             return "#Strings";
+        }
+
+        /// <summary>
+        /// Obtains the string located at the given offset into the string heap.
+        /// </summary>
+        /// <param name="offset">The target string heap offset.</param>
+        /// <returns>A string located at the given offset.</returns>
+        public string GetStringFromOffset(uint offset)
+        {
+            var keys = _stringMap.Keys;
+
+            var values = new Queue<long>(keys);
+            while(values.Count > 0)
+            {
+                var currentIndex = values.Peek();
+                if (currentIndex > offset)
+                    break;
+
+                values.Dequeue();
+            }
+
+            var targetIndex = values.Peek();            
+            return _stringMap[targetIndex];
         }
     }
 }

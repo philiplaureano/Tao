@@ -26,6 +26,11 @@ namespace Tao.UnitTests
             AssertEquals<StringHeap, string>("donothing", h => h.Strings[4]);
         }
 
+        [Test]
+        public void ShouldReadStringUsingOffset()
+        {
+            AssertEquals<StringHeap, string>("skeleton.exe", h => h.GetStringFromOffset(0xA));
+        }
         protected override void SetStreamPosition(Stream stream)
         {
             stream.Seek(0x334, SeekOrigin.Begin);

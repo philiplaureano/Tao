@@ -56,7 +56,6 @@ namespace Tao.Core
         public void ReadFrom(IBinaryReader reader)
         {
             _metadataStream.ReadFrom(reader);
-
             var rowCount = _metadataStream.GetRowCount(TableId.Module);
             for(var i = 0;  i < rowCount; i++)
             {

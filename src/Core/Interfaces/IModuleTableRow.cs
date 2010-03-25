@@ -15,6 +15,12 @@ namespace Tao.Core
         /// Gets the value indicating the name of the target module.
         /// </summary>
         /// <value>The name of the target module.</value>
+        string ModuleName { get; }
+
+        /// <summary>
+        /// Gets the value indicating the string heap index pointing to name of the target module.
+        /// </summary>
+        /// <value>The string heap index pointing to name of the target module.</value>
         IStringHeapIndex NameIndex { get; }
 
         /// <summary>

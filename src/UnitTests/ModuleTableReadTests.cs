@@ -13,6 +13,24 @@ namespace Tao.UnitTests
     public class ModuleTableReadTests : BaseHeaderReadTest
     {
         [Test]
+        public void ShouldReadModuleName()
+        {
+            var stream = OpenSampleAssembly();
+
+            var heap = new StringHeap();
+            var reader = new BinaryReader(stream);
+            var table = new ModuleTable(new MetadataStream(), heap);
+            heap.ReadFrom(reader);
+            reader.Seek(0, SeekOrigin.Begin);
+            table.ReadFrom(reader);
+
+            var row = table.Rows[0];
+            Assert.AreEqual(row.ModuleName, "skeleton.exe");
+            stream.Dispose();
+            stream.Close();
+        }
+
+        [Test]
         public void ShouldReadGeneration()
         {
             AssertEquals<ModuleTable, ushort?>(0, t => t.Rows[0].Generation);
