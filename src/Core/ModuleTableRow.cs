@@ -7,9 +7,9 @@ namespace Tao.Core
     /// <summary>
     /// Represents a single row in the Module table.
     /// </summary>
-    public class ModuleTableRow : IModuleTableRow
+    public class ModuleTableRow : IModuleTableRow, IReader
     {
-        private IStringHeap _heap;
+        private readonly IStringHeap _heap;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModuleTableRow"/> class.
@@ -20,6 +20,9 @@ namespace Tao.Core
         {
             if (metadataStream == null)
                 throw new ArgumentNullException("metadataStream");
+
+            if (stringHeap == null)
+                throw new ArgumentNullException("stringHeap");
 
             NameIndex = new StringHeapIndex(metadataStream);
             Mvid = new GuidHeapIndex(metadataStream);

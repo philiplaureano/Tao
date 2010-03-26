@@ -3,7 +3,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a single row in the Module table.
     /// </summary>
-    public interface IModuleTableRow : IReader
+    public interface IModuleTableRow
     {
         /// <summary>
         /// Gets the value indicating the generation of the module.
