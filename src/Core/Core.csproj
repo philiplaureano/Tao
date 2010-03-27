@@ -50,67 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="BlobHeap.cs" />
-    <Compile Include="Heap.cs" />
-    <Compile Include="Interfaces\IBlobHeap.cs" />
-    <Compile Include="Interfaces\IStringHeapIndex.cs" />
-    <Compile Include="Interfaces\IModuleTableRow.cs" />
-    <Compile Include="Indices\BlobHeapIndex.cs" />
-    <Compile Include="Indices\GuidHeapIndex.cs" />
-    <Compile Include="Headers\BaseHeader.cs" />
-    <Compile Include="BinaryReader.cs" />
-    <Compile Include="Headers\CLIHeader.cs" />
-    <Compile Include="Headers\DataDirectory.cs" />
-    <Compile Include="Headers\DataDirectoryReader.cs" />
-    <Compile Include="DllCharacteristics.cs" />
-    <Compile Include="Headers\DOSHeader.cs" />
-    <Compile Include="Headers\ImportTable.cs" />
-    <Compile Include="Indices\HeapIndex.cs" />
-    <Compile Include="Interfaces\IHeapIndex.cs" />
-    <Compile Include="Interfaces\IMetadataStream.cs" />
-    <Compile Include="Interfaces\IBinaryReader.cs" />
-    <Compile Include="Interfaces\ICLIHeader.cs" />
-    <Compile Include="Interfaces\ICOFFHeader.cs" />
-    <Compile Include="Interfaces\IDataDirectory.cs" />
-    <Compile Include="Interfaces\IReader.cs" />
-    <Compile Include="Interfaces\IHeaderReader.cs" />
-    <Compile Include="Interfaces\IImportAddressTable.cs" />
-    <Compile Include="ImageFileCharacteristics.cs" />
-    <Compile Include="ImageFileMachineType.cs" />
-    <Compile Include="Headers\COFFHeader.cs" />
-    <Compile Include="ImageSubsystem.cs" />
-    <Compile Include="Interfaces\IMetadataRoot.cs" />
-    <Compile Include="Headers\ImportAddressTable.cs" />
-    <Compile Include="Interfaces\IOptionalHeader.cs" />
-    <Compile Include="Interfaces\ISectionHeader.cs" />
-    <Compile Include="Interfaces\IStreamHeader.cs" />
-    <Compile Include="Interfaces\IStreamHeaders.cs" />
-    <Compile Include="Headers\MetadataRoot.cs" />
-    <Compile Include="Headers\MetadataStream.cs" />
-    <Compile Include="Headers\OptionalHeader.cs" />
-    <Compile Include="Interfaces\IStringHeap.cs" />
-    <Compile Include="ModuleTable.cs" />
-    <Compile Include="ModuleTableRow.cs" />
-    <Compile Include="PEFormat.cs" />
-    <Compile Include="RuntimeFlags.cs" />
-    <Compile Include="SectionFlags.cs" />
-    <Compile Include="Headers\SectionHeader.cs" />
-    <Compile Include="Headers\SectionHeaderList.cs" />
-    <Compile Include="Headers\SectionHeaderReader.cs" />
-    <Compile Include="Headers\SectionHeaders.cs" />
-    <Compile Include="Headers\StreamHeader.cs" />
-    <Compile Include="Headers\StreamHeaderReader.cs" />
-    <Compile Include="Headers\StreamHeaders.cs" />
-    <Compile Include="Indices\StringHeapIndex.cs" />
-    <Compile Include="StringHeap.cs" />
-    <Compile Include="TableId.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
+  
+  <UsingTask TaskName="CompileContainerTask" AssemblyFile="$(MSBuildProjectDirectory)\$(OutputPath)\..\..\..\..\lib\Hiro.MSBuild.Tasks.dll" />
   <Target Name="AfterBuild">
+    <CompileContainerTask TargetAssemblies="$(MSBuildProjectDirectory)\$(OutputPath)\Tao.Core.dll"
+                      OutputAssemblyFileName="$(MSBuildProjectDirectory)\$(OutputPath)\Tao.Containers.dll"/>
   </Target>
-  -->
 </Project>
