@@ -11,7 +11,28 @@
 		<delete dir="${build.dir}" if="${directory::exists(build.dir)}"/>
 	</target>
 
-  <target name="compile-core"  description="Compiles the core project assembly">
+  <target name="compile-container" depends="compile-core, compile-interfaces">
+    <msbuild project="src\CompileContainer.MSBuild"/>    
+  </target>
+  
+  <target name="compile-interfaces"  description="Compiles the core interface assembly">
+    <mkdir dir="${build.dir}" unless="${directory::exists(build.dir)}"/>
+    <property name="output.dir" value="${build.dir}\${target.framework}"/>
+
+    <mkdir dir="${output.dir}" unless="${directory::exists(output.dir)}"/>
+    <csc target="library" doc="${output.dir}\Tao.Interfaces.xml" noconfig="true" output="${output.dir}\Tao.Interfaces.dll" debug="${debug}">
+      <sources>
+        <include name="src/Tao.Interfaces/**/*.cs" />
+      </sources>
+      <references>
+        <include name="System.dll" />
+        <include name="System.Data.dll"/>
+        <include name="System.Xml.dll" />
+      </references>
+    </csc>
+  </target>
+  
+  <target name="compile-core"  depends="compile-interfaces" description="Compiles the core project assembly">
     <mkdir dir="${build.dir}" unless="${directory::exists(build.dir)}"/>
     <property name="output.dir" value="${build.dir}\${target.framework}"/>
 
@@ -24,7 +45,9 @@
         <include name="System.dll" />
         <include name="System.Core.dll" if="${target.framework == 'net-3.5'}"/>
         <include name="System.Data.dll"/>
-        <include name="System.Xml.dll" />        
+        <include name="System.Xml.dll" />
+        <include name="${output.dir}\Tao.Interfaces.dll"/>
+        <include name="${library.dir}\Hiro.Containers.dll"/>
         <include name="${library.dir}\LinqBridge.dll" if="${target.framework == 'net-2.0'}"/>
       </references>
     </csc>
@@ -40,7 +63,7 @@
 		
 	<target name="full" depends="clean, test, dist"	description="Compiles, tests, and produces distributions" />
 
-  <target name="compile-unit-tests" depends="compile-core" description="Compiles the unit tests for the core assembly">
+  <target name="compile-unit-tests" depends="compile-container, compile-core" description="Compiles the unit tests for the core assembly">
     <property name="debug.dir" value="${build.dir}\Debug"/>
     <property name="unittest.dir" value="${debug.dir}\UnitTests"/>
     <property name="unittest.source.dir" value="${build.dir}\..\src\UnitTests"/>
@@ -59,7 +82,10 @@
         <include name="System.Core.dll"/>
         <include name="System.Data.dll"/>
         <include name="System.Xml.dll" />
+        <include name="${output.dir}\Tao.Interfaces.dll"/>
         <include name="${output.dir}\Tao.Core.dll"/>
+        <include name="${library.dir}\Hiro.CompiledContainers.dll"/>
+        <include name="${library.dir}\Hiro.Containers.dll"/>        
         <include name="${library.dir}\Moq.dll"/>
         <include name="${library.dir}\nunit.framework.dll"/>
       </references>
@@ -68,6 +94,8 @@
       <fileset basedir="${library.dir}">
         <include name="nunit.framework.dll"/>
         <include name="moq.dll"/>
+        <include name="Hiro.CompiledContainers.dll"/>
+        <include name="Hiro.Containers.dll"/>
       </fileset>
     </copy>
     <copy todir="${unittest.dir}">
@@ -79,6 +107,7 @@
     <copy todir="${unittest.dir}">
       <fileset basedir="${output.dir}">
         <include name="Tao.Core.dll"/>
+        <include name="Tao.Interfaces.dll"/>
       </fileset>
     </copy>
   </target>

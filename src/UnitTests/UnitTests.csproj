@@ -40,6 +40,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Hiro.CompiledContainers, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Core\bin\Debug\Hiro.CompiledContainers.dll</HintPath>
+    </Reference>
+    <Reference Include="Hiro.Containers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0efb83db47c0105, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Hiro.Containers.dll</HintPath>
+    </Reference>
     <Reference Include="Moq, Version=2.0.2991.26580, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Moq.dll</HintPath>
@@ -54,9 +62,9 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tao.Containers, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Tao.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Core\bin\Debug\Tao.Containers.dll</HintPath>
+      <HintPath>..\Core\bin\Debug\Tao.Interfaces.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -68,10 +76,7 @@
     <None Include="skeleton.il" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj">
-      <Project>{65FE5A41-370E-498E-B27B-2479BB1F2AD8}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
+    <Compile Include="FileStreamTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

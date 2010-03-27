@@ -4,30 +4,6 @@
         <name>Hiro.Containers</name>
     </assembly>
     <members>
-        <member name="T:Hiro.Containers.ServiceNotFoundException">
-            <summary>
-            Represents the exception thrown when a particular service cannot be resolved by a <see cref="T:Hiro.Containers.IMicroContainer"/> instance.
-            </summary>
-        </member>
-        <member name="M:Hiro.Containers.ServiceNotFoundException.#ctor(System.String,System.Type)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Hiro.Containers.ServiceNotFoundException"/> class.
-            </summary>
-            <param name="serviceName">The service name.</param>
-            <param name="serviceType">The service type.</param>
-        </member>
-        <member name="P:Hiro.Containers.ServiceNotFoundException.ServiceName">
-            <summary>
-            Gets the value of the service name.
-            </summary>
-            <value>The name of the service.</value>
-        </member>
-        <member name="P:Hiro.Containers.ServiceNotFoundException.ServiceType">
-            <summary>
-            Gets the value of the service type.
-            </summary>
-            <value>The service type.</value>
-        </member>
         <member name="T:Hiro.Containers.IMicroContainer">
             <summary>
             Represents the minimum amount of behavior necessary to implement a service container.
@@ -62,6 +38,30 @@
             Gets or sets the value indicating the <see cref="T:Hiro.Containers.IMicroContainer"/> instance that will be added to the current container chain.
             </summary>
             <value>The next container.</value>
+        </member>
+        <member name="T:Hiro.Containers.ServiceNotFoundException">
+            <summary>
+            Represents the exception thrown when a particular service cannot be resolved by a <see cref="T:Hiro.Containers.IMicroContainer"/> instance.
+            </summary>
+        </member>
+        <member name="M:Hiro.Containers.ServiceNotFoundException.#ctor(System.String,System.Type)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Hiro.Containers.ServiceNotFoundException"/> class.
+            </summary>
+            <param name="serviceName">The service name.</param>
+            <param name="serviceType">The service type.</param>
+        </member>
+        <member name="P:Hiro.Containers.ServiceNotFoundException.ServiceName">
+            <summary>
+            Gets the value of the service name.
+            </summary>
+            <value>The name of the service.</value>
+        </member>
+        <member name="P:Hiro.Containers.ServiceNotFoundException.ServiceType">
+            <summary>
+            Gets the value of the service type.
+            </summary>
+            <value>The service type.</value>
         </member>
     </members>
 </doc>

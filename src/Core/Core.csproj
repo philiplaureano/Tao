@@ -44,18 +44,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Hiro.Containers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0efb83db47c0105, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Hiro.Containers.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Factories\FileStreamFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.csproj">
+      <Project>{88CA72AF-77CD-409A-891D-1468CAF5E62B}</Project>
+      <Name>Tao.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  
   <UsingTask TaskName="CompileContainerTask" AssemblyFile="$(MSBuildProjectDirectory)\$(OutputPath)\..\..\..\..\lib\Hiro.MSBuild.Tasks.dll" />
   <Target Name="AfterBuild">
-    <CompileContainerTask TargetAssemblies="$(MSBuildProjectDirectory)\$(OutputPath)\Tao.Core.dll"
-                      OutputAssemblyFileName="$(MSBuildProjectDirectory)\$(OutputPath)\Tao.Containers.dll"/>
+    <CompileContainerTask TargetAssemblies="$(MSBuildProjectDirectory)\$(OutputPath)\Tao.Core.dll" OutputAssemblyFileName="$(MSBuildProjectDirectory)\$(OutputPath)\Hiro.CompiledContainers.dll" />
   </Target>
 </Project>

@@ -1,0 +1,11 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <TargetPath>$(MSBuildProjectDirectory)\$(OutputPath)Core\bin\$(Configuration)\</TargetPath>
+  </PropertyGroup>
+  <UsingTask TaskName="CompileContainerTask" AssemblyFile="$(MSBuildProjectDirectory)\$(OutputPath)\..\lib\Hiro.MSBuild.Tasks.dll" />
+  <Target Name="Default">
+    <Message Text="Compiling container from $(TargetPath)Tao.Core.dll"/>
+    <CompileContainerTask TargetAssemblies="$(TargetPath)Tao.Core.dll" OutputAssemblyFileName="$(MSBuildProjectDirectory)\$(OutputPath)..\lib\Hiro.CompiledContainers.dll" />
+  </Target>
+</Project>
