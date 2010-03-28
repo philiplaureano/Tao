@@ -4,6 +4,18 @@
         <name>Hiro.Containers</name>
     </assembly>
     <members>
+        <member name="T:Hiro.Containers.IFactory`1">
+            <summary>
+            Represents a factory type.
+            </summary>
+            <typeparam name="T">The type of object that will be created by the factory itself.</typeparam>
+        </member>
+        <member name="M:Hiro.Containers.IFactory`1.Create">
+            <summary>
+            Creates the given <typeparamref name="T"/> type.
+            </summary>
+            <returns>The <typeparamref name="T"/> instance.</returns>
+        </member>
         <member name="T:Hiro.Containers.IMicroContainer">
             <summary>
             Represents the minimum amount of behavior necessary to implement a service container.

@@ -9,7 +9,7 @@ namespace Tao.Core.Factories
     /// <summary>
     /// Represents a factory type that can read the contents of a file and dump it into a memory stream.
     /// </summary>
-    public class FileStreamFactory : IFactory<string, Stream>
+    public class FileStreamFactory : IConversion<string, Stream>
     {
         /// <summary>
         /// Reads the contents of a file and dump it into a memory stream.

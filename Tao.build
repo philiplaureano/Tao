@@ -28,6 +28,9 @@
         <include name="System.dll" />
         <include name="System.Data.dll"/>
         <include name="System.Xml.dll" />
+        <include name="${library.dir}\Hiro.Containers.dll"/>
+        <include name="${library.dir}\LinqBridge.dll" if="${target.framework == 'net-2.0'}"/>
+        <include name="System.Core.dll" if="${target.framework == 'net-3.5'}"/>
       </references>
     </csc>
   </target>
@@ -85,9 +88,12 @@
         <include name="${output.dir}\Tao.Interfaces.dll"/>
         <include name="${output.dir}\Tao.Core.dll"/>
         <include name="${library.dir}\Hiro.CompiledContainers.dll"/>
-        <include name="${library.dir}\Hiro.Containers.dll"/>        
+        <include name="${library.dir}\Hiro.Containers.dll"/>
+        <include name="${library.dir}\Hiro.Core.dll"/>        
         <include name="${library.dir}\Moq.dll"/>
         <include name="${library.dir}\nunit.framework.dll"/>
+        <include name="System.Core.dll" if="${target.framework == 'net-3.5'}"/>
+        <include name="${library.dir}\LinqBridge.dll" if="${target.framework == 'net-2.0'}"/>
       </references>
     </csc>
     <copy todir="${unittest.dir}">
@@ -96,6 +102,7 @@
         <include name="moq.dll"/>
         <include name="Hiro.CompiledContainers.dll"/>
         <include name="Hiro.Containers.dll"/>
+        <include name="Hiro.Core.dll"/>
       </fileset>
     </copy>
     <copy todir="${unittest.dir}">

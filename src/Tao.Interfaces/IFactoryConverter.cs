@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using Hiro.Containers;
 namespace Tao.Interfaces
 {
     /// <summary>
@@ -17,6 +17,6 @@ namespace Tao.Interfaces
         /// <param name="sourceFactory">The source factory instance.</param>
         /// <param name="input">The input value.</param>
         /// <returns>A <see cref="IFactory{TResult}"/> instance that represents the original <paramref name="sourceFactory"/>.</returns>
-        IAdaptedFactory<TInput, TResult> Convert<TInput, TResult>(IFactory<TInput, TResult> sourceFactory, TInput input);
+        IAdaptedFactory<TInput, TResult> Convert<TInput, TResult>(IConversion<TInput, TResult> sourceFactory, TInput input);
     }
 }

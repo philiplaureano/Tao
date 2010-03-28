@@ -33,6 +33,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Hiro.Containers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0efb83db47c0105, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Hiro.Containers.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqBridge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c2b14eb747628076, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\LinqBridge.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -40,8 +48,8 @@
   <ItemGroup>
     <Compile Include="IAdaptedFactory.cs" />
     <Compile Include="IFactoryConverter.cs" />
-    <Compile Include="IFactory`2.cs" />
-    <Compile Include="IFactory`1.cs" />
+    <Compile Include="IConversion.cs" />
+    <Compile Include="IFunctorFactoryConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

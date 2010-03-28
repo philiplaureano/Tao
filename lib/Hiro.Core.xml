@@ -651,6 +651,39 @@
             <param name="serviceMap">The service map that contains the list of dependencies in the application.</param>
             <param name="targetMethod">The target method.</param>
         </member>
+        <member name="T:Hiro.Implementations.FactoryCall">
+            <summary>
+            Represents a class that emits a call to an <see cref="T:Hiro.Containers.IFactory`1"/> instance to instantiate a particular service instance.
+            </summary>
+        </member>
+        <member name="M:Hiro.Implementations.FactoryCall.#ctor(System.Type,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Hiro.Implementations.FactoryCall"/> class.
+            </summary>
+            <param name="serviceType">The service type.</param>
+            <param name="serviceName">The service name.</param>
+        </member>
+        <member name="M:Hiro.Implementations.FactoryCall.GetMissingDependencies(Hiro.Interfaces.IDependencyContainer)">
+            <summary>
+            Gets the list of missing dependencies from the current implementation.
+            </summary>
+            <param name="map">The implementation map.</param>
+            <returns>A list of missing dependencies.</returns>
+        </member>
+        <member name="M:Hiro.Implementations.FactoryCall.GetRequiredDependencies">
+            <summary>
+            Returns the dependencies required by the current implementation.
+            </summary>
+            <returns>The list of required dependencies required by the current implementation.</returns>
+        </member>
+        <member name="M:Hiro.Implementations.FactoryCall.Emit(Hiro.Interfaces.IDependency,System.Collections.Generic.IDictionary{Hiro.Interfaces.IDependency,Hiro.Interfaces.IImplementation},Mono.Cecil.MethodDefinition)">
+            <summary>
+            Emits the <see cref="M:Hiro.Containers.IFactory`1.Create"/> method call that will instantiate the current service instance.
+            </summary>
+            <param name="dependency">The dependency that describes the service to be instantiated.</param>
+            <param name="serviceMap">The service map that contains the list of dependencies in the application.</param>
+            <param name="targetMethod">The target method.</param>
+        </member>
         <member name="T:Hiro.Implementations.NextContainerCall">
             <summary>
             Represents an implementation that will use the next container in the <see cref="T:Hiro.Containers.IMicroContainer"/>
@@ -1125,16 +1158,17 @@
             Initializes a new instance of the DependencyMapLoader class.
             </summary>
         </member>
-        <member name="M:Hiro.Loaders.DependencyMapLoader.#ctor(Hiro.Interfaces.IServiceLoader,Hiro.Interfaces.IDefaultServiceResolver)">
+        <member name="M:Hiro.Loaders.DependencyMapLoader.#ctor(Hiro.Interfaces.ITypeLoader,Hiro.Interfaces.IServiceLoader,Hiro.Interfaces.IDefaultServiceResolver)">
             <summary>
             Initializes a new instance of the DependencyMapLoader class.
             </summary>
+            <param name="typeLoader">The type loader that will load the service types from each assembly.</param>
             <param name="serviceLoader">The service loader that will load services from a given assembly.</param>
             <param name="defaultServiceResolver">The resolver that will determine the default anonymous implementation for a particular service type.</param>
         </member>
         <member name="M:Hiro.Loaders.DependencyMapLoader.LoadFrom(System.Reflection.Assembly)">
             <summary>
-            Loads a dependency map using the types in the given <paramref name="assemblies"/>.
+            Loads a dependency map using the types in the given <paramref name="assembly"/>.
             </summary>
             <param name="assembly">The assembly that will be used to construct the dependency map.</param>
             <returns>A dependency map.</returns>
@@ -1145,6 +1179,21 @@
             </summary>
             <param name="assemblies">The list of assemblies that will be used to construct the dependency map.</param>
             <returns>A dependency map.</returns>
+        </member>
+        <member name="M:Hiro.Loaders.DependencyMapLoader.RegisterNamedFactoryType(System.Type,System.Collections.Generic.IDictionary{System.Type,Hiro.Interfaces.IImplementation},Hiro.Interfaces.IDependencyMap)">
+            <summary>
+            Registers a type as a factory type if it implements the <see cref="T:Hiro.Containers.IFactory`1"/> interface.
+            </summary>
+            <param name="type">The target type</param>
+            <param name="defaultImplementations">The list of default implementations per service type.</param>
+            <param name="map">The dependency map.</param>
+        </member>
+        <member name="M:Hiro.Loaders.DependencyMapLoader.RegisterServicesFrom(System.Collections.Generic.IEnumerable{System.Reflection.Assembly},Hiro.DependencyMap)">
+            <summary>
+            Registers services from the given list of <paramref name="assemblies"/>.
+            </summary>
+            <param name="assemblies">The list of assemblies that contain the service types.</param>
+            <param name="map">The dependency map.</param>
         </member>
         <member name="M:Hiro.Loaders.DependencyMapLoader.LoadFrom(System.String,System.String)">
             <summary>
