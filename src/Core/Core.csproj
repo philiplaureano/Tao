@@ -58,11 +58,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Builder.cs" />
     <Compile Include="Factories\CoffHeaderStreamFactory.cs" />
+    <Compile Include="Factories\DosHeaderStreamFactory.cs" />
     <Compile Include="Factories\FileStreamFactory.cs" />
-    <Compile Include="FunctorFactoryAdapter.cs" />
-    <Compile Include="FunctorFactoryConverter.cs" />
+    <Compile Include="InMemorySubStreamReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.csproj">
@@ -71,8 +70,8 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <UsingTask TaskName="CompileContainerTask" AssemblyFile="$(MSBuildProjectDirectory)\$(OutputPath)\..\..\..\..\lib\Hiro.MSBuild.Tasks.dll" />
+  <!--<UsingTask TaskName="CompileContainerTask" AssemblyFile="$(MSBuildProjectDirectory)\$(OutputPath)\..\..\..\..\lib\Hiro.MSBuild.Tasks.dll" />
   <Target Name="AfterBuild">
     <CompileContainerTask TargetAssemblies="$(MSBuildProjectDirectory)\$(OutputPath)\Tao.Core.dll" OutputAssemblyFileName="$(MSBuildProjectDirectory)\$(OutputPath)\..\..\..\..\lib\Hiro.CompiledContainers.dll" />
-  </Target>
+  </Target>-->
 </Project>

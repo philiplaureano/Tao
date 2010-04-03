@@ -4,6 +4,72 @@
         <name>Hiro.Containers</name>
     </assembly>
     <members>
+        <member name="T:Hiro.Containers.Dependency">
+            <summary>
+            Represents a service dependency.
+            </summary>
+        </member>
+        <member name="T:Hiro.Containers.IDependency">
+            <summary>
+            Represents a service dependency.
+            </summary>
+        </member>
+        <member name="P:Hiro.Containers.IDependency.ServiceName">
+            <summary>
+            Gets the value indicating the name of the service itself.
+            </summary>
+            <value>The service name.</value>
+        </member>
+        <member name="P:Hiro.Containers.IDependency.ServiceType">
+            <summary>
+            Gets a value indicating the service type.
+            </summary>
+            <value>The service type.</value>
+        </member>
+        <member name="M:Hiro.Containers.Dependency.#ctor(System.Type)">
+            <summary>
+            Initializes a new instance of the Dependency class.
+            </summary>
+            <param name="serviceType">The service type.</param>
+        </member>
+        <member name="M:Hiro.Containers.Dependency.#ctor(System.Type,System.String)">
+            <summary>
+            Initializes a new instance of the Dependency class.
+            </summary>
+            <param name="serviceType">The service type.</param>
+            <param name="serviceName">The service name.</param>
+        </member>
+        <member name="M:Hiro.Containers.Dependency.GetHashCode">
+            <summary>
+            Computes the hash code using the <see cref="P:Hiro.Containers.Dependency.ServiceName"/> and <see cref="P:Hiro.Containers.Dependency.ServiceType"/>.
+            </summary>
+            <returns>The hash code value.</returns>
+        </member>
+        <member name="M:Hiro.Containers.Dependency.Equals(System.Object)">
+            <summary>
+            Determines whether or not the current object is equal to the <paramref name="obj">other object.</paramref>
+            </summary>
+            <param name="obj">The object that will be compared with the current object.</param>
+            <returns><c>true</c> if the objects are equal; otherwise, it will return <c>false</c>.</returns>
+        </member>
+        <member name="M:Hiro.Containers.Dependency.ToString">
+            <summary>
+            Displays the dependency as a string.
+            </summary>
+            <returns>A string that displays the contents of the current dependency.</returns>
+        </member>
+        <member name="P:Hiro.Containers.Dependency.ServiceName">
+            <summary>
+            Gets the value indicating the name of the service itself.
+            </summary>
+            <value>The service name.</value>
+        </member>
+        <member name="P:Hiro.Containers.Dependency.ServiceType">
+            <summary>
+            Gets a value indicating the service type.
+            </summary>
+            <value>The service type.</value>
+        </member>
         <member name="T:Hiro.Containers.IFactory`1">
             <summary>
             Represents a factory type.
@@ -15,6 +81,17 @@
             Creates the given <typeparamref name="T"/> type.
             </summary>
             <returns>The <typeparamref name="T"/> instance.</returns>
+        </member>
+        <member name="T:Hiro.Containers.IInitialize">
+            <summary>
+            Represents a type that is introduced to the <see cref="T:Hiro.Containers.IMicroContainer"/> instance upon initialization.
+            </summary>
+        </member>
+        <member name="M:Hiro.Containers.IInitialize.Initialize(Hiro.Containers.IMicroContainer)">
+            <summary>
+            Initializes the current type with the given <paramref name="container"/> instance.
+            </summary>
+            <param name="container">The <see cref="T:Hiro.Containers.IMicroContainer"/> instance that instantiated the current t ype.</param>
         </member>
         <member name="T:Hiro.Containers.IMicroContainer">
             <summary>
@@ -50,6 +127,11 @@
             Gets or sets the value indicating the <see cref="T:Hiro.Containers.IMicroContainer"/> instance that will be added to the current container chain.
             </summary>
             <value>The next container.</value>
+        </member>
+        <member name="T:Hiro.Containers.IContainerPlugin">
+            <summary>
+            Represents a type that can extend a <see cref="T:Hiro.Containers.IMicroContainer"/> type.
+            </summary>
         </member>
         <member name="T:Hiro.Containers.ServiceNotFoundException">
             <summary>
