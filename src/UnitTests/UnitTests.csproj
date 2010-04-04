@@ -48,6 +48,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Hiro.Core.dll</HintPath>
     </Reference>
+    <Reference Include="LinFu.Finders, Version=0.0.0.0, Culture=neutral, PublicKeyToken=3addbe3eede3dde9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\LinFu.Finders.dll</HintPath>
+    </Reference>
     <Reference Include="LinqBridge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c2b14eb747628076, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\LinqBridge.dll</HintPath>
@@ -79,6 +83,7 @@
   <ItemGroup>
     <Compile Include="BaseStreamTests.cs" />
     <Compile Include="CoffHeaderStreamTests.cs" />
+    <Compile Include="DataDirectoryHeaderStreamTests.cs" />
     <Compile Include="DosHeaderStreamTests.cs" />
     <Compile Include="FileStreamTests.cs" />
   </ItemGroup>

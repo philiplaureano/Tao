@@ -29,7 +29,7 @@ namespace Tao.UnitTests
             return streamFactory.Convert(targetFile);
         }
 
-        protected void TestFactory(string serviceName, int expectedEndPosition, int expectedHeaderSize)
+        protected void TestRead(string serviceName, int expectedEndPosition, int expectedHeaderSize)
         {
             var fileStream = GetStream();
             var container = CreateContainer();
@@ -44,7 +44,7 @@ namespace Tao.UnitTests
             Assert.AreEqual(expectedHeaderSize, result.Length);
         }
 
-        private IMicroContainer CreateContainer()
+        protected virtual IMicroContainer CreateContainer()
         {
             var loader = new DependencyMapLoader();
 

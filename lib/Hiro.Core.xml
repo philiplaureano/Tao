@@ -513,10 +513,11 @@
             <param name="map">The implementation map.</param>
             <returns>A list of missing dependencies.</returns>
         </member>
-        <member name="M:Hiro.Interfaces.IImplementation.GetRequiredDependencies">
+        <member name="M:Hiro.Interfaces.IImplementation.GetRequiredDependencies(Hiro.Interfaces.IDependencyContainer)">
             <summary>
             Returns the dependencies required by the current implementation.
             </summary>
+            <param name="map">The implementation map.</param>
             <returns>The list of required dependencies required by the current implementation.</returns>
         </member>
         <member name="M:Hiro.Interfaces.IImplementation.Emit(Hiro.Containers.IDependency,System.Collections.Generic.IDictionary{Hiro.Containers.IDependency,Hiro.Interfaces.IImplementation},Mono.Cecil.MethodDefinition)">
@@ -541,10 +542,11 @@
             <param name="map">The implementation map.</param>
             <returns>A list of missing dependencies.</returns>
         </member>
-        <member name="M:Hiro.Implementations.BaseContainerCall.GetRequiredDependencies">
+        <member name="M:Hiro.Implementations.BaseContainerCall.GetRequiredDependencies(Hiro.Interfaces.IDependencyContainer)">
             <summary>
             Returns the dependencies required by the current implementation.
             </summary>
+            <param name="map">The implementation map.</param>
             <returns>The list of required dependencies required by the current implementation.</returns>
         </member>
         <member name="M:Hiro.Implementations.BaseContainerCall.Emit(Hiro.Containers.IDependency,System.Collections.Generic.IDictionary{Hiro.Containers.IDependency,Hiro.Interfaces.IImplementation},Mono.Cecil.MethodDefinition)">
@@ -605,10 +607,11 @@
             <param name="map">The implementation map.</param>
             <returns>A list of missing dependencies.</returns>
         </member>
-        <member name="M:Hiro.Implementations.ConstructorCall.GetRequiredDependencies">
+        <member name="M:Hiro.Implementations.ConstructorCall.GetRequiredDependencies(Hiro.Interfaces.IDependencyContainer)">
             <summary>
             Returns the dependencies required by the current implementation.
             </summary>
+            <param name="map">The implementation map.</param>
             <returns>The list of required dependencies required by the current implementation.</returns>
         </member>
         <member name="M:Hiro.Implementations.ConstructorCall.Emit(Hiro.Containers.IDependency,System.Collections.Generic.IDictionary{Hiro.Containers.IDependency,Hiro.Interfaces.IImplementation},Mono.Cecil.MethodDefinition)">
@@ -618,6 +621,15 @@
             <param name="dependency">The dependency that describes the service to be instantiated.</param>
             <param name="serviceMap">The service map that contains the list of dependencies in the application.</param>
             <param name="targetMethod">The target method.</param>
+        </member>
+        <member name="M:Hiro.Implementations.ConstructorCall.GetNamedParameterDependencyIfPossible(System.Collections.Generic.ICollection{Hiro.Containers.IDependency},System.Reflection.ParameterInfo)">
+            <summary>
+            Attempts to resolve the service that matches the parameter name and parameter type if possible, and if the given service cannot be resolved,
+            the dependency will fall back to the default parameter type.
+            </summary>
+            <param name="dependencies">The list of dependencies in the current container.</param>
+            <param name="parameter">The target parameter.</param>
+            <returns>The required dependency.</returns>
         </member>
         <member name="M:Hiro.Implementations.ConstructorCall.EmitDependency(Hiro.Containers.IDependency,Mono.Cecil.MethodDefinition,System.Collections.Generic.IDictionary{Hiro.Containers.IDependency,Hiro.Interfaces.IImplementation})">
             <summary>
@@ -687,7 +699,7 @@
             <param name="map">The implementation map.</param>
             <returns>A list of missing dependencies.</returns>
         </member>
-        <member name="M:Hiro.Implementations.ContainerInstanceCall.GetRequiredDependencies">
+        <member name="M:Hiro.Implementations.ContainerInstanceCall.GetRequiredDependencies(Hiro.Interfaces.IDependencyContainer)">
             <summary>
             Returns the dependencies required by the current implementation.
             </summary>
@@ -720,10 +732,11 @@
             <param name="map">The implementation map.</param>
             <returns>A list of missing dependencies.</returns>
         </member>
-        <member name="M:Hiro.Implementations.FactoryCall.GetRequiredDependencies">
+        <member name="M:Hiro.Implementations.FactoryCall.GetRequiredDependencies(Hiro.Interfaces.IDependencyContainer)">
             <summary>
             Returns the dependencies required by the current implementation.
             </summary>
+            <param name="map">The implementation map.</param>
             <returns>The list of required dependencies required by the current implementation.</returns>
         </member>
         <member name="M:Hiro.Implementations.FactoryCall.Emit(Hiro.Containers.IDependency,System.Collections.Generic.IDictionary{Hiro.Containers.IDependency,Hiro.Interfaces.IImplementation},Mono.Cecil.MethodDefinition)">
@@ -797,10 +810,11 @@
             <param name="map">The implementation map.</param>
             <returns>A list of missing dependencies.</returns>
         </member>
-        <member name="M:Hiro.Implementations.PropertyInjectionCall.GetRequiredDependencies">
+        <member name="M:Hiro.Implementations.PropertyInjectionCall.GetRequiredDependencies(Hiro.Interfaces.IDependencyContainer)">
             <summary>
             Returns the dependencies required by the current implementation.
             </summary>
+            <param name="map">The implementation map.</param>
             <returns>The list of required dependencies required by the current implementation.</returns>
         </member>
         <member name="M:Hiro.Implementations.PropertyInjectionCall.Emit(Hiro.Containers.IDependency,System.Collections.Generic.IDictionary{Hiro.Containers.IDependency,Hiro.Interfaces.IImplementation},Mono.Cecil.MethodDefinition)">
@@ -897,10 +911,11 @@
             <param name="map">The implementation map.</param>
             <returns>A list of missing dependencies.</returns>
         </member>
-        <member name="M:Hiro.Implementations.SingletonType.GetRequiredDependencies">
+        <member name="M:Hiro.Implementations.SingletonType.GetRequiredDependencies(Hiro.Interfaces.IDependencyContainer)">
             <summary>
             Returns the dependencies that are required by the current implementation.
             </summary>
+            <param name="map">The implementation map.</param>
             <returns>The list of required dependencies required by the current implementation.</returns>
         </member>
         <member name="P:Hiro.Implementations.SingletonType.TargetType">
@@ -924,6 +939,11 @@
             The dependency container that contains the dependencies in the given application.
             </summary>
         </member>
+        <member name="F:Hiro.Implementations.TransientType._resolver">
+            <summary>
+            The constructor resolver that will select the constructor with the most resolvable parameters.
+            </summary>
+        </member>
         <member name="F:Hiro.Implementations.TransientType._getConstructorImplementation">
             <summary>
             The functor that determines which constructor implementation will be used to instantiate the target type.
@@ -931,10 +951,18 @@
         </member>
         <member name="M:Hiro.Implementations.TransientType.#ctor(System.Type,Hiro.Interfaces.IDependencyContainer)">
             <summary>
+            Initializes a new instance of the <see cref="T:System.Object"/> class.
+            </summary>
+            <param name="targetType">The target type.</param>
+            <param name="container">The dependency container.</param>
+        </member>
+        <member name="M:Hiro.Implementations.TransientType.#ctor(System.Type,Hiro.Interfaces.IDependencyContainer,Hiro.Resolvers.IConstructorResolver)">
+            <summary>
             Initializes a new instance of the TransientType class.
             </summary>
             <param name="targetType">The target type.</param>
             <param name="container">The dependency container.</param>
+            <param name="resolver">The constructor resolver.</param>
         </member>
         <member name="M:Hiro.Implementations.TransientType.GetMissingDependencies(Hiro.Interfaces.IDependencyContainer)">
             <summary>
@@ -943,10 +971,11 @@
             <param name="map">The dependency container.</param>
             <returns>The list of required dependencies required by the current implementation.</returns>
         </member>
-        <member name="M:Hiro.Implementations.TransientType.GetRequiredDependencies">
+        <member name="M:Hiro.Implementations.TransientType.GetRequiredDependencies(Hiro.Interfaces.IDependencyContainer)">
             <summary>
             Returns the dependencies required by the current implementation.
             </summary>
+            <param name="map">The implementation map.</param>
             <returns>The list of required dependencies required by the current implementation.</returns>
         </member>
         <member name="M:Hiro.Implementations.TransientType.Emit(Hiro.Containers.IDependency,System.Collections.Generic.IDictionary{Hiro.Containers.IDependency,Hiro.Interfaces.IImplementation},Mono.Cecil.MethodDefinition)">
@@ -987,6 +1016,19 @@
             </summary>
             <param name="filename">The file name of the target assembly.</param>
             <returns>The loaded <see cref="T:System.Reflection.Assembly"/>.</returns>
+        </member>
+        <member name="T:Hiro.Resolvers.IConstructorResolver">
+            <summary>
+            Represents a type that determines the constructor that will be used to instantiate a particular service implementation.
+            </summary>
+        </member>
+        <member name="M:Hiro.Resolvers.IConstructorResolver.ResolveFrom(System.Type,Hiro.Interfaces.IDependencyContainer)">
+            <summary>
+            Determines which constructor implementation should be used from a given <see cref="T:Hiro.Interfaces.IDependencyContainer"/> instance.
+            </summary>
+            <param name="targetType">The target type that contains list of constructors to be resolved.</param>
+            <param name="container">The dependency container that holds the current set of dependencies.</param>
+            <returns>An implementation that can instantiate the object associated with the constructor.</returns>
         </member>
         <member name="T:Hiro.Interfaces.IContainerCompiler">
             <summary>
@@ -1361,31 +1403,13 @@
             Represents a class that selects the constructor with the most resolvable parameters.
             </summary>
         </member>
-        <member name="F:Hiro.Resolvers.ConstructorResolver._constructors">
-            <summary>
-            The list of available constructors.
-            </summary>
-        </member>
-        <member name="M:Hiro.Resolvers.ConstructorResolver.#ctor(System.Collections.Generic.IEnumerable{Hiro.Interfaces.IImplementation{System.Reflection.ConstructorInfo}})">
-            <summary>
-            Initializes a new instance of the ConstructorResolver class.
-            </summary>
-            <param name="constructors">The list of constructors.</param>
-        </member>
-        <member name="M:Hiro.Resolvers.ConstructorResolver.ResolveFrom(Hiro.Interfaces.IDependencyContainer)">
+        <member name="M:Hiro.Resolvers.ConstructorResolver.ResolveFrom(System.Type,Hiro.Interfaces.IDependencyContainer)">
             <summary>
             Determines which constructor implementation should be used from a given <see cref="T:Hiro.Interfaces.IDependencyContainer"/> instance.
             </summary>
+            <param name="targetType">The target type that contains list of constructors to be resolved.</param>
             <param name="container">The dependency container that holds the current set of dependencies.</param>
             <returns>An implementation that can instantiate the object associated with the constructor.</returns>
-        </member>
-        <member name="M:Hiro.Resolvers.ConstructorResolver.ChooseConstructor(Hiro.Interfaces.IImplementation{System.Reflection.ConstructorInfo}@,System.Int32@,Hiro.Interfaces.IImplementation{System.Reflection.ConstructorInfo})">
-            <summary>
-            Selects the constructor with the most resolvable parameters.
-            </summary>
-            <param name="result">The variable that will store the best match.</param>
-            <param name="bestParameterCount">The parameter count of the current best matching constructor.</param>
-            <param name="constructor">The current constructor.</param>
         </member>
         <member name="T:Hiro.AssemblyDefinitionExtensions">
             <summary>

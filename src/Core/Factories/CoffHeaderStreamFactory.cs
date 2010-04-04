@@ -12,14 +12,17 @@ namespace Tao.Core.Factories
     public class CoffHeaderStreamFactory : IConversion<Stream, Stream>
     {
         private readonly ISubStreamReader _reader;
+        private readonly IStreamSeeker _seeker;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CoffHeaderStreamFactory"/> class.
         /// </summary>
         /// <param name="reader">The substream reader.</param>
-        public CoffHeaderStreamFactory(ISubStreamReader reader)
+        /// <param name="coffHeaderSeeker">The <see cref="IStreamSeeker"/> that will be used to locate the Coff header position.</param>
+        public CoffHeaderStreamFactory(ISubStreamReader reader, IStreamSeeker coffHeaderSeeker)
         {
             _reader = reader;
+            _seeker = coffHeaderSeeker;
         }
 
         /// <summary>
@@ -29,7 +32,7 @@ namespace Tao.Core.Factories
         /// <returns>A stream containing the Coff header data.</returns>
         public Stream Convert(Stream input)
         {
-            input.Seek(0x98, SeekOrigin.Begin);
+            _seeker.Seek(input);
 
             const int size = 0x5c;
             return _reader.Read(size, input);

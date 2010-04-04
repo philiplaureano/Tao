@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IConversion.cs" />
+    <Compile Include="IStreamSeeker.cs" />
     <Compile Include="ISubstreamReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -44,10 +44,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hiro.Containers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0efb83db47c0105, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Hiro.Containers.dll</HintPath>
-    </Reference>
     <Reference Include="LinqBridge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c2b14eb747628076, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\LinqBridge.dll</HintPath>
@@ -58,10 +54,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="DataDirectoryCounter.cs" />
     <Compile Include="Factories\CoffHeaderStreamFactory.cs" />
+    <Compile Include="Factories\DataDirectoryStreamFactory.cs" />
     <Compile Include="Factories\DosHeaderStreamFactory.cs" />
     <Compile Include="Factories\FileStreamFactory.cs" />
     <Compile Include="InMemorySubStreamReader.cs" />
+    <Compile Include="Seekers\CoffHeaderSeeker.cs" />
+    <Compile Include="Seekers\DataDirectoryCountSeeker.cs" />
+    <Compile Include="Seekers\DosHeaderSeeker.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.csproj">

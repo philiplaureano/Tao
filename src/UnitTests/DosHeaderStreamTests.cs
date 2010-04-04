@@ -14,7 +14,7 @@ namespace Tao.UnitTests
         {
             var expectedEndPosition = 0x3C;
             var expectedHeaderSize = 0x3C;
-            TestFactory("DosHeaderStreamFactory", expectedEndPosition, expectedHeaderSize);
+            TestRead("DosHeaderStreamFactory", expectedEndPosition, expectedHeaderSize);
         }
     }
 }
