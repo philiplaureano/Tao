@@ -33,7 +33,7 @@ namespace Tao.Core.Factories
             using (Stream fileStream = new FileStream(input, FileMode.Open))
             {
                 var streamLength = Convert.ToInt32(fileStream.Length);                
-                result = _reader.Execute(Tuple.New(streamLength, fileStream));
+                result = _reader.Execute(streamLength, fileStream);
             }
 
             return result;

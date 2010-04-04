@@ -177,7 +177,7 @@ namespace Tao.Interfaces
         /// <typeparam name="T1">The item1 type.</typeparam>
         /// <typeparam name="T2">The item2 type.</typeparam>
         /// <typeparam name="T3">The item3 type.</typeparam>
-        /// <typeparam name="T3">The item4 type.</typeparam>
+        /// <typeparam name="T4">The item4 type.</typeparam>
         /// <param name="item1">The value of item1.</param>
         /// <param name="item2">The value of item2.</param>
         /// <param name="item3">The value of item3.</param>
@@ -187,5 +187,101 @@ namespace Tao.Interfaces
         {
             return new Tuple<T1, T2, T3, T4>(item1, item2, item3, item4);
         }        
+
+        /// <summary>
+        /// Executes the given function using a tuple from the given arguments.
+        /// </summary>
+        /// <typeparam name="T1">The item1 type.</typeparam>
+        /// <typeparam name="T2">The item2 type.</typeparam>
+        /// <typeparam name="TOutput">The return type.</typeparam>
+        /// <param name="function">The target function.</param>
+        /// <param name="item1">The value of item1.</param>
+        /// <param name="item2">The value of item2.</param>
+        /// <returns>The value returned by the function.</returns>
+        public static TOutput Execute<T1, T2, TOutput>(this IFunction<ITuple<T1, T2>, TOutput> function, T1 item1, T2 item2)
+        {
+            return function.Execute(Tuple.New(item1, item2));
+        }
+
+        /// <summary>
+        /// Executes the given function using a tuple from the given arguments.
+        /// </summary>
+        /// <typeparam name="T1">The item1 type.</typeparam>
+        /// <typeparam name="T2">The item2 type.</typeparam>
+        /// <typeparam name="T3">The item3 type.</typeparam>
+        /// <typeparam name="TOutput">The return type.</typeparam>
+        /// <param name="function">The target function.</param>
+        /// <param name="item1">The value of item1.</param>
+        /// <param name="item2">The value of item2.</param>
+        /// <param name="item3">The value of item3.</param>
+        /// <returns>The value returned by the function.</returns>
+        public static TOutput Execute<T1, T2, T3, TOutput>(this IFunction<ITuple<T1, T2, T3>, TOutput> function, T1 item1, T2 item2, T3 item3)
+        {
+            return function.Execute(Tuple.New(item1, item2, item3));
+        }
+
+        /// <summary>
+        /// Executes the given function using a tuple from the given arguments.
+        /// </summary>
+        /// <typeparam name="T1">The item1 type.</typeparam>
+        /// <typeparam name="T2">The item2 type.</typeparam>
+        /// <typeparam name="T3">The item3 type.</typeparam>
+        /// <typeparam name="T4">The item4 type.</typeparam>
+        /// <typeparam name="TOutput">The return type.</typeparam>
+        /// <param name="function">The target function.</param>
+        /// <param name="item1">The value of item1.</param>
+        /// <param name="item2">The value of item2.</param>
+        /// <param name="item3">The value of item3.</param>
+        /// <param name="item4">The value of item3.</param>
+        /// <returns>The value returned by the function.</returns>
+        public static TOutput Execute<T1, T2, T3, T4, TOutput>(this IFunction<ITuple<T1, T2, T3, T4>, TOutput> function, T1 item1, T2 item2, T3 item3, T4 item4)
+        {
+            return function.Execute(Tuple.New(item1, item2, item3, item4));
+        }
+
+        /// <summary>
+        /// Executes the given function using a tuple from the given arguments.
+        /// </summary>
+        /// <typeparam name="T1">The item1 type.</typeparam>
+        /// <typeparam name="T2">The item2 type.</typeparam>
+        /// <param name="function">The target function.</param>
+        /// <param name="item1">The value of item1.</param>
+        /// <param name="item2">The value of item2.</param>
+        public static void Execute<T1, T2>(this IFunction<ITuple<T1, T2>> function, T1 item1, T2 item2)
+        {
+            function.Execute(Tuple.New(item1, item2));
+        }
+
+        /// <summary>
+        /// Executes the given function using a tuple from the given arguments.
+        /// </summary>
+        /// <typeparam name="T1">The item1 type.</typeparam>
+        /// <typeparam name="T2">The item2 type.</typeparam>
+        /// <typeparam name="T3">The item3 type.</typeparam>
+        /// <param name="function">The target function.</param>
+        /// <param name="item1">The value of item1.</param>
+        /// <param name="item2">The value of item2.</param>
+        /// <param name="item3">The value of item3.</param>
+        public static void Execute<T1, T2, T3>(this IFunction<ITuple<T1, T2, T3>> function, T1 item1, T2 item2, T3 item3)
+        {
+            function.Execute(Tuple.New(item1, item2, item3));
+        }
+
+        /// <summary>
+        /// Executes the given function using a tuple from the given arguments.
+        /// </summary>
+        /// <typeparam name="T1">The item1 type.</typeparam>
+        /// <typeparam name="T2">The item2 type.</typeparam>
+        /// <typeparam name="T3">The item3 type.</typeparam>
+        /// <typeparam name="T4">The item4 type.</typeparam>
+        /// <param name="function">The target function.</param>
+        /// <param name="item1">The value of item1.</param>
+        /// <param name="item2">The value of item2.</param>
+        /// <param name="item3">The value of item3.</param>
+        /// <param name="item4">The value of item3.</param>
+        public static void Execute<T1, T2, T3, T4>(this IFunction<ITuple<T1, T2, T3, T4>> function, T1 item1, T2 item2, T3 item3, T4 item4)
+        {
+            function.Execute(Tuple.New(item1, item2, item3, item4));
+        }
     }
 }

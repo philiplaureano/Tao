@@ -34,7 +34,7 @@ namespace Tao.Core.Factories
         {
             _peStreamSeeker.Execute(input);
 
-            return _inMemorySubStreamReader.Execute(Tuple.New(0x12, input));
+            return _inMemorySubStreamReader.Execute(0x12, input);
         }
     }
 }

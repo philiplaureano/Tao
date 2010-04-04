@@ -14,6 +14,25 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldBeAbleToReadFirstPESectionHeader()
         {
+            var expectedStreamLength = 0x28;
+            var expectedStreamPosition = 0x1a0;
+            var sectionHeaderIndex = 0;
+
+            TestPESectionHeaderStreamRead(sectionHeaderIndex, expectedStreamLength, expectedStreamPosition);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadSecondPESectionHeader()
+        {
+            var expectedStreamLength = 0x28;
+            var expectedStreamPosition = 0x1c8;
+            var sectionHeaderIndex = 1;
+
+            TestPESectionHeaderStreamRead(sectionHeaderIndex, expectedStreamLength, expectedStreamPosition);
+        }
+
+        private void TestPESectionHeaderStreamRead(int sectionHeaderIndex, int expectedStreamLength, int expectedStreamPosition)
+        {
             var stream = GetStream();
             var container = CreateContainer();
 
@@ -22,10 +41,10 @@ namespace Tao.UnitTests
             Assert.IsTrue(container.Contains(typeof(IFunction<ITuple<int, Stream>, Stream>), "PESectionFactory"));
             var factory = (IFunction<ITuple<int, Stream>, Stream>)container.GetInstance(typeof(IFunction<ITuple<int, Stream>, Stream>), "PESectionFactory");
             Assert.IsNotNull(factory);
-
-            var subStream = factory.Execute(Tuple.New(0, stream));
-            Assert.AreEqual(0x22, subStream.Length);
-            Assert.AreEqual(0x19a, stream.Position);
+            
+            var subStream = factory.Execute(sectionHeaderIndex, stream);            
+            Assert.AreEqual(expectedStreamLength, subStream.Length);            
+            Assert.AreEqual(expectedStreamPosition, stream.Position);
         }
     }
 }

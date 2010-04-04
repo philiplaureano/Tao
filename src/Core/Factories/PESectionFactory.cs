@@ -33,13 +33,13 @@ namespace Tao.Core.Factories
             var stream = input.Item2;
             var index = input.Item1;
 
-            const int headerSize = 0x22;
+            const int headerSize = 0x28;
             var offset = headerSize * index;
 
             _dataDirectoriesEndSeeker.Execute(input.Item2);
             stream.Seek(offset, SeekOrigin.Current);
 
-            return _inMemorySubStreamReader.Execute(Tuple.New(headerSize, stream));
+            return _inMemorySubStreamReader.Execute(headerSize, stream);
         }
     }
 }

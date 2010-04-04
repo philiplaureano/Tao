@@ -35,7 +35,7 @@ namespace Tao.Core.Factories
             _seeker.Execute(input);
 
             const int size = 0x5c;
-            return _reader.Execute(Tuple.New(size, input));
+            return _reader.Execute(size, input);
         }
     }
 }

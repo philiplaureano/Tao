@@ -47,5 +47,18 @@ namespace Tao.UnitTests
         {
             TestRead("DataDirectoryStreamFactory", 0x178, 128);
         }
+
+        [Test]
+        public void ShouldBeAbleToSeekRandomDataDirectoryByIndex()
+        {
+            Stream stream = GetStream();
+            var container = CreateContainer();
+
+            var seeker = (IFunction<ITuple<int, Stream>>)container.GetInstance(typeof(IFunction<ITuple<int, Stream>>), "IndexedDataDirectorySeeker");            
+            Assert.IsNotNull(seeker);
+
+            seeker.Execute(14, stream);
+            Assert.AreEqual(0x168, stream.Position);
+        }
     }
 }

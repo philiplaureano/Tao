@@ -41,7 +41,7 @@ namespace Tao.Core.Factories
             var bytesToRead = numberOfDirectories*dataDirectorySize;
 
             _dataDirectoriesSeeker.Execute(input);
-            return _inMemorySubStreamReader.Execute(Tuple.New(bytesToRead, input));
+            return _inMemorySubStreamReader.Execute(bytesToRead, input);
         }
     }
 }

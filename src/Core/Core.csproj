@@ -68,6 +68,7 @@
     <Compile Include="Seekers\DataDirectoriesSeeker.cs" />
     <Compile Include="Seekers\DataDirectoryCountSeeker.cs" />
     <Compile Include="Seekers\DosHeaderSeeker.cs" />
+    <Compile Include="Seekers\IndexedDataDirectorySeeker.cs" />
     <Compile Include="Seekers\PEStreamSeeker.cs" />
   </ItemGroup>
   <ItemGroup>
