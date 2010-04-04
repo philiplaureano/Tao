@@ -11,18 +11,21 @@ namespace Tao.Core.Factories
     /// </summary>
     public class DataDirectoryStreamFactory : IConversion<Stream, Stream>
     {
-        private IConversion<Stream, int> _dataDirectoryCounter;
-        private ISubStreamReader _inMemorySubStreamReader;
+        private readonly IConversion<Stream, int> _dataDirectoryCounter;
+        private readonly ISubStreamReader _inMemorySubStreamReader;
+        private readonly IStreamSeeker _dataDirectoriesSeeker;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
         /// <param name="dataDirectoryCounter">The object that will be responsible for determining the available number of data directories from a given portable executable stream.</param>
         /// <param name="inMemorySubStreamReader">The <see cref="ISubStreamReader"/> that will be used to read the block of data directories.</param>
-        public DataDirectoryStreamFactory(IConversion<Stream, int> dataDirectoryCounter, ISubStreamReader inMemorySubStreamReader)
+        /// <param name="dataDirectoriesSeeker">The <see cref="IStreamSeeker"/> that will set the stream position to point to the first byte in the data directory headers.</param>
+        public DataDirectoryStreamFactory(IConversion<Stream, int> dataDirectoryCounter, ISubStreamReader inMemorySubStreamReader, IStreamSeeker dataDirectoriesSeeker)
         {
             _dataDirectoryCounter = dataDirectoryCounter;
             _inMemorySubStreamReader = inMemorySubStreamReader;
+            _dataDirectoriesSeeker = dataDirectoriesSeeker;
         }
 
         /// <summary>
@@ -37,7 +40,7 @@ namespace Tao.Core.Factories
 
             var bytesToRead = numberOfDirectories*dataDirectorySize;
 
-            input.Seek(0, SeekOrigin.Begin);
+            _dataDirectoriesSeeker.Seek(input);
             return _inMemorySubStreamReader.Read(bytesToRead, input);
         }
     }

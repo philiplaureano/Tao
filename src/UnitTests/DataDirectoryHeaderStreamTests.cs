@@ -30,9 +30,22 @@ namespace Tao.UnitTests
         }
 
         [Test]
+        public void ShouldBeAbleToSeekEndOfDataDirectories()
+        {
+            var stream = GetStream();
+            var container = CreateContainer();
+
+            var seeker = (IStreamSeeker)container.GetInstance(typeof(IStreamSeeker), "DataDirectoriesEndSeeker");
+            Assert.IsNotNull(seeker);
+            seeker.Seek(stream);
+
+            Assert.AreEqual(0x178, stream.Position);
+        }
+
+        [Test]
         public void ShouldBeAbleToReadDataDirectories()
         {
-            TestRead("DataDirectoryStreamFactory", 128, 128);
+            TestRead("DataDirectoryStreamFactory", 0x178, 128);
         }
     }
 }

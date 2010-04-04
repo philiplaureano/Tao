@@ -61,6 +61,8 @@
     <Compile Include="Factories\FileStreamFactory.cs" />
     <Compile Include="InMemorySubStreamReader.cs" />
     <Compile Include="Seekers\CoffHeaderSeeker.cs" />
+    <Compile Include="Seekers\DataDirectoriesEndSeeker.cs" />
+    <Compile Include="Seekers\DataDirectoriesSeeker.cs" />
     <Compile Include="Seekers\DataDirectoryCountSeeker.cs" />
     <Compile Include="Seekers\DosHeaderSeeker.cs" />
   </ItemGroup>
