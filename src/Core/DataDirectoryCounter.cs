@@ -11,13 +11,13 @@ namespace Tao.Core
     /// </summary>
     public class DataDirectoryCounter : IFunction<Stream, int>
     {
-        private readonly IStreamSeeker _dataDirectoryCountSeeker;
+        private readonly IFunction<Stream> _dataDirectoryCountSeeker;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataDirectoryCounter"/> class.
         /// </summary>
         /// <param name="dataDirectoryCountSeeker">The seeker that will locate the position of the number of data directories.</param>
-        public DataDirectoryCounter(IStreamSeeker dataDirectoryCountSeeker)
+        public DataDirectoryCounter(IFunction<Stream> dataDirectoryCountSeeker)
         {
             _dataDirectoryCountSeeker = dataDirectoryCountSeeker;
         }
@@ -30,7 +30,7 @@ namespace Tao.Core
         public int Execute(Stream input)
         {            
             var reader = new BinaryReader(input);
-            _dataDirectoryCountSeeker.Seek(input);
+            _dataDirectoryCountSeeker.Execute(input);
             var result = reader.ReadInt32();       
 
             return result;

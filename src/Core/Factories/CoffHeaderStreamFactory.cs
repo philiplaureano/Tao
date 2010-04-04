@@ -11,15 +11,15 @@ namespace Tao.Core.Factories
     /// </summary>
     public class CoffHeaderStreamFactory : IFunction<Stream, Stream>
     {
-        private readonly ISubStreamReader _reader;
-        private readonly IStreamSeeker _seeker;
+        private readonly IFunction<ITuple<int, Stream>, Stream> _reader;
+        private readonly IFunction<Stream> _seeker;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CoffHeaderStreamFactory"/> class.
         /// </summary>
         /// <param name="reader">The substream reader.</param>
-        /// <param name="coffHeaderSeeker">The <see cref="IStreamSeeker"/> that will be used to locate the Coff header position.</param>
-        public CoffHeaderStreamFactory(ISubStreamReader reader, IStreamSeeker coffHeaderSeeker)
+        /// <param name="coffHeaderSeeker">The <see cref="IFunction{Stream}"/> that will be used to locate the Coff header position.</param>
+        public CoffHeaderStreamFactory(IFunction<ITuple<int, Stream>, Stream> reader, IFunction<Stream> coffHeaderSeeker)
         {
             _reader = reader;
             _seeker = coffHeaderSeeker;
@@ -32,10 +32,10 @@ namespace Tao.Core.Factories
         /// <returns>A stream containing the Coff header data.</returns>
         public Stream Execute(Stream input)
         {
-            _seeker.Seek(input);
+            _seeker.Execute(input);
 
             const int size = 0x5c;
-            return _reader.Read(size, input);
+            return _reader.Execute(Tuple.New(size, input));
         }
     }
 }

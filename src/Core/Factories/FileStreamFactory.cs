@@ -11,13 +11,13 @@ namespace Tao.Core.Factories
     /// </summary>
     public class FileStreamFactory : IFunction<string, Stream>
     {
-        private readonly ISubStreamReader _reader;
+        private readonly IFunction<ITuple<int, Stream>, Stream> _reader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileStreamFactory"/> class.
         /// </summary>
         /// <param name="reader">The substream reader.</param>
-        public FileStreamFactory(ISubStreamReader reader)
+        public FileStreamFactory(IFunction<ITuple<int, Stream>, Stream> reader)
         {
             _reader = reader;
         }
@@ -30,10 +30,10 @@ namespace Tao.Core.Factories
         public Stream Execute(string input)
         {
             Stream result = null;
-            using (var fileStream = new FileStream(input, FileMode.Open))
+            using (Stream fileStream = new FileStream(input, FileMode.Open))
             {
-                var streamLength = System.Convert.ToInt32(fileStream.Length);                
-                result = _reader.Read(streamLength, fileStream);
+                var streamLength = Convert.ToInt32(fileStream.Length);                
+                result = _reader.Execute(Tuple.New(streamLength, fileStream));
             }
 
             return result;

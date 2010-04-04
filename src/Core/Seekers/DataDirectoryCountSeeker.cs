@@ -9,13 +9,13 @@ namespace Tao.Core.Seekers
     /// <summary>
     /// Represents a class that seek the position of the number of data directories within a PE stream.
     /// </summary>
-    public class DataDirectoryCountSeeker : IStreamSeeker
+    public class DataDirectoryCountSeeker : IFunction<Stream>
     {
         /// <summary>
         /// Represents a class that seek the position of the number of data directories within a PE stream.
         /// </summary>
         /// <param name="stream">The target stream.</param>
-        public void Seek(Stream stream)
+        public void Execute(Stream stream)
         {
             stream.Seek(0xF4, SeekOrigin.Begin);
         }

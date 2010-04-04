@@ -35,9 +35,9 @@ namespace Tao.UnitTests
             var stream = GetStream();
             var container = CreateContainer();
 
-            var seeker = (IStreamSeeker)container.GetInstance(typeof(IStreamSeeker), "DataDirectoriesEndSeeker");
+            var seeker = (IFunction<Stream>)container.GetInstance(typeof(IFunction<Stream>), "DataDirectoriesEndSeeker");
             Assert.IsNotNull(seeker);
-            seeker.Seek(stream);
+            seeker.Execute(stream);
 
             Assert.AreEqual(0x178, stream.Position);
         }

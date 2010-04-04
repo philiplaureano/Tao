@@ -18,4 +18,17 @@ namespace Tao.Interfaces
         /// <returns>The <typeparamref name="TOutput"/> instance.</returns>
         TOutput Execute(TInput input);
     }
+
+    /// <summary>
+    /// Represents a converter type.
+    /// </summary>
+    /// <typeparam name="TInput">The input type that will be used to create the object.</typeparam>
+    public interface IFunction<TInput>
+    {
+        /// <summary>
+        /// Executes the given action using the given <typeparamref name="TInput"/>.
+        /// </summary>
+        /// <param name="input">The input data.</param
+        void Execute(TInput input);
+    }
 }

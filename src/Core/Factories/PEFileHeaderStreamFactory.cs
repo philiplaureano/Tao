@@ -11,15 +11,15 @@ namespace Tao.Core.Factories
     /// </summary>
     public class PEFileHeaderStreamFactory : IFunction<Stream, Stream>
     {
-        private readonly ISubStreamReader _inMemorySubStreamReader;
-        private readonly IStreamSeeker _peStreamSeeker;
+        private readonly IFunction<ITuple<int, Stream>, Stream> _inMemorySubStreamReader;
+        private readonly IFunction<Stream> _peStreamSeeker;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        /// <param name="inMemorySubStreamReader">The <see cref="ISubStreamReader"/> that will be used to read the block of data directories.</param>
-        /// <param name="peStreamSeeker">The <see cref="IStreamSeeker"/> that will set the stream position to point to the first byte in the PE header stream.</param>
-        public PEFileHeaderStreamFactory(ISubStreamReader inMemorySubStreamReader, IStreamSeeker peStreamSeeker)
+        /// <param name="inMemorySubStreamReader">The substream reader that will be used to read the block of data directories.</param>
+        /// <param name="peStreamSeeker">The <see cref="IFunction{Stream}"/> that will set the stream position to point to the first byte in the PE header stream.</param>
+        public PEFileHeaderStreamFactory(IFunction<ITuple<int, Stream>, Stream> inMemorySubStreamReader, IFunction<Stream> peStreamSeeker)
         {
             _inMemorySubStreamReader = inMemorySubStreamReader;
             _peStreamSeeker = peStreamSeeker;
@@ -32,9 +32,9 @@ namespace Tao.Core.Factories
         /// <returns>The PE Header substream.</returns>
         public Stream Execute(Stream input)
         {
-            _peStreamSeeker.Seek(input);
+            _peStreamSeeker.Execute(input);
 
-            return _inMemorySubStreamReader.Read(0x12, input);
+            return _inMemorySubStreamReader.Execute(Tuple.New(0x12, input));
         }
     }
 }

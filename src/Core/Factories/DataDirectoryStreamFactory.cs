@@ -11,17 +11,17 @@ namespace Tao.Core.Factories
     /// </summary>
     public class DataDirectoryStreamFactory : IFunction<Stream, Stream>
     {
-        private readonly IFunction<Stream, int> _dataDirectoryCounter;
-        private readonly ISubStreamReader _inMemorySubStreamReader;
-        private readonly IStreamSeeker _dataDirectoriesSeeker;
+        private readonly IFunction<Stream, int> _dataDirectoryCounter;        
+        private readonly IFunction<Stream> _dataDirectoriesSeeker;
+        private readonly IFunction<ITuple<int, Stream>, Stream> _inMemorySubStreamReader;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Object"/> class.
+        /// Initializes a new instance of the <see cref="DataDirectoryStreamFactory"/> class.
         /// </summary>
         /// <param name="dataDirectoryCounter">The object that will be responsible for determining the available number of data directories from a given portable executable stream.</param>
-        /// <param name="inMemorySubStreamReader">The <see cref="ISubStreamReader"/> that will be used to read the block of data directories.</param>
-        /// <param name="dataDirectoriesSeeker">The <see cref="IStreamSeeker"/> that will set the stream position to point to the first byte in the data directory headers.</param>
-        public DataDirectoryStreamFactory(IFunction<Stream, int> dataDirectoryCounter, ISubStreamReader inMemorySubStreamReader, IStreamSeeker dataDirectoriesSeeker)
+        /// <param name="inMemorySubStreamReader">The function that will be used to read the block of data directories.</param>
+        /// <param name="dataDirectoriesSeeker">The <see cref="IFunction{Stream}"/> that will set the stream position to point to the first byte in the data directory headers.</param>
+        public DataDirectoryStreamFactory(IFunction<Stream, int> dataDirectoryCounter, IFunction<ITuple<int, Stream>, Stream> inMemorySubStreamReader, IFunction<Stream> dataDirectoriesSeeker)
         {
             _dataDirectoryCounter = dataDirectoryCounter;
             _inMemorySubStreamReader = inMemorySubStreamReader;
@@ -40,8 +40,8 @@ namespace Tao.Core.Factories
 
             var bytesToRead = numberOfDirectories*dataDirectorySize;
 
-            _dataDirectoriesSeeker.Seek(input);
-            return _inMemorySubStreamReader.Read(bytesToRead, input);
+            _dataDirectoriesSeeker.Execute(input);
+            return _inMemorySubStreamReader.Execute(Tuple.New(bytesToRead, input));
         }
     }
 }

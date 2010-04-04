@@ -11,13 +11,13 @@ namespace Tao.Core.Factories
     /// </summary>
     public class PESectionFactory : IFunction<ITuple<int, Stream>, Stream>
     {
-        private readonly IStreamSeeker _dataDirectoriesEndSeeker;
-        private readonly ISubStreamReader _inMemorySubStreamReader;
+        private readonly IFunction<Stream> _dataDirectoriesEndSeeker;
+        private readonly IFunction<ITuple<int, Stream>, Stream> _inMemorySubStreamReader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public PESectionFactory(ISubStreamReader inMemorySubStreamReader, IStreamSeeker dataDirectoriesEndSeeker)
+        public PESectionFactory(IFunction<ITuple<int, Stream>, Stream> inMemorySubStreamReader, IFunction<Stream> dataDirectoriesEndSeeker)
         {
             _dataDirectoriesEndSeeker = dataDirectoriesEndSeeker;
             _inMemorySubStreamReader = inMemorySubStreamReader;
@@ -36,10 +36,10 @@ namespace Tao.Core.Factories
             const int headerSize = 0x22;
             var offset = headerSize * index;
 
-            _dataDirectoriesEndSeeker.Seek(input.Item2);
+            _dataDirectoriesEndSeeker.Execute(input.Item2);
             stream.Seek(offset, SeekOrigin.Current);
 
-            return _inMemorySubStreamReader.Read(headerSize, stream);
+            return _inMemorySubStreamReader.Execute(Tuple.New(headerSize, stream));
         }
     }
 }
