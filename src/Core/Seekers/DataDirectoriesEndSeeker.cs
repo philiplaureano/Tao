@@ -11,7 +11,7 @@ namespace Tao.Core.Seekers
     /// </summary>
     public class DataDirectoriesEndSeeker : IStreamSeeker
     {
-        private readonly IConversion<Stream, int> _dataDirectoryCounter;
+        private readonly IFunction<Stream, int> _dataDirectoryCounter;
         private readonly IStreamSeeker _dataDirectoriesSeeker;
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace Tao.Core.Seekers
         /// </summary>
         /// <param name="dataDirectoryCounter">The object that will be responsible for determining the available number of data directories from a given portable executable stream.</param>
         /// <param name="dataDirectoriesSeeker">The <see cref="IStreamSeeker"/> that will set the stream position to point to the first byte in the data directory headers.</param>
-        public DataDirectoriesEndSeeker(IConversion<Stream, int> dataDirectoryCounter, IStreamSeeker dataDirectoriesSeeker)
+        public DataDirectoriesEndSeeker(IFunction<Stream, int> dataDirectoryCounter, IStreamSeeker dataDirectoriesSeeker)
         {
             _dataDirectoryCounter = dataDirectoryCounter;
             _dataDirectoriesSeeker = dataDirectoriesSeeker;
@@ -31,7 +31,7 @@ namespace Tao.Core.Seekers
         /// <param name="stream">The target stream.</param>
         public void Seek(Stream stream)
         {
-            var numberOfDirectories = _dataDirectoryCounter.Convert(stream);
+            var numberOfDirectories = _dataDirectoryCounter.Execute(stream);
             const int dataDirectorySize = 8;
 
             var targetPosition = numberOfDirectories * dataDirectorySize;

@@ -9,7 +9,7 @@ namespace Tao.Core.Factories
     /// <summary>
     /// Represents a factory class that extracts the Coff header stream from an existing portable executable image.
     /// </summary>
-    public class CoffHeaderStreamFactory : IConversion<Stream, Stream>
+    public class CoffHeaderStreamFactory : IFunction<Stream, Stream>
     {
         private readonly ISubStreamReader _reader;
         private readonly IStreamSeeker _seeker;
@@ -30,7 +30,7 @@ namespace Tao.Core.Factories
         /// </summary>
         /// <param name="input">The input stream.</param>
         /// <returns>A stream containing the Coff header data.</returns>
-        public Stream Convert(Stream input)
+        public Stream Execute(Stream input)
         {
             _seeker.Seek(input);
 

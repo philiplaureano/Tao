@@ -86,6 +86,8 @@
     <Compile Include="DataDirectoryHeaderStreamTests.cs" />
     <Compile Include="DosHeaderStreamTests.cs" />
     <Compile Include="FileStreamTests.cs" />
+    <Compile Include="PEFileHeaderStreamTests.cs" />
+    <Compile Include="PESectionHeaderStreamTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

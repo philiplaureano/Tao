@@ -15,7 +15,7 @@ namespace Tao.UnitTests
         public void ShouldHaveDataDirectoryCountingService()
         {
             var container = CreateContainer();
-            Assert.IsTrue(container.Contains(typeof(IConversion<Stream, int>), "DataDirectoryCounter"));
+            Assert.IsTrue(container.Contains(typeof(IFunction<Stream, int>), "DataDirectoryCounter"));
         }
 
         [Test]
@@ -23,8 +23,8 @@ namespace Tao.UnitTests
         {
             var stream = GetStream();
             var container = CreateContainer();
-            var counter = (IConversion<Stream, int>)container.GetInstance(typeof(IConversion<Stream, int>), "DataDirectoryCounter");
-            var result = counter.Convert(stream);
+            var counter = (IFunction<Stream, int>)container.GetInstance(typeof(IFunction<Stream, int>), "DataDirectoryCounter");
+            var result = counter.Execute(stream);
 
             Assert.AreEqual(0x10, result);
         }

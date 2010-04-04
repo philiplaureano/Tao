@@ -59,12 +59,16 @@
     <Compile Include="Factories\DataDirectoryStreamFactory.cs" />
     <Compile Include="Factories\DosHeaderStreamFactory.cs" />
     <Compile Include="Factories\FileStreamFactory.cs" />
+    <Compile Include="Factories\PEFileHeaderStreamFactory.cs" />
+    <Compile Include="Factories\PESectionFactory.cs" />
     <Compile Include="InMemorySubStreamReader.cs" />
+    <Compile Include="PESectionCounter.cs" />
     <Compile Include="Seekers\CoffHeaderSeeker.cs" />
     <Compile Include="Seekers\DataDirectoriesEndSeeker.cs" />
     <Compile Include="Seekers\DataDirectoriesSeeker.cs" />
     <Compile Include="Seekers\DataDirectoryCountSeeker.cs" />
     <Compile Include="Seekers\DosHeaderSeeker.cs" />
+    <Compile Include="Seekers\PEStreamSeeker.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.csproj">

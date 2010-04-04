@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using Tao.Interfaces;
+
+namespace Tao.Core.Factories
+{
+    /// <summary>
+    /// Represents a class that can read PE Section header substreams.
+    /// </summary>
+    public class PESectionFactory : IFunction<ITuple<int, Stream>, Stream>
+    {
+        private readonly IStreamSeeker _dataDirectoriesEndSeeker;
+        private readonly ISubStreamReader _inMemorySubStreamReader;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:System.Object"/> class.
+        /// </summary>
+        public PESectionFactory(ISubStreamReader inMemorySubStreamReader, IStreamSeeker dataDirectoriesEndSeeker)
+        {
+            _dataDirectoriesEndSeeker = dataDirectoriesEndSeeker;
+            _inMemorySubStreamReader = inMemorySubStreamReader;
+        }
+
+        /// <summary>
+        /// Reads a PE Section header substream.
+        /// </summary>
+        /// <param name="input">The target stream.</param>
+        /// <returns>A substream that contains the PE section header.</returns>
+        public Stream Execute(ITuple<int, Stream> input)
+        {
+            var stream = input.Item2;
+            var index = input.Item1;
+
+            const int headerSize = 0x22;
+            var offset = headerSize * index;
+
+            _dataDirectoriesEndSeeker.Seek(input.Item2);
+            stream.Seek(offset, SeekOrigin.Current);
+
+            return _inMemorySubStreamReader.Read(headerSize, stream);
+        }
+    }
+}

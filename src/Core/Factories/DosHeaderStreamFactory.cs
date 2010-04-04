@@ -9,7 +9,7 @@ namespace Tao.Core.Factories
     /// <summary>
     /// Represents a factory class that extracts the DOS header stream from an existing portable executable image.
     /// </summary>
-    public class DosHeaderStreamFactory : IConversion<Stream, Stream>
+    public class DosHeaderStreamFactory : IFunction<Stream, Stream>
     {
         private readonly ISubStreamReader _reader;
         private readonly IStreamSeeker _seeker;
@@ -30,7 +30,7 @@ namespace Tao.Core.Factories
         /// </summary>
         /// <param name="input">The input stream.</param>
         /// <returns>A stream containing the DOS header data.</returns>
-        public Stream Convert(Stream input)
+        public Stream Execute(Stream input)
         {
             _seeker.Seek(input);
 

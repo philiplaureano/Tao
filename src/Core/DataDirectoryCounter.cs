@@ -9,7 +9,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a class that determines the number of data directories from a given portable executable file stream.
     /// </summary>
-    public class DataDirectoryCounter : IConversion<Stream, int>
+    public class DataDirectoryCounter : IFunction<Stream, int>
     {
         private readonly IStreamSeeker _dataDirectoryCountSeeker;
 
@@ -27,7 +27,7 @@ namespace Tao.Core
         /// </summary>
         /// <param name="input">The input stream.</param>
         /// <returns>The number of data directories that the <paramref name="input"/> stream contains.</returns>
-        public int Convert(Stream input)
+        public int Execute(Stream input)
         {            
             var reader = new BinaryReader(input);
             _dataDirectoryCountSeeker.Seek(input);

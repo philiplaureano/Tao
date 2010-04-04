@@ -38,10 +38,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IConversion.cs" />
+    <Compile Include="IFunction.cs" />
     <Compile Include="IStreamSeeker.cs" />
     <Compile Include="ISubstreamReader.cs" />
+    <Compile Include="ITuple.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tuple.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

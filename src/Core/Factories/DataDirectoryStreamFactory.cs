@@ -9,9 +9,9 @@ namespace Tao.Core.Factories
     /// <summary>
     /// Represents a class that extracts the Data Directories from a given portable executable stream.
     /// </summary>
-    public class DataDirectoryStreamFactory : IConversion<Stream, Stream>
+    public class DataDirectoryStreamFactory : IFunction<Stream, Stream>
     {
-        private readonly IConversion<Stream, int> _dataDirectoryCounter;
+        private readonly IFunction<Stream, int> _dataDirectoryCounter;
         private readonly ISubStreamReader _inMemorySubStreamReader;
         private readonly IStreamSeeker _dataDirectoriesSeeker;
 
@@ -21,7 +21,7 @@ namespace Tao.Core.Factories
         /// <param name="dataDirectoryCounter">The object that will be responsible for determining the available number of data directories from a given portable executable stream.</param>
         /// <param name="inMemorySubStreamReader">The <see cref="ISubStreamReader"/> that will be used to read the block of data directories.</param>
         /// <param name="dataDirectoriesSeeker">The <see cref="IStreamSeeker"/> that will set the stream position to point to the first byte in the data directory headers.</param>
-        public DataDirectoryStreamFactory(IConversion<Stream, int> dataDirectoryCounter, ISubStreamReader inMemorySubStreamReader, IStreamSeeker dataDirectoriesSeeker)
+        public DataDirectoryStreamFactory(IFunction<Stream, int> dataDirectoryCounter, ISubStreamReader inMemorySubStreamReader, IStreamSeeker dataDirectoriesSeeker)
         {
             _dataDirectoryCounter = dataDirectoryCounter;
             _inMemorySubStreamReader = inMemorySubStreamReader;
@@ -33,9 +33,9 @@ namespace Tao.Core.Factories
         /// </summary>
         /// <param name="input">The input stream.</param>
         /// <returns>A substream containing the data directories of the given portable executable stream.</returns>
-        public Stream Convert(Stream input)
+        public Stream Execute(Stream input)
         {
-            var numberOfDirectories = _dataDirectoryCounter.Convert(input);
+            var numberOfDirectories = _dataDirectoryCounter.Execute(input);
             const int dataDirectorySize = 8;
 
             var bytesToRead = numberOfDirectories*dataDirectorySize;
