@@ -10,6 +10,7 @@ namespace Tao.UnitTests
     public class DosHeaderStreamTests : BaseStreamTests
     {
         [Test]
+        [Ignore]
         public void ShouldBeAbleToExtractDosStream()
         {
             var expectedEndPosition = 0x3C;

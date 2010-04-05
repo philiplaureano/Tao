@@ -27,5 +27,36 @@ namespace Tao.UnitTests
 
             Assert.AreEqual(expectedPosition, position);
         }
+
+        [Test]
+        public void ShouldBeAbleToSeekAbsoluteFilePositionFromRva()
+        {
+            var stream = GetStream();
+            var container = CreateContainer();
+
+            // Use the CLR header RVA
+            var rva = 0x2008;
+            var expectedPosition = 0x208;
+
+            var seeker = (IFunction<ITuple<int, Stream>>)container.GetInstance(typeof(IFunction<ITuple<int, Stream>>), "SeekAbsoluteFilePositionFromRva");
+            Assert.IsNotNull(seeker);
+            seeker.Execute(rva, stream);
+
+            var position = stream.Position;
+            Assert.AreEqual(expectedPosition, position);
+        }
+        [Test]
+        public void ShouldBeAbleToReadDataBlockUsingDataDirectoryIndex()
+        {
+            var stream = GetStream();
+            var container = CreateContainer();
+
+            // Read the CLR header
+            var reader = (IFunction<ITuple<int, Stream>, Stream>)container.GetInstance(typeof(IFunction<ITuple<int, Stream>, Stream>), "ReadStreamFromDataDirectoryIndex");
+            Assert.IsNotNull(reader);
+
+            var result = reader.Execute(14, stream);
+            Assert.AreEqual(0x48, result.Length);
+        }
     }
 }

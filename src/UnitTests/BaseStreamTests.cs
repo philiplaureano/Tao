@@ -26,7 +26,10 @@ namespace Tao.UnitTests
             var streamFactory = container.GetInstance(serviceType, null) as IFunction<string, Stream>;
             Assert.IsNotNull(streamFactory);
 
-            return streamFactory.Execute(targetFile);
+            var result = streamFactory.Execute(targetFile);
+
+            result.Seek(0, SeekOrigin.Begin);
+            return result;
         }
 
         protected void TestRead(string serviceName, int expectedEndPosition, int expectedHeaderSize)
@@ -40,8 +43,8 @@ namespace Tao.UnitTests
 
             var result = factory.Execute(fileStream);
             Assert.IsNotNull(result, "The stream cannot be null");
-            Assert.AreEqual(expectedEndPosition, fileStream.Position);
-            Assert.AreEqual(expectedHeaderSize, result.Length);
+            Assert.AreEqual(expectedEndPosition, fileStream.Position, "Incorrect file position!");
+            Assert.AreEqual(expectedHeaderSize, result.Length, "Incorrect header length!");
         }
 
         protected virtual IMicroContainer CreateContainer()

@@ -66,6 +66,7 @@
     <Compile Include="PESectionCounter.cs" />
     <Compile Include="ReadFileAlignment.cs" />
     <Compile Include="ReadSectionAlignment.cs" />
+    <Compile Include="ReadStreamFromDataDirectoryIndex.cs" />
     <Compile Include="ResolveAbsoluteFilePositionFromRVA.cs" />
     <Compile Include="Seekers\CoffHeaderSeeker.cs" />
     <Compile Include="Seekers\DataDirectoriesEndSeeker.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Seekers\DosHeaderSeeker.cs" />
     <Compile Include="Seekers\IndexedDataDirectorySeeker.cs" />
     <Compile Include="Seekers\PEStreamSeeker.cs" />
+    <Compile Include="Seekers\SeekAbsoluteFilePositionFromRva.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.csproj">

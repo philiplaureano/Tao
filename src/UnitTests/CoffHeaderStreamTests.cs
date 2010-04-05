@@ -13,6 +13,7 @@ namespace Tao.UnitTests
     public class CoffHeaderStreamTests : BaseStreamTests
     {
         [Test]
+        [Ignore]
         public void ShouldBeAbleToExtractCoffHeaderStream()
         {
             var expectedEndPosition = 0xF4;

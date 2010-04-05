@@ -4,7 +4,7 @@
 	<property name="nant.settings.currentframework" value="net-3.5" />
   <property name="library.dir" value="lib"/>
   <property name="debug" value="true"/>
-  <property name="target.framework" value="net-3.5"/>
+  <property name="target.framework" value="net-2.0"/>
   
 	<!-- User targets -->
 	<target name="clean" description="Delete Automated Build artifacts">
@@ -89,8 +89,11 @@
         <include name="${output.dir}\Tao.Core.dll"/>
         <include name="${library.dir}\Hiro.CompiledContainers.dll"/>
         <include name="${library.dir}\Hiro.Containers.dll"/>
-        <include name="${library.dir}\Hiro.Core.dll"/>        
+        <include name="${library.dir}\Hiro.Core.dll"/>
+        <include name="${library.dir}\Mono.Cecil.dll"/>
+        <include name="${library.dir}\NGenerics.dll"/>
         <include name="${library.dir}\Moq.dll"/>
+        <include name="${library.dir}\LinFu.Finders.dll"/>
         <include name="${library.dir}\nunit.framework.dll"/>
         <include name="System.Core.dll" if="${target.framework == 'net-3.5'}"/>
         <include name="${library.dir}\LinqBridge.dll" if="${target.framework == 'net-2.0'}"/>
@@ -103,6 +106,12 @@
         <include name="Hiro.CompiledContainers.dll"/>
         <include name="Hiro.Containers.dll"/>
         <include name="Hiro.Core.dll"/>
+        <include name="Iesi.Collections.dll"/>
+        <include name="Iesi.Collections.Generic.dll"/>
+        <include name="NGenerics.dll"/>
+        <include name="LinqBridge.dll" if="${target.framework == 'net-2.0'}"/>
+        <include name="Mono.Cecil.dll"/>
+        <include name="LinFu.Finders.dll"/>
       </fileset>
     </copy>
     <copy todir="${unittest.dir}">

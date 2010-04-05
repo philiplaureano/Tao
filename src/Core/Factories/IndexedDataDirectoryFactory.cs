@@ -33,13 +33,12 @@ namespace Tao.Core.Factories
             var stream = input.Item2;
 
             _indexedDataDirectorySeeker.Execute(index, stream);
-            using(var reader = new BinaryReader(stream))
-            {
-                var rva = reader.ReadInt32();
-                var size = reader.ReadInt32();
 
-                return Tuple.New(rva, size);
-            }
+            var reader = new BinaryReader(stream);
+            var rva = reader.ReadInt32();
+            var size = reader.ReadInt32();
+
+            return Tuple.New(rva, size);
         }
     }
 }
