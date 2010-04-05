@@ -78,7 +78,10 @@ namespace Tao.UnitTests
 
             var binaryReader = new BinaryReader(result);
             var firstValue = binaryReader.ReadInt32();
+            var secondValue = binaryReader.ReadInt16();
+
             Assert.AreEqual(0x48, firstValue);
+            Assert.AreEqual(2, secondValue);
         }
     }
 }
