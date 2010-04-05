@@ -67,6 +67,7 @@
     <Compile Include="ReadFileAlignment.cs" />
     <Compile Include="ReadSectionAlignment.cs" />
     <Compile Include="ReadStreamFromDataDirectoryIndex.cs" />
+    <Compile Include="ReadStreamFromRvaAndSize.cs" />
     <Compile Include="ResolveAbsoluteFilePositionFromRVA.cs" />
     <Compile Include="Seekers\CoffHeaderSeeker.cs" />
     <Compile Include="Seekers\DataDirectoriesEndSeeker.cs" />

@@ -45,6 +45,7 @@ namespace Tao.UnitTests
             var position = stream.Position;
             Assert.AreEqual(expectedPosition, position);
         }
+
         [Test]
         public void ShouldBeAbleToReadDataBlockUsingDataDirectoryIndex()
         {
@@ -57,6 +58,27 @@ namespace Tao.UnitTests
 
             var result = reader.Execute(14, stream);
             Assert.AreEqual(0x48, result.Length);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadDataUsingGivenRvaAndSize()
+        {
+            var stream = GetStream();
+            var container = CreateContainer();
+
+            // Use the CLR header RVA
+            var rva = 0x2008;
+            var size = 0x48;
+            var reader = container.GetInstance(typeof(IFunction<ITuple<int, int, Stream>, Stream>), "ReadStreamFromRvaAndSize") as IFunction<ITuple<int, int, Stream>, Stream>;
+            Assert.IsNotNull(reader);
+
+            var result = reader.Execute(rva, size, stream);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0x48, result.Length);
+
+            var binaryReader = new BinaryReader(result);
+            var firstValue = binaryReader.ReadInt32();
+            Assert.AreEqual(0x48, firstValue);
         }
     }
 }
