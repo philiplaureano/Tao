@@ -59,10 +59,14 @@
     <Compile Include="Factories\DataDirectoryStreamFactory.cs" />
     <Compile Include="Factories\DosHeaderStreamFactory.cs" />
     <Compile Include="Factories\FileStreamFactory.cs" />
+    <Compile Include="Factories\IndexedDataDirectoryFactory.cs" />
     <Compile Include="Factories\PEFileHeaderStreamFactory.cs" />
     <Compile Include="Factories\PESectionFactory.cs" />
     <Compile Include="InMemorySubStreamReader.cs" />
     <Compile Include="PESectionCounter.cs" />
+    <Compile Include="ReadFileAlignment.cs" />
+    <Compile Include="ReadSectionAlignment.cs" />
+    <Compile Include="ResolveAbsoluteFilePositionFromRVA.cs" />
     <Compile Include="Seekers\CoffHeaderSeeker.cs" />
     <Compile Include="Seekers\DataDirectoriesEndSeeker.cs" />
     <Compile Include="Seekers\DataDirectoriesSeeker.cs" />

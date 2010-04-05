@@ -16,14 +16,14 @@ namespace Tao.Core.Factories
         /// <summary>
         /// Initializes a new instance of the <see cref="FileStreamFactory"/> class.
         /// </summary>
-        /// <param name="reader">The substream reader.</param>
-        public FileStreamFactory(IFunction<ITuple<int, Stream>, Stream> reader)
+        /// <param name="inMemorySubStreamReader">The substream reader.</param>
+        public FileStreamFactory(IFunction<ITuple<int, Stream>, Stream> inMemorySubStreamReader)
         {
-            _reader = reader;
+            _reader = inMemorySubStreamReader;
         }
 
         /// <summary>
-        /// Reads the contents of a file and dump it into a memory stream.
+        /// Reads the contents of a file and dumps it into a memory stream.
         /// </summary>
         /// <param name="input">The input file name.</param>
         /// <returns>A stream that contains the target file.</returns>

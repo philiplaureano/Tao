@@ -19,5 +19,31 @@ namespace Tao.UnitTests
             var expectedHeaderSize = 0x5C;
             TestRead("CoffHeaderStreamFactory", expectedEndPosition, expectedHeaderSize);
         }
+
+        [Test]
+        public void ShouldBeAbleToReadFileAlignment()
+        {
+            var stream = GetStream();
+            var container = CreateContainer();
+
+            var reader = (IFunction<Stream,int>)container.GetInstance(typeof (IFunction<Stream, int>), "ReadFileAlignment");
+            Assert.IsNotNull(reader);
+
+            var result = reader.Execute(stream);
+            Assert.AreEqual(0x200, result);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadSectionAlignment()
+        {
+            var stream = GetStream();
+            var container = CreateContainer();
+
+            var reader = (IFunction<Stream, int>)container.GetInstance(typeof(IFunction<Stream, int>), "ReadSectionAlignment");
+            Assert.IsNotNull(reader);
+
+            var result = reader.Execute(stream);
+            Assert.AreEqual(0x2000, result);
+        }
     }
 }

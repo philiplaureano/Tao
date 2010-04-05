@@ -15,7 +15,7 @@ namespace Tao.Core.Factories
         private readonly IFunction<ITuple<int, Stream>, Stream> _inMemorySubStreamReader;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Object"/> class.
+        /// Initializes a new instance of the <see cref="PESectionFactory"/> class.
         /// </summary>
         public PESectionFactory(IFunction<ITuple<int, Stream>, Stream> inMemorySubStreamReader, IFunction<Stream> dataDirectoriesEndSeeker)
         {

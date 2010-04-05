@@ -49,7 +49,7 @@ namespace Tao.UnitTests
         }
 
         [Test]
-        public void ShouldBeAbleToSeekRandomDataDirectoryByIndex()
+        public void ShouldBeAbleToSeekRandomDataDirectoryPositionByIndex()
         {
             Stream stream = GetStream();
             var container = CreateContainer();
@@ -59,6 +59,24 @@ namespace Tao.UnitTests
 
             seeker.Execute(14, stream);
             Assert.AreEqual(0x168, stream.Position);
+        }
+
+        [Test]
+        public void ShouldBeAbleToSeekRandomDataDirectoryDataByIndex()
+        {
+            Stream stream = GetStream();
+            var container = CreateContainer();
+
+            var factory = (IFunction<ITuple<int, Stream>, ITuple<int, int>>)container.GetInstance(typeof(IFunction<ITuple<int, Stream>, ITuple<int, int>>), "IndexedDataDirectoryFactory");
+            Assert.IsNotNull(factory);
+
+            // Read the CLR data directory header entry
+            var result = factory.Execute(14, stream);
+            var rva = result.Item1;
+            var size = result.Item2;
+
+            Assert.AreEqual(0x2008, rva);
+            Assert.AreEqual(0x48, size);
         }
     }
 }
