@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core
+namespace Tao.Core.Seekers
 {
     /// <summary>
     /// Represents a class that sets the file pointer to point to the starting position of the metadata root header.

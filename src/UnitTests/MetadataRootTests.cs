@@ -37,5 +37,18 @@ namespace Tao.UnitTests
             var count = reader.Execute(stream);
             Assert.AreEqual(5, count);
         }
+
+        [Test]
+        public void ShouldBeAbleToReadVersionStringFromMetadataRoot()
+        {
+            var stream = GetStream();
+            var container = CreateContainer();
+
+            var reader = container.GetInstance<IFunction<Stream, string>>("ReadVersionString");
+            Assert.IsNotNull(reader);
+
+            var result = reader.Execute(stream);
+            Assert.AreEqual("v2.0.50727", result);
+        }
     }
 }

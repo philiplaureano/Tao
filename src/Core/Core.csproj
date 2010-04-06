@@ -62,15 +62,18 @@
     <Compile Include="Factories\IndexedDataDirectoryFactory.cs" />
     <Compile Include="Factories\PEFileHeaderStreamFactory.cs" />
     <Compile Include="Factories\PESectionFactory.cs" />
-    <Compile Include="InMemorySubStreamReader.cs" />
+    <Compile Include="Readers\InMemorySubStreamReader.cs" />
     <Compile Include="PESectionCounter.cs" />
-    <Compile Include="ReadFileAlignment.cs" />
-    <Compile Include="ReadMetadataRva.cs" />
-    <Compile Include="ReadMetadataSize.cs" />
-    <Compile Include="ReadMetadataStreamCount.cs" />
-    <Compile Include="ReadSectionAlignment.cs" />
-    <Compile Include="ReadStreamFromDataDirectoryIndex.cs" />
-    <Compile Include="ReadStreamFromRvaAndSize.cs" />
+    <Compile Include="Readers\ReadFileAlignment.cs" />
+    <Compile Include="Readers\ReadMetadataRva.cs" />
+    <Compile Include="Readers\ReadMetadataSize.cs" />
+    <Compile Include="Readers\ReadMetadataStreamCount.cs" />
+    <Compile Include="Readers\ReadMetadataStreamHeader.cs" />
+    <Compile Include="Readers\ReadSectionAlignment.cs" />
+    <Compile Include="Readers\ReadStreamFromDataDirectoryIndex.cs" />
+    <Compile Include="Readers\ReadStreamFromRvaAndSize.cs" />
+    <Compile Include="Readers\ReadNullTerminatedString.cs" />
+    <Compile Include="Readers\ReadVersionString.cs" />
     <Compile Include="ResolveAbsoluteFilePositionFromRVA.cs" />
     <Compile Include="Seekers\CoffHeaderSeeker.cs" />
     <Compile Include="Seekers\DataDirectoriesEndSeeker.cs" />
@@ -79,9 +82,10 @@
     <Compile Include="Seekers\DosHeaderSeeker.cs" />
     <Compile Include="Seekers\IndexedDataDirectorySeeker.cs" />
     <Compile Include="Seekers\PEStreamSeeker.cs" />
+    <Compile Include="Seekers\RealignStreamPosition.cs" />
     <Compile Include="Seekers\SeekAbsoluteFilePositionFromRva.cs" />
     <Compile Include="Seekers\SeekDataStreamFromDataDirectoryIndex.cs" />
-    <Compile Include="SeekMetadataRootPosition.cs" />
+    <Compile Include="Seekers\SeekMetadataRootPosition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.csproj">
