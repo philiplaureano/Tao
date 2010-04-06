@@ -68,7 +68,7 @@
     <Compile Include="Readers\ReadMetadataRva.cs" />
     <Compile Include="Readers\ReadMetadataSize.cs" />
     <Compile Include="Readers\ReadMetadataStreamCount.cs" />
-    <Compile Include="Readers\ReadMetadataStreamHeader.cs" />
+    <Compile Include="Readers\ReadMetadataStreamHeaders.cs" />
     <Compile Include="Readers\ReadSectionAlignment.cs" />
     <Compile Include="Readers\ReadStreamFromDataDirectoryIndex.cs" />
     <Compile Include="Readers\ReadStreamFromRvaAndSize.cs" />
