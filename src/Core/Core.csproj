@@ -67,6 +67,7 @@
     <Compile Include="ReadFileAlignment.cs" />
     <Compile Include="ReadMetadataRva.cs" />
     <Compile Include="ReadMetadataSize.cs" />
+    <Compile Include="ReadMetadataStreamCount.cs" />
     <Compile Include="ReadSectionAlignment.cs" />
     <Compile Include="ReadStreamFromDataDirectoryIndex.cs" />
     <Compile Include="ReadStreamFromRvaAndSize.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Seekers\PEStreamSeeker.cs" />
     <Compile Include="Seekers\SeekAbsoluteFilePositionFromRva.cs" />
     <Compile Include="Seekers\SeekDataStreamFromDataDirectoryIndex.cs" />
+    <Compile Include="SeekMetadataRootPosition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.csproj">

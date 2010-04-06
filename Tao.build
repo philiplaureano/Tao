@@ -34,8 +34,28 @@
       </references>
     </csc>
   </target>
+
+  <target name="compile-container-extensions"  description="Compiles the core container extensions assembly">
+    <mkdir dir="${build.dir}" unless="${directory::exists(build.dir)}"/>
+    <property name="output.dir" value="${build.dir}\${target.framework}"/>
+
+    <mkdir dir="${output.dir}" unless="${directory::exists(output.dir)}"/>
+    <csc target="library" doc="${output.dir}\Tao.Containers.xml" noconfig="true" output="${output.dir}\Tao.Containers.dll" debug="${debug}">
+      <sources>
+        <include name="src/Tao.Containers/**/*.cs" />
+      </sources>
+      <references>
+        <include name="System.dll" />
+        <include name="System.Data.dll"/>
+        <include name="System.Xml.dll" />
+        <include name="${library.dir}\Hiro.Containers.dll"/>
+        <include name="${library.dir}\LinqBridge.dll" if="${target.framework == 'net-2.0'}"/>
+        <include name="System.Core.dll" if="${target.framework == 'net-3.5'}"/>
+      </references>
+    </csc>
+  </target>
   
-  <target name="compile-core"  depends="compile-interfaces" description="Compiles the core project assembly">
+  <target name="compile-core"  depends="compile-interfaces, compile-container-extensions" description="Compiles the core project assembly">
     <mkdir dir="${build.dir}" unless="${directory::exists(build.dir)}"/>
     <property name="output.dir" value="${build.dir}\${target.framework}"/>
 
@@ -50,6 +70,7 @@
         <include name="System.Data.dll"/>
         <include name="System.Xml.dll" />
         <include name="${output.dir}\Tao.Interfaces.dll"/>
+        <include name="${library.dir}\Tao.Containers.dll"/>
         <include name="${library.dir}\Hiro.Containers.dll"/>
         <include name="${library.dir}\LinqBridge.dll" if="${target.framework == 'net-2.0'}"/>
       </references>
@@ -87,6 +108,7 @@
         <include name="System.Xml.dll" />
         <include name="${output.dir}\Tao.Interfaces.dll"/>
         <include name="${output.dir}\Tao.Core.dll"/>
+        <include name="${output.dir}\Tao.Containers.dll"/>
         <include name="${library.dir}\Hiro.CompiledContainers.dll"/>
         <include name="${library.dir}\Hiro.Containers.dll"/>
         <include name="${library.dir}\Hiro.Core.dll"/>
@@ -103,6 +125,7 @@
       <fileset basedir="${library.dir}">
         <include name="nunit.framework.dll"/>
         <include name="moq.dll"/>
+        <include name="Tao.Containers.dll"/>
         <include name="Hiro.CompiledContainers.dll"/>
         <include name="Hiro.Containers.dll"/>
         <include name="Hiro.Core.dll"/>
@@ -122,6 +145,7 @@
     
     <copy todir="${unittest.dir}">
       <fileset basedir="${output.dir}">
+        <include name="Tao.Core.dll"/>
         <include name="Tao.Core.dll"/>
         <include name="Tao.Interfaces.dll"/>
       </fileset>
