@@ -11,20 +11,20 @@ namespace Tao.Core.Readers
     /// </summary>
     public class ReadMetadataStreamHeaders : IFunction<Stream, IEnumerable<ITuple<int, int, string>>>
     {
-        private readonly IFunction<Stream, string> _readVersionString;
         private readonly IFunction<Stream, string> _readNullTerminatedString;
         private readonly IFunction<ITuple<int, Stream>> _realignStreamPosition;
         private readonly IFunction<Stream, int> _readMetadataStreamCount;
+        private readonly IFunction<Stream> _seekMetadataRootPosition;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReadMetadataStreamHeaders"/> class.
         /// </summary>
-        public ReadMetadataStreamHeaders(IFunction<Stream, string> readVersionString, IFunction<Stream, string> readNullTerminatedString, IFunction<ITuple<int, Stream>> realignStreamPosition, IFunction<Stream, int> readMetadataStreamCount)
+        public ReadMetadataStreamHeaders(IFunction<Stream, string> readNullTerminatedString, IFunction<ITuple<int, Stream>> realignStreamPosition, IFunction<Stream, int> readMetadataStreamCount, IFunction<Stream> seekMetadataRootPosition)
         {
-            _readVersionString = readVersionString;
-            _readMetadataStreamCount = readMetadataStreamCount;
-            _realignStreamPosition = realignStreamPosition;
             _readNullTerminatedString = readNullTerminatedString;
+            _realignStreamPosition = realignStreamPosition;
+            _readMetadataStreamCount = readMetadataStreamCount;
+            _seekMetadataRootPosition = seekMetadataRootPosition;
         }
 
         /// <summary>
@@ -34,17 +34,20 @@ namespace Tao.Core.Readers
         /// <returns>A set of tuples that contain the metadata header stream.</returns>
         public IEnumerable<ITuple<int, int, string>> Execute(Stream stream)
         {
-            _readVersionString.Execute(stream);
+            _seekMetadataRootPosition.Execute(stream);
+            stream.Seek(12, SeekOrigin.Current);
 
-            // Seek the first byte of the first metadata header entry
-            stream.Seek(5, SeekOrigin.Current);
-            
             var reader = new BinaryReader(stream);
+            var versionStringLength = reader.ReadInt32();
+
+            // Skip the flag and streamCount bytes
+            stream.Seek(versionStringLength + 2, SeekOrigin.Current);
+
             var streamCount = _readMetadataStreamCount.Execute(stream);
             for (var i = 0; i < streamCount; i++)
-            {                
-                var offset = reader.ReadInt32();                
-                var size = reader.ReadInt32();                
+            {
+                var offset = reader.ReadInt32();
+                var size = reader.ReadInt32();
                 var name = _readNullTerminatedString.Execute(stream);
 
                 // Realign the stream position to the nearest 4-byte boundary

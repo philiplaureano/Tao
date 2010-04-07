@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="DataDirectoryCounter.cs" />
+    <Compile Include="EnumerateExistingMetadataTables.cs" />
     <Compile Include="Factories\CoffHeaderStreamFactory.cs" />
     <Compile Include="Factories\DataDirectoryStreamFactory.cs" />
     <Compile Include="Factories\DosHeaderStreamFactory.cs" />
@@ -62,19 +63,24 @@
     <Compile Include="Factories\IndexedDataDirectoryFactory.cs" />
     <Compile Include="Factories\PEFileHeaderStreamFactory.cs" />
     <Compile Include="Factories\PESectionFactory.cs" />
+    <Compile Include="Readers\GetMetadataStreamIndexFromName.cs" />
     <Compile Include="Readers\InMemorySubStreamReader.cs" />
     <Compile Include="PESectionCounter.cs" />
     <Compile Include="Readers\ReadFileAlignment.cs" />
     <Compile Include="Readers\ReadMetadataRva.cs" />
     <Compile Include="Readers\ReadMetadataSize.cs" />
+    <Compile Include="Readers\ReadMetadataStream.cs" />
     <Compile Include="Readers\ReadMetadataStreamByIndex.cs" />
     <Compile Include="Readers\ReadMetadataStreamCount.cs" />
     <Compile Include="Readers\ReadMetadataStreamHeaders.cs" />
+    <Compile Include="Readers\ReadMetadataTableRowCounts.cs" />
+    <Compile Include="Readers\ReadRowCountsFromMetadataStream.cs" />
     <Compile Include="Readers\ReadSectionAlignment.cs" />
     <Compile Include="Readers\ReadStreamFromDataDirectoryIndex.cs" />
     <Compile Include="Readers\ReadStreamFromRvaAndSize.cs" />
     <Compile Include="Readers\ReadNullTerminatedString.cs" />
     <Compile Include="Readers\ReadVersionString.cs" />
+    <Compile Include="Readers\ReadMetadataStreamHeaderNameToIndexMappings.cs" />
     <Compile Include="ResolveAbsoluteFilePositionFromRVA.cs" />
     <Compile Include="Seekers\CoffHeaderSeeker.cs" />
     <Compile Include="Seekers\DataDirectoriesEndSeeker.cs" />
@@ -87,6 +93,7 @@
     <Compile Include="Seekers\SeekAbsoluteFilePositionFromRva.cs" />
     <Compile Include="Seekers\SeekDataStreamFromDataDirectoryIndex.cs" />
     <Compile Include="Seekers\SeekMetadataRootPosition.cs" />
+    <Compile Include="TableId.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.csproj">

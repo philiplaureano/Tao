@@ -53,6 +53,9 @@ namespace Tao.UnitTests
 
             var result = reader.Execute(0, stream);
             Assert.AreEqual(0x68, result.Length);
+
+            result = reader.Execute(4, stream);
+            Assert.AreEqual(8, result.Length);
         }
     }
 }
