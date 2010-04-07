@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core
+namespace Tao.Core.Readers
 {
     /// <summary>
     /// Represents a type that determines the number of metadata streams within a given Portable Executable stream.

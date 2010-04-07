@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core
+namespace Tao.Core.Readers
 {
     /// <summary>
     /// Represents a class that can read a stream using a given data directory header index.

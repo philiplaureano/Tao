@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core
+namespace Tao.Core.Readers
 {
     /// <summary>
     /// Represents a class that reads the RVA of the metadata header.
