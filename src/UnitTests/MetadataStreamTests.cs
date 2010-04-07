@@ -57,5 +57,24 @@ namespace Tao.UnitTests
             result = reader.Execute(4, stream);
             Assert.AreEqual(8, result.Length);
         }
+
+        [Test]
+        public void ShouldBeAbleToExtractAllMetadataStreams()
+        {
+            var stream = GetStream();
+            var container = CreateContainer();            
+            var extractor = container.GetInstance<IFunction<Stream, IDictionary<string, Stream>>>("ReadAllMetadataStreams");
+            Assert.IsNotNull(extractor);
+            
+            var heaps = extractor.Execute(stream);
+            Assert.IsNotNull(heaps);
+            Assert.AreEqual(5, heaps.Count);
+
+            Assert.IsTrue(heaps.ContainsKey("#~"));
+            Assert.IsTrue(heaps.ContainsKey("#Blob"));
+            Assert.IsTrue(heaps.ContainsKey("#Strings"));
+            Assert.IsTrue(heaps.ContainsKey("#GUID"));
+            Assert.IsTrue(heaps.ContainsKey("#US"));
+        }
     }
 }

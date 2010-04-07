@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -37,7 +38,6 @@ namespace Tao.UnitTests
         {
             var stream = GetStream();
             var container = CreateContainer();
-
             var counter = container.GetInstance<IFunction<Stream, IDictionary<TableId, int>>>("ReadMetadataTableRowCounts");
             Assert.IsNotNull(counter);
 

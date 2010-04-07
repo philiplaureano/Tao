@@ -66,6 +66,7 @@
     <Compile Include="Readers\GetMetadataStreamIndexFromName.cs" />
     <Compile Include="Readers\InMemorySubStreamReader.cs" />
     <Compile Include="PESectionCounter.cs" />
+    <Compile Include="Readers\ReadAllMetadataStreams.cs" />
     <Compile Include="Readers\ReadFileAlignment.cs" />
     <Compile Include="Readers\ReadMetadataRva.cs" />
     <Compile Include="Readers\ReadMetadataSize.cs" />
