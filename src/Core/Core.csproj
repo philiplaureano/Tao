@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Hiro.Containers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0efb83db47c0105, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Hiro.Containers.dll</HintPath>
+    </Reference>
     <Reference Include="LinqBridge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c2b14eb747628076, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\LinqBridge.dll</HintPath>
@@ -54,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="CalculateMetadataTableRowSize.cs" />
     <Compile Include="DataDirectoryCounter.cs" />
     <Compile Include="EnumerateExistingMetadataTables.cs" />
     <Compile Include="Factories\CoffHeaderStreamFactory.cs" />
@@ -63,6 +68,7 @@
     <Compile Include="Factories\IndexedDataDirectoryFactory.cs" />
     <Compile Include="Factories\PEFileHeaderStreamFactory.cs" />
     <Compile Include="Factories\PESectionFactory.cs" />
+    <Compile Include="GetMetadataTableColumnSizeCounts.cs" />
     <Compile Include="Readers\GetMetadataStreamIndexFromName.cs" />
     <Compile Include="Readers\InMemorySubStreamReader.cs" />
     <Compile Include="PESectionCounter.cs" />
@@ -85,6 +91,8 @@
     <Compile Include="Readers\ReadVersionString.cs" />
     <Compile Include="Readers\ReadMetadataStreamHeaderNameToIndexMappings.cs" />
     <Compile Include="ResolveAbsoluteFilePositionFromRVA.cs" />
+    <Compile Include="Schemas\AssemblyRowSchema.cs" />
+    <Compile Include="Schemas\BaseRowSchema.cs" />
     <Compile Include="Seekers\CoffHeaderSeeker.cs" />
     <Compile Include="Seekers\DataDirectoriesEndSeeker.cs" />
     <Compile Include="Seekers\DataDirectoriesSeeker.cs" />
@@ -99,6 +107,10 @@
     <Compile Include="TableId.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Tao.Containers\Tao.Containers.csproj">
+      <Project>{31DCA1A8-3C9D-42A3-A775-275EE2C8E6C9}</Project>
+      <Name>Tao.Containers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.csproj">
       <Project>{88CA72AF-77CD-409A-891D-1468CAF5E62B}</Project>
       <Name>Tao.Interfaces</Name>

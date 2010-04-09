@@ -52,9 +52,14 @@ namespace Tao.UnitTests
             var loader = new DependencyMapLoader();
 
             var targetAssembly = Path.GetFileName(typeof(FileStreamFactory).Assembly.Location);
-            var map = loader.LoadFromBaseDirectory(targetAssembly);
+            var map = CreateDependencyMap(loader, targetAssembly);
 
             return map.CreateContainer();
+        }
+
+        protected virtual DependencyMap CreateDependencyMap(DependencyMapLoader loader, string targetAssembly)
+        {
+            return loader.LoadFromBaseDirectory(targetAssembly);
         }
     }
 }
