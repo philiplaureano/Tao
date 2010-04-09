@@ -68,6 +68,8 @@
     <Compile Include="PESectionCounter.cs" />
     <Compile Include="Readers\ReadAllMetadataStreams.cs" />
     <Compile Include="Readers\ReadFileAlignment.cs" />
+    <Compile Include="Readers\ReadHeapSizesField.cs" />
+    <Compile Include="Readers\ReadMetadataHeapIndexSizes.cs" />
     <Compile Include="Readers\ReadMetadataRva.cs" />
     <Compile Include="Readers\ReadMetadataSize.cs" />
     <Compile Include="Readers\ReadMetadataStream.cs" />

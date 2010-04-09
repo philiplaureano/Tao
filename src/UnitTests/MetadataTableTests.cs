@@ -50,5 +50,35 @@ namespace Tao.UnitTests
             Assert.AreEqual(1, result[TableId.MethodDef]);
             Assert.AreEqual(1, result[TableId.Assembly]);
         }
+
+        [Test]
+        public void ShouldBeAbleToReadHeapSizesField()
+        {
+            var stream = GetStream();
+            var container = CreateContainer();
+
+            var reader = container.GetInstance<IFunction<Stream, byte?>>("ReadHeapSizesField");
+            Assert.IsNotNull(reader);
+
+            var result = reader.Execute(stream);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadHeapSizes()
+        {
+            var stream = GetStream();
+            var container = CreateContainer();
+            var reader = container.GetInstance<IFunction<Stream, ITuple<int, int, int>>>("ReadMetadataHeapIndexSizes");
+            Assert.IsNotNull(reader);
+
+            var results = reader.Execute(stream);
+            Assert.IsNotNull(results);
+
+            Assert.AreEqual(results.Item1, 2, "Incorrect #Strings heap index size");
+            Assert.AreEqual(results.Item2, 2, "Incorrect #Blob heap index size");
+            Assert.AreEqual(results.Item3, 2, "Incorrect #Blob heap index size");
+        }
     }
 }
