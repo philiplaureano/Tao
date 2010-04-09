@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Tao.Interfaces;
 
 namespace Tao.Core.Schemas
@@ -6,7 +7,7 @@ namespace Tao.Core.Schemas
     /// <summary>
     /// Represents the basic implementation of a row schema class.
     /// </summary>
-    public abstract class BaseRowSchema : ITuple<int, int, int, int, int>
+    public abstract class BaseRowSchema : ITuple<int, int, int, int, int, IEnumerable<ITuple<TableId, int>>>
     {
         private readonly int _wordColumns;
         private readonly int _doubleWordColumns;
@@ -17,7 +18,7 @@ namespace Tao.Core.Schemas
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public BaseRowSchema(int wordColumns, int doubleWordColumns, int stringHeapColumns, int blobHeapColumns, int guidHeapColumns)
+        protected BaseRowSchema(int wordColumns, int doubleWordColumns, int stringHeapColumns, int blobHeapColumns, int guidHeapColumns)
         {
             _wordColumns = wordColumns;
             _doubleWordColumns = doubleWordColumns;
@@ -84,6 +85,15 @@ namespace Tao.Core.Schemas
             {
                 return _guidHeapColumns;
             }
+        }
+
+        /// <summary>
+        /// Gets the value indicating the list of table indexes and the number of indexes that point to each table type.
+        /// </summary>
+        /// <value>The number of table indexes.</value>
+        public abstract IEnumerable<ITuple<TableId, int>> Item6
+        {
+            get;
         }
     }
 }

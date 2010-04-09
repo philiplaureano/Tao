@@ -91,6 +91,7 @@
     <Compile Include="Readers\ReadVersionString.cs" />
     <Compile Include="Readers\ReadMetadataStreamHeaderNameToIndexMappings.cs" />
     <Compile Include="ResolveAbsoluteFilePositionFromRVA.cs" />
+    <Compile Include="Schemas\AssemblyRefRowSchema.cs" />
     <Compile Include="Schemas\AssemblyRowSchema.cs" />
     <Compile Include="Schemas\BaseRowSchema.cs" />
     <Compile Include="Seekers\CoffHeaderSeeker.cs" />
