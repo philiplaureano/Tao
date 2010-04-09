@@ -21,7 +21,7 @@ namespace Tao.Core.Schemas
         /// Gets the value indicating the list of table indexes and the number of indexes that point to each table type.
         /// </summary>
         /// <value>The number of table indexes.</value>
-        public override IEnumerable<ITuple<TableId, int>> Item7
+        public override IEnumerable<ITuple<IEnumerable<TableId>, int>> Item7
         {
             get
             {

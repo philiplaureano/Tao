@@ -7,7 +7,7 @@ namespace Tao.Core.Schemas
     /// <summary>
     /// Represents the basic implementation of a row schema class.
     /// </summary>
-    public abstract class BaseRowSchema : ITuple<int, int, int, int, int, int, IEnumerable<ITuple<TableId, int>>>
+    public abstract class BaseRowSchema : ITuple<int, int, int, int, int, int, IEnumerable<ITuple<IEnumerable<TableId>, int>>>
     {
         private readonly int _singleByteColumns;
         private readonly int _wordColumns;
@@ -105,7 +105,7 @@ namespace Tao.Core.Schemas
         /// Gets the value indicating the list of table indexes and the number of indexes that point to each table type.
         /// </summary>
         /// <value>The number of table indexes.</value>
-        public abstract IEnumerable<ITuple<TableId, int>> Item7
+        public abstract IEnumerable<ITuple<IEnumerable<TableId>, int>> Item7
         {
             get;
         }

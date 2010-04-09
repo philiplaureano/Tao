@@ -39,21 +39,26 @@ namespace Tao.Core
 
             // Obtain the raw schema counts
             var schema =
-                _container.GetInstance<ITuple<int, int, int, int, int, int, IEnumerable<ITuple<TableId, int>>>>(schemaName);
-
+                _container.GetInstance<ITuple<int, int, int, int, int, int, IEnumerable<ITuple<IEnumerable<TableId>, int>>>>(schemaName);
 
             var foreignTableReferences = schema.Item7;
             var rowCounts = _readMetadataTableRowCount.Execute(stream);
             var additionalDwordColumns = 0;
 
-            foreach (var tableReference in foreignTableReferences)
+            foreach (var tableReferences in foreignTableReferences)
             {
-                var foreignTableId = tableReference.Item1;
-                var rowCount = rowCounts.ContainsKey(foreignTableId) ? rowCounts[foreignTableId] : 0;
+                var tableIds = tableReferences.Item1;
+                foreach(var foreignTableId in tableIds)
+                {
+                    var rowCount = rowCounts.ContainsKey(foreignTableId) ? rowCounts[foreignTableId] : 0;
 
-                // Widen the column to 32 bits if necessary
-                if (rowCount > UInt16.MaxValue)
+                    // Widen the column to 32 bits if necessary
+                    if (rowCount <= UInt16.MaxValue) 
+                        continue;
+
                     additionalDwordColumns++;
+                    break;
+                }                
             }
 
             var result = Tuple.New(schema.Item1, schema.Item2, schema.Item3 + additionalDwordColumns, schema.Item4, schema.Item5,

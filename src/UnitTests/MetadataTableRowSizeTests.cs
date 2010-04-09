@@ -72,6 +72,20 @@ namespace Tao.UnitTests
                 expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
         }
 
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForConstantTable()
+        {
+            var tableId = TableId.Constant;
+            var expectedSingleByteColumnCount = 1;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 1;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
 
         private void TestCounts(TableId tableId, int expectedSingleByteColumnCount, int expectedWordColumnCount, int expectedDwordColumnCount, int expectedStringsColumnCount, int expectedBlobColumnCount, int expectedGuidColumnCount)
         {

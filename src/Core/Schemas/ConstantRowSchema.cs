@@ -6,14 +6,14 @@ using Tao.Interfaces;
 namespace Tao.Core.Schemas
 {
     /// <summary>
-    /// Represents the row schema for the AssemblyRow table.
+    /// Represents the row schema for the Assembly table.
     /// </summary>
-    public class AssemblyRowSchema : BaseRowSchema
+    public class ConstantRowSchema : BaseRowSchema
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AssemblyRowSchema"/> class.
+        /// Initializes a new instance of the <see cref="ConstantRowSchema"/> class.
         /// </summary>
-        public AssemblyRowSchema() : base(0,4, 2, 2, 1, 0)
+        public ConstantRowSchema() : base(1, 0, 0, 0, 1, 0)
         {
         }
 
@@ -25,7 +25,12 @@ namespace Tao.Core.Schemas
         {
             get
             {
-                yield break;
+                IEnumerable<TableId> tableIds = new TableId[]
+                                   {
+                                       TableId.TypeDef
+                                   };
+
+                yield return Tuple.New(tableIds, 1);
             }
         }
     }
