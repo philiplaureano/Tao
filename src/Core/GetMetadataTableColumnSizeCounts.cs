@@ -11,7 +11,7 @@ namespace Tao.Core
     /// <summary>
     /// Represents a class that returns the column width schema for a given metadata table.
     /// </summary>
-    public class GetMetadataTableColumnSizeCounts : IFunction<ITuple<TableId, Stream>, ITuple<int, int, int, int, int>>
+    public class GetMetadataTableColumnSizeCounts : IFunction<ITuple<TableId, Stream>, ITuple<int, int, int, int, int, int>>
     {
         private readonly IMicroContainer _container;
         private readonly IFunction<Stream, IDictionary<TableId, int>> _readMetadataTableRowCount;
@@ -30,7 +30,7 @@ namespace Tao.Core
         /// </summary>
         /// <param name="input">The taret table identifier.</param>
         /// <returns>The tuple that describes the table's schema.</returns>
-        public ITuple<int, int, int, int, int> Execute(ITuple<TableId, Stream> input)
+        public ITuple<int, int, int, int, int, int> Execute(ITuple<TableId, Stream> input)
         {
             var tableId = input.Item1;
             var stream = input.Item2;
@@ -39,14 +39,14 @@ namespace Tao.Core
 
             // Obtain the raw schema counts
             var schema =
-                _container.GetInstance<ITuple<int, int, int, int, int, IEnumerable<ITuple<TableId, int>>>>(schemaName);
+                _container.GetInstance<ITuple<int, int, int, int, int, int, IEnumerable<ITuple<TableId, int>>>>(schemaName);
 
-            
-            var foreignTableReferences = schema.Item6;
+
+            var foreignTableReferences = schema.Item7;
             var rowCounts = _readMetadataTableRowCount.Execute(stream);
             var additionalDwordColumns = 0;
-            
-            foreach(var tableReference in foreignTableReferences)
+
+            foreach (var tableReference in foreignTableReferences)
             {
                 var foreignTableId = tableReference.Item1;
                 var rowCount = rowCounts.ContainsKey(foreignTableId) ? rowCounts[foreignTableId] : 0;
@@ -56,9 +56,9 @@ namespace Tao.Core
                     additionalDwordColumns++;
             }
 
-            var result = Tuple.New(schema.Item1, schema.Item2 + additionalDwordColumns, schema.Item3, schema.Item4,
-                                   schema.Item5);
-            
+            var result = Tuple.New(schema.Item1, schema.Item2, schema.Item3 + additionalDwordColumns, schema.Item4, schema.Item5,
+                                   schema.Item6);
+
             return result;
         }
     }

@@ -94,6 +94,7 @@
     <Compile Include="Schemas\AssemblyRefRowSchema.cs" />
     <Compile Include="Schemas\AssemblyRowSchema.cs" />
     <Compile Include="Schemas\BaseRowSchema.cs" />
+    <Compile Include="Schemas\ClassLayoutRowSchema.cs" />
     <Compile Include="Seekers\CoffHeaderSeeker.cs" />
     <Compile Include="Seekers\DataDirectoriesEndSeeker.cs" />
     <Compile Include="Seekers\DataDirectoriesSeeker.cs" />

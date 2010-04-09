@@ -13,7 +13,7 @@ namespace Tao.Core.Schemas
         /// <summary>
         /// Initializes a new instance of the <see cref="AssemblyRefRowSchema"/> class.
         /// </summary>
-        public AssemblyRefRowSchema() : base(4, 1, 2, 1, 0)
+        public AssemblyRefRowSchema() : base(0, 4, 1, 2, 1, 0)
         {
         }
 
@@ -21,11 +21,11 @@ namespace Tao.Core.Schemas
         /// Gets the value indicating the list of table indexes and the number of indexes that point to each table type.
         /// </summary>
         /// <value>The number of table indexes.</value>
-        public override IEnumerable<ITuple<TableId, int>> Item6
+        public override IEnumerable<ITuple<TableId, int>> Item7
         {
             get
             {
-                yield return Tuple.New(TableId.TypeDef, 1);
+                yield break;
             }
         }
     }

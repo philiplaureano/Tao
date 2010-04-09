@@ -8,12 +8,12 @@ namespace Tao.Core.Schemas
     /// <summary>
     /// Represents the row schema for the Assembly table.
     /// </summary>
-    public class AssemblyRowSchema : BaseRowSchema
+    public class ClassLayoutRowSchema : BaseRowSchema
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AssemblyRowSchema"/> class.
+        /// Initializes a new instance of the <see cref="ClassLayoutRowSchema"/> class.
         /// </summary>
-        public AssemblyRowSchema() : base(0,4, 2, 2, 1, 0)
+        public ClassLayoutRowSchema() : base(0, 1, 1, 0, 0, 0)
         {
         }
 
@@ -25,7 +25,7 @@ namespace Tao.Core.Schemas
         {
             get
             {
-                yield break;
+                yield return Tuple.New(TableId.TypeDef, 1);
             }
         }
     }

@@ -31,13 +31,14 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReturnCorrectColumnSizeCountsForAssemblyTable()
         {
             var tableId = TableId.Assembly;
+            var expectedSingleByteColumnCount = 0;
             var expectedWordColumnCount = 4;
             var expectedDwordColumnCount = 2;
             var expectedStringsColumnCount = 2;
             var expectedBlobColumnCount = 1;
             var expectedGuidColumnCount = 0;
 
-            TestCounts(tableId, expectedWordColumnCount, expectedDwordColumnCount,
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
                 expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
         }
 
@@ -45,31 +46,49 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReturnCorrectColumnSizeCountsForAssemblyRefTable()
         {
             var tableId = TableId.AssemblyRef;
+            var expectedSingleByteColumnCount = 0;
             var expectedWordColumnCount = 4;
             var expectedDwordColumnCount = 1;
             var expectedStringsColumnCount = 2;
             var expectedBlobColumnCount = 1;
             var expectedGuidColumnCount = 0;
 
-            TestCounts(tableId, expectedWordColumnCount, expectedDwordColumnCount,
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
                 expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
         }
 
-        private void TestCounts(TableId tableId, int expectedWordColumnCount, int expectedDwordColumnCount, int expectedStringsColumnCount, int expectedBlobColumnCount, int expectedGuidColumnCount)
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForClassLayoutTable()
+        {
+            var tableId = TableId.ClassLayout;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 1;
+            var expectedDwordColumnCount = 1;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+
+        private void TestCounts(TableId tableId, int expectedSingleByteColumnCount, int expectedWordColumnCount, int expectedDwordColumnCount, int expectedStringsColumnCount, int expectedBlobColumnCount, int expectedGuidColumnCount)
         {
             var stream = GetStream();
             var container = CreateContainer();
-            var getRowSchema = container.GetInstance<IFunction<ITuple<TableId, Stream>, ITuple<int, int, int, int, int>>>("GetMetadataTableColumnSizeCounts");
+            var getRowSchema = container.GetInstance<IFunction<ITuple<TableId, Stream>, ITuple<int, int, int, int, int, int>>>("GetMetadataTableColumnSizeCounts");
             Assert.IsNotNull(getRowSchema);
 
             var result = getRowSchema.Execute(tableId, stream);
             Assert.IsNotNull(result);
 
-            Assert.AreEqual(expectedWordColumnCount, result.Item1, "Wrong word column count");
-            Assert.AreEqual(expectedDwordColumnCount, result.Item2, "Wrong dword column count");
-            Assert.AreEqual(expectedStringsColumnCount, result.Item3, "Wrong #Strings column count");
-            Assert.AreEqual(expectedBlobColumnCount, result.Item4, "Wrong #Blob column count");
-            Assert.AreEqual(expectedGuidColumnCount, result.Item5, "Wrong #GUID column count");
+            Assert.AreEqual(expectedSingleByteColumnCount, result.Item1, "Wrong single-byte column count");
+            Assert.AreEqual(expectedWordColumnCount, result.Item2, "Wrong word column count");
+            Assert.AreEqual(expectedDwordColumnCount, result.Item3, "Wrong dword column count");
+            Assert.AreEqual(expectedStringsColumnCount, result.Item4, "Wrong #Strings column count");
+            Assert.AreEqual(expectedBlobColumnCount, result.Item5, "Wrong #Blob column count");
+            Assert.AreEqual(expectedGuidColumnCount, result.Item6, "Wrong #GUID column count");
         }
     }
 }

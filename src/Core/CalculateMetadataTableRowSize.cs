@@ -12,19 +12,19 @@ namespace Tao.Core
     /// </summary>
     public class CalculateMetadataTableRowSize : IFunction<ITuple<ITuple<TableId, Stream>, ITuple<int, int, int>>, int>
     {
-        private readonly IFunction<ITuple<TableId, Stream>, ITuple<int, int, int, int, int>> _getMetadataTableSizeCounts;
+        private readonly IFunction<ITuple<TableId, Stream>, ITuple<int, int, int, int, int, int>> _getMetadataTableSizeCounts;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculateMetadataTableRowSize"/> class.
         /// </summary>
-        public CalculateMetadataTableRowSize(IFunction<ITuple<TableId, Stream>, ITuple<int, int, int, int, int>> getMetadataTableSizeCounts)
+        public CalculateMetadataTableRowSize(IFunction<ITuple<TableId, Stream>, ITuple<int, int, int, int, int, int>> getMetadataTableSizeCounts)
         {
             _getMetadataTableSizeCounts = getMetadataTableSizeCounts;
         }
 
         /// <summary>
         /// Represents a class that determines the size of a single metadata table row from the given <see cref="TableId"/>
-        /// and tuple containing the size of each metadata stream heap index.
+        /// and returns the tuple containing the size of each metadata stream heap index.
         /// </summary>
         /// <param name="input">The tuple containing the <see cref="TableId"/> and the size of each metadata stream heap index.</param>
         /// <returns></returns>
@@ -42,14 +42,15 @@ namespace Tao.Core
             var blobIndexSize = heapSizes.Item2;
             var guidIndexSize = heapSizes.Item3;
 
-            var wordColumns = columnSizeCounts.Item1;
-            var dwordColumns = columnSizeCounts.Item2;
-            var stringColumns = columnSizeCounts.Item3;
-            var blobColumns = columnSizeCounts.Item4;
-            var guidColumns = columnSizeCounts.Item5;
+            var singleByteColumns = columnSizeCounts.Item1;
+            var wordColumns = columnSizeCounts.Item2;
+            var dwordColumns = columnSizeCounts.Item3;
+            var stringColumns = columnSizeCounts.Item4;
+            var blobColumns = columnSizeCounts.Item5;
+            var guidColumns = columnSizeCounts.Item6;
 
-            var result = wordColumns*2 + dwordColumns*4 + stringColumns*stringIndexSize + blobColumns*blobIndexSize +
-                         guidColumns*guidIndexSize;
+            var result = singleByteColumns + wordColumns * 2 + dwordColumns * 4 + stringColumns * stringIndexSize + blobColumns * blobIndexSize +
+                         guidColumns * guidIndexSize;
 
             return result;
         }
