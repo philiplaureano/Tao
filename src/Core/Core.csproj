@@ -69,6 +69,7 @@
     <Compile Include="Factories\PEFileHeaderStreamFactory.cs" />
     <Compile Include="Factories\PESectionFactory.cs" />
     <Compile Include="GetAdditionalColumnCounts.cs" />
+    <Compile Include="GetAdjustedSchemaCounts.cs" />
     <Compile Include="GetMetadataTableColumnSizeCounts.cs" />
     <Compile Include="Readers\GetMetadataStreamIndexFromName.cs" />
     <Compile Include="Readers\InMemorySubStreamReader.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Readers\ReadMetadataStreamCount.cs" />
     <Compile Include="Readers\ReadMetadataStreamHeaders.cs" />
     <Compile Include="Readers\ReadMetadataTableRowCounts.cs" />
+    <Compile Include="Readers\ReadMetadataTables.cs" />
     <Compile Include="Readers\ReadRowCountsFromMetadataStream.cs" />
     <Compile Include="Readers\ReadSectionAlignment.cs" />
     <Compile Include="Readers\ReadStreamFromDataDirectoryIndex.cs" />
@@ -112,6 +114,7 @@
     <Compile Include="Schemas\ImplMapRowSchema.cs" />
     <Compile Include="Schemas\ManifestResourceRowSchema.cs" />
     <Compile Include="Schemas\MemberRefRowSchema.cs" />
+    <Compile Include="Schemas\MethodDefRowSchema.cs" />
     <Compile Include="Schemas\MethodImplRowSchema.cs" />
     <Compile Include="Schemas\MethodSemanticsRowSchema.cs" />
     <Compile Include="Schemas\MethodSpecRowSchema.cs" />

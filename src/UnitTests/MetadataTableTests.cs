@@ -80,5 +80,34 @@ namespace Tao.UnitTests
             Assert.AreEqual(results.Item2, 2, "Incorrect #Blob heap index size");
             Assert.AreEqual(results.Item3, 2, "Incorrect #Blob heap index size");
         }
+
+        [Test]
+        public void ShouldBeAbleToReadAssemblyTableStream()
+        {
+            var tableId = TableId.Assembly;
+            var expectedStreamLength = 22;
+            var expectedRowCount = 1;
+
+            TestTableRead(tableId, expectedRowCount, expectedStreamLength);
+        }
+
+        private void TestTableRead(TableId tableId, int expectedRowCount, int expectedStreamLength)
+        {
+            var stream = GetStream();
+            var container = CreateContainer();
+            var reader = container.GetInstance<IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>>>("ReadMetadataTables");
+            Assert.IsNotNull(reader);
+
+            var tables = reader.Execute(stream);
+            Assert.IsNotNull(tables);            
+            Assert.IsTrue(tables.ContainsKey(tableId));
+
+            var result = tables[tableId];
+            var tableStream = result.Item2;
+            
+            Assert.AreEqual(expectedRowCount, result.Item1, "Wrong row count");
+            
+            Assert.AreEqual(expectedStreamLength, tableStream.Length, "Wrong Stream Length");
+        }
     }
 }

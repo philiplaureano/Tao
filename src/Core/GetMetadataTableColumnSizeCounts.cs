@@ -14,16 +14,17 @@ namespace Tao.Core
     public class GetMetadataTableColumnSizeCounts : IFunction<ITuple<TableId, Stream>, ITuple<int, int, int, int, int, int>>
     {
         private readonly IMicroContainer _container;
-        private readonly IFunction<ITuple<ITuple<int, int, int, int, int, int, IEnumerable<ITuple<IEnumerable<TableId>, int>>>, Stream>,
-                    ITuple<int, int>> _getAdditionalColumnCounts;
+
+        private readonly IFunction < ITuple <TableId, ITuple<int, int, int, int, int, int, IEnumerable<ITuple<IEnumerable<TableId>, int>>>, Stream>, ITuple<int, int, int, int, int, int>>
+            _getAdjustedSchemaCounts;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetMetadataTableColumnSizeCounts"/> class.
         /// </summary>
-        public GetMetadataTableColumnSizeCounts(IMicroContainer container, IFunction<ITuple<ITuple<int, int, int, int, int, int, IEnumerable<ITuple<IEnumerable<TableId>, int>>>, Stream>, ITuple<int, int>> getAdditionalColumnCounts)
+        public GetMetadataTableColumnSizeCounts(IMicroContainer container, IFunction<ITuple<ITuple<int, int, int, int, int, int, IEnumerable<ITuple<IEnumerable<TableId>, int>>>, Stream>, ITuple<int, int>> getAdditionalColumnCounts, IFunction<ITuple<TableId, ITuple<int, int, int, int, int, int, IEnumerable<ITuple<IEnumerable<TableId>, int>>>, Stream>, ITuple<int, int, int, int, int, int>> getAdjustedSchemaCounts)
         {
             _container = container;
-            _getAdditionalColumnCounts = getAdditionalColumnCounts;
+            _getAdjustedSchemaCounts = getAdjustedSchemaCounts;
         }
 
         /// <summary>
@@ -42,18 +43,9 @@ namespace Tao.Core
             var schema =
                 _container.GetInstance<ITuple<int, int, int, int, int, int, IEnumerable<ITuple<IEnumerable<TableId>, int>>>>(schemaName);
 
-            if (schema == null)
-                throw new SchemaNotFoundException(tableId);
-
-            var additionalCounts = _getAdditionalColumnCounts.Execute(schema, stream);
-            int additionalDwordColumns = additionalCounts.Item1;
-            int additionalWordCount = additionalCounts.Item2;
-
-
-            var result = Tuple.New(schema.Item1, schema.Item2 + additionalWordCount, schema.Item3 + additionalDwordColumns, schema.Item4, schema.Item5,
-                                   schema.Item6);
+            var result = _getAdjustedSchemaCounts.Execute(tableId, schema, stream);
 
             return result;
-        }        
+        }
     }
 }
