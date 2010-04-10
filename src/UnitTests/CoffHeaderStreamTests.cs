@@ -25,7 +25,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadFileAlignment()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             var reader = (IFunction<Stream,int>)container.GetInstance(typeof (IFunction<Stream, int>), "ReadFileAlignment");
             Assert.IsNotNull(reader);
@@ -38,7 +38,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadSectionAlignment()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             var reader = (IFunction<Stream, int>)container.GetInstance(typeof(IFunction<Stream, int>), "ReadSectionAlignment");
             Assert.IsNotNull(reader);

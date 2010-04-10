@@ -16,7 +16,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToSeekMetadataRootPosition()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             var seeker = container.GetInstance<IFunction<Stream>>("SeekMetadataRootPosition");
             Assert.IsNotNull(seeker);
@@ -29,7 +29,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadMetadataStreamCount()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             var reader = container.GetInstance<IFunction<Stream, int>>("ReadMetadataStreamCount");
             Assert.IsNotNull(reader);
@@ -42,7 +42,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadVersionStringFromMetadataRoot()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             var reader = container.GetInstance<IFunction<Stream, string>>("ReadVersionString");
             Assert.IsNotNull(reader);

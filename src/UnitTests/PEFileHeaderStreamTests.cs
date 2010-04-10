@@ -21,7 +21,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadTheNumberOfPESections()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             var sectionCounter = (IFunction<Stream, int>)container.GetInstance(typeof(IFunction<Stream, int>), "PESectionCounter");
             Assert.IsNotNull(sectionCounter);

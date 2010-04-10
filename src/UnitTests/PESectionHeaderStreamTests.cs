@@ -34,7 +34,7 @@ namespace Tao.UnitTests
         private void TestPESectionHeaderStreamRead(int sectionHeaderIndex, int expectedStreamLength, int expectedStreamPosition)
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             Assert.IsTrue(container.Contains(typeof(IFunction<ITuple<int, Stream>, Stream>), "InMemorySubStreamReader"));
             Assert.IsTrue(container.Contains(typeof(IFunction<Stream>), "DataDirectoriesEndSeeker"));

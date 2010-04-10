@@ -15,7 +15,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToResolveFileAbsolutePositionFromRva()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             var resolver = (IFunction<ITuple<int, Stream>, int>) container.GetInstance(typeof (IFunction<ITuple<int, Stream>, int>), "ResolveAbsoluteFilePositionFromRva");
             Assert.IsNotNull(resolver);
@@ -32,7 +32,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToSeekAbsoluteFilePositionFromRva()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             // Use the CLR header RVA
             var rva = 0x2008;
@@ -50,7 +50,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadDataBlockUsingDataDirectoryIndex()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             // Read the CLR header
             var reader = (IFunction<ITuple<int, Stream>, Stream>)container.GetInstance(typeof(IFunction<ITuple<int, Stream>, Stream>), "ReadStreamFromDataDirectoryIndex");
@@ -64,7 +64,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadDataUsingGivenRvaAndSize()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             // Use the CLR header RVA
             var rva = 0x2008;

@@ -18,7 +18,7 @@ namespace Tao.UnitTests
         public void ShouldReturnCorrectRowSizeForAssemblyTable()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
             var heapSizes = Tuple.New(2, 2, 2);
             var calculator = container.GetInstance<IFunction<ITuple<ITuple<TableId, Stream>, ITuple<int, int, int>>, int>>("CalculateMetadataTableRowSize");
             Assert.IsNotNull(calculator);
@@ -506,7 +506,7 @@ namespace Tao.UnitTests
         }
         private void TestCounts(TableId tableId, int expectedSingleByteColumnCount, int expectedWordColumnCount, int expectedDwordColumnCount, int expectedStringsColumnCount, int expectedBlobColumnCount, int expectedGuidColumnCount)
         {
-            var container = CreateContainer();
+            
 
             var tableName = Enum.GetName(typeof(TableId), tableId);
             var schemaName = string.Format("{0}RowSchema", tableName);

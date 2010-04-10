@@ -16,7 +16,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadMetadataRva()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             var reader = container.GetInstance<IFunction<Stream, int>>("ReadMetadataRva");
             var rva = reader.Execute(stream);
@@ -27,7 +27,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadMetadataSize()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             var reader = container.GetInstance<IFunction<Stream, int>>("ReadMetadataSize");
             var size = reader.Execute(stream);

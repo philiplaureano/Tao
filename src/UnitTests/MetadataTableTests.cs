@@ -18,7 +18,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToEnumerateTablesThatAlreadyExist()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             var enumerator = container.GetInstance<IFunction<Stream, IEnumerable<TableId>>>("EnumerateExistingMetadataTables");
             Assert.IsNotNull(enumerator);
@@ -37,7 +37,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToGetRowCountsForAllMetadataTables()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
             var counter = container.GetInstance<IFunction<Stream, IDictionary<TableId, int>>>("ReadMetadataTableRowCounts");
             Assert.IsNotNull(counter);
 
@@ -55,7 +55,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadHeapSizesField()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             var reader = container.GetInstance<IFunction<Stream, byte?>>("ReadHeapSizesField");
             Assert.IsNotNull(reader);
@@ -69,7 +69,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadHeapSizes()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
             var reader = container.GetInstance<IFunction<Stream, ITuple<int, int, int>>>("ReadMetadataHeapIndexSizes");
             Assert.IsNotNull(reader);
 
@@ -94,7 +94,7 @@ namespace Tao.UnitTests
         private void TestTableRead(TableId tableId, int expectedRowCount, int expectedStreamLength)
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
             var reader = container.GetInstance<IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>>>("ReadMetadataTables");
             Assert.IsNotNull(reader);
 

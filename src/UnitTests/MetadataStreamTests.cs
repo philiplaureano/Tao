@@ -17,7 +17,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadMetadataStreamHeaders()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
             var reader = container.GetInstance<IFunction<Stream, IEnumerable<ITuple<int, int, string>>>>("ReadMetadataStreamHeaders");
 
             Assert.IsNotNull(reader);
@@ -46,7 +46,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadMetadataStreamUsingAGivenIndex()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             var reader = container.GetInstance<IFunction<ITuple<int, Stream>, Stream>>("ReadMetadataStreamByIndex");
             Assert.IsNotNull(reader);
@@ -62,7 +62,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToExtractAllMetadataStreams()
         {
             var stream = GetStream();
-            var container = CreateContainer();            
+                        
             var extractor = container.GetInstance<IFunction<Stream, IDictionary<string, Stream>>>("ReadAllMetadataStreams");
             Assert.IsNotNull(extractor);
             

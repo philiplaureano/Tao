@@ -14,7 +14,7 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldHaveDataDirectoryCountingService()
         {
-            var container = CreateContainer();
+            
             Assert.IsTrue(container.Contains(typeof(IFunction<Stream, int>), "DataDirectoryCounter"));
         }
 
@@ -22,7 +22,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadTheNumberOfDataDirectories()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
             var counter = (IFunction<Stream, int>)container.GetInstance(typeof(IFunction<Stream, int>), "DataDirectoryCounter");
             var result = counter.Execute(stream);
 
@@ -33,7 +33,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToSeekEndOfDataDirectories()
         {
             var stream = GetStream();
-            var container = CreateContainer();
+            
 
             var seeker = (IFunction<Stream>)container.GetInstance(typeof(IFunction<Stream>), "DataDirectoriesEndSeeker");
             Assert.IsNotNull(seeker);
@@ -52,7 +52,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToSeekRandomDataDirectoryPositionByIndex()
         {
             Stream stream = GetStream();
-            var container = CreateContainer();
+            
 
             var seeker = (IFunction<ITuple<int, Stream>>)container.GetInstance(typeof(IFunction<ITuple<int, Stream>>), "IndexedDataDirectorySeeker");            
             Assert.IsNotNull(seeker);
@@ -65,7 +65,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToSeekRandomDataDirectoryDataByIndex()
         {
             Stream stream = GetStream();
-            var container = CreateContainer();
+            
 
             var factory = (IFunction<ITuple<int, Stream>, ITuple<int, int>>)container.GetInstance(typeof(IFunction<ITuple<int, Stream>, ITuple<int, int>>), "IndexedDataDirectoryFactory");
             Assert.IsNotNull(factory);

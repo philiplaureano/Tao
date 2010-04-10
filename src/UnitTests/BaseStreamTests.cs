@@ -15,12 +15,19 @@ namespace Tao.UnitTests
 {
     public abstract class BaseStreamTests
     {
+        protected static readonly IMicroContainer container;
+
+        static BaseStreamTests()
+        {
+            container = CreateContainer();
+        }
+
         protected Stream GetStream()
         {
             var path = AppDomain.CurrentDomain.BaseDirectory;
             var targetFile = Path.Combine(path, "skeleton.exe");
 
-            var container = CreateContainer();
+
             var serviceType = typeof(IFunction<string, Stream>);
             Assert.IsTrue(container.Contains(serviceType, null));
             var streamFactory = container.GetInstance(serviceType, null) as IFunction<string, Stream>;
@@ -35,7 +42,7 @@ namespace Tao.UnitTests
         protected void TestRead(string serviceName, int expectedEndPosition, int expectedHeaderSize)
         {
             var fileStream = GetStream();
-            var container = CreateContainer();
+
             Assert.IsTrue(container.Contains(typeof(IFunction<Stream, Stream>), serviceName));
 
             var factory = container.GetInstance<IFunction<Stream, Stream>>(serviceName);
@@ -47,19 +54,14 @@ namespace Tao.UnitTests
             Assert.AreEqual(expectedHeaderSize, result.Length, "Incorrect header length!");
         }
 
-        protected virtual IMicroContainer CreateContainer()
+        private static IMicroContainer CreateContainer()
         {
             var loader = new DependencyMapLoader();
 
             var targetAssembly = Path.GetFileName(typeof(FileStreamFactory).Assembly.Location);
-            var map = CreateDependencyMap(loader, targetAssembly);
+            var map = loader.LoadFromBaseDirectory(targetAssembly);
 
             return map.CreateContainer();
-        }
-
-        protected virtual DependencyMap CreateDependencyMap(DependencyMapLoader loader, string targetAssembly)
-        {
-            return loader.LoadFromBaseDirectory(targetAssembly);
         }
     }
 }
