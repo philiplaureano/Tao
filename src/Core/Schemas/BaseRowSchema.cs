@@ -109,5 +109,16 @@ namespace Tao.Core.Schemas
         {
             get;
         }
+
+        /// <summary>
+        /// Creates a tuple with the given column count and list of <see cref="TableId"/> values.
+        /// </summary>
+        /// <param name="columnCount">The number of columns that reference this particular index or token type.</param>
+        /// <param name="tableIds">The list of table identifiers.</param>
+        /// <returns>A tuple with the given column count and list of <see cref="TableId"/> values.</returns>
+        protected ITuple<IEnumerable<TableId>, int> CreateTuple(int columnCount, params TableId[] tableIds)
+        {
+            return Tuple.New((IEnumerable<TableId>)tableIds, columnCount);
+        }
     }
 }

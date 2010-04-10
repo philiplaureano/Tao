@@ -14,15 +14,16 @@ namespace Tao.Core
     public class GetMetadataTableColumnSizeCounts : IFunction<ITuple<TableId, Stream>, ITuple<int, int, int, int, int, int>>
     {
         private readonly IMicroContainer _container;
-        private readonly IFunction<Stream, IDictionary<TableId, int>> _readMetadataTableRowCount;
+        private readonly IFunction<ITuple<ITuple<int, int, int, int, int, int, IEnumerable<ITuple<IEnumerable<TableId>, int>>>, Stream>,
+                    ITuple<int, int>> _getAdditionalColumnCounts;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetMetadataTableColumnSizeCounts"/> class.
         /// </summary>
-        public GetMetadataTableColumnSizeCounts(IMicroContainer container, IFunction<Stream, IDictionary<TableId, int>> readMetadataTableRowCount)
+        public GetMetadataTableColumnSizeCounts(IMicroContainer container, IFunction<ITuple<ITuple<int, int, int, int, int, int, IEnumerable<ITuple<IEnumerable<TableId>, int>>>, Stream>, ITuple<int, int>> getAdditionalColumnCounts)
         {
             _container = container;
-            _readMetadataTableRowCount = readMetadataTableRowCount;
+            _getAdditionalColumnCounts = getAdditionalColumnCounts;
         }
 
         /// <summary>
@@ -41,30 +42,18 @@ namespace Tao.Core
             var schema =
                 _container.GetInstance<ITuple<int, int, int, int, int, int, IEnumerable<ITuple<IEnumerable<TableId>, int>>>>(schemaName);
 
-            var foreignTableReferences = schema.Item7;
-            var rowCounts = _readMetadataTableRowCount.Execute(stream);
-            var additionalDwordColumns = 0;
+            if (schema == null)
+                throw new SchemaNotFoundException(tableId);
 
-            foreach (var tableReferences in foreignTableReferences)
-            {
-                var tableIds = tableReferences.Item1;
-                foreach(var foreignTableId in tableIds)
-                {
-                    var rowCount = rowCounts.ContainsKey(foreignTableId) ? rowCounts[foreignTableId] : 0;
+            var additionalCounts = _getAdditionalColumnCounts.Execute(schema, stream);
+            int additionalDwordColumns = additionalCounts.Item1;
+            int additionalWordCount = additionalCounts.Item2;
 
-                    // Widen the column to 32 bits if necessary
-                    if (rowCount <= UInt16.MaxValue) 
-                        continue;
 
-                    additionalDwordColumns++;
-                    break;
-                }                
-            }
-
-            var result = Tuple.New(schema.Item1, schema.Item2, schema.Item3 + additionalDwordColumns, schema.Item4, schema.Item5,
+            var result = Tuple.New(schema.Item1, schema.Item2 + additionalWordCount, schema.Item3 + additionalDwordColumns, schema.Item4, schema.Item5,
                                    schema.Item6);
 
             return result;
-        }
+        }        
     }
 }

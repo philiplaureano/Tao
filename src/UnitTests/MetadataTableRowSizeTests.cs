@@ -87,14 +87,419 @@ namespace Tao.UnitTests
                        expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
         }
 
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForModuleTable()
+        {
+            var tableId = TableId.Module;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 1;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 1;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 3;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForCustomAttributeTable()
+        {
+            var tableId = TableId.CustomAttribute;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 1;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 1;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForModuleRefTable()
+        {
+            var tableId = TableId.ModuleRef;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 1;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForTypeDefTable()
+        {
+            var tableId = TableId.TypeDef;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 1;
+            var expectedStringsColumnCount = 2;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForFieldTable()
+        {
+            var tableId = TableId.Field;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 1;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 1;
+            var expectedBlobColumnCount = 1;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForParamTable()
+        {
+            var tableId = TableId.Param;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 2;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 1;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForImplMapTable()
+        {
+            var tableId = TableId.ImplMap;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 1;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 1;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForMemberRefTable()
+        {
+            var tableId = TableId.MemberRef;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 1;
+            var expectedBlobColumnCount = 1;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForFieldMarshalTable()
+        {
+            var tableId = TableId.FieldMarshal;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 1;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForDeclSecurityTable()
+        {
+            var tableId = TableId.DeclSecurity;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 1;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 1;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForFieldLayoutTable()
+        {
+            var tableId = TableId.FieldLayout;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 1;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForStandAloneSigTable()
+        {
+            var tableId = TableId.StandAloneSig;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 1;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForEventMapTable()
+        {
+            var tableId = TableId.EventMap;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForEventTable()
+        {
+            var tableId = TableId.Event;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 1;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 1;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForPropertyMapTable()
+        {
+            var tableId = TableId.PropertyMap;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForPropertyTable()
+        {
+            var tableId = TableId.Property;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 1;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 1;
+            var expectedBlobColumnCount = 1;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForMethodSemanticsTable()
+        {
+            var tableId = TableId.MethodSemantics;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 1;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForMethodImplTable()
+        {
+            var tableId = TableId.MethodImpl;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForTypeRefTable()
+        {
+            var tableId = TableId.TypeRef;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 2;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForTypeSpecTable()
+        {
+            var tableId = TableId.TypeSpec;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 1;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForFieldRVATable()
+        {
+            var tableId = TableId.FieldRVA;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 1;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForFileTable()
+        {
+            var tableId = TableId.File;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 1;
+            var expectedStringsColumnCount = 1;
+            var expectedBlobColumnCount = 1;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForManifestResourceTable()
+        {
+            var tableId = TableId.ManifestResource;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 2;
+            var expectedStringsColumnCount = 1;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForNestedClassTable()
+        {
+            var tableId = TableId.NestedClass;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForGenericParamTable()
+        {
+            var tableId = TableId.GenericParam;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 2;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 1;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForGenericParamConstraintTable()
+        {
+            var tableId = TableId.GenericParamConstraint;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 0;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForMethodSpecTable()
+        {
+            var tableId = TableId.MethodSpec;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 0;
+            var expectedStringsColumnCount = 0;
+            var expectedBlobColumnCount = 1;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                       expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
         private void TestCounts(TableId tableId, int expectedSingleByteColumnCount, int expectedWordColumnCount, int expectedDwordColumnCount, int expectedStringsColumnCount, int expectedBlobColumnCount, int expectedGuidColumnCount)
         {
-            var stream = GetStream();
             var container = CreateContainer();
-            var getRowSchema = container.GetInstance<IFunction<ITuple<TableId, Stream>, ITuple<int, int, int, int, int, int>>>("GetMetadataTableColumnSizeCounts");
-            Assert.IsNotNull(getRowSchema);
 
-            var result = getRowSchema.Execute(tableId, stream);
+            var tableName = Enum.GetName(typeof(TableId), tableId);
+            var schemaName = string.Format("{0}RowSchema", tableName);
+
+            // Obtain the raw schema counts
+            var result = container.GetInstance<ITuple<int, int, int, int, int, int, IEnumerable<ITuple<IEnumerable<TableId>, int>>>>(schemaName);
+
             Assert.IsNotNull(result);
 
             Assert.AreEqual(expectedSingleByteColumnCount, result.Item1, "Wrong single-byte column count");
