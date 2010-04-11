@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core
+namespace Tao
 {
     /// <summary>
     /// Represents a class that enumerates the list of tables that currently exist in the metadata stream.

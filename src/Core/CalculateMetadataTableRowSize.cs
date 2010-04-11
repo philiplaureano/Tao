@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core
+namespace Tao
 {
     /// <summary>
     /// Represents a class that determines the size of a single metadata table row from the given <see cref="TableId"/>

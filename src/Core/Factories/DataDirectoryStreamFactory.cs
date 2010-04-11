@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core.Factories
+namespace Tao.Factories
 {
     /// <summary>
     /// Represents a class that extracts the Data Directories from a given portable executable stream.

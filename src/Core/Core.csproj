@@ -8,7 +8,7 @@
     <ProjectGuid>{65FE5A41-370E-498E-B27B-2479BB1F2AD8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tao.Core</RootNamespace>
+    <RootNamespace>Tao</RootNamespace>
     <AssemblyName>Tao.Core</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -60,7 +60,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="CalculateMetadataTableRowSize.cs" />
     <Compile Include="DataDirectoryCounter.cs" />
-    <Compile Include="EnumerateExistingMetadataTables.cs" />
+    <Compile Include="Readers\EnumerateExistingMetadataTables.cs" />
     <Compile Include="Factories\CoffHeaderStreamFactory.cs" />
     <Compile Include="Factories\DataDirectoryStreamFactory.cs" />
     <Compile Include="Factories\DosHeaderStreamFactory.cs" />
@@ -68,13 +68,17 @@
     <Compile Include="Factories\IndexedDataDirectoryFactory.cs" />
     <Compile Include="Factories\PEFileHeaderStreamFactory.cs" />
     <Compile Include="Factories\PESectionFactory.cs" />
-    <Compile Include="GetAdditionalColumnCounts.cs" />
-    <Compile Include="GetAdjustedSchemaCounts.cs" />
-    <Compile Include="GetMetadataTableColumnSizeCounts.cs" />
+    <Compile Include="Readers\GetAdditionalColumnCounts.cs" />
+    <Compile Include="Readers\GetAdjustedSchemaCounts.cs" />
+    <Compile Include="Readers\GetMetadataTableColumnSizeCounts.cs" />
+    <Compile Include="Model\AssemblyDef.cs" />
+    <Compile Include="Model\AssemblyFlags.cs" />
+    <Compile Include="Model\AssemblyHashAlgorithm.cs" />
     <Compile Include="Readers\GetMetadataStreamIndexFromName.cs" />
     <Compile Include="Readers\InMemorySubStreamReader.cs" />
     <Compile Include="PESectionCounter.cs" />
     <Compile Include="Readers\ReadAllMetadataStreams.cs" />
+    <Compile Include="Readers\ReadAssemblyDef.cs" />
     <Compile Include="Readers\ReadFileAlignment.cs" />
     <Compile Include="Readers\ReadHeapSizesField.cs" />
     <Compile Include="Readers\ReadMetadataHeapIndexSizes.cs" />
@@ -82,10 +86,11 @@
     <Compile Include="Readers\ReadMetadataSize.cs" />
     <Compile Include="Readers\ReadMetadataStream.cs" />
     <Compile Include="Readers\ReadMetadataStreamByIndex.cs" />
+    <Compile Include="Readers\ReadMetadataStreamByName.cs" />
     <Compile Include="Readers\ReadMetadataStreamCount.cs" />
     <Compile Include="Readers\ReadMetadataStreamHeaders.cs" />
     <Compile Include="Readers\ReadMetadataTableRowCounts.cs" />
-    <Compile Include="Readers\ReadMetadataTables.cs" />
+    <Compile Include="Readers\ReadAllMetadataTables.cs" />
     <Compile Include="Readers\ReadRowCountsFromMetadataStream.cs" />
     <Compile Include="Readers\ReadSectionAlignment.cs" />
     <Compile Include="Readers\ReadStreamFromDataDirectoryIndex.cs" />

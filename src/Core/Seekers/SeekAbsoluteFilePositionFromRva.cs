@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core.Seekers
+namespace Tao.Seekers
 {
     /// <summary>
     /// Represents a type that sets the stream pointer to point to an absolute address derived from the given RVA.

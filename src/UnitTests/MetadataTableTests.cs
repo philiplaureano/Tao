@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using Tao.Core;
+using Tao;
 using Tao.Interfaces;
 using Tao.Containers;
 
@@ -91,23 +91,44 @@ namespace Tao.UnitTests
             TestTableRead(tableId, expectedRowCount, expectedStreamLength);
         }
 
+        [Test]
+        public void ShouldBeAbleToReadModuleTableStream()
+        {
+            var tableId = TableId.Module;
+            var result = GetTable(tableId);
+            var tableStream = result.Item2;
+
+            Assert.AreEqual(1, result.Item1, "Wrong row count");
+            Assert.AreEqual(0xA, tableStream.Length, "Wrong Stream Length");
+
+            var reader = new BinaryReader(tableStream);
+            var bytes = reader.ReadBytes(Convert.ToInt32(tableStream.Length));
+
+            return;
+        }
+
         private void TestTableRead(TableId tableId, int expectedRowCount, int expectedStreamLength)
+        {
+            var result = GetTable(tableId);
+            var tableStream = result.Item2;
+            
+            Assert.AreEqual(expectedRowCount, result.Item1, "Wrong row count");
+            
+            Assert.AreEqual(expectedStreamLength, tableStream.Length, "Wrong Stream Length");
+        }
+
+        private ITuple<int, Stream> GetTable(TableId tableId)
         {
             var stream = GetStream();
             
-            var reader = container.GetInstance<IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>>>("ReadMetadataTables");
+            var reader = container.GetInstance<IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>>>("ReadAllMetadataTables");
             Assert.IsNotNull(reader);
 
             var tables = reader.Execute(stream);
             Assert.IsNotNull(tables);            
             Assert.IsTrue(tables.ContainsKey(tableId));
 
-            var result = tables[tableId];
-            var tableStream = result.Item2;
-            
-            Assert.AreEqual(expectedRowCount, result.Item1, "Wrong row count");
-            
-            Assert.AreEqual(expectedStreamLength, tableStream.Length, "Wrong Stream Length");
+            return tables[tableId];
         }
     }
 }

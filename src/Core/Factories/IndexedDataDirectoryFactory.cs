@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core.Factories
+namespace Tao.Factories
 {
     /// <summary>
     /// Represents a type that can read a single data directory entry using a given stream and a given index.

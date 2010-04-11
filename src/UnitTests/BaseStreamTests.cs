@@ -8,7 +8,7 @@ using Hiro;
 using Hiro.Containers;
 using Hiro.Loaders;
 using NUnit.Framework;
-using Tao.Core.Factories;
+using Tao.Factories;
 using Tao.Interfaces;
 
 namespace Tao.UnitTests
@@ -22,11 +22,10 @@ namespace Tao.UnitTests
             container = CreateContainer();
         }
 
-        protected Stream GetStream()
+        protected virtual Stream GetStream()
         {
             var path = AppDomain.CurrentDomain.BaseDirectory;
             var targetFile = Path.Combine(path, "skeleton.exe");
-
 
             var serviceType = typeof(IFunction<string, Stream>);
             Assert.IsTrue(container.Contains(serviceType, null));

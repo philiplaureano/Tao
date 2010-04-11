@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core.Readers
+namespace Tao.Readers
 {
     /// <summary>
     /// Represents a class that reads all .NET metadata streams from the given stream.

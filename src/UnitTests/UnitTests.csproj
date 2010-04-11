@@ -92,6 +92,7 @@
     <Compile Include="MetadataStreamTests.cs" />
     <Compile Include="MetadataTableRowSizeTests.cs" />
     <Compile Include="MetadataTableTests.cs" />
+    <Compile Include="ModelTests.cs" />
     <Compile Include="PEFileHeaderStreamTests.cs" />
     <Compile Include="PESectionHeaderStreamTests.cs" />
   </ItemGroup>

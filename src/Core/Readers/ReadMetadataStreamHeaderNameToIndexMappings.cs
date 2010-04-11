@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core
+namespace Tao
 {
     /// <summary>
     /// Represents a class that maps a metadata stream header name to its index in the portable executable image stream..

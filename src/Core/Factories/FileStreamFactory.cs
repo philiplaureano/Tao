@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core.Factories
+namespace Tao.Factories
 {
     /// <summary>
     /// Represents a factory type that can read the contents of a file and dump it into a memory stream.

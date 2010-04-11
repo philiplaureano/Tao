@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core
+namespace Tao
 {
     /// <summary>
     /// Represents a class that determines the number of data directories from a given portable executable file stream.

@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core.Readers
+namespace Tao.Readers
 {
     /// <summary>
     /// Represents a class that retrieves the given index for the given heap name.

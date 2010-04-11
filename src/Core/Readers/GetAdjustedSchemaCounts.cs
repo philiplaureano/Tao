@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core
+namespace Tao
 {
     /// <summary>
     /// Represents a class that adjusts the given schema according to the <see cref="TableId"/> and the metadata in the input stream.

@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core.Seekers
+namespace Tao.Seekers
 {
     /// <summary>
     /// Represents a class that can set the stream position to point to the any data directory from a given index.

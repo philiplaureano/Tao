@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using Tao.Core;
+using Tao;
 using Tao.Interfaces;
 using Tao.Containers;
 

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Tao.Interfaces;
 
-namespace Tao.Core.Schemas
+namespace Tao.Schemas
 {
     /// <summary>
     /// Represents the basic implementation of a row schema class.

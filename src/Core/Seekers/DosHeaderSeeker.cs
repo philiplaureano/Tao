@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core.Seekers
+namespace Tao.Seekers
 {
     /// <summary>
     /// Represents a <see cref="IFunction{Stream}"/> that can find the coff header position.

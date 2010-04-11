@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core.Schemas
+namespace Tao.Schemas
 {
     /// <summary>
     /// Represents the row schema for the GenericParam table.

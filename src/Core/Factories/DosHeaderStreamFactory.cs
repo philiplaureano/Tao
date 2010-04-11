@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core.Factories
+namespace Tao.Factories
 {
     /// <summary>
     /// Represents a factory class that extracts the DOS header stream from an existing portable executable image.

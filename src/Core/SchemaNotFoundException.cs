@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tao.Core
+namespace Tao
 {
     /// <summary>
     /// Represents an exception that is thrown whenever a particular table schema cannot be found.

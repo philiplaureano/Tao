@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core.Seekers
+namespace Tao.Seekers
 {
     /// <summary>
     /// Represents a class that can seek the absolute file position that corresponds to the RVA entry of the given data directory stored

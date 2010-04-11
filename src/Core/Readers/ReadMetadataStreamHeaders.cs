@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core.Readers
+namespace Tao.Readers
 {
     /// <summary>
     /// Represents a class that reads a metadata stream header using a given index.

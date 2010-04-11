@@ -45,17 +45,18 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldBeAbleToReadMetadataStreamUsingAGivenIndex()
         {
-            var stream = GetStream();
-            
-
+            var stream = GetStream();            
             var reader = container.GetInstance<IFunction<ITuple<int, Stream>, Stream>>("ReadMetadataStreamByIndex");
             Assert.IsNotNull(reader);
 
             var result = reader.Execute(0, stream);
             Assert.AreEqual(0x68, result.Length);
 
+            var binaryReader = new BinaryReader(result);
+            var bytes = binaryReader.ReadBytes(Convert.ToInt32(result.Length));
+
             result = reader.Execute(4, stream);
-            Assert.AreEqual(8, result.Length);
+            Assert.AreEqual(8, result.Length);          
         }
 
         [Test]

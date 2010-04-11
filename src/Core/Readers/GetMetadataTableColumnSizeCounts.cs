@@ -6,7 +6,7 @@ using Hiro.Containers;
 using Tao.Interfaces;
 using Tao.Containers;
 
-namespace Tao.Core
+namespace Tao
 {
     /// <summary>
     /// Represents a class that returns the column width schema for a given metadata table.

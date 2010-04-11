@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
-namespace Tao.Core.Seekers
+namespace Tao.Seekers
 {
     /// <summary>
     /// Represents a stream seeker class that sets the stream position to point to the end of the list of data directory headers in a portable executable file.
