@@ -13,26 +13,29 @@ namespace Tao.Readers
     public class ReadAssemblyDef : IFunction<Stream, AssemblyDef>
     {
         private readonly IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>> _readAllMetadataTables;
-        private readonly IFunction<Stream, string> _readNullTerminatedString;
         private readonly IFunction<Stream, ITuple<int, int, int>> _readMetadataHeapIndexSizes;
-        private readonly IFunction<ITuple<string, Stream>, Stream> _readMetadataStreamByName;
+        private readonly IFunction<ITuple<uint, Stream>, string> _readStringFromStringsHeap;
+        private readonly IFunction<ITuple<uint, Stream>, byte[]> _readBlob;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public ReadAssemblyDef(IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>> readAllMetadataTables, IFunction<Stream, string> readNullTerminatedString, IFunction<Stream, ITuple<int, int, int>> readMetadataHeapIndexSizes, IFunction<ITuple<string, Stream>, Stream> readMetadataStreamByName)
+        public ReadAssemblyDef(IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>> readAllMetadataTables,
+            IFunction<Stream, ITuple<int, int, int>> readMetadataHeapIndexSizes,
+            IFunction<ITuple<uint, Stream>, string> readStringFromStringsHeap,
+            IFunction<ITuple<uint, Stream>, byte[]> readBlob)
         {
             _readAllMetadataTables = readAllMetadataTables;
-            _readNullTerminatedString = readNullTerminatedString;
+            _readBlob = readBlob;
+            _readStringFromStringsHeap = readStringFromStringsHeap;
             _readMetadataHeapIndexSizes = readMetadataHeapIndexSizes;
-            _readMetadataStreamByName = readMetadataStreamByName;
         }
 
         /// <summary>
         /// Reads an <see cref="AssemblyDef"/> from a given stream.
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <param name="input">The input stream.</param>
+        /// <returns>An <see cref="AssemblyDef"/> object.</returns>
         public AssemblyDef Execute(Stream input)
         {
             var tables = _readAllMetadataTables.Execute(input);
@@ -54,29 +57,21 @@ namespace Tao.Readers
             var stringIndexSize = heapSizes.Item1;
             var blobIndexSize = heapSizes.Item2;
 
+            // Read the public key
             var publicKeyIndex = Read(blobIndexSize, reader);
+            if (publicKeyIndex != 0)
+                result.PublicKey = _readBlob.Execute(publicKeyIndex, input);
 
             var nameIndex = Read(stringIndexSize, reader);
             var cultureIndex = Read(stringIndexSize, reader);
 
             if (nameIndex != 0)
-                result.Name = ReadString(nameIndex, input); 
+                result.Name = _readStringFromStringsHeap.Execute(nameIndex, input);
 
             if (cultureIndex != 0)
-                result.Culture = ReadString(cultureIndex, input);
-
-            // TODO: Read the blob values
-            var blobHeap = _readMetadataStreamByName.Execute("#Blob", input);
+                result.Culture = _readStringFromStringsHeap.Execute(cultureIndex, input);
 
             return result;
-        }
-
-        private string ReadString(uint targetOffset, Stream input)
-        {
-            var stringHeap = _readMetadataStreamByName.Execute("#Strings", input);
-            stringHeap.Seek(targetOffset, SeekOrigin.Begin);
-
-            return _readNullTerminatedString.Execute(stringHeap);
         }
 
         private uint Read(int indexSize, BinaryReader reader)

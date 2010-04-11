@@ -70,6 +70,9 @@
     <Compile Include="Factories\PESectionFactory.cs" />
     <Compile Include="Readers\GetAdditionalColumnCounts.cs" />
     <Compile Include="Readers\GetAdjustedSchemaCounts.cs" />
+    <Compile Include="Readers\GetBlobSize.cs" />
+    <Compile Include="Readers\GetBlobSizeFromDoubleWord.cs" />
+    <Compile Include="Readers\GetBlobSizeFromWord.cs" />
     <Compile Include="Readers\GetMetadataTableColumnSizeCounts.cs" />
     <Compile Include="Model\AssemblyDef.cs" />
     <Compile Include="Model\AssemblyFlags.cs" />
@@ -79,6 +82,7 @@
     <Compile Include="PESectionCounter.cs" />
     <Compile Include="Readers\ReadAllMetadataStreams.cs" />
     <Compile Include="Readers\ReadAssemblyDef.cs" />
+    <Compile Include="Readers\ReadBlob.cs" />
     <Compile Include="Readers\ReadFileAlignment.cs" />
     <Compile Include="Readers\ReadHeapSizesField.cs" />
     <Compile Include="Readers\ReadMetadataHeapIndexSizes.cs" />
@@ -96,6 +100,7 @@
     <Compile Include="Readers\ReadStreamFromDataDirectoryIndex.cs" />
     <Compile Include="Readers\ReadStreamFromRvaAndSize.cs" />
     <Compile Include="Readers\ReadNullTerminatedString.cs" />
+    <Compile Include="Readers\ReadStringFromStringsHeap.cs" />
     <Compile Include="Readers\ReadVersionString.cs" />
     <Compile Include="Readers\ReadMetadataStreamHeaderNameToIndexMappings.cs" />
     <Compile Include="ResolveAbsoluteFilePositionFromRVA.cs" />
