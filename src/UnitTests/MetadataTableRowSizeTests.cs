@@ -17,16 +17,31 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldReturnCorrectRowSizeForAssemblyTable()
         {
-            var stream = GetStream();
-            
-            var heapSizes = Tuple.New(2, 2, 2);
-            var calculator = container.GetInstance<IFunction<ITuple<ITuple<TableId, Stream>, ITuple<int, int, int>>, int>>("CalculateMetadataTableRowSize");
-            Assert.IsNotNull(calculator);
+            var tableId = TableId.Assembly;
+            var expectedRowSize = 22;
 
-            var result = calculator.Execute(Tuple.New(TableId.Assembly, stream), heapSizes);
-            Assert.AreEqual(22, result);
+            TestRowSizeCalculation(tableId, expectedRowSize);
         }
 
+        [Test]
+        public void ShouldReturnCorrectRowSizeForModuleTable()
+        {
+            TestRowSizeCalculation(TableId.Module, 0xA);
+        }
+
+        [Test]
+        public void ShouldReturnCorrectRowSizeForTypeDefTable()
+        {
+            TestRowSizeCalculation(TableId.TypeDef, 0xE);
+        }
+
+        [Test]
+        public void ShouldReturnCorrectRowSizeForMethodDefTable()
+        {
+            TestRowSizeCalculation(TableId.MethodDef, 0xE);
+        }
+
+        #region Column Size Count Tests
         [Test]
         public void ShouldBeAbleToReturnCorrectColumnSizeCountsForAssemblyTable()
         {
@@ -503,10 +518,13 @@ namespace Tao.UnitTests
 
             TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
                        expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
-        }
+        } 
+        #endregion
+
+        #region Private Members
         private void TestCounts(TableId tableId, int expectedSingleByteColumnCount, int expectedWordColumnCount, int expectedDwordColumnCount, int expectedStringsColumnCount, int expectedBlobColumnCount, int expectedGuidColumnCount)
         {
-            
+
 
             var tableName = Enum.GetName(typeof(TableId), tableId);
             var schemaName = string.Format("{0}RowSchema", tableName);
@@ -523,5 +541,17 @@ namespace Tao.UnitTests
             Assert.AreEqual(expectedBlobColumnCount, result.Item5, "Wrong #Blob column count");
             Assert.AreEqual(expectedGuidColumnCount, result.Item6, "Wrong #GUID column count");
         }
+
+        private void TestRowSizeCalculation(TableId tableId, int expectedRowSize)
+        {
+            var stream = GetStream();
+            var heapSizes = Tuple.New(2, 2, 2);
+            var calculator = container.GetInstance<IFunction<ITuple<ITuple<TableId, Stream>, ITuple<int, int, int>>, int>>("CalculateMetadataTableRowSize");
+            Assert.IsNotNull(calculator);
+
+            var result = calculator.Execute(Tuple.New(tableId, stream), heapSizes);
+            Assert.AreEqual(expectedRowSize, result);
+        } 
+        #endregion
     }
 }
