@@ -32,5 +32,22 @@ namespace Tao.UnitTests
             Assert.IsNull(result.Culture);
             Assert.IsNull(result.PublicKey);
         }
+
+        [Test]
+        public void ShouldBeAbleToReadModuleFromStream()
+        {
+            var stream = GetStream();
+            var reader = container.GetInstance<IFunction<Stream, ModuleDef>>("ReadModuleDef");
+            Assert.IsNotNull(reader);
+
+            var result = reader.Execute(stream);
+            Assert.IsNotNull(result);
+
+            byte[] guidData = { 0xCD, 0xEE, 0x79, 0x0E, 0xD5, 0x88, 0x8F, 0x43, 0x86, 0x84, 0x11, 0x81, 0x81, 0x89, 0xFF, 0x1D };
+            
+            var expectedGuid = new Guid(guidData);
+            Assert.AreEqual("skeleton.exe", result.Name);
+            Assert.AreEqual(expectedGuid, expectedGuid);
+        }
     }
 }

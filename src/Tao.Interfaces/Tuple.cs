@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Tao.Interfaces
@@ -7,6 +8,7 @@ namespace Tao.Interfaces
     /// <summary>
     /// Represents a data structure that has a specific number and sequence of values.
     /// </summary>
+    [DebuggerStepThrough]
     public class Tuple<T> : ITuple<T>
     {
         private readonly T _item1;
@@ -36,6 +38,7 @@ namespace Tao.Interfaces
     /// <summary>
     /// Represents a data structure that has a specific number and sequence of values.
     /// </summary>
+    [DebuggerStepThrough]
     public class Tuple<T1, T2> : Tuple<T1>, ITuple<T1, T2>
     {
         private readonly T2 _item2;
@@ -66,6 +69,7 @@ namespace Tao.Interfaces
     /// <summary>
     /// Represents a data structure that has a specific number and sequence of values.
     /// </summary>
+    [DebuggerStepThrough]
     public class Tuple<T1, T2, T3> : Tuple<T1, T2>, ITuple<T1, T2, T3>
     {
         private readonly T3 _item3;
@@ -98,6 +102,7 @@ namespace Tao.Interfaces
     /// <summary>
     /// Represents a data structure that has a specific number and sequence of values.
     /// </summary>
+    [DebuggerStepThrough]
     public class Tuple<T1, T2, T3, T4> : Tuple<T1, T2, T3>, ITuple<T1, T2, T3, T4>
     {
         private readonly T4 _item4;
@@ -131,6 +136,7 @@ namespace Tao.Interfaces
     /// <summary>
     /// Represents a data structure that has a specific number and sequence of values.
     /// </summary>
+    [DebuggerStepThrough]
     public class Tuple<T1, T2, T3, T4, T5> : Tuple<T1, T2, T3, T4>, ITuple<T1, T2, T3, T4, T5>
     {
         private readonly T5 _item5;
@@ -165,6 +171,7 @@ namespace Tao.Interfaces
     /// <summary>
     /// Represents a data structure that has a specific number and sequence of values.
     /// </summary>
+    [DebuggerStepThrough]
     public class Tuple<T1, T2, T3, T4, T5, T6> : Tuple<T1, T2, T3, T4, T5>, ITuple<T1, T2, T3, T4, T5, T6>
     {
         private readonly T6 _item6;
@@ -200,6 +207,7 @@ namespace Tao.Interfaces
     /// <summary>
     /// Represents a data structure that has a specific number and sequence of values.
     /// </summary>
+    [DebuggerStepThrough]
     public class Tuple<T1, T2, T3, T4, T5, T6, T7> : Tuple<T1, T2, T3, T4, T5, T6>, ITuple<T1, T2, T3, T4, T5, T6, T7>
     {
         private readonly T7 _item7;
@@ -236,6 +244,7 @@ namespace Tao.Interfaces
     /// <summary>
     /// Represents a data structure that has a specific number and sequence of values.
     /// </summary>
+    [DebuggerStepThrough]
     public class Tuple<T1, T2, T3, T4, T5, T6, T7, T8> : Tuple<T1, T2, T3, T4, T5, T6, T7>, ITuple<T1, T2, T3, T4, T5, T6, T7, T8>
     {
         private readonly T8 _item8;
@@ -273,6 +282,7 @@ namespace Tao.Interfaces
     /// <summary>
     /// Represents a data structure that has a specific number and sequence of values.
     /// </summary>
+    [DebuggerStepThrough]
     public class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> : Tuple<T1, T2, T3, T4, T5, T6, T7, T8>, ITuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>
     {
         private readonly T9 _item9;
@@ -298,7 +308,7 @@ namespace Tao.Interfaces
         /// <summary>
         /// Gets the value indicating the value of Item4.
         /// </summary>
-        /// <value>The value of Item4.</value>
+        /// <value>The value of Item4.</value>        
         public T9 Item9
         {
             get
@@ -311,6 +321,7 @@ namespace Tao.Interfaces
     /// <summary>
     /// Represents an extension class that allows users to instantiate tuple objects.
     /// </summary>
+    [DebuggerStepThrough]
     public static class Tuple
     {
         /// <summary>
@@ -319,6 +330,7 @@ namespace Tao.Interfaces
         /// <typeparam name="T">The item type.</typeparam>
         /// <param name="item">The value of item1.</param>
         /// <returns>A tuple that contains the given items.</returns>
+        [DebuggerStepThrough]
         public static ITuple<T> New<T>(T item)
         {
             return new Tuple<T>(item);
@@ -332,6 +344,7 @@ namespace Tao.Interfaces
         /// <param name="item1">The value of item1.</param>
         /// <param name="item2">The value of item2.</param>
         /// <returns>A tuple that contains the given items.</returns>
+        [DebuggerStepThrough]
         public static ITuple<T1, T2> New<T1, T2>(T1 item1, T2 item2)
         {
             return new Tuple<T1, T2>(item1, item2);
@@ -347,6 +360,7 @@ namespace Tao.Interfaces
         /// <param name="item2">The value of item2.</param>
         /// <param name="item3">The value of item3.</param>
         /// <returns>A tuple that contains the given items.</returns>
+        [DebuggerStepThrough]
         public static ITuple<T1, T2, T3> New<T1, T2, T3>(T1 item1, T2 item2, T3 item3)
         {
             return new Tuple<T1, T2, T3>(item1, item2, item3);
@@ -364,6 +378,7 @@ namespace Tao.Interfaces
         /// <param name="item3">The value of item3.</param>
         /// <param name="item4">The value of item4.</param>
         /// <returns>A tuple that contains the given items.</returns>
+        [DebuggerStepThrough]
         public static ITuple<T1, T2, T3, T4> New<T1, T2, T3, T4>(T1 item1, T2 item2, T3 item3, T4 item4)
         {
             return new Tuple<T1, T2, T3, T4>(item1, item2, item3, item4);
@@ -383,6 +398,7 @@ namespace Tao.Interfaces
         /// <param name="item4">The value of item4.</param>
         /// <param name="item5">The value of item5.</param>
         /// <returns>A tuple that contains the given items.</returns>
+        [DebuggerStepThrough]
         public static ITuple<T1, T2, T3, T4, T5> New<T1, T2, T3, T4, T5>(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5)
         {
             return new Tuple<T1, T2, T3, T4, T5>(item1, item2, item3, item4, item5);
@@ -404,6 +420,7 @@ namespace Tao.Interfaces
         /// <param name="item5">The value of item5.</param>
         /// <param name="item6">The value of item6.</param>
         /// <returns>A tuple that contains the given items.</returns>
+        [DebuggerStepThrough]
         public static ITuple<T1, T2, T3, T4, T5, T6> New<T1, T2, T3, T4, T5, T6>(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6)
         {
             return new Tuple<T1, T2, T3, T4, T5, T6>(item1, item2, item3, item4, item5, item6);
@@ -427,6 +444,7 @@ namespace Tao.Interfaces
         /// <param name="item6">The value of item6.</param>
         /// <param name="item7">The value of item7.</param>
         /// <returns>A tuple that contains the given items.</returns>
+        [DebuggerStepThrough]
         public static ITuple<T1, T2, T3, T4, T5, T6, T7> New<T1, T2, T3, T4, T5, T6, T7>(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7)
         {
             return new Tuple<T1, T2, T3, T4, T5, T6, T7>(item1, item2, item3, item4, item5, item6, item7);
@@ -452,6 +470,7 @@ namespace Tao.Interfaces
         /// <param name="item7">The value of item7.</param>
         /// <param name="item8">The value of item8.</param>
         /// <returns>A tuple that contains the given items.</returns>
+        [DebuggerStepThrough]
         public static ITuple<T1, T2, T3, T4, T5, T6, T7, T8> New<T1, T2, T3, T4, T5, T6, T7, T8>(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8)
         {
             return new Tuple<T1, T2, T3, T4, T5, T6, T7, T8>(item1, item2, item3, item4, item5, item6, item7, item8);
@@ -479,6 +498,7 @@ namespace Tao.Interfaces
         /// <param name="item8">The value of item8.</param>
         /// <param name="item8">The value of item9.</param>
         /// <returns>A tuple that contains the given items.</returns>
+        [DebuggerStepThrough]
         public static ITuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> New<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8, T9 item9)
         {
             return new Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>(item1, item2, item3, item4, item5, item6, item7, item8, item9);
@@ -494,6 +514,7 @@ namespace Tao.Interfaces
         /// <param name="item1">The value of item1.</param>
         /// <param name="item2">The value of item2.</param>
         /// <returns>The value returned by the function.</returns>
+        [DebuggerStepThrough]
         public static TOutput Execute<T1, T2, TOutput>(this IFunction<ITuple<T1, T2>, TOutput> function, T1 item1, T2 item2)
         {
             return function.Execute(Tuple.New(item1, item2));
@@ -530,6 +551,7 @@ namespace Tao.Interfaces
         /// <param name="item3">The value of item3.</param>
         /// <param name="item4">The value of item4.</param>
         /// <returns>The value returned by the function.</returns>
+        [DebuggerStepThrough]
         public static TOutput Execute<T1, T2, T3, T4, TOutput>(this IFunction<ITuple<T1, T2, T3, T4>, TOutput> function, T1 item1, T2 item2, T3 item3, T4 item4)
         {
             return function.Execute(Tuple.New(item1, item2, item3, item4));
@@ -551,6 +573,7 @@ namespace Tao.Interfaces
         /// <param name="item4">The value of item4.</param>
         /// <param name="item5">The value of item5.</param>
         /// <returns>The value returned by the function.</returns>
+        [DebuggerStepThrough]
         public static TOutput Execute<T1, T2, T3, T4, T5, TOutput>(this IFunction<ITuple<T1, T2, T3, T4, T5>, TOutput> function, T1 item1, T2 item2, T3 item3, T4 item4, T5 item5)
         {
             return function.Execute(Tuple.New(item1, item2, item3, item4, item5));
@@ -574,6 +597,7 @@ namespace Tao.Interfaces
         /// <param name="item5">The value of item5.</param>
         /// <param name="item6">The value of item6.</param>
         /// <returns>The value returned by the function.</returns>
+        [DebuggerStepThrough]
         public static TOutput Execute<T1, T2, T3, T4, T5, T6, TOutput>(this IFunction<ITuple<T1, T2, T3, T4, T5, T6>, TOutput> function, T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6)
         {
             return function.Execute(Tuple.New(item1, item2, item3, item4, item5, item6));
@@ -599,6 +623,7 @@ namespace Tao.Interfaces
         /// <param name="item6">The value of item6.</param>
         /// <param name="item7">The value of item7.</param>
         /// <returns>The value returned by the function.</returns>
+        [DebuggerStepThrough]
         public static TOutput Execute<T1, T2, T3, T4, T5, T6, T7, TOutput>(this IFunction<ITuple<T1, T2, T3, T4, T5, T6, T7>, TOutput> function, T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7)
         {
             return function.Execute(Tuple.New(item1, item2, item3, item4, item5, item6, item7));
@@ -626,6 +651,7 @@ namespace Tao.Interfaces
         /// <param name="item7">The value of item7.</param>
         /// <param name="item8">The value of item8.</param>
         /// <returns>The value returned by the function.</returns>
+        [DebuggerStepThrough]
         public static TOutput Execute<T1, T2, T3, T4, T5, T6, T7, T8, TOutput>(this IFunction<ITuple<T1, T2, T3, T4, T5, T6, T7, T8>, TOutput> function, T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8)
         {
             return function.Execute(Tuple.New(item1, item2, item3, item4, item5, item6, item7, item8));
@@ -655,6 +681,7 @@ namespace Tao.Interfaces
         /// <param name="item8">The value of item8.</param>
         /// <param name="item9">The value of item9.</param>
         /// <returns>The value returned by the function.</returns>
+        [DebuggerStepThrough]
         public static TOutput Execute<T1, T2, T3, T4, T5, T6, T7, T8, T9, TOutput>(this IFunction<ITuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>, TOutput> function, T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8, T9 item9)
         {
             return function.Execute(Tuple.New(item1, item2, item3, item4, item5, item6, item7, item8, item9));
@@ -668,6 +695,7 @@ namespace Tao.Interfaces
         /// <param name="function">The target function.</param>
         /// <param name="item1">The value of item1.</param>
         /// <param name="item2">The value of item2.</param>
+        [DebuggerStepThrough]
         public static void Execute<T1, T2>(this IFunction<ITuple<T1, T2>> function, T1 item1, T2 item2)
         {
             function.Execute(Tuple.New(item1, item2));
@@ -683,6 +711,7 @@ namespace Tao.Interfaces
         /// <param name="item1">The value of item1.</param>
         /// <param name="item2">The value of item2.</param>
         /// <param name="item3">The value of item3.</param>
+        [DebuggerStepThrough]
         public static void Execute<T1, T2, T3>(this IFunction<ITuple<T1, T2, T3>> function, T1 item1, T2 item2, T3 item3)
         {
             function.Execute(Tuple.New(item1, item2, item3));
@@ -700,6 +729,7 @@ namespace Tao.Interfaces
         /// <param name="item2">The value of item2.</param>
         /// <param name="item3">The value of item3.</param>
         /// <param name="item4">The value of item3.</param>
+        [DebuggerStepThrough]
         public static void Execute<T1, T2, T3, T4>(this IFunction<ITuple<T1, T2, T3, T4>> function, T1 item1, T2 item2, T3 item3, T4 item4)
         {
             function.Execute(Tuple.New(item1, item2, item3, item4));
@@ -720,6 +750,7 @@ namespace Tao.Interfaces
         /// <param name="item4">The value of item4.</param>
         /// <param name="item5">The value of item5.</param>
         /// <returns>The value returned by the function.</returns>
+        [DebuggerStepThrough]
         public static void Execute<T1, T2, T3, T4, T5>(this IFunction<ITuple<T1, T2, T3, T4, T5>> function, T1 item1, T2 item2, T3 item3, T4 item4, T5 item5)
         {
             function.Execute(Tuple.New(item1, item2, item3, item4, item5));
@@ -742,6 +773,7 @@ namespace Tao.Interfaces
         /// <param name="item5">The value of item5.</param>
         /// <param name="item6">The value of item6.</param>
         /// <returns>The value returned by the function.</returns>
+        [DebuggerStepThrough]
         public static void Execute<T1, T2, T3, T4, T5, T6>(this IFunction<ITuple<T1, T2, T3, T4, T5, T6>> function, T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6)
         {
             function.Execute(Tuple.New(item1, item2, item3, item4, item5, item6));
@@ -766,6 +798,7 @@ namespace Tao.Interfaces
         /// <param name="item6">The value of item6.</param>
         /// <param name="item7">The value of item7.</param>
         /// <returns>The value returned by the function.</returns>
+        [DebuggerStepThrough]
         public static void Execute<T1, T2, T3, T4, T5, T6, T7>(this IFunction<ITuple<T1, T2, T3, T4, T5, T6, T7>> function, T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7)
         {
             function.Execute(Tuple.New(item1, item2, item3, item4, item5, item6, item7));
@@ -792,6 +825,7 @@ namespace Tao.Interfaces
         /// <param name="item7">The value of item7.</param>
         /// <param name="item8">The value of item8.</param>
         /// <returns>The value returned by the function.</returns>
+        [DebuggerStepThrough]
         public static void Execute<T1, T2, T3, T4, T5, T6, T7, T8>(this IFunction<ITuple<T1, T2, T3, T4, T5, T6, T7, T8>> function, T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8)
         {
             function.Execute(Tuple.New(item1, item2, item3, item4, item5, item6, item7, item8));
@@ -820,6 +854,7 @@ namespace Tao.Interfaces
         /// <param name="item8">The value of item8.</param>
         /// <param name="item9">The value of item9.</param>
         /// <returns>The value returned by the function.</returns>
+        [DebuggerStepThrough]
         public static void Execute<T1, T2, T3, T4, T5, T6, T7, T8, T9>(this IFunction<ITuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>> function, T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8, T9 item9)
         {
             function.Execute(Tuple.New(item1, item2, item3, item4, item5, item6, item7, item8, item9));

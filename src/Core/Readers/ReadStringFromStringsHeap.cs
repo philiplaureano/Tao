@@ -31,6 +31,10 @@ namespace Tao.Readers
         public string Execute(ITuple<uint, Stream> input)
         {
             var targetOffset = input.Item1;
+
+            if (targetOffset == 0)
+                return null;
+
             var stream = input.Item2;
             var stringHeap = _readMetadataStreamByName.Execute("#Strings", stream);
             stringHeap.Seek(targetOffset, SeekOrigin.Begin);

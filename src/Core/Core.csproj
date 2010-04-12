@@ -60,6 +60,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="CalculateMetadataTableRowSize.cs" />
     <Compile Include="DataDirectoryCounter.cs" />
+    <Compile Include="Model\ModuleDef.cs" />
     <Compile Include="Readers\EnumerateExistingMetadataTables.cs" />
     <Compile Include="Factories\CoffHeaderStreamFactory.cs" />
     <Compile Include="Factories\DataDirectoryStreamFactory.cs" />
@@ -84,6 +85,8 @@
     <Compile Include="Readers\ReadAssemblyDef.cs" />
     <Compile Include="Readers\ReadBlob.cs" />
     <Compile Include="Readers\ReadFileAlignment.cs" />
+    <Compile Include="Readers\ReadGuidFromGuidHeap.cs" />
+    <Compile Include="Readers\ReadHeapIndexValue.cs" />
     <Compile Include="Readers\ReadHeapSizesField.cs" />
     <Compile Include="Readers\ReadMetadataHeapIndexSizes.cs" />
     <Compile Include="Readers\ReadMetadataRva.cs" />
@@ -95,6 +98,7 @@
     <Compile Include="Readers\ReadMetadataStreamHeaders.cs" />
     <Compile Include="Readers\ReadMetadataTableRowCounts.cs" />
     <Compile Include="Readers\ReadAllMetadataTables.cs" />
+    <Compile Include="Readers\ReadModuleDef.cs" />
     <Compile Include="Readers\ReadRowCountsFromMetadataStream.cs" />
     <Compile Include="Readers\ReadSectionAlignment.cs" />
     <Compile Include="Readers\ReadStreamFromDataDirectoryIndex.cs" />

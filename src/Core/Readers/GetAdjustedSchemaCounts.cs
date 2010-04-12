@@ -35,10 +35,9 @@ namespace Tao
             if (schema == null)
                 throw new SchemaNotFoundException(tableId);
 
-            var additionalCounts = _getAdditionalColumnCounts.Execute(schema, stream);
-            int additionalDwordColumns = additionalCounts.Item1;
-            int additionalWordCount = additionalCounts.Item2;
-
+            var additionalCounts = _getAdditionalColumnCounts.Execute(schema, stream);            
+            var additionalWordCount = additionalCounts.Item1;
+            var additionalDwordColumns = additionalCounts.Item2;
 
             return Tuple.New(schema.Item1, schema.Item2 + additionalWordCount, schema.Item3 + additionalDwordColumns, schema.Item4, schema.Item5,
                              schema.Item6);

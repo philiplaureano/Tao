@@ -48,6 +48,10 @@ namespace Tao.Readers
         /// <returns>The stream containing the target blob.</returns>
         byte[] IFunction<ITuple<uint, Stream>, byte[]>.Execute(ITuple<uint, Stream> input)
         {
+            var index = input.Item1;
+            if (index == 0)
+                return null;
+
             var blobStream = this.Execute(input);
 
             var length = Convert.ToInt32(blobStream.Length);

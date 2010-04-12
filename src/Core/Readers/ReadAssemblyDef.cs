@@ -16,19 +16,22 @@ namespace Tao.Readers
         private readonly IFunction<Stream, ITuple<int, int, int>> _readMetadataHeapIndexSizes;
         private readonly IFunction<ITuple<uint, Stream>, string> _readStringFromStringsHeap;
         private readonly IFunction<ITuple<uint, Stream>, byte[]> _readBlob;
+        private readonly IFunction<ITuple<int, BinaryReader>, uint> _readHeapIndexValue;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Object"/> class.
+        /// Initializes a new instance of the <see cref="ReadAssemblyDef"/> class.
         /// </summary>
         public ReadAssemblyDef(IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>> readAllMetadataTables,
             IFunction<Stream, ITuple<int, int, int>> readMetadataHeapIndexSizes,
             IFunction<ITuple<uint, Stream>, string> readStringFromStringsHeap,
-            IFunction<ITuple<uint, Stream>, byte[]> readBlob)
+            IFunction<ITuple<uint, Stream>, byte[]> readBlob,
+            IFunction<ITuple<int, BinaryReader>, uint> readHeapIndexValue)
         {
             _readAllMetadataTables = readAllMetadataTables;
             _readBlob = readBlob;
             _readStringFromStringsHeap = readStringFromStringsHeap;
             _readMetadataHeapIndexSizes = readMetadataHeapIndexSizes;
+            _readHeapIndexValue = readHeapIndexValue;
         }
 
         /// <summary>
@@ -58,25 +61,17 @@ namespace Tao.Readers
             var blobIndexSize = heapSizes.Item2;
 
             // Read the public key
-            var publicKeyIndex = Read(blobIndexSize, reader);
+            var publicKeyIndex = _readHeapIndexValue.Execute(blobIndexSize, reader);
             if (publicKeyIndex != 0)
                 result.PublicKey = _readBlob.Execute(publicKeyIndex, input);
 
-            var nameIndex = Read(stringIndexSize, reader);
-            var cultureIndex = Read(stringIndexSize, reader);
+            var nameIndex = _readHeapIndexValue.Execute(stringIndexSize, reader);
+            var cultureIndex = _readHeapIndexValue.Execute(stringIndexSize, reader);
 
-            if (nameIndex != 0)
-                result.Name = _readStringFromStringsHeap.Execute(nameIndex, input);
-
-            if (cultureIndex != 0)
-                result.Culture = _readStringFromStringsHeap.Execute(cultureIndex, input);
+            result.Name = _readStringFromStringsHeap.Execute(nameIndex, input);
+            result.Culture = _readStringFromStringsHeap.Execute(cultureIndex, input);
 
             return result;
-        }
-
-        private uint Read(int indexSize, BinaryReader reader)
-        {
-            return indexSize == 2 ? reader.ReadUInt16() : reader.ReadUInt32();
         }
     }
 }

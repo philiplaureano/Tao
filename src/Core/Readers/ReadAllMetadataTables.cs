@@ -41,7 +41,7 @@ namespace Tao.Readers
             var rowCounts = _readMetadataTableRowCounts.Execute(input);
 
             // Seek the end of the #~ Header
-            const int baseHeaderSize = 0x10;
+            const int baseHeaderSize = 0x18;
             var tableCount = rowCounts.Count;            
             var offset = baseHeaderSize + tableCount*4;
             metadataHeap.Seek(offset, SeekOrigin.Begin);
