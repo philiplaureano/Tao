@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Mono.Cecil;
 using NUnit.Framework;
 using Tao.Interfaces;
 using Tao.Model;
 using Tao.Containers;
+using AssemblyHashAlgorithm = Tao.Model.AssemblyHashAlgorithm;
 
 namespace Tao.UnitTests
 {
@@ -29,7 +32,7 @@ namespace Tao.UnitTests
             Assert.AreEqual(0, result.RevisionNumber);
             Assert.AreEqual(0, Convert.ToInt32(result.Flags));
             Assert.AreEqual("donothing", result.Name);
-            Assert.IsNull(result.Culture);
+            Assert.IsEmpty(result.Culture);
             Assert.IsNull(result.PublicKey);
         }
 
@@ -44,10 +47,28 @@ namespace Tao.UnitTests
             Assert.IsNotNull(result);
 
             byte[] guidData = { 0xCD, 0xEE, 0x79, 0x0E, 0xD5, 0x88, 0x8F, 0x43, 0x86, 0x84, 0x11, 0x81, 0x81, 0x89, 0xFF, 0x1D };
-            
+
             var expectedGuid = new Guid(guidData);
             Assert.AreEqual("skeleton.exe", result.Name);
             Assert.AreEqual(expectedGuid, expectedGuid);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadSimpleTypeDefFromStream()
+        {
+            var stream = GetStream();
+            var reader = container.GetInstance<IFunction<Stream, IEnumerable<TypeDef>>>("ReadTypeDefs");
+            Assert.IsNotNull(reader);
+
+            var results = reader.Execute(stream);
+            var types = new List<TypeDef>(results);
+            Assert.IsNotNull(results);
+            Assert.IsTrue(types.Count > 0);
+
+            var type = types[0];
+            Assert.AreEqual(0, Convert.ToInt32(type.Flags));
+            Assert.AreEqual("<Module>", type.Name);
+            Assert.AreEqual(string.Empty, type.Namespace);            
         }
     }
 }

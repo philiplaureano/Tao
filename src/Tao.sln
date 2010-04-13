@@ -1,15 +1,15 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{65FE5A41-370E-498E-B27B-2479BB1F2AD8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{9BEF4693-849E-4EF0-908D-5C866D06E363}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0691ABF2-B3C7-43BF-9862-2D8D1299CE58}"
 	ProjectSection(SolutionItems) = preProject
 		CompileContainer.MSBuild = CompileContainer.MSBuild
 		..\go.bat = ..\go.bat
 		..\Tao.build = ..\Tao.build
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{65FE5A41-370E-498E-B27B-2479BB1F2AD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{9BEF4693-849E-4EF0-908D-5C866D06E363}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tao.Interfaces", "Tao.Interfaces\Tao.Interfaces.csproj", "{88CA72AF-77CD-409A-891D-1468CAF5E62B}"
 EndProject
