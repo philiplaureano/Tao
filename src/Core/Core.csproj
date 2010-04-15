@@ -76,7 +76,10 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="CalculateMetadataTableRowSize.cs" />
+    <Compile Include="CodedTokenType.cs" />
     <Compile Include="DataDirectoryCounter.cs" />
+    <Compile Include="DecodeToken.cs" />
+    <Compile Include="GetNumberOfBitsToEncodeTag.cs" />
     <Compile Include="Model\ModuleDef.cs" />
     <Compile Include="Model\TypeAttributes.cs" />
     <Compile Include="Model\TypeDef.cs" />
@@ -147,6 +150,7 @@
     <Compile Include="Schemas\GenericParamConstraintRowSchema.cs" />
     <Compile Include="Schemas\GenericParamRowSchema.cs" />
     <Compile Include="Schemas\ImplMapRowSchema.cs" />
+    <Compile Include="Schemas\InterfaceImplRowSchema.cs" />
     <Compile Include="Schemas\ManifestResourceRowSchema.cs" />
     <Compile Include="Schemas\MemberRefRowSchema.cs" />
     <Compile Include="Schemas\MethodDefRowSchema.cs" />
@@ -177,10 +181,6 @@
     <Compile Include="TableId.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Tao.Containers\Tao.Containers.csproj">
-      <Project>{31DCA1A8-3C9D-42A3-A775-275EE2C8E6C9}</Project>
-      <Name>Tao.Containers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.csproj">
       <Project>{88CA72AF-77CD-409A-891D-1468CAF5E62B}</Project>
       <Name>Tao.Interfaces</Name>

@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="BaseStreamTests.cs" />
     <Compile Include="CLIHeaderStreamTests.cs" />
+    <Compile Include="CodedTokenTests.cs" />
     <Compile Include="CoffHeaderStreamTests.cs" />
     <Compile Include="DataBlockReadTests.cs" />
     <Compile Include="DataDirectoryHeaderStreamTests.cs" />
