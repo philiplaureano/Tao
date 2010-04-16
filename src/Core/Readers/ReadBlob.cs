@@ -18,9 +18,10 @@ namespace Tao.Readers
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public ReadBlob(IFunction<ITuple<string, Stream>, Stream> readMetadataStreamByName, IFunction<Stream, uint> getBlobSize)
+        public ReadBlob(IFunction<ITuple<string, Stream>, Stream> readMetadataStreamByName, IFunction<Stream, uint> getBlobSize, IFunction<ITuple<int, Stream>, Stream> inMemorySubStreamReader)
         {
             _readMetadataStreamByName = readMetadataStreamByName;
+            _inMemorySubStreamReader = inMemorySubStreamReader;
             _getBlobSize = getBlobSize;
         }
 

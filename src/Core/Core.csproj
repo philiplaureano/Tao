@@ -80,6 +80,8 @@
     <Compile Include="DataDirectoryCounter.cs" />
     <Compile Include="DecodeToken.cs" />
     <Compile Include="GetNumberOfBitsToEncodeTag.cs" />
+    <Compile Include="GetTableId.cs" />
+    <Compile Include="GetTableReferenceFromCodedToken.cs" />
     <Compile Include="Model\ModuleDef.cs" />
     <Compile Include="Model\TypeAttributes.cs" />
     <Compile Include="Model\TypeDef.cs" />
