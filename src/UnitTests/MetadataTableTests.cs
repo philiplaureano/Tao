@@ -37,11 +37,11 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToGetRowCountsForAllMetadataTables()
         {
             var stream = GetStream();
-            
             var counter = container.GetInstance<IFunction<Stream, IDictionary<TableId, int>>>("ReadMetadataTableRowCounts");
             Assert.IsNotNull(counter);
 
             var result = counter.Execute(stream);
+
             Assert.IsNotNull(result);
             Assert.AreEqual(4, result.Count);
 
@@ -56,7 +56,6 @@ namespace Tao.UnitTests
         {
             var stream = GetStream();
             
-
             var reader = container.GetInstance<IFunction<Stream, byte?>>("ReadHeapSizesField");
             Assert.IsNotNull(reader);
 

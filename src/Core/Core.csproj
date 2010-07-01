@@ -181,6 +181,7 @@
     <Compile Include="Seekers\SeekAbsoluteFilePositionFromRva.cs" />
     <Compile Include="Seekers\SeekDataStreamFromDataDirectoryIndex.cs" />
     <Compile Include="Seekers\SeekMetadataRootPosition.cs" />
+    <Compile Include="Signatures\CustomModReader.cs" />
     <Compile Include="Signatures\FieldSignatureConstantReader.cs" />
     <Compile Include="Signatures\TypeDefOrRefEncodedReader.cs" />
     <Compile Include="TableId.cs" />
