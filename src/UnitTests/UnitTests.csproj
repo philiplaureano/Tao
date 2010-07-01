@@ -92,6 +92,7 @@
     <Compile Include="DataBlockReadTests.cs" />
     <Compile Include="DataDirectoryHeaderStreamTests.cs" />
     <Compile Include="DosHeaderStreamTests.cs" />
+    <Compile Include="FieldSigTests.cs" />
     <Compile Include="FileStreamTests.cs" />
     <Compile Include="MetadataRootTests.cs" />
     <Compile Include="MetadataStreamTests.cs" />
@@ -105,6 +106,10 @@
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{65FE5A41-370E-498E-B27B-2479BB1F2AD8}</Project>
       <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SampleAssemblies\FieldSigAssembly\FieldSigAssembly.csproj">
+      <Project>{F24529AE-ACE1-4C8A-9D19-8889C1C29A5B}</Project>
+      <Name>FieldSigAssembly</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tao.Containers\Tao.Containers.csproj">
       <Project>{31DCA1A8-3C9D-42A3-A775-275EE2C8E6C9}</Project>

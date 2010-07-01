@@ -6,6 +6,9 @@ using Hiro.Containers;
 
 namespace Tao.Containers
 {
+    /// <summary>
+    /// Represents a class that adds syntactic sugar to Hiro's microcontainer instances.
+    /// </summary>
     public static class MicroContainerExtensions
     {
         /// <summary>

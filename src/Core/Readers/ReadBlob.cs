@@ -9,7 +9,7 @@ namespace Tao.Readers
     /// <summary>
     /// Represents a class that reads a blob using the given offset into the #Blob heap.
     /// </summary>
-    public class ReadBlob : IFunction<ITuple<uint, Stream>, Stream>, IFunction<ITuple<uint, Stream>, byte[]>
+    public class ReadBlob : IFunction<ITuple<uint, Stream>, Stream>, IFunction<ITuple<uint, uint, Stream>, Stream>, IFunction<ITuple<uint, Stream>, byte[]>
     {
         private readonly IFunction<ITuple<string, Stream>, Stream> _readMetadataStreamByName;
         private readonly IFunction<ITuple<int, Stream>, Stream> _inMemorySubStreamReader;
@@ -38,7 +38,7 @@ namespace Tao.Readers
             var blobHeap = _readMetadataStreamByName.Execute("#Blob", stream);
             blobHeap.Seek(offset, SeekOrigin.Begin);
 
-            var blobSize = Convert.ToInt32(_getBlobSize.Execute(stream));
+            var blobSize = Convert.ToInt32(_getBlobSize.Execute(blobHeap));
             return _inMemorySubStreamReader.Execute(blobSize, blobHeap);
         }
 
@@ -58,6 +58,22 @@ namespace Tao.Readers
             var length = Convert.ToInt32(blobStream.Length);
             var reader = new BinaryReader(blobStream);
             return reader.ReadBytes(length);
+        }
+
+        /// <summary>
+        /// Reads a blob using the given offset into the #Blob heap.
+        /// </summary>
+        /// <param name="input">The target offset, blob size, and the input stream.</param>
+        /// <returns>The stream containing the target blob.</returns>
+        public Stream Execute(ITuple<uint, uint, Stream> input)
+        {
+            var offset = input.Item1;
+            var blobSize = Convert.ToInt32(input.Item2);
+            var stream = input.Item3;
+            var blobHeap = _readMetadataStreamByName.Execute("#Blob", stream);
+
+            blobHeap.Seek(offset, SeekOrigin.Begin);
+            return _inMemorySubStreamReader.Execute(blobSize, blobHeap);
         }
     }
 }

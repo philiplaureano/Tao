@@ -79,6 +79,7 @@
     <Compile Include="CodedTokenType.cs" />
     <Compile Include="DataDirectoryCounter.cs" />
     <Compile Include="DecodeToken.cs" />
+    <Compile Include="ElementType.cs" />
     <Compile Include="GetNumberOfBitsToEncodeTag.cs" />
     <Compile Include="GetTableId.cs" />
     <Compile Include="GetTableReferenceFromCodedToken.cs" />
@@ -180,6 +181,8 @@
     <Compile Include="Seekers\SeekAbsoluteFilePositionFromRva.cs" />
     <Compile Include="Seekers\SeekDataStreamFromDataDirectoryIndex.cs" />
     <Compile Include="Seekers\SeekMetadataRootPosition.cs" />
+    <Compile Include="Signatures\FieldSignatureConstantReader.cs" />
+    <Compile Include="Signatures\TypeDefOrRefEncodedReader.cs" />
     <Compile Include="TableId.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +208,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!--<UsingTask TaskName="CompileContainerTask" AssemblyFile="$(MSBuildProjectDirectory)\$(OutputPath)\..\..\..\..\lib\Hiro.MSBuild.Tasks.dll" />
   <Target Name="AfterBuild">
