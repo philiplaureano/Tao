@@ -101,6 +101,7 @@
     <Compile Include="ModelTests.cs" />
     <Compile Include="PEFileHeaderStreamTests.cs" />
     <Compile Include="PESectionHeaderStreamTests.cs" />
+    <Compile Include="TypeSignatureTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

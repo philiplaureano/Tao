@@ -86,6 +86,7 @@
     <Compile Include="Model\ModuleDef.cs" />
     <Compile Include="Model\TypeAttributes.cs" />
     <Compile Include="Model\TypeDef.cs" />
+    <Compile Include="Model\TypeSignature.cs" />
     <Compile Include="Readers\GetTableRowSize.cs" />
     <Compile Include="Readers\ReadTypeDefs.cs" />
     <Compile Include="Readers\EnumerateExistingMetadataTables.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Signatures\CustomModReader.cs" />
     <Compile Include="Signatures\FieldSignatureConstantReader.cs" />
     <Compile Include="Signatures\TypeDefOrRefEncodedReader.cs" />
+    <Compile Include="Signatures\TypeSignatureReader.cs" />
     <Compile Include="TableId.cs" />
   </ItemGroup>
   <ItemGroup>
