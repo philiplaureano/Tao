@@ -84,6 +84,19 @@ namespace Tao.UnitTests
             TestElementTypeRead(elementType);
         }
 
+        [Test]
+        public void ShouldReadStringType()
+        {
+            var elementType = ElementType.String;
+            TestElementTypeRead(elementType);
+        }
+        [Test]
+        public void ShouldReadObjectType()
+        {
+            var elementType = ElementType.Object;
+            TestElementTypeRead(elementType);
+        }
+
         private void TestElementTypeRead(ElementType elementType)
         {
             var bytes = new byte[] { Convert.ToByte(elementType) };
