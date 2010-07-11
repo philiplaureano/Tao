@@ -89,6 +89,7 @@
     <Compile Include="CLIHeaderStreamTests.cs" />
     <Compile Include="CodedTokenTests.cs" />
     <Compile Include="CoffHeaderStreamTests.cs" />
+    <Compile Include="CustomModTests.cs" />
     <Compile Include="DataBlockReadTests.cs" />
     <Compile Include="DataDirectoryHeaderStreamTests.cs" />
     <Compile Include="DosHeaderStreamTests.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="ModelTests.cs" />
     <Compile Include="PEFileHeaderStreamTests.cs" />
     <Compile Include="PESectionHeaderStreamTests.cs" />
+    <Compile Include="TypeDefOrRefEncodedTests.cs" />
     <Compile Include="TypeSignatureTests.cs" />
   </ItemGroup>
   <ItemGroup>

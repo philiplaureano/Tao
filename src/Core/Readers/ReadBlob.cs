@@ -13,16 +13,16 @@ namespace Tao.Readers
     {
         private readonly IFunction<ITuple<string, Stream>, Stream> _readMetadataStreamByName;
         private readonly IFunction<ITuple<int, Stream>, Stream> _inMemorySubStreamReader;
-        private readonly IFunction<Stream, uint> _getBlobSize;
+        private readonly IFunction<Stream, uint> _readCompressedInteger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public ReadBlob(IFunction<ITuple<string, Stream>, Stream> readMetadataStreamByName, IFunction<Stream, uint> getBlobSize, IFunction<ITuple<int, Stream>, Stream> inMemorySubStreamReader)
+        public ReadBlob(IFunction<ITuple<string, Stream>, Stream> readMetadataStreamByName, IFunction<Stream, uint> readCompressedInteger, IFunction<ITuple<int, Stream>, Stream> inMemorySubStreamReader)
         {
             _readMetadataStreamByName = readMetadataStreamByName;
             _inMemorySubStreamReader = inMemorySubStreamReader;
-            _getBlobSize = getBlobSize;
+            _readCompressedInteger = readCompressedInteger;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Tao.Readers
             var blobHeap = _readMetadataStreamByName.Execute("#Blob", stream);
             blobHeap.Seek(offset, SeekOrigin.Begin);
 
-            var blobSize = Convert.ToInt32(_getBlobSize.Execute(blobHeap));
+            var blobSize = Convert.ToInt32(_readCompressedInteger.Execute(blobHeap));
             return _inMemorySubStreamReader.Execute(blobSize, blobHeap);
         }
 

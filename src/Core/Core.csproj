@@ -99,7 +99,7 @@
     <Compile Include="Factories\PESectionFactory.cs" />
     <Compile Include="Readers\GetAdditionalColumnCounts.cs" />
     <Compile Include="Readers\GetAdjustedSchemaCounts.cs" />
-    <Compile Include="Readers\GetBlobSize.cs" />
+    <Compile Include="Readers\ReadCompressedInteger.cs" />
     <Compile Include="Readers\GetBlobSizeFromDoubleWord.cs" />
     <Compile Include="Readers\GetBlobSizeFromWord.cs" />
     <Compile Include="Readers\GetMetadataTableColumnSizeCounts.cs" />

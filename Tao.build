@@ -87,7 +87,26 @@
 		
 	<target name="full" depends="clean, test, dist"	description="Compiles, tests, and produces distributions" />
 
-  <target name="compile-unit-tests" depends="compile-container, compile-core" description="Compiles the unit tests for the core assembly">
+  <target name="compile-sample-assemblies">
+    <property name="debug.dir" value="${build.dir}\Debug"/>
+    <property name="unittest.dir" value="${debug.dir}\UnitTests"/>
+    <property name="unittest.source.dir" value="${build.dir}\..\src\UnitTests"/>
+    <property name="output.dir" value="${build.dir}\${target.framework}"/>
+
+    <csc target="library" noconfig="true" output="${unittest.dir}\FieldSigAssembly.dll" debug="${debug}">
+      <sources>
+        <include name="src/SampleAssemblies/FieldSigAssembly/**/*.cs" /> Unit
+      </sources>
+      <references>
+        <include name="System.dll" />
+        <include name="System.Core.dll"/>
+        <include name="System.Data.dll"/>
+        <include name="System.Xml.dll" />
+      </references>
+    </csc>    
+  </target>
+  
+  <target name="compile-unit-tests" depends="compile-sample-assemblies, compile-container, compile-core" description="Compiles the unit tests for the core assembly">
     <property name="debug.dir" value="${build.dir}\Debug"/>
     <property name="unittest.dir" value="${debug.dir}\UnitTests"/>
     <property name="unittest.source.dir" value="${build.dir}\..\src\UnitTests"/>
@@ -106,6 +125,7 @@
         <include name="System.Core.dll"/>
         <include name="System.Data.dll"/>
         <include name="System.Xml.dll" />
+        <include name="${debug.dir}\FieldSigAssembly.dll"/>
         <include name="${output.dir}\Tao.Interfaces.dll"/>
         <include name="${output.dir}\Tao.Core.dll"/>
         <include name="${output.dir}\Tao.Containers.dll"/>
