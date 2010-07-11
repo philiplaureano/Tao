@@ -90,11 +90,36 @@ namespace Tao.UnitTests
             var elementType = ElementType.String;
             TestElementTypeRead(elementType);
         }
+
         [Test]
         public void ShouldReadObjectType()
         {
             var elementType = ElementType.Object;
             TestElementTypeRead(elementType);
+        }
+
+        [Test]
+        public void ShouldReadTypeDefOrRefEncodedSignature()
+        {
+            const byte token = 0x49;
+            var expectedTableId = TableId.TypeRef;
+            uint expectedIndex = 0x12;
+
+            var elementType = ElementType.Class;
+
+            var bytes = new byte[] { Convert.ToByte(elementType), token };
+
+            var reader = container.GetInstance<IFunction<IEnumerable<byte>, TypeSignature>>();
+            var result = reader.Execute(bytes);
+
+            Assert.IsNotNull(result);
+            
+            Assert.IsInstanceOfType(typeof(TypeDefOrRefEncodedSignature), result);
+
+            var encodedSignature = (TypeDefOrRefEncodedSignature)result;
+            Assert.AreEqual(elementType, encodedSignature.ElementType);
+            Assert.AreEqual(expectedTableId, encodedSignature.TableId);
+            Assert.AreEqual(expectedIndex, encodedSignature.TableIndex);
         }
 
         private void TestElementTypeRead(ElementType elementType)

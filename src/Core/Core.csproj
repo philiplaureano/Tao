@@ -86,6 +86,7 @@
     <Compile Include="Model\ModuleDef.cs" />
     <Compile Include="Model\TypeAttributes.cs" />
     <Compile Include="Model\TypeDef.cs" />
+    <Compile Include="Model\TypeDefOrRefEncodedSignature.cs" />
     <Compile Include="Model\TypeSignature.cs" />
     <Compile Include="Readers\GetTableRowSize.cs" />
     <Compile Include="Readers\ReadTypeDefs.cs" />
