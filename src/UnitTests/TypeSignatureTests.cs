@@ -104,7 +104,6 @@ namespace Tao.UnitTests
             const byte token = 0x49;
             var expectedTableId = TableId.TypeRef;
             uint expectedIndex = 0x12;
-
             var elementType = ElementType.Class;
 
             var bytes = new byte[] { Convert.ToByte(elementType), token };
@@ -113,7 +112,6 @@ namespace Tao.UnitTests
             var result = reader.Execute(bytes);
 
             Assert.IsNotNull(result);
-            
             Assert.IsInstanceOfType(typeof(TypeDefOrRefEncodedSignature), result);
 
             var encodedSignature = (TypeDefOrRefEncodedSignature)result;
@@ -122,10 +120,64 @@ namespace Tao.UnitTests
             Assert.AreEqual(expectedIndex, encodedSignature.TableIndex);
         }
 
+        [Test]
+        public void ShouldReadVoidPointerSignature()
+        {
+            var bytes = new byte[] { Convert.ToByte(ElementType.Ptr), Convert.ToByte(ElementType.Void) };
+
+            var reader = container.GetInstance<IFunction<IEnumerable<byte>, TypeSignature>>();
+            var result = reader.Execute(bytes);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(typeof(VoidPointerSignature), result);
+
+            var signature = (VoidPointerSignature)result;
+            Assert.AreEqual(signature.ElementType, ElementType.Ptr);
+        }
+
+        [Test]
+        public void ShouldReadVoidPointerSignatureWithCustomModSignaturesAttached()
+        {
+            var customModBytes = GetCustomModBytes(ElementType.CMOD_REQD, 0x49);
+
+            // Add the PTR head element
+            var byteList = new List<byte> { Convert.ToByte(ElementType.Ptr) };
+
+            // Add the custom signatures
+            byteList.AddRange(customModBytes);
+            byteList.AddRange(customModBytes);
+            byteList.Add(Convert.ToByte(ElementType.Void));
+
+            var bytes = byteList.ToArray();
+
+            var reader = container.GetInstance<IFunction<IEnumerable<byte>, TypeSignature>>();
+            var result = reader.Execute(bytes);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(typeof(VoidPointerSignature), result);
+
+            var signature = (VoidPointerSignature)result;
+            Assert.AreEqual(signature.ElementType, ElementType.Ptr);
+
+            var customMods = signature.CustomMods;
+            Assert.IsTrue(customMods.Count == 2);
+
+            var firstMod = customMods[0];
+
+            Assert.AreEqual(firstMod.ElementType, ElementType.CMOD_REQD);
+            Assert.AreEqual(firstMod.TableId, TableId.TypeRef);
+            Assert.AreEqual(firstMod.RowIndex, 0x12);
+        }
+
+        private byte[] GetCustomModBytes(ElementType elementType, byte codedToken)
+        {
+            return new byte[] { Convert.ToByte(elementType), Convert.ToByte(codedToken) };
+        }
+
         private void TestElementTypeRead(ElementType elementType)
         {
             var bytes = new byte[] { Convert.ToByte(elementType) };
-            
+
             var reader = container.GetInstance<IFunction<IEnumerable<byte>, TypeSignature>>();
             Assert.IsNotNull(reader);
             var result = reader.Execute(bytes);
