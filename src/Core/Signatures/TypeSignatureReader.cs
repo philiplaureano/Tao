@@ -92,14 +92,39 @@ namespace Tao.Signatures
             targetIndex++;
 
             var nextElementType = (ElementType)bytes[targetIndex];
-            if (nextElementType == ElementType.Void)
+            if (nextElementType != ElementType.Void)
+            {
+                result = CreateTypePointerSignature(bytes, bytesRead, targetIndex, nextElementType);
+            }
+            else
+            {
                 result = new VoidPointerSignature();
+            }
 
             foreach (var mod in mods)
             {
                 result.CustomMods.Add(mod);
             }
 
+            return result;
+        }
+
+        private PointerSignature CreateTypePointerSignature(IList<byte> bytes, int bytesRead, int targetIndex, ElementType nextElementType)
+        {
+            PointerSignature result;
+            var typePointerSignature = new TypePointerSignature();
+
+            var attachedSignatureSize = bytes.Count - targetIndex;
+            var remainingBytes = new byte[attachedSignatureSize];
+            var currentIndex = 0;
+            for (var i = targetIndex; i <= attachedSignatureSize; i++)
+            {
+                remainingBytes[currentIndex++] = bytes[i];
+            }
+
+            var attachedSignature = Execute(remainingBytes);
+            typePointerSignature.TypeSignature = attachedSignature;
+            result = typePointerSignature;
             return result;
         }
 

@@ -121,6 +121,22 @@ namespace Tao.UnitTests
         }
 
         [Test]
+        public void ShouldReadTypePointerSignature()
+        {
+            var bytes = new byte[] { Convert.ToByte(ElementType.Ptr), Convert.ToByte(ElementType.I4) };
+            var reader = container.GetInstance<IFunction<IEnumerable<byte>, TypeSignature>>();
+            var signature = reader.Execute(bytes);
+
+            Assert.IsNotNull(signature);
+            Assert.IsInstanceOfType(typeof(TypePointerSignature), signature);
+
+            var typePointer = (TypePointerSignature) signature;
+            TypeSignature typeSignature = typePointer.TypeSignature;
+
+            Assert.AreEqual(ElementType.I4, typeSignature.ElementType);
+        }
+
+        [Test]
         public void ShouldReadVoidPointerSignature()
         {
             var bytes = new byte[] { Convert.ToByte(ElementType.Ptr), Convert.ToByte(ElementType.Void) };
