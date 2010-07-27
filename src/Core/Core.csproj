@@ -85,6 +85,7 @@
     <Compile Include="GetTableReferenceFromCodedToken.cs" />
     <Compile Include="Model\CustomMod.cs" />
     <Compile Include="Model\ModuleDef.cs" />
+    <Compile Include="Model\ParamSignature.cs" />
     <Compile Include="Model\PointerSignature.cs" />
     <Compile Include="Model\TypeAttributes.cs" />
     <Compile Include="Model\TypeDef.cs" />
@@ -188,6 +189,7 @@
     <Compile Include="Seekers\SeekMetadataRootPosition.cs" />
     <Compile Include="Signatures\CustomModReader.cs" />
     <Compile Include="Signatures\FieldSignatureConstantReader.cs" />
+    <Compile Include="Signatures\ParamSignatureReader.cs" />
     <Compile Include="Signatures\TypeDefOrRefEncodedReader.cs" />
     <Compile Include="Signatures\TypeSignatureReader.cs" />
     <Compile Include="Model\VoidPointerSignature.cs" />
