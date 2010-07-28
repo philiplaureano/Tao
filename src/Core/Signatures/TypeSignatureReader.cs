@@ -11,8 +11,8 @@ namespace Tao.Signatures
     /// </summary>
     public class TypeSignatureReader : IFunction<IEnumerable<byte>, TypeSignature>
     {
-        private readonly IFunction<byte, ITuple<TableId, uint>> _typeDefOrRefEncodedReader;
-        private readonly IFunction<IEnumerable<byte>, ITuple<ElementType, TableId, uint>> _customModReader;
+        private readonly IFunction<byte, ITuple<TableId, uint>> _typeDefOrRefEncodedReader;       
+        private readonly IFunction<ITuple<Queue<byte>, ICollection<CustomMod>>, int> _readCustomMods;
 
         private readonly Dictionary<ElementType, Func<IList<byte>, TypeSignature>> _entries =
             new Dictionary<ElementType, Func<IList<byte>, TypeSignature>>();
@@ -21,15 +21,14 @@ namespace Tao.Signatures
         /// Initializes a new instance of the <see cref="TypeSignatureReader"/> class.
         /// </summary>
         /// <param name="typeDefOrRefEncodedReader">The reader that will read the embbedded type def or type ref token.</param>
-        /// <param name="customModReader">The reader that will read the CustomMod signature type</param>
-        public TypeSignatureReader(IFunction<byte, ITuple<TableId, uint>> typeDefOrRefEncodedReader, IFunction<IEnumerable<byte>,
-            ITuple<ElementType, TableId, uint>> customModReader)
+        /// <param name="readCustomMods">The reader that will read the CustomMod signatures</param>
+        public TypeSignatureReader(IFunction<byte, ITuple<TableId, uint>> typeDefOrRefEncodedReader, IFunction<ITuple<Queue<byte>, ICollection<CustomMod>>, int> readCustomMods)
         {
             if (typeDefOrRefEncodedReader == null)
                 throw new ArgumentNullException("typeDefOrRefEncodedReader");
 
             _typeDefOrRefEncodedReader = typeDefOrRefEncodedReader;
-            _customModReader = customModReader;
+            _readCustomMods = readCustomMods;
 
             CreateEntries();
         }
@@ -84,7 +83,7 @@ namespace Tao.Signatures
             var mods = new List<CustomMod>();
             var byteQueue = new Queue<byte>(bytes);
             var elementType = (ElementType)byteQueue.Dequeue();
-            var bytesRead = ReadCustomMods(byteQueue, mods);
+            var bytesRead = _readCustomMods.Execute(byteQueue, mods);
 
             PointerSignature result = null;
 
@@ -94,7 +93,7 @@ namespace Tao.Signatures
             var nextElementType = (ElementType)bytes[targetIndex];
             if (nextElementType != ElementType.Void)
             {
-                result = CreateTypePointerSignature(bytes, bytesRead, targetIndex, nextElementType);
+                result = CreateTypePointerSignature(bytes, targetIndex);
             }
             else
             {
@@ -109,7 +108,7 @@ namespace Tao.Signatures
             return result;
         }
 
-        private PointerSignature CreateTypePointerSignature(IList<byte> bytes, int bytesRead, int targetIndex, ElementType nextElementType)
+        private PointerSignature CreateTypePointerSignature(IList<byte> bytes, int targetIndex)
         {
             PointerSignature result;
             var typePointerSignature = new TypePointerSignature();
@@ -126,26 +125,7 @@ namespace Tao.Signatures
             typePointerSignature.TypeSignature = attachedSignature;
             result = typePointerSignature;
             return result;
-        }
-
-        private int ReadCustomMods(Queue<byte> byteQueue, ICollection<CustomMod> mods)
-        {
-            var nextByte = (ElementType)byteQueue.Peek();
-            var bytesRead = 0;
-            while ((nextByte == ElementType.CMOD_OPT
-                    || nextByte == ElementType.CMOD_REQD) && byteQueue.Count >= 2)
-            {
-                var currentBytes = new List<byte> { byteQueue.Dequeue(), byteQueue.Dequeue() };
-
-                bytesRead += 2;
-                var mod = _customModReader.Execute(currentBytes);
-                var customMod = new CustomMod() { ElementType = mod.Item1, TableId = mod.Item2, RowIndex = mod.Item3 };
-
-                mods.Add(customMod);
-                nextByte = byteQueue.Count >= 1 ? (ElementType)byteQueue.Dequeue() : default(ElementType);
-            }
-            return bytesRead;
-        }
+        }       
 
         private TypeSignature CreateTypeDefOrRefEncodedSignature(IList<byte> bytes)
         {

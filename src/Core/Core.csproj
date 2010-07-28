@@ -88,11 +88,14 @@
     <Compile Include="Model\ParamSignature.cs" />
     <Compile Include="Model\PointerSignature.cs" />
     <Compile Include="Model\TypeAttributes.cs" />
+    <Compile Include="Model\TypedByRefParamSignature.cs" />
     <Compile Include="Model\TypeDef.cs" />
     <Compile Include="Model\TypeDefOrRefEncodedSignature.cs" />
+    <Compile Include="Model\TypedParamSignature.cs" />
     <Compile Include="Model\TypePointerSignature.cs" />
     <Compile Include="Model\TypeSignature.cs" />
     <Compile Include="Readers\GetTableRowSize.cs" />
+    <Compile Include="Readers\ReadCustomMods.cs" />
     <Compile Include="Readers\ReadTypeDefs.cs" />
     <Compile Include="Readers\EnumerateExistingMetadataTables.cs" />
     <Compile Include="Factories\CoffHeaderStreamFactory.cs" />

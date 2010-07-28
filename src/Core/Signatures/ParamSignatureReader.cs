@@ -12,14 +12,17 @@ namespace Tao.Signatures
     public class ParamSignatureReader : IFunction<IEnumerable<byte>, ParamSignature>
     {
         private readonly IFunction<IEnumerable<byte>, TypeSignature> _typeSignatureReader;
+        private readonly IFunction<ITuple<Queue<byte>, ICollection<CustomMod>>, int> _readCustomMods;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParamSignatureReader"/> class.
         /// </summary>
         /// <param name="typeSignatureReader">The type signature reader.</param>
-        public ParamSignatureReader(IFunction<IEnumerable<byte>, TypeSignature> typeSignatureReader)
+        /// <param name="readCustomMods">The <see cref="CustomMod"/> reader.</param>
+        public ParamSignatureReader(IFunction<IEnumerable<byte>, TypeSignature> typeSignatureReader, IFunction<ITuple<Queue<byte>, ICollection<CustomMod>>, int> readCustomMods)
         {
             _typeSignatureReader = typeSignatureReader;
+            _readCustomMods = readCustomMods;
         }
 
         /// <summary>
@@ -33,19 +36,53 @@ namespace Tao.Signatures
             var nextElement = (ElementType)byteQueue.Peek();
             var inputBytes = input;
             
-
-            var result = new ParamSignature();
-            if (nextElement == ElementType.ByRef)
+            var customMods = new List<CustomMod>();
+            int modBytesRead = 0;
+            if (nextElement == ElementType.CMOD_OPT || nextElement == ElementType.CMOD_REQD)
             {
-                byteQueue.Dequeue();
-                inputBytes = byteQueue;
-                result.IsByRef = true;
+                modBytesRead = _readCustomMods.Execute(byteQueue, customMods);
+                var items = new Queue<byte>(input);
+                
+                for(var i = 0; i < modBytesRead; i++)
+                {
+                    items.Dequeue();
+                }
+                   
+                byteQueue = items;                
+                nextElement = (ElementType)byteQueue.Peek();
             }
 
-            var typeSignature = _typeSignatureReader.Execute(inputBytes);
-            result.Type = typeSignature;
+            TypedParamSignature result = null;                       
+            var isByRef = nextElement == ElementType.ByRef;
+            if (isByRef)
+            {
+                result = new TypedParamSignature(true);
+                byteQueue.Dequeue();
+                inputBytes = byteQueue;
+            }
 
-            return result;
+            if (nextElement == ElementType.TypedByRef)
+            {
+                var byRefParamSignature = new TypedByRefParamSignature();
+                foreach(var mod in customMods)
+                {
+                    byRefParamSignature.CustomMods.Add(mod);
+                }
+
+                return byRefParamSignature;
+            }
+
+            inputBytes = modBytesRead > 0 ? byteQueue : inputBytes;
+            var typedParamSignature = result ?? new TypedParamSignature(false);
+            var typeSignature = _typeSignatureReader.Execute(inputBytes);
+            typedParamSignature.Type = typeSignature;
+
+            foreach (var mod in customMods)
+            {
+                typedParamSignature.CustomMods.Add(mod);
+            }
+
+            return typedParamSignature;
         }
     }
 }
