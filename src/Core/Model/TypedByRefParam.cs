@@ -7,7 +7,7 @@ namespace Tao.Model
     /// <summary>
     /// Represents a TYPEDBYREF param signature.
     /// </summary>
-    public class TypedByRefParamSignature : ParamSignature
+    public class TypedByRefParam : ParamSignature, ITypedByRefMethodSignatureElement
     {
         public override bool IsByRef
         {

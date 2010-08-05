@@ -7,18 +7,9 @@ namespace Tao.Model
     /// <summary>
     /// Represents a <see cref="ParamSignature"/> that has an associated type.
     /// </summary>
-    public class TypedParamSignature : ParamSignature
+    public class TypedParamSignature : ParamSignature, ITypedMethodSignatureElement
     {
-        private readonly bool _isByRef;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TypedParamSignature"/> class.
-        /// </summary>
-        /// <param name="isByRef">Determines whether or not the <see cref="TypedParamSignature.Type"/> is passed by reference.</param>
-        public TypedParamSignature(bool isByRef)
-        {
-            _isByRef = isByRef;
-        }
+        private bool _isByRef;
 
         /// <summary>
         /// Gets or sets the value indicating the <see cref="TypeSignature"/> of the current parameter.
@@ -37,6 +28,15 @@ namespace Tao.Model
         public override bool IsByRef
         {
             get { return _isByRef; }
+        }
+
+        /// <summary>
+        /// Sets the value indicating whether or not the current signature is ByRef.
+        /// </summary>
+        /// <param name="isByRef">Determines whether or not the current signature is ByRef.</param>
+        public void SetIsByRef(bool isByRef)
+        {
+            _isByRef = isByRef;
         }
     }
 }

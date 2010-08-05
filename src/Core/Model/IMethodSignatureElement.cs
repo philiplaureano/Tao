@@ -1,30 +1,23 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Tao.Model
 {
     /// <summary>
-    /// Represents a Param signature type.
+    /// Represents a method signature type that can act as the return type or the parameter type.
     /// </summary>
-    public abstract class ParamSignature : IMethodSignatureElement
+    public interface IMethodSignatureElement
     {
-        private readonly List<CustomMod> _customMods = new List<CustomMod>();
-
         /// <summary>
         /// Gets or sets the value indicating whether nor not the current type signature is ByRef.
         /// </summary>
         /// <value>Determines whether or not the type is ByRef.</value>
-        public abstract bool IsByRef { get; }
+        bool IsByRef { get; }
 
         /// <summary>
         /// Gets the value indicating the list of <see cref="CustomMod"/> instances
         /// associated with the current parameter.
         /// </summary>
         /// <value>The list of <see cref="CustomMod"/> instances associated with the current param.</value>
-        public IList<CustomMod> CustomMods
-        {
-            get { return _customMods; }
-        }
+        IList<CustomMod> CustomMods { get; }
     }
 }

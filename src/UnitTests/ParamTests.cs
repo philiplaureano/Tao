@@ -90,7 +90,7 @@ namespace Tao.UnitTests
 
             var param = reader.Execute(typeBytes);
             Assert.IsNotNull(param);
-            Assert.IsInstanceOfType(typeof(TypedByRefParamSignature), param);
+            Assert.IsInstanceOfType(typeof(TypedByRefParam), param);
             Assert.AreEqual(0, param.CustomMods.Count);
             Assert.IsFalse(param.IsByRef);
         }
