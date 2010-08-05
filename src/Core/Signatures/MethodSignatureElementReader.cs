@@ -6,6 +6,12 @@ using Tao.Model;
 
 namespace Tao.Signatures
 {
+    /// <summary>
+    /// Represents a class that reads <see cref="IMethodSignatureElement"/> instances into memory.
+    /// </summary>
+    /// <typeparam name="TSignatureElement">The base method signature element type.</typeparam>
+    /// <typeparam name="TTypedByRefSignatureElement">The TypedByRef method signature element type.</typeparam>
+    /// <typeparam name="TTypedSignatureElement">The typed method signature element type.</typeparam>
     public abstract class MethodSignatureElementReader<TSignatureElement, TTypedByRefSignatureElement, TTypedSignatureElement> 
         where TSignatureElement : class, IMethodSignatureElement
         where TTypedByRefSignatureElement : class, ITypedByRefMethodSignatureElement, TSignatureElement
@@ -26,7 +32,7 @@ namespace Tao.Signatures
         }
 
         /// <summary>
-        /// Reads a <see cref="ParamSignature"/> from the given byte stream.
+        /// Reads a <see cref="MethodSignatureElement"/> from the given byte stream.
         /// </summary>
         /// <param name="input">The input bytes.</param>
         /// <returns>A <see cref="IMethodSignatureElement"/> instance.</returns>

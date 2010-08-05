@@ -5,9 +5,9 @@ using System.Text;
 namespace Tao.Model
 {
     /// <summary>
-    /// Represents a <see cref="ParamSignature"/> that has an associated type.
+    /// Represents a <see cref="MethodSignatureElement"/> that has an associated type.
     /// </summary>
-    public class TypedParamSignature : ParamSignature, ITypedMethodSignatureElement
+    public class TypedMethodSignatureElement : MethodSignatureElement, ITypedMethodSignatureElement
     {
         private bool _isByRef;
 

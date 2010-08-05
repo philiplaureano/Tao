@@ -7,10 +7,10 @@ using Tao.Model;
 namespace Tao.Signatures
 {
     /// <summary>
-    /// Represents a type that can read <see cref="ParamSignature"/> instances into memory.
+    /// Represents a type that can read <see cref="MethodSignatureElement"/> instances into memory.
     /// </summary>
-    public class ParamSignatureReader : MethodSignatureElementReader<ParamSignature, TypedByRefParam, TypedParamSignature>, 
-        IFunction<IEnumerable<byte>, ParamSignature>
+    public class ParamSignatureReader : MethodSignatureElementReader<MethodSignatureElement, TypedByRefMethodSignatureElement, TypedMethodSignatureElement>, 
+        IFunction<IEnumerable<byte>, MethodSignatureElement>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ParamSignatureReader"/> class.
@@ -25,9 +25,9 @@ namespace Tao.Signatures
         /// Creates a TypedByRef method signature element.
         /// </summary>
         /// <returns>A method signature element.</returns>
-        protected override TypedByRefParam CreateByRefSignature()
+        protected override TypedByRefMethodSignatureElement CreateByRefSignature()
         {
-            return new TypedByRefParam();
+            return new TypedByRefMethodSignatureElement();
         }
 
         /// <summary>
@@ -35,9 +35,9 @@ namespace Tao.Signatures
         /// </summary>
         /// <param name="isByRef">Determines whether or not the element is passed by reference.</param>
         /// <returns>A typed method signature element.</returns>
-        protected override TypedParamSignature CreateTypedMethodElementSignature(bool isByRef)
+        protected override TypedMethodSignatureElement CreateTypedMethodElementSignature(bool isByRef)
         {
-            var result = new TypedParamSignature();
+            var result = new TypedMethodSignatureElement();
             result.SetIsByRef(isByRef);
 
             return result;

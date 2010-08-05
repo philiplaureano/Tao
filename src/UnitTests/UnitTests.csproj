@@ -103,6 +103,7 @@
     <Compile Include="ParamTests.cs" />
     <Compile Include="PEFileHeaderStreamTests.cs" />
     <Compile Include="PESectionHeaderStreamTests.cs" />
+    <Compile Include="RetTypeSignatureTests.cs" />
     <Compile Include="TypeDefOrRefEncodedTests.cs" />
     <Compile Include="TypeSignatureTests.cs" />
   </ItemGroup>

@@ -88,13 +88,13 @@
     <Compile Include="Model\ITypedByRefMethodSignatureElement.cs" />
     <Compile Include="Model\ITypedMethodSignatureElement.cs" />
     <Compile Include="Model\ModuleDef.cs" />
-    <Compile Include="Model\ParamSignature.cs" />
+    <Compile Include="Model\MethodSignatureElement.cs" />
     <Compile Include="Model\PointerSignature.cs" />
     <Compile Include="Model\TypeAttributes.cs" />
-    <Compile Include="Model\TypedByRefParam.cs" />
+    <Compile Include="Model\TypedByRefMethodSignatureElement.cs" />
     <Compile Include="Model\TypeDef.cs" />
     <Compile Include="Model\TypeDefOrRefEncodedSignature.cs" />
-    <Compile Include="Model\TypedParamSignature.cs" />
+    <Compile Include="Model\TypedMethodSignatureElement.cs" />
     <Compile Include="Model\TypePointerSignature.cs" />
     <Compile Include="Model\TypeSignature.cs" />
     <Compile Include="Readers\GetTableRowSize.cs" />
@@ -197,6 +197,7 @@
     <Compile Include="Signatures\FieldSignatureConstantReader.cs" />
     <Compile Include="Signatures\MethodSignatureElementReader.cs" />
     <Compile Include="Signatures\ParamSignatureReader.cs" />
+    <Compile Include="Signatures\RetTypeSignatureReader.cs" />
     <Compile Include="Signatures\TypeDefOrRefEncodedReader.cs" />
     <Compile Include="Signatures\TypeSignatureReader.cs" />
     <Compile Include="Model\VoidPointerSignature.cs" />

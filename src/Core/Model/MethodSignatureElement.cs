@@ -7,7 +7,7 @@ namespace Tao.Model
     /// <summary>
     /// Represents a Param signature type.
     /// </summary>
-    public abstract class ParamSignature : IMethodSignatureElement
+    public abstract class MethodSignatureElement : IMethodSignatureElement
     {
         private readonly List<CustomMod> _customMods = new List<CustomMod>();
 
