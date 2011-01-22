@@ -39,6 +39,7 @@ namespace Tao.UnitTests
             Assert.IsTrue(result);
         }                          
 
+        // TODO: Finish the FieldSig read implementation
         protected override Stream GetStream()
         {
             var targetAssemblyLocation = "FieldSigAssembly.dll";

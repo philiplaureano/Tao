@@ -85,6 +85,7 @@
     <None Include="skeleton.il" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayShapeTests.cs" />
     <Compile Include="BaseStreamTests.cs" />
     <Compile Include="CLIHeaderStreamTests.cs" />
     <Compile Include="CodedTokenTests.cs" />
