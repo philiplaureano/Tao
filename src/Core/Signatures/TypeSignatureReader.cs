@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Tao.Interfaces;
 using Tao.Model;
@@ -9,20 +10,20 @@ namespace Tao.Signatures
     /// <summary>
     /// Represents a type that reads type signatures.
     /// </summary>
-    public class TypeSignatureReader : IFunction<IEnumerable<byte>, TypeSignature>
+    public class TypeSignatureReader : IFunction<Stream, TypeSignature>
     {
-        private readonly IFunction<byte, ITuple<TableId, uint>> _typeDefOrRefEncodedReader;       
-        private readonly IFunction<ITuple<Queue<byte>, ICollection<CustomMod>>, int> _readCustomMods;
+        private readonly IFunction<byte, ITuple<TableId, uint>> _typeDefOrRefEncodedReader;
+        private readonly IFunction<ITuple<Stream, ICollection<CustomMod>>, int> _readCustomMods;
 
-        private readonly Dictionary<ElementType, Func<IList<byte>, TypeSignature>> _entries =
-            new Dictionary<ElementType, Func<IList<byte>, TypeSignature>>();
+        private readonly Dictionary<ElementType, Func<Stream, TypeSignature>> _entries =
+            new Dictionary<ElementType, Func<Stream, TypeSignature>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeSignatureReader"/> class.
         /// </summary>
         /// <param name="typeDefOrRefEncodedReader">The reader that will read the embbedded type def or type ref token.</param>
         /// <param name="readCustomMods">The reader that will read the CustomMod signatures</param>
-        public TypeSignatureReader(IFunction<byte, ITuple<TableId, uint>> typeDefOrRefEncodedReader, IFunction<ITuple<Queue<byte>, ICollection<CustomMod>>, int> readCustomMods)
+        public TypeSignatureReader(IFunction<byte, ITuple<TableId, uint>> typeDefOrRefEncodedReader, IFunction<ITuple<Stream, ICollection<CustomMod>>, int> readCustomMods)
         {
             if (typeDefOrRefEncodedReader == null)
                 throw new ArgumentNullException("typeDefOrRefEncodedReader");
@@ -35,7 +36,7 @@ namespace Tao.Signatures
 
         private void CreateEntries()
         {
-            Func<IList<byte>, TypeSignature> defaultCreator = bytes => new TypeSignature();
+            Func<Stream, TypeSignature> defaultCreator = bytes => new TypeSignature();
             _entries[ElementType.Boolean] = defaultCreator;
             _entries[ElementType.Char] = defaultCreator;
             _entries[ElementType.I1] = defaultCreator;
@@ -60,40 +61,39 @@ namespace Tao.Signatures
         /// </summary>
         /// <param name="input">The bytes that represent the type signature.</param>
         /// <returns>A <see cref="TypeSignature"/> instance.</returns>
-        public TypeSignature Execute(IEnumerable<byte> input)
-        {
-            var bytes = new List<byte>(input);
-            var elementType = (ElementType)bytes[0];
+        public TypeSignature Execute(Stream input)
+        {            
+            var elementType = (ElementType)input.PeekByte();
 
             if (!_entries.ContainsKey(elementType))
                 throw new NotSupportedException(string.Format("Element type not supported: {0}", elementType));
 
+            // Skip the element byte
+            input.Seek(1, SeekOrigin.Current);
+
             var createSignature = _entries[elementType];
-            var signature = createSignature(bytes);
+            var signature = createSignature(input);
             signature.ElementType = elementType;
 
             return signature;
         }
 
-        private TypeSignature CreatePointerSignature(IList<byte> bytes)
+        private TypeSignature CreatePointerSignature(Stream inputStream)
         {
-            if (bytes.Count == 0)
-                throw new ArgumentException("Unexpected end of byte stream", "bytes");
+            if (inputStream.Length == 0)
+                throw new ArgumentException("Unexpected end of byte stream", "inputStream");
 
-            var mods = new List<CustomMod>();
-            var byteQueue = new Queue<byte>(bytes);
-            var elementType = (ElementType)byteQueue.Dequeue();
-            var bytesRead = _readCustomMods.Execute(byteQueue, mods);
+            var mods = new List<CustomMod>();            
+            var elementType = (ElementType)inputStream.ReadByte();
+            var bytesRead = _readCustomMods.Execute(inputStream, mods);
 
             PointerSignature result = null;
 
-            var targetIndex = bytesRead > 0 ? bytesRead : 0;
-            targetIndex++;
-
-            var nextElementType = (ElementType)bytes[targetIndex];
+            var nextElementType = (ElementType)inputStream.PeekByte();
             if (nextElementType != ElementType.Void)
             {
-                result = CreateTypePointerSignature(bytes, targetIndex);
+                int targetIndex = bytesRead;
+                result = CreateTypePointerSignature(inputStream);
             }
             else
             {
@@ -108,28 +108,22 @@ namespace Tao.Signatures
             return result;
         }
 
-        private PointerSignature CreateTypePointerSignature(IList<byte> bytes, int targetIndex)
+        private PointerSignature CreateTypePointerSignature(Stream inputStream)
         {
             PointerSignature result;
-            var typePointerSignature = new TypePointerSignature();
+            var typePointerSignature = new TypePointerSignature();            
 
-            var attachedSignatureSize = bytes.Count - targetIndex;
-            var remainingBytes = new byte[attachedSignatureSize];
-            var currentIndex = 0;
-            for (var i = targetIndex; i <= attachedSignatureSize; i++)
-            {
-                remainingBytes[currentIndex++] = bytes[i];
-            }
-
-            var attachedSignature = Execute(remainingBytes);
+            var attachedSignature = Execute(inputStream);
             typePointerSignature.TypeSignature = attachedSignature;
             result = typePointerSignature;
-            return result;
-        }       
 
-        private TypeSignature CreateTypeDefOrRefEncodedSignature(IList<byte> bytes)
+            return result;
+        }
+
+        private TypeSignature CreateTypeDefOrRefEncodedSignature(Stream inputStream)
         {
-            var decodedToken = _typeDefOrRefEncodedReader.Execute(bytes[1]);
+            var nextByte = (byte)inputStream.ReadByte();
+            var decodedToken = _typeDefOrRefEncodedReader.Execute(nextByte);
             var encodedSignature = new TypeDefOrRefEncodedSignature
                                        {
                                            TableId = decodedToken.Item1,

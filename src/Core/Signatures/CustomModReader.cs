@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Tao.Interfaces;
 
@@ -8,7 +9,7 @@ namespace Tao.Signatures
     /// <summary>
     /// Represents a class that reads a CustomMod signature element.
     /// </summary>
-    public class CustomModReader : IFunction<IEnumerable<byte>, ITuple<ElementType, TableId, uint>>
+    public class CustomModReader : IFunction<Stream, ITuple<ElementType, TableId, uint>>
     {
         private readonly IFunction<byte, ITuple<TableId, uint>> _typeDefOrRefEncodedReader;
 
@@ -26,15 +27,16 @@ namespace Tao.Signatures
         /// </summary>
         /// <param name="input">The bytes that represent the CustomMod.</param>
         /// <returns>A CustomMod descriptor.</returns>
-        public ITuple<ElementType, TableId, uint> Execute(IEnumerable<byte> input)
+        public ITuple<ElementType, TableId, uint> Execute(Stream input)
         {
-            var bytes = new List<byte>(input);
-            if (bytes.Count != 2)
+            if (input.Length != 2)
                 throw new ArgumentException("Invalid number of bytes", "input");
 
-            var firstByte = bytes[0];
+            var firstByte = (byte)input.ReadByte();
             var elementType = (ElementType) firstByte;
-            var encodedTypeDefOrRef = _typeDefOrRefEncodedReader.Execute(bytes[1]);
+
+            var secondByte = (byte) input.ReadByte();
+            var encodedTypeDefOrRef = _typeDefOrRefEncodedReader.Execute(secondByte);
 
             return Tuple.New(elementType, encodedTypeDefOrRef.Item1, encodedTypeDefOrRef.Item2);
         }

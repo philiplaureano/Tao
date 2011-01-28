@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
@@ -17,10 +18,11 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadByRefSimpleParam()
         {
             var typeBytes = new byte[] { Convert.ToByte(ElementType.ByRef), Convert.ToByte(ElementType.Boolean) };
-            var reader = container.GetInstance<IFunction<IEnumerable<byte>, MethodSignatureElement>>("ParamSignatureReader");
+            var stream = new MemoryStream(typeBytes);
+            var reader = container.GetInstance<IFunction<Stream, MethodSignatureElement>>("ParamSignatureReader");
             Assert.IsNotNull(reader);
 
-            var param = (TypedMethodSignatureElement)reader.Execute(typeBytes);
+            var param = (TypedMethodSignatureElement)reader.Execute(stream);
             Assert.AreEqual(0, param.CustomMods.Count);
             Assert.IsTrue(param.IsByRef);
             Assert.IsNotNull(param.Type);
@@ -33,10 +35,11 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadSimpleParam()
         {
             var typeBytes = new byte[] { Convert.ToByte(ElementType.Boolean) };
-            var reader = container.GetInstance<IFunction<IEnumerable<byte>, MethodSignatureElement>>("ParamSignatureReader");
+            var stream = new MemoryStream(typeBytes);
+            var reader = container.GetInstance<IFunction<Stream, MethodSignatureElement>>("ParamSignatureReader");
             Assert.IsNotNull(reader);
 
-            var param = (TypedMethodSignatureElement)reader.Execute(typeBytes);
+            var param = (TypedMethodSignatureElement)reader.Execute(stream);
             Assert.AreEqual(0, param.CustomMods.Count);
             Assert.IsFalse(param.IsByRef);
             Assert.IsNotNull(param.Type);
@@ -57,10 +60,11 @@ namespace Tao.UnitTests
             bytes.Add(Convert.ToByte(ElementType.Boolean));
 
             var typeBytes = bytes.ToArray();
-            var reader = container.GetInstance<IFunction<IEnumerable<byte>, MethodSignatureElement>>("ParamSignatureReader");
+            var stream = new MemoryStream(typeBytes);
+            var reader = container.GetInstance<IFunction<Stream, MethodSignatureElement>>("ParamSignatureReader");
             Assert.IsNotNull(reader);
 
-            var param = (TypedMethodSignatureElement)reader.Execute(typeBytes);           
+            var param = (TypedMethodSignatureElement)reader.Execute(stream);           
             Assert.IsFalse(param.IsByRef);
             Assert.IsNotNull(param.Type);
 
@@ -85,10 +89,11 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadTypedByRef()
         {
             var typeBytes = new byte[] { Convert.ToByte(ElementType.TypedByRef) };
-            var reader = container.GetInstance<IFunction<IEnumerable<byte>, MethodSignatureElement>>("ParamSignatureReader");
+            var stream = new MemoryStream(typeBytes);
+            var reader = container.GetInstance<IFunction<Stream, MethodSignatureElement>>("ParamSignatureReader");
             Assert.IsNotNull(reader);
 
-            var param = reader.Execute(typeBytes);
+            var param = reader.Execute(stream);
             Assert.IsNotNull(param);
             Assert.IsInstanceOfType(typeof(TypedByRefMethodSignatureElement), param);
             Assert.AreEqual(0, param.CustomMods.Count);

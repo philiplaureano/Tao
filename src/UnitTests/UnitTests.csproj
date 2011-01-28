@@ -100,6 +100,7 @@
     <Compile Include="MetadataStreamTests.cs" />
     <Compile Include="MetadataTableRowSizeTests.cs" />
     <Compile Include="MetadataTableTests.cs" />
+    <Compile Include="MethodDefSigTests.cs" />
     <Compile Include="ModelTests.cs" />
     <Compile Include="ParamTests.cs" />
     <Compile Include="PEFileHeaderStreamTests.cs" />
@@ -116,6 +117,10 @@
     <ProjectReference Include="..\SampleAssemblies\FieldSigAssembly\FieldSigAssembly.csproj">
       <Project>{F24529AE-ACE1-4C8A-9D19-8889C1C29A5B}</Project>
       <Name>FieldSigAssembly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SampleAssemblies\MethodSigAssembly\MethodDefSigAssembly.csproj">
+      <Project>{B1476A0B-AE67-41A7-A248-1960768435FC}</Project>
+      <Name>MethodDefSigAssembly</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tao.Containers\Tao.Containers.csproj">
       <Project>{31DCA1A8-3C9D-42A3-A775-275EE2C8E6C9}</Project>

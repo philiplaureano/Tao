@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
@@ -107,9 +108,12 @@ namespace Tao.UnitTests
             var elementType = ElementType.Class;
 
             var bytes = new byte[] { Convert.ToByte(elementType), token };
+            var stream = new MemoryStream(bytes);
 
-            var reader = container.GetInstance<IFunction<IEnumerable<byte>, TypeSignature>>();
-            var result = reader.Execute(bytes);
+            var reader = container.GetInstance<IFunction<Stream, TypeSignature>>();
+            Assert.IsNotNull(reader);
+
+            var result = reader.Execute(stream);
 
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(typeof(TypeDefOrRefEncodedSignature), result);
@@ -124,8 +128,12 @@ namespace Tao.UnitTests
         public void ShouldReadTypePointerSignature()
         {
             var bytes = new byte[] { Convert.ToByte(ElementType.Ptr), Convert.ToByte(ElementType.I4) };
-            var reader = container.GetInstance<IFunction<IEnumerable<byte>, TypeSignature>>();
-            var signature = reader.Execute(bytes);
+            var stream = new MemoryStream(bytes);
+
+            var reader = container.GetInstance<IFunction<Stream, TypeSignature>>();
+            Assert.IsNotNull(reader);
+
+            var signature = reader.Execute(stream);
 
             Assert.IsNotNull(signature);
             Assert.IsInstanceOfType(typeof(TypePointerSignature), signature);
@@ -141,8 +149,11 @@ namespace Tao.UnitTests
         {
             var bytes = new byte[] { Convert.ToByte(ElementType.Ptr), Convert.ToByte(ElementType.Void) };
 
-            var reader = container.GetInstance<IFunction<IEnumerable<byte>, TypeSignature>>();
-            var result = reader.Execute(bytes);
+            var stream = new MemoryStream(bytes);
+            var reader = container.GetInstance<IFunction<Stream, TypeSignature>>();
+            Assert.IsNotNull(reader);
+
+            var result = reader.Execute(stream);
 
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(typeof(VoidPointerSignature), result);
@@ -165,9 +176,12 @@ namespace Tao.UnitTests
             byteList.Add(Convert.ToByte(ElementType.Void));
 
             var bytes = byteList.ToArray();
+            var stream = new MemoryStream(bytes);
+            
+            var reader = container.GetInstance<IFunction<Stream, TypeSignature>>();
+            Assert.IsNotNull(reader);
 
-            var reader = container.GetInstance<IFunction<IEnumerable<byte>, TypeSignature>>();
-            var result = reader.Execute(bytes);
+            var result = reader.Execute(stream);
 
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(typeof(VoidPointerSignature), result);
@@ -193,10 +207,12 @@ namespace Tao.UnitTests
         private void TestElementTypeRead(ElementType elementType)
         {
             var bytes = new byte[] { Convert.ToByte(elementType) };
+            var stream = new MemoryStream(bytes);
 
-            var reader = container.GetInstance<IFunction<IEnumerable<byte>, TypeSignature>>();
+            var reader = container.GetInstance<IFunction<Stream, TypeSignature>>();
             Assert.IsNotNull(reader);
-            var result = reader.Execute(bytes);
+
+            var result = reader.Execute(stream);
 
             Assert.AreEqual(elementType, result.ElementType);
         }

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tao</RootNamespace>
     <AssemblyName>Tao.Core</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -31,6 +31,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -65,10 +66,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Hiro.Containers.dll</HintPath>
     </Reference>
-    <Reference Include="LinqBridge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c2b14eb747628076, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\LinqBridge.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -76,6 +73,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="CalculateMetadataTableRowSize.cs" />
+    <Compile Include="MethodSignatureFlags.cs" />
     <Compile Include="CodedTokenType.cs" />
     <Compile Include="DataDirectoryCounter.cs" />
     <Compile Include="DecodeToken.cs" />
@@ -88,6 +86,7 @@
     <Compile Include="Model\IMethodSignatureElement.cs" />
     <Compile Include="Model\ITypedByRefMethodSignatureElement.cs" />
     <Compile Include="Model\ITypedMethodSignatureElement.cs" />
+    <Compile Include="Model\MethodDefSig.cs" />
     <Compile Include="Model\ModuleDef.cs" />
     <Compile Include="Model\MethodSignatureElement.cs" />
     <Compile Include="Model\PointerSignature.cs" />
@@ -197,12 +196,16 @@
     <Compile Include="Signatures\ArrayShapeReader.cs" />
     <Compile Include="Signatures\CustomModReader.cs" />
     <Compile Include="Signatures\FieldSignatureConstantReader.cs" />
+    <Compile Include="Signatures\IParamSignatureReader.cs" />
+    <Compile Include="Signatures\IRetTypeSignatureReader.cs" />
+    <Compile Include="Signatures\MethodDefSigReader.cs" />
     <Compile Include="Signatures\MethodSignatureElementReader.cs" />
     <Compile Include="Signatures\ParamSignatureReader.cs" />
     <Compile Include="Signatures\RetTypeSignatureReader.cs" />
     <Compile Include="Signatures\TypeDefOrRefEncodedReader.cs" />
     <Compile Include="Signatures\TypeSignatureReader.cs" />
     <Compile Include="Model\VoidPointerSignature.cs" />
+    <Compile Include="StreamExtensions.cs" />
     <Compile Include="TableId.cs" />
   </ItemGroup>
   <ItemGroup>

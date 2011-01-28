@@ -15,7 +15,7 @@ namespace Tao.UnitTests
     public class FieldSigTests : BaseStreamTests
     {
         [Test]
-        public void ShouldReadCorrectBlobData()
+        public void ShouldReadCorrectBlobDataForGivenField()
         {
             var blobReader = container.GetInstance<IFunction<ITuple<uint, Stream>, byte[]>>();
 

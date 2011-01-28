@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
@@ -34,10 +35,11 @@ namespace Tao.UnitTests
         private void TestCustomModRead(ElementType elementType, byte codedToken, TableId expectedTableId)
         {
             var bytes = new byte[] { Convert.ToByte(elementType), codedToken };
-            var modReader = container.GetInstance<IFunction<IEnumerable<byte>, ITuple<ElementType, TableId, uint>>>("CustomModReader");
+            var stream = new MemoryStream(bytes);
+            var modReader = container.GetInstance<IFunction<Stream, ITuple<ElementType, TableId, uint>>>("CustomModReader");
             Assert.IsNotNull(modReader);
 
-            var result = modReader.Execute(bytes);
+            var result = modReader.Execute(stream);
 
             Assert.AreEqual(elementType, result.Item1);
 

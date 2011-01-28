@@ -6,6 +6,7 @@ using Tao.Interfaces;
 
 namespace Tao.Readers
 {
+    /// TODO: Add support for reading compressed signed integers
     /// <summary>
     /// Represents a type that returns the blob size for the current blob in the input stream.
     /// </summary>

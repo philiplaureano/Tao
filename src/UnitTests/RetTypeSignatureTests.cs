@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
@@ -17,10 +18,11 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadVoidRetType()
         {
             var typeBytes = new byte[] { Convert.ToByte(ElementType.Void) };
-            var reader = container.GetInstance<IFunction<IEnumerable<byte>, MethodSignatureElement>>("RetTypeSignatureReader");
+            var stream = new MemoryStream(typeBytes);
+            var reader = container.GetInstance<IFunction<Stream, MethodSignatureElement>>("RetTypeSignatureReader");
             Assert.IsNotNull(reader);
 
-            var param = (TypedMethodSignatureElement)reader.Execute(typeBytes);
+            var param = (TypedMethodSignatureElement)reader.Execute(stream);
             Assert.IsNotNull(param);
             Assert.AreEqual(0, param.CustomMods.Count);
             Assert.IsFalse(param.IsByRef);
