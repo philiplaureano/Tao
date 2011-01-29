@@ -62,14 +62,11 @@ namespace Tao.Signatures
         /// <param name="input">The bytes that represent the type signature.</param>
         /// <returns>A <see cref="TypeSignature"/> instance.</returns>
         public TypeSignature Execute(Stream input)
-        {            
-            var elementType = (ElementType)input.PeekByte();
+        {
+            var elementType = (ElementType)input.ReadByte();
 
             if (!_entries.ContainsKey(elementType))
                 throw new NotSupportedException(string.Format("Element type not supported: {0}", elementType));
-
-            // Skip the element byte
-            input.Seek(1, SeekOrigin.Current);
 
             var createSignature = _entries[elementType];
             var signature = createSignature(input);
@@ -83,8 +80,7 @@ namespace Tao.Signatures
             if (inputStream.Length == 0)
                 throw new ArgumentException("Unexpected end of byte stream", "inputStream");
 
-            var mods = new List<CustomMod>();            
-            var elementType = (ElementType)inputStream.ReadByte();
+            var mods = new List<CustomMod>();
             var bytesRead = _readCustomMods.Execute(inputStream, mods);
 
             PointerSignature result = null;
@@ -111,7 +107,7 @@ namespace Tao.Signatures
         private PointerSignature CreateTypePointerSignature(Stream inputStream)
         {
             PointerSignature result;
-            var typePointerSignature = new TypePointerSignature();            
+            var typePointerSignature = new TypePointerSignature();
 
             var attachedSignature = Execute(inputStream);
             typePointerSignature.TypeSignature = attachedSignature;

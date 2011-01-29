@@ -41,11 +41,8 @@ namespace Tao.Signatures
         /// <returns>A <see cref="IMethodSignatureElement"/> instance.</returns>
         public TSignatureElement Execute(Stream input)
         {
-            // Save the starting stream position so that
-            // we can reset the stream position to the last known
-            // read position after the read
-            var startPosition = input.Position;
             var nextElement = (ElementType)input.PeekByte();
+            var startPosition = input.Position;
 
             var customMods = new List<CustomMod>();
             int modBytesRead = 0;
@@ -56,11 +53,11 @@ namespace Tao.Signatures
                 nextElement = (ElementType)input.ReadByte();
             }
 
-            // Seek the last known read position
-            var endPosition = startPosition + modBytesRead;
-            input.Seek(endPosition, SeekOrigin.Begin);
+            // Point to the end of the custom mod bytes
+            var nextPosition = startPosition + modBytesRead;
+            input.Seek(nextPosition, SeekOrigin.Begin);
 
-            var results = ReadSignature(input, nextElement, customMods, modBytesRead);
+            var results = ReadSignature(input, nextElement, customMods);
 
             return results;
         }
@@ -71,9 +68,8 @@ namespace Tao.Signatures
         /// <param name="inputStream">The remaining bytes that will be read by the reader.</param>
         /// <param name="nextElement">The next element type.</param>
         /// <param name="customMods">The list of custom mods read from the given byte array.</param>
-        /// <param name="modBytesRead">The number of bytes read.</param>
         /// <returns>A method signature element that describes the type that was read by the reader.</returns>
-        protected virtual TSignatureElement ReadSignature(Stream inputStream, ElementType nextElement, IEnumerable<CustomMod> customMods, int modBytesRead)
+        protected virtual TSignatureElement ReadSignature(Stream inputStream, ElementType nextElement, IEnumerable<CustomMod> customMods)
         {
             TTypedSignatureElement result = null;
             var isByRef = nextElement == ElementType.ByRef;
@@ -94,12 +90,8 @@ namespace Tao.Signatures
                 return byRefParamSignature;
             }
 
-            // Skip the void element byte
-            if (nextElement == ElementType.Void)
-                inputStream.Seek(1, SeekOrigin.Current);
-
             var typedParamSignature = result ?? CreateTypedMethodElementSignature(isByRef);
-            var typeSignature = _typeSignatureReader.Execute(inputStream);
+            var typeSignature = ReadTypeSignature(inputStream);
             typedParamSignature.Type = typeSignature;
 
             foreach (var mod in customMods)
@@ -108,6 +100,11 @@ namespace Tao.Signatures
             }
 
             return typedParamSignature;
+        }
+
+        protected virtual TypeSignature ReadTypeSignature(Stream inputStream)
+        {
+            return _typeSignatureReader.Execute(inputStream);
         }
 
         /// <summary>

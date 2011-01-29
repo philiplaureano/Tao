@@ -36,7 +36,7 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldBeAbleToReadMethodDefSig()
         {
-            var reader = container.GetInstance<IFunction<ITuple<uint, Stream>, MethodDefSig>>("MethodDefSigReader");
+            var reader = container.GetInstance<IFunction<ITuple<uint, Stream>, MethodDefSig>>("MethodDefSignatureReader");
             Assert.IsNotNull(reader, "MethodDefSigReader not found");
 
             uint index = 0xA;

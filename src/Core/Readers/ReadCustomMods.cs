@@ -33,36 +33,40 @@ namespace Tao.Readers
             var startPosition = stream.Position;
 
             var bytes = stream.ReadToEnd(false);
-
             var byteQueue = new Queue<byte>(bytes);
             var mods = input.Item2;
-            var nextByte = (ElementType)byteQueue.Peek();
+            
+            var nextByte = byteQueue.Count == 0 ? new ElementType?() : (ElementType)byteQueue.Peek();
             var bytesRead = 0;
-            while ((nextByte == ElementType.CMOD_OPT
-                    || nextByte == ElementType.CMOD_REQD) && byteQueue.Count >= 2)
+
+            if (nextByte.HasValue)
             {
-                var currentBytes = new List<byte> { byteQueue.Dequeue(), byteQueue.Dequeue() };
-                var currentStream = new MemoryStream(currentBytes.ToArray());
-
-                bytesRead += 2;
-                var mod = _customModReader.Execute(currentStream);
-                var customMod = new CustomMod() { ElementType = mod.Item1, TableId = mod.Item2, RowIndex = mod.Item3 };
-
-                mods.Add(customMod);
-                //nextByte = byteQueue.Count >= 1 ? (ElementType)byteQueue.Dequeue() : default(ElementType);
-
-                if (byteQueue.Count >= 1)
+                while ((nextByte == ElementType.CMOD_OPT
+                    || nextByte == ElementType.CMOD_REQD) && byteQueue.Count >= 2)
                 {
-                    var peekByte = (ElementType)byteQueue.Peek();
+                    var currentBytes = new List<byte> { byteQueue.Dequeue(), byteQueue.Dequeue() };
+                    var currentStream = new MemoryStream(currentBytes.ToArray());
 
-                    nextByte = peekByte;
-                }
-                else
-                {
-                    nextByte = default(ElementType);
+                    bytesRead += 2;
+                    var mod = _customModReader.Execute(currentStream);
+                    var customMod = new CustomMod() { ElementType = mod.Item1, TableId = mod.Item2, RowIndex = mod.Item3 };
+
+                    mods.Add(customMod);
+                    //nextByte = byteQueue.Count >= 1 ? (ElementType)byteQueue.Dequeue() : default(ElementType);
+
+                    if (byteQueue.Count >= 1)
+                    {
+                        var peekByte = (ElementType)byteQueue.Peek();
+
+                        nextByte = peekByte;
+                    }
+                    else
+                    {
+                        nextByte = default(ElementType);
+                    }
                 }
             }
-
+            
             // Reset the stream pointer to point to the last known read position
             var endPosition = startPosition + bytesRead;
             stream.Seek(endPosition,SeekOrigin.Begin);
