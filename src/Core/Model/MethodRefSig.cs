@@ -8,7 +8,7 @@ namespace Tao.Model
     /// <summary>
     /// Represents a MethodRefSig signature.
     /// </summary>
-    public class MethodRefSig : MethodSignature
+    public class MethodRefSig : MethodSignature, IMethodRefSignature
     {
         private readonly List<ITypedMethodSignatureElement> _additionalParameters =
             new List<ITypedMethodSignatureElement>();

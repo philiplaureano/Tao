@@ -107,6 +107,7 @@
     <Compile Include="PEFileHeaderStreamTests.cs" />
     <Compile Include="PESectionHeaderStreamTests.cs" />
     <Compile Include="RetTypeSignatureTests.cs" />
+    <Compile Include="StandAloneSigReadTests.cs" />
     <Compile Include="TypeDefOrRefEncodedTests.cs" />
     <Compile Include="TypeSignatureTests.cs" />
   </ItemGroup>
@@ -126,6 +127,10 @@
     <ProjectReference Include="..\SampleAssemblies\MethodSigAssembly\MethodDefSigAssembly.csproj">
       <Project>{B1476A0B-AE67-41A7-A248-1960768435FC}</Project>
       <Name>MethodDefSigAssembly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SampleAssemblies\StandAloneMethodSigAssembly\StandAloneMethodSigAssembly.csproj">
+      <Project>{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}</Project>
+      <Name>StandAloneMethodSigAssembly</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tao.Containers\Tao.Containers.csproj">
       <Project>{31DCA1A8-3C9D-42A3-A775-275EE2C8E6C9}</Project>

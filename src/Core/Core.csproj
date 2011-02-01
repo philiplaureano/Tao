@@ -83,9 +83,11 @@
     <Compile Include="GetTableReferenceFromCodedToken.cs" />
     <Compile Include="Model\ArrayShape.cs" />
     <Compile Include="Model\CustomMod.cs" />
+    <Compile Include="Model\IMethodRefSignature.cs" />
     <Compile Include="Model\IMethodSignature.cs" />
     <Compile Include="Model\IMethodSignatureElement.cs" />
     <Compile Include="Model\IMethodSignatureStreamReader.cs" />
+    <Compile Include="Model\IStandAloneMethodSigSignature.cs" />
     <Compile Include="Model\ITypedByRefMethodSignatureElement.cs" />
     <Compile Include="Model\ITypedMethodSignatureElement.cs" />
     <Compile Include="Model\MethodDefSig.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="Model\ModuleDef.cs" />
     <Compile Include="Model\MethodSignatureElement.cs" />
     <Compile Include="Model\PointerSignature.cs" />
+    <Compile Include="Model\StandAloneMethodSig.cs" />
     <Compile Include="Model\TypeAttributes.cs" />
     <Compile Include="Model\TypedByRefMethodSignatureElement.cs" />
     <Compile Include="Model\TypeDef.cs" />
@@ -106,6 +109,7 @@
     <Compile Include="Readers\ReadMethodDefSignatureFromBlob.cs" />
     <Compile Include="Readers\ReadMethodRefSignatureFromBlob.cs" />
     <Compile Include="Readers\ReadMethodSignatureFromBlob.cs" />
+    <Compile Include="Readers\ReadStandAloneMethodSigSignatureFromBlob.cs" />
     <Compile Include="Readers\ReadTypeDefs.cs" />
     <Compile Include="Readers\EnumerateExistingMetadataTables.cs" />
     <Compile Include="Factories\CoffHeaderStreamFactory.cs" />
@@ -216,6 +220,8 @@
     <Compile Include="Signatures\MethodSignatureElementReader.cs" />
     <Compile Include="Signatures\ParamSignatureReader.cs" />
     <Compile Include="Signatures\RetTypeSignatureReader.cs" />
+    <Compile Include="Signatures\StandAloneMethodSigSignatureReader.cs" />
+    <Compile Include="Signatures\StandAloneMethodSigSignatureStreamReader.cs" />
     <Compile Include="Signatures\TypeDefOrRefEncodedReader.cs" />
     <Compile Include="Signatures\TypeSignatureReader.cs" />
     <Compile Include="Model\VoidPointerSignature.cs" />

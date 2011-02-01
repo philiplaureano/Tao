@@ -36,10 +36,7 @@ namespace Tao.Readers
             var methodSignature = input.Item2;
             var flags = (MethodSignatureFlags)blobStream.ReadByte();
 
-            methodSignature.HasThis = (flags & MethodSignatureFlags.HasThis) != 0;
-            methodSignature.HasExplicitThis = (flags & MethodSignatureFlags.ExplicitThis) != 0;
-            methodSignature.IsVarArg = (flags & MethodSignatureFlags.VarArg) != 0;
-            methodSignature.IsGeneric = (flags & MethodSignatureFlags.Generic) != 0;
+            ReadMethodFlags(methodSignature, flags);
 
             // Read the number of generic parameters, if present
             methodSignature.GenericParameterCount = methodSignature.IsGeneric ? (uint)blobStream.ReadByte() : 0;
@@ -50,11 +47,22 @@ namespace Tao.Readers
             // Read the return type
             methodSignature.ReturnType = _retTypeSignatureReader.Execute(blobStream);
 
-            var bytes = blobStream.ToArray();
-            var remainingBytes = blobStream.ReadToEnd(true);
-
             // Read the parameters
             _assignMethodSignatureParameters.Execute(blobStream, methodSignature);
+        }
+
+        /// <summary>
+        /// Reads the current <paramref name="flags"/> for the <paramref name="methodSignature"/>
+        /// and assigns it to the given method signature.
+        /// </summary>
+        /// <param name="methodSignature">The target method signature.</param>
+        /// <param name="flags">The <see cref="MethodSignatureFlags"/> enumeration that describes the method itself.</param>
+        protected virtual void ReadMethodFlags(IMethodSignature methodSignature, MethodSignatureFlags flags)
+        {
+            methodSignature.HasThis = (flags & MethodSignatureFlags.HasThis) != 0;
+            methodSignature.HasExplicitThis = (flags & MethodSignatureFlags.ExplicitThis) != 0;
+            methodSignature.IsVarArg = (flags & MethodSignatureFlags.VarArg) != 0;
+            methodSignature.IsGeneric = (flags & MethodSignatureFlags.Generic) != 0;
         }
     }
 }

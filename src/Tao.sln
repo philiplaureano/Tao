@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MethodDefSigAssembly", "Sam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MethodRefSigAssembly", "SampleAssemblies\MethodRefSigAssembly\MethodRefSigAssembly.csproj", "{F95B2FB4-17E7-4B91-8F02-49FEDB13DCFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandAloneMethodSigAssembly", "SampleAssemblies\StandAloneMethodSigAssembly\StandAloneMethodSigAssembly.csproj", "{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AutomatedDebug|Any CPU = AutomatedDebug|Any CPU
@@ -145,6 +147,21 @@ Global
 		{F95B2FB4-17E7-4B91-8F02-49FEDB13DCFD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F95B2FB4-17E7-4B91-8F02-49FEDB13DCFD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F95B2FB4-17E7-4B91-8F02-49FEDB13DCFD}.Release|Win32.ActiveCfg = Release|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.AutomatedDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.AutomatedDebug|Any CPU.Build.0 = Debug|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.AutomatedDebug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.AutomatedDebug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.AutomatedDebug|Win32.ActiveCfg = Debug|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -158,5 +175,6 @@ Global
 		{F24529AE-ACE1-4C8A-9D19-8889C1C29A5B} = {EE2984DC-1BF2-4D1F-B3B4-7C54A6DE418E}
 		{B1476A0B-AE67-41A7-A248-1960768435FC} = {EE2984DC-1BF2-4D1F-B3B4-7C54A6DE418E}
 		{F95B2FB4-17E7-4B91-8F02-49FEDB13DCFD} = {EE2984DC-1BF2-4D1F-B3B4-7C54A6DE418E}
+		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381} = {EE2984DC-1BF2-4D1F-B3B4-7C54A6DE418E}
 	EndGlobalSection
 EndGlobal

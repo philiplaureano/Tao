@@ -24,7 +24,7 @@ namespace Tao
         /// <summary>
         /// A flag that indicates that the default calling convention should be used.
         /// </summary>
-        Default= 0x0,
+        Default = 0x0,
 
         /// <summary>
         /// A flag that indicates a variable argument calling convention.
@@ -32,13 +32,28 @@ namespace Tao
         VarArg = 0x5,
 
         /// <summary>
-        /// Indicates that the method is a generic method.
+        /// A flag that indicates that a method is using the StdCall calling convention.
         /// </summary>
-        Generic = 0x10,
+        StdCall = 0x02,
+        
+        /// <summary>
+        /// A flag that indicates that a method is using the C calling convention.
+        /// </summary>
+        C = 0x1,
 
         /// <summary>
-        /// Used to encode "..." in the parameter list
+        /// A flag that indicates that a method is using the ThisCall calling convention.
         /// </summary>
-        Sentinel = 0x41
+        ThisCall =0x2,
+
+        /// <summary>
+        /// A flag that indicates that a method is using the ThisCall calling convention.
+        /// </summary>
+        FastCall = 0x4,
+
+        /// <summary>
+        /// Indicates that the method is a generic method.
+        /// </summary>
+        Generic = 0x10
     }
 }

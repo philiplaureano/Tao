@@ -44,6 +44,7 @@ namespace Tao.Signatures
                 var nextElementType = (ElementType)blobStream.PeekByte();
                 if (hasSentinel && nextElementType == ElementType.Sentinel)
                 {
+                    // Add the current parameter as an additional parameter
                     parameters = methodSignature.AdditionalParameters;
 
                     // Skip the Sentinel element
