@@ -100,12 +100,26 @@ namespace Tao.UnitTests
         }
 
         [Test]
-        public void ShouldReadTypeDefOrRefEncodedSignature()
+        public void ShouldReadTypeDefOrRefEncodedClassSignature()
+        {
+            var elementType = ElementType.Class;
+
+            TestReadingTypeDefOrRefEncodedSignature(elementType);
+        }
+
+        [Test]
+        public void ShouldReadTypeDefOrRefEncodedValueTypeSignature()
+        {
+            var elementType = ElementType.ValueType;
+            TestReadingTypeDefOrRefEncodedSignature(elementType);
+        }
+
+        private void TestReadingTypeDefOrRefEncodedSignature(ElementType elementType)
         {
             const byte token = 0x49;
             var expectedTableId = TableId.TypeRef;
             uint expectedIndex = 0x12;
-            var elementType = ElementType.Class;
+            
 
             var bytes = new byte[] { Convert.ToByte(elementType), token };
             var stream = new MemoryStream(bytes);
@@ -322,7 +336,46 @@ namespace Tao.UnitTests
             var signature = reader.Execute(stream) as MvarSignature;
             Assert.IsNotNull(signature);
             Assert.AreEqual(signature.ElementType, ElementType.Mvar);
-            Assert.AreEqual(signature.ArgumentIndex, genericArgumentIndex);            
+            Assert.AreEqual(signature.ArgumentIndex, genericArgumentIndex);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadVar()
+        {
+            var reader = container.GetInstance<IFunction<Stream, TypeSignature>>();
+            Assert.IsNotNull(reader);
+
+            byte genericArgumentIndex = 0;
+            var bytes = new byte[] { Convert.ToByte(ElementType.Var), genericArgumentIndex };
+            var stream = new MemoryStream(bytes);
+
+            var signature = reader.Execute(stream) as VarSignature;
+            Assert.IsNotNull(signature);
+            Assert.AreEqual(signature.ElementType, ElementType.Var);
+            Assert.AreEqual(signature.ArgumentIndex, genericArgumentIndex);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadSZArray()
+        {
+            var elementType = ElementType.SzArray;
+            var arrayElementType = ElementType.I4;
+
+            var bytes = new byte[] { Convert.ToByte(elementType), Convert.ToByte(arrayElementType) };
+            var stream = new MemoryStream(bytes);
+
+            var reader = container.GetInstance<IFunction<Stream, TypeSignature>>();
+            Assert.IsNotNull(reader);
+
+            var signature = reader.Execute(stream) as SzArraySignature;
+            Assert.IsNotNull(signature);
+            Assert.AreEqual(signature.ElementType, ElementType.SzArray);
+
+            var arrayElementTypeSignature = signature.ArrayElementType;
+            Assert.IsNotNull(arrayElementTypeSignature);
+            Assert.AreEqual(arrayElementTypeSignature.ElementType, ElementType.I4);
+
+            Assert.AreEqual(0, signature.CustomMods.Count);
         }
 
         private byte[] GetCustomModBytes(ElementType elementType, byte codedToken)

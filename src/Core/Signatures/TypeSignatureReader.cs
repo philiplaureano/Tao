@@ -140,7 +140,7 @@ namespace Tao.Signatures
 
                 var signature = new MvarSignature
                                     {
-                                        ArgumentIndex = argumentIndex, 
+                                        ArgumentIndex = argumentIndex,
                                         ElementType = elementType
                                     };
                 return signature;
@@ -160,6 +160,37 @@ namespace Tao.Signatures
             if (elementType == ElementType.String)
                 return new TypeSignature() { ElementType = ElementType.String };
 
+            if (elementType == ElementType.SzArray)
+            {
+                var signature = new SzArraySignature { ElementType = elementType };
+
+                _readCustomMods.Execute(input, signature.CustomMods);
+                signature.ArrayElementType = Execute(input);
+
+                return signature;
+            }
+
+            if (elementType == ElementType.ValueType)
+            {
+                var signature = CreateTypeDefOrRefEncodedSignature(input);
+                signature.ElementType = elementType;
+                return signature;
+            }
+
+            if (elementType == ElementType.Var)
+            {
+                // TODO: Read the argument index as a compressed integer rather than a byte
+                var argumentIndex = (uint)input.ReadByte();
+
+                var signature = new VarSignature
+                {
+                    ArgumentIndex = argumentIndex,
+                    ElementType = elementType
+                };
+
+                return signature;
+            }
+
             throw new NotSupportedException(string.Format("Element type not supported: {0}", elementType));
         }
 
@@ -169,14 +200,13 @@ namespace Tao.Signatures
                 throw new ArgumentException("Unexpected end of byte stream", "inputStream");
 
             var mods = new List<CustomMod>();
-            var bytesRead = _readCustomMods.Execute(inputStream, mods);
+            _readCustomMods.Execute(inputStream, mods);
 
             PointerSignature result = null;
 
             var nextElementType = (ElementType)inputStream.PeekByte();
             if (nextElementType != ElementType.Void)
             {
-                int targetIndex = bytesRead;
                 result = CreateTypePointerSignature(inputStream);
             }
             else
