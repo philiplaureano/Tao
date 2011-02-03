@@ -83,11 +83,13 @@
     <Compile Include="GetTableReferenceFromCodedToken.cs" />
     <Compile Include="Model\ArrayShape.cs" />
     <Compile Include="Model\CustomMod.cs" />
+    <Compile Include="Model\FunctionPointerSignature.cs" />
+    <Compile Include="Model\GenericTypeInstance.cs" />
     <Compile Include="Model\IMethodRefSignature.cs" />
     <Compile Include="Model\IMethodSignature.cs" />
     <Compile Include="Model\IMethodSignatureElement.cs" />
     <Compile Include="Model\IMethodSignatureStreamReader.cs" />
-    <Compile Include="Model\IStandAloneMethodSigSignature.cs" />
+    <Compile Include="Model\IStandAloneMethodSignature.cs" />
     <Compile Include="Model\ITypedByRefMethodSignatureElement.cs" />
     <Compile Include="Model\ITypedMethodSignatureElement.cs" />
     <Compile Include="Model\MethodDefSig.cs" />
@@ -95,8 +97,10 @@
     <Compile Include="Model\MethodSignature.cs" />
     <Compile Include="Model\ModuleDef.cs" />
     <Compile Include="Model\MethodSignatureElement.cs" />
+    <Compile Include="Model\MultiDimensionalArraySignature.cs" />
+    <Compile Include="Model\MvarSignature.cs" />
     <Compile Include="Model\PointerSignature.cs" />
-    <Compile Include="Model\StandAloneMethodSig.cs" />
+    <Compile Include="Model\StandAloneMethodSignature.cs" />
     <Compile Include="Model\TypeAttributes.cs" />
     <Compile Include="Model\TypedByRefMethodSignatureElement.cs" />
     <Compile Include="Model\TypeDef.cs" />
@@ -229,6 +233,10 @@
     <Compile Include="TableId.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Tao.Containers\Tao.Containers.csproj">
+      <Project>{31DCA1A8-3C9D-42A3-A775-275EE2C8E6C9}</Project>
+      <Name>Tao.Containers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.csproj">
       <Project>{88CA72AF-77CD-409A-891D-1468CAF5E62B}</Project>
       <Name>Tao.Interfaces</Name>

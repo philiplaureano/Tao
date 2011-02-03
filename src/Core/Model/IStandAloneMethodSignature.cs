@@ -3,9 +3,9 @@ using System.Collections.Generic;
 namespace Tao.Model
 {
     /// <summary>
-    /// Represents a StandAloneMethodSig method signature type.
+    /// Represents a StandAloneMethod method signature type.
     /// </summary>
-    public interface IStandAloneMethodSigSignature : IMethodRefSignature
+    public interface IStandAloneMethodSignature : IMethodRefSignature
     {
         /// <summary>
         /// Gets a value indicating whether or not the method signature uses a StdCall calling convention.

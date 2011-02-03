@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
@@ -28,8 +29,8 @@ namespace Tao.UnitTests
             bytes.Add(numLowBounds);
             bytes.AddRange(loBounds);
 
-            var reader = container.GetInstance<IFunction<IEnumerable<byte>, ArrayShape>>("ArrayShapeReader");
-            var shape = reader.Execute(bytes);
+            var reader = container.GetInstance<IFunction<Stream, ArrayShape>>("ArrayShapeReader");
+            var shape = reader.Execute(new MemoryStream(bytes.ToArray()));
 
             var currentSizes = new List<uint>(shape.Sizes);
             var currentLoBounds = new List<uint>(shape.LoBounds);

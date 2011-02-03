@@ -11,7 +11,7 @@ namespace Tao.Signatures
     /// <summary>
     /// Represents a type that can read a MethodRef signature from a given blob.
     /// </summary>
-    public class MethodRefSignatureStreamReader : IMethodSignatureStreamReader<MethodRefSig>
+    public class MethodRefSignatureStreamReader : IMethodSignatureStreamReader<IMethodRefSignature>
     {
         private readonly IFunction<ITuple<Stream, IMethodSignature>> _readMethodSignatureFromBlob;
 
@@ -23,7 +23,7 @@ namespace Tao.Signatures
             _readMethodSignatureFromBlob = readMethodDefSignatureFromBlob;
         }
 
-        public MethodRefSig ReadSignature(Stream blobStream)
+        public IMethodRefSignature ReadSignature(Stream blobStream)
         {
             var methodDefSig = new MethodRefSig();
             _readMethodSignatureFromBlob.Execute(blobStream, methodDefSig);

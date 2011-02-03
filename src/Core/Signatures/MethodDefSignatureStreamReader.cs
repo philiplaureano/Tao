@@ -9,26 +9,26 @@ using Tao.Model;
 namespace Tao.Signatures
 {
     /// <summary>
-    /// Represents a type that can read a MethodDef signature from a given blob.N
+    /// Represents a type that can read a MethodDef signature from a given blob.
     /// </summary>
-    public class MethodDefSignatureStreamReader : IMethodSignatureStreamReader<MethodDefSig>
+    public class MethodDefSignatureStreamReader : IMethodSignatureStreamReader<IMethodSignature>
     {
         private readonly IFunction<ITuple<Stream, IMethodSignature>> _readMethodSignatureFromBlob;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MethodDefSignatureStreamReader"/> class.
+        /// Initializes a new instance of the <see cDef="MethodDefSignatureStreamReader"/> class.
         /// </summary>
         public MethodDefSignatureStreamReader(IFunction<ITuple<Stream, IMethodSignature>> readMethodDefSignatureFromBlob)
         {
             _readMethodSignatureFromBlob = readMethodDefSignatureFromBlob;
         }
 
-        public MethodDefSig ReadSignature(Stream blobStream)
+        public IMethodSignature ReadSignature(Stream blobStream)
         {
             var methodDefSig = new MethodDefSig();
             _readMethodSignatureFromBlob.Execute(blobStream, methodDefSig);
 
             return methodDefSig;
-        }              
+        }
     }
 }

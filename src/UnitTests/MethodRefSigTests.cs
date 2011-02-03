@@ -16,7 +16,7 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldBeAbleToReadMethodRefSig()
         {
-            var reader = container.GetInstance<IFunction<ITuple<uint, Stream>, MethodRefSig>>("MethodRefSignatureReader");
+            var reader = container.GetInstance<IFunction<ITuple<uint, Stream>, IMethodRefSignature>>("MethodRefSignatureReader");
             Assert.IsNotNull(reader, "MethodRefSigReader not found");
 
             uint index = 0xA;

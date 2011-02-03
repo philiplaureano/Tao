@@ -8,7 +8,7 @@ using Tao.Signatures;
 namespace Tao.Readers
 {
     /// <summary>
-    /// Represents a type that reads the contents of a blob into a given <see cref="IStandAloneMethodSigSignature"/> instance.
+    /// Represents a type that reads the contents of a blob into a given <see cref="IStandAloneMethodSignature"/> instance.
     /// </summary>
     public class ReadStandAloneMethodSigSignatureFromBlob : ReadMethodRefSignatureFromBlob
     {
@@ -29,7 +29,7 @@ namespace Tao.Readers
         /// <param name="flags">The <see cref="MethodSignatureFlags"/> enumeration that describes the method itself.</param>
         protected override void ReadMethodFlags(IMethodSignature methodSignature, MethodSignatureFlags flags)
         {
-            var signature = methodSignature as IStandAloneMethodSigSignature;
+            var signature = methodSignature as IStandAloneMethodSignature;
             if (signature == null)
             {
                 base.ReadMethodFlags(methodSignature, flags);

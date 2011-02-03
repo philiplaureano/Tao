@@ -11,13 +11,13 @@ namespace Tao.Signatures
     /// <summary>
     /// Represents a type that can read <see cref="MethodDefSig"/> instances into memory.
     /// </summary>
-    public class MethodDefSignatureReader : MethodSignatureReader<MethodDefSig>
+    public class MethodDefSignatureReader : MethodSignatureReader<IMethodSignature>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MethodSignatureReader{TMethodSignature}"/> class.
         /// </summary>
         public MethodDefSignatureReader(IFunction<ITuple<uint, Stream>, byte[]> readBlob, 
-            IMethodSignatureStreamReader<MethodDefSig> methodDefSignatureStreamReader) 
+            IMethodSignatureStreamReader<IMethodSignature> methodDefSignatureStreamReader) 
             : base(readBlob, methodDefSignatureStreamReader)
         {
         }

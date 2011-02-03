@@ -16,7 +16,7 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldBeAbleToReadManagedStandAloneMethodSig()
         {
-            var reader = container.GetInstance<IFunction<ITuple<uint, Stream>, StandAloneMethodSig>>("StandAloneMethodSigSignatureReader");
+            var reader = container.GetInstance<IFunction<ITuple<uint, Stream>, IStandAloneMethodSignature>>("StandAloneMethodSigSignatureReader");
             Assert.IsNotNull(reader, "StandAloneMethodSigReader not found");
 
             uint index = 0xA;
@@ -73,7 +73,7 @@ namespace Tao.UnitTests
             var reader = container.GetInstance<IFunction<ITuple<Stream, IMethodSignature>>>("ReadStandAloneMethodSigSignatureFromBlob");
             Assert.IsNotNull(reader, "ReadStandAloneMethodSignatureFromBlob not found");
 
-            var standAloneMethodSig = new StandAloneMethodSig();
+            var standAloneMethodSig = new StandAloneMethodSignature();
             var inputStream = new MemoryStream(bytes.ToArray());
             reader.Execute(inputStream, standAloneMethodSig);
 

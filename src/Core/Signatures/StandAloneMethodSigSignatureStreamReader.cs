@@ -9,9 +9,9 @@ using Tao.Model;
 namespace Tao.Signatures
 {
     /// <summary>
-    /// Represents a type that can read a StandAloneMethodSig signature from a given blob.N
+    /// Represents a type that can read a StandAloneMethodSignature signature from a given blob.
     /// </summary>
-    public class StandAloneMethodSigSignatureStreamReader : IMethodSignatureStreamReader<StandAloneMethodSig>
+    public class StandAloneMethodSigSignatureStreamReader : IMethodSignatureStreamReader<IStandAloneMethodSignature>
     {
         private readonly IFunction<ITuple<Stream, IMethodSignature>> _readMethodSignatureFromBlob;
 
@@ -23,9 +23,14 @@ namespace Tao.Signatures
             _readMethodSignatureFromBlob = readStandAloneMethodSigSignatureFromBlob;
         }
 
-        public StandAloneMethodSig ReadSignature(Stream blobStream)
+        /// <summary>
+        /// Reads the method signature from the given <paramref name="blobStream"/>.
+        /// </summary>
+        /// <param name="blobStream">The stream that contains the method signature.</param>
+        /// <returns>A method signature instance.</returns>
+        public IStandAloneMethodSignature ReadSignature(Stream blobStream)
         {
-            var standAloneMethodSig = new StandAloneMethodSig();
+            var standAloneMethodSig = new StandAloneMethodSignature();
             _readMethodSignatureFromBlob.Execute(blobStream, standAloneMethodSig);
 
             return standAloneMethodSig;

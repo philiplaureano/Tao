@@ -11,7 +11,7 @@ namespace Tao.Signatures
     /// <summary>
     /// Represents a type that converts byte arrays into <see cref="ArrayShape"/> objects.
     /// </summary>
-    public class ArrayShapeReader : IFunction<IEnumerable<byte>, ArrayShape>
+    public class ArrayShapeReader : IFunction<Stream, ArrayShape>
     {
         private readonly IFunction<Stream, uint> _readCompressedInteger;
 
@@ -29,25 +29,22 @@ namespace Tao.Signatures
         /// </summary>
         /// <param name="input">The byte array containing the array shape data.</param>
         /// <returns>An <see cref="ArrayShape"/> object.</returns>
-        public ArrayShape Execute(IEnumerable<byte> input)
+        public ArrayShape Execute(Stream input)
         {
-            var bytes = input.ToArray();
-
-            var stream = new MemoryStream(bytes);
-            var rank = _readCompressedInteger.Execute(stream);
-            var numSizes = _readCompressedInteger.Execute(stream);
+            var rank = _readCompressedInteger.Execute(input);
+            var numSizes = _readCompressedInteger.Execute(input);
             var sizes = new List<uint>();
             for (var i = 0; i < numSizes; i++)
             {
-                var size = _readCompressedInteger.Execute(stream);
+                var size = _readCompressedInteger.Execute(input);
                 sizes.Add(size);
             }
 
             var loBounds = new List<uint>();
-            var numLoBounds = _readCompressedInteger.Execute(stream);
+            var numLoBounds = _readCompressedInteger.Execute(input);
             for (var i = 0; i < numLoBounds; i++)
             {
-                var loBound = _readCompressedInteger.Execute(stream);
+                var loBound = _readCompressedInteger.Execute(input);
                 loBounds.Add(loBound);
             }
 

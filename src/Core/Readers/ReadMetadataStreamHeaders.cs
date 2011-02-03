@@ -32,26 +32,26 @@ namespace Tao.Readers
         /// </summary>
         /// <param name="input">The index of the metadata stream header and the target stream.</param>
         /// <returns>A set of tuples that contain the metadata header stream.</returns>
-        public IEnumerable<ITuple<int, int, string>> Execute(Stream stream)
+        public IEnumerable<ITuple<int, int, string>> Execute(Stream input)
         {
-            _seekMetadataRootPosition.Execute(stream);
-            stream.Seek(12, SeekOrigin.Current);
+            _seekMetadataRootPosition.Execute(input);
+            input.Seek(12, SeekOrigin.Current);
 
-            var reader = new BinaryReader(stream);
+            var reader = new BinaryReader(input);
             var versionStringLength = reader.ReadInt32();
 
             // Skip the flag and streamCount bytes
-            stream.Seek(versionStringLength + 2, SeekOrigin.Current);
+            input.Seek(versionStringLength + 2, SeekOrigin.Current);
 
-            var streamCount = _readMetadataStreamCount.Execute(stream);
+            var streamCount = _readMetadataStreamCount.Execute(input);
             for (var i = 0; i < streamCount; i++)
             {
                 var offset = reader.ReadInt32();
                 var size = reader.ReadInt32();
-                var name = _readNullTerminatedString.Execute(stream);
+                var name = _readNullTerminatedString.Execute(input);
 
                 // Realign the stream position to the nearest 4-byte boundary
-                _realignStreamPosition.Execute(4, stream);
+                _realignStreamPosition.Execute(4, input);
                 yield return Tuple.New(offset, size, name);
             }
         }

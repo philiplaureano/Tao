@@ -120,6 +120,10 @@
       <Project>{F24529AE-ACE1-4C8A-9D19-8889C1C29A5B}</Project>
       <Name>FieldSigAssembly</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SampleAssemblies\GenericInstanceSignature\GenericInstanceSignature.csproj">
+      <Project>{58D3DA07-261F-4A56-AC3B-A3AC43DB044A}</Project>
+      <Name>GenericInstanceSignature</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SampleAssemblies\MethodRefSigAssembly\MethodRefSigAssembly.csproj">
       <Project>{F95B2FB4-17E7-4B91-8F02-49FEDB13DCFD}</Project>
       <Name>MethodRefSigAssembly</Name>

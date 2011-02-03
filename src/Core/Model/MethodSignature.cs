@@ -7,7 +7,7 @@ namespace Tao.Model
     /// </summary>
     public class MethodSignature : IMethodSignature
     {
-        private readonly IList<ITypedMethodSignatureElement> _additionalParameters = new List<ITypedMethodSignatureElement>();
+        private readonly IList<ITypedMethodSignatureElement> _parameters = new List<ITypedMethodSignatureElement>();
 
         /// <summary>
         /// Gets or sets a value indicating whether or not the current method has a 'this' pointer.
@@ -38,19 +38,7 @@ namespace Tao.Model
         /// </summary>
         /// <value>The method return type.</value>
         public ITypedMethodSignatureElement ReturnType { get; set; }
-
-        /// <summary>
-        /// Gets the value indicating the list of parameters for the current method.
-        /// </summary>
-        /// <value>The list of parameters for the current method.</value>
-        public IList<ITypedMethodSignatureElement> Parameters
-        {
-            get 
-            {
-                return _additionalParameters;
-            }
-        }
-
+        
         /// <summary>
         /// Gets or sets the value that indicates whether or not the target object instance will also be an explicit parameter
         /// in the current set of method parameters.
@@ -63,5 +51,42 @@ namespace Tao.Model
         /// </summary>
         /// <value>Determines whether or not the current method supports variable arguments.</value>
         public bool IsVarArg { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the method signature uses a StdCall calling convention.
+        /// </summary>
+        /// <value>The value indicating whether or not the method signature uses a StdCall calling convention.</value>
+        public bool IsStdCall { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the method signature uses a C calling convention.
+        /// </summary>
+        /// <value>The value indicating whether or not the method signature uses a C calling convention.</value>
+        public bool IsUsingCCallingConvention { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the method signature uses a FastCall calling convention.
+        /// </summary>
+        /// <value>The value indicating whether or not the method signature uses a FastCall calling convention.</value>
+        public bool IsFastCall { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the method signature uses a ThisCall calling convention.
+        /// </summary>
+        /// <value>The value indicating whether or not the method signature uses a ThisCall calling convention.</value>
+        public bool IsThisCall { get; set; }
+
+        /// <summary>
+        /// Gets the value indicating the list of parameters for the current method.
+        /// </summary>
+        /// <value>The list of parameters for the current method.</value>
+        public IList<ITypedMethodSignatureElement> Parameters
+        {
+            get
+            {
+                return _parameters;
+            }
+        }
+
     }
 }
