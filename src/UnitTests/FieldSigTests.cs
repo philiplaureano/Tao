@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Hiro.Containers;
 using Tao.Interfaces;
 using Tao.Containers;
+using Tao.Model;
 
 namespace Tao.UnitTests
 {
@@ -29,6 +30,39 @@ namespace Tao.UnitTests
             Assert.AreEqual(0x8, blob[1]);
         }
 
+        // TODO: Read the field signature based on a given stream and blob stream index
+        [Test]
+        public void ShouldReadFieldSignatureWithClassType()
+        {
+            const byte token = 0x8;
+            var expectedTableId = TableId.TypeDef;
+            uint expectedIndex = 2;
+
+            byte fieldSig = 0x6;
+            byte classElement = (byte)ElementType.Class;
+            var bytes = new byte[]
+                            {
+                                fieldSig,
+                                classElement,
+                                token
+                            };
+
+            var stream = new MemoryStream(bytes);
+
+            var reader = container.GetInstance<IFunction<Stream, FieldSignature>>();
+            Assert.IsNotNull(reader);
+
+            var fieldSignature = reader.Execute(stream);
+            Assert.IsNotNull(fieldSignature);
+            Assert.AreEqual(0, fieldSignature.CustomMods.Count);
+
+            TypeSignature fieldType = fieldSignature.FieldType;
+
+            TypeDefOrRefEncodedSignature encodedSignature = fieldType as TypeDefOrRefEncodedSignature;
+            Assert.IsNotNull(encodedSignature);
+            Assert.AreEqual(encodedSignature.TableIndex, expectedIndex);
+            Assert.AreEqual(encodedSignature.TableId, expectedTableId);
+        }
         [Test]
         public void ShouldRecognizeFieldSignatureConstant()
         {
@@ -37,7 +71,7 @@ namespace Tao.UnitTests
 
             var result = fieldConstantReader.Execute(0x6);
             Assert.IsTrue(result);
-        }                          
+        }
 
         // TODO: Finish the FieldSig read implementation
         protected override Stream GetStream()

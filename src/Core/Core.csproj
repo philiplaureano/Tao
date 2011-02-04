@@ -84,6 +84,7 @@
     <Compile Include="Model\ArrayShape.cs" />
     <Compile Include="Model\BaseVarSignature.cs" />
     <Compile Include="Model\CustomMod.cs" />
+    <Compile Include="Model\FieldSignature.cs" />
     <Compile Include="Model\FunctionPointerSignature.cs" />
     <Compile Include="Model\GenericTypeInstance.cs" />
     <Compile Include="Model\IMethodRefSignature.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Signatures\AssignMethodRefParameters.cs" />
     <Compile Include="Signatures\CustomModReader.cs" />
     <Compile Include="Signatures\FieldSignatureConstantReader.cs" />
+    <Compile Include="Signatures\FieldSignatureReader.cs" />
     <Compile Include="Signatures\IAssignMethodSignatureParameters.cs" />
     <Compile Include="Signatures\IParamSignatureReader.cs" />
     <Compile Include="Signatures\IRetTypeSignatureReader.cs" />

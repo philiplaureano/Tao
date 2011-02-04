@@ -19,7 +19,7 @@ namespace Tao.Model
         }
 
         ///<summary>
-        /// /// Gets the value indicating the metadata row of the given type signature.
+        /// Gets the value indicating the metadata row of the given type signature.
         ///</summary>
         /// <value>The metadata row of the given type signature.</value>
         public uint TableIndex
