@@ -17,6 +17,7 @@ namespace Tao.Signatures
         private readonly IFunction<byte, ITuple<TableId, uint>> _typeDefOrRefEncodedReader;
         private readonly IFunction<ITuple<Stream, ICollection<CustomMod>>, int> _readCustomMods;
         private readonly IFunction<Stream, ArrayShape> _arrayShapeReader;
+        private readonly IFunction<Stream, uint> _readCompressedInteger;
 
         private readonly Dictionary<ElementType, Func<Stream, TypeSignature>> _primitiveEntries =
             new Dictionary<ElementType, Func<Stream, TypeSignature>>();
@@ -29,18 +30,21 @@ namespace Tao.Signatures
         /// </summary>
         /// <param name="typeDefOrRefEncodedReader">The reader that will read the embbedded type def or type ref token.</param>
         /// <param name="readCustomMods">The reader that will read the CustomMod signatures.</param>
-        /// <param name="arrayShapeReader">The reader that will read the ArrayShape signatures.</param>             
+        /// <param name="arrayShapeReader">The reader that will read the ArrayShape signatures.</param>
+        /// <param name="readCompressedInteger">The reader that will read compressed signed integers.</param>             
         public TypeSignatureReader(IFunction<byte, ITuple<TableId, uint>> typeDefOrRefEncodedReader,
-            IFunction<ITuple<Stream, ICollection<CustomMod>>, int> readCustomMods, IFunction<Stream, ArrayShape> arrayShapeReader)
+            IFunction<ITuple<Stream, ICollection<CustomMod>>, int> readCustomMods, 
+            IFunction<Stream, ArrayShape> arrayShapeReader, 
+            IFunction<Stream, uint> readCompressedInteger)
         {
             if (typeDefOrRefEncodedReader == null)
                 throw new ArgumentNullException("typeDefOrRefEncodedReader");
 
             _typeDefOrRefEncodedReader = typeDefOrRefEncodedReader;
-            //_methodDefSignatureReader = methodDefSignatureReader;
-            //_methodRefSignatureReader = methodRefSignatureReader;
+            
             _readCustomMods = readCustomMods;
             _arrayShapeReader = arrayShapeReader;
+            _readCompressedInteger = readCompressedInteger;
 
             CreateEntries();
         }
@@ -122,8 +126,7 @@ namespace Tao.Signatures
                 signature.ElementType = elementType;
                 signature.GenericTypeDefinition = CreateTypeDefOrRefEncodedSignature(input);
 
-                // TODO: Read the argument count as a compressed integer rather than a byte
-                var argumentCount = (int)input.ReadByte();
+                var argumentCount = _readCompressedInteger.Execute(input);
                 for (var i = 0; i < argumentCount; i++)
                 {
                     var typeSignature = Execute(input);
@@ -135,8 +138,7 @@ namespace Tao.Signatures
 
             if (elementType == ElementType.Mvar)
             {
-                // TODO: Read the argument index as a compressed integer rather than a byte
-                var argumentIndex = (uint)input.ReadByte();
+                var argumentIndex = _readCompressedInteger.Execute(input);
 
                 var signature = new MvarSignature
                                     {
@@ -179,8 +181,7 @@ namespace Tao.Signatures
 
             if (elementType == ElementType.Var)
             {
-                // TODO: Read the argument index as a compressed integer rather than a byte
-                var argumentIndex = (uint)input.ReadByte();
+                var argumentIndex = _readCompressedInteger.Execute(input);
 
                 var signature = new VarSignature
                 {

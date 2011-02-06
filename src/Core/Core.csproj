@@ -113,6 +113,7 @@
     <Compile Include="Model\TypeSignature.cs" />
     <Compile Include="Model\VarSignature.cs" />
     <Compile Include="Readers\GetTableRowSize.cs" />
+    <Compile Include="Readers\ReadCompressedSignedInteger.cs" />
     <Compile Include="Readers\ReadCustomMods.cs" />
     <Compile Include="Readers\ReadMethodDefSignatureFromBlob.cs" />
     <Compile Include="Readers\ReadMethodRefSignatureFromBlob.cs" />

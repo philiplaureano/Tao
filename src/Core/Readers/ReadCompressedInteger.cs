@@ -6,9 +6,8 @@ using Tao.Interfaces;
 
 namespace Tao.Readers
 {
-    /// TODO: Add support for reading compressed signed integers
     /// <summary>
-    /// Represents a type that returns the blob size for the current blob in the input stream.
+    /// Represents a type that reads a compressed unsigned integer.
     /// </summary>
     public class ReadCompressedInteger : IFunction<Stream, uint>
     {        
@@ -29,13 +28,10 @@ namespace Tao.Readers
             if ((leadingByte & 0xC0) == 0x80)
                 return (uint)((leadingByte & 0x3F) << 8 | (byte)input.ReadByte());
 
-            if ((leadingByte & 0xE0) != 0xC0)
-                throw new NotSupportedException();
-
-            return (uint)((leadingByte & 0x1F) << 24 | 
-                        (byte)input.ReadByte() << 16 | 
-                        (byte)input.ReadByte() << 8 | 
-                        (byte)input.ReadByte());
+            return (uint)((leadingByte & 0x1F) << 24 |
+                               (byte)input.ReadByte() << 16 |
+                               (byte)input.ReadByte() << 8 |
+                               (byte)input.ReadByte());         
         }      
     }
 }

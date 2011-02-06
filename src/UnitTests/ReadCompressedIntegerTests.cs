@@ -29,6 +29,27 @@ namespace Tao.UnitTests
             Assert.AreEqual(value, result);
             Assert.AreEqual(expectedStreamPosition, stream.Position);
         }
+
+        [Test]
+        public void ShouldBeAbleToReadCompressedSignedByteValue()
+        {
+            sbyte value = -3;
+            var expectedStreamPosition = 1;
+
+            var reader = container.GetInstance<IFunction<Stream, int>>("ReadCompressedSignedInteger");
+            Assert.IsNotNull(reader);
+
+            byte signBit = 1;
+            var absoluteValue = 3;
+            byte encodedValue = (byte)((absoluteValue << 1) | signBit);
+
+            var stream = new MemoryStream(new byte[] { encodedValue });
+
+            var result = reader.Execute(stream);
+            Assert.AreEqual(value, result);
+            Assert.AreEqual(expectedStreamPosition, stream.Position);
+        }
+
         [Test]
         public void ShouldBeAbleToReadCompressedWordValue()
         {
@@ -38,7 +59,43 @@ namespace Tao.UnitTests
             var reader = container.GetInstance<IFunction<Stream, uint>>("ReadCompressedInteger");
             Assert.IsNotNull(reader);
 
-            var bytes = new byte[] {0xAE, 0x57};
+            var bytes = new byte[] { 0xAE, 0x57 };
+            var stream = new MemoryStream(bytes);
+
+            var result = reader.Execute(stream);
+            Assert.AreEqual(expectedValue, result);
+            Assert.AreEqual(expectedStreamPosition, stream.Position);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadCompressedSignedWordValue()
+        {
+            short expectedValue = -8000;
+            var expectedStreamPosition = 2;
+
+            var reader = container.GetInstance<IFunction<Stream, int>>("ReadCompressedSignedInteger");
+            Assert.IsNotNull(reader);
+
+            var bytes = new byte[] { 0xBE, 0x81 };
+
+            var stream = new MemoryStream(bytes);
+
+
+            var result = reader.Execute(stream);
+            Assert.AreEqual(expectedValue, result);
+            Assert.AreEqual(expectedStreamPosition, stream.Position);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadCompressedSignedDWordValue()
+        {
+            int expectedValue = 268435455;
+            var expectedStreamPosition = 4;
+
+            var reader = container.GetInstance<IFunction<Stream, int>>("ReadCompressedSignedInteger");
+            Assert.IsNotNull(reader);
+
+            var bytes = new byte[] { 0xDF, 0xFF, 0xFF, 0xFE };
             var stream = new MemoryStream(bytes);
 
             var result = reader.Execute(stream);
@@ -50,15 +107,10 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadCompressedDoubleWordValue()
         {
             uint compressedValue = 0xC0004000;
-           
+
             uint expectedValue = 0x4000;
             var expectedStreamPosition = 4;
 
-            TestCompressedIntegerRead(compressedValue, expectedValue, expectedStreamPosition);
-        }
-
-        private void TestCompressedIntegerRead(uint compressedValue, uint expectedResult, int expectedStreamPosition)
-        {
             var stream = new MemoryStream();
             var writer = new BinaryWriter(stream);
             writer.Write(compressedValue);
@@ -75,7 +127,7 @@ namespace Tao.UnitTests
             // Reset the stream pointer to point to the beginning of the stream
             stream.Seek(0, SeekOrigin.Begin);
             var result = reader.Execute(stream);
-            Assert.AreEqual(expectedResult, result);
+            Assert.AreEqual(expectedValue, result);
 
             Assert.AreEqual(expectedStreamPosition, stream.Position);
         }
