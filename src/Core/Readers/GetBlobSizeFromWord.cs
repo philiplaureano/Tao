@@ -20,21 +20,13 @@ namespace Tao.Readers
         {
             var stream = input.Item1;
             var leadingByte = input.Item2;
-            const int baseValue = 0x80;
-            const byte sizeBitShift = 14;
-            const uint sizeMask = 0x10b << sizeBitShift;
 
+            var mask = 0x0011111111111111b;
             var reader = new BinaryReader(stream);
-            var remainingByte = reader.ReadByte();
+            var word = reader.ReadInt16();
+            uint value = (uint)(word & mask);
 
-            // Combine the leading byte and the remaining byte
-            // into a single dword
-            var leadingWord = leadingByte << 8;
-            leadingWord |= remainingByte;
-
-            var size = (uint)leadingWord ^ sizeMask + baseValue;
-
-            return size;
+            return value;
         }
     }
 }
