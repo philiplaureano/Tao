@@ -11,19 +11,7 @@ namespace Tao.Readers
     /// Represents a type that returns the blob size for the current blob in the input stream.
     /// </summary>
     public class ReadCompressedInteger : IFunction<Stream, uint>
-    {
-        private readonly IFunction<ITuple<Stream, byte>, uint> _getBlobSizeFromWord;
-        private readonly IFunction<ITuple<Stream, byte>, uint> _getBlobSizeFromDoubleWord;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Object"/> class.
-        /// </summary>
-        public ReadCompressedInteger(IFunction<ITuple<Stream, byte>, uint> getBlobSizeFromWord, IFunction<ITuple<Stream, byte>, uint> getBlobSizeFromDoubleWord)
-        {
-            _getBlobSizeFromWord = getBlobSizeFromWord;
-            _getBlobSizeFromDoubleWord = getBlobSizeFromDoubleWord;
-        }
-
+    {        
         /// <summary>
         /// Returns the blob size for the current blob in the input stream.
         /// </summary>

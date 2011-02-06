@@ -16,19 +16,34 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldBeAbleToReadCompressedSingleByteValue()
         {
-            uint value = 0x3;
+            byte value = 0x3;
             var expectedStreamPosition = 1;
 
-            TestCompressedIntegerRead(value, value, expectedStreamPosition);
+            var reader = container.GetInstance<IFunction<Stream, uint>>("ReadCompressedInteger");
+            Assert.IsNotNull(reader);
+
+            var bytes = new byte[] { value };
+            var stream = new MemoryStream(bytes);
+
+            var result = reader.Execute(stream);
+            Assert.AreEqual(value, result);
+            Assert.AreEqual(expectedStreamPosition, stream.Position);
         }
         [Test]
         public void ShouldBeAbleToReadCompressedWordValue()
         {
-            uint compressedValue = 0xAE57;
             uint expectedValue = 0x2E57;
             var expectedStreamPosition = 2;
 
-            TestCompressedIntegerRead(compressedValue, expectedValue, expectedStreamPosition);
+            var reader = container.GetInstance<IFunction<Stream, uint>>("ReadCompressedInteger");
+            Assert.IsNotNull(reader);
+
+            var bytes = new byte[] {0xAE, 0x57};
+            var stream = new MemoryStream(bytes);
+
+            var result = reader.Execute(stream);
+            Assert.AreEqual(expectedValue, result);
+            Assert.AreEqual(expectedStreamPosition, stream.Position);
         }
 
         [Test]
@@ -36,8 +51,8 @@ namespace Tao.UnitTests
         {
             uint compressedValue = 0xC0004000;
            
-            uint expectedValue = 0x2000;
-            var expectedStreamPosition = 2;
+            uint expectedValue = 0x4000;
+            var expectedStreamPosition = 4;
 
             TestCompressedIntegerRead(compressedValue, expectedValue, expectedStreamPosition);
         }
@@ -50,6 +65,12 @@ namespace Tao.UnitTests
 
             var reader = container.GetInstance<IFunction<Stream, uint>>("ReadCompressedInteger");
             Assert.IsNotNull(reader);
+
+            var streamContents = stream.ToArray();
+            var bigEndianContents = new List<byte>(streamContents);
+            bigEndianContents.Reverse();
+
+            stream = new MemoryStream(bigEndianContents.ToArray());
 
             // Reset the stream pointer to point to the beginning of the stream
             stream.Seek(0, SeekOrigin.Begin);

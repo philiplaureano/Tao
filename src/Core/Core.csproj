@@ -130,8 +130,6 @@
     <Compile Include="Readers\GetAdditionalColumnCounts.cs" />
     <Compile Include="Readers\GetAdjustedSchemaCounts.cs" />
     <Compile Include="Readers\ReadCompressedInteger.cs" />
-    <Compile Include="Readers\GetBlobSizeFromDoubleWord.cs" />
-    <Compile Include="Readers\GetBlobSizeFromWord.cs" />
     <Compile Include="Readers\GetMetadataTableColumnSizeCounts.cs" />
     <Compile Include="Model\AssemblyDef.cs" />
     <Compile Include="Model\AssemblyFlags.cs" />
