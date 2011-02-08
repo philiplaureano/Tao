@@ -102,6 +102,7 @@
     <Compile Include="Model\MultiDimensionalArraySignature.cs" />
     <Compile Include="Model\MvarSignature.cs" />
     <Compile Include="Model\PointerSignature.cs" />
+    <Compile Include="Model\PropertySignature.cs" />
     <Compile Include="Model\StandAloneMethodSignature.cs" />
     <Compile Include="Model\SZArraySignature.cs" />
     <Compile Include="Model\TypeAttributes.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="Signatures\MethodSignatureReader.cs" />
     <Compile Include="Signatures\MethodSignatureElementReader.cs" />
     <Compile Include="Signatures\ParamSignatureReader.cs" />
+    <Compile Include="Signatures\PropertySignatureReader.cs" />
     <Compile Include="Signatures\RetTypeSignatureReader.cs" />
     <Compile Include="Signatures\StandAloneMethodSigSignatureReader.cs" />
     <Compile Include="Signatures\StandAloneMethodSigSignatureStreamReader.cs" />

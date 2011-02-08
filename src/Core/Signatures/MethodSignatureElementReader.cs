@@ -102,6 +102,11 @@ namespace Tao.Signatures
             return typedParamSignature;
         }
 
+        /// <summary>
+        /// Reads the type signature from the given <paramref name="inputStream"/>.
+        /// </summary>
+        /// <param name="inputStream">The input stream that contains the type signature.</param>
+        /// <returns>A <see cref="TypeSignature"/> instance.</returns>
         protected virtual TypeSignature ReadTypeSignature(Stream inputStream)
         {
             return _typeSignatureReader.Execute(inputStream);

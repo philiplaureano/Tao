@@ -106,6 +106,7 @@
     <Compile Include="ParamTests.cs" />
     <Compile Include="PEFileHeaderStreamTests.cs" />
     <Compile Include="PESectionHeaderStreamTests.cs" />
+    <Compile Include="PropertySigTests.cs" />
     <Compile Include="ReadCompressedIntegerTests.cs" />
     <Compile Include="RetTypeSignatureTests.cs" />
     <Compile Include="StandAloneSigReadTests.cs" />
