@@ -102,6 +102,7 @@
     <Compile Include="MetadataTableTests.cs" />
     <Compile Include="MethodDefSigTests.cs" />
     <Compile Include="MethodRefSigTests.cs" />
+    <Compile Include="MethodSpecTests.cs" />
     <Compile Include="ModelTests.cs" />
     <Compile Include="ParamTests.cs" />
     <Compile Include="PEFileHeaderStreamTests.cs" />

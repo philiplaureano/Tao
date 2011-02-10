@@ -97,6 +97,7 @@
     <Compile Include="Model\MethodDefSig.cs" />
     <Compile Include="Model\MethodRefSig.cs" />
     <Compile Include="Model\MethodSignature.cs" />
+    <Compile Include="Model\MethodSpec.cs" />
     <Compile Include="Model\ModuleDef.cs" />
     <Compile Include="Model\MethodSignatureElement.cs" />
     <Compile Include="Model\MultiDimensionalArraySignature.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="Signatures\MethodRefSignatureStreamReader.cs" />
     <Compile Include="Signatures\MethodSignatureReader.cs" />
     <Compile Include="Signatures\MethodSignatureElementReader.cs" />
+    <Compile Include="Signatures\MethodSpecReader.cs" />
     <Compile Include="Signatures\ParamSignatureReader.cs" />
     <Compile Include="Signatures\PropertySignatureReader.cs" />
     <Compile Include="Signatures\RetTypeSignatureReader.cs" />

@@ -170,7 +170,7 @@ namespace Tao.Signatures
             return signature;
         }
 
-        private static TypeSignature CreateGenericType(Stream input, TypeSignatureReader typeSignatureReader, ElementType elementType, IFunction<Stream, uint> readCompressedInteger, IFunction<byte, ITuple<TableId, uint>> typeDefOrRefEncodedReader)
+        private static TypeSignature CreateGenericType(Stream input, IFunction<Stream, TypeSignature> typeSignatureReader, ElementType elementType, IFunction<Stream, uint> readCompressedInteger, IFunction<byte, ITuple<TableId, uint>> typeDefOrRefEncodedReader)
         {
             // TODO: Should the generic element type be passed to the GenericTypeInstance signature?
             var genericElementType = (ElementType)input.ReadByte();
