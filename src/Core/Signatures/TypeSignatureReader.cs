@@ -31,7 +31,7 @@ namespace Tao.Signatures
         /// <param name="typeDefOrRefEncodedReader">The reader that will read the embbedded type def or type ref token.</param>
         /// <param name="readCustomMods">The reader that will read the CustomMod signatures.</param>
         /// <param name="arrayShapeReader">The reader that will read the ArrayShape signatures.</param>
-        /// <param name="readCompressedInteger">The reader that will read compressed signed integers.</param>             
+        /// <param name="readCompressedInteger">The reader that will read compressed signed integers.</param>
         public TypeSignatureReader(IFunction<byte, ITuple<TableId, uint>> typeDefOrRefEncodedReader,
             IFunction<ITuple<Stream, ICollection<CustomMod>>, int> readCustomMods, 
             IFunction<Stream, ArrayShape> arrayShapeReader, 
@@ -40,8 +40,7 @@ namespace Tao.Signatures
             if (typeDefOrRefEncodedReader == null)
                 throw new ArgumentNullException("typeDefOrRefEncodedReader");
 
-            _typeDefOrRefEncodedReader = typeDefOrRefEncodedReader;
-            
+            _typeDefOrRefEncodedReader = typeDefOrRefEncodedReader;            
             _readCustomMods = readCustomMods;
             _arrayShapeReader = arrayShapeReader;
             _readCompressedInteger = readCompressedInteger;
@@ -75,140 +74,170 @@ namespace Tao.Signatures
             var elementType = (ElementType)input.ReadByte();
 
             if (_primitiveEntries.ContainsKey(elementType))
-            {
-                var createSignature = _primitiveEntries[elementType];
-                var signature = createSignature(input);
-                signature.ElementType = elementType;
-                return signature;
-            }
+                return CreatePrimitiveType(input, elementType, _primitiveEntries);
 
             if (elementType == ElementType.Array)
-            {
-                var arrayType = Execute(input);
-                var shape = _arrayShapeReader.Execute(input);
-                var signature = new MultiDimensionalArraySignature { ArrayType = arrayType, Shape = shape };
-
-                return signature;
-            }
+                return CreateArray(input, this, _arrayShapeReader);
 
             if (elementType == ElementType.Class)
-            {
-                var signature = CreateTypeDefOrRefEncodedSignature(input);
-                signature.ElementType = elementType;
-
-                return signature;
-            }
+                return CreateClass(input, elementType, this._typeDefOrRefEncodedReader);
 
             if (elementType == ElementType.FnPtr)
-            {
-                var flags = (MethodSignatureFlags)input.PeekByte();
-                var isVarArg = (flags & MethodSignatureFlags.VarArg) != 0;
-
-                // Use the MethodRefSignatureStreamReader for VARARG methods
-                var streamReader = isVarArg ? _methodRefSignatureStreamReader : _methodDefSignatureStreamReader;
-                var targetMethod = streamReader.ReadSignature(input);
-
-                var functionPointer = new FunctionPointerSignature
-                                          {
-                                              ElementType = ElementType.FnPtr,
-                                              TargetMethod = targetMethod
-                                          };
-
-                return functionPointer;
-            }
+                return CreateFunctionPointerSignature(input, _methodDefSignatureStreamReader, _methodRefSignatureStreamReader);
 
             if (elementType == ElementType.GenericInst)
-            {
-                // TODO: Should the generic element type be passed to the GenericTypeInstance signature?
-                var genericElementType = (ElementType)input.ReadByte();
-
-                var signature = new GenericTypeInstance();
-                signature.ElementType = elementType;
-                signature.GenericTypeDefinition = CreateTypeDefOrRefEncodedSignature(input);
-
-                var argumentCount = _readCompressedInteger.Execute(input);
-                for (var i = 0; i < argumentCount; i++)
-                {
-                    var typeSignature = Execute(input);
-                    signature.TypeParameters.Add(typeSignature);
-                }
-
-                return signature;
-            }
+                return CreateGenericType(input, this, elementType, this._readCompressedInteger, this._typeDefOrRefEncodedReader);
 
             if (elementType == ElementType.Mvar)
-            {
-                var argumentIndex = _readCompressedInteger.Execute(input);
-
-                var signature = new MvarSignature
-                                    {
-                                        ArgumentIndex = argumentIndex,
-                                        ElementType = elementType
-                                    };
-                return signature;
-            }
+                return CreateMVar(this, input, elementType, _readCompressedInteger);
 
             if (elementType == ElementType.Object)
                 return new TypeSignature() { ElementType = ElementType.Object };
 
             if (elementType == ElementType.Ptr)
-            {
-                var signature = CreatePointerSignature(input);
-                signature.ElementType = elementType;
-
-                return signature;
-            }
+                return CreatePointerSignature(this, input, elementType, _readCustomMods);
 
             if (elementType == ElementType.String)
                 return new TypeSignature() { ElementType = ElementType.String };
 
             if (elementType == ElementType.SzArray)
-            {
-                var signature = new SzArraySignature { ElementType = elementType };
-
-                _readCustomMods.Execute(input, signature.CustomMods);
-                signature.ArrayElementType = Execute(input);
-
-                return signature;
-            }
+                return CreateSzArray(this, input, elementType, _readCustomMods);
 
             if (elementType == ElementType.ValueType)
-            {
-                var signature = CreateTypeDefOrRefEncodedSignature(input);
-                signature.ElementType = elementType;
-                return signature;
-            }
+                return CreateValueType(this, input, elementType);
 
             if (elementType == ElementType.Var)
-            {
-                var argumentIndex = _readCompressedInteger.Execute(input);
-
-                var signature = new VarSignature
-                {
-                    ArgumentIndex = argumentIndex,
-                    ElementType = elementType
-                };
-
-                return signature;
-            }
+                return CreateVar(input, elementType, _readCompressedInteger);
 
             throw new NotSupportedException(string.Format("Element type not supported: {0}", elementType));
         }
 
-        private TypeSignature CreatePointerSignature(Stream inputStream)
+        private static TypeSignature CreateVar(Stream input, ElementType elementType, IFunction<Stream, uint> readCompressedInteger)
+        {
+            var argumentIndex = readCompressedInteger.Execute(input);
+
+            var signature = new VarSignature
+                                {
+                                    ArgumentIndex = argumentIndex,
+                                    ElementType = elementType
+                                };
+
+            return signature;
+        }
+
+        private static TypeSignature CreatePointerSignature(TypeSignatureReader typeSignatureReader, Stream input, ElementType elementType, IFunction<ITuple<Stream, ICollection<CustomMod>>, int> readCustomMods)
+        {
+            var signature = typeSignatureReader.CreatePointerSignature(input, readCustomMods);
+            signature.ElementType = elementType;
+
+            return signature;
+        }
+
+        private static TypeSignature CreateClass(Stream input, ElementType elementType, IFunction<byte, ITuple<TableId, uint>> typeDefOrRefEncodedReader)
+        {
+            var signature = CreateTypeDefOrRefEncodedSignature(input, typeDefOrRefEncodedReader);
+            signature.ElementType = elementType;
+
+            return signature;
+        }
+
+        private static TypeSignature CreateValueType(TypeSignatureReader typeSignatureReader, Stream input, ElementType elementType)
+        {
+            var signature = CreateTypeDefOrRefEncodedSignature(input, typeSignatureReader._typeDefOrRefEncodedReader);
+            signature.ElementType = elementType;
+            return signature;
+        }
+
+        private static TypeSignature CreateSzArray(IFunction<Stream, TypeSignature> typeSignatureReader, Stream input, ElementType elementType, IFunction<ITuple<Stream, ICollection<CustomMod>>, int> readCustomMods)
+        {
+            var signature = new SzArraySignature { ElementType = elementType };
+
+            readCustomMods.Execute(input, signature.CustomMods);
+            signature.ArrayElementType = typeSignatureReader.Execute(input);
+
+            return signature;
+        }
+
+        private static TypeSignature CreateMVar(TypeSignatureReader typeSignatureReader, Stream input, ElementType elementType, IFunction<Stream, uint> readCompressedInteger)
+        {
+            var argumentIndex = readCompressedInteger.Execute(input);
+
+            var signature = new MvarSignature
+                                {
+                                    ArgumentIndex = argumentIndex,
+                                    ElementType = elementType
+                                };
+            return signature;
+        }
+
+        private static TypeSignature CreateGenericType(Stream input, TypeSignatureReader typeSignatureReader, ElementType elementType, IFunction<Stream, uint> readCompressedInteger, IFunction<byte, ITuple<TableId, uint>> typeDefOrRefEncodedReader)
+        {
+            // TODO: Should the generic element type be passed to the GenericTypeInstance signature?
+            var genericElementType = (ElementType)input.ReadByte();
+
+            var signature = new GenericTypeInstance();
+            signature.ElementType = elementType;
+            signature.GenericTypeDefinition = CreateTypeDefOrRefEncodedSignature(input, typeDefOrRefEncodedReader);
+
+            var argumentCount = readCompressedInteger.Execute(input);
+            for (var i = 0; i < argumentCount; i++)
+            {
+                var typeSignature = typeSignatureReader.Execute(input);
+                signature.TypeParameters.Add(typeSignature);
+            }
+
+            return signature;
+        }
+
+        private static TypeSignature CreateFunctionPointerSignature(Stream input, IMethodSignatureStreamReader<IMethodSignature> methodDefSignatureStreamReader, IMethodSignatureStreamReader<IMethodRefSignature> methodRefSignatureStreamReader)
+        {
+            var flags = (MethodSignatureFlags)input.PeekByte();
+            var isVarArg = (flags & MethodSignatureFlags.VarArg) != 0;
+
+            // Use the MethodRefSignatureStreamReader for VARARG methods
+            var streamReader = isVarArg ? methodRefSignatureStreamReader : methodDefSignatureStreamReader;
+            var targetMethod = streamReader.ReadSignature(input);
+
+            var functionPointer = new FunctionPointerSignature
+                                      {
+                                          ElementType = ElementType.FnPtr,
+                                          TargetMethod = targetMethod
+                                      };
+
+            return functionPointer;
+        }
+
+        private static TypeSignature CreateArray(Stream input, IFunction<Stream, TypeSignature> typeSignatureReader, IFunction<Stream, ArrayShape> arrayShapeReader)
+        {
+            var arrayType = typeSignatureReader.Execute(input);
+            var shape = arrayShapeReader.Execute(input);
+            var signature = new MultiDimensionalArraySignature { ArrayType = arrayType, Shape = shape };
+
+            return signature;
+        }
+
+        private static TypeSignature CreatePrimitiveType(Stream input, ElementType elementType, Dictionary<ElementType, Func<Stream, TypeSignature>> primitiveEntries)
+        {
+            var createSignature = primitiveEntries[elementType];
+            var signature = createSignature(input);
+            signature.ElementType = elementType;
+            return signature;
+        }
+
+        private TypeSignature CreatePointerSignature(Stream inputStream, IFunction<ITuple<Stream, ICollection<CustomMod>>, int> readCustomMods)
         {
             if (inputStream.Length == 0)
                 throw new ArgumentException("Unexpected end of byte stream", "inputStream");
 
             var mods = new List<CustomMod>();
-            _readCustomMods.Execute(inputStream, mods);
+            readCustomMods.Execute(inputStream, mods);
 
             PointerSignature result = null;
 
             var nextElementType = (ElementType)inputStream.PeekByte();
             if (nextElementType != ElementType.Void)
             {
-                result = CreateTypePointerSignature(inputStream);
+                result = CreateTypePointerSignature(this, inputStream);
             }
             else
             {
@@ -223,22 +252,22 @@ namespace Tao.Signatures
             return result;
         }
 
-        private PointerSignature CreateTypePointerSignature(Stream inputStream)
+        private static PointerSignature CreateTypePointerSignature(IFunction<Stream, TypeSignature> typeSignatureReader, Stream inputStream)
         {
             PointerSignature result;
             var typePointerSignature = new TypePointerSignature();
 
-            var attachedSignature = Execute(inputStream);
+            var attachedSignature = typeSignatureReader.Execute(inputStream);
             typePointerSignature.TypeSignature = attachedSignature;
             result = typePointerSignature;
 
             return result;
         }
 
-        private TypeDefOrRefEncodedSignature CreateTypeDefOrRefEncodedSignature(Stream inputStream)
+        private static TypeDefOrRefEncodedSignature CreateTypeDefOrRefEncodedSignature(Stream inputStream, IFunction<byte, ITuple<TableId, uint>> typeDefOrRefEncodedReader)
         {
             var nextByte = (byte)inputStream.ReadByte();
-            var decodedToken = _typeDefOrRefEncodedReader.Execute(nextByte);
+            var decodedToken = typeDefOrRefEncodedReader.Execute(nextByte);
             var encodedSignature = new TypeDefOrRefEncodedSignature
                                        {
                                            TableId = decodedToken.Item1,
