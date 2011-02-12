@@ -23,6 +23,11 @@ namespace Tao.Signatures
             _readMethodSignatureFromBlob = readMethodDefSignatureFromBlob;
         }
 
+        /// <summary>
+        /// Reads an <see cref="IMethodSignature"/> instance from the given <paramref name="blobStream"/>.
+        /// </summary>
+        /// <param name="blobStream">The blob stream that contains the method signature.</param>
+        /// <returns>A method signature object.</returns>
         public IMethodSignature ReadSignature(Stream blobStream)
         {
             var methodDefSig = new MethodDefSig();

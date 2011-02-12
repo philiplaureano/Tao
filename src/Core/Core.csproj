@@ -216,6 +216,16 @@
     <Compile Include="Signatures\ArrayShapeReader.cs" />
     <Compile Include="Signatures\AssignMethodDefParameters.cs" />
     <Compile Include="Signatures\AssignMethodRefParameters.cs" />
+    <Compile Include="Signatures\CreateArrayTypeSignature.cs" />
+    <Compile Include="Signatures\CreateClassOrValueTypeSignature.cs" />
+    <Compile Include="Signatures\CreateFunctionPointerSignature.cs" />
+    <Compile Include="Signatures\CreateGenericTypeSignature.cs" />
+    <Compile Include="Signatures\CreateMVarTypeSignature.cs" />
+    <Compile Include="Signatures\CreatePointerTypeSignature.cs" />
+    <Compile Include="Signatures\CreatePrimitiveTypeSignature.cs" />
+    <Compile Include="Signatures\CreateSzArrayTypeSignature.cs" />
+    <Compile Include="Signatures\CreateTypeDefOrRefEncodedSignature.cs" />
+    <Compile Include="Signatures\CreateVarTypeSignature.cs" />
     <Compile Include="Signatures\CustomModReader.cs" />
     <Compile Include="Signatures\FieldSignatureConstantReader.cs" />
     <Compile Include="Signatures\FieldSignatureReader.cs" />
