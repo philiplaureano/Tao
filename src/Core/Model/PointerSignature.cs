@@ -2,7 +2,10 @@ using System.Collections.Generic;
 
 namespace Tao.Model
 {
-    public class PointerSignature : TypeSignature
+    /// <summary>
+    /// Represents a pointer signature type.
+    /// </summary>
+    public class PointerSignature : TypeSignature, ITypeSpecification
     {
         private readonly IList<CustomMod> _customMods = new List<CustomMod>();
 

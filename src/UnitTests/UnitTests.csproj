@@ -113,6 +113,7 @@
     <Compile Include="StandAloneSigReadTests.cs" />
     <Compile Include="TypeDefOrRefEncodedTests.cs" />
     <Compile Include="TypeSignatureTests.cs" />
+    <Compile Include="TypeSpecTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

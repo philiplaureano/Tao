@@ -8,7 +8,7 @@ namespace Tao.Model
     /// <summary>
     /// Represents an SZArray type signature element.
     /// </summary>
-    public class SzArraySignature : TypeSignature
+    public class SzArraySignature : TypeSignature, ITypeSpecification
     {
         private readonly List<CustomMod> _customMods = new List<CustomMod>();
 

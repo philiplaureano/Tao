@@ -8,7 +8,7 @@ namespace Tao.Model
     /// <summary>
     /// Represents a generic type instantiation.
     /// </summary>
-    public class GenericTypeInstance : TypeSignature
+    public class GenericTypeInstance : TypeSignature, ITypeSpecification
     {
         private readonly List<TypeSignature> _typeParameters = new List<TypeSignature>();
 

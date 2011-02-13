@@ -19,7 +19,7 @@ namespace Tao.Signatures
 
         private readonly IFunction<ITuple<IFunction<Stream, TypeSignature>, Stream, ElementType>, TypeSignature>
             _createPointerTypeSignature;
-        
+
         private readonly IFunction<ITuple<IFunction<Stream, TypeSignature>, Stream, ElementType>, TypeSignature>
             _createSzArrayTypeSignature;
 
@@ -27,7 +27,7 @@ namespace Tao.Signatures
             _createGenericTypeSignature;
 
         private readonly IFunction<ITuple<Stream, ElementType>, TypeSignature> _createMVarTypeSignature;
-        private readonly IFunction<ITuple<Stream, IMethodSignatureStreamReader<IMethodRefSignature>, IMethodSignatureStreamReader<IMethodSignature>>, TypeSignature> 
+        private readonly IFunction<ITuple<Stream, IMethodSignatureStreamReader<IMethodRefSignature>, IMethodSignatureStreamReader<IMethodSignature>>, TypeSignature>
             _createFunctionPointerSignature;
 
         private readonly IFunction<ITuple<Stream, IFunction<Stream, TypeSignature>>, TypeSignature>
@@ -53,6 +53,8 @@ namespace Tao.Signatures
                                                                         ElementType.R8
                                                                     };
 
+        private IMicroContainer _container;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeSignatureReader"/> class.
         /// </summary>
@@ -65,15 +67,15 @@ namespace Tao.Signatures
         /// <param name="createFunctionPointerSignature">The object that creates a function pointer <see cref="TypeSignature"/> instance from the given stream.</param>
         /// <param name="createArrayTypeSignature">The object that can create single-dimensional array type signature instances.</param>
         /// <param name="createPrimitiveTypeSignature">The object that creates primitive <see cref="TypeSignature"/> instances.</param>
-        public TypeSignatureReader( IFunction<ITuple<Stream, ElementType>, 
-            TypeSignature> createVarTypeSignature, 
-            IFunction<ITuple<IFunction<Stream, TypeSignature>, Stream, ElementType>, TypeSignature> createPointerTypeSignature, 
-            IFunction<ITuple<Stream, IFunction<Stream, TypeSignature>, ElementType>, TypeSignature> createGenericTypeSignature, 
-            IFunction<ITuple<Stream, ElementType>, TypeSignature> createClassOrValueTypeSignature, 
-            IFunction<ITuple<IFunction<Stream, TypeSignature>, Stream, ElementType>, TypeSignature> createSzArrayTypeSignature, 
+        public TypeSignatureReader(IFunction<ITuple<Stream, ElementType>,
+            TypeSignature> createVarTypeSignature,
+            IFunction<ITuple<IFunction<Stream, TypeSignature>, Stream, ElementType>, TypeSignature> createPointerTypeSignature,
+            IFunction<ITuple<Stream, IFunction<Stream, TypeSignature>, ElementType>, TypeSignature> createGenericTypeSignature,
+            IFunction<ITuple<Stream, ElementType>, TypeSignature> createClassOrValueTypeSignature,
+            IFunction<ITuple<IFunction<Stream, TypeSignature>, Stream, ElementType>, TypeSignature> createSzArrayTypeSignature,
             IFunction<ITuple<Stream, ElementType>, TypeSignature> createMVarTypeSignature,
-            IFunction<ITuple<Stream, IMethodSignatureStreamReader<IMethodRefSignature>, IMethodSignatureStreamReader<IMethodSignature>>, TypeSignature> createFunctionPointerSignature, 
-            IFunction<ITuple<Stream, IFunction<Stream, TypeSignature>>, TypeSignature> createArrayTypeSignature, 
+            IFunction<ITuple<Stream, IMethodSignatureStreamReader<IMethodRefSignature>, IMethodSignatureStreamReader<IMethodSignature>>, TypeSignature> createFunctionPointerSignature,
+            IFunction<ITuple<Stream, IFunction<Stream, TypeSignature>>, TypeSignature> createArrayTypeSignature,
             IFunction<ITuple<Stream, ElementType>, TypeSignature> createPrimitiveTypeSignature)
         {
             _createClassOrValueTypeSignature = createClassOrValueTypeSignature;
@@ -106,7 +108,17 @@ namespace Tao.Signatures
                 return _createClassOrValueTypeSignature.Execute(input, elementType);
 
             if (elementType == ElementType.FnPtr)
+            {
+                // HACK: Resolve the MethodDef/MethodRef stream readers at runtime as a workaround
+                // for the recursive dependency errors
+                if (_methodRefSignatureStreamReader == null)
+                    _methodRefSignatureStreamReader = _container.GetInstance<IMethodSignatureStreamReader<IMethodRefSignature>>();
+
+                if (_methodDefSignatureStreamReader == null)
+                    _methodDefSignatureStreamReader = _container.GetInstance<IMethodSignatureStreamReader<IMethodSignature>>();
+
                 return _createFunctionPointerSignature.Execute(input, _methodRefSignatureStreamReader, _methodDefSignatureStreamReader);
+            }
 
             if (elementType == ElementType.GenericInst)
                 return _createGenericTypeSignature.Execute(input, this, elementType);
@@ -133,7 +145,7 @@ namespace Tao.Signatures
                 return _createVarTypeSignature.Execute(input, elementType);
 
             throw new NotSupportedException(string.Format("Element type not supported: {0}", elementType));
-        }                                                 
+        }
 
         /// <summary>
         /// Adds additional late-bound services to the current object instance.
@@ -141,10 +153,7 @@ namespace Tao.Signatures
         /// <param name="container">The container itself.</param>
         public void Initialize(IMicroContainer container)
         {
-            // HACK: Resolve the MethodDef/MethodRef stream readers at runtime as a workaround
-            // for the recursive dependency errors
-            _methodRefSignatureStreamReader = container.GetInstance<IMethodSignatureStreamReader<IMethodRefSignature>>();
-            _methodDefSignatureStreamReader = container.GetInstance<IMethodSignatureStreamReader<IMethodSignature>>();
+            _container = container;
         }
     }
 }

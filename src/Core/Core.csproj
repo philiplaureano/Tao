@@ -94,6 +94,8 @@
     <Compile Include="Model\IStandAloneMethodSignature.cs" />
     <Compile Include="Model\ITypedByRefMethodSignatureElement.cs" />
     <Compile Include="Model\ITypedMethodSignatureElement.cs" />
+    <Compile Include="Model\ITypeSignature.cs" />
+    <Compile Include="Model\ITypeSpecification.cs" />
     <Compile Include="Model\MethodDefSig.cs" />
     <Compile Include="Model\MethodRefSig.cs" />
     <Compile Include="Model\MethodSignature.cs" />
@@ -247,6 +249,7 @@
     <Compile Include="Signatures\TypeDefOrRefEncodedReader.cs" />
     <Compile Include="Signatures\TypeSignatureReader.cs" />
     <Compile Include="Model\VoidPointerSignature.cs" />
+    <Compile Include="Signatures\TypeSpecReader.cs" />
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="TableId.cs" />
   </ItemGroup>

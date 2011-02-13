@@ -8,7 +8,7 @@ namespace Tao.Model
     /// <summary>
     /// Represents a multidimensional array type.
     /// </summary>
-    public class MultiDimensionalArraySignature : TypeSignature
+    public class MultiDimensionalArraySignature : TypeSignature, ITypeSpecification
     {
         /// <summary>
         /// Gets or sets the value indicating the <see cref="ArrayShape"/> of the current array.
