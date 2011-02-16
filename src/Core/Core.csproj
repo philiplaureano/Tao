@@ -96,6 +96,8 @@
     <Compile Include="Model\ITypedMethodSignatureElement.cs" />
     <Compile Include="Model\ITypeSignature.cs" />
     <Compile Include="Model\ITypeSpecification.cs" />
+    <Compile Include="Model\LocalVariable.cs" />
+    <Compile Include="Model\LocalVarSignature.cs" />
     <Compile Include="Model\MethodDefSig.cs" />
     <Compile Include="Model\MethodRefSig.cs" />
     <Compile Include="Model\MethodSignature.cs" />
@@ -110,8 +112,10 @@
     <Compile Include="Model\SZArraySignature.cs" />
     <Compile Include="Model\TypeAttributes.cs" />
     <Compile Include="Model\TypedByRefMethodSignatureElement.cs" />
+    <Compile Include="Model\TypedByRefVariable.cs" />
     <Compile Include="Model\TypeDef.cs" />
     <Compile Include="Model\TypeDefOrRefEncodedSignature.cs" />
+    <Compile Include="Model\TypedLocalVariable.cs" />
     <Compile Include="Model\TypedMethodSignatureElement.cs" />
     <Compile Include="Model\TypePointerSignature.cs" />
     <Compile Include="Model\TypeSignature.cs" />
@@ -234,6 +238,7 @@
     <Compile Include="Signatures\IAssignMethodSignatureParameters.cs" />
     <Compile Include="Signatures\IParamSignatureReader.cs" />
     <Compile Include="Signatures\IRetTypeSignatureReader.cs" />
+    <Compile Include="Signatures\LocalVarSignatureReader.cs" />
     <Compile Include="Signatures\MethodDefSignatureReader.cs" />
     <Compile Include="Signatures\MethodDefSignatureStreamReader.cs" />
     <Compile Include="Signatures\MethodRefSignatureReader.cs" />

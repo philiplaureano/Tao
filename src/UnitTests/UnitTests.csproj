@@ -96,6 +96,7 @@
     <Compile Include="DosHeaderStreamTests.cs" />
     <Compile Include="FieldSigTests.cs" />
     <Compile Include="FileStreamTests.cs" />
+    <Compile Include="LocalVarSigTests.cs" />
     <Compile Include="MetadataRootTests.cs" />
     <Compile Include="MetadataStreamTests.cs" />
     <Compile Include="MetadataTableRowSizeTests.cs" />
