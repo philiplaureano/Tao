@@ -133,6 +133,7 @@
     <Compile Include="Readers\ReadMethodDefSignatureFromBlob.cs" />
     <Compile Include="Readers\ReadMethodRefSignatureFromBlob.cs" />
     <Compile Include="Readers\ReadMethodSignatureFromBlob.cs" />
+    <Compile Include="Readers\ReadSerString.cs" />
     <Compile Include="Readers\ReadSingle.cs" />
     <Compile Include="Readers\ReadStandAloneMethodSigSignatureFromBlob.cs" />
     <Compile Include="Readers\ReadTypeDefs.cs" />
