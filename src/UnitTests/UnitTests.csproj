@@ -10,12 +10,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tao.UnitTests</RootNamespace>
     <AssemblyName>Tao.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,6 +61,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\LinqBridge.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Cecil, Version=0.6.9.0, Culture=neutral, PublicKeyToken=f8308f98b9861962, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Mono.Cecil.dll</HintPath>
@@ -90,10 +92,12 @@
     <Compile Include="CLIHeaderStreamTests.cs" />
     <Compile Include="CodedTokenTests.cs" />
     <Compile Include="CoffHeaderStreamTests.cs" />
+    <Compile Include="CustomAttributeTests.cs" />
     <Compile Include="CustomModTests.cs" />
     <Compile Include="DataBlockReadTests.cs" />
     <Compile Include="DataDirectoryHeaderStreamTests.cs" />
     <Compile Include="DosHeaderStreamTests.cs" />
+    <Compile Include="ElementReaderTests.cs" />
     <Compile Include="FieldSigTests.cs" />
     <Compile Include="FileStreamTests.cs" />
     <Compile Include="LocalVarSigTests.cs" />

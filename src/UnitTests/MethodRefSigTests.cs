@@ -21,7 +21,7 @@ namespace Tao.UnitTests
 
             uint index = 0xA;
             var stream = GetStream();
-            var input = Tuple.New(index, stream);
+            var input = Tao.Interfaces.Tuple.New(index, stream);
 
             var methodDefSig = reader.Execute(input);
 

@@ -545,11 +545,11 @@ namespace Tao.UnitTests
         private void TestRowSizeCalculation(TableId tableId, int expectedRowSize)
         {
             var stream = GetStream();
-            var heapSizes = Tuple.New(2, 2, 2);
+            var heapSizes = Tao.Interfaces.Tuple.New(2, 2, 2);
             var calculator = container.GetInstance<IFunction<ITuple<ITuple<TableId, Stream>, ITuple<int, int, int>>, int>>("CalculateMetadataTableRowSize");
             Assert.IsNotNull(calculator);
 
-            var result = calculator.Execute(Tuple.New(tableId, stream), heapSizes);
+            var result = calculator.Execute(Tao.Interfaces.Tuple.New(tableId, stream), heapSizes);
             Assert.AreEqual(expectedRowSize, result);
         } 
         #endregion
