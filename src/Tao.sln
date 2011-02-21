@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericInstanceSignature", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SZArrayAssembly", "SampleAssemblies\SZArrayAssembly\SZArrayAssembly.csproj", "{8D8B9534-690D-4296-828E-6C662940A539}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomAttributes", "SampleAssemblies\CustomAttributes\CustomAttributes.csproj", "{71BF542F-E8DC-4A77-B0EE-C90398A96E42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AutomatedDebug|Any CPU = AutomatedDebug|Any CPU
@@ -196,6 +198,21 @@ Global
 		{8D8B9534-690D-4296-828E-6C662940A539}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8D8B9534-690D-4296-828E-6C662940A539}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8D8B9534-690D-4296-828E-6C662940A539}.Release|Win32.ActiveCfg = Release|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.AutomatedDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.AutomatedDebug|Any CPU.Build.0 = Debug|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.AutomatedDebug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.AutomatedDebug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.AutomatedDebug|Win32.ActiveCfg = Debug|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -212,5 +229,6 @@ Global
 		{DC13DFA9-985B-4AC3-B6F4-B44B53A78381} = {EE2984DC-1BF2-4D1F-B3B4-7C54A6DE418E}
 		{58D3DA07-261F-4A56-AC3B-A3AC43DB044A} = {EE2984DC-1BF2-4D1F-B3B4-7C54A6DE418E}
 		{8D8B9534-690D-4296-828E-6C662940A539} = {EE2984DC-1BF2-4D1F-B3B4-7C54A6DE418E}
+		{71BF542F-E8DC-4A77-B0EE-C90398A96E42} = {EE2984DC-1BF2-4D1F-B3B4-7C54A6DE418E}
 	EndGlobalSection
 EndGlobal

@@ -10,7 +10,7 @@ namespace Tao.Readers
     /// <summary>
     /// Represents a class that reads an <see cref="Int16"/> from a given stream.
     /// </summary>
-    public class ReadInt16 : IFunction<Stream, short >
+    public class ReadInt16 : IFunction<Stream, short>
     {
         /// <summary>
         /// Reads an <see cref="Int16"/> from the given stream.

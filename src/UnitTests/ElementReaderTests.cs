@@ -52,11 +52,21 @@ namespace Tao.UnitTests
         }
 
         [Test]
+        public void ShouldBeAbleToReadSByteElement()
+        {
+            var className = "ReadSByte";
+            sbyte expectedValue = sbyte.MaxValue;
+
+            var bytes = BitConverter.GetBytes(expectedValue);
+            TestElementRead(className, expectedValue, bytes);
+        }
+
+        [Test]
         public void ShouldBeAbleToReadByteElement()
         {
             var className = "ReadByte";
             byte expectedValue = 65;
-            
+
             var bytes = BitConverter.GetBytes(expectedValue);
             TestElementRead(className, expectedValue, bytes);
         }
@@ -104,7 +114,7 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldBeAbleToReadI4Element()
         {
-            var className = "ReadInt32";            
+            var className = "ReadInt32";
             int expectedValue = -42;
             var bytes = BitConverter.GetBytes(expectedValue);
             TestElementRead(className, expectedValue, bytes);
@@ -118,19 +128,30 @@ namespace Tao.UnitTests
             var bytes = BitConverter.GetBytes(expectedValue);
             TestElementRead(className, expectedValue, bytes);
         }
-       
+
         [Test]
-        [Ignore("TODO: Implement this")]
-        public void ShouldMapElementToCorrespondingReaderType()
+        public void ShouldBeAbleToReadSerString()
         {
-            // TODO: Write a test that maps each element type to an IFunction<Stream, TElement> instance
-            throw new NotImplementedException();
+            var text = "Named1";
+            byte length = (byte)text.Length;
+            var textBytes = Encoding.UTF8.GetBytes(text);
+
+            var bytes = new List<byte>();
+            bytes.Add(length);
+            bytes.AddRange(textBytes);
+
+            var reader = container.GetInstance<IFunction<Stream, string>>("ReadSerString");
+            Assert.IsNotNull(reader, "ReadSerString reader not found");
+
+            var stream = new MemoryStream(bytes.ToArray());
+            var result = reader.Execute(stream);
+            Assert.AreEqual(text, result);
         }
 
         private void TestElementRead<TElement>(string className, TElement expectedValue, byte[] bytes)
            where TElement : struct
         {
-            var inputStream = new MemoryStream(bytes);            
+            var inputStream = new MemoryStream(bytes);
             var reader = container.GetInstance<IFunction<Stream, TElement>>(className);
             Assert.IsNotNull(reader, string.Format("{0} reader not found", className));
 

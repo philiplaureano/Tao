@@ -125,6 +125,7 @@
     <Compile Include="Readers\ReadByte.cs" />
     <Compile Include="Readers\ReadChar.cs" />
     <Compile Include="Readers\ReadCompressedSignedInteger.cs" />
+    <Compile Include="Readers\ReadCustomAttributeElement.cs" />
     <Compile Include="Readers\ReadCustomMods.cs" />
     <Compile Include="Readers\ReadDouble.cs" />
     <Compile Include="Readers\ReadInt16.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Readers\ReadMethodDefSignatureFromBlob.cs" />
     <Compile Include="Readers\ReadMethodRefSignatureFromBlob.cs" />
     <Compile Include="Readers\ReadMethodSignatureFromBlob.cs" />
+    <Compile Include="Readers\ReadSByte.cs" />
     <Compile Include="Readers\ReadSerString.cs" />
     <Compile Include="Readers\ReadSingle.cs" />
     <Compile Include="Readers\ReadStandAloneMethodSigSignatureFromBlob.cs" />

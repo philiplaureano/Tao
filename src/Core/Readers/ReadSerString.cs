@@ -30,6 +30,16 @@ namespace Tao.Readers
         /// <returns></returns>
         public string Execute(Stream input)
         {
+            var nextByte = (byte) input.ReadByte();
+            if (nextByte == 0xFF)
+                return null;
+
+            if (nextByte == 0x00)
+                return string.Empty;
+
+            // Reset the stream position to 
+            // point to the string length
+            input.Seek(-1, SeekOrigin.Current);
             var length = (int)_readCompressedInteger.Execute(input);
 
             var reader = new BinaryReader(input);

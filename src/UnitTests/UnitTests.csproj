@@ -92,6 +92,7 @@
     <Compile Include="CLIHeaderStreamTests.cs" />
     <Compile Include="CodedTokenTests.cs" />
     <Compile Include="CoffHeaderStreamTests.cs" />
+    <Compile Include="CustomAttributeElementReaderTests.cs" />
     <Compile Include="CustomAttributeTests.cs" />
     <Compile Include="CustomModTests.cs" />
     <Compile Include="DataBlockReadTests.cs" />

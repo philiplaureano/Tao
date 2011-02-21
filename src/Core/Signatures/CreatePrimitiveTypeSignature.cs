@@ -29,6 +29,7 @@ namespace Tao.Signatures
             _primitiveEntries[ElementType.I4] = defaultCreator;
             _primitiveEntries[ElementType.I8] = defaultCreator;
             _primitiveEntries[ElementType.U1] = defaultCreator;
+            _primitiveEntries[ElementType.U2] = defaultCreator;
             _primitiveEntries[ElementType.U4] = defaultCreator;
             _primitiveEntries[ElementType.U8] = defaultCreator;
             _primitiveEntries[ElementType.R4] = defaultCreator;

@@ -51,10 +51,17 @@ namespace Tao.UnitTests
             var elementType = ElementType.I8;
             TestElementTypeRead(elementType);
         }
+        
         [Test]
         public void ShouldReadU1Type()
         {
             var elementType = ElementType.U1;
+            TestElementTypeRead(elementType);
+        }
+        [Test]
+        public void ShouldReadU2Type()
+        {
+            var elementType = ElementType.U2;
             TestElementTypeRead(elementType);
         }
 

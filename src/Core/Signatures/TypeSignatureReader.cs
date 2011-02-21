@@ -47,6 +47,7 @@ namespace Tao.Signatures
                                                                         ElementType.I4,
                                                                         ElementType.I8,
                                                                         ElementType.U1,
+                                                                        ElementType.U2,
                                                                         ElementType.U4,
                                                                         ElementType.U8,
                                                                         ElementType.R4,

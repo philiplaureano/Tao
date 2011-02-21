@@ -9,7 +9,7 @@ namespace Tao.Interfaces
     /// </summary>
     /// <typeparam name="TInput">The input type that will be used to create the object.</typeparam>
     /// <typeparam name="TOutput">The type of object that will be created by the factory itself.</typeparam>
-    public interface IFunction<TInput, TOutput>
+    public interface IFunction<in TInput, out TOutput>
     {
         /// <summary>
         /// Creates the given <typeparamref name="TOutput"/> using the given <typeparamref name="TInput"/>.
@@ -23,7 +23,7 @@ namespace Tao.Interfaces
     /// Represents a converter type.
     /// </summary>
     /// <typeparam name="TInput">The input type that will be used to create the object.</typeparam>
-    public interface IFunction<TInput>
+    public interface IFunction<in TInput>
     {
         /// <summary>
         /// Executes the given action using the given <typeparamref name="TInput"/>.

@@ -13,6 +13,7 @@ namespace Tao
         I1 = 0x4,
         U1 = 0x5,
         I2 = 0x6,
+        U2 = 0x7,
         I4 = 0x8,
         U4 = 0x9,
         I8 = 0xA,
