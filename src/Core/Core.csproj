@@ -131,6 +131,8 @@
     <Compile Include="Readers\ReadInt16.cs" />
     <Compile Include="Readers\ReadInt32.cs" />
     <Compile Include="Readers\ReadInt64.cs" />
+    <Compile Include="Readers\ReadMetadataTable.cs" />
+    <Compile Include="Readers\ReadMetadataTables.cs" />
     <Compile Include="Readers\ReadMethodDefSignatureFromBlob.cs" />
     <Compile Include="Readers\ReadMethodRefSignatureFromBlob.cs" />
     <Compile Include="Readers\ReadMethodSignatureFromBlob.cs" />

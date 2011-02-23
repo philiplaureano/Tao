@@ -12,23 +12,28 @@ namespace Tao.Readers
     /// </summary>
     public class ReadAssemblyDef : IFunction<Stream, AssemblyDef>
     {
-        private readonly IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>> _readAllMetadataTables;
         private readonly IFunction<Stream, ITuple<int, int, int>> _readMetadataHeapIndexSizes;
         private readonly IFunction<ITuple<uint, Stream>, string> _readStringFromStringsHeap;
         private readonly IFunction<ITuple<uint, Stream>, byte[]> _readBlob;
         private readonly IFunction<ITuple<int, BinaryReader>, uint> _readHeapIndexValue;
+        private readonly IFunction<ITuple<TableId, Stream>, ITuple<int, Stream>> _readMetadataTable;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReadAssemblyDef"/> class.
         /// </summary>
-        public ReadAssemblyDef(IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>> readAllMetadataTables,
-            IFunction<Stream, ITuple<int, int, int>> readMetadataHeapIndexSizes,
+        /// <param name="readBlob">The blob reader.</param>
+        /// <param name="readHeapIndexValue">The heap index value reader.</param>
+        /// <param name="readMetadataHeapIndexSizes">The reader that will determine the heap index sizes from the input stream.</param>
+        /// <param name="readMetadataTable">The metadata table reader.</param>
+        /// <param name="readStringFromStringsHeap">The string reader.</param>
+        public ReadAssemblyDef(IFunction<Stream, ITuple<int, int, int>> readMetadataHeapIndexSizes,
             IFunction<ITuple<uint, Stream>, string> readStringFromStringsHeap,
             IFunction<ITuple<uint, Stream>, byte[]> readBlob,
-            IFunction<ITuple<int, BinaryReader>, uint> readHeapIndexValue)
+            IFunction<ITuple<int, BinaryReader>, uint> readHeapIndexValue, 
+            IFunction<ITuple<TableId, Stream>, ITuple<int, Stream>> readMetadataTable)
         {
-            _readAllMetadataTables = readAllMetadataTables;
             _readBlob = readBlob;
+            _readMetadataTable = readMetadataTable;
             _readStringFromStringsHeap = readStringFromStringsHeap;
             _readMetadataHeapIndexSizes = readMetadataHeapIndexSizes;
             _readHeapIndexValue = readHeapIndexValue;
@@ -41,8 +46,7 @@ namespace Tao.Readers
         /// <returns>An <see cref="AssemblyDef"/> object.</returns>
         public AssemblyDef Execute(Stream input)
         {
-            var tables = _readAllMetadataTables.Execute(input);
-            var tableEntry = tables[TableId.Assembly];
+            var tableEntry = _readMetadataTable.Execute(TableId.Assembly, input);
             var tableStream = tableEntry.Item2;
 
             var reader = new BinaryReader(tableStream);
