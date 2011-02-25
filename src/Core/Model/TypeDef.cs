@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tao.Interfaces;
 
 namespace Tao.Model
 {
@@ -25,6 +26,12 @@ namespace Tao.Model
         /// Gets a value indicating the Flags of the current type.
         /// </summary>
         /// <value>The Flags of the current type.</value>
-        public TypeAttributes? Flags { get; set; }   
+        public TypeAttributes? Flags { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value indicating the <see cref="TableId"/> and the row of the parent type.
+        /// </summary>
+        /// <value>The value indicating the <see cref="TableId"/> and the row of the parent type.</value>
+        public ITuple<TableId, int> Extends { get; set; }
     }
 }

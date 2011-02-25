@@ -45,7 +45,7 @@ namespace Tao.Readers
         /// <returns>A list of <see cref="TypeDef"/>instances. </returns>
         public IEnumerable<TypeDef> Execute(Stream input)
         {
-            IEnumerable<TableId> targetTableIds = new TableId[] { TableId.Field, TableId.MethodDef, TableId.TypeDef, TableId.TypeRef, TableId.TypeSpec };
+            IEnumerable<TableId> targetTableIds = new TableId[] { TableId.Field, TableId.MethodDef, TableId.TypeDef };
             Func<TableId, bool> shouldReadGivenTables = currentTableId => targetTableIds.Contains(currentTableId);
 
             var tables = _readMetadataTables.Execute(shouldReadGivenTables, input);
@@ -86,13 +86,11 @@ namespace Tao.Readers
             var tableIds = new TableId[] { TableId.TypeDef, TableId.TypeRef, TableId.TypeSpec };
             int token = ReadToken(tables, reader, tableIds);
 
-            if (token == 0)
-                return;
-
             var extends = _getTableReferenceFromCodedToken.Execute(CodedTokenType.TypeDefOrTypeRef, token);
-            if (rowCount <= 1 || currentRow >= rowCount)
+            if (currentRow >= rowCount)
                 return;
 
+            typeDef.Extends = extends;
         }
 
         private int ReadToken(IDictionary<TableId, ITuple<int, Stream>> tables, BinaryReader reader, IEnumerable<TableId> tableIds)

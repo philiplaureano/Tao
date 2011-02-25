@@ -50,14 +50,15 @@ namespace Tao.Readers
             var tableStream = tableEntry.Item2;
 
             var reader = new BinaryReader(tableStream);
-            var result = new AssemblyDef();
-
-            result.HashAlgorithm = (AssemblyHashAlgorithm)reader.ReadUInt32();
-            result.MajorVersion = reader.ReadUInt16();
-            result.MinorVersion = reader.ReadUInt16();
-            result.BuildNumber = reader.ReadUInt16();
-            result.RevisionNumber = reader.ReadUInt16();
-            result.Flags = (AssemblyFlags)reader.ReadInt32();
+            var result = new AssemblyDef
+                             {
+                                 HashAlgorithm = (AssemblyHashAlgorithm) reader.ReadUInt32(),
+                                 MajorVersion = reader.ReadUInt16(),
+                                 MinorVersion = reader.ReadUInt16(),
+                                 BuildNumber = reader.ReadUInt16(),
+                                 RevisionNumber = reader.ReadUInt16(),
+                                 Flags = (AssemblyFlags) reader.ReadInt32()
+                             };
 
             var heapSizes = _readMetadataHeapIndexSizes.Execute(input);
 

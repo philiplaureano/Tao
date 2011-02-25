@@ -68,7 +68,11 @@ namespace Tao.UnitTests
             var type = types[0];
             Assert.AreEqual(0, Convert.ToInt32(type.Flags));
             Assert.AreEqual("<Module>", type.Name);
-            Assert.AreEqual(string.Empty, type.Namespace);            
+            Assert.AreEqual(string.Empty, type.Namespace);
+
+            var extends = type.Extends;
+            Assert.AreEqual(TableId.TypeDef, extends.Item1);
+            Assert.AreEqual(0, extends.Item2);
         }
     }
 }

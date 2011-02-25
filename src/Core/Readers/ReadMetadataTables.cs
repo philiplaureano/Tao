@@ -63,18 +63,18 @@ namespace Tao.Readers
 
                 var streamLength = rowCount * rowSize;
 
+                Stream currentStream = null;
                 if (shouldReadTargetTable(tableId))
                 {
-                    var currentStream = _inMemorySubStreamReader.Execute(streamLength, metadataHeap);
+                    currentStream = _inMemorySubStreamReader.Execute(streamLength, metadataHeap);
                     results[tableId] = Tuple.New(rowCount, currentStream);
+                    continue;
                 }
-                else
-                {
-                    // Skip the current table stream
-                    metadataHeap.Seek(streamLength, SeekOrigin.Current);
-                    Stream currentStream = new MemoryStream();
-                    results[tableId] = Tuple.New(0, currentStream);                    
-                }
+
+                // Skip the current table stream
+                metadataHeap.Seek(streamLength, SeekOrigin.Current);
+                currentStream = new MemoryStream();
+                results[tableId] = Tuple.New(0, currentStream);
             }
 
             return results;
