@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
+using Tao.Containers;
 using Tao.Interfaces;
 using Tao.Model;
-using Tao.Containers;
 
 namespace Tao.UnitTests
 {

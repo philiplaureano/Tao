@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using Tao.Interfaces;
 
 namespace Tao.Seekers
 {
     /// <summary>
-    /// Represents a <see cref="IFunction{Stream}"/> that can find the coff header position.
+    /// Represents a <see cref="IFunction{TInput}"/> that can find the coff header position.
     /// </summary>
     public class DosHeaderSeeker : IFunction<Stream>
     {

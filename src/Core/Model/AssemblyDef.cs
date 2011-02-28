@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tao.Model
+﻿namespace Tao.Model
 {
     /// <summary>
     /// Represents an assembly definition class.

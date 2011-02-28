@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tao.Interfaces
+﻿namespace Tao.Interfaces
 {
     /// <summary>
     /// Represents a data structure that has a specific number and sequence of values.

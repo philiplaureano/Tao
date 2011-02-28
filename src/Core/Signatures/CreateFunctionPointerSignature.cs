@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Hiro.Containers;
+﻿using System.IO;
 using Tao.Interfaces;
 using Tao.Model;
-using Tao.Containers;
 
 namespace Tao.Signatures
 {

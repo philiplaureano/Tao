@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Tao.Interfaces;
 using Tao.Model;
 
@@ -45,7 +44,7 @@ namespace Tao.Readers
         /// <returns>A list of <see cref="TypeDef"/>instances. </returns>
         public IEnumerable<TypeDef> Execute(Stream input)
         {
-            IEnumerable<TableId> targetTableIds = new TableId[] { TableId.Field, TableId.MethodDef, TableId.TypeDef };
+            IEnumerable<TableId> targetTableIds = new[] { TableId.Field, TableId.MethodDef, TableId.TypeDef };
             Func<TableId, bool> shouldReadGivenTables = currentTableId => targetTableIds.Contains(currentTableId);
 
             var tables = _readMetadataTables.Execute(shouldReadGivenTables, input);
@@ -83,7 +82,7 @@ namespace Tao.Readers
             typeDef.Name = _readStringFromStringHeap.Execute(nameIndex, input);
             typeDef.Namespace = _readStringFromStringHeap.Execute(namespaceIndex, input);
 
-            var tableIds = new TableId[] { TableId.TypeDef, TableId.TypeRef, TableId.TypeSpec };
+            var tableIds = new[] { TableId.TypeDef, TableId.TypeRef, TableId.TypeSpec };
             int token = ReadToken(tables, reader, tableIds);
 
             var extends = _getTableReferenceFromCodedToken.Execute(CodedTokenType.TypeDefOrTypeRef, token);

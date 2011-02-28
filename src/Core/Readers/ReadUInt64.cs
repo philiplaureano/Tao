@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Tao.Interfaces;
 
 namespace Tao.Readers
 {
     /// <summary>
-    /// Represents a class that reads an <see cref="UInt64"/> from a given stream.
+    /// Represents a class that reads an <see cref="ulong"/> from a given stream.
     /// </summary>
     public class ReadUInt64 : IFunction<Stream, UInt64>
     {

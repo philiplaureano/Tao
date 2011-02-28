@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using FieldSigAssembly;
+﻿using System.IO;
 using NUnit.Framework;
-using Hiro.Containers;
-using Tao.Interfaces;
 using Tao.Containers;
+using Tao.Interfaces;
 using Tao.Model;
 
 namespace Tao.UnitTests
@@ -40,7 +34,7 @@ namespace Tao.UnitTests
 
             byte fieldSig = 0x6;
             byte classElement = (byte)ElementType.Class;
-            var bytes = new byte[]
+            var bytes = new[]
                             {
                                 fieldSig,
                                 classElement,

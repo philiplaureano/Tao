@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using Tao.Interfaces;
 using Tao.Containers;
+using Tao.Interfaces;
 
 namespace Tao.UnitTests
 {
@@ -18,7 +17,7 @@ namespace Tao.UnitTests
             var elementType = ElementType.Boolean;
             object expectedValue = true;
 
-            var bytes = new byte[] { Convert.ToByte(expectedValue) };
+            var bytes = new[] { Convert.ToByte(expectedValue) };
 
             TestElementRead(expectedValue, bytes, elementType);
         }
@@ -29,7 +28,7 @@ namespace Tao.UnitTests
             var elementType = ElementType.Char;
             object expectedValue = 'z';
 
-            var bytes = new byte[] { Convert.ToByte(expectedValue) };
+            var bytes = new[] { Convert.ToByte(expectedValue) };
             TestElementRead(expectedValue, bytes, elementType);
         }
 
@@ -65,7 +64,7 @@ namespace Tao.UnitTests
             var elementType = ElementType.U1;
             object expectedValue = Byte.MaxValue;
 
-            var bytes = new byte[] { (byte)expectedValue };
+            var bytes = new[] { (byte)expectedValue };
             TestElementRead(expectedValue, bytes, elementType);
         }
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Tao.Model;
+﻿using Tao.Model;
 using Tao.Signatures;
 
 namespace Tao.Readers

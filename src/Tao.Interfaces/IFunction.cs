@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tao.Interfaces
+﻿namespace Tao.Interfaces
 {
     /// <summary>
     /// Represents a converter type.

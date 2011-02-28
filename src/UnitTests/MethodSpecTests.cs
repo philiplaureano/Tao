@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Tao.Containers;
 using Tao.Interfaces;
@@ -35,7 +33,7 @@ namespace Tao.UnitTests
             Assert.IsNotNull(reader);
 
             var stream = new MemoryStream(bytes.ToArray());
-            var signature = reader.Execute(stream) as MethodSpec;
+            var signature = reader.Execute(stream);
             Assert.IsNotNull(signature);
 
             // The TypeDefOrRefEncoded index should be pointing to the TypeRef table, row 2

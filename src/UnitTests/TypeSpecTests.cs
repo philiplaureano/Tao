@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
+using Tao.Containers;
 using Tao.Interfaces;
 using Tao.Model;
-using Tao.Containers;
 
 namespace Tao.UnitTests
 {
@@ -17,7 +15,7 @@ namespace Tao.UnitTests
         [ExpectedException(typeof(NotSupportedException))]
         public void ShouldThrowNotSupportedExceptionOnInvalidElement()
         {
-            var bytes = new byte[] {(byte) ElementType.I4};
+            var bytes = new[] {(byte) ElementType.I4};
             var stream = new MemoryStream(bytes);
             var reader = container.GetInstance<IFunction<Stream, ITypeSpecification>>();
             Assert.IsNotNull(reader);
@@ -28,7 +26,7 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldReadVoidPointerSignature()
         {
-            var bytes = new byte[] { Convert.ToByte(ElementType.Ptr), Convert.ToByte(ElementType.Void) };
+            var bytes = new[] { Convert.ToByte(ElementType.Ptr), Convert.ToByte(ElementType.Void) };
 
             var stream = new MemoryStream(bytes);
             var reader = container.GetInstance<IFunction<Stream, ITypeSpecification>>();
@@ -87,7 +85,7 @@ namespace Tao.UnitTests
             byte genericParameters = 2;
             byte normalParameters = 2;
             byte returnType = Convert.ToByte(ElementType.Void);
-            var parameterTypes = new byte[] { Convert.ToByte(ElementType.I4), Convert.ToByte(ElementType.Object) };
+            var parameterTypes = new[] { Convert.ToByte(ElementType.I4), Convert.ToByte(ElementType.Object) };
 
             // Create the FunctionPointerSignature
             var bytes = new List<byte> { Convert.ToByte(ElementType.FnPtr), Convert.ToByte(flags), genericParameters, normalParameters, returnType };
@@ -196,7 +194,7 @@ namespace Tao.UnitTests
             var elementType = ElementType.SzArray;
             var arrayElementType = ElementType.I4;
 
-            var bytes = new byte[] { Convert.ToByte(elementType), Convert.ToByte(arrayElementType) };
+            var bytes = new[] { Convert.ToByte(elementType), Convert.ToByte(arrayElementType) };
             var stream = new MemoryStream(bytes);
 
             var reader = container.GetInstance<IFunction<Stream, TypeSignature>>();
@@ -214,12 +212,12 @@ namespace Tao.UnitTests
         }
         private byte[] GetCustomModBytes(ElementType elementType, byte codedToken)
         {
-            return new byte[] { Convert.ToByte(elementType), Convert.ToByte(codedToken) };
+            return new[] { Convert.ToByte(elementType), Convert.ToByte(codedToken) };
         }
 
         private void TestElementTypeRead(ElementType elementType)
         {
-            var bytes = new byte[] { Convert.ToByte(elementType) };
+            var bytes = new[] { Convert.ToByte(elementType) };
             var stream = new MemoryStream(bytes);
 
             var reader = container.GetInstance<IFunction<Stream, ITypeSpecification>>();
