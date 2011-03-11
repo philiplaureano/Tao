@@ -20,7 +20,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadAssemblyFromStream()
         {
             var stream = GetStream();
-            var reader = container.GetInstance<IFunction<Stream, AssemblyDef>>("ReadAssemblyDef");
+            var reader = container.GetInstance<IFunction<Stream, AssemblyDefRow>>("ReadAssemblyDef");
             Assert.IsNotNull(reader);
 
             var result = reader.Execute(stream);
@@ -40,7 +40,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadModuleFromStream()
         {
             var stream = GetStream();
-            var reader = container.GetInstance<IFunction<Stream, ModuleDef>>("ReadModuleDef");
+            var reader = container.GetInstance<IFunction<Stream, ModuleDefRow>>("ReadModuleDef");
             Assert.IsNotNull(reader);
 
             var result = reader.Execute(stream);
@@ -57,11 +57,11 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReadSimpleTypeDefFromStream()
         {
             var stream = GetStream();
-            var reader = container.GetInstance<IFunction<Stream, IEnumerable<TypeDef>>>("ReadTypeDefs");
+            var reader = container.GetInstance<IFunction<Stream, IEnumerable<TypeDefRow>>>("ReadTypeDefs");
             Assert.IsNotNull(reader);
 
             var results = reader.Execute(stream);
-            var types = new List<TypeDef>(results);
+            var types = new List<TypeDefRow>(results);
             Assert.IsNotNull(results);
             Assert.IsTrue(types.Count > 0);
 
@@ -73,6 +73,9 @@ namespace Tao.UnitTests
             var extends = type.Extends;
             Assert.AreEqual(TableId.TypeDef, extends.Item1);
             Assert.AreEqual(0, extends.Item2);
+
+            Assert.AreEqual(1, type.FieldList);
+            Assert.AreEqual(1, type.MethodList);
         }
     }
 }

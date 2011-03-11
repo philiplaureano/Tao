@@ -8,9 +8,9 @@ using Tao.Model;
 namespace Tao.Readers
 {
     /// <summary>
-    /// Represents a class that reads a <see cref="ModuleDef"/> from the given metadata stream.
+    /// Represents a class that reads a <see cref="ModuleDefRow"/> from the given metadata stream.
     /// </summary>
-    public class ReadModuleDef : IFunction<Stream, ModuleDef>
+    public class ReadModuleDef : IFunction<Stream, ModuleDefRow>
     {
         private readonly IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>> _readAllMetadataTables;
         private readonly IFunction<Stream, ITuple<int, int, int>> _readMetadataHeapIndexSizes;
@@ -31,11 +31,11 @@ namespace Tao.Readers
         }
 
         /// <summary>
-        /// Reads a <see cref="ModuleDef"/> from the given metadata stream.
+        /// Reads a <see cref="ModuleDefRow"/> from the given metadata stream.
         /// </summary>
         /// <param name="input">The input stream.</param>
-        /// <returns>The <see cref="ModuleDef"/> embedded in the metadata stream.</returns>
-        public ModuleDef Execute(Stream input)
+        /// <returns>The <see cref="ModuleDefRow"/> embedded in the metadata stream.</returns>
+        public ModuleDefRow Execute(Stream input)
         {
             var heapSizes = _readMetadataHeapIndexSizes.Execute(input);
             var tables = _readAllMetadataTables.Execute(input);
@@ -55,7 +55,7 @@ namespace Tao.Readers
             var nameIndex = _readHeapIndexValue.Execute(stringIndexSize, reader);
             var guidIndex = _readHeapIndexValue.Execute(guidIndexSize, reader);
 
-            var result = new ModuleDef();
+            var result = new ModuleDefRow();
 
             result.Name = _readStringFromStringsHeap.Execute(nameIndex, input);
             result.Mvid = _readGuidFromGuidHeap.Execute(guidIndex, input);

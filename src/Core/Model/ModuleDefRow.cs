@@ -7,7 +7,7 @@ namespace Tao.Model
     /// <summary>
     /// Represents a module definition.
     /// </summary>
-    public class ModuleDef
+    public class ModuleDefRow
     {
         /// <summary>
         /// Gets a value indicating the Name of the current type.

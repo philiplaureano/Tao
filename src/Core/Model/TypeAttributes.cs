@@ -5,7 +5,7 @@ using System.Text;
 namespace Tao.Model
 {
     /// <summary>
-    /// Represents flags that describe a given <see cref="TypeDef"/> instance.
+    /// Represents flags that describe a given <see cref="TypeDefRow"/> instance.
     /// </summary>
     public enum TypeAttributes : uint
     {

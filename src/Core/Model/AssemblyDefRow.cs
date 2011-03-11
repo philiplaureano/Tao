@@ -7,7 +7,7 @@ namespace Tao.Model
     /// <summary>
     /// Represents an assembly definition class.
     /// </summary>
-    public class AssemblyDef
+    public class AssemblyDefRow
     {
         /// <summary>
         /// Gets a value indicating the MajorVersion of the current type.

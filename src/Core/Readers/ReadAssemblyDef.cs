@@ -8,9 +8,9 @@ using Tao.Model;
 namespace Tao.Readers
 {
     /// <summary>
-    /// Represents a class that reads an <see cref="AssemblyDef"/> from a given stream.
+    /// Represents a class that reads an <see cref="AssemblyDefRow"/> from a given stream.
     /// </summary>
-    public class ReadAssemblyDef : IFunction<Stream, AssemblyDef>
+    public class ReadAssemblyDef : IFunction<Stream, AssemblyDefRow>
     {
         private readonly IFunction<Stream, ITuple<int, int, int>> _readMetadataHeapIndexSizes;
         private readonly IFunction<ITuple<uint, Stream>, string> _readStringFromStringsHeap;
@@ -40,17 +40,17 @@ namespace Tao.Readers
         }
 
         /// <summary>
-        /// Reads an <see cref="AssemblyDef"/> from a given stream.
+        /// Reads an <see cref="AssemblyDefRow"/> from a given stream.
         /// </summary>
         /// <param name="input">The input stream.</param>
-        /// <returns>An <see cref="AssemblyDef"/> object.</returns>
-        public AssemblyDef Execute(Stream input)
+        /// <returns>An <see cref="AssemblyDefRow"/> object.</returns>
+        public AssemblyDefRow Execute(Stream input)
         {
             var tableEntry = _readMetadataTable.Execute(TableId.Assembly, input);
             var tableStream = tableEntry.Item2;
 
             var reader = new BinaryReader(tableStream);
-            var result = new AssemblyDef
+            var result = new AssemblyDefRow
                              {
                                  HashAlgorithm = (AssemblyHashAlgorithm) reader.ReadUInt32(),
                                  MajorVersion = reader.ReadUInt16(),

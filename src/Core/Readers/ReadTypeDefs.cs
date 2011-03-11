@@ -9,9 +9,9 @@ using Tao.Model;
 namespace Tao.Readers
 {
     /// <summary>
-    /// Represents a type that reads <see cref="TypeDef"/> instances from the metadata tables.
+    /// Represents a type that reads <see cref="TypeDefRow"/> instances from the metadata tables.
     /// </summary>
-    public class ReadTypeDefs : IFunction<Stream, IEnumerable<TypeDef>>
+    public class ReadTypeDefs : IFunction<Stream, IEnumerable<TypeDefRow>>
     {
         private readonly IFunction<ITuple<Func<TableId, bool>, Stream>, IDictionary<TableId, ITuple<int, Stream>>> _readMetadataTables;
         private readonly IFunction<Stream, ITuple<int, int, int>> _readMetadataHeapIndexSizes;
@@ -27,7 +27,7 @@ namespace Tao.Readers
             IFunction<ITuple<uint, Stream>, string> readStringFromStringHeap,
             IFunction<ITuple<TableId, Stream>, int> getTableRowSize,
             IFunction<ITuple<int, BinaryReader>, uint> readHeapIndexValue,
-            IFunction<ITuple<CodedTokenType, int>, ITuple<TableId, int>> getTableReferenceFromCodedToken, 
+            IFunction<ITuple<CodedTokenType, int>, ITuple<TableId, int>> getTableReferenceFromCodedToken,
             IFunction<ITuple<Func<TableId, bool>, Stream>, IDictionary<TableId, ITuple<int, Stream>>> readMetadataTables)
         {
             _getTableReferenceFromCodedToken = getTableReferenceFromCodedToken;
@@ -39,11 +39,11 @@ namespace Tao.Readers
         }
 
         /// <summary>
-        /// Reads <see cref="TypeDef"/> instances from the metadata tables.
+        /// Reads <see cref="TypeDefRow"/> instances from the metadata tables.
         /// </summary>
         /// <param name="input">The input stream.</param>
-        /// <returns>A list of <see cref="TypeDef"/>instances. </returns>
-        public IEnumerable<TypeDef> Execute(Stream input)
+        /// <returns>A list of <see cref="TypeDefRow"/>instances. </returns>
+        public IEnumerable<TypeDefRow> Execute(Stream input)
         {
             IEnumerable<TableId> targetTableIds = new TableId[] { TableId.Field, TableId.MethodDef, TableId.TypeDef };
             Func<TableId, bool> shouldReadGivenTables = currentTableId => targetTableIds.Contains(currentTableId);
@@ -63,37 +63,58 @@ namespace Tao.Readers
             {
                 var offset = rowSize * i;
                 tableStream.Seek(offset, SeekOrigin.Begin);
-                var typeDef = new TypeDef();
 
-                Read(stringHeapIndexSize, typeDef, input, reader, tables, rowSize, i);
+                var typeDef = Read(stringHeapIndexSize, i, input, reader, tables);
 
                 yield return typeDef;
             }
         }
 
-        private void Read(int stringHeapIndexSize, TypeDef typeDef, Stream input, BinaryReader reader, IDictionary<TableId, ITuple<int, Stream>> tables, int rowSize, int currentRow)
+        /// <summary>
+        /// Reads a <see cref="TypeDefRow"/> from the current stream.
+        /// </summary>
+        /// <param name="stringHeapIndexSize">The current size of the string heap index.</param>
+        /// <param name="currentRow">The current row index.</param>
+        /// <param name="input">The input stream.</param>
+        /// <param name="reader">The stream reader.</param>
+        /// <param name="tables">The collection of metadata tables.</param>
+        /// <returns>A <see cref="TypeDefRow"/> that represents the current stream.</returns>
+        private TypeDefRow Read(int stringHeapIndexSize, int currentRow, Stream input, BinaryReader reader, IDictionary<TableId, ITuple<int, Stream>> tables)
         {
+            var typeDefRow = new TypeDefRow();
             var typeDefTable = tables[TableId.TypeDef];
             var rowCount = typeDefTable.Item1;
 
-            typeDef.Flags = (TypeAttributes)reader.ReadUInt32();
+            typeDefRow.Flags = (TypeAttributes)reader.ReadUInt32();
             var nameIndex = _readHeapIndexValue.Execute(stringHeapIndexSize, reader);
             var namespaceIndex = _readHeapIndexValue.Execute(stringHeapIndexSize, reader);
 
-            typeDef.Name = _readStringFromStringHeap.Execute(nameIndex, input);
-            typeDef.Namespace = _readStringFromStringHeap.Execute(namespaceIndex, input);
+            typeDefRow.Name = _readStringFromStringHeap.Execute(nameIndex, input);
+            typeDefRow.Namespace = _readStringFromStringHeap.Execute(namespaceIndex, input);
 
             var tableIds = new TableId[] { TableId.TypeDef, TableId.TypeRef, TableId.TypeSpec };
             int token = ReadToken(tables, reader, tableIds);
 
             var extends = _getTableReferenceFromCodedToken.Execute(CodedTokenType.TypeDefOrTypeRef, token);
             if (currentRow >= rowCount)
-                return;
+                return typeDefRow;
 
-            typeDef.Extends = extends;
+            typeDefRow.Extends = extends;
+
+            typeDefRow.FieldList = (uint)ReadToken(tables, reader, TableId.TypeDef);
+            typeDefRow.MethodList = (uint)ReadToken(tables, reader, TableId.TypeDef);
+
+            return typeDefRow;
         }
 
-        private int ReadToken(IDictionary<TableId, ITuple<int, Stream>> tables, BinaryReader reader, IEnumerable<TableId> tableIds)
+        /// <summary>
+        /// Reads a token from the given stream.
+        /// </summary>
+        /// <param name="tables">The collection of metadata tables.</param>
+        /// <param name="reader">The stream reader.</param>
+        /// <param name="tableIds">The list of <see cref="TableId"/> identifiers that determine which row will be scanned to determine the size of the table index.</param>
+        /// <returns>A token value from the current stream.</returns>
+        private int ReadToken(IDictionary<TableId, ITuple<int, Stream>> tables, BinaryReader reader, params TableId[] tableIds)
         {
             // Determine whether or not
             // the reader should use DWORD indicies
