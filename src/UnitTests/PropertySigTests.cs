@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using NUnit.Framework;
 using Tao.Containers;
 using Tao.Interfaces;
@@ -21,7 +17,7 @@ namespace Tao.UnitTests
             const byte type = (byte)ElementType.I4;
             const byte param = (byte)ElementType.String;
 
-            var bytes = new byte[] { property, paramCount, type, param };
+            var bytes = new[] { property, paramCount, type, param };
             var stream = new MemoryStream(bytes);
 
             var reader = container.GetInstance<IFunction<Stream, PropertySignature>>();
@@ -45,7 +41,7 @@ namespace Tao.UnitTests
             const byte type = (byte)ElementType.I4;
             const byte param = (byte)ElementType.String;
 
-            var bytes = new byte[] { property, paramCount, type, param };
+            var bytes = new[] { property, paramCount, type, param };
             var stream = new MemoryStream(bytes);
 
             var reader = container.GetInstance<IFunction<Stream, PropertySignature>>();

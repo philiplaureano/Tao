@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
+using Tao.Containers;
 using Tao.Interfaces;
 using Tao.Model;
-using Tao.Containers;
 
 namespace Tao.UnitTests
 {
@@ -53,7 +51,7 @@ namespace Tao.UnitTests
             // The simulated method signature will have
             // one required string parameter and two optional Int32 parameters
             var parameterTypes =
-                new byte[] 
+                new[] 
                 {
                     Convert.ToByte(ElementType.String), 
                     Convert.ToByte(ElementType.Sentinel),

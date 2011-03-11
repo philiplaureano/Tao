@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
-using Tao.Interfaces;
 using Tao.Containers;
-using System.Net;
+using Tao.Interfaces;
 
 namespace Tao.UnitTests
 {
@@ -22,7 +18,7 @@ namespace Tao.UnitTests
             var reader = container.GetInstance<IFunction<Stream, uint>>("ReadCompressedInteger");
             Assert.IsNotNull(reader);
 
-            var bytes = new byte[] { value };
+            var bytes = new[] { value };
             var stream = new MemoryStream(bytes);
 
             var result = reader.Execute(stream);
@@ -43,7 +39,7 @@ namespace Tao.UnitTests
             var absoluteValue = 3;
             byte encodedValue = (byte)((absoluteValue << 1) | signBit);
 
-            var stream = new MemoryStream(new byte[] { encodedValue });
+            var stream = new MemoryStream(new[] { encodedValue });
 
             var result = reader.Execute(stream);
             Assert.AreEqual(value, result);

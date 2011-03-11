@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Tao.Model
+﻿namespace Tao.Model
 {
     /// <summary>
     /// Represents a method function pointer type signature.

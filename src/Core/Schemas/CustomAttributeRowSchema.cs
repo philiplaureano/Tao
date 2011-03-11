@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Tao.Interfaces;
 
 namespace Tao.Schemas
@@ -27,7 +25,7 @@ namespace Tao.Schemas
             get
             {
                 // Return one reference to the Type field
-                IEnumerable<TableId> tableIds = new TableId[]
+                IEnumerable<TableId> tableIds = new[]
                                    {
                                        TableId.MethodDef
                                    };

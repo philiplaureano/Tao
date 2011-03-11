@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Tao.Interfaces;
 using Tao.Model;
 
@@ -13,8 +11,8 @@ namespace Tao.Signatures
     /// </summary>
     public class TypeSpecReader : IFunction<Stream, ITypeSpecification>
     {
-        private static readonly HashSet<ElementType> SupportedElementTypes = new HashSet<ElementType>()
-                                                                                  {
+        private static readonly HashSet<ElementType> SupportedElementTypes = new HashSet<ElementType>
+                                                                                 {
                                                                                      ElementType.Array,
                                                                                      ElementType.FnPtr,
                                                                                      ElementType.GenericInst,

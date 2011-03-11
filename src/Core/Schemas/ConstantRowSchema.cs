@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Tao.Interfaces;
 
 namespace Tao.Schemas
@@ -25,7 +23,7 @@ namespace Tao.Schemas
         {
             get
             {
-                IEnumerable<TableId> tableIds = new TableId[]
+                IEnumerable<TableId> tableIds = new[]
                                    {
                                        TableId.TypeDef
                                    };

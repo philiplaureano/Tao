@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tao
+﻿namespace Tao
 {
     /// <summary>
     /// Represents the constants that uniquely identify a given metadata table in a .NET executable image.

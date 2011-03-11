@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Tao.Interfaces;
 using Tao.Model;
 
@@ -69,7 +67,7 @@ namespace Tao.Signatures
                 // local variable is pinned
                 nextByte = isPinned ? (byte)input.ReadByte() : nextByte;
 
-                var isByRef = ((byte)nextByte) == (byte)ElementType.ByRef;
+                var isByRef = (nextByte) == (byte)ElementType.ByRef;
                 localVariable.IsByRef = isByRef;
                 localVariable.Type = _typeSignatureReader.Execute(input);
 

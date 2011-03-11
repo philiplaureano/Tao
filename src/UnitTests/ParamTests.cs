@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
-using Tao.Interfaces;
-using Tao.Model;
 using Tao.Containers;
 using Tao.Interfaces;
+using Tao.Model;
 
 namespace Tao.UnitTests
 {
@@ -17,7 +14,7 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldBeAbleToReadByRefSimpleParam()
         {
-            var typeBytes = new byte[] { Convert.ToByte(ElementType.ByRef), Convert.ToByte(ElementType.Boolean) };
+            var typeBytes = new[] { Convert.ToByte(ElementType.ByRef), Convert.ToByte(ElementType.Boolean) };
             var stream = new MemoryStream(typeBytes);
             var reader = container.GetInstance<IFunction<Stream, MethodSignatureElement>>("ParamSignatureReader");
             Assert.IsNotNull(reader);
@@ -34,7 +31,7 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldBeAbleToReadSimpleParam()
         {
-            var typeBytes = new byte[] { Convert.ToByte(ElementType.Boolean) };
+            var typeBytes = new[] { Convert.ToByte(ElementType.Boolean) };
             var stream = new MemoryStream(typeBytes);
             var reader = container.GetInstance<IFunction<Stream, MethodSignatureElement>>("ParamSignatureReader");
             Assert.IsNotNull(reader);
@@ -88,7 +85,7 @@ namespace Tao.UnitTests
         [Test]
         public void ShouldBeAbleToReadTypedByRef()
         {
-            var typeBytes = new byte[] { Convert.ToByte(ElementType.TypedByRef) };
+            var typeBytes = new[] { Convert.ToByte(ElementType.TypedByRef) };
             var stream = new MemoryStream(typeBytes);
             var reader = container.GetInstance<IFunction<Stream, MethodSignatureElement>>("ParamSignatureReader");
             Assert.IsNotNull(reader);
@@ -102,7 +99,7 @@ namespace Tao.UnitTests
 
         private byte[] GetCustomModBytes(ElementType elementType, byte codedToken)
         {
-            return new byte[] { Convert.ToByte(elementType), Convert.ToByte(codedToken) };
+            return new[] { Convert.ToByte(elementType), Convert.ToByte(codedToken) };
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CustomAttributes
+﻿namespace CustomAttributes
 {
     [Sample(42)] // boxed 42
     // 01 00 // Prolog

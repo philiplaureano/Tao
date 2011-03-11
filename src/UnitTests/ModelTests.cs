@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using Mono.Cecil;
 using NUnit.Framework;
+using Tao.Containers;
 using Tao.Interfaces;
 using Tao.Model;
-using Tao.Containers;
-using AssemblyHashAlgorithm = Tao.Model.AssemblyHashAlgorithm;
 
 namespace Tao.UnitTests
 {

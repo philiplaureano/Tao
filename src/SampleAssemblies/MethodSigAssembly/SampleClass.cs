@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MethodSigAssembly
+﻿namespace MethodSigAssembly
 {
     public class SampleClass
     {

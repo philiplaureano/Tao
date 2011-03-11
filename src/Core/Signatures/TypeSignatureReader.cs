@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Hiro.Containers;
 using Tao.Containers;
 using Tao.Interfaces;
@@ -38,8 +37,8 @@ namespace Tao.Signatures
         private IMethodSignatureStreamReader<IMethodRefSignature> _methodRefSignatureStreamReader;
         private IMethodSignatureStreamReader<IMethodSignature> _methodDefSignatureStreamReader;
 
-        private static readonly HashSet<ElementType> PrimitiveTypes = new HashSet<ElementType>()
-                                                                    {
+        private static readonly HashSet<ElementType> PrimitiveTypes = new HashSet<ElementType>
+                                                                          {
                                                                         ElementType.Boolean,
                                                                         ElementType.Char,
                                                                         ElementType.I1,
@@ -128,13 +127,13 @@ namespace Tao.Signatures
                 return _createMVarTypeSignature.Execute(input, elementType);
 
             if (elementType == ElementType.Object)
-                return new TypeSignature() { ElementType = ElementType.Object };
+                return new TypeSignature { ElementType = ElementType.Object };
 
             if (elementType == ElementType.Ptr)
                 return _createPointerTypeSignature.Execute(this, input, elementType);
 
             if (elementType == ElementType.String)
-                return new TypeSignature() { ElementType = ElementType.String };
+                return new TypeSignature { ElementType = ElementType.String };
 
             if (elementType == ElementType.SzArray)
                 return _createSzArrayTypeSignature.Execute(this, input, elementType);

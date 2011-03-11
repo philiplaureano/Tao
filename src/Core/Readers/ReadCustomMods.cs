@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Tao.Interfaces;
 using Tao.Model;
 
@@ -49,7 +47,7 @@ namespace Tao.Readers
 
                     bytesRead += 2;
                     var mod = _customModReader.Execute(currentStream);
-                    var customMod = new CustomMod() { ElementType = mod.Item1, TableId = mod.Item2, RowIndex = mod.Item3 };
+                    var customMod = new CustomMod { ElementType = mod.Item1, TableId = mod.Item2, RowIndex = mod.Item3 };
 
                     mods.Add(customMod);
                     //nextByte = byteQueue.Count >= 1 ? (ElementType)byteQueue.Dequeue() : default(ElementType);
