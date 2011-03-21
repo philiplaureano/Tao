@@ -6,15 +6,15 @@ namespace Tao.Factories
     /// <summary>
     /// Represents a class that can read PE Section header substreams.
     /// </summary>
-    public class PESectionFactory : IFunction<ITuple<int, Stream>, Stream>
+    public class PeSectionFactory : IFunction<ITuple<int, Stream>, Stream>
     {
         private readonly IFunction<Stream> _dataDirectoriesEndSeeker;
         private readonly IFunction<ITuple<int, Stream>, Stream> _inMemorySubStreamReader;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PESectionFactory"/> class.
+        /// Initializes a new instance of the <see cref="PeSectionFactory"/> class.
         /// </summary>
-        public PESectionFactory(IFunction<ITuple<int, Stream>, Stream> inMemorySubStreamReader, IFunction<Stream> dataDirectoriesEndSeeker)
+        public PeSectionFactory(IFunction<ITuple<int, Stream>, Stream> inMemorySubStreamReader, IFunction<Stream> dataDirectoriesEndSeeker)
         {
             _dataDirectoriesEndSeeker = dataDirectoriesEndSeeker;
             _inMemorySubStreamReader = inMemorySubStreamReader;

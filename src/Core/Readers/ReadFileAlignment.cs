@@ -8,14 +8,14 @@ namespace Tao.Readers
     /// </summary>
     public class ReadFileAlignment : IFunction<Stream, int>
     {
-        private readonly IFunction<Stream> _coffHeaderSeeker;
+        private readonly IFunction<Stream> _optionalHeaderSeeker;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReadFileAlignment"/> class.
         /// </summary>
-        public ReadFileAlignment(IFunction<Stream> coffHeaderSeeker)
+        public ReadFileAlignment(IFunction<Stream> optionalHeaderSeeker)
         {
-            _coffHeaderSeeker = coffHeaderSeeker;
+            _optionalHeaderSeeker = optionalHeaderSeeker;
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Tao.Readers
         /// <returns>The file alignment.</returns>
         public int Execute(Stream input)
         {
-            _coffHeaderSeeker.Execute(input);
+            _optionalHeaderSeeker.Execute(input);
 
             input.Seek(0x24, SeekOrigin.Current);
             var reader = new BinaryReader(input);

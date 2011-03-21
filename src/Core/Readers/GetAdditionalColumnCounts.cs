@@ -46,7 +46,7 @@ namespace Tao
                     var rowCount = rowCounts.ContainsKey(foreignTableId) ? rowCounts[foreignTableId] : 0;
 
                     // Widen the column to 32 bits if necessary
-                    if (rowCount <= UInt16.MaxValue)
+                    if (rowCount <= 64000)
                         continue;
 
                     additionalWordCount--;

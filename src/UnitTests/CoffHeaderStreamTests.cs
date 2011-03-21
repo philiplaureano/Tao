@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using NUnit.Framework;
 using Tao.Interfaces;
+using Tao.Containers;
 
 namespace Tao.UnitTests
 {
@@ -8,38 +10,14 @@ namespace Tao.UnitTests
     public class CoffHeaderStreamTests : BaseStreamTests
     {
         [Test]
-        [Ignore]
-        public void ShouldBeAbleToExtractCoffHeaderStream()
-        {
-            var expectedEndPosition = 0xF4;
-            var expectedHeaderSize = 0x5C;
-            TestRead("CoffHeaderStreamFactory", expectedEndPosition, expectedHeaderSize);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadFileAlignment()
+        public void ShouldBeAbleToReadNumberOfSections()
         {
             var stream = GetStream();
-            
-
-            var reader = (IFunction<Stream,int>)container.GetInstance(typeof (IFunction<Stream, int>), "ReadFileAlignment");
+            var reader = container.GetInstance<IFunction<Stream, int>>("ReadSectionCount");
             Assert.IsNotNull(reader);
 
             var result = reader.Execute(stream);
-            Assert.AreEqual(0x200, result);
-        }
-
-        [Test]
-        public void ShouldBeAbleToReadSectionAlignment()
-        {
-            var stream = GetStream();
-            
-
-            var reader = (IFunction<Stream, int>)container.GetInstance(typeof(IFunction<Stream, int>), "ReadSectionAlignment");
-            Assert.IsNotNull(reader);
-
-            var result = reader.Execute(stream);
-            Assert.AreEqual(0x2000, result);
+            Assert.AreEqual(2, result);
         }
     }
 }

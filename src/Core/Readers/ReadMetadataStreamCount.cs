@@ -11,7 +11,7 @@ namespace Tao.Readers
         private readonly IFunction<Stream> _seekMetadataRootPosition;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Object"/> class.
+        /// Initializes a new instance of the <see cref="ReadMetadataStreamCount"/> class.
         /// </summary>
         public ReadMetadataStreamCount(IFunction<Stream> seekMetadataRootPosition)
         {

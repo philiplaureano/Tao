@@ -37,8 +37,12 @@ namespace Tao
             var additionalWordCount = additionalCounts.Item1;
             var additionalDwordColumns = additionalCounts.Item2;
 
-            return Tuple.New(schema.Item1, schema.Item2 + additionalWordCount, schema.Item3 + additionalDwordColumns, schema.Item4, schema.Item5,
-                             schema.Item6);
+            var stringHeapColumns = schema.Item4;
+            var blobHeapColumns = schema.Item5;
+            var guidHeapColumns = schema.Item6;
+
+            return Tuple.New(schema.Item1, schema.Item2 + additionalWordCount, schema.Item3 + additionalDwordColumns, stringHeapColumns, blobHeapColumns,
+                             guidHeapColumns);
         }
     }
 }

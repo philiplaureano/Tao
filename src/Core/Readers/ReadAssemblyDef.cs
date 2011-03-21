@@ -60,18 +60,18 @@ namespace Tao.Readers
             var heapSizes = _readMetadataHeapIndexSizes.Execute(input);
 
             var stringIndexSize = heapSizes.Item1;
-            var blobIndexSize = heapSizes.Item2;
+            var blobIndexSize = heapSizes.Item3;
 
             // Read the public key
             var publicKeyIndex = _readHeapIndexValue.Execute(blobIndexSize, reader);
             if (publicKeyIndex != 0)
-                result.PublicKey = _readBlob.Execute(publicKeyIndex, input);
+                result.PublicKey = publicKeyIndex;
 
             var nameIndex = _readHeapIndexValue.Execute(stringIndexSize, reader);
             var cultureIndex = _readHeapIndexValue.Execute(stringIndexSize, reader);
 
-            result.Name = _readStringFromStringsHeap.Execute(nameIndex, input);
-            result.Culture = _readStringFromStringsHeap.Execute(cultureIndex, input);
+            result.Name = nameIndex;
+            result.Culture = cultureIndex;
 
             return result;
         }

@@ -28,9 +28,9 @@ namespace Tao.Readers
         {
             var bitVector = _readHeapSizesField.Execute(input);
 
-            var stringIndexSize = GetIndexSize(0, bitVector);
-            var guidIndexSize = GetIndexSize(1, bitVector);
-            var blobIndexSize = GetIndexSize(3, bitVector);
+            var stringIndexSize = GetIndexSize(0x1, bitVector);
+            var guidIndexSize = GetIndexSize(0x2, bitVector);
+            var blobIndexSize = GetIndexSize(0x4, bitVector);
 
             return Tuple.New(stringIndexSize, guidIndexSize, blobIndexSize);
         }
@@ -43,8 +43,7 @@ namespace Tao.Readers
         /// <returns>The heap index size.</returns>
         private int GetIndexSize(byte targetBit, byte? bitVector)
         {
-            var bitValue = (bitVector >> targetBit) & 1;
-            var useDwordIndices = Convert.ToBoolean(bitValue);
+            var useDwordIndices = (bitVector & targetBit) != 0;
             return useDwordIndices ? 4 : 2;
         }
     }

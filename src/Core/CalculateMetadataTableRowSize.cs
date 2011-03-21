@@ -36,9 +36,9 @@ namespace Tao
             var columnSizeCounts = _getMetadataTableSizeCounts.Execute(tableId, stream);
 
             var stringIndexSize = heapSizes.Item1;
-            var blobIndexSize = heapSizes.Item2;
-            var guidIndexSize = heapSizes.Item3;
-
+            var guidIndexSize = heapSizes.Item2;
+            var blobIndexSize = heapSizes.Item3;
+            
             var singleByteColumns = columnSizeCounts.Item1;
             var wordColumns = columnSizeCounts.Item2;
             var dwordColumns = columnSizeCounts.Item3;

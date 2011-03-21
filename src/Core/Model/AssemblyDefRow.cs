@@ -30,16 +30,16 @@
         public ushort RevisionNumber { get; set; }
 
         /// <summary>
-        /// Gets a value indicating the Name of the current type.
+        /// Gets a value indicating the string heap index that points to the name of the current type.
         /// </summary>
         /// <value>The Name value.</value>
-        public string Name { get; set; }
+        public uint Name { get; set; }
 
         /// <summary>
         /// Gets a value indicating the Culture of the current type.
         /// </summary>
         /// <value>The Culture value.</value>
-        public string Culture { get; set; }
+        public uint Culture { get; set; }
 
         /// <summary>
         /// Gets a value indicating the HashAlgorithm of the current type.
@@ -51,7 +51,7 @@
         /// Gets a value indicating the PublicKey of the current type.
         /// </summary>
         /// <value>The PublicKey value.</value>
-        public byte[] PublicKey { get; set; }
+        public uint PublicKey { get; set; }
 
         /// <summary>
         /// Gets a value indicating the Flags of the current type.

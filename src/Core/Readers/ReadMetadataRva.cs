@@ -25,7 +25,8 @@ namespace Tao.Readers
         /// <returns>The RVA of the metadata root header.</returns>
         public int Execute(Stream input)
         {
-            var cliHeaderStream = _readStreamFromDataDirectoryIndex.Execute(0xE, input);
+            var targetDataDirectoryIndex = 0xE;
+            var cliHeaderStream = _readStreamFromDataDirectoryIndex.Execute(targetDataDirectoryIndex, input);
             cliHeaderStream.Seek(8, SeekOrigin.Begin);
 
             var reader = new BinaryReader(cliHeaderStream);

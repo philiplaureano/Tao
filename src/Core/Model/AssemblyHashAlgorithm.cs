@@ -1,8 +1,11 @@
-﻿namespace Tao.Model
+﻿using System;
+
+namespace Tao.Model
 {
     /// <summary>
     /// Describes the algorithm used for hashing the assembly.
     /// </summary>
+    [Flags]
     public enum AssemblyHashAlgorithm : uint
     {
         /// <summary>

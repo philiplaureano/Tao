@@ -8,16 +8,16 @@ namespace Tao.Model
     public class TypeDefRow
     {
         /// <summary>
-        /// Gets a value indicating the Name of the current type.
+        /// Gets a value indicating the string index that points to the name of the current type.
         /// </summary>
         /// <value>The Name of the current type.</value>
-        public string Name { get; set; }
+        public uint Name { get; set; }
 
         /// <summary>
-        /// Gets a value indicating the Namespace of the current type.
+        /// Gets a value indicating the string index that points to the namespace of the current type.
         /// </summary>
         /// <value>The Name of the current type.</value>
-        public string Namespace { get; set; }
+        public uint Namespace { get; set; }
 
         /// <summary>
         /// Gets a value indicating the Flags of the current type.

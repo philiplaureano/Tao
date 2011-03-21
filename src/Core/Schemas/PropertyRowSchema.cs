@@ -22,7 +22,7 @@ namespace Tao.Schemas
         /// <value>The number of table indexes.</value>
         public override IEnumerable<ITuple<IEnumerable<TableId>, int>> Item7
         {
-            get { throw new NotImplementedException(); }
+            get { yield break; }
         }
     }
 }

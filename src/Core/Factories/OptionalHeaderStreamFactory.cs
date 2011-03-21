@@ -6,20 +6,20 @@ namespace Tao.Factories
     /// <summary>
     /// Represents a factory class that extracts the Coff header stream from an existing portable executable image.
     /// </summary>
-    public class CoffHeaderStreamFactory : IFunction<Stream, Stream>
+    public class OptionalHeaderStreamFactory : IFunction<Stream, Stream>
     {
         private readonly IFunction<ITuple<int, Stream>, Stream> _reader;
         private readonly IFunction<Stream> _seeker;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CoffHeaderStreamFactory"/> class.
+        /// Initializes a new instance of the <see cref="OptionalHeaderStreamFactory"/> class.
         /// </summary>
         /// <param name="reader">The substream reader.</param>
-        /// <param name="coffHeaderSeeker">The <see cref="IFunction{Stream}"/> that will be used to locate the Coff header position.</param>
-        public CoffHeaderStreamFactory(IFunction<ITuple<int, Stream>, Stream> reader, IFunction<Stream> coffHeaderSeeker)
+        /// <param name="optionalHeaderSeeker">The <see cref="IFunction{Stream}"/> that will be used to locate the Coff header position.</param>
+        public OptionalHeaderStreamFactory(IFunction<ITuple<int, Stream>, Stream> reader, IFunction<Stream> optionalHeaderSeeker)
         {
             _reader = reader;
-            _seeker = coffHeaderSeeker;
+            _seeker = optionalHeaderSeeker;
         }
 
         /// <summary>

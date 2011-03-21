@@ -23,7 +23,7 @@ namespace Tao.Schemas
         {
             get
             {
-                yield return CreateTuple(1, TableId.Module, TableId.ModuleRef, TableId.TypeRef);
+                yield return CreateTuple(1, TableId.Module, TableId.ModuleRef, TableId.AssemblyRef, TableId.TypeRef);
             }
         }
     }

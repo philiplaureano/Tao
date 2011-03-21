@@ -13,20 +13,16 @@ namespace Tao.Readers
     {
         private readonly IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>> _readAllMetadataTables;
         private readonly IFunction<Stream, ITuple<int, int, int>> _readMetadataHeapIndexSizes;
-        private readonly IFunction<ITuple<uint, Stream>, string> _readStringFromStringsHeap;
         private readonly IFunction<ITuple<int, BinaryReader>, uint> _readHeapIndexValue;
-        private readonly IFunction<ITuple<uint, Stream>, Guid> _readGuidFromGuidHeap;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReadModuleDef"/> class.
         /// </summary>
-        public ReadModuleDef(IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>> readAllMetadataTables, IFunction<Stream, ITuple<int, int, int>> readMetadataHeapIndexSizes, IFunction<ITuple<uint, Stream>, string> readStringFromStringsHeap, IFunction<ITuple<int, BinaryReader>, uint> readHeapIndexValue, IFunction<ITuple<uint, Stream>, Guid> readGuidFromGuidHeap)
+        public ReadModuleDef(IFunction<Stream, IDictionary<TableId, ITuple<int, Stream>>> readAllMetadataTables, IFunction<Stream, ITuple<int, int, int>> readMetadataHeapIndexSizes, IFunction<ITuple<int, BinaryReader>, uint> readHeapIndexValue)
         {
             _readAllMetadataTables = readAllMetadataTables;
             _readMetadataHeapIndexSizes = readMetadataHeapIndexSizes;
-            _readStringFromStringsHeap = readStringFromStringsHeap;
             _readHeapIndexValue = readHeapIndexValue;
-            _readGuidFromGuidHeap = readGuidFromGuidHeap;
         }
 
         /// <summary>
@@ -43,7 +39,7 @@ namespace Tao.Readers
             var tableStream = moduleTable.Item2;
 
             var stringIndexSize = heapSizes.Item1;
-            var guidIndexSize = heapSizes.Item3;
+            var guidIndexSize = heapSizes.Item2;
 
             var reader = new BinaryReader(tableStream);
             tableStream.Seek(0, SeekOrigin.Begin);
@@ -56,8 +52,8 @@ namespace Tao.Readers
 
             var result = new ModuleDefRow();
 
-            result.Name = _readStringFromStringsHeap.Execute(nameIndex, input);
-            result.Mvid = _readGuidFromGuidHeap.Execute(guidIndex, input);
+            result.Name = nameIndex;
+            result.Mvid = guidIndex;
 
             return result;
         }

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
 using Tao.Interfaces;
+using Tao.Containers;
 
 namespace Tao.UnitTests
 {
@@ -30,16 +31,16 @@ namespace Tao.UnitTests
         private void TestPESectionHeaderStreamRead(int sectionHeaderIndex, int expectedStreamLength, int expectedStreamPosition)
         {
             var stream = GetStream();
-            
 
             Assert.IsTrue(container.Contains(typeof(IFunction<ITuple<int, Stream>, Stream>), "InMemorySubStreamReader"));
             Assert.IsTrue(container.Contains(typeof(IFunction<Stream>), "DataDirectoriesEndSeeker"));
-            Assert.IsTrue(container.Contains(typeof(IFunction<ITuple<int, Stream>, Stream>), "PESectionFactory"));
-            var factory = (IFunction<ITuple<int, Stream>, Stream>)container.GetInstance(typeof(IFunction<ITuple<int, Stream>, Stream>), "PESectionFactory");
+            Assert.IsTrue(container.Contains(typeof(IFunction<ITuple<int, Stream>, Stream>), "PeSectionFactory"));
+
+            var factory = container.GetInstance<IFunction<ITuple<int, Stream>, Stream>>("PeSectionFactory");
             Assert.IsNotNull(factory);
-            
-            var subStream = factory.Execute(sectionHeaderIndex, stream);            
-            Assert.AreEqual(expectedStreamLength, subStream.Length);            
+
+            var subStream = factory.Execute(sectionHeaderIndex, stream);
+            Assert.AreEqual(expectedStreamLength, subStream.Length);
             Assert.AreEqual(expectedStreamPosition, stream.Position);
         }
     }

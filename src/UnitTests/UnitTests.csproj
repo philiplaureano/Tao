@@ -57,10 +57,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\LinFu.Finders.dll</HintPath>
     </Reference>
-    <Reference Include="LinqBridge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c2b14eb747628076, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\LinqBridge.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Cecil, Version=0.6.9.0, Culture=neutral, PublicKeyToken=f8308f98b9861962, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -79,6 +75,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SampleBinaries\LinFu.Core.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="skeleton.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -105,11 +104,13 @@
     <Compile Include="MetadataRootTests.cs" />
     <Compile Include="MetadataStreamTests.cs" />
     <Compile Include="MetadataTableRowSizeTests.cs" />
+    <Compile Include="MetadataTableTestExtensions.cs" />
     <Compile Include="MetadataTableTests.cs" />
     <Compile Include="MethodDefSigTests.cs" />
     <Compile Include="MethodRefSigTests.cs" />
     <Compile Include="MethodSpecTests.cs" />
     <Compile Include="ModelTests.cs" />
+    <Compile Include="OptionalHeaderTests.cs" />
     <Compile Include="ParamTests.cs" />
     <Compile Include="PEFileHeaderStreamTests.cs" />
     <Compile Include="PESectionHeaderStreamTests.cs" />

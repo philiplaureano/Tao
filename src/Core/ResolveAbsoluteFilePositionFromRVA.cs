@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Tao.Interfaces;
 
 namespace Tao
@@ -8,16 +9,18 @@ namespace Tao
     /// </summary>
     public class ResolveAbsoluteFilePositionFromRva : IFunction<ITuple<int, Stream>, int>
     {
-        private readonly IFunction<Stream, int> _readSectionAlignment;
-        private readonly IFunction<Stream, int> _readFileAlignment;
+        private readonly IFunction<Stream, int> _readSectionCount;
+        private readonly IFunction<ITuple<int, Stream>, Stream> _peSectionFactory;
+        private readonly IFunction<Stream> _optionalHeaderSeeker;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResolveAbsoluteFilePositionFromRva"/> class.
         /// </summary>
-        public ResolveAbsoluteFilePositionFromRva(IFunction<Stream, int> readSectionAlignment, IFunction<Stream, int> readFileAlignment)
+        public ResolveAbsoluteFilePositionFromRva(IFunction<Stream, int> readSectionCount, IFunction<ITuple<int, Stream>, Stream> peSectionFactory, IFunction<Stream> optionalHeaderSeeker)
         {
-            _readSectionAlignment = readSectionAlignment;
-            _readFileAlignment = readFileAlignment;
+            _peSectionFactory = peSectionFactory;
+            _optionalHeaderSeeker = optionalHeaderSeeker;
+            _readSectionCount = readSectionCount;
         }
 
         /// <summary>
@@ -29,15 +32,41 @@ namespace Tao
         {
             var stream = input.Item2;
             var rva = input.Item1;
-            var sectionAlignment = _readSectionAlignment.Execute(stream);
-            var fileAlignment = _readFileAlignment.Execute(stream);
 
-            var sectionId = rva / sectionAlignment;
+            stream.Seek(0x84, SeekOrigin.Begin);
 
-            var baseAddress = fileAlignment * sectionId;
-            var offset = rva%sectionAlignment;
+            // Determine the size of the optional header
+            stream.Seek(0x10, SeekOrigin.Current);
+            var reader = new BinaryReader(stream);
+            var optionalHeaderSize = reader.ReadInt16();
 
-            return baseAddress + offset;
+            // Move to the end of the optional header stream
+            _optionalHeaderSeeker.Execute(stream);
+            stream.Seek(optionalHeaderSize, SeekOrigin.Current);
+
+            var sectionCount = _readSectionCount.Execute(stream);
+            for (var i = 0; i < sectionCount; i++)
+            {
+                var sectionStream = _peSectionFactory.Execute(i, stream);
+                var sectionReader = new BinaryReader(sectionStream);
+
+                // Get the Section RVA
+                sectionStream.Seek(0xC, SeekOrigin.Begin);
+                var sectionRva = sectionReader.ReadUInt32();
+                var sizeOfRawData = sectionReader.ReadUInt32();
+                var pointerToRawData = sectionReader.ReadUInt32();
+
+                var sectionBoundary = sectionRva + sizeOfRawData;
+
+                if (rva < sectionRva || rva >= sectionBoundary) 
+                    continue;
+
+                var blockSize = rva - sectionRva;
+                var result = pointerToRawData + blockSize;
+                return (int) result;
+            }
+
+            return 0;
         }
     }
 }
