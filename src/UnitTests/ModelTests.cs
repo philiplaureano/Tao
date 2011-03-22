@@ -181,6 +181,28 @@ namespace Tao.UnitTests
             Assert.AreEqual(0x02D9, parent);
         }
 
+        [Test]
+        public void ShouldBeAbleToReadParamsFromStream()
+        {
+            var stream = GetStream();
+            var reader = container.GetInstance<IFunction<Stream, IEnumerable<ParamRow>>>("ReadParamRows");
+            Assert.IsNotNull(reader);
+
+            var results = reader.Execute(stream);
+            var rows = new List<ParamRow>(results);
+            Assert.AreEqual(5401, rows.Count);
+
+            var firstItem = rows[0];
+            Assert.AreEqual(0, (uint) firstItem.Flags);
+            Assert.AreEqual(1, (uint)firstItem.Sequence);
+            Assert.AreEqual(0x00010786, firstItem.Name);
+
+            var lastItem = rows[5400];
+            Assert.AreEqual(0, (uint) lastItem.Flags);
+            Assert.AreEqual(1, (uint)lastItem.Sequence);
+            Assert.AreEqual(0x0001096A, lastItem.Name);
+        }
+
         protected override Stream GetStream()
         {
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;

@@ -112,6 +112,8 @@
     <Compile Include="Model\MethodSignatureElement.cs" />
     <Compile Include="Model\MultiDimensionalArraySignature.cs" />
     <Compile Include="Model\MvarSignature.cs" />
+    <Compile Include="Model\ParamAttributes.cs" />
+    <Compile Include="Model\ParamRow.cs" />
     <Compile Include="Model\PointerSignature.cs" />
     <Compile Include="Model\PropertySignature.cs" />
     <Compile Include="Readers\ReadMethodRows.cs" />
@@ -148,6 +150,7 @@
     <Compile Include="Readers\ReadMethodDefSignatureFromBlob.cs" />
     <Compile Include="Readers\ReadMethodRefSignatureFromBlob.cs" />
     <Compile Include="Readers\ReadMethodSignatureFromBlob.cs" />
+    <Compile Include="Readers\ReadParamRows.cs" />
     <Compile Include="Readers\ReadSByte.cs" />
     <Compile Include="Readers\ReadSectionCount.cs" />
     <Compile Include="Readers\ReadSerString.cs" />

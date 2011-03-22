@@ -17,6 +17,7 @@ namespace Tao.Readers
         private readonly IFunction<ITuple<Func<TableId, bool>, Stream>, IDictionary<TableId, ITuple<int, Stream>>> _readMetadataTables;
         private readonly IFunction<ITuple<IDictionary<TableId, ITuple<int, Stream>>, BinaryReader, TableId[]>, int> _readToken;
 
+        //BMK TODO: Comment this method
         public ReadMethodRows(IFunction<Stream, ITuple<int, int, int>> readMetadataHeapIndexSizes, IFunction<ITuple<int, BinaryReader>, uint> readHeapIndexValue, IFunction<ITuple<Func<TableId, bool>, Stream>, IDictionary<TableId, ITuple<int, Stream>>> readMetadataTables, IFunction<ITuple<IDictionary<TableId, ITuple<int, Stream>>, BinaryReader, TableId[]>, int> readToken)
         {
             _readMetadataHeapIndexSizes = readMetadataHeapIndexSizes;
