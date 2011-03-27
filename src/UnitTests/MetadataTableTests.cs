@@ -140,6 +140,39 @@ namespace Tao.UnitTests
         }
 
         [Test]
+        public void ShouldBeAbleToReadInterfaceImplTableStreamAtCorrectPosition()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.InterfaceImpl, stream);
+
+            var rowCount = table.Item1;
+            Assert.AreEqual(rowCount, 645);
+
+            var tableStream = table.Item2;
+            var reader = new BinaryReader(tableStream);
+            var classValue = reader.ReadUInt16();
+            var interfaceValue = reader.ReadUInt16();
+
+            // Check the first row
+            Assert.AreEqual(4, classValue);
+            Assert.AreEqual(8, interfaceValue);
+
+            // Check a random middle row (row 355)
+            reader.BaseStream.Seek(0x588, SeekOrigin.Begin);
+            Assert.AreEqual(0x1dc, reader.ReadUInt16());
+            Assert.AreEqual(0x568, reader.ReadUInt16());
+
+            // Check the last row
+            reader.BaseStream.Seek(0xa10, SeekOrigin.Begin);
+            Assert.AreEqual(0x420, reader.ReadUInt16());
+            Assert.AreEqual(0x1F1, reader.ReadUInt16());
+        }
+       
+
+        [Test]
         public void ShouldBeAbleToReadAssemblyTableStream()
         {
             var tableId = TableId.Assembly;
@@ -175,6 +208,7 @@ namespace Tao.UnitTests
         {
             TestTableRead(GetTable, tableId, expectedRowCount, expectedStreamLength);
         }
+
         private ITuple<int, Stream> GetTable(TableId tableId)
         {
             return GetTable(tableId, GetStream());

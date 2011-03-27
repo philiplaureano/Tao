@@ -94,6 +94,7 @@
     <Compile Include="Model\IMethodSignature.cs" />
     <Compile Include="Model\IMethodSignatureElement.cs" />
     <Compile Include="Model\IMethodSignatureStreamReader.cs" />
+    <Compile Include="Model\InterfaceImplRow.cs" />
     <Compile Include="Model\IStandAloneMethodSignature.cs" />
     <Compile Include="Model\ITypedByRefMethodSignatureElement.cs" />
     <Compile Include="Model\ITypedMethodSignatureElement.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Model\ParamRow.cs" />
     <Compile Include="Model\PointerSignature.cs" />
     <Compile Include="Model\PropertySignature.cs" />
+    <Compile Include="Readers\ReadInterfaceImplRows.cs" />
     <Compile Include="Readers\ReadMethodRows.cs" />
     <Compile Include="Model\StandAloneMethodSignature.cs" />
     <Compile Include="Model\SZArraySignature.cs" />

@@ -33,6 +33,33 @@ namespace Tao.UnitTests
         }
 
         [Test]
+        public void ShouldBeAbleToReadInterfaceImplFromStream()
+        {
+            var stream = GetStream();
+            var reader = container.GetInstance<IFunction<Stream, IEnumerable<InterfaceImplRow>>>("ReadInterfaceImplRows");   
+            Assert.IsNotNull(reader);
+
+            var items = reader.Execute(stream);
+            Assert.IsNotNull(items);
+
+            // Test the first and the last rows
+            var rows = items.ToArray();
+            var firstRow = rows[0];
+            Assert.AreEqual(TableId.TypeDef, firstRow.Class.Item1);
+            Assert.AreEqual(4, firstRow.Class.Item2);
+
+            Assert.AreEqual(TableId.TypeDef, firstRow.Interface.Item1);
+            Assert.AreEqual(2,firstRow.Interface.Item2);
+
+            var lastRow = rows[644];
+            Assert.AreEqual(TableId.TypeDef, lastRow.Class.Item1);
+            Assert.AreEqual(1056, lastRow.Class.Item2);
+
+            Assert.AreEqual(TableId.TypeRef, lastRow.Interface.Item1);
+            Assert.AreEqual(124, lastRow.Interface.Item2);
+        }
+
+        [Test]
         public void ShouldBeAbleToReadFieldFromStream()
         {
             var stream = GetStream();

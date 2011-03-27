@@ -62,10 +62,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Mono.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="Moq, Version=2.0.2991.26580, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Moq.dll</HintPath>
-    </Reference>
     <Reference Include="NUnit.framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\NUnit.framework.dll</HintPath>
