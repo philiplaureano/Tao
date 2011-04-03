@@ -266,6 +266,39 @@ namespace Tao.UnitTests
         }
 
         [Test]
+        public void ShouldBeAbleToReadPropertyTableStreamAtCorrectPosition()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.Property, stream);
+            var rowCount = table.Item1;
+            var tableStream = table.Item2;
+
+            Assert.AreEqual(rowCount, 1068);
+            Assert.AreEqual(0x29B8, tableStream.Length);
+
+            // Match the first row
+            var reader = new BinaryReader(tableStream);
+            Assert.AreEqual(0, reader.ReadUInt16());
+            Assert.AreEqual(0x3E46, reader.ReadUInt32());
+            Assert.AreEqual(0xC1A7, reader.ReadUInt32());
+
+            // Match the middle row
+            tableStream.Seek(0x14D2, SeekOrigin.Begin);
+            Assert.AreEqual(0, reader.ReadUInt16());
+            Assert.AreEqual(0x1261E, reader.ReadUInt32());
+            Assert.AreEqual(0xC26A, reader.ReadUInt32());
+
+            // Match the last row
+            tableStream.Seek(0x29AE, SeekOrigin.Begin);
+            Assert.AreEqual(0, reader.ReadUInt16());
+            Assert.AreEqual(0x1FD4, reader.ReadUInt32());
+            Assert.AreEqual(0xC1B2, reader.ReadUInt32());
+        }
+
+        [Test]
         public void ShouldBeAbleToReadCustomAttributeTableStreamAtCorrectPosition()
         {
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
