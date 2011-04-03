@@ -209,6 +209,32 @@ namespace Tao.UnitTests
         }
 
         [Test]
+        public void ShouldBeAbleToReadStandAloneSigTableStreamAtCorrectPosition()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.StandAloneSig, stream);
+            var rowCount = table.Item1;
+            var tableStream = table.Item2;
+
+            Assert.AreEqual(rowCount, 3832);
+            
+            // Match the first row
+            var reader = new BinaryReader(tableStream);
+            Assert.AreEqual(0xC982, reader.ReadUInt32());
+
+            // Match the middle row (row 1916)
+            tableStream.Seek(0x1DEC, SeekOrigin.Begin);
+            Assert.AreEqual(0xE460, reader.ReadUInt32());
+
+            // Match the last row
+            tableStream.Seek(0x3BDC, SeekOrigin.Begin);
+            Assert.AreEqual(0x631D, reader.ReadUInt32());
+        }
+
+        [Test]
         public void ShouldBeAbleToReadCustomAttributeTableStreamAtCorrectPosition()
         {
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
