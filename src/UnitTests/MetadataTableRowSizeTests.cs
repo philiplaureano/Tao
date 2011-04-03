@@ -101,7 +101,7 @@ namespace Tao.UnitTests
         public void ShouldBeAbleToReturnCorrectColumnSizeCountsForConstantTable()
         {
             var tableId = TableId.Constant;
-            var expectedSingleByteColumnCount = 1;
+            var expectedSingleByteColumnCount = 2;
             var expectedWordColumnCount = 0;
             var expectedDwordColumnCount = 0;
             var expectedStringsColumnCount = 0;

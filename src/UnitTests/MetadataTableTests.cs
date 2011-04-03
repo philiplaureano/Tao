@@ -220,7 +220,7 @@ namespace Tao.UnitTests
             var tableStream = table.Item2;
 
             Assert.AreEqual(rowCount, 3832);
-            
+
             // Match the first row
             var reader = new BinaryReader(tableStream);
             Assert.AreEqual(0xC982, reader.ReadUInt32());
@@ -232,6 +232,37 @@ namespace Tao.UnitTests
             // Match the last row
             tableStream.Seek(0x3BDC, SeekOrigin.Begin);
             Assert.AreEqual(0x631D, reader.ReadUInt32());
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadPropertyMapTableStreamAtCorrectPosition()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.PropertyMap, stream);
+            var rowCount = table.Item1;
+            var tableStream = table.Item2;
+
+            Assert.AreEqual(rowCount, 296);
+            Assert.AreEqual(0x4A0, tableStream.Length);
+
+            var reader = new BinaryReader(tableStream);
+
+            // Match the first row
+            Assert.AreEqual(0xF, reader.ReadUInt16());
+            Assert.AreEqual(1, reader.ReadUInt16());
+
+            // Match the middle row (row 148)
+            tableStream.Seek(0x24C, SeekOrigin.Begin);
+            Assert.AreEqual(0x1BD, reader.ReadUInt16());
+            Assert.AreEqual(0x1B0, reader.ReadUInt16());
+
+            // Match the last row
+            tableStream.Seek(0x49C, SeekOrigin.Begin);
+            Assert.AreEqual(0x41E, reader.ReadUInt16());
+            Assert.AreEqual(0x42A, reader.ReadUInt16());
         }
 
         [Test]
