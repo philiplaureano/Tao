@@ -299,6 +299,73 @@ namespace Tao.UnitTests
         }
 
         [Test]
+        public void ShouldBeAbleToReadMethodSemanticsTableStreamAtCorrectPosition()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.MethodSemantics, stream);
+            var rowCount = table.Item1;
+            var tableStream = table.Item2;
+            Assert.AreEqual(rowCount, 1605);
+
+            Assert.AreEqual(0x259E, tableStream.Length);
+
+            var reader = new BinaryReader(tableStream);
+
+            // Match the first row
+            Assert.AreEqual(2, reader.ReadUInt16());
+            Assert.AreEqual(0x52, reader.ReadUInt16());
+            Assert.AreEqual(3, reader.ReadUInt16());
+
+            // Match the middle row (row 803)
+            tableStream.Seek(0x12CC, SeekOrigin.Begin);
+            Assert.AreEqual(2, reader.ReadUInt16());
+            Assert.AreEqual(0xAB8, reader.ReadUInt16());
+            Assert.AreEqual(0x44F, reader.ReadUInt16());
+
+            // Match the last row
+            tableStream.Seek(0x2598, SeekOrigin.Begin);
+            Assert.AreEqual(2, reader.ReadUInt16());
+            Assert.AreEqual(0x15B4, reader.ReadUInt16());
+            Assert.AreEqual(0x859, reader.ReadUInt16());
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadMethodImplTableStreamAtCorrectPosition()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.MethodImpl, stream);
+            var rowCount = table.Item1;
+            
+            var tableStream = table.Item2;            
+            Assert.AreEqual(rowCount, 56);
+            Assert.AreEqual(0x150, tableStream.Length);
+
+            // Match the first row
+            var reader = new BinaryReader(tableStream);
+            Assert.AreEqual(0xE5, reader.ReadUInt16());
+            Assert.AreEqual(0x7C0, reader.ReadUInt16());
+            Assert.AreEqual(0x48A, reader.ReadUInt16());
+
+            // Match a middle row
+            tableStream.Seek(0xA2, SeekOrigin.Begin);
+            Assert.AreEqual(0x293, reader.ReadUInt16());
+            Assert.AreEqual(0x24AA, reader.ReadUInt16());
+            Assert.AreEqual(0x983, reader.ReadUInt16());
+
+            // Match the last row
+            tableStream.Seek(0x14A, SeekOrigin.Begin);
+            Assert.AreEqual(0x3F1, reader.ReadUInt16());
+            Assert.AreEqual(0x2A86, reader.ReadUInt16());
+            Assert.AreEqual(0x002B, reader.ReadUInt16());
+        }
+
+        [Test]
         public void ShouldBeAbleToReadCustomAttributeTableStreamAtCorrectPosition()
         {
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;

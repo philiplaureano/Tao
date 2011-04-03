@@ -24,7 +24,8 @@ namespace Tao.Schemas
             get
             {
                 yield return CreateTuple(1, TableId.TypeDef);
-                yield return CreateTuple(2, TableId.MethodDef, TableId.MemberRef);
+                yield return CreateTuple(1, TableId.MethodDef, TableId.MemberRef);
+                yield return CreateTuple(1, TableId.MethodDef, TableId.MemberRef);
             }
         }
     }
