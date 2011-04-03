@@ -11,6 +11,7 @@ namespace Tao
     public class EnumerateExistingMetadataTables : IFunction<Stream, IEnumerable<TableId>>
     {
         private readonly IFunction<Stream, Stream> _readMetadataStream;
+        private static readonly Array _values = Enum.GetValues(typeof(TableId));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EnumerateExistingMetadataTables"/> class.
@@ -37,8 +38,7 @@ namespace Tao
                 bitVector = reader.ReadUInt64();
             }
             
-            var values = Enum.GetValues(typeof(TableId));
-            foreach (var value in values)
+            foreach (var value in _values)
             {
                 var currentId = Convert.ToByte(value);
                 if (!IsValid(currentId, bitVector))

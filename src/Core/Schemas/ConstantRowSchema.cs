@@ -11,7 +11,7 @@ namespace Tao.Schemas
         /// <summary>
         /// Initializes a new instance of the <see cref="ConstantRowSchema"/> class.
         /// </summary>
-        public ConstantRowSchema() : base(1, 0, 0, 0, 1, 0)
+        public ConstantRowSchema() : base(2, 0, 0, 0, 1, 0)
         {
         }
 
@@ -25,7 +25,9 @@ namespace Tao.Schemas
             {
                 IEnumerable<TableId> tableIds = new[]
                                    {
-                                       TableId.TypeDef
+                                       TableId.Param,
+                                       TableId.Field,
+                                       TableId.Property
                                    };
 
                 yield return Tuple.New(tableIds, 1);

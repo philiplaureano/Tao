@@ -152,11 +152,12 @@ namespace Tao.UnitTests
             Assert.AreEqual(rowCount, 645);
 
             var tableStream = table.Item2;
-            var reader = new BinaryReader(tableStream);
+            var reader = new BinaryReader(tableStream);            
+
+            // Check the first row
             var classValue = reader.ReadUInt16();
             var interfaceValue = reader.ReadUInt16();
 
-            // Check the first row
             Assert.AreEqual(4, classValue);
             Assert.AreEqual(8, interfaceValue);
 
@@ -170,7 +171,112 @@ namespace Tao.UnitTests
             Assert.AreEqual(0x420, reader.ReadUInt16());
             Assert.AreEqual(0x1F1, reader.ReadUInt16());
         }
-       
+
+        [Test]
+        public void ShouldBeAbleToReadMemberRefRowTableStreamAtCorrectPosition()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.MemberRef, stream);
+            var rowCount = table.Item1;
+            Assert.AreEqual(rowCount, 1613);
+
+            var tableStream = table.Item2;
+            var reader = new BinaryReader(tableStream);
+            
+            var classValue = reader.ReadUInt16();
+            var nameValue = reader.ReadUInt32();
+            var signature = reader.ReadUInt32();
+            
+            // Match the first row
+            Assert.AreEqual(0x24, classValue);
+            Assert.AreEqual(0x7EC1, nameValue);
+            Assert.AreEqual(0x767E, signature);
+
+            // Match a random middle row (row number 806)
+            tableStream.Seek(0x1F7C, SeekOrigin.Begin);
+            Assert.AreEqual(0x284, reader.ReadUInt16());
+            Assert.AreEqual(0x897B, reader.ReadUInt32());
+            Assert.AreEqual(0xBC2B, reader.ReadUInt32());
+
+            // Match the last row
+            tableStream.Seek(0x3EF8, SeekOrigin.Begin);
+            Assert.AreEqual(0x1454, reader.ReadUInt16());
+            Assert.AreEqual(0xFE4F, reader.ReadUInt32());
+            Assert.AreEqual(0x7C42, reader.ReadUInt32());
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadCustomAttributeTableStreamAtCorrectPosition()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.CustomAttribute, stream);
+            var rowCount = table.Item1;
+            Assert.AreEqual(rowCount, 1100);
+
+            var tableStream = table.Item2;
+            Assert.AreEqual(0x2AF8, tableStream.Length);
+
+            var reader = new BinaryReader(tableStream);
+            
+            // Match the first row
+            Assert.AreEqual(0x2E, reader.ReadUInt32());
+            Assert.AreEqual(0x315B, reader.ReadUInt16());
+            Assert.AreEqual(0x3B6A, reader.ReadUInt32());
+
+            // Match the middle row (row 550)
+            tableStream.Seek(0x1572, SeekOrigin.Begin);
+            Assert.AreEqual(0x5103, reader.ReadUInt32());
+            Assert.AreEqual(0x31FB, reader.ReadUInt16());
+            Assert.AreEqual(0x56C9, reader.ReadUInt32());
+
+            // Match the last row
+            tableStream.Seek(0x2AEE, SeekOrigin.Begin);
+            Assert.AreEqual(0x2A880, reader.ReadUInt32());
+            Assert.AreEqual(0x320B, reader.ReadUInt16());
+            Assert.AreEqual(0x62EA, reader.ReadUInt32());
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadConstantTableStreamAtCorrectPosition()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.Constant, stream);
+            var rowCount = table.Item1;
+            Assert.AreEqual(rowCount, 1345);
+
+            var tableStream = table.Item2;
+            Assert.AreEqual(0x2A08, tableStream.Length);
+
+            var reader = new BinaryReader(tableStream);
+
+            // Match the first row
+            Assert.AreEqual(0x8, reader.ReadByte());
+            Assert.AreEqual(0, reader.ReadByte());
+            Assert.AreEqual(0x414, reader.ReadUInt16());
+            Assert.AreEqual(0x2039, reader.ReadUInt32());
+            
+            // Match the middle row (row 672)
+            tableStream.Seek(0x14F8, SeekOrigin.Begin);
+            Assert.AreEqual(0x8, reader.ReadByte());
+            Assert.AreEqual(0, reader.ReadByte());
+            Assert.AreEqual(0x228C, reader.ReadUInt16());
+
+            // Mach the last row
+            tableStream.Seek(0x2A00, SeekOrigin.Begin);
+            Assert.AreEqual(0x5, reader.ReadByte());
+            Assert.AreEqual(0, reader.ReadByte());
+            Assert.AreEqual(0x3D74, reader.ReadUInt16());
+            Assert.AreEqual(0x3B68, reader.ReadUInt32());
+        }
 
         [Test]
         public void ShouldBeAbleToReadAssemblyTableStream()
