@@ -400,6 +400,59 @@ namespace Tao.UnitTests
         }
 
         [Test]
+        public void ShouldBeAbleToReadModuleRefStream()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.ModuleRef, stream);
+            var rowCount = table.Item1;
+            var tableStream = table.Item2;
+
+            var reader = new BinaryReader(tableStream);
+
+            Assert.AreEqual(1, rowCount);
+            Assert.AreEqual(4, tableStream.Length);
+            Assert.AreEqual(0x1077C, reader.ReadUInt32());
+        }
+        
+
+        [Test]
+        public void ShouldBeAbleToReadClassLayoutTableStreamAtCorrectPosition()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.ClassLayout, stream);
+            var rowCount = table.Item1;
+            var tableStream = table.Item2;
+
+            Assert.AreEqual(8, rowCount);
+            Assert.AreEqual(0x40, tableStream.Length);
+
+            var reader = new BinaryReader(tableStream);
+
+            // Match the first row
+            Assert.AreEqual(0, reader.ReadUInt16());
+            Assert.AreEqual(1, reader.ReadUInt32());
+            Assert.AreEqual(0x2D9, reader.ReadUInt16());
+
+            // Match the middle row (row 4)
+            tableStream.Seek(0x18, SeekOrigin.Begin);
+            Assert.AreEqual(0, reader.ReadUInt16());
+            Assert.AreEqual(1, reader.ReadUInt32());
+            Assert.AreEqual(0x36A, reader.ReadUInt16());
+            
+            // Match the last row
+            tableStream.Seek(0x38, SeekOrigin.Begin);
+            Assert.AreEqual(1, reader.ReadUInt16());
+            Assert.AreEqual(0x20, reader.ReadUInt32());
+            Assert.AreEqual(0x422, reader.ReadUInt16());
+        }
+
+        [Test]
         public void ShouldBeAbleToReadFieldMarshalTableStreamAtCorrectPosition()
         {
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -475,6 +528,34 @@ namespace Tao.UnitTests
 
             TestTableRead(tableId, expectedRowCount, expectedStreamLength);
         }
+
+        [Test]
+        public void ShouldBeAbleToReadTypeSpecTableStreamAtCorrectPosition()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.TypeSpec, stream);
+            var rowCount = table.Item1;
+            Assert.AreEqual(rowCount, 894);
+
+            var tableStream = table.Item2;
+            Assert.AreEqual(0xDF8, tableStream.Length);
+
+            var reader = new BinaryReader(tableStream);
+
+            // Match the first row
+            Assert.AreEqual(1,reader.ReadUInt32());
+
+            // Match the middle row (row 447)
+            tableStream.Seek(0x6F8, SeekOrigin.Begin);
+            Assert.AreEqual(0x167F,reader.ReadUInt32());
+
+            // Match the last row
+            tableStream.Seek(0xDF4, SeekOrigin.Begin);
+            Assert.AreEqual(0x10C38,reader.ReadUInt32());
+        }   
 
         [Test]
         public void ShouldBeAbleToReadModuleTableStream()
