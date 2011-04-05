@@ -11,7 +11,7 @@ namespace Tao.Schemas
         /// <summary>
         /// Initializes a new instance of the <see cref="AssemblyRefRowSchema"/> class.
         /// </summary>
-        public AssemblyRefRowSchema() : base(0, 4, 1, 2, 1, 0)
+        public AssemblyRefRowSchema() : base(0, 4, 1, 2, 2, 0)
         {
         }
 

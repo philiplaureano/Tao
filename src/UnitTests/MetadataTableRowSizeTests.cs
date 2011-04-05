@@ -61,7 +61,7 @@ namespace Tao.UnitTests
             var expectedWordColumnCount = 4;
             var expectedDwordColumnCount = 1;
             var expectedStringsColumnCount = 2;
-            var expectedBlobColumnCount = 1;
+            var expectedBlobColumnCount = 2;
             var expectedGuidColumnCount = 0;
 
             TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
