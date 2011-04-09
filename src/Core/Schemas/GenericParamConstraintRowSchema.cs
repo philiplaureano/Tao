@@ -24,7 +24,7 @@ namespace Tao.Schemas
             get
             {
                 yield return CreateTuple(1, TableId.GenericParam);
-                yield return CreateTuple(1, TableId.TypeDef, TableId.TypeRef);
+                yield return CreateTuple(1, TableId.TypeDef, TableId.TypeRef, TableId.TypeSpec);
             }
         }
     }

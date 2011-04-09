@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
 using Tao.Containers;
 using Tao.Interfaces;
@@ -560,12 +561,12 @@ namespace Tao.UnitTests
             var table = GetTable(TableId.GenericParam, stream);
             var rowCount = table.Item1;
             Assert.AreEqual(rowCount, 229);
-
+            
             var tableStream = table.Item2;
             Assert.AreEqual(0x8F2, tableStream.Length);
 
             var reader = new BinaryReader(tableStream);
-
+            
             // Match the first row
             Assert.AreEqual(0,reader.ReadUInt16());
             Assert.AreEqual(0,reader.ReadUInt16());
@@ -584,6 +585,72 @@ namespace Tao.UnitTests
             Assert.AreEqual(0, reader.ReadUInt16());
             Assert.AreEqual(0xB9B, reader.ReadUInt16());
             Assert.AreEqual(0x23, reader.ReadUInt32());
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadGenericParamConstraintTableAtCorrectPosition() 
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.GenericParamConstraint, stream);
+            var rowCount = table.Item1;
+            Assert.AreEqual(rowCount, 0x1e);
+
+            var tableStream = table.Item2;
+            Assert.AreEqual(0x78, tableStream.Length);
+
+            // Match the first row
+            var reader = new BinaryReader(tableStream);
+            Assert.AreEqual(5,reader.ReadUInt16());
+            Assert.AreEqual(0x1A4,reader.ReadUInt16());
+        
+            // Match the last row
+            tableStream.Seek(0x74, SeekOrigin.Begin);
+            Assert.AreEqual(0xCD, reader.ReadUInt16());
+        }
+
+        [Test]
+        public void ShouldBeAbleToReadMethodSpecTableAtCorrectPosition()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var table = GetTable(TableId.MethodSpec, stream);
+            var rowCount = table.Item1;
+            Assert.AreEqual(rowCount, 233);
+
+            var tableStream = table.Item2;
+            Assert.AreEqual(0x576, tableStream.Length);
+
+            // Match the first row
+            var reader = new BinaryReader(tableStream);
+            Assert.AreEqual(0xB88,reader.ReadInt16());
+            Assert.AreEqual(0x19, reader.ReadUInt32());
+
+            // Match the middle row (row 116)
+            tableStream.Seek(0x2B2, SeekOrigin.Begin);
+            Assert.AreEqual(0x5DE, reader.ReadUInt16());
+            Assert.AreEqual(0x8DD, reader.ReadUInt16());
+
+            tableStream.Seek(0x570, SeekOrigin.Begin);
+            Assert.AreEqual(0x5A6, reader.ReadUInt16());
+            Assert.AreEqual(0x945, reader.ReadUInt32());
+        }
+
+        [Test]
+        public void ShouldHaveGenericParamConstraintTable()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var targetFile = Path.Combine(baseDirectory, "SampleBinaries\\LinFu.Core.dll");
+            var stream = new FileStream(targetFile, FileMode.Open, FileAccess.Read);
+
+            var enumerator = container.GetInstance<IFunction<Stream, IEnumerable<TableId>>>();
+            var tables = enumerator.Execute(stream).ToArray();
+
+            Assert.IsTrue(tables.Contains(TableId.GenericParamConstraint));
         }
 
         [Test]
