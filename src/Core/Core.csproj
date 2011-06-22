@@ -221,6 +221,7 @@
     <Compile Include="Schemas\DeclSecurityRowSchema.cs" />
     <Compile Include="Schemas\EventMapRowSchema.cs" />
     <Compile Include="Schemas\EventRowSchema.cs" />
+    <Compile Include="Schemas\ExportedTypeRowSchema.cs" />
     <Compile Include="Schemas\FieldLayoutRowSchema.cs" />
     <Compile Include="Schemas\FieldMarshalRowSchema.cs" />
     <Compile Include="Schemas\FieldRowSchema.cs" />

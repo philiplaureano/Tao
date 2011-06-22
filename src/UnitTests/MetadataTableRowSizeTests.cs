@@ -36,7 +36,7 @@ namespace Tao.UnitTests
         {
             TestRowSizeCalculation(TableId.MethodDef, 0xE);
         }
-
+        // TODO: Add tests that verify the table index references
         #region Column Size Count Tests
         [Test]
         public void ShouldBeAbleToReturnCorrectColumnSizeCountsForAssemblyTable()
@@ -62,6 +62,21 @@ namespace Tao.UnitTests
             var expectedDwordColumnCount = 1;
             var expectedStringsColumnCount = 2;
             var expectedBlobColumnCount = 2;
+            var expectedGuidColumnCount = 0;
+
+            TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
+                expectedStringsColumnCount, expectedBlobColumnCount, expectedGuidColumnCount);
+        }
+
+        [Test]
+        public void ShouldBeAbleToReturnCorrectColumnSizeCountsForExportedTable()
+        {
+            var tableId = TableId.ExportedType;
+            var expectedSingleByteColumnCount = 0;
+            var expectedWordColumnCount = 0;
+            var expectedDwordColumnCount = 2;
+            var expectedStringsColumnCount = 2;
+            var expectedBlobColumnCount = 0;
             var expectedGuidColumnCount = 0;
 
             TestCounts(tableId, expectedSingleByteColumnCount, expectedWordColumnCount, expectedDwordColumnCount,
@@ -520,8 +535,6 @@ namespace Tao.UnitTests
         #region Private Members
         private void TestCounts(TableId tableId, int expectedSingleByteColumnCount, int expectedWordColumnCount, int expectedDwordColumnCount, int expectedStringsColumnCount, int expectedBlobColumnCount, int expectedGuidColumnCount)
         {
-
-
             var tableName = Enum.GetName(typeof(TableId), tableId);
             var schemaName = string.Format("{0}RowSchema", tableName);
 

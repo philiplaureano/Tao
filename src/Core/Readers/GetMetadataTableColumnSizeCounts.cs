@@ -26,6 +26,7 @@ namespace Tao
             _schemas[TableId.DeclSecurity] = new DeclSecurityRowSchema();
             _schemas[TableId.Event] = new EventRowSchema();
             _schemas[TableId.EventMap] = new EventMapRowSchema();
+            _schemas[TableId.ExportedType] = new ExportedTypeRowSchema();
             _schemas[TableId.FieldLayout] = new FieldLayoutRowSchema();
             _schemas[TableId.FieldMarshal] = new FieldMarshalRowSchema();
             _schemas[TableId.Field] = new FieldRowSchema();

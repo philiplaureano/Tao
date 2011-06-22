@@ -74,6 +74,9 @@
     <Content Include="SampleBinaries\LinFu.Core.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="SampleBinaries\nunit-gui-runner.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="skeleton.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -101,7 +104,9 @@
     <Compile Include="MetadataStreamTests.cs" />
     <Compile Include="MetadataTableRowSizeTests.cs" />
     <Compile Include="MetadataTableTestExtensions.cs" />
-    <Compile Include="MetadataTableTests.cs" />
+    <Compile Include="TableReadTests\BaseMetadataTableTests.cs" />
+    <Compile Include="TableReadTests\LinFuSampleBinaryTableReadTests.cs" />
+    <Compile Include="TableReadTests\MetadataTableTests.cs" />
     <Compile Include="MethodDefSigTests.cs" />
     <Compile Include="MethodRefSigTests.cs" />
     <Compile Include="MethodSpecTests.cs" />
