@@ -1,0 +1,38 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace Tao
+{
+  /// <summary>
+  /// Represents a class that is responsible for reading the legacy MS-DOS header of a portable executable file.
+  /// </summary>
+  public class DosHeaderReader
+  {
+    public Read(inputStream : Stream) : Stream
+    {
+      def binaryReader = BinaryReader(inputStream);
+      def length = inputStream.Length :> int;
+      
+      def bytesToRead = 128;
+      when (length < bytesToRead)
+        throw BadImageFormatException("Invalid MS-DOS Header");
+        
+      def bytes = array(bytesToRead) : array[byte];
+      
+      _ = binaryReader.Read(bytes, 0, bytesToRead);
+      
+      match(bytes[0], bytes[1])
+      {
+          // Check for the 'MZ' string
+        | (0x4d : byte, 0x5a : byte) => MemoryStream(bytes);
+        | _ =>  throw BadImageFormatException("Invalid MS-DOS Header");
+      }            
+    }
+  }
+}
