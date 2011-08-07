@@ -1,0 +1,55 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Macro;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace Tao
+{
+  public class CoffHeaderReader
+  {
+    public Read([NotNull] inputStream : Stream) : CoffHeader
+        requires inputStream.Length >= 24 otherwise throw BadImageFormatException("Invalid COFF header")  
+    {
+      def binaryReader = BinaryReader(inputStream);
+      def bytesToRead = 4;        
+      def signatureBytes = array(bytesToRead) : array[byte];
+      
+      _ = binaryReader.Read(signatureBytes, 0, bytesToRead);
+      
+      mutable byteStream : Stream = null;
+      
+      match(signatureBytes[0], signatureBytes[1])
+      {
+          // Check for the 'PE' string
+        | (0x50 : byte, 0x45 : byte) => byteStream = MemoryStream(signatureBytes);
+        | _ =>  throw BadImageFormatException("Invalid COFF header");
+      }                        
+
+      def header = CoffHeader();
+      header.Machine = binaryReader.ReadUInt16() :> Machine;
+      header.NumberOfSections = binaryReader.ReadUInt16();
+      header.TimeDateStamp = binaryReader.ReadUInt32();
+      header.PointerToSymbolTable = binaryReader.ReadUInt32();
+      header.NumberOfSymbols = binaryReader.ReadUInt32();
+      header.OptionalHeaderSize = binaryReader.ReadUInt16();
+      header.Characteristics = binaryReader.ReadUInt16() :> Characteristics; 
+      
+      match(header.Machine)
+      {
+        | Machine.Unknown
+        | Machine.I386
+        | Machine.IA64
+        | Machine.Amd64 =>{};
+        | _ => throw NotSupportedException(string.Format("Unsupported Machine Type '{0}'", header.Machine.ToString()));
+      }
+      
+      header;
+    }
+  }
+}

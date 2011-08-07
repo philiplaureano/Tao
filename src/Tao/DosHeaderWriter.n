@@ -1,5 +1,7 @@
-﻿using Nemerle.Collections;
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
 using Nemerle.Text;
+
 using Nemerle.Utility;
 
 using System;
@@ -14,7 +16,7 @@ namespace Tao
   /// </summary>
   public class DosHeaderWriter
   {
-      public Write(outputStream : Stream) : void
+      public Write([NotNull] outputStream : Stream) : void
       {          
           mutable bytes = array[ // dos header start
 				0x4d : byte, 0x5a, 0x90, 0x00, 0x03, 0x00, 0x00,

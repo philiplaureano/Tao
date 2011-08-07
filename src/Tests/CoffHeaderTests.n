@@ -1,0 +1,208 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tests.Macros;
+using Tao;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace Tests
+{
+  public class CoffHeaderTests
+  {    
+    public ShouldThrowBadImageFormatExceptionIfMagicPESignatureNotFoundDuringReadOperation() : void
+        expects BadImageFormatException
+    {
+      def randomBytes = array[0x42 : byte, 0x43];
+      def stream = MemoryStream(randomBytes);
+      
+      def reader = CoffHeaderReader();
+      _ = reader.Read(stream);     
+    }
+
+    public ShouldThrowBadImageFormatExceptionIfStreamLengthIsTooShort() : void
+        expects BadImageFormatException
+    {
+      def bytes = array[0x50 : byte, 0x45];
+      def stream = MemoryStream(bytes);
+      
+      def reader = CoffHeaderReader();
+      _ = reader.Read(stream);     
+    }
+	
+    public ShouldThrowNotSupportedExceptionIfMachineTypeIsNotSupported() : void
+        expects NotSupportedException
+    {
+      def machineBytes = array[0x66 : byte, 0x04];
+      ShouldRecognizeMachineType(machineBytes, Machine.MIPSFPU16);
+    }
+    
+    public ShouldBeAbleToRecognizeI386() : void
+    {
+      def machineBytes = array[0x4C : byte, 0x01];
+      ShouldRecognizeMachineType(machineBytes, Machine.I386);
+    }
+        
+    public ShouldBeAbleToRecognizeAMD64() : void
+    {
+      def machineBytes = array[0x64 : byte, 0x86];
+      ShouldRecognizeMachineType(machineBytes, Machine.Amd64); 
+    }
+    
+    public ShouldBeAbleToRecognizeIA64() : void
+    {
+      def machineBytes = array[0x00 : byte, 0x02];
+      ShouldRecognizeMachineType(machineBytes, Machine.IA64); 
+    }
+    
+    public ShouldBeAbleToRecognizeUnknownMachineType() : void
+    {
+      def machineBytes = array[0x00 : byte, 0x00];
+      ShouldRecognizeMachineType(machineBytes, Machine.Unknown); 
+    }
+    
+    public ShouldBeAbleToReadNumberOfSections() : void
+    {
+      def header = ReadHeader();      
+      assert header.NumberOfSections equals 2 otherwiseprint "Invalid header count";
+    }
+    
+    public ShouldReadTimeDateStamp() : void
+    {
+      def header = ReadHeader();
+      assert header.TimeDateStamp equals 0x4AD286DD otherwiseprint "Invalid TimeDateStamp";
+    }
+    
+    public ShouldReadPointerToSymbolTable() : void
+    {
+      def header = ReadHeader();
+      assert header.PointerToSymbolTable equals 0 otherwiseprint "Invalid PointerToSymbolTable";
+    }
+    
+    public ShouldReadNumberOfSymbols() : void
+    {
+      def header = ReadHeader();
+      assert header.NumberOfSymbols equals 0 otherwiseprint "Invalid NumberOfSymbol";
+    }
+    
+    public ShouldReadOptionalHeaderSize() : void
+    {
+      def header = ReadHeader();
+      assert header.OptionalHeaderSize equals 224 otherwiseprint "Invalid OptionalHeaderSize";
+    }
+    
+    public ShouldReadCharacteristics() : void
+    {
+      def header = ReadHeader();
+      def characteristics = header.Characteristics;
+      def is32Bit = (characteristics & Characteristics.Is32BitMachine) != 0;
+      def isExecutableImage = (characteristics & Characteristics.ExecutableImage) != 0;
+
+      assert is32Bit && isExecutableImage equals true otherwiseprint "Invalid characteristics";
+    }
+    
+    public ShouldBeAbleToWriteMachine() : void
+    {
+      // NOTE: A write is considered successful
+      // if the resulting byte stream of the Coff header
+      // matches the precalculated hash code
+      throw NotImplementedException();
+    }
+    
+    public ShouldBeAbleToWriteNumberOfSections() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteTimeDateStamp() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWritePointerToSymbolTable() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteNumberOfSymbols() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteOptionalHeaderSize() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteCharacteristics() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    private ReadHeader() : CoffHeader
+    {
+      def data = GetData();
+      def stream = MemoryStream(data);
+      def reader = CoffHeaderReader();
+      reader.Read(stream);
+    }
+    
+    private GetData() : array[byte]
+    {
+      GetData(array[0x4C : byte, 0x01]);
+    }
+    
+    private GetData(machineBytes : array[byte]) : array[byte]
+    {
+      array[
+           // The "PE" magic string
+           0x50 : byte, 0x45, 0x00, 0x00, 
+           // Machine = I386 (0x14c)
+           machineBytes[0], machineBytes[1], 
+           // NumberOfSections = 2                       
+           0x02, 0x00, 
+           // TimeDateStamp
+           0xDD, 0x86, 0xD2, 0x4A, 
+           // PointerToSymbolTable = 0
+           0x00, 0x00, 0x00, 0x00,
+           // NumberOfSymbols = 0
+           0x00, 0x00, 0x00, 0x00, 
+           // SizeOfOptionalHeader = 224
+           0xE0, 0x00,
+           // Characteristics = EXECUTABLE_IMAGE | 32BIT_MACHINE
+           0x02, 0x01
+           ];
+    }
+    private ShouldRecognizeMachineType(machineBytes : array[byte], machineType : Machine) : void
+    {
+      def data = array[
+                       // The "PE" magic string
+                       0x50 : byte, 0x45, 0x00, 0x00, 
+                       // Machine = I386 (0x14c)
+                       machineBytes[0], machineBytes[1], 
+                       // NumberOfSections = 2                       
+                       0x02, 0x00, 
+                       // TimeDateStamp
+                       0xDD, 0x86, 0xD2, 0x4A, 
+                       // PointerToSymbolTable = 0
+                       0x00, 0x00, 0x00, 0x00,
+                       // NumberOfSymbols = 0
+	                   0x00, 0x00, 0x00, 0x00, 
+	                   // SizeOfOptionalHeader = 224
+	                   0xE0, 0x00,
+	                   // Characteristics = EXECUTABLE_IMAGE | 32BIT_MACHINE
+	                   0x02, 0x01
+	                   ];
+	                   
+	
+      def stream = MemoryStream(data);
+      def reader = CoffHeaderReader();
+      def header = reader.Read(stream);
+	  
+      assert header.Machine equals machineType otherwiseprint "Wrong Machine Type";
+    }
+  }
+}

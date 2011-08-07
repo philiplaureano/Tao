@@ -1,0 +1,36 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  [Flags]
+  public enum Machine : ushort
+  {
+    | Unknown = 0
+    | AM33 = 0x1d3
+    | Amd64 = 0x8664
+    | Arm_LittleEndian = 0x1c0
+    | PureMSIL = 0xC0EE
+    | EFIByteCode = 0xEBC
+    | MitsubishiM32R = 0x9041
+    | MIPS16 = 0x266
+    | MIPSFPU = 0x366
+    | MIPSFPU16 = 0x466
+    | POWERPC = 0x1f0
+    | POWERPCFP = 0x1f1
+    | R4000 = 0x166
+    | SH3 = 0x1a2
+    | SH3DSP = 0x1a3
+    | SH4 = 0x1a6
+    | SH5 = 0x1a8
+    | Thumb = 0x1c2
+    | WCEMIPSV2 = 0x169
+    | I386 = 0x14c    
+    | IA64 = 0x200
+  }
+}

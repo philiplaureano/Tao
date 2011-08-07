@@ -3,18 +3,18 @@
   <PropertyGroup>
     <NoStdLib>true</NoStdLib>
     <Nemerle Condition=" '$(Nemerle)' == '' ">$(ProgramFiles)\Nemerle</Nemerle>
-    <Name>Tao</Name>
+    <Name>Tests.Macros</Name>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{d911e1dc-aaf7-426a-b3ec-a9e336ac83ce}</ProjectGuid>
+    <ProjectGuid>{1e8a64c1-e4d6-4b2a-9a2f-df9536217cbd}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tao</RootNamespace>
-    <AssemblyName>Tao</AssemblyName>
+    <RootNamespace>Tests.Macros</RootNamespace>
+    <AssemblyName>Tests.Macros</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,10 +37,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="Nemerle, Version=1.0.0.9832, Culture=neutral, PublicKeyToken=e080a9c724e2bfcd">
-      <Name>Nemerle</Name>
-      <AssemblyName>Nemerle.dll</AssemblyName>
-      <HintPath>..\..\tools\Nemerle\Nemerle.dll</HintPath>
+    <Reference Include="Nemerle.Macros, Version=1.0.0.9832, Culture=neutral, PublicKeyToken=5291d186334f6101">
+      <Name>Nemerle.Macros</Name>
+      <AssemblyName>Nemerle.Macros.dll</AssemblyName>
+      <HintPath>C:\Program Files (x86)\Nemerle\Nemerle.Macros.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.core, Version=2.2.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Name>nunit.core</Name>
+      <AssemblyName>nunit.core.dll</AssemblyName>
+      <HintPath>..\..\..\tools\nunit\nunit.core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Name>nunit.framework</Name>
+      <AssemblyName>nunit.framework.dll</AssemblyName>
+      <HintPath>..\..\..\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -54,29 +66,20 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Nemerle">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(Nemerle)\Nemerle.dll</HintPath>
+    </Reference>
+    <Reference Include="Nemerle.Compiler">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(Nemerle)\Nemerle.Compiler.dll</HintPath>
+    </Reference>
     <MacroReference Include="Nemerle.Linq">
       <HintPath>$(Nemerle)\Nemerle.Linq.dll</HintPath>
     </MacroReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Characteristics.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CoffHeader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CoffHeaderReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DosHeaderReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DosHeaderWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Machine.n">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Fixture.n" />
     <Compile Include="Properties\AssemblyInfo.n" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,22 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+
+namespace Tao
+{  
+  public struct CoffHeader
+  {
+    public mutable Machine : Machine;
+    public mutable NumberOfSections : ushort;
+    public mutable TimeDateStamp : uint;
+    public mutable PointerToSymbolTable : uint;
+    public mutable NumberOfSymbols : uint;
+    public mutable OptionalHeaderSize : ushort;
+    public mutable Characteristics : Characteristics;
+  }
+}
