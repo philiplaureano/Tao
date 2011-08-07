@@ -3,18 +3,18 @@
   <PropertyGroup>
     <NoStdLib>true</NoStdLib>
     <Nemerle Condition=" '$(Nemerle)' == '' ">$(ProgramFiles)\Nemerle</Nemerle>
-    <Name>Tao</Name>
+    <Name>Tests</Name>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{d911e1dc-aaf7-426a-b3ec-a9e336ac83ce}</ProjectGuid>
+    <ProjectGuid>c0f7b9c1-6109-4612-baf1-4941ad4d3f14</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tao</RootNamespace>
-    <AssemblyName>Tao</AssemblyName>
+    <RootNamespace>Tests</RootNamespace>
+    <AssemblyName>Tests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,14 +37,26 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="Nemerle, Version=1.0.0.9832, Culture=neutral, PublicKeyToken=e080a9c724e2bfcd">
-      <Name>Nemerle</Name>
-      <AssemblyName>Nemerle.dll</AssemblyName>
-      <HintPath>..\..\tools\Nemerle\Nemerle.dll</HintPath>
+    <Reference Include="nunit.core, Version=2.2.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Name>nunit.core</Name>
+      <AssemblyName>nunit.core.dll</AssemblyName>
+      <HintPath>..\..\tools\nunit\nunit.core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.2.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Name>nunit.framework</Name>
+      <AssemblyName>nunit.framework.dll</AssemblyName>
+      <HintPath>..\..\tools\nunit\nunit.framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Security, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Name>System.Security</Name>
+      <AssemblyName>System.Security.dll</AssemblyName>
+      <HintPath>C:\Windows\Microsoft.NET\Framework\v2.0.50727\System.Security.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -54,36 +66,53 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Nemerle">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(Nemerle)\Nemerle.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <MacroReference Include="Nemerle.Linq">
       <HintPath>$(Nemerle)\Nemerle.Linq.dll</HintPath>
     </MacroReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Characteristics.n">
+    <Compile Include="ByteArrayExtensions.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CoffHeader.n">
+    <Compile Include="MSDosHeaderTests.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CoffHeaderReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CoffHeaderWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DosHeaderReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DosHeaderWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Machine.n">
+    <Compile Include="CoffHeaderTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
+    <Compile Include="StreamExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="SampleBinaries" />
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SampleBinaries\skeleton.exe">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\skeleton.il">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tao\Tao.nproj">
+      <Name>Tao</Name>
+      <Project>{d911e1dc-aaf7-426a-b3ec-a9e336ac83ce}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <MacroProjectReference Include="Tests.Macros\Tests.Macros.nproj">
+      <Name>Tests.Macros</Name>
+      <Project>{1e8a64c1-e4d6-4b2a-9a2f-df9536217cbd}</Project>
+      <Private>False</Private>
+    </MacroProjectReference>
   </ItemGroup>
   <Import Project="$(Nemerle)\Nemerle.MSBuild.targets" />
   <!--

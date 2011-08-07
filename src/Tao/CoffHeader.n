@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace Tao
 {  
-  public struct CoffHeader
+  public class CoffHeader
   {
     public mutable Machine : Machine;
     public mutable NumberOfSections : ushort;

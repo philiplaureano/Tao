@@ -38,7 +38,7 @@ namespace Tests
         // Verify the hash matches the manually calculated hash of the skeleton binary
       def binaryReader = BinaryReader(headerStream);
       def bytesRead = binaryReader.ReadBytes(headerStream.Length :> System.Int32);
-      def currentHash = GetHash(bytesRead);
+      def currentHash = bytesRead.GetHash();
       def expectedHash = "F1-16-65-C8-72-14-66-F7-8A-96-C1-06-B0-8F-17-FC-29-A1-2F-6C";
       
       assert headerStream.Length equals 128 otherwiseprint "Invalid header stream length";
@@ -113,7 +113,7 @@ namespace Tests
 				0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 				0x00];
 		
-      def expectedHash = GetHash(bytes);	
+      def expectedHash = bytes.GetHash();
       
       def writer = DosHeaderWriter();
       def outputStream = MemoryStream();
@@ -132,12 +132,6 @@ namespace Tests
         def currentByte = outputStream.ReadByte() :> byte;        
         assert bytes[i] equals currentByte otherwiseprint "Invalid MS-DOS header at byte position";
       }
-    }
-	
-    private GetHash(bytes : array[byte]) : string
-    {
-      def provider = SHA1CryptoServiceProvider();
-      BitConverter.ToString(provider.ComputeHash(bytes));      
-    }
+    }	   
   }
 }

@@ -1,0 +1,28 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+
+namespace Tests
+{
+  /// <summary>
+  /// Description of ByteArrayExtensions.
+  /// </summary>
+  public class ByteArrayExtensions
+  {
+      public static GetHash(this byteArray : array[byte]) : string
+      {
+         def provider = SHA1CryptoServiceProvider();
+         BitConverter.ToString(provider.ComputeHash(byteArray));    
+      }
+      public static ToStream(this byteArray : array[byte]) : Stream
+      {
+          MemoryStream(byteArray);
+      }
+  }
+}

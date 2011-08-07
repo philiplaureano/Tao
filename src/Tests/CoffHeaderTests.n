@@ -109,37 +109,143 @@ namespace Tests
       // NOTE: A write is considered successful
       // if the resulting byte stream of the Coff header
       // matches the precalculated hash code
-      throw NotImplementedException();
+      
+      def expectedBytes = GetData();
+      TestHeaderWrite(expectedBytes, h => h.Machine = Machine.I386);
     }
-    
+               
     public ShouldBeAbleToWriteNumberOfSections() : void
     {
-      throw NotImplementedException();
+      def expectedBytes = GetData();
+      def expectedHash = expectedBytes.GetHash();
+      
+      def header = CreateDefaultHeader(null);      
+      
+      def outputStream = MemoryStream();
+      def writer = CoffHeaderWriter();
+      writer.Write(header, outputStream);      
     }
     
     public ShouldWriteTimeDateStamp() : void
     {
-      throw NotImplementedException();
+      def expectedBytes = array[
+           // The "PE" magic string
+           0x50 : byte, 0x45, 0x00, 0x00, 
+           // Machine = I386 (0x14c)
+           0x4c, 0x01, 
+           // NumberOfSections = 2                       
+           0x02, 0x00, 
+           // TimeDateStamp
+           0xD1, 0x86, 0xD2, 0x4C, 
+           // PointerToSymbolTable = 0
+           0x00, 0x00, 0x00, 0x00,
+           // NumberOfSymbols = 0
+           0x00, 0x00, 0x00, 0x00, 
+           // SizeOfOptionalHeader = 224
+           0xE0, 0x00,
+           // Characteristics = EXECUTABLE_IMAGE | 32BIT_MACHINE
+           0x02, 0x01
+           ];
+      
+      def timeStamp = 0x4CD286D1 :> uint;     
+      
+      TestHeaderWrite(expectedBytes, h => h.TimeDateStamp = timeStamp );
     }
     
     public ShouldWritePointerToSymbolTable() : void
     {
-      throw NotImplementedException();
+      def expectedBytes = array[
+           // The "PE" magic string
+           0x50 : byte, 0x45, 0x00, 0x00, 
+           // Machine = I386 (0x14c)
+           0x4c, 0x01, 
+           // NumberOfSections = 2                       
+           0x02, 0x00, 
+           // TimeDateStamp
+           0xDD, 0x86, 0xD2, 0x4A, 
+           // PointerToSymbolTable = 0
+           0x01, 0x00, 0x00, 0x00,
+           // NumberOfSymbols = 0
+           0x00, 0x00, 0x00, 0x00, 
+           // SizeOfOptionalHeader = 224
+           0xE0, 0x00,
+           // Characteristics = EXECUTABLE_IMAGE | 32BIT_MACHINE
+           0x02, 0x01
+           ];
+           
+      TestHeaderWrite(expectedBytes, h => h.PointerToSymbolTable = 1:> uint);
     }
     
     public ShouldWriteNumberOfSymbols() : void
     {
-      throw NotImplementedException();
+      def expectedBytes = array[
+           // The "PE" magic string
+           0x50 : byte, 0x45, 0x00, 0x00, 
+           // Machine = I386 (0x14c)
+           0x4c, 0x01, 
+           // NumberOfSections = 2                       
+           0x02, 0x00, 
+           // TimeDateStamp
+           0xDD, 0x86, 0xD2, 0x4A, 
+           // PointerToSymbolTable = 0
+           0x00, 0x00, 0x00, 0x00,
+           // NumberOfSymbols = 0
+           0x03, 0x00, 0x00, 0x00, 
+           // SizeOfOptionalHeader = 224
+           0xE0, 0x00,
+           // Characteristics = EXECUTABLE_IMAGE | 32BIT_MACHINE
+           0x02, 0x01
+           ];
+           
+      TestHeaderWrite(expectedBytes, h => h.NumberOfSymbols = 3 :> uint);
     }
     
     public ShouldWriteOptionalHeaderSize() : void
     {
-      throw NotImplementedException();
+      def expectedBytes = array[
+           // The "PE" magic string
+           0x50 : byte, 0x45, 0x00, 0x00, 
+           // Machine = I386 (0x14c)
+           0x4c, 0x01, 
+           // NumberOfSections = 2                       
+           0x02, 0x00, 
+           // TimeDateStamp
+           0xDD, 0x86, 0xD2, 0x4A, 
+           // PointerToSymbolTable = 0
+           0x00, 0x00, 0x00, 0x00,
+           // NumberOfSymbols = 0
+           0x00, 0x00, 0x00, 0x00, 
+           // SizeOfOptionalHeader = 9
+           0x09, 0x00,
+           // Characteristics = EXECUTABLE_IMAGE | 32BIT_MACHINE
+           0x02, 0x01
+           ];
+           
+      TestHeaderWrite(expectedBytes, h => h.OptionalHeaderSize = 9 :> ushort);
     }
     
     public ShouldWriteCharacteristics() : void
     {
-      throw NotImplementedException();
+      def expectedBytes = array[
+           // The "PE" magic string
+           0x50 : byte, 0x45, 0x00, 0x00, 
+           // Machine = I386 (0x14c)
+           0x4c, 0x01, 
+           // NumberOfSections = 2                       
+           0x02, 0x00, 
+           // TimeDateStamp
+           0xDD, 0x86, 0xD2, 0x4A, 
+           // PointerToSymbolTable = 0
+           0x00, 0x00, 0x00, 0x00,
+           // NumberOfSymbols = 0
+           0x00, 0x00, 0x00, 0x00, 
+           // SizeOfOptionalHeader = 224
+           0xE0, 0x00,
+           // Characteristics = DLL | 32BIT_MACHINE
+           0x00, 0x21
+           ];
+           
+      TestHeaderWrite(expectedBytes, h => h.Characteristics = Characteristics.DLL | Characteristics.Is32BitMachine);
     }
     
     private ReadHeader() : CoffHeader
@@ -150,10 +256,52 @@ namespace Tests
       reader.Read(stream);
     }
     
+    private TestHeaderWrite(expectedBytes : array[byte], setHeader : CoffHeader-> void) : void
+    {
+      def header = CreateDefaultHeader(setHeader);      
+      
+      def outputStream = MemoryStream(expectedBytes.Length);
+      def writer = CoffHeaderWriter();
+      writer.Write(header, outputStream);
+      
+      def expectedHash = expectedBytes.GetHash();
+      def actualHash = outputStream.GetHash();
+      
+      assert actualHash equals expectedHash otherwiseprint "Invalid output stream";
+    }
+    
+    private CreateDefaultHeader(extraHeaderStep : CoffHeader -> void = null) : CoffHeader
+    {
+      def setHeader(header : CoffHeader) : void
+      {
+        header.Machine = Machine.I386;
+        header.NumberOfSections = 2;
+        header.TimeDateStamp = 0x4AD286DD;
+        header.PointerToSymbolTable = 0;
+        header.NumberOfSymbols = 0;
+        header.OptionalHeaderSize = 224;
+        header.Characteristics = Characteristics.ExecutableImage | Characteristics.Is32BitMachine;
+        
+        // Allow users to override the default header settings
+        when(extraHeaderStep != null)
+          extraHeaderStep(header);
+      }
+      
+      CreateHeader(setHeader);
+    }
+    
+    private CreateHeader(setHeader : CoffHeader -> void) : CoffHeader
+    {
+      def header = CoffHeader();
+      setHeader(header);
+        
+      header;
+    }    
+    
     private GetData() : array[byte]
     {
       GetData(array[0x4C : byte, 0x01]);
-    }
+    } 
     
     private GetData(machineBytes : array[byte]) : array[byte]
     {
@@ -176,6 +324,7 @@ namespace Tests
            0x02, 0x01
            ];
     }
+    
     private ShouldRecognizeMachineType(machineBytes : array[byte], machineType : Machine) : void
     {
       def data = array[

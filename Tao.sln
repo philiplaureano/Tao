@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "Tao", "src\Tao\Tao.nproj", "{D911E1DC-AAF7-426A-B3EC-A9E336AC83CE}"
+EndProject
+Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "Tests", "src\Tests\Tests.nproj", "{C0F7B9C1-6109-4612-BAF1-4941AD4D3F14}"
+EndProject
+Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "Tests.Macros", "src\Tests\Tests.Macros\Tests.Macros.nproj", "{1E8A64C1-E4D6-4B2A-9A2F-DF9536217CBD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D911E1DC-AAF7-426A-B3EC-A9E336AC83CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D911E1DC-AAF7-426A-B3EC-A9E336AC83CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D911E1DC-AAF7-426A-B3EC-A9E336AC83CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D911E1DC-AAF7-426A-B3EC-A9E336AC83CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0F7B9C1-6109-4612-BAF1-4941AD4D3F14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0F7B9C1-6109-4612-BAF1-4941AD4D3F14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0F7B9C1-6109-4612-BAF1-4941AD4D3F14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0F7B9C1-6109-4612-BAF1-4941AD4D3F14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E8A64C1-E4D6-4B2A-9A2F-DF9536217CBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E8A64C1-E4D6-4B2A-9A2F-DF9536217CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E8A64C1-E4D6-4B2A-9A2F-DF9536217CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E8A64C1-E4D6-4B2A-9A2F-DF9536217CBD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

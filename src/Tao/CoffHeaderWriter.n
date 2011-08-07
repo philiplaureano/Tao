@@ -1,0 +1,31 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace Tao
+{  
+  public class CoffHeaderWriter
+  {
+    public Write(header : CoffHeader, [NotNull] outputStream : Stream) : void
+        ensures outputStream.Length == 24
+    {
+      def writer = BinaryWriter(outputStream);
+          
+      // Write the PE magic signature
+      writer.Write(0x00004550 :> uint);      
+      writer.Write(header.Machine :> ushort);
+      writer.Write(header.NumberOfSections : ushort);
+      writer.Write(header.TimeDateStamp : uint);
+      writer.Write(header.PointerToSymbolTable : uint);
+      writer.Write(header.NumberOfSymbols : uint);
+      writer.Write(header.OptionalHeaderSize : ushort);
+      writer.Write(header.Characteristics :> ushort);
+    }
+  }
+}
