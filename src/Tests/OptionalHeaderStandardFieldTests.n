@@ -1,0 +1,128 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tests.Macros;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class OptionalHeaderStandardFieldTests
+  {
+    public ShouldThrowBadImageFormatExceptionIfOptionalHeaderSizeIsZero() : void
+        expects BadImageFormatException
+    {
+      throw NotImplementedException();
+    }   
+      
+    public ShouldThrowBadImageFormatExceptionIfMagicPEStringIsNotFound() : void
+        expects BadImageFormatException
+    {
+      throw NotImplementedException();
+    }
+      
+    public ShouldThrowExceptionOnInvalidMagicNumber() : void
+	    expects BadImageFormatException
+	{
+		throw NotImplementedException();
+	}
+	
+    public ShouldReadMajorLinkerVersion() : void
+    {
+      throw NotImplementedException();
+    }
+            
+    public ShouldReadMinorLinkerVersion() : void
+    {
+      throw NotImplementedException();
+    }
+        
+    public ShouldReadCodeSize() : void
+    {
+      throw NotImplementedException();
+    }
+       
+    public ShouldReadInitializedDataSize() : void
+    {
+      throw NotImplementedException();
+    }
+		
+    public ShouldReadBaseOfCode() : void
+    {
+      throw NotImplementedException();
+    }
+	
+    public ShouldReadAddressOfEntryPoint() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadUninitializedDataSize() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadBaseOfDataInPE32Header() : void
+    {
+      throw NotImplementedException();
+    }
+	
+    public ShouldNotReadBaseOfDataInPE32PlusHeader() : void
+    {
+      throw NotImplementedException();
+    }
+		
+    public ShouldBeAbleToReadMagicNumber() : void
+    {
+      throw NotImplementedException();
+    }    
+    
+    public ShouldWriteMajorLinkerVersion() : void
+    {
+      throw NotImplementedException();
+    }
+            
+    public ShouldWriteMinorLinkerVersion() : void
+    {
+      throw NotImplementedException();
+    }
+        
+    public ShouldWriteCodeSize() : void
+    {
+      throw NotImplementedException();
+    }
+       
+    public ShouldWriteInitializedDataSize() : void
+    {
+      throw NotImplementedException();
+    }
+		
+    public ShouldWriteBaseOfCode() : void
+    {
+      throw NotImplementedException();
+    }
+	
+    public ShouldWriteAddressOfEntryPoint() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteUninitializedDataSize() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteBaseOfDataInPE32Header() : void
+    {
+      throw NotImplementedException();
+    }
+	
+    public ShouldNotWriteBaseOfDataInPE32PlusHeader() : void
+    {
+      throw NotImplementedException();
+    }
+		
+    public ShouldBeAbleToWriteMagicNumber() : void
+    {
+      throw NotImplementedException();
+    } 
+  }
+}
