@@ -94,6 +94,31 @@ namespace Tests
       assert header.OptionalHeaderSize equals 224 otherwiseprint "Invalid OptionalHeaderSize";
     }
     
+    public ShouldThrowBadImageFormatExceptionIfOptionalHeaderSizeIsZero() : void
+        expects BadImageFormatException
+    {
+      def data = array[
+           // The "PE" magic string
+           0x50 : byte, 0x45, 0x00, 0x00, 
+           // Machine = I386 (0x14c)
+           0x4c, 0x1, 
+           // NumberOfSections = 2                       
+           0x02, 0x00, 
+           // TimeDateStamp
+           0xDD, 0x86, 0xD2, 0x4A, 
+           // PointerToSymbolTable = 0
+           0x00, 0x00, 0x00, 0x00,
+           // NumberOfSymbols = 0
+           0x00, 0x00, 0x00, 0x00, 
+           // SizeOfOptionalHeader = 0
+           0x00, 0x00,
+           // Characteristics = EXECUTABLE_IMAGE | 32BIT_MACHINE
+           0x02, 0x01
+           ];
+      
+           def header = ReadHeader(data);
+    }  
+    
     public ShouldReadCharacteristics() : void
     {
       def header = ReadHeader();
@@ -222,7 +247,7 @@ namespace Tests
            ];
            
       TestHeaderWrite(expectedBytes, h => h.OptionalHeaderSize = 9 :> ushort);
-    }
+    }         
     
     public ShouldWriteCharacteristics() : void
     {
@@ -251,6 +276,11 @@ namespace Tests
     private ReadHeader() : CoffHeader
     {
       def data = GetData();
+      ReadHeader(data);
+    }
+    
+    private ReadHeader(data : array[byte]) : CoffHeader
+    {
       def stream = MemoryStream(data);
       def reader = CoffHeaderReader();
       reader.Read(stream);

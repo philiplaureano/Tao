@@ -1,67 +1,114 @@
 ﻿using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao;
 using Tests.Macros;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Tests
 {
   public class OptionalHeaderStandardFieldTests
-  {
-    public ShouldThrowBadImageFormatExceptionIfOptionalHeaderSizeIsZero() : void
+  {          
+    public ShouldThrowBadImageFormatExceptionIfMagicNumberIsInvalid() : void
         expects BadImageFormatException
     {
-      throw NotImplementedException();
-    }   
-      
-    public ShouldThrowBadImageFormatExceptionIfMagicPEStringIsNotFound() : void
-        expects BadImageFormatException
-    {
-      throw NotImplementedException();
+      def data = array[ 
+           // Magic Number = 0x00 - Invalid Magic Number
+           0x00 : byte, 0x00, 
+           // MajorLinkerVersion = 8
+           0x08, 
+           // MinorLinkerVersion = 0
+           0x00, 
+           // SizeOfCode = 0x200
+           0x00, 0x02, 0x00, 0x00, 
+           // SizeOfInitializedData = 0x200
+           0x00, 0x02, 0x00, 0x00, 
+           // SizeOfUninitializedData = 0
+           0x00, 0x00, 0x00, 0x00,
+           // AddressOfEntryPoint = 0x21CE
+	       0xCE, 0x21, 0x00, 0x00, 
+	       // BaseOfCode = 0x2000	       
+	       0x00, 0x20, 0x00, 0x00,
+	       // BaseOfData = 0x4000	       
+	       0x00, 0x40, 0x00, 0x00
+       ];
+       
+      def input = MemoryStream(data);
+      def reader = OptionalHeaderStandardFieldsReader();
+      _ = reader.Read(input);      
     }
+    
+    public ShouldRecognizePE32ImageType() : void
+    {
+      def data = GetData();
+        
+      def input = MemoryStream(data);
+      def reader = OptionalHeaderStandardFieldsReader();
+      def header = reader.Read(input);    
       
-    public ShouldThrowExceptionOnInvalidMagicNumber() : void
-	    expects BadImageFormatException
-	{
-		throw NotImplementedException();
-	}
-	
+      assert header.ImageType equals ImageType.PE32 otherwiseprint "Invalid image type";
+    }
+    
+    public ShouldRecognizePE32PlusImageType() : void
+    {
+      def data = GetData();
+      
+      // Change the header bytes to a PE32+ header
+      data[1] = 0x02;
+      
+      def input = MemoryStream(data);
+      def reader = OptionalHeaderStandardFieldsReader();
+      def header = reader.Read(input);    
+      
+      assert header.ImageType equals ImageType.PE32Plus otherwiseprint "Invalid image type";
+    }         
+	        
     public ShouldReadMajorLinkerVersion() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.MajorLinkerVersion equals 8 otherwiseprint "Invalid MajorLinkerVersion";
     }
             
     public ShouldReadMinorLinkerVersion() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.MinorLinkerVersion equals 0 otherwiseprint "Invalid MinorLinkerVersion";
     }
         
     public ShouldReadCodeSize() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.SizeOfCode equals 0x200 otherwiseprint "Invalid SizeOfCode";
     }
        
     public ShouldReadInitializedDataSize() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.SizeOfInitializedData equals 0x200 otherwiseprint "Invalid InitializedDataSize";
     }
 		
     public ShouldReadBaseOfCode() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.BaseOfCode equals 0x2000 otherwiseprint "Invalid BaseOfCode";
     }
 	
     public ShouldReadAddressOfEntryPoint() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.AddressOfEntryPoint equals 0x21CE otherwiseprint "Invalid AddressOfEntryPoint";
     }
+    
     public ShouldReadUninitializedDataSize() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.SizeOfUninitializedData equals 0 otherwiseprint "Invalid SizeOfUnitializedData";
     }
+    
     public ShouldReadBaseOfDataInPE32Header() : void
     {
       throw NotImplementedException();
@@ -71,11 +118,6 @@ namespace Tests
     {
       throw NotImplementedException();
     }
-		
-    public ShouldBeAbleToReadMagicNumber() : void
-    {
-      throw NotImplementedException();
-    }    
     
     public ShouldWriteMajorLinkerVersion() : void
     {
@@ -124,5 +166,39 @@ namespace Tests
     {
       throw NotImplementedException();
     } 
+    
+    private GetHeader() : OptionalHeaderStandardFields
+    {
+      def data = GetData();
+        
+      def input = MemoryStream(data);
+      def reader = OptionalHeaderStandardFieldsReader();
+      reader.Read(input);
+    }
+    
+    private GetData() : array[byte]
+    {
+      def data = array[ 
+           // Magic Number = 0x10b
+           0x0B : byte, 0x01, 
+           // MajorLinkerVersion = 8
+           0x08, 
+           // MinorLinkerVersion = 0
+           0x00, 
+           // SizeOfCode = 0x200
+           0x00, 0x02, 0x00, 0x00, 
+           // SizeOfInitializedData = 0x200
+           0x00, 0x02, 0x00, 0x00, 
+           // SizeOfUninitializedData = 0
+           0x00, 0x00, 0x00, 0x00,
+           // AddressOfEntryPoint = 0x21CE
+	       0xCE, 0x21, 0x00, 0x00, 
+	       // BaseOfCode = 0x2000	       
+	       0x00, 0x20, 0x00, 0x00,
+	       // BaseOfData = 0x4000	       
+	       0x00, 0x40, 0x00, 0x00
+       ];
+      data;
+    }    
   }
 }

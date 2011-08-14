@@ -1,0 +1,40 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace Tao
+{
+  public class OptionalHeaderStandardFieldsReader
+  {
+    public Read([NotNull] inputStream : Stream) : OptionalHeaderStandardFields
+        requires inputStream.Length > 0
+    {
+      def binaryReader = BinaryReader(inputStream);
+      def magicNumber = binaryReader.ReadUInt16();
+      
+      def result = OptionalHeaderStandardFields();
+      match(magicNumber)
+      {
+        |0x10B => result.ImageType = ImageType.PE32;
+        |0x20B =>result.ImageType = ImageType.PE32Plus;
+        |_=>throw BadImageFormatException("Invalid PE Magic Number");
+      }            
+      
+      result.MajorLinkerVersion = binaryReader.ReadByte();
+      result.MinorLinkerVersion = binaryReader.ReadByte();
+      result.SizeOfCode = binaryReader.ReadUInt32();
+      result.SizeOfInitializedData = binaryReader.ReadUInt32();
+      result.SizeOfUninitializedData = binaryReader.ReadUInt32();
+      result.AddressOfEntryPoint = binaryReader.ReadUInt32();
+      result.BaseOfCode = binaryReader.ReadUInt32();
+      
+      result;
+    }
+  }
+}

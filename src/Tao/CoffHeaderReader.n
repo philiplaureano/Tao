@@ -14,7 +14,8 @@ namespace Tao
   public class CoffHeaderReader
   {
     public Read([NotNull] inputStream : Stream) : CoffHeader
-        requires inputStream.Length >= 24 otherwise throw BadImageFormatException("Invalid COFF header")  
+        requires inputStream.Length >= 24 otherwise throw BadImageFormatException("Invalid COFF header")
+        ensures value != null
     {
       def binaryReader = BinaryReader(inputStream);
       def bytesToRead = 4;        
@@ -22,8 +23,7 @@ namespace Tao
       
       _ = binaryReader.Read(signatureBytes, 0, bytesToRead);
       
-      mutable byteStream : Stream = null;
-      
+      mutable byteStream : Stream = null;      
       match(signatureBytes[0], signatureBytes[1])
       {
           // Check for the 'PE' string
@@ -39,7 +39,7 @@ namespace Tao
       header.NumberOfSymbols = binaryReader.ReadUInt32();
       header.OptionalHeaderSize = binaryReader.ReadUInt16();
       header.Characteristics = binaryReader.ReadUInt16() :> Characteristics; 
-      
+                 
       match(header.Machine)
       {
         | Machine.Unknown
@@ -48,6 +48,10 @@ namespace Tao
         | Machine.Amd64 =>{};
         | _ => throw NotSupportedException(string.Format("Unsupported Machine Type '{0}'", header.Machine.ToString()));
       }
+      
+      // Check for a valid optional header
+      when(header.OptionalHeaderSize == 0)
+        throw BadImageFormatException("Missing optional header");
       
       header;
     }

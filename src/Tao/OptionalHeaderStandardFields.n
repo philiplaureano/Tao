@@ -1,0 +1,22 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class OptionalHeaderStandardFields
+  {
+      public mutable ImageType : ImageType;
+      public mutable MajorLinkerVersion : byte;
+      public mutable MinorLinkerVersion : byte;
+      public mutable SizeOfCode : uint;
+      public mutable SizeOfInitializedData : uint;
+      public mutable SizeOfUninitializedData : uint;
+      public mutable AddressOfEntryPoint : uint;
+      public mutable BaseOfCode : uint;
+  }
+}

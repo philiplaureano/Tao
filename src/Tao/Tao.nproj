@@ -77,10 +77,19 @@
     <Compile Include="DosHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ImageType.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Machine.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="OptionalHeaderStandardFields.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
+    <Compile Include="OptionalHeaderStandardFieldsReader.n">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
