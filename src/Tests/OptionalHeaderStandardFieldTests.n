@@ -111,12 +111,22 @@ namespace Tests
     
     public ShouldReadBaseOfDataInPE32Header() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.BaseOfData equals 0x4000 otherwiseprint "Invalid BaseOfData";
     }
 	
     public ShouldNotReadBaseOfDataInPE32PlusHeader() : void
     {
-      throw NotImplementedException();
+      def data = GetData();
+      
+      // Change the header to a PE32+ header
+      data[1] = 0x2;
+      
+      def input = MemoryStream(data);
+      def reader = OptionalHeaderStandardFieldsReader();
+      def header = reader.Read(input);
+      
+      assert header.BaseOfData equals null otherwiseprint "The BaseOfData should never be read in PE32+ images";
     }
     
     public ShouldWriteMajorLinkerVersion() : void

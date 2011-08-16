@@ -22,8 +22,8 @@ namespace Tao
       match(magicNumber)
       {
         |0x10B => result.ImageType = ImageType.PE32;
-        |0x20B =>result.ImageType = ImageType.PE32Plus;
-        |_=>throw BadImageFormatException("Invalid PE Magic Number");
+        |0x20B => result.ImageType = ImageType.PE32Plus;
+        |_     => throw BadImageFormatException("Invalid PE Magic Number");
       }            
       
       result.MajorLinkerVersion = binaryReader.ReadByte();
@@ -32,7 +32,10 @@ namespace Tao
       result.SizeOfInitializedData = binaryReader.ReadUInt32();
       result.SizeOfUninitializedData = binaryReader.ReadUInt32();
       result.AddressOfEntryPoint = binaryReader.ReadUInt32();
-      result.BaseOfCode = binaryReader.ReadUInt32();
+      result.BaseOfCode = binaryReader.ReadUInt32();      
+      
+      when (result.ImageType == ImageType.PE32)
+        result.BaseOfData = binaryReader.ReadUInt32();
       
       result;
     }
