@@ -119,7 +119,7 @@ namespace Tests
     {
       def data = GetData();
       
-      // Change the header to a PE32+ header
+      // Change the header to a PE32+ header (0x02B)
       data[1] = 0x2;
       
       def input = MemoryStream(data);
@@ -131,50 +131,215 @@ namespace Tests
     
     public ShouldWriteMajorLinkerVersion() : void
     {
-      throw NotImplementedException();
+      def header = CreateInputHeader();
+      
+      // Set the MajorLinker version to a discernable value
+      def expectedVersion = 42 : byte;
+      header.MajorLinkerVersion = expectedVersion;
+      
+      // Change the expected data to match the expected version
+      def data = GetData();
+      data[2] = expectedVersion;      
+      
+      TestWrite(header, data);
     }
             
     public ShouldWriteMinorLinkerVersion() : void
     {
-      throw NotImplementedException();
+      def header = CreateInputHeader();
+      
+      // Set the MinorLinker version to a discernable value
+      def expectedVersion = 42 : byte;
+      header.MinorLinkerVersion = expectedVersion;
+      
+      // Change the expected data to match the expected version
+      def data = GetData();
+      data[3] = expectedVersion;      
+      
+      TestWrite(header, data);
     }
         
     public ShouldWriteCodeSize() : void
     {
-      throw NotImplementedException();
+      def header = CreateInputHeader();      
+      header.SizeOfCode = 0x100;
+      
+      // Change the expected data to match the code size (0x100)
+      def data = GetData();
+      data[5] = 0x01;      
+      
+      TestWrite(header, data);      
     }
        
     public ShouldWriteInitializedDataSize() : void
     {
-      throw NotImplementedException();
+      def header = CreateInputHeader();      
+      header.SizeOfInitializedData = 0x100;
+      
+      // Change the expected data to match the size of initialized data (0x100)
+      def data = GetData();
+      data[9] = 0x01;      
+      
+      TestWrite(header, data);  
     }
 		
     public ShouldWriteBaseOfCode() : void
     {
-      throw NotImplementedException();
+      def header = CreateInputHeader();      
+      header.BaseOfCode = 0x2300;
+      
+      // Change the expected data to match the size of uninitialized data (0x300)
+      def data = GetData();
+      data[21] = 0x23;      
+      
+      TestWrite(header, data);
     }
 	
     public ShouldWriteAddressOfEntryPoint() : void
     {
-      throw NotImplementedException();
+      def header = CreateInputHeader();      
+      header.AddressOfEntryPoint = 0x22CE;
+      
+      // Change the expected data to match the size of uninitialized data (0x300)
+      def data = GetData();
+      data[17] = 0x22;      
+      
+      TestWrite(header, data); 
     }
+    
     public ShouldWriteUninitializedDataSize() : void
     {
-      throw NotImplementedException();
+      def header = CreateInputHeader();      
+      header.SizeOfUninitializedData = 0x300;
+      
+      // Change the expected data to match the size of uninitialized data (0x300)
+      def data = GetData();
+      data[13] = 0x03;      
+      
+      TestWrite(header, data);       
     }
     public ShouldWriteBaseOfDataInPE32Header() : void
     {
-      throw NotImplementedException();
+      def fields = OptionalHeaderStandardFields();
+      fields.ImageType = ImageType.PE32;
+      fields.MajorLinkerVersion = 8;
+      fields.MinorLinkerVersion = 0;
+      fields.SizeOfCode = 0x200;
+      fields.SizeOfInitializedData = 0x200;
+      fields.SizeOfUninitializedData = 0;
+      fields.AddressOfEntryPoint = 0x21CE;
+      fields.BaseOfCode = 0x2000;
+      fields.BaseOfData = 0x4000 :> uint;
+                   
+      def expectedData = GetData();
+      
+      TestWrite(fields, expectedData);
     }
 	
     public ShouldNotWriteBaseOfDataInPE32PlusHeader() : void
     {
-      throw NotImplementedException();
+      def fields = OptionalHeaderStandardFields();
+      fields.ImageType = ImageType.PE32Plus;
+      fields.MajorLinkerVersion = 8;
+      fields.MinorLinkerVersion = 0;
+      fields.SizeOfCode = 0x200;
+      fields.SizeOfInitializedData = 0x200;
+      fields.SizeOfUninitializedData = 0;
+      fields.AddressOfEntryPoint = 0x21CE;
+      fields.BaseOfCode = 0x2000;
+      
+      // Write out dummy data to the BaseOfDataField;
+      // this operation should not affect the results
+      fields.BaseOfData = 0x12345 : uint;
+      
+      def expectedData = array[ 
+           // Magic Number = 0x20b (PE32+)
+           0x0B : byte, 0x02, 
+           // MajorLinkerVersion = 8
+           0x08, 
+           // MinorLinkerVersion = 0
+           0x00, 
+           // SizeOfCode = 0x200
+           0x00, 0x02, 0x00, 0x00, 
+           // SizeOfInitializedData = 0x200
+           0x00, 0x02, 0x00, 0x00, 
+           // SizeOfUninitializedData = 0
+           0x00, 0x00, 0x00, 0x00,
+           // AddressOfEntryPoint = 0x21CE
+	       0xCE, 0x21, 0x00, 0x00, 
+	       // BaseOfCode = 0x2000	       
+	       0x00, 0x20, 0x00, 0x00
+       ];
+      
+      TestWrite(fields, expectedData);
     }
 		
-    public ShouldBeAbleToWriteMagicNumber() : void
+    public ShouldBeAbleToWriteMagicNumberForPE32Image() : void
     {
-      throw NotImplementedException();
+      def fields = OptionalHeaderStandardFields();
+      fields.ImageType = ImageType.PE32;
+      fields.MajorLinkerVersion = 8;
+      fields.MinorLinkerVersion = 0;
+      fields.SizeOfCode = 0x200;
+      fields.SizeOfInitializedData = 0x200;
+      fields.SizeOfUninitializedData = 0;
+      fields.AddressOfEntryPoint = 0x21CE;
+      fields.BaseOfCode = 0x2000;
+      fields.BaseOfData = 0x4000 :> uint;
+                   
+      def expectedData = GetData();
+      
+      TestWrite(fields, expectedData);
+    } 
+    
+    private CreateInputHeader() : OptionalHeaderStandardFields
+    {
+      def fields = OptionalHeaderStandardFields();
+      fields.ImageType = ImageType.PE32;
+      fields.MajorLinkerVersion = 8;
+      fields.MinorLinkerVersion = 0;
+      fields.SizeOfCode = 0x200;
+      fields.SizeOfInitializedData = 0x200;
+      fields.SizeOfUninitializedData = 0;
+      fields.AddressOfEntryPoint = 0x21CE;
+      fields.BaseOfCode = 0x2000;
+      fields.BaseOfData = 0x4000 :> uint;
+      
+      fields;
+    }
+    
+    public ShouldBeAbleToWriteMagicNumberForPE32PlusImage() : void
+    {
+      def fields = OptionalHeaderStandardFields();
+      fields.ImageType = ImageType.PE32Plus;
+      fields.MajorLinkerVersion = 8;
+      fields.MinorLinkerVersion = 0;
+      fields.SizeOfCode = 0x200;
+      fields.SizeOfInitializedData = 0x200;
+      fields.SizeOfUninitializedData = 0;
+      fields.AddressOfEntryPoint = 0x21CE;
+      fields.BaseOfCode = 0x2000;
+      
+      def expectedData = array[ 
+           // Magic Number = 0x20b (PE32+)
+           0x0B : byte, 0x02, 
+           // MajorLinkerVersion = 8
+           0x08, 
+           // MinorLinkerVersion = 0
+           0x00, 
+           // SizeOfCode = 0x200
+           0x00, 0x02, 0x00, 0x00, 
+           // SizeOfInitializedData = 0x200
+           0x00, 0x02, 0x00, 0x00, 
+           // SizeOfUninitializedData = 0
+           0x00, 0x00, 0x00, 0x00,
+           // AddressOfEntryPoint = 0x21CE
+	       0xCE, 0x21, 0x00, 0x00, 
+	       // BaseOfCode = 0x2000	       
+	       0x00, 0x20, 0x00, 0x00
+       ];
+      
+      TestWrite(fields, expectedData);      
     } 
     
     private GetHeader() : OptionalHeaderStandardFields
@@ -184,6 +349,19 @@ namespace Tests
       def input = MemoryStream(data);
       def reader = OptionalHeaderStandardFieldsReader();
       reader.Read(input);
+    }
+    
+    private TestWrite(fields : OptionalHeaderStandardFields, expectedData : array[byte]) : void
+    {
+      def expectedHash = expectedData.GetHash();      
+      def outputStream = MemoryStream();
+      
+      def writer = OptionalHeaderStandardFieldsWriter();
+      writer.Write(fields, outputStream);
+      
+      def actualHash = outputStream.GetHash();
+      
+      assert actualHash equals expectedHash otherwiseprint "Invalid hash code";
     }
     
     private GetData() : array[byte]

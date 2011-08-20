@@ -86,6 +86,9 @@
     <Compile Include="OptionalHeaderStandardFields.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="OptionalHeaderStandardFieldsWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
     <Compile Include="OptionalHeaderStandardFieldsReader.n">
       <SubType>Code</SubType>
