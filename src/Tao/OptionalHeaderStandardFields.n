@@ -10,14 +10,14 @@ namespace Tao
 {
   public class OptionalHeaderStandardFields
   {
-      public mutable ImageType : ImageType;
-      public mutable MajorLinkerVersion : byte;
-      public mutable MinorLinkerVersion : byte;
-      public mutable SizeOfCode : uint;
-      public mutable SizeOfInitializedData : uint;
-      public mutable SizeOfUninitializedData : uint;
-      public mutable AddressOfEntryPoint : uint;
-      public mutable BaseOfCode : uint;
-      public mutable BaseOfData : uint?;
+    public ImageType : ImageType { get; set; }
+    public MajorLinkerVersion : byte { get; set; }
+    public MinorLinkerVersion : byte { get; set; }
+    public SizeOfCode : uint { get; set; }
+    public SizeOfInitializedData : uint { get; set; }
+    public SizeOfUninitializedData : uint { get; set; }
+    public AddressOfEntryPoint : uint { get; set; }
+    public BaseOfCode : uint { get; set; }
+    public BaseOfData : uint? { get; set; }
   }
 }

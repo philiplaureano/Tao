@@ -1,0 +1,208 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class NTHeader32Tests
+  {      
+    public ShouldReadImageBase() : void
+    {
+      throw NotImplementedException();
+    }
+      
+    public ShouldReadSectionAlignment() : void
+    {
+      throw NotImplementedException();
+    }
+      
+    public ShouldReadFileAlignment() : void
+    {
+      throw NotImplementedException();
+    }
+      
+    public ShouldReadMajorOperatingSystemVersion() : void
+    {
+      throw NotImplementedException();
+    }
+      
+    public ShouldReadMinorOperatingSystemVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldReadMajorImageVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldReadMinorImageVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldReadSubsystemVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldReadWin32VersionValue() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldReadSizeOfImage() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldReadSizeOfheaders() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldReadCheckSum() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldReadSubSystem() : void
+    {                
+      throw NotImplementedException();
+    }
+    
+    public ShouldReadDllCharacteristics() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadSizeOfStackReserve() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldReadSizeOfStackCommit() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldReadSizeOfHeapReserve() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldReadSizeOfHeapCommit() : void 
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadLoaderFlags() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadNumberOfRvaAndSizes() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteImageBase() : void
+    {
+      throw NotImplementedException();
+    }
+      
+    public ShouldWriteSectionAlignment() : void
+    {
+      throw NotImplementedException();
+    }
+      
+    public ShouldWriteFileAlignment() : void
+    {
+      throw NotImplementedException();
+    }
+      
+    public ShouldWriteMajorOperatingSystemVersion() : void
+    {
+      throw NotImplementedException();
+    }
+      
+    public ShouldWriteMinorOperatingSystemVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteMajorImageVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteMinorImageVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteSubsystemVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteWin32VersionValue() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteSizeOfImage() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteSizeOfheaders() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteCheckSum() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteSubSystem() : void
+    {                
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteDllCharacteristics() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteSizeOfStackReserve() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteSizeOfStackCommit() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteSizeOfHeapReserve() : void
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteSizeOfHeapCommit() : void 
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteLoaderFlags() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteNumberOfRvaAndSizes() : void
+    {
+      throw NotImplementedException();
+    }
+  }
+}

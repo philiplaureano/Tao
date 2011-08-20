@@ -1,0 +1,36 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class NTHeader[TSize]
+    where TSize : struct
+  {
+    public ImageBase : TSize { get; set; }
+    public SectionAlignment : uint { get; set; }
+    public FileAlignment : uint { get; set; }
+    public MajorOperatingSystemVersion : ushort { get; set; }
+    public MinorOperatingSystemVersion : ushort { get; set; }
+    public MajorImageVersion : ushort { get; set; }
+    public MinorImageVersion : ushort { get; set; }    
+    public MajorSubsystemVersion : ushort { get; set; }
+    public MinorSubsystemVersion : ushort { get; set; }
+    public Win32VersionValue : uint { get;set; }
+    public SizeOfImage : uint { get; set; }
+    public SizeOfHeaders : uint { get; set; }
+    public CheckSum : uint { get; set; }
+    public Subsystem : ushort { get; set; }
+    public DllCharacteristics : ushort { get; set; }
+    public SizeOfStackReserve : TSize { get; set; }
+    public SizeOfStackCommit : TSize { get; set; }
+    public SizeOfHeapReserve : TSize { get; set; }
+    public SizeOfHeapCommit : TSize { get; set; }
+    public LoaderFlags : uint { get; set; }
+    public NumberOfRvaAndSizes : uint { get; set; }
+  }
+}
