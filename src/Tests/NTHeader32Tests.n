@@ -2,9 +2,12 @@
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao;
+using Tests.Macros;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Tests
@@ -12,98 +15,232 @@ namespace Tests
   public class NTHeader32Tests
   {      
     public ShouldReadImageBase() : void
-    {
-      throw NotImplementedException();
+    {      
+      def header = GetHeader();
+      assert header.ImageBase equals 0x00400000 otherwiseprint "Invalid ImageBase";
     }
-      
+        
     public ShouldReadSectionAlignment() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.SectionAlignment equals 0x00002000 otherwiseprint "Invalid SectionAlignment";
     }
       
     public ShouldReadFileAlignment() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();        
+      assert header.FileAlignment equals 0x00000200 otherwiseprint "Invalid FileAlignment";
     }
       
     public ShouldReadMajorOperatingSystemVersion() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();        
+      assert header.MajorOperatingSystemVersion equals 4 otherwiseprint "Invalid MajorOperatingSystemVersion";
     }
       
     public ShouldReadMinorOperatingSystemVersion() : void
     {
-      throw NotImplementedException();
+      def setOperatingSystemBytes = fun (bytes : array[byte]) : void
+      {
+          bytes[0xE] = 2;
+      }
+      
+      def header = GetHeader(setOperatingSystemBytes);
+      assert header.MinorOperatingSystemVersion equals 2 otherwiseprint "Invalid MinorOperatingSystemVersion";      
     }
     
     public ShouldReadMajorImageVersion() : void
     {
-      throw NotImplementedException();
+      def setMajorImageVersion = fun(bytes : array[byte]) : void
+      {
+          bytes[0x10] = 42;
+      }
+      
+      def header = GetHeader(setMajorImageVersion);
+      assert header.MajorImageVersion equals 42 otherwiseprint "Invalid MajorImageVersion";
     }
     
     public ShouldReadMinorImageVersion() : void
     {
-      throw NotImplementedException();
+      def setMinorImageVersion = fun(bytes : array[byte]) : void
+      {
+          bytes[0x12] = 42;
+      }
+      
+      def header = GetHeader(setMinorImageVersion);
+      assert header.MinorImageVersion equals 42 otherwiseprint "Invalid MinorImageVersion";
     }
     
-    public ShouldReadSubsystemVersion() : void
+    public ShouldReadMajorsSubsystemVersion() : void
     {
-      throw NotImplementedException();
+      def setMajorSubsystemVersionVersion = fun(bytes : array[byte]) : void
+      {
+          bytes[0x14] = 42;
+      }
+      
+      def header = GetHeader(setMajorSubsystemVersionVersion);
+      assert header.MajorSubsystemVersion equals 42 otherwiseprint "Invalid MajorSubsystemVersionVersion";
+    }
+    
+    public ShouldReadMinorsSubsystemVersion() : void
+    {
+      def setMinorSubsystemVersionVersion = fun(bytes : array[byte]) : void
+      {
+          bytes[0x16] = 42;
+      }
+      
+      def header = GetHeader(setMinorSubsystemVersionVersion);
+      assert header.MinorSubsystemVersion equals 42 otherwiseprint "Invalid MinorSubsystemVersionVersion";
     }
     
     public ShouldReadWin32VersionValue() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.Win32VersionValue equals 0 otherwiseprint "Invalid Win32VersionValue";
     }
     
     public ShouldReadSizeOfImage() : void
-    {
-      throw NotImplementedException();
+    {     
+      def header = GetHeader();
+        
+      assert header.SizeOfImage equals 0x00006000 otherwiseprint "Invalid SizeOfImage";
     }
     
-    public ShouldReadSizeOfheaders() : void
+    public ShouldReadSizeOfHeaders() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.SizeOfHeaders equals 0x200 otherwiseprint "Invalid SizeOfHeader";
     }
     
     public ShouldReadCheckSum() : void
     {
-      throw NotImplementedException();
+      def setCheckSumBytes = fun(bytes : array[byte]) : void 
+      {
+          bytes[0x24] = 0xFF;
+      }
+        
+      def header = GetHeader(setCheckSumBytes);
+      assert header.CheckSum equals 0xFF otherwiseprint "Invalid CheckSum";
     }
     
     public ShouldReadSubSystem() : void
     {                
-      throw NotImplementedException();
+      def header = GetHeader();      
+      assert header.Subsystem equals Subsystem.WindowsConsole otherwiseprint "Invalid Subsystem";
     }
     
     public ShouldReadDllCharacteristics() : void
     {
-      throw NotImplementedException();
+      def expectedCharacteristics = 0x8540 :> DLLCharacteristics;
+      
+      def header = GetHeader();      
+      assert header.DllCharacteristics equals expectedCharacteristics otherwiseprint "Invalid DLLCharacteristics";
     }
     public ShouldReadSizeOfStackReserve() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.SizeOfStackReserve equals 0x00100000 otherwiseprint "Invalid SizeOfStackReserve";
     }
     
     public ShouldReadSizeOfStackCommit() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.SizeOfStackCommit equals 0x00001000 otherwiseprint "Invalid SizeOfStackCommit";
     }
     
     public ShouldReadSizeOfHeapReserve() : void
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.SizeOfHeapReserve equals 0x00100000 otherwiseprint "Invalid SizeOfHeapReserve";
     }
     
     public ShouldReadSizeOfHeapCommit() : void 
     {
-      throw NotImplementedException();
+      def header = GetHeader();
+      assert header.SizeOfHeapCommit equals 0x00001000 otherwiseprint "Invalid SizeOfHeapCommit";
     }
-    public ShouldReadLoaderFlags() : void
+    
+    public ShouldReadLoaderFlagsAsZero() : void
     {
-      throw NotImplementedException();
+      def setLoaderFlags = fun(bytes : array[byte]) : void
+      {
+         bytes[0x3c] = 42;
+      }
+        
+      def header = GetHeader(setLoaderFlags);
+      assert header.LoaderFlags equals 0 otherwiseprint "Invalid LoaderFlags";
     }
+    
     public ShouldReadNumberOfRvaAndSizes() : void
+    {
+      def header = GetHeader();
+      assert header.NumberOfRvaAndSizes equals 0x10 otherwiseprint "Invalid NumberOfRvaAndSizes";
+    }
+    
+    private GetHeader(modifyData : array[byte] -> void = null) : NTHeader[uint]
+    {
+      def data = GetData();
+      
+      // Apply any necessary changes to the data
+      when (modifyData != null)
+        modifyData(data);
+        
+      def stream = data.ToStream();
+      def reader = NTHeader32Reader();
+      
+      def header : NTHeader[uint] = reader.Read(stream);
+      
+      header;
+    }
+    
+    private GetData() : array[byte]
+    {
+      array[	                     
+        // ImageBase = 0x00400000
+        0x00 : byte, 0x00, 0x40, 0x00,
+        // SectionAlignment = 0x00002000
+        0x00, 0x20, 0x00, 0x00, 
+        // FileAlignment = 0x0200
+        0x00, 0x02, 0x00, 0x00, 
+        // MajorOperatingSystemVersion = 4
+        0x04, 0x00,
+        // MinorOperatingSystemVersion = 0
+        0x00, 0x00,
+        // MajorImageVersion = 0
+	    0x00, 0x00, 
+	    // MinorImageVersion = 0
+	    0x00, 0x00, 
+	    // MajorSubsystemVersion = 4
+	    0x04, 0x00,
+	    // MinorSubsystemVersion = 0
+	    0x00, 0x00, 
+	    // Win32VersionValue = 0
+	    0x00, 0x00, 0x00, 0x00, 
+	    // SizeOfImage = 0x00006000
+	    0x00, 0x60, 0x00, 0x00,
+	    // SizeOfHeaders = 0x00000200
+	    0x00, 0x02, 0x00, 0x00,
+	    // Checksum = 0
+	    0x00, 0x00, 0x00, 0x00, 
+	    // Subsystem = 3 
+	    0x03, 0x00, 
+	    // DLLCharacteristics = 0x8540
+	    0x40, 0x85, 
+	    // SizeOfStackReserve = 0x00100000
+	    0x00, 0x00, 0x10, 0x00, 
+	    // SizeOfStackCommit = 0x00001000
+	    0x00, 0x10, 0x00, 0x00, 
+	    // SizeOfHeapReserve = 0x00100000
+	    0x00, 0x00, 0x10, 0x00, 
+	    // SizeOfHeapCommit = 0x00001000
+	    0x00, 0x10, 0x00, 0x00, 
+	    // LoaderFlags = 0
+	    0x00, 0x00, 0x00, 0x00,
+	    // NumberOfRvaAndSizes = 10
+	    0x10, 0x00, 0x00, 0x00
+	    ]	
+    }
+    public ShouldWriteWin32VersionAsZero() : void
     {
       throw NotImplementedException();
     }
@@ -147,12 +284,7 @@ namespace Tests
     {
       throw NotImplementedException();
     }
-    
-    public ShouldWriteWin32VersionValue() : void
-    {
-      throw NotImplementedException();
-    }
-    
+        
     public ShouldWriteSizeOfImage() : void
     {
       throw NotImplementedException();
@@ -168,7 +300,12 @@ namespace Tests
       throw NotImplementedException();
     }
     
-    public ShouldWriteSubSystem() : void
+    public ShouldWriteMajorSubSystem() : void
+    {                
+      throw NotImplementedException();
+    }
+    
+    public ShouldWriteMinorSubSystem() : void
     {                
       throw NotImplementedException();
     }
@@ -196,7 +333,7 @@ namespace Tests
     {
       throw NotImplementedException();
     }
-    public ShouldWriteLoaderFlags() : void
+    public ShouldWriteLoaderFlagsAsZero() : void
     {
       throw NotImplementedException();
     }

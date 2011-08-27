@@ -1,0 +1,51 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace Tao
+{
+  public class NTHeader32Reader
+  {
+      public Read([NotNull] stream : Stream) : NTHeader[uint]
+      {
+          def reader = BinaryReader(stream);
+          
+          def header = NTHeader32();
+          header.ImageBase = reader.ReadUInt32();
+          
+          header.SectionAlignment = reader.ReadUInt32();
+          header.FileAlignment = reader.ReadUInt32();
+          header.MajorOperatingSystemVersion = reader.ReadUInt16();
+          header.MinorOperatingSystemVersion = reader.ReadUInt16();
+          header.MajorImageVersion = reader.ReadUInt16();
+          header.MinorImageVersion = reader.ReadUInt16();
+          header.MajorSubsystemVersion = reader.ReadUInt16();
+          header.MinorSubsystemVersion = reader.ReadUInt16();
+          header.Win32VersionValue = reader.ReadUInt32();
+          header.SizeOfImage = reader.ReadUInt32();
+          header.SizeOfHeaders = reader.ReadUInt32();
+          header.CheckSum = reader.ReadUInt32();
+          header.Subsystem = reader.ReadUInt16() :> Subsystem;
+          header.DllCharacteristics = reader.ReadUInt16() :> DLLCharacteristics;
+          
+          header.SizeOfStackReserve = reader.ReadUInt32();
+          header.SizeOfStackCommit = reader.ReadUInt32();
+          header.SizeOfHeapReserve = reader.ReadUInt32();
+          header.SizeOfHeapCommit = reader.ReadUInt32();
+          
+          // Ignore the LoaderFlags field and skip to the next field
+          _ = reader.ReadUInt32();
+          
+          header.LoaderFlags = 0;
+          header.NumberOfRvaAndSizes = reader.ReadUInt32();
+          
+          header;
+      }
+  }
+}

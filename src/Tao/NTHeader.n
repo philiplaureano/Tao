@@ -24,8 +24,8 @@ namespace Tao
     public SizeOfImage : uint { get; set; }
     public SizeOfHeaders : uint { get; set; }
     public CheckSum : uint { get; set; }
-    public Subsystem : ushort { get; set; }
-    public DllCharacteristics : ushort { get; set; }
+    public Subsystem : Subsystem { get; set; }
+    public DllCharacteristics : DLLCharacteristics { get; set; }
     public SizeOfStackReserve : TSize { get; set; }
     public SizeOfStackCommit : TSize { get; set; }
     public SizeOfHeapReserve : TSize { get; set; }

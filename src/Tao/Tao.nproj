@@ -71,6 +71,9 @@
     <Compile Include="CoffHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DLLCharacteristics.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DosHeaderReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -89,6 +92,9 @@
     <Compile Include="NTHeader32.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="NTHeader32Reader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NTHeader64.n">
       <SubType>Code</SubType>
     </Compile>
@@ -100,6 +106,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
     <Compile Include="OptionalHeaderStandardFieldsReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Subsystem.n">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
