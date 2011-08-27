@@ -13,6 +13,7 @@ namespace Tao
   public class NTHeader32Reader
   {
       public Read([NotNull] stream : Stream) : NTHeader[uint]
+        requires stream.Length > 0 otherwise throw ArgumentException("stream", "The NT Header stream cannot be empty")
       {
           def reader = BinaryReader(stream);
           

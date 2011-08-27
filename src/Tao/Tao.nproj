@@ -95,6 +95,9 @@
     <Compile Include="NTHeader32Reader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="NTHeader32Writer.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NTHeader64.n">
       <SubType>Code</SubType>
     </Compile>

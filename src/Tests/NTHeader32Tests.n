@@ -16,25 +16,25 @@ namespace Tests
   {      
     public ShouldReadImageBase() : void
     {      
-      def header = GetHeader();
+      def header = GetReadHeader();
       assert header.ImageBase equals 0x00400000 otherwiseprint "Invalid ImageBase";
     }
         
     public ShouldReadSectionAlignment() : void
     {
-      def header = GetHeader();
+      def header = GetReadHeader();
       assert header.SectionAlignment equals 0x00002000 otherwiseprint "Invalid SectionAlignment";
     }
       
     public ShouldReadFileAlignment() : void
     {
-      def header = GetHeader();        
+      def header = GetReadHeader();        
       assert header.FileAlignment equals 0x00000200 otherwiseprint "Invalid FileAlignment";
     }
       
     public ShouldReadMajorOperatingSystemVersion() : void
     {
-      def header = GetHeader();        
+      def header = GetReadHeader();        
       assert header.MajorOperatingSystemVersion equals 4 otherwiseprint "Invalid MajorOperatingSystemVersion";
     }
       
@@ -45,7 +45,7 @@ namespace Tests
           bytes[0xE] = 2;
       }
       
-      def header = GetHeader(setOperatingSystemBytes);
+      def header = GetReadHeader(setOperatingSystemBytes);
       assert header.MinorOperatingSystemVersion equals 2 otherwiseprint "Invalid MinorOperatingSystemVersion";      
     }
     
@@ -56,7 +56,7 @@ namespace Tests
           bytes[0x10] = 42;
       }
       
-      def header = GetHeader(setMajorImageVersion);
+      def header = GetReadHeader(setMajorImageVersion);
       assert header.MajorImageVersion equals 42 otherwiseprint "Invalid MajorImageVersion";
     }
     
@@ -67,7 +67,7 @@ namespace Tests
           bytes[0x12] = 42;
       }
       
-      def header = GetHeader(setMinorImageVersion);
+      def header = GetReadHeader(setMinorImageVersion);
       assert header.MinorImageVersion equals 42 otherwiseprint "Invalid MinorImageVersion";
     }
     
@@ -78,7 +78,7 @@ namespace Tests
           bytes[0x14] = 42;
       }
       
-      def header = GetHeader(setMajorSubsystemVersionVersion);
+      def header = GetReadHeader(setMajorSubsystemVersionVersion);
       assert header.MajorSubsystemVersion equals 42 otherwiseprint "Invalid MajorSubsystemVersionVersion";
     }
     
@@ -89,26 +89,26 @@ namespace Tests
           bytes[0x16] = 42;
       }
       
-      def header = GetHeader(setMinorSubsystemVersionVersion);
+      def header = GetReadHeader(setMinorSubsystemVersionVersion);
       assert header.MinorSubsystemVersion equals 42 otherwiseprint "Invalid MinorSubsystemVersionVersion";
     }
     
     public ShouldReadWin32VersionValue() : void
     {
-      def header = GetHeader();
+      def header = GetReadHeader();
       assert header.Win32VersionValue equals 0 otherwiseprint "Invalid Win32VersionValue";
     }
     
     public ShouldReadSizeOfImage() : void
     {     
-      def header = GetHeader();
+      def header = GetReadHeader();
         
       assert header.SizeOfImage equals 0x00006000 otherwiseprint "Invalid SizeOfImage";
     }
     
     public ShouldReadSizeOfHeaders() : void
     {
-      def header = GetHeader();
+      def header = GetReadHeader();
       assert header.SizeOfHeaders equals 0x200 otherwiseprint "Invalid SizeOfHeader";
     }
     
@@ -119,13 +119,13 @@ namespace Tests
           bytes[0x24] = 0xFF;
       }
         
-      def header = GetHeader(setCheckSumBytes);
+      def header = GetReadHeader(setCheckSumBytes);
       assert header.CheckSum equals 0xFF otherwiseprint "Invalid CheckSum";
     }
     
     public ShouldReadSubSystem() : void
     {                
-      def header = GetHeader();      
+      def header = GetReadHeader();      
       assert header.Subsystem equals Subsystem.WindowsConsole otherwiseprint "Invalid Subsystem";
     }
     
@@ -133,30 +133,30 @@ namespace Tests
     {
       def expectedCharacteristics = 0x8540 :> DLLCharacteristics;
       
-      def header = GetHeader();      
+      def header = GetReadHeader();      
       assert header.DllCharacteristics equals expectedCharacteristics otherwiseprint "Invalid DLLCharacteristics";
     }
     public ShouldReadSizeOfStackReserve() : void
     {
-      def header = GetHeader();
+      def header = GetReadHeader();
       assert header.SizeOfStackReserve equals 0x00100000 otherwiseprint "Invalid SizeOfStackReserve";
     }
     
     public ShouldReadSizeOfStackCommit() : void
     {
-      def header = GetHeader();
+      def header = GetReadHeader();
       assert header.SizeOfStackCommit equals 0x00001000 otherwiseprint "Invalid SizeOfStackCommit";
     }
     
     public ShouldReadSizeOfHeapReserve() : void
     {
-      def header = GetHeader();
+      def header = GetReadHeader();
       assert header.SizeOfHeapReserve equals 0x00100000 otherwiseprint "Invalid SizeOfHeapReserve";
     }
     
     public ShouldReadSizeOfHeapCommit() : void 
     {
-      def header = GetHeader();
+      def header = GetReadHeader();
       assert header.SizeOfHeapCommit equals 0x00001000 otherwiseprint "Invalid SizeOfHeapCommit";
     }
     
@@ -167,17 +167,354 @@ namespace Tests
          bytes[0x3c] = 42;
       }
         
-      def header = GetHeader(setLoaderFlags);
+      def header = GetReadHeader(setLoaderFlags);
       assert header.LoaderFlags equals 0 otherwiseprint "Invalid LoaderFlags";
     }
     
     public ShouldReadNumberOfRvaAndSizes() : void
     {
-      def header = GetHeader();
+      def header = GetReadHeader();
       assert header.NumberOfRvaAndSizes equals 0x10 otherwiseprint "Invalid NumberOfRvaAndSizes";
+    }        
+    
+    public ShouldWriteWin32VersionAsZero() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[0x18] = 0x00;
+        expectedData[0x19] = 0x00;
+        expectedData[0x1A] = 0x00;
+        expectedData[0x1B] = 0x00;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        // The reader should ignore the Win32 version value
+        header.Win32VersionValue = 0x00001234;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
     }
     
-    private GetHeader(modifyData : array[byte] -> void = null) : NTHeader[uint]
+    public ShouldWriteImageBase() : void
+    {      
+      // Change the ImageBase value to 0x00300000 to ensure that
+      // the written value is correct and distinct from the original results      
+      def setExpectedData = fun(expectedData : array[byte]) : void
+       {
+           expectedData[2] = 0x30;
+       };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+       {
+           header.ImageBase = 0x00300000;
+       };
+       
+      TestWrite(setExpectedData, setExpectedHeader);            
+    }
+        
+    public ShouldWriteSectionAlignment() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[5] = 0x30;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.SectionAlignment = 0x00003000;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader); 
+    }
+      
+    public ShouldWriteFileAlignment() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[9] = 0x06;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.FileAlignment = 0x0600;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+      
+    public ShouldWriteMajorOperatingSystemVersion() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[12] = 0x05;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.MajorOperatingSystemVersion = 5;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+      
+    public ShouldWriteMinorOperatingSystemVersion() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[14] = 0x05;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.MinorOperatingSystemVersion = 5;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteMajorImageVersion() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[16] = 42;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.MajorImageVersion = 42;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteMinorImageVersion() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[18] = 42;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.MinorImageVersion = 42;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteMajorSubsystemVersion() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[20] = 42;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.MajorSubsystemVersion = 42;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteMinorSubsystemVersion() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[22] = 42;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.MinorSubsystemVersion = 42;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteSizeOfImage() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[0x1D] = 0x50;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.SizeOfImage = 0x00005000;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteSizeOfHeaders() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[0x21] = 0x03;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.SizeOfHeaders = 0x00000300;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteCheckSum() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[0x25] = 0x03;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.CheckSum = 0x00000300;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteSubsystem() : void
+    {                
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[0x28] = 10;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.Subsystem = Subsystem.EFIApplication;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteDllCharacteristics() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[0x2A] = 0x00;
+        expectedData[0x2B] = 0x08;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.DllCharacteristics = DLLCharacteristics.NoBind;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteSizeOfStackReserve() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[0x2E] = 0x20;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.SizeOfStackReserve = 0x00200000;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteSizeOfStackCommit() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[0x30] = 0x00;
+        expectedData[0x31] = 0x00;
+        expectedData[0x32] = 0x20;
+        expectedData[0x33] = 0x00;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.SizeOfStackCommit = 0x00200000;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteSizeOfHeapReserve() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[0x34] = 0x00;
+        expectedData[0x35] = 0x00;
+        expectedData[0x36] = 0x20;
+        expectedData[0x37] = 0x00;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.SizeOfHeapReserve = 0x00200000;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteSizeOfHeapCommit() : void 
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[0x38] = 0x00;
+        expectedData[0x39] = 0x00;
+        expectedData[0x3A] = 0x20;
+        expectedData[0x3B] = 0x00;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.SizeOfHeapCommit = 0x00200000;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    public ShouldWriteLoaderFlagsAsZero() : void
+    {
+     def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[0x3C] = 0x00;
+        expectedData[0x3D] = 0x00;
+        expectedData[0x3E] = 0x00;
+        expectedData[0x3F] = 0x00;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        // The reader should ignore the loader flags value
+        header.LoaderFlags = 0x00200000;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    public ShouldWriteNumberOfRvaAndSizes() : void
+    {
+      def setExpectedData = fun(expectedData : array[byte]) : void
+      {
+        expectedData[0x40] = 0x00;
+        expectedData[0x41] = 0x00;
+        expectedData[0x42] = 0x20;
+        expectedData[0x43] = 0x00;
+      };
+       
+      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      {
+        header.NumberOfRvaAndSizes = 0x00200000;
+      };
+       
+      TestWrite(setExpectedData, setExpectedHeader);
+    }
+    
+    private GetReadHeader(modifyData : array[byte] -> void = null) : NTHeader[uint]
     {
       def data = GetData();
       
@@ -192,7 +529,7 @@ namespace Tests
       
       header;
     }
-    
+            
     private GetData() : array[byte]
     {
       array[	                     
@@ -222,7 +559,7 @@ namespace Tests
 	    0x00, 0x02, 0x00, 0x00,
 	    // Checksum = 0
 	    0x00, 0x00, 0x00, 0x00, 
-	    // Subsystem = 3 
+	    // Subsystem = 3 (WindowsConsole)
 	    0x03, 0x00, 
 	    // DLLCharacteristics = 0x8540
 	    0x40, 0x85, 
@@ -236,110 +573,59 @@ namespace Tests
 	    0x00, 0x10, 0x00, 0x00, 
 	    // LoaderFlags = 0
 	    0x00, 0x00, 0x00, 0x00,
-	    // NumberOfRvaAndSizes = 10
+	    // NumberOfRvaAndSizes = 0x10
 	    0x10, 0x00, 0x00, 0x00
 	    ]	
-    }
-    public ShouldWriteWin32VersionAsZero() : void
-    {
-      throw NotImplementedException();
-    }
+    }    
     
-    public ShouldWriteImageBase() : void
+    private TestWrite(setExpectedData : array[byte]->void, setExpectedHeaderValues : NTHeader[uint]->void) : void
     {
-      throw NotImplementedException();
-    }
+      def expectedData = GetData();
+      setExpectedData(expectedData);
       
-    public ShouldWriteSectionAlignment() : void
-    {
-      throw NotImplementedException();
-    }
-      
-    public ShouldWriteFileAlignment() : void
-    {
-      throw NotImplementedException();
-    }
-      
-    public ShouldWriteMajorOperatingSystemVersion() : void
-    {
-      throw NotImplementedException();
-    }
-      
-    public ShouldWriteMinorOperatingSystemVersion() : void
-    {
-      throw NotImplementedException();
-    }
-    
-    public ShouldWriteMajorImageVersion() : void
-    {
-      throw NotImplementedException();
-    }
-    
-    public ShouldWriteMinorImageVersion() : void
-    {
-      throw NotImplementedException();
-    }
-    
-    public ShouldWriteSubsystemVersion() : void
-    {
-      throw NotImplementedException();
-    }
+      def header = GetWriteHeader();
+      setExpectedHeaderValues(header);
         
-    public ShouldWriteSizeOfImage() : void
-    {
-      throw NotImplementedException();
+      def writer = NTHeader32Writer();
+      def stream = MemoryStream();
+      writer.Write(header, stream);
+      
+      def expectedHash = expectedData.GetHash();
+      def actualHash = stream.GetHash();
+      assert expectedHash equals actualHash otherwiseprint "Invalid write operation";
     }
     
-    public ShouldWriteSizeOfheaders() : void
+    private GetWriteHeader() : NTHeader[uint]
     {
-      throw NotImplementedException();
-    }
-    
-    public ShouldWriteCheckSum() : void
-    {
-      throw NotImplementedException();
-    }
-    
-    public ShouldWriteMajorSubSystem() : void
-    {                
-      throw NotImplementedException();
-    }
-    
-    public ShouldWriteMinorSubSystem() : void
-    {                
-      throw NotImplementedException();
-    }
-    
-    public ShouldWriteDllCharacteristics() : void
-    {
-      throw NotImplementedException();
-    }
-    public ShouldWriteSizeOfStackReserve() : void
-    {
-      throw NotImplementedException();
-    }
-    
-    public ShouldWriteSizeOfStackCommit() : void
-    {
-      throw NotImplementedException();
-    }
-    
-    public ShouldWriteSizeOfHeapReserve() : void
-    {
-      throw NotImplementedException();
-    }
-    
-    public ShouldWriteSizeOfHeapCommit() : void 
-    {
-      throw NotImplementedException();
-    }
-    public ShouldWriteLoaderFlagsAsZero() : void
-    {
-      throw NotImplementedException();
-    }
-    public ShouldWriteNumberOfRvaAndSizes() : void
-    {
-      throw NotImplementedException();
-    }
+      def header = NTHeader32();
+      header.ImageBase = 0x00400000;
+      header.SectionAlignment = 0x00002000;
+      header.FileAlignment = 0x0200;
+      
+      header.MajorOperatingSystemVersion = 4;
+      header.MinorOperatingSystemVersion = 0;
+      
+      header.MajorImageVersion = 0;
+      header.MinorImageVersion = 0;
+      
+      header.MajorSubsystemVersion = 4;
+      header.MinorSubsystemVersion = 0;
+      
+      header.Win32VersionValue = 0;
+      header.SizeOfImage = 0x00006000;
+      header.SizeOfHeaders = 0x00000200;
+      header.Subsystem = Subsystem.WindowsConsole;
+      header.DllCharacteristics = 0x8540 :> DLLCharacteristics;
+      
+      header.SizeOfStackReserve = 0x00100000;
+      header.SizeOfStackCommit = 0x00001000;
+      
+      header.SizeOfHeapReserve = 0x00100000;
+      header.SizeOfHeapCommit = 0x00001000;
+      
+      header.NumberOfRvaAndSizes = 0x10;
+      
+      header;
+    }    
   }
 }
