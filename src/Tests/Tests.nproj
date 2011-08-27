@@ -88,9 +88,6 @@
     <Compile Include="NTHeader32Tests.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NTHeader64Tests.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="OptionalHeaderStandardFieldTests.n">
       <SubType>Code</SubType>
     </Compile>

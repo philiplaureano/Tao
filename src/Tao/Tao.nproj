@@ -101,6 +101,18 @@
     <Compile Include="NTHeader64.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="NTHeader64Reader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NTHeader64Writer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NTHeaderReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NTHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="OptionalHeaderStandardFields.n">
       <SubType>Code</SubType>
     </Compile>

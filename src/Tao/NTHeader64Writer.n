@@ -1,0 +1,19 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class NTHeader64Writer : NTHeaderWriter[ulong]
+  {
+      protected override WriteValue(value : ulong, writer : BinaryWriter) : void
+      {
+          writer.Write(value : ulong);
+      }
+  }
+}

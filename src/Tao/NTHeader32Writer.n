@@ -10,45 +10,11 @@ using System.Linq;
 
 namespace Tao
 {  
-  public class NTHeader32Writer
+  public class NTHeader32Writer : NTHeaderWriter[uint]
   {
-      public Write([NotNull] header : NTHeader[uint], [NotNull] stream : Stream) : void
+      protected override WriteValue(value : uint, writer : BinaryWriter) : void
       {
-          def writer = BinaryWriter(stream);
-          
-          writer.Write(header.ImageBase : uint);
-          
-          writer.Write(header.SectionAlignment : uint);
-          writer.Write(header.FileAlignment : uint);
-          
-          writer.Write(header.MajorOperatingSystemVersion);
-          writer.Write(header.MinorOperatingSystemVersion);
-          
-          writer.Write(header.MajorImageVersion);
-          writer.Write(header.MinorImageVersion);
-          
-          writer.Write(header.MajorSubsystemVersion);
-          writer.Write(header.MinorSubsystemVersion);
-          
-          // Write a blank Win32VersionValue
-          writer.Write(0 : uint);
-          writer.Write(header.SizeOfImage);
-          writer.Write(header.SizeOfHeaders);
-          writer.Write(header.CheckSum);
-          
-          writer.Write(header.Subsystem :> ushort);
-          writer.Write(header.DllCharacteristics :> ushort);
-          
-          // PE32/64 size-specific fields
-          writer.Write(header.SizeOfStackReserve : uint);
-          writer.Write(header.SizeOfStackCommit : uint);
-          writer.Write(header.SizeOfHeapReserve : uint);
-          writer.Write(header.SizeOfHeapCommit : uint);
-          
-          // Write an empty loader flags field
-          writer.Write(0 : uint);
-          
-          writer.Write(header.NumberOfRvaAndSizes);
+          writer.Write(value : uint);
       }
   }
 }
