@@ -1,0 +1,26 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace Tao
+{
+  public class DataDirectoryWriter
+  {
+    public Write([NotNull] directories : IEnumerable.[DataDirectory], [NotNull] stream : Stream) : void
+        requires directories.Count() > 0 otherwise throw ArgumentException("There are no data directories to be written")
+    {          
+      def writer = BinaryWriter(stream);
+      foreach(directory in directories)
+      {
+          writer.Write(directory.Rva);
+          writer.Write(directory.Size);
+      }         
+    }
+  }
+}

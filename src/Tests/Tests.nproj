@@ -79,6 +79,9 @@
     <Compile Include="ByteArrayExtensions.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataDirectoryTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MSDosHeaderTests.n">
       <SubType>Code</SubType>
     </Compile>

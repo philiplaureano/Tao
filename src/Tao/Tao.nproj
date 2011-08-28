@@ -71,6 +71,15 @@
     <Compile Include="CoffHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataDirectory.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataDirectoryReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataDirectoryWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DLLCharacteristics.n">
       <SubType>Code</SubType>
     </Compile>
