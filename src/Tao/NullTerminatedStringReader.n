@@ -1,0 +1,43 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Linq;
+
+namespace Tao
+{
+  public class NullTerminatedStringReader
+  {
+    public Read([NotNull] inputStream : Stream, length : uint) : string
+        requires length <= inputStream.Length otherwise throw ArgumentException("length", "Length exceeds the actual length of the input stream")
+    {
+      def reader = BinaryReader(inputStream);
+      def bytes = reader.ReadBytes(length :> int);
+      
+      def data = array(length :> int) : array[char];
+      mutable totalBytesRead = 0;
+      def readData(index : int, bytesRead : int) : void
+      {          
+        def value = bytes[index];
+        def character = value :> char;
+          
+        when (character != 0)
+        {
+          totalBytesRead++;
+          data[index] = character;
+          when (bytesRead :> uint < length)
+            readData(index + 1, bytesRead + 1);   
+        }          
+      }
+      
+      readData(0, 0);
+      
+      string(data, 0, totalBytesRead);
+    }
+  }
+}

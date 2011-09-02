@@ -1,0 +1,46 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace Tao
+{  
+  public class SectionHeaderReader
+  {
+    public Read([NotNull] inputStream : Stream, numberOfSections : uint) : IEnumerable.[SectionHeader]
+        requires inputStream.Length > 0
+        ensures value != null
+    {
+      def reader = BinaryReader(inputStream);
+      def results = List.[SectionHeader]();
+          
+      def stringReader = NullTerminatedStringReader();
+      for(mutable i : uint = 0; i < numberOfSections; i++)
+      {
+        def header = SectionHeader();
+        header.Name = stringReader.Read(inputStream, 8);
+        header.VirtualSize = reader.ReadUInt32();
+        header.VirtualAddress = reader.ReadUInt32();
+        header.SizeOfRawData = reader.ReadUInt32();
+              
+        header.PointerToRawData = reader.ReadUInt32();
+        header.PointerToRelocations = reader.ReadUInt32();
+        header.PointerToLineNumbers = reader.ReadUInt32();
+              
+        header.NumberOfRelocations = reader.ReadUInt16();
+        header.NumberOfLineNumbers = reader.ReadUInt16();
+              
+        header.Characteristics = reader.ReadUInt32() :> SectionFlags;
+              
+        results.Add(header);
+      }
+          
+      results;
+    }
+  }
+}

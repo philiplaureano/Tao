@@ -122,6 +122,9 @@
     <Compile Include="NTHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="NullTerminatedStringReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="OptionalHeaderStandardFields.n">
       <SubType>Code</SubType>
     </Compile>
@@ -130,6 +133,15 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
     <Compile Include="OptionalHeaderStandardFieldsReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionFlags.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionHeaderReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Subsystem.n">

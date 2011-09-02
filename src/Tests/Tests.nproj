@@ -95,7 +95,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
+    <Compile Include="SectionHeaderTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="StreamExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NullTerminatedStringReaderTests.n">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

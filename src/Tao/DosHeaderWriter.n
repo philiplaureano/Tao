@@ -11,9 +11,6 @@ using System.Linq;
 
 namespace Tao
 {
-  /// <summary>
-  /// Description of DosHeaderWriter.
-  /// </summary>
   public class DosHeaderWriter
   {
       public Write([NotNull] outputStream : Stream) : void

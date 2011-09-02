@@ -1,0 +1,135 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+using Tests.Macros;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace Tests
+{
+  public class SectionHeaderTests
+  {
+    public ShouldReadName() : void
+    {          
+      def header = GetReadHeader();
+      assert header.Name equals ".text" otherwiseprint "Invalid SectionHeader name";         
+    }
+      
+    public ShouldReadVirtualSize() : void
+    {
+      def header = GetReadHeader();
+      assert header.VirtualSize equals 0x1D4 otherwiseprint "Incorrect virtual size";
+    }
+      
+    public ShouldReadVirtualAddress() : void
+    {
+      def header = GetReadHeader();
+      assert header.VirtualAddress equals 0x2000 otherwiseprint "Incorrect Virtual Address";
+    }
+    
+    public ShouldReadSizeOfRawData() : void
+    {
+      def header = GetReadHeader();
+      assert header.SizeOfRawData equals 0x200 otherwiseprint "Incorrect SizeOfRawData value";
+    }
+    
+    public ShouldReadPointerToRawData() : void
+    {
+      def header = GetReadHeader();
+      assert header.PointerToRawData equals 0x200 otherwiseprint "Incorrect PointerToRawData value";
+    }
+    
+    public ShouldReadPointerToRelocations() : void
+    {
+      def header = GetReadHeader();
+      assert header.PointerToRelocations equals 0 otherwiseprint "Incorrect PointerToRelocations value";      
+    }
+    
+    public ShouldReadPointerToLineNumbers() : void
+    {
+      def header = GetReadHeader();
+      assert header.PointerToLineNumbers equals 0 otherwiseprint "Incorrect PointerToLineNumbers value";
+    }
+    
+    public ShouldReadNumberOfRelocations() : void
+    {
+      def header = GetReadHeader();
+      assert header.NumberOfRelocations equals 0 otherwiseprint "Incorrect NumberOfRelocations value";        
+    }
+    
+    public ShouldReadNumberOfLineNumbers() : void
+    {
+      def header = GetReadHeader();
+      assert header.NumberOfLineNumbers equals 0 otherwiseprint "Incorrect NumberOfLineNumbers value";
+    }
+    
+    public ShouldReadCharacteristics() : void
+    {
+      def header = GetReadHeader();
+      def flags = header.Characteristics :> uint;
+        
+      assert flags equals 0x60000020 otherwiseprint "Invalid SectionFlags";
+    }
+    
+    public ShouldReadEntireSectionHeaderStream() : void
+    {
+      def inputData = GetInputHeaderBytes();
+      def inputStream = MemoryStream(inputData);
+      def reader = SectionHeaderReader();
+      _ = reader.Read(inputStream, 1 :> uint );
+      
+      assert inputStream.Length equals 0x28 otherwiseprint "The SectionHeaderReader must consume the entire section header input stream";
+    }
+    
+    private GetReadHeader() : SectionHeader
+    {
+      def inputData = GetInputHeaderBytes();
+      def inputStream = MemoryStream(inputData);
+      def reader = SectionHeaderReader();
+      def headers = reader.Read(inputStream, 1 :> uint );
+          
+      headers.First();
+    }
+    private GetInputHeaderBytes() : array[byte]
+    {
+      def textSectionHeaderData = array[
+          
+            // Name = ".text"
+	        0x2E : byte, 0x74, 0x65, 0x78, 0x74, 0x00, 0x00, 0x00, 
+	        
+	        // VirtualSize = 0x1D4
+	        0xD4, 0x01, 0x00, 0x00, 
+	        
+	        // VirtualAddress = 0x2000
+	        0x00, 0x20, 0x00, 0x00,
+	        
+	        // RawSize = 0x200
+	        0x00, 0x02, 0x00, 0x00, 
+	        
+	        // RawAddress = 0x200
+	        0x00, 0x02, 0x00, 0x00, 
+	        
+	        // RelocAddress = 0
+	        0x00, 0x00, 0x00, 0x00, 
+	        
+	        // LineNumbers = 0
+	        0x00, 0x00, 0x00, 0x00,
+	        
+	        // RelocationsNumber = 0
+	        0x00, 0x00, 
+	        
+	        // LineNumbersNumber = 0
+	        0x00, 0x00, 
+	        
+	        // Characteristics = 0x60000020
+	        0x20, 0x00, 0x00, 0x60  
+            ];
+            
+      textSectionHeaderData;
+    }
+  }
+}

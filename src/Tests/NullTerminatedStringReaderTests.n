@@ -1,0 +1,30 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+using Tests.Macros;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{  
+  public class NullTerminatedStringReaderTests
+  {
+      public ShouldReadFromNullTerminatedString() : void
+      {
+          def expectedText = ".text";
+          def inputBytes = array[0x2E : byte, 0x74, 0x65, 0x78, 0x74, 0x00, 0x00, 0x00];
+          def inputStream = MemoryStream(inputBytes);
+          
+          def length : uint = 8;
+          def reader = NullTerminatedStringReader();
+          def result = reader.Read(inputStream, length);
+          
+          assert result equals expectedText otherwiseprint "Invalid string";
+      }
+  }
+}
