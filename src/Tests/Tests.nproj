@@ -101,7 +101,7 @@
     <Compile Include="StreamExtensions.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NullTerminatedStringReaderTests.n">
+    <Compile Include="NullTerminatedStringTests.n">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

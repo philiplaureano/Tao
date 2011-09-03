@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Tests
 {  
-  public class NullTerminatedStringReaderTests
+  public class NullTerminatedReaderTests
   {
       public ShouldReadFromNullTerminatedString() : void
       {
@@ -25,6 +25,24 @@ namespace Tests
           def result = reader.Read(inputStream, length);
           
           assert result equals expectedText otherwiseprint "Invalid string";
+      }
+      
+      public ShouldWriteNullTerminatedString() : void
+      {
+          def inputText = ".text";
+          def buffer = array(8) : array[byte];
+          def outputStream = MemoryStream(buffer);
+          
+          def writer = NullTerminatedStringWriter();
+          writer.Write(inputText, outputStream);
+          
+          def expectedBytes = array[0x2E : byte, 0x74, 0x65, 0x78, 0x74, 0x00, 0x00, 0x00];
+          def actualBytes = outputStream.ToArray();
+          
+          def expectedHash = expectedBytes.GetHash();
+          def actualHash = actualBytes.GetHash();
+          
+          assert expectedHash equals actualHash otherwiseprint "Invalid null terminated string";
       }
   }
 }

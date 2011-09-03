@@ -85,6 +85,165 @@ namespace Tests
       assert inputStream.Length equals 0x28 otherwiseprint "The SectionHeaderReader must consume the entire section header input stream";
     }
     
+    public ShouldWriteName() : void
+    {
+      def header = GetWriteHeader();
+      header.Name = ".abcd";                
+        
+      def expectedBytes = GetInputHeaderBytes();
+      def expectedOutputStream = MemoryStream(expectedBytes);
+        
+        // HACK: Overwrite the ".text" bytes with the sample header name for this test
+      def stringWriter = NullTerminatedStringWriter();
+      stringWriter.Write(".abcd", expectedOutputStream);
+        
+      def headers = List.[SectionHeader]();
+      headers.Add(header);
+        
+      def outputStream = MemoryStream();
+      def writer = StreamHeaderWriter();
+      writer.Write(headers, outputStream);
+        
+      def expectedHash = expectedOutputStream.GetHash();
+      def actualHash = outputStream.GetHash();
+      assert expectedHash equals actualHash otherwiseprint "Invalid Name written";
+    }
+    
+    public ShouldWriteVirtualSize() : void
+    {
+      def expectedValue : uint = 0xFEED;                            
+      def targetIndex = 0;                          
+      
+      TestWrite(targetIndex, header=>header.VirtualSize = expectedValue, expectedValue);
+    }
+    
+    public ShouldWriteVirtualAddress() : void
+    {
+      def expectedValue : uint = 0xFEED;                            
+      def targetIndex = 1;                          
+      
+      TestWrite(targetIndex, header=>header.VirtualAddress = expectedValue, expectedValue);
+    }
+    
+    public ShouldWriteSizeOfRawData() : void
+    {
+      def expectedValue : uint = 0xFEED;                            
+      def targetIndex = 2;                          
+      
+      TestWrite(targetIndex, header => header.SizeOfRawData = expectedValue, expectedValue);
+    }
+    
+    public ShouldWritePointerToRawData() : void
+    {
+      def expectedValue : uint = 0xFEED;                            
+      def targetIndex = 3;                          
+      
+      TestWrite(targetIndex, header => header.PointerToRawData = expectedValue, expectedValue);
+    }
+    
+    public ShouldWritePointerToRelocations() : void
+    {
+      def expectedValue : uint = 0xFEED;                            
+      def targetIndex = 4;                          
+      
+      TestWrite(targetIndex, header => header.PointerToRelocations = expectedValue, expectedValue);
+    }
+    public ShouldWritePointerToLineNumbers() : void
+    {
+      def expectedValue : uint = 0xFEED;                            
+      def targetIndex = 5;                          
+      
+      TestWrite(targetIndex, header => header.PointerToLineNumbers = expectedValue, expectedValue);
+    }
+    
+    public ShouldWriteNumberOfRelocations() : void
+    {
+      def expectedValue : ushort = 0xFEED;                            
+      def targetIndex = 6;                          
+      
+      TestWrite(targetIndex, header => header.NumberOfRelocations = expectedValue, expectedValue);
+    }
+    
+    public ShouldWriteNumberOfLineNumbers() : void
+    {
+      def expectedValue : ushort = 0xFEED;                            
+      def targetIndex = 7;                          
+      
+      TestWrite(targetIndex, header => header.NumberOfLineNumbers = expectedValue, expectedValue);
+    }
+    
+    private TestWrite(targetIndex : int, setHeaderData : SectionHeader-> void, expectedValue : uint) : void
+    {
+      TestWrite(targetIndex, setHeaderData, writer=>writer.Write(expectedValue));
+    }
+    
+    private TestWrite(targetIndex : int, setHeaderData : SectionHeader-> void, expectedValue : ushort) : void
+    {
+      TestWrite(targetIndex, setHeaderData, writer=>writer.Write(expectedValue));
+    }
+    
+    private TestWrite(targetIndex : int, setHeaderData : SectionHeader-> void, writeExpectedValue : BinaryWriter -> void) : void
+    {                            
+      def targetAddress = GetTargetAddress(targetIndex);
+      
+      def expectedData = GetInputHeaderBytes();
+      def expectedStream = MemoryStream(expectedData);
+      
+      def expectedStreamWriter = BinaryWriter(expectedStream);
+      _ = expectedStream.Seek(targetAddress, SeekOrigin.Begin);
+      
+      writeExpectedValue(expectedStreamWriter);
+      
+      def header = GetWriteHeader();
+      setHeaderData(header);
+      
+      def headers = List.[SectionHeader]();
+      headers.Add(header);
+      
+      def outputStream = MemoryStream();
+      def writer = StreamHeaderWriter();
+      writer.Write(headers, outputStream);
+      
+      def expectedHash = expectedStream.GetHash();
+      def actualHash = outputStream.GetHash();
+      
+      assert expectedHash equals actualHash otherwiseprint "Invalid write operation";
+    }
+    private GetTargetAddress(targetIndex : int) : int
+    {
+      def baseAddress = 8;
+      mutable targetAddress = 0;
+      when(targetIndex <= 5 || targetIndex == 8)
+      {
+        targetAddress = baseAddress + (targetIndex * 4);
+      }    
+      
+      when(targetIndex == 6 || targetIndex == 7)
+      {
+        def wordOffset = (targetIndex - 6) * 2;
+        targetAddress = baseAddress + 24 + wordOffset;
+      }
+      
+      targetAddress;
+    }
+    
+    private GetWriteHeader() : SectionHeader
+    {
+      def header = SectionHeader();
+      header.Name = ".text";
+      header.VirtualSize = 0x1D4;
+      header.VirtualAddress = 0x2000;
+      header.SizeOfRawData = 0x200;
+      header.PointerToRawData = 0x200;
+      header.PointerToRelocations = 0;
+      header.PointerToLineNumbers = 0;
+      header.NumberOfLineNumbers = 0;
+      header.NumberOfRelocations = 0;
+      header.Characteristics = 0x60000020 :> SectionFlags;
+      
+      header;
+    }
+    
     private GetReadHeader() : SectionHeader
     {
       def inputData = GetInputHeaderBytes();

@@ -1,0 +1,29 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class NullTerminatedStringWriter
+  {
+    public Write([NotNull] inputText : string, [NotNull] outputStream : Stream) : void
+    {   
+      def writer = BinaryWriter(outputStream);
+      for(mutable i = 0; i < inputText.Length; i++)
+      {
+        def currentCharacter = inputText[i] :> byte; 
+        writer.Write(currentCharacter);
+      }
+      
+      def nullTerminator = 0 :> byte;
+      writer.Write(nullTerminator);
+    }
+  }
+}

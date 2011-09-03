@@ -125,6 +125,9 @@
     <Compile Include="NullTerminatedStringReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="NullTerminatedStringWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="OptionalHeaderStandardFields.n">
       <SubType>Code</SubType>
     </Compile>
@@ -142,6 +145,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionHeaderReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StreamHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Subsystem.n">

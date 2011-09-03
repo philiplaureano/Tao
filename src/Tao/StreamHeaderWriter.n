@@ -1,0 +1,37 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class StreamHeaderWriter
+  {
+      public Write(headers : IEnumerable.[SectionHeader], outputStream : Stream) : void
+      {
+          def stringWriter = NullTerminatedStringWriter();
+          def writer = BinaryWriter(outputStream);
+          foreach(header in headers)
+          {
+              // Truncate the name string length to a maximum of 8 bytes
+              def nameStream = MemoryStream(array(8) : array[byte]);              
+              stringWriter.Write(header.Name, nameStream);              
+              writer.Write(nameStream.ToArray());
+              
+              writer.Write(header.VirtualSize);
+              writer.Write(header.VirtualAddress);
+              writer.Write(header.SizeOfRawData);
+              writer.Write(header.PointerToRawData);
+              writer.Write(header.PointerToRelocations);
+              writer.Write(header.PointerToLineNumbers);
+              writer.Write(header.NumberOfRelocations);
+              writer.Write(header.NumberOfLineNumbers);
+              writer.Write(header.Characteristics :> uint);
+          }          
+      }
+  }
+}
