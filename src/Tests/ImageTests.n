@@ -1,0 +1,144 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+using Tests.Macros;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class ImageTests
+  {
+    public ShouldReadDosHeader() : void
+    {
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def image = GetImage(imageFile);      
+      def expectedHash = GetDosHeader().GetHash();
+      def actualHash = image.DOSHeader.GetHash();
+        
+      assert expectedHash equals actualHash otherwiseprint "Invalid MS-DOS header";
+    }
+
+    public ShouldReadCoffHeader() : void
+    {
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def image = GetImage(imageFile);      
+      def coffHeader = image.CoffHeader;
+      
+      assert coffHeader notnull otherwiseprint "Invalid CoffHeader";
+      assert coffHeader.Machine equals Machine.I386 otherwiseprint "Invalid Machine value";
+      assert coffHeader.NumberOfSections equals 2 otherwiseprint "Invalid NumberOfSections";
+      assert coffHeader.TimeDateStamp equals 0x4AD286DD otherwiseprint "Invalid TimeDateStamp";
+      assert coffHeader.PointerToSymbolTable equals 0 otherwiseprint "Invalid PointerToSymbolTable";
+      assert coffHeader.NumberOfSymbols equals 0 otherwiseprint "Invalid NumberOfSymbols";
+      assert coffHeader.OptionalHeaderSize equals 0xE0 otherwiseprint "Invalid SizeOfOptionalHeader";
+    }
+    
+    public ShouldReadOptionalHeader() : void
+    {
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def image = GetImage(imageFile);
+      def header = image.OptionalHeader :> OptionalHeader.OptionalHeader32;
+      assert header notnull otherwiseprint "Invalid OptionalHeader";
+      
+      def standardFields = header.StandardFields;
+      def ntHeader = header.Header;      
+      
+      assert standardFields.MajorLinkerVersion equals 8 otherwiseprint "Invalid MajorLinkerVersion";
+      assert standardFields.MinorLinkerVersion equals 0 otherwiseprint "Invalid MinorLinkerVersion";
+      assert standardFields.SizeOfCode equals 0x200 otherwiseprint "Invalid SizeOfCode";
+      assert standardFields.SizeOfInitializedData equals 0x200 otherwiseprint "Invalid SizeOfInitializedData";
+      assert standardFields.SizeOfUninitializedData equals 0 otherwiseprint "Invalid SizeOfUninitializedData";
+      assert standardFields.AddressOfEntryPoint equals 0x21CE otherwiseprint "Invalid AddressOfEntryPoint";
+      assert standardFields.BaseOfCode equals 0x2000 otherwiseprint "Invalid BaseOfCode";
+      assert standardFields.BaseOfData equals 0x4000 otherwiseprint "Invalid BaseOfData";
+      
+      assert ntHeader.ImageBase equals 0x00400000 otherwiseprint "Invalid BaseOfData";
+      assert ntHeader.SectionAlignment equals 0x00002000 otherwiseprint "Invalid SectionAlignment";
+      assert ntHeader.FileAlignment equals 0x200 otherwiseprint "Invalid FileAlignment";
+      
+      assert ntHeader.MajorOperatingSystemVersion equals 4 otherwiseprint "Invalid MajorOperatingSystemVersion";
+      assert ntHeader.MinorOperatingSystemVersion equals 0 otherwiseprint "Invalid MinorOperatingSystemVersion";
+      
+      assert ntHeader.MajorImageVersion equals 0 otherwiseprint "Invalid MajorImageVersion";
+      assert ntHeader.MinorImageVersion equals 0 otherwiseprint "Invalid MinorImageVersion";
+      
+      assert ntHeader.MajorSubsystemVersion equals 4 otherwiseprint "Invalid MajorSubsystemVersion";
+      assert ntHeader.MinorSubsystemVersion equals 0 otherwiseprint "Invalid MinorSubsystemVersion";
+      assert ntHeader.Win32VersionValue equals 0 otherwiseprint "Invalid Win32VersionValue";
+      
+      assert ntHeader.SizeOfImage equals 0x6000 otherwiseprint "Invalid SizeOfImage";
+      assert ntHeader.SizeOfHeaders equals 0x200 otherwiseprint "Invalid SizeOfHeaders";
+      assert ntHeader.CheckSum equals 0 otherwiseprint "Invalid CheckSum";
+      assert ntHeader.Subsystem equals Subsystem.WindowsConsole otherwiseprint "Invalid Subsystem";
+      assert ntHeader.DllCharacteristics :> ushort equals 0x8540 otherwiseprint "Invalid DllCharacteristics";
+      
+      assert ntHeader.SizeOfStackReserve equals 0x00100000 otherwiseprint "Invalid SizeOfStackReserve";
+      assert ntHeader.SizeOfStackCommit equals 0x00001000 otherwiseprint "Invalid SizeOfStackCommit";
+      
+      assert ntHeader.SizeOfHeapReserve equals 0x00100000 otherwiseprint "Invalid SizeOfHeapReserve";
+      assert ntHeader.SizeOfHeapCommit equals 0x00001000 otherwiseprint "Invalid SizeOfHeapCommit";
+      
+      assert ntHeader.LoaderFlags equals 0 otherwiseprint "Invalid LoaderFlags";
+      assert ntHeader.NumberOfRvaAndSizes equals 0x10 otherwiseprint "Invalid NumberOfRvaAndSizes";
+    }
+    
+    public ShouldBeAbleToReadDataDirectories() : void
+    {
+      throw NotImplementedException();
+    }    
+    public ShouldBeAbleToReadSections() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteDosHeader() : void
+    {
+      throw NotImplementedException();  
+    }
+    public ShouldWriteCoffHeader() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteOptionalHeader() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteDataDirectories() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteSections() : void
+    {
+      throw NotImplementedException();
+    }
+    private GetImage(imageFile : string) : Image
+    {
+      using(def imageStream = System.IO.FileStream(imageFile, FileMode.Open))
+      {
+        def reader = ImageReader();
+        reader.Read(imageStream);
+      }      
+    }
+    
+    private GetDosHeader() : array[byte]
+    {
+      def data = array[
+	    0x4D : byte, 0x5A, 0x90, 0x00, 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00,
+	    0xB8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00,
+	    0x0E, 0x1F, 0xBA, 0x0E, 0x00, 0xB4, 0x09, 0xCD, 0x21, 0xB8, 0x01, 0x4C, 0xCD, 0x21, 0x54, 0x68,
+	    0x69, 0x73, 0x20, 0x70, 0x72, 0x6F, 0x67, 0x72, 0x61, 0x6D, 0x20, 0x63, 0x61, 0x6E, 0x6E, 0x6F,
+	    0x74, 0x20, 0x62, 0x65, 0x20, 0x72, 0x75, 0x6E, 0x20, 0x69, 0x6E, 0x20, 0x44, 0x4F, 0x53, 0x20,
+	    0x6D, 0x6F, 0x64, 0x65, 0x2E, 0x0D, 0x0D, 0x0A, 0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  
+     ];
+                 
+      data;
+    }    
+  }
+}

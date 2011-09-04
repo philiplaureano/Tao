@@ -89,6 +89,12 @@
     <Compile Include="DosHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Image.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ImageType.n">
       <SubType>Code</SubType>
     </Compile>
@@ -98,16 +104,10 @@
     <Compile Include="NTHeader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NTHeader32.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="NTHeader32Reader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NTHeader32Writer.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NTHeader64.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NTHeader64Reader.n">
@@ -128,6 +128,9 @@
     <Compile Include="NullTerminatedStringWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="OptionalHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="OptionalHeaderStandardFields.n">
       <SubType>Code</SubType>
     </Compile>
@@ -136,6 +139,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
     <Compile Include="OptionalHeaderStandardFieldsReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Section.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionFlags.n">

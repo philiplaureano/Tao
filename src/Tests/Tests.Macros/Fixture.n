@@ -36,6 +36,12 @@ namespace Tests.Macros
    <[NUnit.Framework.Assert.IsFalse($exp2.Equals($exp),$(errorMessage: string))]>;
   }
   
+  macro assert_not_null(exp, errorMessage : string)
+  syntax("assert", exp, "notnull", "otherwiseprint", errorMessage)
+  {
+      <[NUnit.Framework.Assert.IsNotNull($exp,$(errorMessage: string))]>;
+  }
+  
   [MacroUsage(MacroPhase.BeforeInheritance, MacroTargets.Method)]
   macro TestExpects(typeBuilder : TypeBuilder, method : ParsedMethod, exception)
   syntax ("expects", exception)

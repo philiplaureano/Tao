@@ -1,0 +1,18 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace Tao
+{  
+  public class Section
+  {
+    public Header : SectionHeader { get; set; }
+    public Data : Stream { get; set };
+  }
+}

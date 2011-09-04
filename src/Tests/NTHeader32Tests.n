@@ -597,7 +597,7 @@ namespace Tests
     
     private GetWriteHeader() : NTHeader[uint]
     {
-      def header = NTHeader32();
+      def header = NTHeader.[uint]();;
       header.ImageBase = 0x00400000;
       header.SectionAlignment = 0x00002000;
       header.FileAlignment = 0x0200;

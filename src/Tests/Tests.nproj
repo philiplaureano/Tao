@@ -82,6 +82,9 @@
     <Compile Include="DataDirectoryTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ImageTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MSDosHeaderTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -110,6 +113,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SampleBinaries\SamplePE32PlusApp.exe">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="SampleBinaries\skeleton.exe">
       <SubType>Content</SubType>
     </Content>

@@ -1,0 +1,52 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+  public class ImageReader
+  {
+    public Read([NotNull] imageStream : Stream) : Image
+        requires imageStream.Length > 0 otherwise throw ArgumentException("imageStream", "Unable to read from an empty image stream")
+        ensures value.DOSHeader != null
+        ensures value.CoffHeader != null        
+    {
+      def image = Image();
+          
+      def dosHeaderReader = DosHeaderReader();
+      def dosStream = dosHeaderReader.Read(imageStream);
+      image.DOSHeader = dosStream;
+          
+      def coffHeaderReader = CoffHeaderReader();
+      def coffHeader = coffHeaderReader.Read(imageStream);
+      image.CoffHeader = coffHeader;
+          
+      def standardFieldsReader = OptionalHeaderStandardFieldsReader();
+      def standardFields = standardFieldsReader.Read(imageStream);
+      
+      match(standardFields.ImageType)
+      {
+        |ImageType.PE32 =>
+        {
+            def reader = NTHeader32Reader();
+            def header = reader.Read(imageStream);
+            image.OptionalHeader = OptionalHeader.OptionalHeader32(standardFields, header);
+        };                                   
+        |ImageType.PE32Plus =>
+        {
+            def reader = NTHeader64Reader();
+            def header = reader.Read(imageStream);
+            image.OptionalHeader = OptionalHeader.OptionalHeader64(standardFields, header);
+        };
+      }
+          
+      image;
+    }
+  }
+}

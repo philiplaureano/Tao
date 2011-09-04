@@ -1,0 +1,31 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class Image
+  {
+    private _dataDirectories : List.[DataDirectory] = List.[DataDirectory]();      
+    private _sections : List.[Section] = List.[Section]();
+    
+    public DOSHeader : Stream { get; set; }
+    public CoffHeader : CoffHeader { get; set; }
+    public OptionalHeader : OptionalHeader { get; set; }
+    public DataDirectories : IList.[DataDirectory] 
+    {
+        get { _dataDirectories; }
+    }
+    
+    public Sections : IList.[Section]
+    {
+        get { _sections; }
+    }    
+  }
+}

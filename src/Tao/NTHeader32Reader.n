@@ -14,7 +14,7 @@ namespace Tao
   {      
     protected override CreateHeader() : NTHeader[uint]
     {
-        NTHeader32();
+        NTHeader.[uint]();
     }
     
     protected override ReadValue(reader : BinaryReader) : uint
