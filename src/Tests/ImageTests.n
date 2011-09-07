@@ -39,7 +39,7 @@ namespace Tests
       assert coffHeader.OptionalHeaderSize equals 0xE0 otherwiseprint "Invalid SizeOfOptionalHeader";
     }
     
-    public ShouldReadOptionalHeader() : void
+    public ShouldReadOptionalHeader32() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
       def image = GetImage(imageFile);
@@ -87,7 +87,54 @@ namespace Tests
       assert ntHeader.LoaderFlags equals 0 otherwiseprint "Invalid LoaderFlags";
       assert ntHeader.NumberOfRvaAndSizes equals 0x10 otherwiseprint "Invalid NumberOfRvaAndSizes";
     }
-    
+    public ShouldReadOptionalHeader64() : void
+    {
+        def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
+      def image = GetImage(imageFile);
+      def header = image.OptionalHeader :> OptionalHeader.OptionalHeader64;
+      assert header notnull otherwiseprint "Invalid OptionalHeader";
+      
+      def standardFields = header.StandardFields;
+      def ntHeader = header.Header;      
+      
+      assert standardFields.MajorLinkerVersion equals 0x0A otherwiseprint "Invalid MajorLinkerVersion";
+      assert standardFields.MinorLinkerVersion equals 0 otherwiseprint "Invalid MinorLinkerVersion";
+      assert standardFields.SizeOfCode equals 0x2400 otherwiseprint "Invalid SizeOfCode";
+      assert standardFields.SizeOfInitializedData equals 0xC400 otherwiseprint "Invalid SizeOfInitializedData";
+      assert standardFields.SizeOfUninitializedData equals 0 otherwiseprint "Invalid SizeOfUninitializedData";
+      assert standardFields.AddressOfEntryPoint equals 0x2B78 otherwiseprint "Invalid AddressOfEntryPoint";
+      assert standardFields.BaseOfCode equals 0x1000 otherwiseprint "Invalid BaseOfCode";
+      assert standardFields.BaseOfData equals null otherwiseprint "Invalid BaseOfData";
+      
+      assert ntHeader.ImageBase equals 0x0000000140000000 otherwiseprint "Invalid BaseOfData";
+      assert ntHeader.SectionAlignment equals 0x00001000 otherwiseprint "Invalid SectionAlignment";
+      assert ntHeader.FileAlignment equals 0x200 otherwiseprint "Invalid FileAlignment";
+      
+      assert ntHeader.MajorOperatingSystemVersion equals 5 otherwiseprint "Invalid MajorOperatingSystemVersion";
+      assert ntHeader.MinorOperatingSystemVersion equals 2 otherwiseprint "Invalid MinorOperatingSystemVersion";
+      
+      assert ntHeader.MajorImageVersion equals 0 otherwiseprint "Invalid MajorImageVersion";
+      assert ntHeader.MinorImageVersion equals 0 otherwiseprint "Invalid MinorImageVersion";
+      
+      assert ntHeader.MajorSubsystemVersion equals 5 otherwiseprint "Invalid MajorSubsystemVersion";
+      assert ntHeader.MinorSubsystemVersion equals 2 otherwiseprint "Invalid MinorSubsystemVersion";
+      assert ntHeader.Win32VersionValue equals 0 otherwiseprint "Invalid Win32VersionValue";
+      
+      assert ntHeader.SizeOfImage equals 0x00014000 otherwiseprint "Invalid SizeOfImage";
+      assert ntHeader.SizeOfHeaders equals 0x400 otherwiseprint "Invalid SizeOfHeaders";
+      assert ntHeader.CheckSum equals 0x00012B4C otherwiseprint "Invalid CheckSum";
+      assert ntHeader.Subsystem equals Subsystem.WindowsConsole otherwiseprint "Invalid Subsystem";
+      assert ntHeader.DllCharacteristics :> ushort equals 0x8140 otherwiseprint "Invalid DllCharacteristics";
+      
+      assert ntHeader.SizeOfStackReserve equals 0x0000000000100000 otherwiseprint "Invalid SizeOfStackReserve";
+      assert ntHeader.SizeOfStackCommit equals 0x0000000000001000 otherwiseprint "Invalid SizeOfStackCommit";
+      
+      assert ntHeader.SizeOfHeapReserve equals 0x0000000000100000 otherwiseprint "Invalid SizeOfHeapReserve";
+      assert ntHeader.SizeOfHeapCommit equals 0x0000000000001000 otherwiseprint "Invalid SizeOfHeapCommit";
+      
+      assert ntHeader.LoaderFlags equals 0 otherwiseprint "Invalid LoaderFlags";
+      assert ntHeader.NumberOfRvaAndSizes equals 0x10 otherwiseprint "Invalid NumberOfRvaAndSizes";
+    }
     public ShouldBeAbleToReadDataDirectories() : void
     {
       throw NotImplementedException();

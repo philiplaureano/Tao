@@ -23,6 +23,13 @@ namespace Tao
       def dosStream = dosHeaderReader.Read(imageStream);
       image.DOSHeader = dosStream;
           
+      def dosStreamReader = BinaryReader(dosStream);
+      _ = dosStream.Seek(0x3C, SeekOrigin.Begin);
+      
+      // Determine the location of the COFF header
+      def coffHeaderOffset = dosStreamReader.ReadUInt32();
+      _ = imageStream.Seek(coffHeaderOffset, SeekOrigin.Begin);
+      
       def coffHeaderReader = CoffHeaderReader();
       def coffHeader = coffHeaderReader.Read(imageStream);
       image.CoffHeader = coffHeader;
