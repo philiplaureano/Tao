@@ -33,10 +33,12 @@ namespace Tao
       def coffHeaderReader = CoffHeaderReader();
       def coffHeader = coffHeaderReader.Read(imageStream);
       image.CoffHeader = coffHeader;
-          
+      
+      // Read the fields that are common to both 32 and 64-bit optional headers
       def standardFieldsReader = OptionalHeaderStandardFieldsReader();
       def standardFields = standardFieldsReader.Read(imageStream);
       
+      mutable numberOfDirectories : uint = 0;
       match(standardFields.ImageType)
       {
         |ImageType.PE32 =>
@@ -44,15 +46,27 @@ namespace Tao
             def reader = NTHeader32Reader();
             def header = reader.Read(imageStream);
             image.OptionalHeader = OptionalHeader.OptionalHeader32(standardFields, header);
+            
+            numberOfDirectories = header.NumberOfRvaAndSizes;
         };                                   
         |ImageType.PE32Plus =>
         {
             def reader = NTHeader64Reader();
             def header = reader.Read(imageStream);
             image.OptionalHeader = OptionalHeader.OptionalHeader64(standardFields, header);
+            
+            numberOfDirectories = header.NumberOfRvaAndSizes;
         };
       }
-          
+      
+      // Read the data directories
+      def directoryReader = DataDirectoryReader();
+      def directories = directoryReader.Read(numberOfDirectories :> ushort, imageStream);
+      foreach(directory in directories)
+      {
+          image.DataDirectories.Add(directory);
+      }
+      
       image;
     }
   }

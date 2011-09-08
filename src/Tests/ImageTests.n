@@ -89,7 +89,7 @@ namespace Tests
     }
     public ShouldReadOptionalHeader64() : void
     {
-        def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
+      def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
       def image = GetImage(imageFile);
       def header = image.OptionalHeader :> OptionalHeader.OptionalHeader64;
       assert header notnull otherwiseprint "Invalid OptionalHeader";
@@ -135,10 +135,53 @@ namespace Tests
       assert ntHeader.LoaderFlags equals 0 otherwiseprint "Invalid LoaderFlags";
       assert ntHeader.NumberOfRvaAndSizes equals 0x10 otherwiseprint "Invalid NumberOfRvaAndSizes";
     }
+    
     public ShouldBeAbleToReadDataDirectories() : void
     {
-      throw NotImplementedException();
+      def emptyDataDirectoryIndices = array[0, 4, 7, 8, 9, 10, 11, 13, 15];
+        
+      def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
+      def image = GetImage(imageFile);
+      
+      def directories = image.DataDirectories;
+      assert directories.Count equals 0x10 otherwiseprint "Invalid number of data directories";
+      
+      foreach(index in emptyDataDirectoryIndices)
+      {
+          def directory = directories[index];
+          assert directory.Rva equals 0 otherwiseprint "This data directory should be empty";
+          assert directory.Size equals 0 otherwiseprint "This data directory should be empty";
+      }
+      
+      // Verify the Import directory RVA and size
+      assert directories[1].Rva equals 0x0000EE98 otherwiseprint "Invalid Import directory RVA";
+      assert directories[1].Size equals 0x00000050 otherwiseprint "Invalid Import directory Size";
+      
+      // Verify the Resource directory RVA and size
+      assert directories[2].Rva equals 0x00012000 otherwiseprint "Invalid Resource directory RVA";
+      assert directories[2].Size equals 0x000006A8 otherwiseprint "Invalid Resource directory Size";
+      
+      // Verify the Exception directory RVA and size
+      assert directories[3].Rva equals 0x00011000 otherwiseprint "Invalid Exception directory RVA";
+      assert directories[3].Size equals 0x00000060 otherwiseprint "Invalid Exception directory Size";
+      
+      // Verify the Relocation directory RVA and size
+      assert directories[5].Rva equals 0x00013000 otherwiseprint "Invalid Relocation directory RVA";
+      assert directories[5].Size equals 0x00000010 otherwiseprint "Invalid Relocation directory Size";
+      
+      // Verify the Debug directory RVA and size
+      assert directories[6].Rva equals 0x00004180 otherwiseprint "Invalid Debug directory RVA";
+      assert directories[6].Size equals 0x0000001C otherwiseprint "Invalid Debug directory Size";
+      
+      // Verify the IAT directory RVA and size
+      assert directories[12].Rva equals 0x00004000 otherwiseprint "Invalid IAT directory RVA";
+      assert directories[12].Size equals 0x000000E8 otherwiseprint "Invalid IAT directory Size";
+      
+      // Verify the CLR directory RVA and size
+      assert directories[14].Rva equals 0x0000419C otherwiseprint "Invalid CLR directory RVA";
+      assert directories[14].Size equals 0x00000048 otherwiseprint "Invalid CLR directory Size";
     }    
+    
     public ShouldBeAbleToReadSections() : void
     {
       throw NotImplementedException();
