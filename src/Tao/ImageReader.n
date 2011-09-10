@@ -67,6 +67,37 @@ namespace Tao
           image.DataDirectories.Add(directory);
       }
       
+      // Read the section headers and their corresponding
+      // section data
+      def sectionHeaderReader = SectionHeaderReader();
+      def numberOfSections = coffHeader.NumberOfSections;
+      def sectionHeaders = sectionHeaderReader.Read(numberOfSections, imageStream);
+      
+      // Keep track of the original position after the section header read operation
+      def originalPosition = imageStream.Position;
+      foreach(header in sectionHeaders)
+      {
+          def section = Section();
+          section.Header = header;
+          
+          def pointerToRawData = header.PointerToRawData :> int;
+          def size = header.SizeOfRawData :> int ;
+          
+          // Seek the start position of the section itself
+          _ = imageStream.Seek(pointerToRawData, SeekOrigin.Begin);
+          
+          def buffer = array(size) : array[byte];
+          def reader = BinaryReader(imageStream);
+          _ = reader.Read(buffer, 0, size);
+          
+          section.Data = MemoryStream(buffer);
+          
+          image.Sections.Add(section);
+      }
+      
+      // Restore the original stream position after the stream header read
+      imageStream.Position = originalPosition;
+      
       image;
     }
   }

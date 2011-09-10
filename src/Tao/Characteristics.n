@@ -9,7 +9,7 @@ using System.Linq;
 namespace Tao
 {
   [Flags]
-  public enum Characteristics : ushort
+  public enum Characteristics : uint
   {
     |RelocsStripped = 0x0001
     |ExecutableImage = 0x0002

@@ -12,7 +12,7 @@ namespace Tao
 {  
   public class SectionHeaderReader
   {
-    public Read([NotNull] inputStream : Stream, numberOfSections : uint) : IEnumerable.[SectionHeader]
+    public Read(numberOfSections : uint, [NotNull] inputStream : Stream) : IEnumerable.[SectionHeader]
         requires inputStream.Length > 0
         ensures value != null
     {

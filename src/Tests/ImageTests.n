@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Tests
 {
-  public class ImageTests
+  public partial class ImageTests
   {
     public ShouldReadDosHeader() : void
     {
@@ -148,9 +148,9 @@ namespace Tests
       
       foreach(index in emptyDataDirectoryIndices)
       {
-          def directory = directories[index];
-          assert directory.Rva equals 0 otherwiseprint "This data directory should be empty";
-          assert directory.Size equals 0 otherwiseprint "This data directory should be empty";
+        def directory = directories[index];
+        assert directory.Rva equals 0 otherwiseprint "This data directory should be empty";
+        assert directory.Size equals 0 otherwiseprint "This data directory should be empty";
       }
       
       // Verify the Import directory RVA and size
@@ -184,8 +184,41 @@ namespace Tests
     
     public ShouldBeAbleToReadSections() : void
     {
-      throw NotImplementedException();
-    }
+      def textSectionHash = GetTextSectionHash();
+      def relocSectionHash = GetRelocSectionHash();
+      
+      def imageFile = @"..\..\SampleBinaries\skeleton.exe";
+      def image = GetImage(imageFile);
+      
+      def sectionCount = image.Sections.Count;
+      assert sectionCount equals 2 otherwiseprint "Invalid number of sections";  
+      
+      def textSection = image.Sections[0];
+      mutable header = textSection.Header;
+      assert header.Name equals ".text" otherwiseprint "Invalid section name";
+      assert header.VirtualSize equals 0x1D4 otherwiseprint "Invalid VirtualSize";
+      assert header.VirtualAddress equals 0x2000 otherwiseprint "Invalid VirtualAddress";
+      assert header.SizeOfRawData equals 0x200 otherwiseprint "Invalid SizeOfRawData";
+      assert header.PointerToRawData equals 0x200 otherwiseprint "Invalid PointerToRawData";
+      assert header.PointerToRelocations equals 0 otherwiseprint "Invalid PointerToRelocations";
+      assert header.PointerToLineNumbers equals 0 otherwiseprint "Invalid PointerToLineNumbers";
+      assert header.NumberOfRelocations equals 0 otherwiseprint "Invalid NumberOfRelocations";
+      assert header.NumberOfLineNumbers equals 0 otherwiseprint "Invalid NumberOfLineNumbers";
+      assert header.Characteristics :> uint equals 0x60000020 otherwiseprint "Invalid Characteristics";
+      
+      header = image.Sections[1].Header;
+      assert header.Name equals ".reloc" otherwiseprint "Invalid section name";
+      assert header.VirtualSize equals 0xC otherwiseprint "Invalid VirtualSize";
+      assert header.VirtualAddress equals 0x4000 otherwiseprint "Invalid VirtualAddress";
+      assert header.SizeOfRawData equals 0x200 otherwiseprint "Invalid SizeOfRawData";
+      assert header.PointerToRawData equals 0x400 otherwiseprint "Invalid PointerToRawData";
+      assert header.PointerToRelocations equals 0 otherwiseprint "Invalid PointerToRelocations";
+      assert header.PointerToLineNumbers equals 0 otherwiseprint "Invalid PointerToLineNumbers";
+      assert header.NumberOfRelocations equals 0 otherwiseprint "Invalid NumberOfRelocations";
+      assert header.NumberOfLineNumbers equals 0 otherwiseprint "Invalid NumberOfLineNumbers";
+      assert header.Characteristics :> uint equals 0x42000040 otherwiseprint "Invalid Characteristics";
+    }        
+    
     public ShouldWriteDosHeader() : void
     {
       throw NotImplementedException();  

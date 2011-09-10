@@ -80,7 +80,7 @@ namespace Tests
       def inputData = GetInputHeaderBytes();
       def inputStream = MemoryStream(inputData);
       def reader = SectionHeaderReader();
-      _ = reader.Read(inputStream, 1 :> uint );
+      _ = reader.Read(1 :> uint, inputStream);
       
       assert inputStream.Length equals 0x28 otherwiseprint "The SectionHeaderReader must consume the entire section header input stream";
     }
@@ -249,8 +249,8 @@ namespace Tests
       def inputData = GetInputHeaderBytes();
       def inputStream = MemoryStream(inputData);
       def reader = SectionHeaderReader();
-      def headers = reader.Read(inputStream, 1 :> uint );
-          
+      def headers = reader.Read(1 :> uint, inputStream);
+      
       headers.First();
     }
     private GetInputHeaderBytes() : array[byte]
