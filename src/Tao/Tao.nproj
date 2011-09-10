@@ -98,6 +98,9 @@
     <Compile Include="ImageType.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ImageWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Machine.n">
       <SubType>Code</SubType>
     </Compile>

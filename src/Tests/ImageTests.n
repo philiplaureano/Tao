@@ -218,24 +218,56 @@ namespace Tests
       assert header.NumberOfLineNumbers equals 0 otherwiseprint "Invalid NumberOfLineNumbers";
       assert header.Characteristics :> uint equals 0x42000040 otherwiseprint "Invalid Characteristics";
     }        
+        
+    public ShouldBeAbleToRoundTripAnEntire32BitImage() : void
+    {
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def image = GetImage(imageFile);
+      
+      mutable expectedHash = string.Empty;
+      
+      using(def imageStream = System.IO.FileStream(imageFile, FileMode.Open))
+      {
+        expectedHash = imageStream.GetHash();
+      }
+      
+      def outputStream = MemoryStream();
+      def writer = ImageWriter();
+      writer.Write(image, outputStream);
+      
+      def actualHash = outputStream.GetHash();
+      assert actualHash equals expectedHash otherwiseprint "Invalid image";      
+    }
+    public ShouldWriteCorrectOptionalHeaderSizeFor32BitHeaders() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteCorrectOptionalHeaderSizeFor64BitHeaders() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteNumberOfSymbolsAsZero() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteNullPointerToSymbolTable() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteCorrectNumberOfSections() : void
+    {
+      throw NotImplementedException();
+    }
     
-    public ShouldWriteDosHeader() : void
-    {
-      throw NotImplementedException();  
-    }
-    public ShouldWriteCoffHeader() : void
+    public ShouldHaveMSDosHeaderPointingToPositionOfNTHeader() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteOptionalHeader() : void
+    public ShouldWriteCorrectDateTimeStamp() :  void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteDataDirectories() : void
-    {
-      throw NotImplementedException();
-    }
-    public ShouldWriteSections() : void
+    public ShouldBeAbleToRoundTripAnEntire64BitImage() : void
     {
       throw NotImplementedException();
     }

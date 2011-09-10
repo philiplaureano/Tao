@@ -1,0 +1,26 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class StartupStubTests
+  {
+    public ShouldWriteStartupStubForI386Machine() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteStartupStubForAmd64Machine() : void
+    {
+      throw NotImplementedException();
+    }    
+    public ShouldWriteStartupStubForIA64Machine() : void
+    {
+      throw NotImplementedException();
+    }
+  }
+}
