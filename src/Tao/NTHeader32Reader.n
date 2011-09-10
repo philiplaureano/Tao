@@ -2,6 +2,7 @@
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Tao
 {
   public class NTHeader32Reader : NTHeaderReader[uint]
   {      
-    protected override CreateHeader() : NTHeader[uint]
+    protected override CreateHeader() : INTHeader[uint]
     {
         NTHeader.[uint]();
     }

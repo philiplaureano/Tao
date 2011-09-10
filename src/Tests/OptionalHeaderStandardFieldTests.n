@@ -2,6 +2,7 @@
 using Nemerle.Text;
 using Nemerle.Utility;
 using Tao;
+using Tao.Interfaces;
 using Tests.Macros;
 
 using System;
@@ -342,7 +343,7 @@ namespace Tests
       TestWrite(fields, expectedData);      
     } 
     
-    private GetHeader() : OptionalHeaderStandardFields
+    private GetHeader() : IOptionalHeaderStandardFields
     {
       def data = GetData();
         
@@ -351,7 +352,7 @@ namespace Tests
       reader.Read(input);
     }
     
-    private TestWrite(fields : OptionalHeaderStandardFields, expectedData : array[byte]) : void
+    private TestWrite(fields : IOptionalHeaderStandardFields, expectedData : array[byte]) : void
     {
       def expectedHash = expectedData.GetHash();      
       def outputStream = MemoryStream();

@@ -2,6 +2,7 @@
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.IO;
@@ -10,12 +11,12 @@ using System.Linq;
 
 namespace Tao
 {  
-  public class DataDirectoryReader
+  public class DataDirectoryReader : IDataDirectoryReader
   {
-    public Read(numberOfDirectories : ushort, [NotNull] stream : Stream) : IEnumerable[DataDirectory]
+    public Read(numberOfDirectories : ushort, [NotNull] stream : Stream) : IEnumerable[IDataDirectory]
         requires stream.Length > 0
     {
-      def results = List.[DataDirectory]();
+      def results = List.[IDataDirectory]();
       for(mutable i = 0; i < numberOfDirectories; i++)
       {
         def reader = BinaryReader(stream);          

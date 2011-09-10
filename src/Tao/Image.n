@@ -2,6 +2,7 @@
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.IO;
@@ -12,18 +13,18 @@ namespace Tao
 {
   public class Image
   {
-    private _dataDirectories : List.[DataDirectory] = List.[DataDirectory]();      
-    private _sections : List.[Section] = List.[Section]();
+    private _dataDirectories : List.[IDataDirectory] = List.[IDataDirectory]();      
+    private _sections : List.[ISection] = List.[ISection]();
     
     public DOSHeader : Stream { get; set; }
-    public CoffHeader : CoffHeader { get; set; }
+    public CoffHeader : ICoffHeader { get; set; }
     public OptionalHeader : OptionalHeader { get; set; }
-    public DataDirectories : IList.[DataDirectory] 
+    public DataDirectories : IList.[IDataDirectory] 
     {
         get { _dataDirectories; }
     }
     
-    public Sections : IList.[Section]
+    public Sections : IList.[ISection]
     {
         get { _sections; }
     }    

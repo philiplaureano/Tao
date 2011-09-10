@@ -3,6 +3,7 @@ using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 using Tao;
+using Tao.Interfaces;
 using Tests.Macros;
 
 using System;
@@ -187,7 +188,7 @@ namespace Tests
         expectedData[0x1B] = 0x00;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         // The reader should ignore the Win32 version value
         header.Win32VersionValue = 0x00001234;
@@ -205,7 +206,7 @@ namespace Tests
            expectedData[2] = 0x30;
        };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
        {
            header.ImageBase = 0x00300000;
        };
@@ -220,7 +221,7 @@ namespace Tests
         expectedData[5] = 0x30;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.SectionAlignment = 0x00003000;
       };
@@ -235,7 +236,7 @@ namespace Tests
         expectedData[9] = 0x06;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.FileAlignment = 0x0600;
       };
@@ -250,7 +251,7 @@ namespace Tests
         expectedData[12] = 0x05;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.MajorOperatingSystemVersion = 5;
       };
@@ -265,7 +266,7 @@ namespace Tests
         expectedData[14] = 0x05;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.MinorOperatingSystemVersion = 5;
       };
@@ -280,7 +281,7 @@ namespace Tests
         expectedData[16] = 42;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.MajorImageVersion = 42;
       };
@@ -295,7 +296,7 @@ namespace Tests
         expectedData[18] = 42;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.MinorImageVersion = 42;
       };
@@ -310,7 +311,7 @@ namespace Tests
         expectedData[20] = 42;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.MajorSubsystemVersion = 42;
       };
@@ -325,7 +326,7 @@ namespace Tests
         expectedData[22] = 42;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.MinorSubsystemVersion = 42;
       };
@@ -340,7 +341,7 @@ namespace Tests
         expectedData[0x1D] = 0x50;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.SizeOfImage = 0x00005000;
       };
@@ -355,7 +356,7 @@ namespace Tests
         expectedData[0x21] = 0x03;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.SizeOfHeaders = 0x00000300;
       };
@@ -370,7 +371,7 @@ namespace Tests
         expectedData[0x25] = 0x03;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.CheckSum = 0x00000300;
       };
@@ -385,7 +386,7 @@ namespace Tests
         expectedData[0x28] = 10;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.Subsystem = Subsystem.EFIApplication;
       };
@@ -401,7 +402,7 @@ namespace Tests
         expectedData[0x2B] = 0x08;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.DllCharacteristics = DLLCharacteristics.NoBind;
       };
@@ -416,7 +417,7 @@ namespace Tests
         expectedData[0x2E] = 0x20;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.SizeOfStackReserve = 0x00200000;
       };
@@ -434,7 +435,7 @@ namespace Tests
         expectedData[0x33] = 0x00;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.SizeOfStackCommit = 0x00200000;
       };
@@ -452,7 +453,7 @@ namespace Tests
         expectedData[0x37] = 0x00;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.SizeOfHeapReserve = 0x00200000;
       };
@@ -470,7 +471,7 @@ namespace Tests
         expectedData[0x3B] = 0x00;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.SizeOfHeapCommit = 0x00200000;
       };
@@ -487,7 +488,7 @@ namespace Tests
         expectedData[0x3F] = 0x00;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         // The reader should ignore the loader flags value
         header.LoaderFlags = 0x00200000;
@@ -506,7 +507,7 @@ namespace Tests
         expectedData[0x43] = 0x00;
       };
        
-      def setExpectedHeader = fun(header : NTHeader[uint]) : void
+      def setExpectedHeader = fun(header : INTHeader[uint]) : void
       {
         header.NumberOfRvaAndSizes = 0x00200000;
       };
@@ -514,7 +515,7 @@ namespace Tests
       TestWrite(setExpectedData, setExpectedHeader);
     }
     
-    private GetReadHeader(modifyData : array[byte] -> void = null) : NTHeader[uint]
+    private GetReadHeader(modifyData : array[byte] -> void = null) : INTHeader[uint]
     {
       def data = GetData();
       
@@ -525,7 +526,7 @@ namespace Tests
       def stream = data.ToStream();
       def reader = NTHeader32Reader();
       
-      def header : NTHeader[uint] = reader.Read(stream);
+      def header : INTHeader[uint] = reader.Read(stream);
       
       header;
     }
@@ -578,7 +579,7 @@ namespace Tests
 	    ]	
     }    
     
-    private TestWrite(setExpectedData : array[byte]->void, setExpectedHeaderValues : NTHeader[uint]->void) : void
+    private TestWrite(setExpectedData : array[byte]->void, setExpectedHeaderValues : INTHeader[uint] -> void) : void
     {
       def expectedData = GetData();
       setExpectedData(expectedData);
@@ -595,35 +596,35 @@ namespace Tests
       assert expectedHash equals actualHash otherwiseprint "Invalid write operation";
     }
     
-    private GetWriteHeader() : NTHeader[uint]
+    private GetWriteHeader() : INTHeader[uint]
     {
-      def header = NTHeader.[uint]();;
-      header.ImageBase = 0x00400000;
-      header.SectionAlignment = 0x00002000;
-      header.FileAlignment = 0x0200;
+      def header = NTHeader.[uint]();
+      header.ImageBase = 0x00400000 :> uint;
+      header.SectionAlignment = 0x00002000 :> uint;
+      header.FileAlignment = 0x0200 :> uint;
       
-      header.MajorOperatingSystemVersion = 4;
-      header.MinorOperatingSystemVersion = 0;
+      header.MajorOperatingSystemVersion = 4 :> ushort;
+      header.MinorOperatingSystemVersion = 0 :> ushort;
       
-      header.MajorImageVersion = 0;
-      header.MinorImageVersion = 0;
+      header.MajorImageVersion = 0 :> ushort;
+      header.MinorImageVersion = 0 :> ushort;
       
-      header.MajorSubsystemVersion = 4;
-      header.MinorSubsystemVersion = 0;
+      header.MajorSubsystemVersion = 4 :> ushort;
+      header.MinorSubsystemVersion = 0 :> ushort;
       
-      header.Win32VersionValue = 0;
-      header.SizeOfImage = 0x00006000;
-      header.SizeOfHeaders = 0x00000200;
+      header.Win32VersionValue = 0 :> uint;
+      header.SizeOfImage = 0x00006000 :> uint;
+      header.SizeOfHeaders = 0x00000200 :> uint;
       header.Subsystem = Subsystem.WindowsConsole;
       header.DllCharacteristics = 0x8540 :> DLLCharacteristics;
       
-      header.SizeOfStackReserve = 0x00100000;
-      header.SizeOfStackCommit = 0x00001000;
+      header.SizeOfStackReserve = 0x00100000 :> uint;
+      header.SizeOfStackCommit = 0x00001000 :> uint;
       
-      header.SizeOfHeapReserve = 0x00100000;
-      header.SizeOfHeapCommit = 0x00001000;
+      header.SizeOfHeapReserve = 0x00100000 :> uint;
+      header.SizeOfHeapCommit = 0x00001000 :> uint;
       
-      header.NumberOfRvaAndSizes = 0x10;
+      header.NumberOfRvaAndSizes = 0x10 :> uint;
       
       header;
     }    

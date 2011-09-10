@@ -2,6 +2,7 @@
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ using System.Linq;
 
 namespace Tao
 {
-  public class DataDirectoryWriter
+  public class DataDirectoryWriter : IDataDirectoryWriter
   {
-    public Write([NotNull] directories : IEnumerable.[DataDirectory], [NotNull] stream : Stream) : void
+    public Write([NotNull] directories : IEnumerable.[IDataDirectory], [NotNull] stream : Stream) : void
         requires directories.Count() > 0 otherwise throw ArgumentException("There are no data directories to be written")
     {          
       def writer = BinaryWriter(stream);

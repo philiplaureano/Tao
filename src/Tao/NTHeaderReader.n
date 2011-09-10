@@ -2,6 +2,7 @@
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.IO;
@@ -10,10 +11,10 @@ using System.Linq;
 
 namespace Tao
 {
-  public abstract class NTHeaderReader[TSize]
+  public abstract class NTHeaderReader[TSize] : INTHeaderReader[TSize]
     where TSize : struct
   {      
-    public Read([NotNull] stream : Stream) : NTHeader[TSize]
+    public Read([NotNull] stream : Stream) : INTHeader[TSize]
         requires stream.Length > 0 otherwise throw ArgumentException("stream", "The NT Header stream cannot be empty")
     {
       def reader = BinaryReader(stream);
@@ -50,7 +51,7 @@ namespace Tao
       header;
     }
     
-    protected abstract CreateHeader() : NTHeader[TSize];
+    protected abstract CreateHeader() : INTHeader[TSize];
     protected abstract ReadValue(reader : BinaryReader) : TSize;
   }
 }

@@ -1,0 +1,21 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Interfaces
+{
+  public interface ICoffHeader
+  {
+    Machine : Machine { get; set; };
+    NumberOfSections : ushort { get; set; };
+    TimeDateStamp : uint { get; set; };
+    PointerToSymbolTable : uint { get; set; };
+    NumberOfSymbols : uint { get; set; };
+    OptionalHeaderSize : ushort { get; set; };
+    Characteristics : Characteristics { get; set; };
+  }
+}

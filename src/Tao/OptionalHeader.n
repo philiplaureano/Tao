@@ -1,6 +1,7 @@
 ﻿using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,14 @@ namespace Tao
   {
     |OptionalHeader32
         {
-          StandardFields : OptionalHeaderStandardFields;
-          Header : NTHeader[uint];
+          StandardFields : IOptionalHeaderStandardFields;
+          Header : INTHeader[uint];
         }
       
     |OptionalHeader64
         {
-          StandardFields : OptionalHeaderStandardFields;
-          Header : NTHeader[ulong];
+          StandardFields : IOptionalHeaderStandardFields;
+          Header : INTHeader[ulong];
         }
   }
 }

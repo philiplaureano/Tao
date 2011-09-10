@@ -3,6 +3,7 @@ using Nemerle.Text;
 using Nemerle.Utility;
 using Tests.Macros;
 using Tao;
+using Tao.Interfaces;
 
 using System;
 using System.Collections.Generic;
@@ -273,20 +274,20 @@ namespace Tests
       TestHeaderWrite(expectedBytes, h => h.Characteristics = Characteristics.DLL | Characteristics.Is32BitMachine);
     }
     
-    private ReadHeader() : CoffHeader
+    private ReadHeader() : ICoffHeader
     {
       def data = GetData();
       ReadHeader(data);
     }
     
-    private ReadHeader(data : array[byte]) : CoffHeader
+    private ReadHeader(data : array[byte]) : ICoffHeader
     {
       def stream = MemoryStream(data);
       def reader = CoffHeaderReader();
       reader.Read(stream);
     }
     
-    private TestHeaderWrite(expectedBytes : array[byte], setHeader : CoffHeader-> void) : void
+    private TestHeaderWrite(expectedBytes : array[byte], setHeader : ICoffHeader-> void) : void
     {
       def header = CreateDefaultHeader(setHeader);      
       
@@ -300,9 +301,9 @@ namespace Tests
       assert actualHash equals expectedHash otherwiseprint "Invalid output stream";
     }
     
-    private CreateDefaultHeader(extraHeaderStep : CoffHeader -> void = null) : CoffHeader
+    private CreateDefaultHeader(extraHeaderStep : ICoffHeader -> void = null) : ICoffHeader
     {
-      def setHeader(header : CoffHeader) : void
+      def setHeader(header : ICoffHeader) : void
       {
         header.Machine = Machine.I386;
         header.NumberOfSections = 2;
@@ -320,7 +321,7 @@ namespace Tests
       CreateHeader(setHeader);
     }
     
-    private CreateHeader(setHeader : CoffHeader -> void) : CoffHeader
+    private CreateHeader(setHeader : ICoffHeader -> void) : ICoffHeader
     {
       def header = CoffHeader();
       setHeader(header);

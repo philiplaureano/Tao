@@ -2,6 +2,7 @@
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.IO;
@@ -10,9 +11,9 @@ using System.Linq;
 
 namespace Tao
 {
-  public class StreamHeaderWriter
+  public class SectionHeaderWriter : ISectionHeaderWriter
   {
-      public Write([NotNull] headers : IEnumerable.[SectionHeader], [NotNull] outputStream : Stream) : void
+      public Write([NotNull] headers : IEnumerable.[ISectionHeader], [NotNull] outputStream : Stream) : void
       {
           def stringWriter = NullTerminatedStringWriter();
           def writer = BinaryWriter(outputStream);

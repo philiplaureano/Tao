@@ -131,6 +131,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.nproj">
+      <Name>Tao.Interfaces</Name>
+      <Project>{453795b0-1351-452c-8c7a-8e1b9d3be97c}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Tao\Tao.nproj">
       <Name>Tao</Name>
       <Project>{d911e1dc-aaf7-426a-b3ec-a9e336ac83ce}</Project>

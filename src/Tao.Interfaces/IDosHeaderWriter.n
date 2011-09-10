@@ -1,0 +1,16 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Interfaces
+{
+  public interface IDosHeaderWriter
+  {
+      Write(outputStream : Stream) : void;
+  }
+}

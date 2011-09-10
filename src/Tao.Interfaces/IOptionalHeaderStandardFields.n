@@ -1,0 +1,23 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Interfaces
+{
+  public interface IOptionalHeaderStandardFields
+  {
+    ImageType : ImageType { get; set; }
+    MajorLinkerVersion : byte { get; set; }
+    MinorLinkerVersion : byte { get; set; }
+    SizeOfCode : uint { get; set; }
+    SizeOfInitializedData : uint { get; set; }
+    SizeOfUninitializedData : uint { get; set; }
+    AddressOfEntryPoint : uint { get; set; }
+    BaseOfCode : uint { get; set; }
+    BaseOfData : uint? { get; set; }
+  }
+}

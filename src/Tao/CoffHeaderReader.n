@@ -3,6 +3,7 @@ using Nemerle.Collections;
 using Nemerle.Macro;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Tao
 {
   public class CoffHeaderReader
   {
-    public Read([NotNull] inputStream : Stream) : CoffHeader
+    public Read([NotNull] inputStream : Stream) : ICoffHeader
         requires inputStream.Length >= 24 otherwise throw BadImageFormatException("Invalid COFF header")
         ensures value != null
     {

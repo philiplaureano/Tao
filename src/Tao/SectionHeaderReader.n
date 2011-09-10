@@ -2,6 +2,7 @@
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,14 @@ using System.Linq;
 
 namespace Tao
 {  
-  public class SectionHeaderReader
+  public class SectionHeaderReader : ISectionHeaderReader
   {
-    public Read(numberOfSections : uint, [NotNull] inputStream : Stream) : IEnumerable.[SectionHeader]
+    public Read(numberOfSections : uint, [NotNull] inputStream : Stream) : IEnumerable.[ISectionHeader]
         requires inputStream.Length > 0
         ensures value != null
     {
       def reader = BinaryReader(inputStream);
-      def results = List.[SectionHeader]();
+      def results = List.[ISectionHeader]();
           
       def stringReader = NullTerminatedStringReader();
       for(mutable i : uint = 0; i < numberOfSections; i++)

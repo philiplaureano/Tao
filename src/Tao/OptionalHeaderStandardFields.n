@@ -1,6 +1,7 @@
 ﻿using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class OptionalHeaderStandardFields
+  public class OptionalHeaderStandardFields : IOptionalHeaderStandardFields
   {
     public ImageType : ImageType { get; set; }
     public MajorLinkerVersion : byte { get; set; }

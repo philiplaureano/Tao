@@ -1,6 +1,7 @@
 ﻿using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class SectionHeader
+  public class SectionHeader : ISectionHeader
   {
       public Name : string { get; set; }
       public VirtualSize : uint { get; set; }

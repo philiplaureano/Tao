@@ -2,6 +2,7 @@
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class OptionalHeaderStandardFieldsReader
+  public class OptionalHeaderStandardFieldsReader : IOptionalHeaderStandardFieldsReader
   {
     public Read([NotNull] inputStream : Stream) : OptionalHeaderStandardFields
         requires inputStream.Length > 0

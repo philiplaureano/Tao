@@ -4,14 +4,14 @@ using Nemerle.Utility;
 using Tao.Interfaces;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tao
+namespace Tao.Interfaces
 {
-  public class DataDirectory : IDataDirectory
+  public interface ICoffHeaderWriter
   {
-      public Rva : uint { get; set; }
-      public Size : uint { get; set; }
+    Write(header : ICoffHeader, outputStream : Stream) : void;
   }
 }

@@ -3,18 +3,18 @@
   <PropertyGroup>
     <NoStdLib>true</NoStdLib>
     <Nemerle Condition=" '$(Nemerle)' == '' ">$(ProgramFiles)\Nemerle</Nemerle>
-    <Name>Tao</Name>
+    <Name>Tao.Interfaces</Name>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{d911e1dc-aaf7-426a-b3ec-a9e336ac83ce}</ProjectGuid>
+    <ProjectGuid>{453795b0-1351-452c-8c7a-8e1b9d3be97c}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tao</RootNamespace>
-    <AssemblyName>Tao</AssemblyName>
+    <RootNamespace>Tao.Interfaces</RootNamespace>
+    <AssemblyName>Tao.Interfaces</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,11 +37,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="Nemerle, Version=1.0.0.9832, Culture=neutral, PublicKeyToken=e080a9c724e2bfcd">
-      <Name>Nemerle</Name>
-      <AssemblyName>Nemerle.dll</AssemblyName>
-      <HintPath>..\..\tools\Nemerle\Nemerle.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -54,106 +49,96 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Nemerle">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(Nemerle)\Nemerle.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <MacroReference Include="Nemerle.Linq">
       <HintPath>$(Nemerle)\Nemerle.Linq.dll</HintPath>
     </MacroReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CoffHeader.n">
+    <Compile Include="Characteristics.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CoffHeaderReader.n">
+    <Compile Include="DLLCharacteristics.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CoffHeaderWriter.n">
+    <Compile Include="ICoffHeader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataDirectory.n">
+    <Compile Include="ICoffHeaderReader.n" />
+    <Compile Include="ICoffHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataDirectoryReader.n">
+    <Compile Include="IDataDirectory.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataDirectoryWriter.n">
+    <Compile Include="IDataDirectoryReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DosHeaderReader.n">
+    <Compile Include="IDataDirectoryWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DosHeaderWriter.n">
+    <Compile Include="IDosHeaderReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Image.n">
+    <Compile Include="IDosHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ImageReader.n">
+    <Compile Include="ImageType.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ImageWriter.n">
+    <Compile Include="INTHeader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NTHeader.n">
+    <Compile Include="INTHeaderReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NTHeader32Reader.n">
+    <Compile Include="INTHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NTHeader32Writer.n">
+    <Compile Include="IOptionalHeaderStandardFields.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NTHeader64Reader.n">
+    <Compile Include="IOptionalHeaderStandardFieldsReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NTHeader64Writer.n">
+    <Compile Include="IOptionalHeaderStandardFieldsWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NTHeaderReader.n">
+    <Compile Include="ISection.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NTHeaderWriter.n">
+    <Compile Include="ISectionHeader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NullTerminatedStringReader.n">
+    <Compile Include="ISectionHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NullTerminatedStringWriter.n">
+    <Compile Include="IStringReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="OptionalHeader.n">
+    <Compile Include="IStringWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="OptionalHeaderStandardFields.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OptionalHeaderStandardFieldsWriter.n">
+    <Compile Include="Machine.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
-    <Compile Include="OptionalHeaderStandardFieldsReader.n">
+    <Compile Include="SectionFlags.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Section.n">
+    <Compile Include="ISectionHeaderReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SectionHeader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SectionHeaderReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SectionHeaderWriter.n">
+    <Compile Include="Subsystem.n">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.nproj">
-      <Name>Tao.Interfaces</Name>
-      <Project>{453795b0-1351-452c-8c7a-8e1b9d3be97c}</Project>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(Nemerle)\Nemerle.MSBuild.targets" />
   <!--

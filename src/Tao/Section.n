@@ -2,6 +2,7 @@
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ using System.Linq;
 
 namespace Tao
 {  
-  public class Section
+  public class Section : ISection
   {
-    public Header : SectionHeader { get; set; }
+    public Header : ISectionHeader { get; set; }
     public Data : Stream { get; set };
   }
 }

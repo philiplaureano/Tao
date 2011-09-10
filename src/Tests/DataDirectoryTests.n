@@ -4,6 +4,7 @@ using Nemerle.Linq;
 using Nemerle.Text;
 using Nemerle.Utility;
 using Tao;
+using Tao.Interfaces;
 using Tests.Macros;
 
 using System;
@@ -44,10 +45,10 @@ namespace Tests
       def expectedData = GetSampleDataDirectoryBytes();
       expectedData[0] = 0x09;
       
-      def directories = List.[DataDirectory]();
+      def directories = List.[IDataDirectory]();
       def directory = DataDirectory();
-      directory.Rva = 0x2009;
-      directory.Size = 0x48;
+      directory.Rva = 0x2009 :> uint;
+      directory.Size = 0x48 :> uint;
       
       directories.Add(directory);
       
@@ -67,10 +68,10 @@ namespace Tests
       def expectedData = GetSampleDataDirectoryBytes();
       expectedData[4] = 0x42;
       
-      def directories = List.[DataDirectory]();
+      def directories = List.[IDataDirectory]();
       def directory = DataDirectory();
-      directory.Rva = 0x2008;
-      directory.Size = 0x42;
+      directory.Rva = 0x2008 :> uint;
+      directory.Size = 0x42  :> uint;
       
       directories.Add(directory);
       
@@ -286,7 +287,7 @@ namespace Tests
       assert expectedHash equals actualHash otherwiseprint "Invalid DataDirectory header write operation";
     }
     
-    private GetSampleDirectory(index : int) : DataDirectory
+    private GetSampleDirectory(index : int) : IDataDirectory
     {
       def data = GetSampleDataDirectoryHeaderBytes();
       def reader = DataDirectoryReader();
@@ -313,7 +314,7 @@ namespace Tests
       _ = inputStream.Seek(0, SeekOrigin.Begin);
     }
     
-    private GetSampleDataDirectories() : array[DataDirectory]
+    private GetSampleDataDirectories() : array[IDataDirectory]
     {
       def data = GetSampleDataDirectoryHeaderBytes();
       def inputStream = MemoryStream(data); 

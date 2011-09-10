@@ -1,0 +1,17 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Interfaces
+{
+  public interface INTHeaderWriter[TSize]
+    where TSize : struct
+  {
+      Write(header : INTHeader[TSize], stream : Stream) : void;
+  }
+}

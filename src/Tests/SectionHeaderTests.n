@@ -2,6 +2,7 @@
 using Nemerle.Text;
 using Nemerle.Utility;
 using Tao;
+using Tao.Interfaces;
 using Tests.Macros;
 
 using System;
@@ -16,7 +17,7 @@ namespace Tests
     public ShouldReadName() : void
     {          
       def header = GetReadHeader();
-      assert header.Name equals ".text" otherwiseprint "Invalid SectionHeader name";         
+      assert header.Name equals ".text" otherwiseprint "Invalid ISectionHeader name";         
     }
       
     public ShouldReadVirtualSize() : void
@@ -97,11 +98,11 @@ namespace Tests
       def stringWriter = NullTerminatedStringWriter();
       stringWriter.Write(".abcd", expectedOutputStream);
         
-      def headers = List.[SectionHeader]();
+      def headers = List.[ISectionHeader]();
       headers.Add(header);
         
       def outputStream = MemoryStream();
-      def writer = StreamHeaderWriter();
+      def writer = SectionHeaderWriter();
       writer.Write(headers, outputStream);
         
       def expectedHash = expectedOutputStream.GetHash();
@@ -172,17 +173,17 @@ namespace Tests
       TestWrite(targetIndex, header => header.NumberOfLineNumbers = expectedValue, expectedValue);
     }
     
-    private TestWrite(targetIndex : int, setHeaderData : SectionHeader-> void, expectedValue : uint) : void
+    private TestWrite(targetIndex : int, setHeaderData : ISectionHeader-> void, expectedValue : uint) : void
     {
       TestWrite(targetIndex, setHeaderData, writer=>writer.Write(expectedValue));
     }
     
-    private TestWrite(targetIndex : int, setHeaderData : SectionHeader-> void, expectedValue : ushort) : void
+    private TestWrite(targetIndex : int, setHeaderData : ISectionHeader-> void, expectedValue : ushort) : void
     {
       TestWrite(targetIndex, setHeaderData, writer=>writer.Write(expectedValue));
     }
     
-    private TestWrite(targetIndex : int, setHeaderData : SectionHeader-> void, writeExpectedValue : BinaryWriter -> void) : void
+    private TestWrite(targetIndex : int, setHeaderData : ISectionHeader-> void, writeExpectedValue : BinaryWriter -> void) : void
     {                            
       def targetAddress = GetTargetAddress(targetIndex);
       
@@ -197,11 +198,11 @@ namespace Tests
       def header = GetWriteHeader();
       setHeaderData(header);
       
-      def headers = List.[SectionHeader]();
+      def headers = List.[ISectionHeader]();
       headers.Add(header);
       
       def outputStream = MemoryStream();
-      def writer = StreamHeaderWriter();
+      def writer = SectionHeaderWriter();
       writer.Write(headers, outputStream);
       
       def expectedHash = expectedStream.GetHash();
@@ -227,24 +228,24 @@ namespace Tests
       targetAddress;
     }
     
-    private GetWriteHeader() : SectionHeader
+    private GetWriteHeader() : ISectionHeader
     {
       def header = SectionHeader();
       header.Name = ".text";
-      header.VirtualSize = 0x1D4;
-      header.VirtualAddress = 0x2000;
-      header.SizeOfRawData = 0x200;
-      header.PointerToRawData = 0x200;
-      header.PointerToRelocations = 0;
-      header.PointerToLineNumbers = 0;
-      header.NumberOfLineNumbers = 0;
-      header.NumberOfRelocations = 0;
+      header.VirtualSize = 0x1D4 :> uint;
+      header.VirtualAddress = 0x2000 :> uint;
+      header.SizeOfRawData = 0x200 :> uint;
+      header.PointerToRawData = 0x200 :> uint;
+      header.PointerToRelocations = 0 :> uint;
+      header.PointerToLineNumbers = 0 :> uint;
+      header.NumberOfLineNumbers = 0 :> ushort;
+      header.NumberOfRelocations = 0 :> ushort;
       header.Characteristics = 0x60000020 :> SectionFlags;
       
       header;
     }
     
-    private GetReadHeader() : SectionHeader
+    private GetReadHeader() : ISectionHeader
     {
       def inputData = GetInputHeaderBytes();
       def inputStream = MemoryStream(inputData);

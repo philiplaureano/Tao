@@ -2,6 +2,7 @@
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class NullTerminatedStringReader
+  public class NullTerminatedStringReader : IStringReader
   {
     public Read([NotNull] inputStream : Stream, length : uint) : string
         requires length <= inputStream.Length otherwise throw ArgumentException("length", "Length exceeds the actual length of the input stream")
