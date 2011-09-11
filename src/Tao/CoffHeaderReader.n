@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class CoffHeaderReader
+  public class CoffHeaderReader : ICoffHeaderReader
   {
     public Read([NotNull] inputStream : Stream) : ICoffHeader
         requires inputStream.Length >= 24 otherwise throw BadImageFormatException("Invalid COFF header")

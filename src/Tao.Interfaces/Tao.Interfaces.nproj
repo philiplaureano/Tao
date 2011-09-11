@@ -81,10 +81,16 @@
     <Compile Include="IDataDirectoryWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IDosHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="IDosHeaderReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IDosHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IImage.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ImageType.n">
@@ -124,6 +130,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OptionalHeader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />

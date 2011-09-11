@@ -8,9 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Tao.Interfaces
-{
-  public interface IDosHeaderReader
+{  
+  public interface IDosHeader
   {
-    Read(inputStream : Stream) : IDosHeader;
+      LfaNew : uint { get; set;  }
+      Data : Stream { get; set; }
   }
 }

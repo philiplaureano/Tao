@@ -2,6 +2,7 @@
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.IO;
@@ -12,6 +13,42 @@ namespace Tao
 {  
   public class ImageReader
   {
+    private _dosHeaderReader : IDosHeaderReader ;
+    private _coffHeaderReader : ICoffHeaderReader;
+    private _standardFieldsReader : IOptionalHeaderStandardFieldsReader;
+    private _ntHeader32Reader : INTHeaderReader[uint];
+    private _ntHeader64Reader : INTHeaderReader[ulong];
+    private _dataDirectoryReader : IDataDirectoryReader;
+    private _sectionHeaderReader : ISectionHeaderReader;
+    
+    public this() 
+    {        
+      _dosHeaderReader = DosHeaderReader();
+      _coffHeaderReader = CoffHeaderReader();
+      _standardFieldsReader = OptionalHeaderStandardFieldsReader();
+      _ntHeader32Reader   = NTHeader32Reader();
+      _ntHeader64Reader   = NTHeader64Reader();
+      _dataDirectoryReader  = DataDirectoryReader();
+      _sectionHeaderReader  = SectionHeaderReader();
+    }
+    
+    public this(dosHeaderReader : IDosHeaderReader, 
+                coffHeaderReader : ICoffHeaderReader, 
+                standardFieldsReader : IOptionalHeaderStandardFieldsReader, 
+                ntHeader32Reader : INTHeaderReader[uint], 
+                ntHeader64Reader : INTHeaderReader[ulong], 
+                dataDirectoryReader : IDataDirectoryReader,
+                sectionHeaderReader : ISectionHeaderReader)
+    {
+      _dosHeaderReader  = dosHeaderReader;
+      _coffHeaderReader  = coffHeaderReader;
+      _standardFieldsReader = standardFieldsReader;
+      _ntHeader32Reader = ntHeader32Reader;
+      _ntHeader64Reader   = ntHeader64Reader;
+      _dataDirectoryReader = dataDirectoryReader;
+      _sectionHeaderReader  = sectionHeaderReader;
+    }
+    
     public Read([NotNull] imageStream : Stream) : Image
         requires imageStream.Length > 0 otherwise throw ArgumentException("imageStream", "Unable to read from an empty image stream")
         ensures value.DOSHeader != null
@@ -19,40 +56,32 @@ namespace Tao
     {
       def image = Image();
           
-      def dosHeaderReader = DosHeaderReader();
-      def dosStream = dosHeaderReader.Read(imageStream);
-      image.DOSHeader = dosStream;
-          
-      def dosStreamReader = BinaryReader(dosStream);
-      _ = dosStream.Seek(0x3C, SeekOrigin.Begin);
+      def dosHeader = _dosHeaderReader.Read(imageStream);
+      image.DOSHeader = dosHeader;          
       
       // Determine the location of the COFF header
-      def coffHeaderOffset = dosStreamReader.ReadUInt32();
+      def coffHeaderOffset = dosHeader.LfaNew;
       _ = imageStream.Seek(coffHeaderOffset, SeekOrigin.Begin);
       
-      def coffHeaderReader = CoffHeaderReader();
-      def coffHeader = coffHeaderReader.Read(imageStream);
+      def coffHeader = _coffHeaderReader.Read(imageStream);
       image.CoffHeader = coffHeader;
       
       // Read the fields that are common to both 32 and 64-bit optional headers
-      def standardFieldsReader = OptionalHeaderStandardFieldsReader();
-      def standardFields = standardFieldsReader.Read(imageStream);
+      def standardFields = _standardFieldsReader.Read(imageStream);
       
       mutable numberOfDirectories : uint = 0;
       match(standardFields.ImageType)
       {
         |ImageType.PE32 =>
         {
-            def reader = NTHeader32Reader();
-            def header = reader.Read(imageStream);
+            def header = _ntHeader32Reader.Read(imageStream);
             image.OptionalHeader = OptionalHeader.OptionalHeader32(standardFields, header);
             
             numberOfDirectories = header.NumberOfRvaAndSizes;
         };                                   
         |ImageType.PE32Plus =>
         {
-            def reader = NTHeader64Reader();
-            def header = reader.Read(imageStream);
+            def header = _ntHeader64Reader.Read(imageStream);
             image.OptionalHeader = OptionalHeader.OptionalHeader64(standardFields, header);
             
             numberOfDirectories = header.NumberOfRvaAndSizes;
@@ -60,39 +89,37 @@ namespace Tao
       }
       
       // Read the data directories
-      def directoryReader = DataDirectoryReader();
-      def directories = directoryReader.Read(numberOfDirectories :> ushort, imageStream);
+      def directories = _dataDirectoryReader.Read(numberOfDirectories :> ushort, imageStream);
       foreach(directory in directories)
       {
-          image.DataDirectories.Add(directory);
+        image.DataDirectories.Add(directory);
       }
       
       // Read the section headers and their corresponding
       // section data
-      def sectionHeaderReader = SectionHeaderReader();
       def numberOfSections = coffHeader.NumberOfSections;
-      def sectionHeaders = sectionHeaderReader.Read(numberOfSections, imageStream);
+      def sectionHeaders = _sectionHeaderReader.Read(numberOfSections, imageStream);
       
       // Keep track of the original position after the section header read operation
       def originalPosition = imageStream.Position;
       foreach(header in sectionHeaders)
       {
-          def section = Section();
-          section.Header = header;
+        def section = Section();
+        section.Header = header;
           
-          def pointerToRawData = header.PointerToRawData :> int;
-          def size = header.SizeOfRawData :> int ;
+        def pointerToRawData = header.PointerToRawData :> int;
+        def size = header.SizeOfRawData :> int ;
           
           // Seek the start position of the section itself
-          _ = imageStream.Seek(pointerToRawData, SeekOrigin.Begin);
+        _ = imageStream.Seek(pointerToRawData, SeekOrigin.Begin);
           
-          def buffer = array(size) : array[byte];
-          def reader = BinaryReader(imageStream);
-          _ = reader.Read(buffer, 0, size);
+        def buffer = array(size) : array[byte];
+        def reader = BinaryReader(imageStream);
+        _ = reader.Read(buffer, 0, size);
           
-          section.Data = MemoryStream(buffer);
+        section.Data = MemoryStream(buffer);
           
-          image.Sections.Add(section);
+        image.Sections.Add(section);
       }
       
       // Restore the original stream position after the stream header read

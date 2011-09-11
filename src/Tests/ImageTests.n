@@ -20,7 +20,7 @@ namespace Tests
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
       def image = GetImage(imageFile);      
       def expectedHash = GetDosHeader().GetHash();
-      def actualHash = image.DOSHeader.GetHash();
+      def actualHash = image.DOSHeader.Data.GetHash();
         
       assert expectedHash equals actualHash otherwiseprint "Invalid MS-DOS header";
     }
@@ -268,10 +268,7 @@ namespace Tests
       throw NotImplementedException();
     }
     public ShouldWriteOptionalHeaderAtlfanewPosition() : void
-    {
-      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-      def image = GetImage(imageFile);
-      
+    {                  
       throw NotImplementedException();
     }
     public ShouldWriteCorrectDateTimeStamp() :  void
@@ -282,7 +279,7 @@ namespace Tests
     {
       throw NotImplementedException();
     }
-    private GetImage(imageFile : string) : Image
+    private GetImage(imageFile : string) : IImage
     {
       using(def imageStream = System.IO.FileStream(imageFile, FileMode.Open))
       {

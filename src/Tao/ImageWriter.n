@@ -1,6 +1,7 @@
 ﻿using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao.Interfaces;
 
 using System;
 using System.IO;
@@ -11,7 +12,7 @@ namespace Tao
 {  
   public class ImageWriter
   {
-      public Write(image : Image, outputStream : Stream) : void
+      public Write(image : IImage, outputStream : Stream) : void
       {
           throw NotImplementedException();
       }

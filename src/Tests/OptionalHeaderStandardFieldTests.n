@@ -293,7 +293,7 @@ namespace Tests
       TestWrite(fields, expectedData);
     } 
     
-    private CreateInputHeader() : OptionalHeaderStandardFields
+    private CreateInputHeader() : IOptionalHeaderStandardFields
     {
       def fields = OptionalHeaderStandardFields();
       fields.ImageType = ImageType.PE32;
@@ -313,13 +313,13 @@ namespace Tests
     {
       def fields = OptionalHeaderStandardFields();
       fields.ImageType = ImageType.PE32Plus;
-      fields.MajorLinkerVersion = 8;
-      fields.MinorLinkerVersion = 0;
-      fields.SizeOfCode = 0x200;
-      fields.SizeOfInitializedData = 0x200;
-      fields.SizeOfUninitializedData = 0;
-      fields.AddressOfEntryPoint = 0x21CE;
-      fields.BaseOfCode = 0x2000;
+      fields.MajorLinkerVersion = 8 :> byte;
+      fields.MinorLinkerVersion = 0 :> byte;
+      fields.SizeOfCode = 0x200 :> uint;
+      fields.SizeOfInitializedData = 0x200 :> uint;
+      fields.SizeOfUninitializedData = 0  :> uint;
+      fields.AddressOfEntryPoint = 0x21CE :> uint;
+      fields.BaseOfCode = 0x2000 :> uint;
       
       def expectedData = array[ 
            // Magic Number = 0x20b (PE32+)

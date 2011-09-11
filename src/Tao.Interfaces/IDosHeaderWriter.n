@@ -11,6 +11,6 @@ namespace Tao.Interfaces
 {
   public interface IDosHeaderWriter
   {
-      Write(outputStream : Stream) : void;
+      Write(header : IDosHeader) : void;
   }
 }

@@ -1,0 +1,45 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+  public class DosHeader : IDosHeader
+  { 
+    private _headerStream : Stream;
+    public this(headerStream : Stream) 
+    {
+      Data = headerStream;
+    }
+    
+    public LfaNew : uint
+    {
+      get 
+         requires Data != null
+      {
+        def reader = BinaryReader(Data);
+        _ = Data.Seek(0x3C, SeekOrigin.Begin);
+        reader.ReadUInt32();
+      }
+      set
+        requires Data != null
+      {
+        def writer = BinaryWriter(Data);
+        _ = Data.Seek(0x3C, SeekOrigin.Begin);
+        writer.Write(value : uint);
+      }
+    }
+    
+    public Data : Stream
+    {
+         get;set; 
+    }
+  }
+}

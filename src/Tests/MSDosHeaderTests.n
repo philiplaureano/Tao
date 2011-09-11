@@ -33,7 +33,8 @@ namespace Tests
       def reader = DosHeaderReader();
         
         // Verify the read block length is 128 bytes
-      def headerStream : System.IO.Stream = reader.Read(_inputStream);
+      def dosHeader = reader.Read(_inputStream);
+      def headerStream : System.IO.Stream = dosHeader.Data;
         
         // Verify the hash matches the manually calculated hash of the skeleton binary
       def binaryReader = BinaryReader(headerStream);
@@ -120,11 +121,11 @@ namespace Tests
 	       	  
       def outputBytes = array(bytes.Length) : array[byte];
       
-      writer.Write(outputStream);
+      def dosHeader = DosHeader(outputStream);
+      writer.Write(dosHeader);
       
       Console.WriteLine("Output Stream Length: {0}", outputStream.Length);
-      
-      
+            
       outputStream.Position =0;
       
       for(mutable i = 0; i < 128; i++)
