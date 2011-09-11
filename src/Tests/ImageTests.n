@@ -279,6 +279,22 @@ namespace Tests
     {
       throw NotImplementedException();
     }
+    public ShouldWriteDataDirectoriesImmediatelyAfterOptionalHeaderWritePosition() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteSectionHeadersImmediatelyAfterDataDirectories() : void
+    {
+      throw NotImplementedException();  
+    }
+    public ShouldWriteSectionDataAfterSectionHeaders() : void
+    {
+      throw NotImplementedException();    
+    }
+    public ShouldAlignWrittenSectionsAccordingToFileAlignment() : void
+    {
+      throw NotImplementedException();  
+    }
     private GetImage(imageFile : string) : IImage
     {
       using(def imageStream = System.IO.FileStream(imageFile, FileMode.Open))

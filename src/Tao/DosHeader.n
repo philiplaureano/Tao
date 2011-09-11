@@ -23,11 +23,13 @@ namespace Tao
     {
       get 
          requires Data != null
+         requires Data.Length >= 0x3C
       {
         def reader = BinaryReader(Data);
         _ = Data.Seek(0x3C, SeekOrigin.Begin);
         reader.ReadUInt32();
       }
+      
       set
         requires Data != null
       {
@@ -39,7 +41,7 @@ namespace Tao
     
     public Data : Stream
     {
-         get;set; 
+        get;set; 
     }
   }
 }
