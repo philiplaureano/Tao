@@ -14,7 +14,7 @@ namespace Tao
   public class CoffHeaderWriter : ICoffHeaderWriter
   {
     public Write(header : ICoffHeader, [NotNull] outputStream : Stream) : void
-        ensures outputStream.Length == 24
+        ensures outputStream.Length >= 24
     {
       def writer = BinaryWriter(outputStream);
           

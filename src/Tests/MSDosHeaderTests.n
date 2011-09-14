@@ -122,7 +122,7 @@ namespace Tests
       def outputBytes = array(bytes.Length) : array[byte];
       
       def dosHeader = DosHeader(outputStream);
-      writer.Write(dosHeader);
+      writer.Write(dosHeader, outputStream);
       
       Console.WriteLine("Output Stream Length: {0}", outputStream.Length);
             

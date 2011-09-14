@@ -222,22 +222,23 @@ namespace Tests
         
     public ShouldBeAbleToRoundTripAnEntire32BitImage() : void
     {
-      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-      def image = GetImage(imageFile);
+      //def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      //def image = GetImage(imageFile);
       
-      mutable expectedHash = string.Empty;
+      //mutable expectedHash = string.Empty;
       
-      using(def imageStream = System.IO.FileStream(imageFile, FileMode.Open))
-      {
-        expectedHash = imageStream.GetHash();
-      }
+      //using(def imageStream = System.IO.FileStream(imageFile, FileMode.Open))
+      //{
+      //  expectedHash = imageStream.GetHash();
+      //}
       
-      def outputStream = MemoryStream();
-      def writer = ImageWriter();
-      writer.Write(image, outputStream);
+      //def outputStream = MemoryStream();
+      //def writer = ImageWriter();
+      //writer.Write(image, outputStream);
       
-      def actualHash = outputStream.GetHash();
-      assert actualHash equals expectedHash otherwiseprint "Invalid image";      
+      //def actualHash = outputStream.GetHash();
+      //assert actualHash equals expectedHash otherwiseprint "Invalid image";      
+      throw NotImplementedException();
     }
     public ShouldWriteCorrectOptionalHeaderSizeFor32BitHeaders() : void
     {
@@ -263,11 +264,41 @@ namespace Tests
     {
       throw NotImplementedException();  
     }
-    public ShouldHaveWrittenMSDosHeaderPointingToPositionOfNTHeader() : void
-    {      
-      throw NotImplementedException();
+    public ShouldHaveWrittenMSDosHeaderPointingToPositionOfCoffHeader() : void
+    {           
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def inputImage = GetImage(imageFile);
+      
+      // Write the entire image to the output stream
+      def outputStream = MemoryStream();
+      def writer = ImageWriter();
+      writer.Write(inputImage, outputStream);                  
+            
+      def lfaNew = inputImage.DOSHeader.LfaNew;
+      
+      // Read only up to the size of the COFF header
+      def outputHeaderSize : uint = 24;
+      
+      // The output image should match the input image
+      using(inputStream = FileStream(@"..\..\SampleBinaries\Skeleton.exe", FileMode.Open))
+      {
+        def outputHeaderBlock = GetCoffHeaderData(outputStream, lfaNew, outputHeaderSize);
+        def inputHeaderBlock = GetCoffHeaderData(inputStream, lfaNew, outputHeaderSize);
+        
+        def expectedHash = inputHeaderBlock.GetHash();
+        def actualHash = outputHeaderBlock.GetHash();
+        assert expectedHash equals actualHash otherwiseprint "The output Optional header does not match the given input Optional header";
+      }           
     }
-    public ShouldWriteOptionalHeaderAtlfanewPosition() : void
+    private GetCoffHeaderData(stream : Stream, startPosition : uint, size : uint) : array[byte]
+    {
+      _ = stream.Seek(startPosition, SeekOrigin.Begin);
+      
+      def blockReader = BinaryReader(stream);
+      blockReader.ReadBytes(size :> int);
+    }
+    
+    public ShouldWriteOptionalHeaderAfterCoffHeaderPosition() : void
     {                  
       throw NotImplementedException();
     }
@@ -294,6 +325,10 @@ namespace Tests
     public ShouldAlignWrittenSectionsAccordingToFileAlignment() : void
     {
       throw NotImplementedException();  
+    }
+    public ShouldWriteSectionHeadersThatPointToTheActualPositionOfEachCorrespondingSectionDataBlock() : void
+    {
+      throw NotImplementedException();    
     }
     private GetImage(imageFile : string) : IImage
     {

@@ -13,9 +13,8 @@ namespace Tao
 {
   public class DosHeaderWriter : IDosHeaderWriter
   {
-    public Write([NotNull] header : IDosHeader) : void
+    public  Write(header : IDosHeader, outputStream : Stream) : void
     {   
-      def outputStream = header.Data;
       mutable bytes = array[ // dos header start
 				0x4d : byte, 0x5a, 0x90, 0x00, 0x03, 0x00, 0x00,
 				0x00, 0x04, 0x00, 0x00, 0x00, 0xff, 0xff,
