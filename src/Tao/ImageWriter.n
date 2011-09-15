@@ -27,30 +27,30 @@ namespace Tao
       def coffHeaderWriter = CoffHeaderWriter();
       coffHeaderWriter.Write(coffHeader, outputStream);
       
-      //def standardFieldsWriter = OptionalHeaderStandardFieldsWriter();
-      //def optionalHeader = image.OptionalHeader;
+      def standardFieldsWriter = OptionalHeaderStandardFieldsWriter();
+      def optionalHeader = image.OptionalHeader;
           
-      //match(optionalHeader)
-      //{
-      //  |OptionalHeader.OptionalHeader32 =>
-      //   {
-      //      def currentHeader = optionalHeader :> OptionalHeader.OptionalHeader32;
-      //      def standardFields = currentHeader.StandardFields;
-      //      def ntHeaderWriter = NTHeader32Writer();
+      match(optionalHeader)
+      {
+        |OptionalHeader.OptionalHeader32 =>
+         {
+            def currentHeader = optionalHeader :> OptionalHeader.OptionalHeader32;
+            def standardFields = currentHeader.StandardFields;
+            def ntHeaderWriter = NTHeader32Writer();
             
-      //      standardFieldsWriter.Write(standardFields, outputStream);
-      //      ntHeaderWriter.Write(currentHeader.Header, outputStream);
-      //   }
-      //  |OptionalHeader.OptionalHeader64 =>
-      //   {
-      //      def currentHeader = optionalHeader :> OptionalHeader.OptionalHeader64;
-      //      def standardFields = currentHeader.StandardFields;
-      //      def ntHeaderWriter = NTHeader64Writer();
+            standardFieldsWriter.Write(standardFields, outputStream);
+            ntHeaderWriter.Write(currentHeader.Header, outputStream);
+         }
+        |OptionalHeader.OptionalHeader64 =>
+         {
+            def currentHeader = optionalHeader :> OptionalHeader.OptionalHeader64;
+            def standardFields = currentHeader.StandardFields;
+            def ntHeaderWriter = NTHeader64Writer();
             
-      //      standardFieldsWriter.Write(standardFields, outputStream);
-      //      ntHeaderWriter.Write(currentHeader.Header, outputStream);
-      //   }
-      //}          
+            standardFieldsWriter.Write(standardFields, outputStream);
+            ntHeaderWriter.Write(currentHeader.Header, outputStream);
+         }
+      }          
     }
   }
 }

@@ -300,8 +300,43 @@ namespace Tests
     
     public ShouldWriteOptionalHeaderAfterCoffHeaderPosition() : void
     {                  
-      throw NotImplementedException();
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def inputImage = GetImage(imageFile);
+      
+      // Write the entire image to the output stream
+      def outputStream = MemoryStream();
+      def writer = ImageWriter();
+      writer.Write(inputImage, outputStream);    
+      
+      // Determine the starting offset for the optional header
+      def lfaNew = inputImage.DOSHeader.LfaNew;
+      def coffHeaderSize : uint = 24;
+      def startPosition = lfaNew + coffHeaderSize;
+      
+      // Read the optional header bytes that were written to the output stream
+      // and exclude the data directories
+      _ = outputStream.Seek(startPosition, SeekOrigin.Begin);
+      def optionalHeaderSize = 0x60 : uint;
+      
+      using(inputFile =  FileStream(imageFile, FileMode.Open))
+      {
+        def expectedOptionalHeaderData = GetOptionalHeaderData(lfaNew, optionalHeaderSize, inputFile);
+        def actualOptionalHeaderData = GetOptionalHeaderData(lfaNew, optionalHeaderSize, outputStream);
+        
+        assert expectedOptionalHeaderData.GetHash() equals actualOptionalHeaderData.GetHash() otherwiseprint "Invalid Optional Header";
+      }
     }
+    private GetOptionalHeaderData(lfaNew : uint, optionalHeaderSize : uint, stream : Stream) : array[byte]
+    {
+      def coffHeaderSize : uint = 24;
+      def startPosition = lfaNew + coffHeaderSize;
+      
+      _ = stream.Seek(startPosition, SeekOrigin.Begin);
+      def reader = BinaryReader(stream);
+      
+      reader.ReadBytes(optionalHeaderSize :> int);
+    }
+    
     public ShouldWriteCorrectDateTimeStamp() :  void
     {
       throw NotImplementedException();
@@ -329,6 +364,10 @@ namespace Tests
     public ShouldWriteSectionHeadersThatPointToTheActualPositionOfEachCorrespondingSectionDataBlock() : void
     {
       throw NotImplementedException();    
+    }
+    public ShouldWriteCorrectSectionHeaderSizes() : void
+    {
+      throw NotImplementedException();
     }
     private GetImage(imageFile : string) : IImage
     {
