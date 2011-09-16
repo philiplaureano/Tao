@@ -262,8 +262,28 @@ namespace Tests
     }
     public ShouldWriteNumberOfRvaAndSizesThatCorrespondWithTheNumberOfDataDirectories() : void
     {
-      throw NotImplementedException();  
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def inputImage = GetImage(imageFile);
+      
+      // Write the entire image to the output stream
+      def outputStream = MemoryStream();
+      def writer = ImageWriter();
+      writer.Write(inputImage, outputStream);                  
+            
+      def startPosition = 0xF4;
+      def length = 4;
+      
+      def optionalHeader = inputImage.OptionalHeader :> OptionalHeader.OptionalHeader32;
+      def numberOfDataDirectories : uint = optionalHeader.Header.NumberOfRvaAndSizes;
+      
+      def outputReader = outputStream.GetReader();
+      
+      _ = outputStream.Seek(startPosition, SeekOrigin.Begin);
+      def actualNumberOfDataDirectories = outputReader.ReadUInt32();
+      
+      assert numberOfDataDirectories equals actualNumberOfDataDirectories otherwiseprint "Invalid number of data directories";
     }
+    
     public ShouldHaveWrittenMSDosHeaderPointingToPositionOfCoffHeader() : void
     {           
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
@@ -333,7 +353,7 @@ namespace Tests
       
       reader.ReadBytes(size :> int);
     }
-    
+
     public ShouldWriteCorrectDateTimeStamp() :  void
     {
       throw NotImplementedException();

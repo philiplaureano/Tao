@@ -1,4 +1,5 @@
-﻿using Nemerle.Collections;
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
@@ -11,7 +12,7 @@ namespace Tests
 {
   public class StreamExtensions
   {
-    public static GetHash(this stream : Stream) : string
+    public static GetHash([NotNull] this stream : Stream) : string
     {
       _ = stream.Seek(0, SeekOrigin.Begin);
       def reader = BinaryReader(stream);
@@ -19,6 +20,40 @@ namespace Tests
       def bytes = reader.ReadBytes(streamLength :> int);
       
       bytes.GetHash();
+    }
+    
+    public static GetReader([NotNull] this stream: Stream) : BinaryReader
+    {
+        BinaryReader(stream);
+    }
+    
+    public static ShouldMatch([NotNull] this currentStream : Stream, [NotNull] otherStream : Stream, startPosition : uint, length : uint, 
+    failureMessage : string, params args : array[object]) : void
+    {
+        def matchesOtherStream = currentStream.Matches(otherStream, startPosition, length);
+        when (!matchesOtherStream)
+        {
+            NUnit.Framework.Assert.Fail(failureMessage, args);
+        }
+    }
+    public static Matches([NotNull] this currentStream : Stream, [NotNull] otherStream : Stream, startPosition : uint, length : uint) : bool
+        requires startPosition <= currentStream.Length
+    {
+      def expectedData = currentStream.GetData(startPosition, length);
+      def actualData = otherStream.GetData(startPosition, length);
+      def expectedHash = expectedData.GetHash();
+      def actualHash = actualData.GetHash();
+      
+      expectedHash == actualHash;
+    }
+    
+    public static GetData([NotNull] this currentStream : Stream, startPosition : uint, size : uint) : array[byte]
+        requires startPosition <= currentStream.Length
+    {            
+      _ = currentStream.Seek(startPosition, SeekOrigin.Begin);
+      def reader = BinaryReader(currentStream);
+      
+      reader.ReadBytes(size :> int);
     }
   }
 }
