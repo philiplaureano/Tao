@@ -88,6 +88,7 @@ namespace Tests
       assert ntHeader.LoaderFlags equals 0 otherwiseprint "Invalid LoaderFlags";
       assert ntHeader.NumberOfRvaAndSizes equals 0x10 otherwiseprint "Invalid NumberOfRvaAndSizes";
     }
+    
     public ShouldReadOptionalHeader64() : void
     {
       def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
@@ -222,44 +223,35 @@ namespace Tests
         
     public ShouldBeAbleToRoundTripAnEntire32BitImage() : void
     {
-      //def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-      //def image = GetImage(imageFile);
-      
-      //mutable expectedHash = string.Empty;
-      
-      //using(def imageStream = System.IO.FileStream(imageFile, FileMode.Open))
-      //{
-      //  expectedHash = imageStream.GetHash();
-      //}
-      
-      //def outputStream = MemoryStream();
-      //def writer = ImageWriter();
-      //writer.Write(image, outputStream);
-      
-      //def actualHash = outputStream.GetHash();
-      //assert actualHash equals expectedHash otherwiseprint "Invalid image";      
-      throw NotImplementedException();
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      TestImageRoundTripping(imageFile);
     }
-    public ShouldWriteCorrectOptionalHeaderSizeFor32BitHeaders() : void
-    {
-      throw NotImplementedException();
-    }
-    public ShouldWriteCorrectOptionalHeaderSizeFor64BitHeaders() : void
-    {
-      throw NotImplementedException();
-    }
-    public ShouldWriteNumberOfSymbolsAsZero() : void
-    {
-      throw NotImplementedException();
-    }
-    public ShouldWriteNullPointerToSymbolTable() : void
-    {
-      throw NotImplementedException();
-    }
+    
     public ShouldWriteCorrectNumberOfSectionsThatCorrespondWithTheNumberOfSectionObjectsOnTheImage() : void
     {
-      throw NotImplementedException();
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def inputImage = GetImage(imageFile);
+      
+      // The original image should have two sections
+      assert inputImage.CoffHeader.NumberOfSections equals 2 otherwiseprint "Invalid number of sections in the input image";
+      
+      // The image writer should write "0" sections if we remove
+      // all sections from the input image
+      inputImage.Sections.Clear();
+      
+      def outputStream = MemoryStream();
+      def writer = ImageWriter();
+      writer.Write(inputImage, outputStream);  
+      
+      def startPosition = 0x86;
+      _ = outputStream.Seek(startPosition, SeekOrigin.Begin);
+      
+      def reader = BinaryReader(outputStream);
+      def actualNumberOfSections = reader.ReadUInt16();
+      
+      assert actualNumberOfSections equals 0 otherwiseprint "The number of written sections doesn't match the expected number of sections";
     }
+    
     public ShouldWriteNumberOfRvaAndSizesThatCorrespondWithTheNumberOfDataDirectories() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
@@ -302,21 +294,14 @@ namespace Tests
       // The output image should match the input image
       using(inputStream = FileStream(@"..\..\SampleBinaries\Skeleton.exe", FileMode.Open))
       {
-        def outputHeaderBlock = GetCoffHeaderData(outputStream, lfaNew, outputHeaderSize);
-        def inputHeaderBlock = GetCoffHeaderData(inputStream, lfaNew, outputHeaderSize);
+        def outputHeaderBlock = outputStream.GetData(lfaNew, outputHeaderSize);
+        def inputHeaderBlock = inputStream.GetData(lfaNew, outputHeaderSize);
         
         def expectedHash = inputHeaderBlock.GetHash();
         def actualHash = outputHeaderBlock.GetHash();
         assert expectedHash equals actualHash otherwiseprint "The output Optional header does not match the given input Optional header";
       }           
-    }
-    private GetCoffHeaderData(stream : Stream, startPosition : uint, size : uint) : array[byte]
-    {
-      _ = stream.Seek(startPosition, SeekOrigin.Begin);
-      
-      def blockReader = BinaryReader(stream);
-      blockReader.ReadBytes(size :> int);
-    }
+    }    
     
     public ShouldWriteOptionalHeaderAfterCoffHeaderPosition() : void
     {                  
@@ -340,24 +325,12 @@ namespace Tests
       
       using(inputFile =  FileStream(imageFile, FileMode.Open))
       {
-        def expectedOptionalHeaderData = GetData(startPosition, optionalHeaderSize, inputFile);
-        def actualOptionalHeaderData = GetData(startPosition, optionalHeaderSize, outputStream);
+        def expectedOptionalHeaderData = inputFile.GetData(startPosition, optionalHeaderSize);
+        def actualOptionalHeaderData = outputStream.GetData(startPosition, optionalHeaderSize);
         
         assert expectedOptionalHeaderData.GetHash() equals actualOptionalHeaderData.GetHash() otherwiseprint "Invalid Optional Header";
       }
-    }
-    private GetData(startPosition : uint, size : uint, stream : Stream) : array[byte]
-    {            
-      _ = stream.Seek(startPosition, SeekOrigin.Begin);
-      def reader = BinaryReader(stream);
-      
-      reader.ReadBytes(size :> int);
-    }
-
-    public ShouldWriteCorrectDateTimeStamp() :  void
-    {
-      throw NotImplementedException();
-    }
+    }    
     public ShouldBeAbleToRoundTripAnEntire64BitImage() : void
     {
       throw NotImplementedException();
@@ -378,32 +351,75 @@ namespace Tests
       
       using(inputFile =  FileStream(imageFile, FileMode.Open))
       {
-        def expectedOptionalHeaderData = GetData(startPosition, dataDirectoryBlockLength, inputFile);
-        def actualOptionalHeaderData = GetData(startPosition, dataDirectoryBlockLength, outputStream);
+        def expectedOptionalHeaderData = inputFile.GetData(startPosition, dataDirectoryBlockLength);
+        def actualOptionalHeaderData = outputStream.GetData(startPosition, dataDirectoryBlockLength);
         
         assert expectedOptionalHeaderData.GetHash() equals actualOptionalHeaderData.GetHash() otherwiseprint "The written Data Directories don't match the expected entries";
       }      
     }
+    private TestImageBlockWrite(imageFile : string, startPosition : uint, size : uint, failureMessage : string, params args : array[object]) : void
+    {        
+      def inputImage = GetImage(imageFile);
+      
+      // Write the entire image to the output stream
+      def outputStream = MemoryStream();
+      def writer = ImageWriter();
+      writer.Write(inputImage, outputStream); 
+      
+      using(inputFile =  FileStream(imageFile, FileMode.Open))
+      {
+        def expectedData = inputFile.GetData(startPosition,size);
+        def actualData = outputStream.GetData(startPosition, size);
+                
+        def message = string.Format(failureMessage, args);
+        assert expectedData.GetHash() equals actualData.GetHash() otherwiseprint message;                
+      }     
+    }
+    
     public ShouldWriteSectionHeadersImmediatelyAfterDataDirectories() : void
     {
-      throw NotImplementedException();  
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      
+      def startPosition : uint = 0x178;
+      def length : uint = 0x50;
+      
+      TestImageBlockWrite(imageFile, startPosition, length, "Invalid section header block");
     }
+    
     public ShouldWriteSectionDataAfterSectionHeaders() : void
     {
-      throw NotImplementedException();    
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def inputImage = GetImage(imageFile);
+      
+      foreach(section in inputImage.Sections)
+      {
+        def header = section.Header;
+        def startPosition = header.PointerToRawData;
+        def length = header.SizeOfRawData;
+          
+        TestImageBlockWrite(imageFile, startPosition, length, "Invalid '{0}' section", header.Name);
+      }
     }
-    public ShouldAlignWrittenSectionsAccordingToFileAlignment() : void
+    
+    private TestImageRoundTripping(imageFile : string) : void
     {
-      throw NotImplementedException();  
+      def image = GetImage(imageFile);
+      
+      mutable expectedHash = string.Empty;
+      
+      using(def imageStream = System.IO.FileStream(imageFile, FileMode.Open))
+      {
+        expectedHash = imageStream.GetHash();
+      }
+      
+      def outputStream = MemoryStream();
+      def writer = ImageWriter();
+      writer.Write(image, outputStream);
+      
+      def actualHash = outputStream.GetHash();
+      assert actualHash equals expectedHash otherwiseprint "Invalid image";  
     }
-    public ShouldWriteSectionHeadersThatPointToTheActualPositionOfEachCorrespondingSectionDataBlock() : void
-    {
-      throw NotImplementedException();    
-    }
-    public ShouldWriteCorrectSectionHeaderSizes() : void
-    {
-      throw NotImplementedException();
-    }
+    
     private GetImage(imageFile : string) : IImage
     {
       using(def imageStream = System.IO.FileStream(imageFile, FileMode.Open))

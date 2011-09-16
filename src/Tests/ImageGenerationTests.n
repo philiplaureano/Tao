@@ -1,0 +1,46 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class ImageGenerationTests
+  {
+    public ShouldWriteCorrectOptionalHeaderSizeFor32BitHeaders() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteCorrectOptionalHeaderSizeFor64BitHeaders() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteNumberOfSymbolsAsZero() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteNullPointerToSymbolTable() : void
+    {
+      throw NotImplementedException();
+    }    
+    public ShouldWriteCorrectDateTimeStamp() :  void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldAlignWrittenSectionsAccordingToFileAlignment() : void
+    {
+      throw NotImplementedException();  
+    }
+    public ShouldWriteSectionHeadersThatPointToTheActualPositionOfEachCorrespondingSectionDataBlock() : void
+    {
+      throw NotImplementedException();    
+    }
+    public ShouldWriteCorrectSectionHeaderSizes() : void
+    {
+      throw NotImplementedException();
+    }
+  }
+}

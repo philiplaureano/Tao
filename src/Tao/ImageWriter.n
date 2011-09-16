@@ -18,12 +18,17 @@ namespace Tao
       def dosHeader = image.DOSHeader;
       def dosHeaderWriter = DosHeaderWriter();
       dosHeaderWriter.Write(dosHeader, outputStream);
-          
+                      
       // Seek the COFF header position
       def lfaNew = dosHeader.LfaNew;
       _ = outputStream.Seek(lfaNew, SeekOrigin.Begin);
           
       def coffHeader = image.CoffHeader;
+      
+      // Write the number of sections to the COFF header
+      def sections = image.Sections;
+      coffHeader.NumberOfSections = sections.Count :> ushort;
+      
       def coffHeaderWriter = CoffHeaderWriter();
       coffHeaderWriter.Write(coffHeader, outputStream);
       
@@ -59,8 +64,29 @@ namespace Tao
          }
       }                
       
+      // Write the data directories
       def dataDirectoryWriter = DataDirectoryWriter();
       dataDirectoryWriter.Write(image.DataDirectories, outputStream);
+      
+      // Write the sections      
+      def sectionHeaderWriter = SectionHeaderWriter();
+      def sectionHeaders = sections.Select(s => s.Header);
+      sectionHeaderWriter.Write(sectionHeaders, outputStream);
+      
+      def writer = BinaryWriter(outputStream);
+      foreach(section in sections)
+      {
+          def sectionData = section.Data;
+          def header = section.Header;
+          def reader = BinaryReader(sectionData);
+                              
+          def length = header.SizeOfRawData;                    
+          def sectionBytes = reader.ReadBytes(length :> int);
+          
+          def startPosition = header.PointerToRawData;
+          _ = outputStream.Seek(startPosition, SeekOrigin.Begin);
+          writer.Write(sectionBytes);
+      }
     }
   }
 }

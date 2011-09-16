@@ -82,6 +82,9 @@
     <Compile Include="DataDirectoryTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ImageGenerationTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ImageTests.n">
       <SubType>Code</SubType>
     </Compile>
