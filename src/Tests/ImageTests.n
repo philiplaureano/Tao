@@ -320,21 +320,18 @@ namespace Tests
       
       using(inputFile =  FileStream(imageFile, FileMode.Open))
       {
-        def expectedOptionalHeaderData = GetOptionalHeaderData(lfaNew, optionalHeaderSize, inputFile);
-        def actualOptionalHeaderData = GetOptionalHeaderData(lfaNew, optionalHeaderSize, outputStream);
+        def expectedOptionalHeaderData = GetData(startPosition, optionalHeaderSize, inputFile);
+        def actualOptionalHeaderData = GetData(startPosition, optionalHeaderSize, outputStream);
         
         assert expectedOptionalHeaderData.GetHash() equals actualOptionalHeaderData.GetHash() otherwiseprint "Invalid Optional Header";
       }
     }
-    private GetOptionalHeaderData(lfaNew : uint, optionalHeaderSize : uint, stream : Stream) : array[byte]
-    {
-      def coffHeaderSize : uint = 24;
-      def startPosition = lfaNew + coffHeaderSize;
-      
+    private GetData(startPosition : uint, size : uint, stream : Stream) : array[byte]
+    {            
       _ = stream.Seek(startPosition, SeekOrigin.Begin);
       def reader = BinaryReader(stream);
       
-      reader.ReadBytes(optionalHeaderSize :> int);
+      reader.ReadBytes(size :> int);
     }
     
     public ShouldWriteCorrectDateTimeStamp() :  void
@@ -347,7 +344,25 @@ namespace Tests
     }
     public ShouldWriteDataDirectoriesImmediatelyAfterOptionalHeaderWritePosition() : void
     {
-      throw NotImplementedException();
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def inputImage = GetImage(imageFile);
+      
+      // Write the entire image to the output stream
+      def outputStream = MemoryStream();
+      def writer = ImageWriter();
+      writer.Write(inputImage, outputStream);    
+      
+      // Set the expected start position of the first data directory
+      def startPosition : uint = 0xF8;
+      def dataDirectoryBlockLength : uint = 0x80;
+      
+      using(inputFile =  FileStream(imageFile, FileMode.Open))
+      {
+        def expectedOptionalHeaderData = GetData(startPosition, dataDirectoryBlockLength, inputFile);
+        def actualOptionalHeaderData = GetData(startPosition, dataDirectoryBlockLength, outputStream);
+        
+        assert expectedOptionalHeaderData.GetHash() equals actualOptionalHeaderData.GetHash() otherwiseprint "The written Data Directories don't match the expected entries";
+      }      
     }
     public ShouldWriteSectionHeadersImmediatelyAfterDataDirectories() : void
     {

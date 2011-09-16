@@ -13,7 +13,7 @@ namespace Tao
 {  
   public class ImageWriter
   {
-    public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : void        
+    public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : void
     {
       def dosHeader = image.DOSHeader;
       def dosHeaderWriter = DosHeaderWriter();
@@ -30,6 +30,7 @@ namespace Tao
       def standardFieldsWriter = OptionalHeaderStandardFieldsWriter();
       def optionalHeader = image.OptionalHeader;
           
+      def directoryCount = image.DataDirectories.Count :> uint;
       match(optionalHeader)
       {
         |OptionalHeader.OptionalHeader32 =>
@@ -38,6 +39,9 @@ namespace Tao
             def standardFields = currentHeader.StandardFields;
             def ntHeaderWriter = NTHeader32Writer();
             
+            // Make sure that the number of directories is consistent with 
+            // the value in the header
+            currentHeader.Header.NumberOfRvaAndSizes = directoryCount;
             standardFieldsWriter.Write(standardFields, outputStream);
             ntHeaderWriter.Write(currentHeader.Header, outputStream);
          }
@@ -47,10 +51,16 @@ namespace Tao
             def standardFields = currentHeader.StandardFields;
             def ntHeaderWriter = NTHeader64Writer();
             
+            // Make sure that the number of directories is consistent with 
+            // the value in the header
+            currentHeader.Header.NumberOfRvaAndSizes = directoryCount;
             standardFieldsWriter.Write(standardFields, outputStream);
             ntHeaderWriter.Write(currentHeader.Header, outputStream);
          }
-      }          
+      }                
+      
+      def dataDirectoryWriter = DataDirectoryWriter();
+      dataDirectoryWriter.Write(image.DataDirectories, outputStream);
     }
   }
 }
