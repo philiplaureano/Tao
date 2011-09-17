@@ -23,6 +23,11 @@ namespace Tests.Macros
     UnitTestFixtureImpl.DoGlobalTransform(Macros.ImplicitCTX())
   }  
   
+  macro assert_condition(exp1, errorMessage)
+  syntax("assert", exp1, "istrue", "otherwiseprint", errorMessage)
+  {
+    <[NUnit.Framework.Assert.IsTrue( $exp1, $errorMessage)]>;  
+  }
   macro assert_equals(exp1,exp2, errorMessage) 
   syntax("assert", exp1, "equals", exp2, "otherwiseprint", errorMessage)
   {

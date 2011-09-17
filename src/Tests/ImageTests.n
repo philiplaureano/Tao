@@ -7,6 +7,7 @@ using Tao.Interfaces;
 using Tests.Macros;
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -224,7 +225,8 @@ namespace Tests
     public ShouldBeAbleToRoundTripAnEntire32BitImage() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-      TestImageRoundTripping(imageFile);
+      def outputFile = "output32.exe";
+      TestImageRoundTripping(imageFile, outputFile);
     }
     
     public ShouldWriteCorrectNumberOfSectionsThatCorrespondWithTheNumberOfSectionObjectsOnTheImage() : void
@@ -333,8 +335,11 @@ namespace Tests
     }    
     public ShouldBeAbleToRoundTripAnEntire64BitImage() : void
     {
-      throw NotImplementedException();
+      def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
+      def outputFile = "output64.exe";
+      TestImageRoundTripping(imageFile, outputFile);
     }
+    
     public ShouldWriteDataDirectoriesImmediatelyAfterOptionalHeaderWritePosition() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
@@ -401,23 +406,33 @@ namespace Tests
       }
     }
     
-    private TestImageRoundTripping(imageFile : string) : void
+    private TestImageRoundTripping(imageFile : string, outputFile : string) : void
     {
       def image = GetImage(imageFile);
+           
       
-      mutable expectedHash = string.Empty;
-      
-      using(def imageStream = System.IO.FileStream(imageFile, FileMode.Open))
+      using(def outputStream = FileStream(outputFile, FileMode.Create))
       {
-        expectedHash = imageStream.GetHash();
-      }
+        def writer = ImageWriter();
+        writer.Write(image, outputStream);
+                        
+        outputStream.Close();      
+      }      
       
-      def outputStream = MemoryStream();
-      def writer = ImageWriter();
-      writer.Write(image, outputStream);
+      def info = ProcessStartInfo();
+                
+      info.FileName = outputFile;
+      info.RedirectStandardOutput = true;
+      info.UseShellExecute = false;
+        
+      mutable exitCode : int = int.MinValue;
+      using(def process = Process.Start(info))
+      {
+          process.WaitForExit();
+          exitCode = process.ExitCode;
+      }                
       
-      def actualHash = outputStream.GetHash();
-      assert actualHash equals expectedHash otherwiseprint "Invalid image";  
+      assert exitCode equals 0 otherwiseprint "Invalid Image";
     }
     
     private GetImage(imageFile : string) : IImage

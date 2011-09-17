@@ -87,6 +87,47 @@ namespace Tests
       def reader = DosHeaderReader();
       _ = reader.Read(stream);     
     }		
+    public ShouldWriteLfaNewValue() : void
+    {
+      def bytes = array[ // dos header start
+				0x4d : byte, 0x5a, 0x90, 0x00, 0x03, 0x00, 0x00,
+				0x00, 0x04, 0x00, 0x00, 0x00, 0xff, 0xff,
+				0x00, 0x00, 0xb8, 0x00, 0x00, 0x00, 0x00,
+				0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00,
+				0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+				0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+				0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+				0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+				0x00, 0x00, 0x00, 0x00,
+				// lfanew
+				0x80, 0x00, 0x00, 0x00,
+				// dos header end
+				0x0e, 0x1f, 0xba, 0x0e, 0x00, 0xb4, 0x09,
+				0xcd, 0x21, 0xb8, 0x01, 0x4c, 0xcd, 0x21,
+				0x54, 0x68, 0x69, 0x73, 0x20, 0x70, 0x72,
+				0x6f, 0x67, 0x72, 0x61, 0x6d, 0x20, 0x63,
+				0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x20, 0x62,
+				0x65, 0x20, 0x72, 0x75, 0x6e, 0x20, 0x69,
+				0x6e, 0x20, 0x44, 0x4f, 0x53, 0x20, 0x6d,
+				0x6f, 0x64, 0x65, 0x2e, 0x0d, 0x0d, 0x0a,
+				0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+				0x00];
+		
+      def headerStream = MemoryStream(bytes);
+      def header = DosHeader(headerStream);
+      header.LfaNew = 0xF0;
+      
+      def outputStream = MemoryStream();
+      def writer = DosHeaderWriter();
+      writer.Write(header, outputStream);
+      
+      // The written output stream should have the correct LfaNew value
+      _ = outputStream.Seek(0x3C, SeekOrigin.Begin);
+      def reader = BinaryReader(outputStream);
+      def actualLfaNew = reader.ReadUInt32();
+      
+      assert actualLfaNew equals header.LfaNew otherwiseprint "Invalid LfaNew value";
+    }
     
     public ShouldMatchGivenHeaderBytesWhenWrittenToTargetStream() : void
     {	    
@@ -119,20 +160,16 @@ namespace Tests
       def writer = DosHeaderWriter();
       def outputStream = MemoryStream();
 	       	  
-      def outputBytes = array(bytes.Length) : array[byte];
-      
-      def dosHeader = DosHeader(outputStream);
+      def outputBytes = array(bytes.Length) : array[byte];      
+      def dosHeader = DosHeader(MemoryStream(bytes));
       writer.Write(dosHeader, outputStream);
+      
+      _ = outputStream.Read(outputBytes, 0, bytes.Length);
       
       Console.WriteLine("Output Stream Length: {0}", outputStream.Length);
             
-      outputStream.Position =0;
-      
-      for(mutable i = 0; i < 128; i++)
-      {   
-        def currentByte = outputStream.ReadByte() :> byte;        
-        assert bytes[i] equals currentByte otherwiseprint "Invalid MS-DOS header at byte position";
-      }
-    }	   
+      def actualHash = outputStream.GetHash();
+      assert expectedHash equals actualHash otherwiseprint "Invalid DOS header";
+    }     
   }
 }
