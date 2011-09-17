@@ -1,0 +1,117 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tests.Macros;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class CLIHeaderTests
+  {
+    public ShouldReadCb() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadMajorRuntimeVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadMinorRuntimeVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadMetadataRva() : void
+    {
+      throw NotImplementedException();  
+    }
+    public ShouldReadFlags() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadResourcesRva() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadStrongNameSignature() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadCodeManagerTableAsZero() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadVTableFixups() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadExportAddressTableJumpsAsZero() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadManagedNativeHeaderAsZero() : void
+    {
+      throw NotImplementedException();  
+    }    
+    public ShouldWriteCb() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteMajorRuntimeVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteMinorRuntimeVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteMetadataRva() : void
+    {
+      throw NotImplementedException();  
+    }
+    public ShouldWriteFlags() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteResourcesRva() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteStrongNameSignature() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteCodeManagerTableAsZero() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteVTableFixups() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteExportAddressTableJumpsAsZero() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteManagedNativeHeaderAsZero() : void
+    {
+      throw NotImplementedException();  
+    }
+    public ShouldWriteVTableFixupsInAReadWriteSectionOfTheFile() : void
+    {
+      throw NotImplementedException();  
+    }
+    public ShouldAlwaysHaveEitherAMethodDefTokenOrAFileTokenAsTheEntryPointForTheAssembly() : void
+    {
+      throw NotImplementedException();    
+    }
+    
+    public ShouldRaiseErrorIfEntryPointTokenIsInvalid() : void
+        expects InvalidOperationException
+    {
+      throw NotImplementedException();
+    }
+  }
+}

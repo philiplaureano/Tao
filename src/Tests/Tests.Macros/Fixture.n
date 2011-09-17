@@ -28,7 +28,7 @@ namespace Tests.Macros
   {
     <[NUnit.Framework.Assert.IsTrue( $exp1, $errorMessage)]>;  
   }
-  macro assert_equals(exp1,exp2, errorMessage) 
+      macro assert_equals(exp1,exp2, errorMessage) 
   syntax("assert", exp1, "equals", exp2, "otherwiseprint", errorMessage)
   {
     <[NUnit.Framework.Assert.AreEqual( $exp2 ,$exp1, $errorMessage )]>;

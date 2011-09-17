@@ -10,6 +10,18 @@ namespace Tests
 {
   public class ImageGenerationTests
   {
+    public ShouldHaveCorrectDefaultCoffHeaderCharacteristicsFor32BitImages() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldHaveCorrectDefaultCoffHeaderCharacteristicsFor64BitImages() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldBeAbleToGenerateDefaultImportDirectory() : void
+    {
+      throw NotImplementedException();  
+    }
     public ShouldWriteCorrectOptionalHeaderSizeFor32BitHeaders() : void
     {
       throw NotImplementedException();
@@ -41,6 +53,10 @@ namespace Tests
     public ShouldWriteCorrectSectionHeaderSizes() : void
     {
       throw NotImplementedException();
+    }
+    public ShouldSetTheDllSectionFlagWhenCreatingNetModulesAndDLLLibraries() : void
+    {
+        throw NotImplementedException();
     }
   }
 }

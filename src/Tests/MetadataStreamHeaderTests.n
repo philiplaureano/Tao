@@ -1,0 +1,38 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{  
+  public class MetadataStreamHeaderTests
+  {
+    public ShouldReadName() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadSize() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadOffset() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteName() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteSize() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteOffset() : void
+    {
+      throw NotImplementedException();
+    }        
+  }
+}

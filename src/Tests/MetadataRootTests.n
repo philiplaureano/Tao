@@ -1,0 +1,82 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class MetadataRootTests
+  {
+    public ShouldWriteReservedFieldAsZero() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldSkipReadingReservedField() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldPadWrittenVersionStringToNearestFourByteBoundary() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadSignature() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadMajorVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadMinorVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadLength() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadVersionString() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadNumberOfStreams() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldReadAttachedStreamHeaders() : void
+    {
+      throw NotImplementedException();
+    }        
+    public ShouldWriteSignature() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteMajorVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteMinorVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteLength() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteVersionString() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteNumberOfStreams() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteCorrectOffsetForAttachedStreamHeaders() : void
+    {
+      throw NotImplementedException();
+    }
+  }
+}

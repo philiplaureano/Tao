@@ -21,6 +21,10 @@ namespace Tests
     public ShouldWriteStartupStubForIA64Machine() : void
     {
       throw NotImplementedException();
+    }    
+    public ShouldWriteStartupStubImmediatelyAfterImportDirectoryPosition() : void
+    {
+      throw NotImplementedException();
     }
   }
 }
