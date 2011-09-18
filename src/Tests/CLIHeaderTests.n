@@ -1,9 +1,12 @@
 ﻿using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao;
+using Tao.Interfaces;
 using Tests.Macros;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,48 +16,76 @@ namespace Tests
   {
     public ShouldReadCb() : void
     {
-      throw NotImplementedException();
-    }
+      TestRead("Cb", 0x48 :> uint);
+    }           
     public ShouldReadMajorRuntimeVersion() : void
     {
-      throw NotImplementedException();
-    }
+      TestRead("MajorRuntimeVersion", 2 :> ushort);
+    }    
     public ShouldReadMinorRuntimeVersion() : void
-    {
-      throw NotImplementedException();
-    }
+    {      
+      TestRead("MinorRuntimeVersion", 5 :> ushort);
+    }    
     public ShouldReadMetadataRva() : void
     {
-      throw NotImplementedException();  
-    }
+      TestRead("MetadataRva", 0x00004248 :> uint);
+    }    
+    public ShouldReadMetadataSize() : void
+    {
+      TestRead("MetadataSize", 0x0000A68C :> uint);
+    }    
     public ShouldReadFlags() : void
     {
-      throw NotImplementedException();
+      TestRead("Flags", 0 :> RuntimeFlags);
     }
     public ShouldReadResourcesRva() : void
     {
-      throw NotImplementedException();
+      TestRead("ResourcesRva", 0 :> uint);
     }
-    public ShouldReadStrongNameSignature() : void
+    public ShouldReadResourcesSize() : void
     {
-      throw NotImplementedException();
+      TestRead("ResourcesSize", 0 :> uint);
     }
-    public ShouldReadCodeManagerTableAsZero() : void
+    public ShouldReadStrongNameSignatureRva() : void
     {
-      throw NotImplementedException();
+      TestRead("StrongNameSignatureRva", 0 :> uint);
     }
-    public ShouldReadVTableFixups() : void
+    public ShouldReadStrongNameSignatureSize() : void
     {
-      throw NotImplementedException();
+      TestRead("StrongNameSignatureSize", 0 :> uint);
     }
-    public ShouldReadExportAddressTableJumpsAsZero() : void
+    public ShouldReadCodeManagerTableRvaAsZero() : void
     {
-      throw NotImplementedException();
+      TestRead("CodeManagerTableRva", 0 :> uint);
     }
-    public ShouldReadManagedNativeHeaderAsZero() : void
+    public ShouldReadCodeManagerTableSizeAsZero() : void
     {
-      throw NotImplementedException();  
+      TestRead("CodeManagerTableSize", 0 :> uint);
+    }
+    public ShouldReadVTableFixupsRva() : void
+    {
+      TestRead("VTableFixupsRva", 0x0000E930 :> uint);
     }    
+    public ShouldReadVTableFixupsSize() : void
+    {
+      TestRead("VTableFixupsSize", 0x000004E8 :> uint);
+    }
+    public ShouldReadExportAddressTableJumpsRvaAsZero() : void
+    {
+      TestRead("ExportAddressTableJumpsRva", 0 :> uint);
+    }
+    public ShouldReadExportAddressTableJumpsSizeAsZero() : void
+    {
+      TestRead("ExportAddressTableJumpsSize", 0 :> uint);
+    }    
+    public ShouldReadManagedNativeHeaderRvaAsZero() : void
+    {
+      TestRead("ManagedNativeHeaderRva", 0 :> uint);
+    }   
+    public ShouldReadManagedNativeHeaderSizeAsZero() : void
+    {
+      TestRead("ManagedNativeHeaderSize", 0 :> uint);
+    }   
     public ShouldWriteCb() : void
     {
       throw NotImplementedException();
@@ -112,6 +143,66 @@ namespace Tests
         expects InvalidOperationException
     {
       throw NotImplementedException();
+    }
+    
+    private TestRead[TValue](propertyName : string, expectedValue : TValue) : void
+    {
+      Tester.TestRead(propertyName, expectedValue, TestHeaderRead);
+    }
+    
+    private TestHeaderRead(doTest: ICLIHeader-> void) : void
+    {
+      def bytes = GetSampleHeader();
+      def inputStream = MemoryStream(bytes);
+      def reader = CLIHeaderReader();
+      def header = reader.Read(inputStream);
+      
+      doTest(header);
+    }
+    private GetSampleHeader() : array[byte]
+    {
+      def data = array[
+        // Cb (count of bytes) = 0x48
+	    0x48 : byte, 0x00, 0x00, 0x00, 
+	    // MajorRuntimeVersion = 2
+	    0x02, 0x00, 
+	    // MinorRuntimeVersion = 5
+	    0x05, 0x00, 
+	    // Metadata RVA = 0x00004248
+	    0x48, 0x42, 0x00, 0x00, 
+	    // Metadata Size = 0xA68C
+	    0x8C, 0xA6, 0x00, 0x00,
+	    // Flags = 0
+	    0x00, 0x00, 0x00, 0x00, 
+	    // EntryPointToken = 0x06000031
+	    0x31, 0x00, 0x00, 0x06, 
+	    // Resources RVA = 0
+	    0x00, 0x00, 0x00, 0x00, 
+	    // Resources Size = 0
+	    0x00, 0x00, 0x00, 0x00,
+	    // StrongNameSignature RVA = 0
+	    0x00, 0x00, 0x00, 0x00, 
+	    // StrongNameSignature Size = 0
+	    0x00, 0x00, 0x00, 0x00, 
+	    // CodeManagerTable Rva = 0
+	    0x00, 0x00, 0x00, 0x00, 
+	    // CodeManagerTable Size = 0
+	    0x00, 0x00, 0x00, 0x00,
+	    // VTableFixups RVA = 0x0000E930
+	    0x30, 0xE9, 0x00, 0x00, 
+	    // VTableFixups Size = 0000004E8
+	    0xE8, 0x04, 0x00, 0x00, 
+	    // ExportAddressTableJumps RVA = 0
+	    0x00, 0x00, 0x00, 0x00, 
+	    // ExportAddressTableJumps Size = 0  
+	    0x00, 0x00, 0x00, 0x00,
+	    // ManagedNativeHeader RVA = 0
+	    0x00, 0x00, 0x00, 0x00, 
+	    // ManagedNativeHeader Size = 0
+	    0x00, 0x00, 0x00, 0x00
+        ];
+        
+      data;
     }
   }
 }

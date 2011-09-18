@@ -132,6 +132,12 @@
     <Compile Include="Machine.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\ICLIHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\RuntimeFlags.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="OptionalHeader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -147,6 +153,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Metadata" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(Nemerle)\Nemerle.MSBuild.targets" />

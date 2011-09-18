@@ -76,6 +76,9 @@
     </MacroReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlobHeapTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ByteArrayExtensions.n">
       <SubType>Code</SubType>
     </Compile>
@@ -136,6 +139,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StringsHeapTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tester.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UserStringsTest.n">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

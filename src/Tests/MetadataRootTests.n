@@ -1,7 +1,7 @@
 ﻿using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
-
+using Tests.Macros;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,6 +77,11 @@ namespace Tests
     public ShouldWriteCorrectOffsetForAttachedStreamHeaders() : void
     {
       throw NotImplementedException();
+    }
+    public ShouldThrowBadImageFormatExceptionIfSignatureNotFound() : void
+        expects BadImageFormatException
+    {
+        throw NotImplementedException();
     }
   }
 }
