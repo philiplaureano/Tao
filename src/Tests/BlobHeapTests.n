@@ -1,0 +1,22 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{  
+  public class BlobHeapTests
+  {
+      public ShouldBeAbleToReadBlobBytesFromGivenIndex() : void
+      {
+          throw NotImplementedException();
+      }
+      public ShouldAutomaticallyEncodeBlobSizeWhenWritingBlobFromGivenBytes() : void
+      {
+          throw NotImplementedException();
+      }
+  }
+}

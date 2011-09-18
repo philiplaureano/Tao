@@ -101,6 +101,9 @@
     <Compile Include="Metadata\CLIHeaderReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\CLIHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NTHeader.n">
       <SubType>Code</SubType>
     </Compile>

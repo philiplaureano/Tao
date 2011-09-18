@@ -1,0 +1,35 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Interfaces
+{
+  public interface ICLIHeader
+  {
+    Cb : uint  { get; set; }
+    MajorRuntimeVersion : ushort { get; set; }
+    MinorRuntimeVersion : ushort { get; set; }
+    MetadataRva : uint { get; set; }
+    MetadataSize : uint { get; set; }
+    Flags : RuntimeFlags { get; set; }
+    EntryPointToken : uint { get; set; }      
+    ResourcesRva : uint { get; set; }
+    ResourcesSize : uint { get; set; }
+    StrongNameSignatureRva : uint { get; set; }
+    StrongNameSignatureSize : uint { get; set; }
+    CodeManagerTableRva : uint { get; set; }
+    CodeManagerTableSize : uint { get; set; }
+    VTableFixupsRva : uint { get; set; }
+    VTableFixupsSize : uint { get; set; }
+    ExportAddressTableJumpsRva : uint { get; set; }
+    ExportAddressTableJumpsSize : uint { get; set; }
+    ManagedNativeHeaderRva : uint { get; set; }
+    ManagedNativeHeaderSize : uint { get; set; }
+  }
+}

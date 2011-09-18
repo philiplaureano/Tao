@@ -88,48 +88,76 @@ namespace Tests
     }   
     public ShouldWriteCb() : void
     {
-      throw NotImplementedException();
-    }
+      TestDwordWrite("Cb");
+    }        
     public ShouldWriteMajorRuntimeVersion() : void
     {
-      throw NotImplementedException();
+      TestWordWrite("MajorRuntimeVersion");
     }
     public ShouldWriteMinorRuntimeVersion() : void
     {
-      throw NotImplementedException();
-    }
+      TestWordWrite("MinorRuntimeVersion");
+    }    
     public ShouldWriteMetadataRva() : void
     {
-      throw NotImplementedException();  
+      TestDwordWrite("MetadataRva");  
+    }
+    public ShouldWriteMetadataSize() : void
+    {
+      TestDwordWrite("MetadataSize"); 
     }
     public ShouldWriteFlags() : void
     {
-      throw NotImplementedException();
-    }
+      TestWrite("Flags", RuntimeFlags.ILOnly);
+    }    
     public ShouldWriteResourcesRva() : void
     {
-      throw NotImplementedException();
+      TestDwordWrite("ResourcesRva");
     }
-    public ShouldWriteStrongNameSignature() : void
+    public ShouldWriteResourcesSize() : void
     {
-      throw NotImplementedException();
+      TestDwordWrite("ResourcesSize");
     }
-    public ShouldWriteCodeManagerTableAsZero() : void
+    public ShouldWriteStrongNameSignatureRva() : void
     {
-      throw NotImplementedException();
+      TestDwordWrite("StrongNameSignatureRva");
     }
-    public ShouldWriteVTableFixups() : void
+    public ShouldWriteStrongNameSignatureSize() : void
     {
-      throw NotImplementedException();
+      TestDwordWrite("StrongNameSignatureSize");
     }
-    public ShouldWriteExportAddressTableJumpsAsZero() : void
+    public ShouldWriteCodeManagerTableRvaAsZero() : void
     {
-      throw NotImplementedException();
+      TestDwordWrite("CodeManagerTableRva");
     }
-    public ShouldWriteManagedNativeHeaderAsZero() : void
+    public ShouldWriteCodeManagerTableSizeAsZero() : void
     {
-      throw NotImplementedException();  
+      TestDwordWrite("CodeManagerTableSize");
     }
+    public ShouldWriteVTableFixupsRva() : void
+    {
+      TestDwordWrite("VTableFixupsRva");
+    }
+    public ShouldWriteVTableFixupsSize() : void
+    {
+      TestDwordWrite("VTableFixupsSize");
+    }    
+    public ShouldWriteExportAddressTableJumpsRvaAsZero() : void
+    {
+      TestDwordWrite("ExportAddressTableJumpsRva");
+    }
+    public ShouldWriteExportAddressTableJumpsSizeAsZero() : void
+    {
+      TestDwordWrite("ExportAddressTableJumpsSize");
+    }
+    public ShouldWriteManagedNativeHeaderSizeAsZero() : void
+    {
+      TestDwordWrite("ManagedNativeHeaderSize");
+    }    
+    public ShouldWriteManagedNativeHeaderRvaAsZero() : void
+    {
+      TestDwordWrite("ManagedNativeHeaderRva");
+    }    
     public ShouldWriteVTableFixupsInAReadWriteSectionOfTheFile() : void
     {
       throw NotImplementedException();  
@@ -144,7 +172,89 @@ namespace Tests
     {
       throw NotImplementedException();
     }
+    private TestDwordWrite(propertyName : string) : void
+    {
+      TestWrite(propertyName, 0x42 :> uint);
+    }
+    private TestWordWrite(propertyName : string) : void
+    {
+      TestWrite(propertyName, 0x42 :> ushort);
+    }
+    private TestWrite(propertyName: string, expectedValue : RuntimeFlags) : void
+    {
+      def readValue = fun(targetOffset : uint, reader: BinaryReader) : RuntimeFlags
+        {
+            def stream = reader.BaseStream;
+            _ = stream.Seek(targetOffset :> int, SeekOrigin.Begin);
+            reader.ReadUInt32() :> RuntimeFlags
+        }
+        
+      TestWrite(propertyName, expectedValue, readValue);
+    } 
     
+    private TestWrite(propertyName: string, expectedValue : uint) : void
+    {
+      def readValue = fun(targetOffset : uint, reader: BinaryReader) : uint
+        {
+            def stream = reader.BaseStream;
+            _ = stream.Seek(targetOffset :> int, SeekOrigin.Begin);
+            reader.ReadUInt32();
+        }
+        
+      TestWrite(propertyName, expectedValue, readValue);
+    }    
+    private TestWrite(propertyName: string, expectedValue : ushort) : void
+    {
+      def readValue = fun(targetOffset : uint, reader: BinaryReader) : ushort
+        {
+            def stream = reader.BaseStream;
+            _ = stream.Seek(targetOffset :> int, SeekOrigin.Begin);
+            reader.ReadUInt16();
+        }
+        
+      TestWrite(propertyName, expectedValue, readValue);
+    }
+    private TestWrite[TValue](propertyName : string, expectedValue : TValue, readValue: uint * BinaryReader->TValue) : void
+    {
+      def offsetMap = Dictionary.[string, uint]();
+      offsetMap["Cb"] = 0;
+      offsetMap["MajorRuntimeVersion"] = 4;
+      offsetMap["MinorRuntimeVersion"] = 6;
+      offsetMap["MetadataRva"] = 8;
+      offsetMap["MetadataSize"] = 12;
+      offsetMap["Flags"] = 16;
+      offsetMap["EntryPointToken"] = 20;
+      offsetMap["ResourcesRva"] = 24;
+      offsetMap["ResourcesSize"] = 28;
+      offsetMap["StrongNameSignatureRva"] = 32;
+      offsetMap["StrongNameSignatureSize"] = 36;
+      offsetMap["CodeManagerTableRva"] = 40;
+      offsetMap["CodeManagerTableSize"] = 44;
+      offsetMap["VTableFixupsRva"] = 48;
+      offsetMap["VTableFixupsSize"] = 52;
+      offsetMap["ExportAddressTableJumpsRva"] = 56;
+      offsetMap["ExportAddressTableJumpsSize"] = 60;
+      offsetMap["ManagedNativeHeaderRva"] = 64;
+      offsetMap["ManagedNativeHeaderSize"] = 68;
+      
+      def targetOffset = offsetMap[propertyName];
+      def readActualValue = fun(reader: BinaryReader) : TValue
+      {
+          readValue(targetOffset, reader);
+      }     
+      def createHeader = fun() : ICLIHeader
+      {
+          CLIHeader();
+      }
+        
+      def writeValue = fun(header : ICLIHeader, outputStream : Stream) : void
+      {
+          def writer = CLIHeaderWriter();
+          writer.Write(header, outputStream);  
+      }
+        
+      Tester.TestWrite(propertyName, expectedValue, createHeader, readActualValue, writeValue);
+    }
     private TestRead[TValue](propertyName : string, expectedValue : TValue) : void
     {
       Tester.TestRead(propertyName, expectedValue, TestHeaderRead);

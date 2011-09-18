@@ -1,0 +1,49 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class CLIHeaderWriter
+  {
+      public Write([NotNull] header : ICLIHeader, [NotNull] outputStream : Stream) : void
+      {
+          def writer = BinaryWriter(outputStream);
+          writer.Write(header.Cb);
+          writer.Write(header.MajorRuntimeVersion);
+          writer.Write(header.MinorRuntimeVersion);
+          
+          writer.Write(header.MetadataRva);
+          writer.Write(header.MetadataSize);
+          
+          writer.Write(header.Flags :> uint);
+          writer.Write(header.EntryPointToken);
+          
+          writer.Write(header.ResourcesRva);
+          writer.Write(header.ResourcesSize);
+          
+          writer.Write(header.StrongNameSignatureRva);
+          writer.Write(header.StrongNameSignatureSize);
+          
+          writer.Write(header.CodeManagerTableRva);
+          writer.Write(header.CodeManagerTableSize);
+          
+          writer.Write(header.VTableFixupsRva);
+          writer.Write(header.VTableFixupsSize);
+          
+          writer.Write(header.ExportAddressTableJumpsRva);
+          writer.Write(header.ExportAddressTableJumpsSize);
+          
+          writer.Write(header.ManagedNativeHeaderRva);
+          writer.Write(header.ManagedNativeHeaderSize);
+      }
+  }
+}

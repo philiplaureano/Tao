@@ -1,0 +1,45 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class CLIHeaderReader
+  {
+      public Read([NotNull] inputStream : Stream) : ICLIHeader
+      {
+          def reader = BinaryReader(inputStream);
+          
+          def header = CLIHeader();
+          header.Cb = reader.ReadUInt32();
+          header.MajorRuntimeVersion = reader.ReadUInt16();
+          header.MinorRuntimeVersion = reader.ReadUInt16();
+          header.MetadataRva = reader.ReadUInt32();
+          header.MetadataSize = reader.ReadUInt32();
+          header.Flags = reader.ReadUInt32() :> RuntimeFlags;
+          header.EntryPointToken = reader.ReadUInt32();
+          header.ResourcesRva = reader.ReadUInt32();
+          header.ResourcesSize = reader.ReadUInt32();
+          header.StrongNameSignatureRva = reader.ReadUInt32();
+          header.StrongNameSignatureSize = reader.ReadUInt32();
+          header.CodeManagerTableRva = reader.ReadUInt32();
+          header.CodeManagerTableSize = reader.ReadUInt32();
+          header.VTableFixupsRva = reader.ReadUInt32();
+          header.VTableFixupsSize = reader.ReadUInt32();
+          header.ExportAddressTableJumpsRva = reader.ReadUInt32();
+          header.ExportAddressTableJumpsSize = reader.ReadUInt32();
+          header.ManagedNativeHeaderRva = reader.ReadUInt32();
+          header.ManagedNativeHeaderSize = reader.ReadUInt32();
+          
+          header;
+      }
+  }
+}
