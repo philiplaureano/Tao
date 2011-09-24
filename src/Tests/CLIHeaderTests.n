@@ -213,7 +213,8 @@ namespace Tests
         }
         
       TestWrite(propertyName, expectedValue, readValue);
-    }
+    }    
+       
     private TestWrite[TValue](propertyName : string, expectedValue : TValue, readValue: uint * BinaryReader->TValue) : void
     {
       def offsetMap = Dictionary.[string, uint]();
@@ -255,20 +256,12 @@ namespace Tests
         
       Tester.TestWrite(propertyName, expectedValue, createHeader, readActualValue, writeValue);
     }
+    
     private TestRead[TValue](propertyName : string, expectedValue : TValue) : void
     {
-      Tester.TestRead(propertyName, expectedValue, TestHeaderRead);
+      Tester.TestRead.[TValue, ICLIHeader, CLIHeaderReader](propertyName, expectedValue, GetSampleHeader);
     }
-    
-    private TestHeaderRead(doTest: ICLIHeader-> void) : void
-    {
-      def bytes = GetSampleHeader();
-      def inputStream = MemoryStream(bytes);
-      def reader = CLIHeaderReader();
-      def header = reader.Read(inputStream);
-      
-      doTest(header);
-    }
+              
     private GetSampleHeader() : array[byte]
     {
       def data = array[

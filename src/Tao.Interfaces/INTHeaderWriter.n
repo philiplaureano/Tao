@@ -9,9 +9,8 @@ using System.Linq;
 
 namespace Tao.Interfaces
 {
-  public interface INTHeaderWriter[TSize]
+  public interface INTHeaderWriter[TSize] : IWriter[INTHeader[TSize]]
     where TSize : struct
   {
-      Write(header : INTHeader[TSize], stream : Stream) : void;
   }
 }

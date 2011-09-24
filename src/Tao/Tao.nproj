@@ -104,6 +104,21 @@
     <Compile Include="Metadata\CLIHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\MetadataRoot.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\MetadataRootReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\StreamHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\StreamHeaderReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\StreamHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NTHeader.n">
       <SubType>Code</SubType>
     </Compile>

@@ -24,7 +24,7 @@ namespace Tao
       for(mutable i : uint = 0; i < numberOfSections; i++)
       {
         def header = SectionHeader();
-        header.Name = stringReader.Read(inputStream, 8);
+        header.Name = stringReader.Read(8, inputStream);
         header.VirtualSize = reader.ReadUInt32();
         header.VirtualAddress = reader.ReadUInt32();
         header.SizeOfRawData = reader.ReadUInt32();

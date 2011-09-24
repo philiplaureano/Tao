@@ -1,6 +1,8 @@
 ﻿using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao;
+using Tao.Interfaces;
 using Tests.Macros;
 using System;
 using System.Collections.Generic;
@@ -24,28 +26,28 @@ namespace Tests
     }
     public ShouldReadSignature() : void
     {
-      throw NotImplementedException();
+      TestRead("Signature", 0x424A5342 :> uint);
     }
     public ShouldReadMajorVersion() : void
     {
-      throw NotImplementedException();
+      TestRead("MajorVersion", 1 :> ushort);
     }
     public ShouldReadMinorVersion() : void
     {
-      throw NotImplementedException();
+      TestRead("MinorVersion", 1 :> ushort);
     }
     public ShouldReadLength() : void
     {
-      throw NotImplementedException();
+      TestRead("Length", 0xC :> uint);
     }
     public ShouldReadVersionString() : void
     {
-      throw NotImplementedException();
+      TestRead("Version", "v4.0.30319");
     }
     public ShouldReadNumberOfStreams() : void
     {
-      throw NotImplementedException();
-    }
+      TestRead("NumberOfStreamHeaders", 5 :> ushort);
+    }    
     public ShouldReadAttachedStreamHeaders() : void
     {
       throw NotImplementedException();
@@ -81,7 +83,33 @@ namespace Tests
     public ShouldThrowBadImageFormatExceptionIfSignatureNotFound() : void
         expects BadImageFormatException
     {
-        throw NotImplementedException();
+      throw NotImplementedException();
+    }
+    private TestRead[TValue](propertyName : string, expectedValue : TValue) : void
+    {
+      Tester.TestRead.[TValue, IMetadataRoot, MetadataRootReader](propertyName, expectedValue, GetSampleHeader);
+    }
+    private GetSampleHeader() : array[byte]
+    {
+      def data = array[
+        // Signature = 0x424A5342
+	    0x42 : byte, 0x53, 0x4A, 0x42, 
+	    // MajorVersion = 1
+	    0x01, 0x00, 
+	    // MinorVersion = 1
+	    0x01, 0x00, 
+	    // Reserved
+	    0x00, 0x00, 0x00, 0x00, 
+	    // VersionLength = 0xC
+	    0x0C, 0x00, 0x00, 0x00,	    
+	    // VersionString = v4.0.30319
+	    0x76, 0x34, 0x2E, 0x30, 0x2E, 0x33, 0x30, 0x33, 0x31, 0x39, 0x00, 0x00, 
+	    // Flags = 0
+	    0x00, 0x00, 
+	    // NumberOfStreams = 5
+	    0x05, 0x00  
+      ];
+      data;
     }
   }
 }

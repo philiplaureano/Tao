@@ -10,8 +10,7 @@ using System.Linq;
 
 namespace Tao.Interfaces
 {
-  public interface IDataDirectoryWriter
+  public interface IDataDirectoryWriter : IWriter[IEnumerable.[IDataDirectory]]
   {
-      Write(directories : IEnumerable.[IDataDirectory], stream : Stream) : void;
   }
 }

@@ -114,6 +114,9 @@
     <Compile Include="IOptionalHeaderStandardFieldsWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ISection.n">
       <SubType>Code</SubType>
     </Compile>
@@ -129,10 +132,28 @@
     <Compile Include="IStringWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Machine.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\ICLIHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\IMetadataRoot.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\IMetadataRootReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\IStreamHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\IStreamHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\IStreamHeaderReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\RuntimeFlags.n">

@@ -9,8 +9,7 @@ using System.Linq;
 
 namespace Tao.Interfaces
 {
-  public interface ICoffHeaderReader
+  public interface ICoffHeaderReader : IReader[ICoffHeader]
   {
-      Read(inputStream : Stream) : ICoffHeader;
   }
 }

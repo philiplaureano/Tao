@@ -1,0 +1,22 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Interfaces
+{
+  public interface IMetadataRoot
+  {
+    Signature : uint { get; set; }
+    MajorVersion : ushort { get; set; }
+    MinorVersion : ushort { get; set; }
+    Reserved : uint { get; set; }
+    Length : uint { get; set; }
+    Version : string { get; set }
+    Flags : ushort { get; set; }
+    NumberOfStreamHeaders : ushort { get; set; }
+  }
+}

@@ -1,0 +1,40 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class StreamHeaderReader : IStreamHeaderReader
+  {
+    public Read(count: ushort, [NotNull] inputStream : Stream) : IEnumerable.[IStreamHeader]
+    {
+      def reader = BinaryReader(inputStream);
+      for(mutable i = 0; i < count; i++)
+      {
+        def header = StreamHeader();
+        header.Offset = reader.ReadUInt32();
+        header.Size = reader.ReadUInt32();
+      
+        def startPosition = inputStream.Position;
+        def maxLength = 32;
+        def stringReader = NullTerminatedStringReader();
+        def name = stringReader.Read(maxLength :> uint, inputStream);
+        def length = name.Length;
+        
+        // Seek the next 4-byte boundary
+        def nextBoundary = startPosition + length + (length % 4);
+        _ = inputStream.Seek(nextBoundary, SeekOrigin.Begin);
+        header.Name = name;
+      
+        yield header;
+      }
+    }
+  }
+}

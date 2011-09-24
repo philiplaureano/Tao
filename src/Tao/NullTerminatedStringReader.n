@@ -14,8 +14,7 @@ namespace Tao
 {
   public class NullTerminatedStringReader : IStringReader
   {
-    public Read([NotNull] inputStream : Stream, length : uint) : string
-        requires length <= inputStream.Length otherwise throw ArgumentException("length", "Length exceeds the actual length of the input stream")
+    public Read(length : uint, [NotNull] inputStream : Stream) : string
     {
       def reader = BinaryReader(inputStream);
       def bytes = reader.ReadBytes(length :> int);

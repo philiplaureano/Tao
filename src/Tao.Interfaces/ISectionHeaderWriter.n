@@ -9,8 +9,7 @@ using System.Linq;
 
 namespace Tao.Interfaces
 {
-  public interface ISectionHeaderWriter
+  public interface ISectionHeaderWriter : IWriter[IEnumerable.[ISectionHeader]]
   {
-      Write(headers : IEnumerable.[ISectionHeader], outputStream : Stream) : void;
   }
 }

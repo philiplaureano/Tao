@@ -9,9 +9,8 @@ using System.Linq;
 
 namespace Tao.Interfaces
 {
-  public interface INTHeaderReader[TSize]
+  public interface INTHeaderReader[TSize] : IReader[INTHeader[TSize]]
     where TSize : struct
   {
-      Read(stream : Stream) : INTHeader[TSize];
   }
 }

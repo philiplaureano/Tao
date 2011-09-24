@@ -1,0 +1,45 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class StreamHeaderWriter : IStreamHeaderWriter
+  {
+      public Write([NotNull] headers : IEnumerable[IStreamHeader], [NotNull] outputStream : Stream) : void        
+      {
+          def writer = BinaryWriter(outputStream);
+          foreach(header in headers)
+          {
+              writer.Write(header.Offset);
+              writer.Write(header.Size);
+              
+              def name = header.Name;
+              when (string.IsNullOrEmpty(name))
+              {
+                  throw BadImageFormatException("Invalid Metadata StreamHeader name");
+              }
+              
+              foreach(ch in name)
+              {
+                  writer.Write(ch :> byte);
+              }
+              
+              writer.Write(0 : byte);
+              // Pad the name to the nearest boundary
+              def bytesToPad = name.Length % 4 - 1;
+              for(mutable i = 0; i < bytesToPad; i++)
+              {
+                  writer.Write(0 : byte);
+              }
+          }
+      }
+  }
+}

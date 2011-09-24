@@ -9,8 +9,7 @@ using System.Linq;
 
 namespace Tao.Interfaces
 {
-  public interface IDosHeaderWriter
+  public interface IDosHeaderWriter : IWriter[IDosHeader]
   {
-      Write(header : IDosHeader, outputStream : Stream) : void;
   }
 }

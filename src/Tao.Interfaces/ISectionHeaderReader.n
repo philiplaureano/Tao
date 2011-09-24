@@ -9,8 +9,7 @@ using System.Linq;
 
 namespace Tao.Interfaces
 {
-  public interface ISectionHeaderReader
+  public interface ISectionHeaderReader : IReader[uint, IEnumerable.[ISectionHeader]]
   {
-      Read(numberOfSections : uint, inputStream : Stream) : IEnumerable.[ISectionHeader];
   }
 }

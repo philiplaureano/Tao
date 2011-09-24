@@ -11,6 +11,6 @@ namespace Tao.Interfaces
 {
   public interface IStringReader
   {
-      Read(inputStream : Stream, length : uint) : string;
+      Read(length : uint, inputStream : Stream) : string;
   }
 }
