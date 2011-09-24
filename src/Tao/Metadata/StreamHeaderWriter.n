@@ -34,7 +34,7 @@ namespace Tao
               
               writer.Write(0 : byte);
               // Pad the name to the nearest boundary
-              def bytesToPad = name.Length % 4 - 1;
+              def bytesToPad = (name.Length + 1) % 4;
               for(mutable i = 0; i < bytesToPad; i++)
               {
                   writer.Write(0 : byte);

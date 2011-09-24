@@ -5,9 +5,10 @@ using Nemerle.Utility;
 using Tao.Interfaces;
 
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Tao
 {
@@ -15,6 +16,7 @@ namespace Tao
   {
     public Read(count: ushort, [NotNull] inputStream : Stream) : IEnumerable.[IStreamHeader]
     {
+      def results = List.[IStreamHeader]();
       def reader = BinaryReader(inputStream);
       for(mutable i = 0; i < count; i++)
       {
@@ -23,18 +25,46 @@ namespace Tao
         header.Size = reader.ReadUInt32();
       
         def startPosition = inputStream.Position;
-        def maxLength = 32;
-        def stringReader = NullTerminatedStringReader();
-        def name = stringReader.Read(maxLength :> uint, inputStream);
-        def length = name.Length;
+        
+        def maxLength : long = 32;
+        def bytesRemaining : long = (inputStream.Length :> int) - startPosition;
+        mutable bytesToRead = 0;
+        
+        if (bytesRemaining < maxLength)
+        {
+            bytesToRead = bytesRemaining :> int;
+        }
+        else
+        {
+            bytesToRead = 32;
+        }
+        
+        def bytes = reader.ReadBytes(bytesToRead);
+        def nullTerminatorIndex = bytes.FindIndex(b => b == 0 : byte);
+        
+        def length = nullTerminatorIndex + 1 ;
+        def name = Encoding.UTF8.GetString(bytes, 0, nullTerminatorIndex);
         
         // Seek the next 4-byte boundary
-        def nextBoundary = startPosition + length + (length % 4);
+        mutable nextOffset = 0;
+        
+        if (length <= 4)
+        {
+            nextOffset = 4 - length;
+        }
+        else
+        {
+            nextOffset = 4 - length % 4;
+        }
+        
+        def nextBoundary = startPosition + length + nextOffset;
         _ = inputStream.Seek(nextBoundary, SeekOrigin.Begin);
         header.Name = name;
       
-        yield header;
+        results.Add(header);
       }
+      
+      results;
     }
   }
 }
