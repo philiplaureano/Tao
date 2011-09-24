@@ -73,7 +73,64 @@ namespace Tests
       verifyHeader(3, 0x00009848 :> uint, 0x10 :> uint, "#GUID");
       verifyHeader(4, 0x00009858 :> uint, 0x00000E34 :> uint, "#Blob");
     }
-    
+    public ShouldWriteMultipleStreamHeaders() : void
+    {
+      def headers = array(5) : array[IStreamHeader];
+      def createHeader(index : ushort, offset : uint, size : uint, name : string) : void
+      {
+        def header = StreamHeader();
+        header.Offset = offset;
+        header.Size = size;
+        header.Name = name;
+            
+        headers[index :> int] = header;
+      }
+      
+      createHeader(0, 0x0000006C :> uint, 0x00004034 :> uint, "#~");
+      createHeader(1, 0x000040A0 :> uint, 0x00004FEC :> uint, "#Strings");
+      createHeader(2, 0x0000908C :> uint, 0x000007BC :> uint, "#US");
+      createHeader(3, 0x00009848 :> uint, 0x10 :> uint, "#GUID");
+      createHeader(4, 0x00009858 :> uint, 0x00000E34 :> uint, "#Blob");
+      
+      def outputStream = MemoryStream();
+      def writer = StreamHeaderWriter();
+      writer.Write(headers, outputStream);
+      
+      _ = outputStream.Seek(0, SeekOrigin.Begin);
+      def properties = typeof(IStreamHeader).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+      def reader = StreamHeaderReader();
+      def writtenHeaders = reader.Read(5, outputStream).ToArray();
+      for(mutable i = 0; i < 5; i++)
+      {
+          def writtenHeader = writtenHeaders[i];
+          def expectedHeader = headers[i];
+          foreach(property in properties)
+          {
+              def actualValue = property.GetValue(writtenHeader, null);
+              def expectedValue = property.GetValue(expectedHeader, null);
+              
+              assert actualValue equals expectedValue otherwiseprint string.Format("Header #{0}: Invalid property '{1}'. Expected: '{2}', ActualValue: '{3}'", i, property.Name, expectedValue, actualValue);
+          }
+      }
+      
+      def expectedBytes = GetMultipleStreamHeaderSampleBytes();
+      def actualHash = outputStream.GetHash();
+      def expectedHash = expectedBytes.GetHash();
+      
+      assert actualHash equals expectedHash otherwiseprint "The input header bytes do not match the expected output bytes";
+    }
+    private VerifyHeader(index : ushort, expectedOffset : uint, expectedSize : uint, expectedName : string) : array[IStreamHeader] -> void
+    {
+      def verifyHeader(actualHeaders: array[IStreamHeader]) : void
+      {
+        VerifyValue.[uint](index, "Offset", expectedOffset)(actualHeaders);
+        VerifyValue.[uint](index, "Size", expectedSize)(actualHeaders);
+        VerifyValue.[string](index, "Name", expectedName)(actualHeaders);
+      }
+      
+      def result = verifyHeader;
+      result;
+    }
     private VerifyValue[TValue](targetIndex : ushort, propertyName : string, expectedValue : TValue) : array[IStreamHeader] -> void
     {
       VerifyHeaderValue.[TValue](targetIndex, propertyName, expectedValue, _);
