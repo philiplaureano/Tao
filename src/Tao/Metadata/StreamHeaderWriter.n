@@ -13,44 +13,22 @@ namespace Tao
 {
   public class StreamHeaderWriter : IStreamHeaderWriter
   {
-      public Write([NotNull] headers : IEnumerable[IStreamHeader], [NotNull] outputStream : Stream) : void        
+    public Write([NotNull] headers : IEnumerable[IStreamHeader], [NotNull] outputStream : Stream) : void        
+    {
+      def writer = BinaryWriter(outputStream);
+      def stringWriter = PaddedNullTerminatedStringWriter();
+      foreach(header in headers)
       {
-          def writer = BinaryWriter(outputStream);
-          foreach(header in headers)
-          {
-              writer.Write(header.Offset);
-              writer.Write(header.Size);
+        writer.Write(header.Offset);
+        writer.Write(header.Size);
               
-              def name = header.Name;
-              when (string.IsNullOrEmpty(name))
-              {
-                  throw BadImageFormatException("Invalid Metadata StreamHeader name");
-              }
-              
-              foreach(ch in name)
-              {
-                  writer.Write(ch :> byte);
-              }
-              
-              writer.Write(0 : byte);
-              
-              // Pad the name to the nearest boundary
-              def length = name.Length + 1;
-              mutable bytesToPad = 0;
-              if (length <= 4)
-              {
-                  bytesToPad = 4 - length;
-              }
-              else
-              {
-                  bytesToPad =  4 - (length % 4);
-              }
-              
-              for(mutable i = 0; i < bytesToPad; i++)
-              {
-                  writer.Write(0 : byte);
-              }
-          }
+        def name : string = header.Name;
+        when (string.IsNullOrEmpty(name))
+        {
+          throw BadImageFormatException("Invalid Metadata StreamHeader name");
+        }
+        stringWriter.Write(name, outputStream);              
       }
+    }          
   }
 }

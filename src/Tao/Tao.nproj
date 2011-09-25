@@ -110,6 +110,9 @@
     <Compile Include="Metadata\MetadataRootReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\MetadataRootWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\StreamHeader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -150,6 +153,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OptionalHeaderStandardFieldsWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PaddedNullTerminatedStringReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PaddedNullTerminatedStringWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />

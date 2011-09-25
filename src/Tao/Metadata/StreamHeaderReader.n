@@ -18,53 +18,22 @@ namespace Tao
     {
       def results = List.[IStreamHeader]();
       def reader = BinaryReader(inputStream);
+      def stringReader = PaddedNullTerminatedStringReader();
       for(mutable i = 0; i < count; i++)
       {
         def header = StreamHeader();
         header.Offset = reader.ReadUInt32();
         header.Size = reader.ReadUInt32();
-      
-        def startPosition = inputStream.Position;
+                      
+        def maxLength : long = 32;                
+        def name = stringReader.Read(maxLength :> uint, inputStream);
         
-        def maxLength : long = 32;
-        def bytesRemaining : long = (inputStream.Length :> int) - startPosition;
-        mutable bytesToRead = 0;
-        
-        if (bytesRemaining < maxLength)
-        {
-            bytesToRead = bytesRemaining :> int;
-        }
-        else
-        {
-            bytesToRead = 32;
-        }
-        
-        def bytes = reader.ReadBytes(bytesToRead);
-        def nullTerminatorIndex = bytes.FindIndex(b => b == 0 : byte);
-        
-        def length = nullTerminatorIndex + 1 ;
-        def name = Encoding.UTF8.GetString(bytes, 0, nullTerminatorIndex);
-        
-        // Seek the next 4-byte boundary
-        mutable nextOffset = 0;
-        
-        if (length <= 4)
-        {
-            nextOffset = 4 - length;
-        }
-        else
-        {
-            nextOffset = 4 - length % 4;
-        }
-        
-        def nextBoundary = startPosition + length + nextOffset;
-        _ = inputStream.Seek(nextBoundary, SeekOrigin.Begin);
         header.Name = name;
       
         results.Add(header);
       }
       
       results;
-    }
+    }    
   }
 }

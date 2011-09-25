@@ -16,16 +16,52 @@ namespace Tests
   {
     public ShouldWriteReservedFieldAsZero() : void
     {
-      throw NotImplementedException();
+      def createHeader() : IMetadataRoot
+      {
+        def header = MetadataRoot();
+        header.Signature = 0x424A5342 :> uint;
+        header.Version =  "v1.2345";
+        header.Reserved = 0xFEED;
+        
+        header;
+      }
+      def getReserved(reader : BinaryReader) : uint
+      {
+        def headerReader = MetadataRootReader();
+        def underlyingStream = reader.BaseStream;
+        def header = headerReader.Read(underlyingStream);
+        header.Reserved;
+      };
+      
+      TestWrite("Reserved", 0 :> uint, getReserved);
     }
     public ShouldSkipReadingReservedField() : void
     {
-      throw NotImplementedException();
-    }
-    public ShouldPadWrittenVersionStringToNearestFourByteBoundary() : void
-    {
-      throw NotImplementedException();
-    }
+      def data = array[
+        // Signature = 0x424A5342
+	    0x42 : byte, 0x53, 0x4A, 0x42, 
+	    // MajorVersion = 1
+	    0x01, 0x00, 
+	    // MinorVersion = 1
+	    0x01, 0x00, 
+	    // Reserved
+	    0x02, 0x00, 0x00, 0x00, 
+	    // VersionLength = 0xC
+	    0x0C, 0x00, 0x00, 0x00,	    
+	    // VersionString = v4.0.30319
+	    0x76, 0x34, 0x2E, 0x30, 0x2E, 0x33, 0x30, 0x33, 0x31, 0x39, 0x00, 0x00, 
+	    // Flags = 0
+	    0x00, 0x00, 
+	    // NumberOfStreams = 0
+	    0x00, 0x00  
+      ];
+      
+      def inputStream = MemoryStream(data);
+      def reader = MetadataRootReader();
+      def root = reader.Read(inputStream);
+      
+      assert root.Reserved equals 0 otherwiseprint "The Reserved field should always be ignored on every read operation";
+    }   
     public ShouldReadSignature() : void
     {
       TestRead("Signature", 0x424A5342 :> uint);
@@ -63,8 +99,8 @@ namespace Tests
       
       def verifyHeader(index : ushort, expectedOffset : uint, expectedSize : uint, expectedName : string) : void
       {
-          def doVerify = VerifyHeader(index, expectedOffset, expectedSize, expectedName)(_);
-          doVerify(streamHeaders);
+        def doVerify = VerifyHeader(index, expectedOffset, expectedSize, expectedName)(_);
+        doVerify(streamHeaders);
       };
       
       verifyHeader(0, 0x0000006C :> uint, 0x00004034 :> uint, "#~");
@@ -74,28 +110,87 @@ namespace Tests
       verifyHeader(4, 0x00009858 :> uint, 0x00000E34 :> uint, "#Blob");      
     }        
     public ShouldWriteSignature() : void
-    {
-      throw NotImplementedException();
+    {        
+      TestWrite("Signature", 0x424A5342 :> uint);
     }
+    
     public ShouldWriteMajorVersion() : void
     {
-      throw NotImplementedException();
+      TestWrite("MajorVersion", 42 :> ushort);
     }
     public ShouldWriteMinorVersion() : void
     {
-      throw NotImplementedException();
+      TestWrite("MinorVersion", 42 :> ushort);
     }
-    public ShouldWriteLength() : void
+    public ShouldWriteVersionLength() : void
     {
-      throw NotImplementedException();
+      def text = "v1.2345";
+      def createHeader() : IMetadataRoot
+      {
+        def header = MetadataRoot();
+        header.Signature = 0x424A5342 :> uint;
+        header.Version = text;
+        
+        header;
+      }
+      def getLength(reader : BinaryReader) : uint
+      {
+        def headerReader = MetadataRootReader();
+        def underlyingStream = reader.BaseStream;
+        def header = headerReader.Read(underlyingStream);
+        header.Length;
+      };
+      
+      TestWrite("Length", text.Length :> uint, getLength);
     }
     public ShouldWriteVersionString() : void
     {
-      throw NotImplementedException();
+      TestWrite("Version", "v1.2345");
     }
+    public ShouldThrowBadImageFormatExceptionIfVersionStringIsEmptyOrNull() : void
+        expects BadImageFormatException
+    {
+        def root = MetadataRoot();
+        root.Version = null;
+        
+        def writer = MetadataRootWriter();
+        writer.Write(root, MemoryStream());
+    }
+    
     public ShouldWriteNumberOfStreams() : void
     {
-      throw NotImplementedException();
+      def headers = List.[IStreamHeader]();
+      def expectedNumberOfHeaders = 0x42;
+      for(mutable i = 0; i < expectedNumberOfHeaders; i++)
+      {
+        def header = StreamHeader();
+        header.Name = string.Format("Header{0}",i);
+        headers.Add(header);
+      }
+      
+      def createHeader() : IMetadataRoot
+      {
+        def header = MetadataRoot();
+        header.Version = "v1.23456789";
+        header.Signature = 0x424A5342 :> uint;
+        header.NumberOfStreamHeaders = expectedNumberOfHeaders :> ushort;
+        foreach(currentHeader in headers)
+        {
+          header.StreamHeaders.Add(currentHeader);
+        }
+        
+        header;
+      }
+      
+      def getCount(reader : BinaryReader) : ushort
+      {
+        def headerReader = MetadataRootReader();
+        def underlyingStream = reader.BaseStream;
+        def header = headerReader.Read(underlyingStream);
+        header.NumberOfStreamHeaders :> ushort;
+      };
+      
+      Tester.TestWrite.[ushort, IMetadataRoot, MetadataRootWriter]("NumberOfStreamHeaders", expectedNumberOfHeaders :> ushort, createHeader, getCount);
     }
     public ShouldWriteCorrectOffsetForAttachedStreamHeaders() : void
     {
@@ -104,7 +199,44 @@ namespace Tests
     public ShouldThrowBadImageFormatExceptionIfSignatureNotFound() : void
         expects BadImageFormatException
     {
-      throw NotImplementedException();
+      def dummyData = array[0 : byte, 0, 0, 0];
+      def reader = MetadataRootReader();
+      def root = reader.Read(MemoryStream(dummyData));      
+    }
+    private TestWrite[TValue](propertyName : string, value : TValue) : void
+    {
+      def targetProperty = typeof(IMetadataRoot).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+      def createHeader() : IMetadataRoot
+      {
+        def header = MetadataRoot();
+        header.Signature = 0x424A5342 :> uint;
+        header.Version = "v1.2345";
+        targetProperty.SetValue(header, value, null);
+        header;
+      }
+      def readValue(reader : BinaryReader) : TValue
+      {
+        def headerReader = MetadataRootReader();
+        def underlyingStream = reader.BaseStream;
+        def header = headerReader.Read(underlyingStream);
+        def actualValue = targetProperty.GetValue(header, null) :> TValue;
+            
+        actualValue;
+      };
+      Tester.TestWrite.[TValue, IMetadataRoot, MetadataRootWriter](propertyName, value, createHeader, readValue);
+    }
+    private TestWrite[TValue](propertyName : string, value : TValue, readValue: BinaryReader->TValue) : void
+    {
+      def targetProperty = typeof(IMetadataRoot).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+      def createHeader() : IMetadataRoot
+      {
+        def header = MetadataRoot();
+        header.Signature = 0x424A5342 :> uint;
+        header.Version = "v1.2345";
+        targetProperty.SetValue(header, value, null);
+        header;
+      }
+      Tester.TestWrite.[TValue, IMetadataRoot, MetadataRootWriter](propertyName, value, createHeader, readValue);
     }
     private VerifyHeader(index : ushort, expectedOffset : uint, expectedSize : uint, expectedName : string) : IList[IStreamHeader] -> void
     {

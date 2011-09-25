@@ -1,0 +1,60 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Tao
+{  
+  public class PaddedNullTerminatedStringReader : IStringReader
+  {
+    public Read(maxLength : uint, [NotNull] inputStream : Stream) : string
+    {
+      def startPosition = inputStream.Position;
+      def bytesRemaining : long = (inputStream.Length :> int) - startPosition;
+      mutable bytesToRead = 0;
+        
+      if (bytesRemaining < maxLength)
+      {
+        bytesToRead = bytesRemaining :> int;
+      }
+      else
+      {
+        bytesToRead = maxLength :> int;
+      }
+     
+      mutable bytesRead = 0;
+      def reader = BinaryReader(inputStream);          
+      def buffer = array(bytesToRead) : array[char];
+      def bytes = reader.ReadBytes(bytesToRead);
+      
+      def readBytes(index: int, inputBytes : array[byte]) : void
+      {
+        when (index < inputBytes.Length)
+        {
+          def currentChar = bytes[index] :> char;
+          
+          when(currentChar != '\0')
+          {
+            buffer[index] = currentChar;
+          
+            bytesRead++;
+            readBytes(index + 1, inputBytes);          
+          }
+        }
+      }
+      readBytes(0, bytes);
+      
+      def nextBoundary = ((startPosition + bytesRead) / 4 + 1) * 4;      
+      _ = inputStream.Seek(nextBoundary, SeekOrigin.Begin);
+      def text = string(buffer, 0, bytesRead);
+      text;
+    }
+  }
+}

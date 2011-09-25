@@ -1,0 +1,48 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+  public class MetadataRootWriter : IMetadataRootWriter
+  {
+    public Write([NotNull] root : IMetadataRoot, [NotNull] outputStream : Stream) : void
+    {
+      def writer = BinaryWriter(outputStream);
+      writer.Write(root.Signature);
+      writer.Write(root.MajorVersion);
+      writer.Write(root.MinorVersion);
+          
+      // Skip the reserved block
+      writer.Write(0 : uint);
+          
+      // Write the Version string length
+      def version =  root.Version;
+      when (string.IsNullOrEmpty(version))
+        throw BadImageFormatException("The version string in the MetadataRoot header cannot be null");
+        
+      def length = version.Length;
+      writer.Write(length :> uint);
+          
+      // Write the version string
+      def stringWriter = PaddedNullTerminatedStringWriter();
+      stringWriter.Write(root.Version, outputStream);
+          
+      // Write the flags field
+      writer.Write(0 : ushort);
+          
+      def streamCount = root.StreamHeaders.Count;
+      writer.Write(streamCount :> ushort);
+          
+      def streamHeaderWriter = StreamHeaderWriter();
+      streamHeaderWriter.Write(root.StreamHeaders, outputStream);
+    }
+  }
+}

@@ -119,6 +119,9 @@
     <Compile Include="OptionalHeaderStandardFieldTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PaddedNullTerminatedStringTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
     <Compile Include="SectionDataReadTests.n">
       <SubType>Code</SubType>

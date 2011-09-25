@@ -12,52 +12,48 @@ namespace Tao.Interfaces
 {
   public class MetadataRootReader : IMetadataRootReader
   {
-      public Read(inputStream : Stream) : IMetadataRoot
-      {
-          def reader = BinaryReader(inputStream);
+    public Read(inputStream : Stream) : IMetadataRoot
+    {
+      def reader = BinaryReader(inputStream);
           
           // Search for the magic signature
-          def signature = reader.ReadUInt32();
-          when (signature != 0x424A5342)
-            throw BadImageFormatException("Missing Metadata Signature");
+      def signature = reader.ReadUInt32();
+      when (signature != 0x424A5342)
+        throw BadImageFormatException("Missing Metadata Signature");
             
-          def root = MetadataRoot();
-          root.Signature = signature;
-          root.MajorVersion = reader.ReadUInt16();
-          root.MinorVersion = reader.ReadUInt16();
+      def root = MetadataRoot();
+      root.Signature = signature;
+      root.MajorVersion = reader.ReadUInt16();
+      root.MinorVersion = reader.ReadUInt16();
           
-          // Ignore the reserved value
-          _ = reader.ReadUInt32();
+      // Ignore the reserved value
+      _ = reader.ReadUInt32();
           
-          // Determine the string length
-          def length = reader.ReadUInt32();
-          root.Length = length;
+      // Determine the string length
+      def length = reader.ReadUInt32();
+      root.Length = length;
+      
+      def startPosition = inputStream.Position;
+      
+      def stringReader = PaddedNullTerminatedStringReader();
+      def text = stringReader.Read(length, inputStream);
+      root.Version = text;                                
+      
+      // Skip reading the flags field
+      _ = reader.ReadUInt16();
+      def numberOfHeaders = reader.ReadUInt16();
+      root.NumberOfStreamHeaders = numberOfHeaders;
           
-          def bytes = reader.ReadBytes(length :> int);
-          def stringReader = NullTerminatedStringReader();
-          def stringStream = MemoryStream(bytes);
-          def text = stringReader.Read(length, stringStream);
-          root.Version = text;
+      // Read the attached stream headers
+      def streamHeaderReader = StreamHeaderReader();
+      def streamHeaders = streamHeaderReader.Read(numberOfHeaders, inputStream);
           
-          // Align the position to the next 4-byte boundary
-          def actualLength : uint = text.Length :> uint;                    
-          def currentPosition = inputStream.Position;
-          def nextPosition = currentPosition + (length - actualLength) % 4;
-          _ = inputStream.Seek(nextPosition, SeekOrigin.Begin);
-          
-          def numberOfHeaders = reader.ReadUInt16();
-          root.NumberOfStreamHeaders = numberOfHeaders;
-          
-          // Read the attached stream headers
-          def streamHeaderReader = StreamHeaderReader();
-          def streamHeaders = streamHeaderReader.Read(numberOfHeaders, inputStream);
-          
-          foreach(header in streamHeaders)
-          {
-              root.StreamHeaders.Add(header);
-          }
-          
-          root;
+      foreach(header in streamHeaders)
+      {
+        root.StreamHeaders.Add(header);
       }
+          
+      root;
+    }
   }
 }

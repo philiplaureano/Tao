@@ -104,8 +104,16 @@ namespace Tests
         where THeaderWriter : IWriter[THeader], new()
         where THeaderReader : IReader[THeader], new()
     {
-      def targetProperty = typeof(THeader).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
-      def createHeader() : THeader
+      TestWrite.[TValue, THeader, THeader, THeaderWriter, THeaderReader](propertyName, expectedValue);
+    }
+    
+    public TestWrite[TValue, THeaderBase, THeader, THeaderWriter, THeaderReader](propertyName : string, expectedValue : TValue) : void
+        where THeader : THeaderBase, new()
+        where THeaderWriter : IWriter[THeaderBase], new()
+        where THeaderReader : IReader[THeaderBase], new()
+    {
+      def targetProperty = typeof(THeaderBase).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+      def createHeader() : THeaderBase
       {
         // This is equivalent to:
         // var header = new Header() { TargetProperty = expectedValue; } in C#
@@ -125,8 +133,9 @@ namespace Tests
         actualValue;
       };
         
-      TestWrite.[TValue, THeader, THeaderWriter](propertyName, expectedValue, createHeader, readValue);
+      TestWrite.[TValue, THeaderBase, THeaderWriter](propertyName, expectedValue, createHeader, readValue);
     }
+    
     public TestWrite[TValue, THeader, THeaderWriter](propertyName : string, expectedValue : TValue,
         createHeader: void->THeader, readValue: BinaryReader->TValue) : void
         where THeaderWriter : IWriter[THeader], new()
@@ -161,6 +170,7 @@ namespace Tests
       def outputStream = MemoryStream();
       writeValue(header, outputStream);
       
+      outputStream.Seek(0, SeekOrigin.Begin);
       def reader = BinaryReader(outputStream);      
       def actualValue = readValue(reader);      
       def message = string.Format("Invalid {0} value -- expected '{1}', actual value = '{2}'", propertyName, expectedValue, actualValue);
