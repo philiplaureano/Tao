@@ -11,13 +11,21 @@ namespace Tao
 {  
   public class MetadataRoot : IMetadataRoot
   {
-      public Signature : uint { get; set; }
-      public MajorVersion : ushort { get; set; }
-      public MinorVersion : ushort { get; set; }
-      public Reserved : uint { get; set; }
-      public Length : uint { get; set; }
-      public Version : string { get; set }
-      public Flags : ushort { get; set; }
-      public NumberOfStreamHeaders : ushort { get; set; }
+    private _headers : IList[IStreamHeader] = List.[IStreamHeader]();
+    public Signature : uint { get; set; }
+    public MajorVersion : ushort { get; set; }
+    public MinorVersion : ushort { get; set; }
+    public Reserved : uint { get; set; }
+    public Length : uint { get; set; }
+    public Version : string { get; set }
+    public Flags : ushort { get; set; }
+    public NumberOfStreamHeaders : ushort { get; set; }
+    public StreamHeaders : IList[IStreamHeader] 
+    { 
+      get
+      {
+        _headers;
+      }
+    }
   }
 }

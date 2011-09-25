@@ -17,6 +17,7 @@ namespace Tao.Interfaces
     Length : uint { get; set; }
     Version : string { get; set }
     Flags : ushort { get; set; }
-    NumberOfStreamHeaders : ushort { get; set; }
+    NumberOfStreamHeaders : ushort { get; set; }    
+    StreamHeaders : IList[IStreamHeader] { get; }
   }
 }

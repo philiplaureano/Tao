@@ -5,8 +5,10 @@ using Tao;
 using Tao.Interfaces;
 using Tests.Macros;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Tests
 {
@@ -46,11 +48,30 @@ namespace Tests
     }
     public ShouldReadNumberOfStreams() : void
     {
-      TestRead("NumberOfStreamHeaders", 5 :> ushort);
+      TestRead("NumberOfStreamHeaders", 0 :> ushort);
     }    
     public ShouldReadAttachedStreamHeaders() : void
     {
-      throw NotImplementedException();
+      def bytes = GetSampleHeaderBytesWithMetadataStreamHeadersAttached();
+      def inputStream = MemoryStream(bytes);
+      
+      def reader = MetadataRootReader();
+      def root = reader.Read(inputStream);
+      
+      def streamHeaders = root.StreamHeaders;
+      assert streamHeaders.Count equals 5 otherwiseprint "Invalid number of stream headers";
+      
+      def verifyHeader(index : ushort, expectedOffset : uint, expectedSize : uint, expectedName : string) : void
+      {
+          def doVerify = VerifyHeader(index, expectedOffset, expectedSize, expectedName)(_);
+          doVerify(streamHeaders);
+      };
+      
+      verifyHeader(0, 0x0000006C :> uint, 0x00004034 :> uint, "#~");
+      verifyHeader(1, 0x000040A0 :> uint, 0x00004FEC :> uint, "#Strings");
+      verifyHeader(2, 0x0000908C :> uint, 0x000007BC :> uint, "#US");
+      verifyHeader(3, 0x00009848 :> uint, 0x10 :> uint, "#GUID");
+      verifyHeader(4, 0x00009858 :> uint, 0x00000E34 :> uint, "#Blob");      
     }        
     public ShouldWriteSignature() : void
     {
@@ -85,9 +106,95 @@ namespace Tests
     {
       throw NotImplementedException();
     }
+    private VerifyHeader(index : ushort, expectedOffset : uint, expectedSize : uint, expectedName : string) : IList[IStreamHeader] -> void
+    {
+      def verifyHeader(actualHeaders: IList[IStreamHeader]) : void
+      {
+        VerifyValue.[uint](index, "Offset", expectedOffset)(actualHeaders);
+        VerifyValue.[uint](index, "Size", expectedSize)(actualHeaders);
+        VerifyValue.[string](index, "Name", expectedName)(actualHeaders);
+      }
+      
+      def result = verifyHeader;
+      result;
+    }
+    private VerifyValue[TValue](targetIndex : ushort, propertyName : string, expectedValue : TValue) : IList[IStreamHeader] -> void
+    {
+      VerifyHeaderValue.[TValue](targetIndex, propertyName, expectedValue, _);
+    }
+    private VerifyHeaderValue[TValue](targetIndex : ushort, propertyName : string, expectedValue : TValue, headers : IList[IStreamHeader]) : void
+    {
+      def targetItem = headers[targetIndex :> int];
+      def targetProperty = typeof(IStreamHeader).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+        
+      def actualValue = targetProperty.GetValue(targetItem, null);
+      assert actualValue equals expectedValue otherwiseprint string.Format("Invalid property value '{0}'. Expected: '{1}', ActualValue: '{2}'", propertyName, expectedValue, actualValue);
+    }
     private TestRead[TValue](propertyName : string, expectedValue : TValue) : void
     {
       Tester.TestRead.[TValue, IMetadataRoot, MetadataRootReader](propertyName, expectedValue, GetSampleHeader);
+    }
+    private GetSampleHeaderBytesWithMetadataStreamHeadersAttached() : array[byte]
+    {
+      def data = array[
+        // Signature = 0x424A5342
+	    0x42 : byte, 0x53, 0x4A, 0x42, 
+	    // MajorVersion = 1
+	    0x01, 0x00, 
+	    // MinorVersion = 1
+	    0x01, 0x00, 
+	    // Reserved
+	    0x00, 0x00, 0x00, 0x00, 
+	    // VersionLength = 0xC
+	    0x0C, 0x00, 0x00, 0x00,	    
+	    // VersionString = v4.0.30319
+	    0x76, 0x34, 0x2E, 0x30, 0x2E, 0x33, 0x30, 0x33, 0x31, 0x39, 0x00, 0x00, 
+	    // Flags = 0
+	    0x00, 0x00, 
+	    // NumberOfStreams = 5
+	    0x05, 0x00,
+	    
+	    // Header 0:
+	    // Offset = 0x0000006C
+	    0x6C, 0x00, 0x00, 0x00, 
+	    // Size = 0x00004034
+	    0x34, 0x40, 0x00, 0x00, 
+	    // Name = "#~\0\0"
+	    0x23, 0x7E, 0x00, 0x00, 
+	    
+	    // Header 1 - #Strings:
+	    // Offset = 0x000040A0
+	    0xA0, 0x40, 0x00, 0x00,
+	    // Size = 0x00004FEC
+	    0xEC, 0x4F, 0x00, 0x00, 
+	    // Name = "#Strings"
+	    0x23, 0x53, 0x74, 0x72, 0x69, 0x6E, 0x67, 0x73, 0x00, 0x00, 0x00, 0x00,
+	    
+	    // Header 2 - #US:
+	    // Offset = 0x0000908C
+	    0x8C, 0x90, 0x00, 0x00, 
+	    // Size = 0x000007BC
+	    0xBC, 0x07, 0x00, 0x00,
+	    // Name = "#US"
+	    0x23, 0x55, 0x53, 0x00
+	    , 
+	    // Header 3 - #GUID:
+	    // Offset = 0x00009848
+	    0x48, 0x98, 0x00, 0x00,
+	    // Size = 0x10
+	    0x10, 0x00, 0x00, 0x00, 
+	    // Name = "#GUID"
+	    0x23, 0x47, 0x55, 0x49, 0x44, 0x00, 0x00, 0x00, 
+	    
+	    // Header 4 - #BLOB:
+	    // Offset = 0x00009858
+	    0x58, 0x98, 0x00, 0x00,
+	    // Size = 0x00000E34
+	    0x34, 0x0E, 0x00, 0x00, 
+	    // Name = "#Blob"
+	    0x23, 0x42, 0x6C, 0x6F, 0x62, 0x00, 0x00, 0x00	    
+      ];
+      data;
     }
     private GetSampleHeader() : array[byte]
     {
@@ -106,8 +213,8 @@ namespace Tests
 	    0x76, 0x34, 0x2E, 0x30, 0x2E, 0x33, 0x30, 0x33, 0x31, 0x39, 0x00, 0x00, 
 	    // Flags = 0
 	    0x00, 0x00, 
-	    // NumberOfStreams = 5
-	    0x05, 0x00  
+	    // NumberOfStreams = 0
+	    0x00, 0x00  
       ];
       data;
     }

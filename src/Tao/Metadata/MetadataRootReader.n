@@ -48,6 +48,15 @@ namespace Tao.Interfaces
           def numberOfHeaders = reader.ReadUInt16();
           root.NumberOfStreamHeaders = numberOfHeaders;
           
+          // Read the attached stream headers
+          def streamHeaderReader = StreamHeaderReader();
+          def streamHeaders = streamHeaderReader.Read(numberOfHeaders, inputStream);
+          
+          foreach(header in streamHeaders)
+          {
+              root.StreamHeaders.Add(header);
+          }
+          
           root;
       }
   }
