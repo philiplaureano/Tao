@@ -15,7 +15,7 @@ using System.Linq;
 namespace Tests
 {
   public partial class ImageTests
-  {
+  {    
     public ShouldReadDosHeader() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
@@ -428,8 +428,8 @@ namespace Tests
       mutable exitCode : int = int.MinValue;
       using(def process = Process.Start(info))
       {
-          process.WaitForExit();
-          exitCode = process.ExitCode;
+        process.WaitForExit();
+        exitCode = process.ExitCode;
       }                
       
       assert exitCode equals 0 otherwiseprint "Invalid Image";

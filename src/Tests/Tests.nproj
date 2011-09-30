@@ -123,6 +123,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
+    <Compile Include="RvaMappingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SectionDataReadTests.n">
       <SubType>Code</SubType>
     </Compile>

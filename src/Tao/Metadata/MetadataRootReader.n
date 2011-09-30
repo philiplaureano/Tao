@@ -33,8 +33,6 @@ namespace Tao.Interfaces
       def length = reader.ReadUInt32();
       root.Length = length;
       
-      def startPosition = inputStream.Position;
-      
       def stringReader = PaddedNullTerminatedStringReader();
       def text = stringReader.Read(length, inputStream);
       root.Version = text;                                

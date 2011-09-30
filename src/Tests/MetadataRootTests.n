@@ -14,6 +14,22 @@ namespace Tests
 {
   public class MetadataRootTests
   {
+    public ShouldBeAbleToExtractMetadataRootFromAnImageObject() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldBeAbleToInjectMetadataRootIntoAnExistingImageObject() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldBeAbleToReadAttachedMetadataHeaps() : void
+    {
+      throw NotImplementedException();  
+    }
+    public ShouldBeAbleToWriteAttachedMetadataHeaps() : void
+    {
+      throw NotImplementedException();  
+    }
     public ShouldWriteReservedFieldAsZero() : void
     {
       def createHeader() : IMetadataRoot
@@ -150,11 +166,11 @@ namespace Tests
     public ShouldThrowBadImageFormatExceptionIfVersionStringIsEmptyOrNull() : void
         expects BadImageFormatException
     {
-        def root = MetadataRoot();
-        root.Version = null;
+      def root = MetadataRoot();
+      root.Version = null;
         
-        def writer = MetadataRootWriter();
-        writer.Write(root, MemoryStream());
+      def writer = MetadataRootWriter();
+      writer.Write(root, MemoryStream());
     }
     
     public ShouldWriteNumberOfStreams() : void
@@ -192,7 +208,7 @@ namespace Tests
       
       Tester.TestWrite.[ushort, IMetadataRoot, MetadataRootWriter]("NumberOfStreamHeaders", expectedNumberOfHeaders :> ushort, createHeader, getCount);
     }
-    public ShouldWriteCorrectOffsetForAttachedStreamHeaders() : void
+    public ShouldWriteCorrectStreamOffsetForAttachedStreamHeaders() : void
     {
       throw NotImplementedException();
     }
