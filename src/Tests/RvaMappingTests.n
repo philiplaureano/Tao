@@ -1,0 +1,60 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+using Tao.Interfaces;
+using Tests.Macros;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class RvaMappingTests
+  {
+    public ShouldBeAbleToDetermineCorrectSectionBasedOnRVA() : void
+    {      
+      def createSectionHeader(sectionName : string, pointerToRawData : uint, virtualAddress : uint, sizeOfRawData : uint) : ISectionHeader
+      {
+        def header = SectionHeader();
+        header.PointerToRawData = pointerToRawData;
+        header.VirtualAddress = virtualAddress;
+        header.SizeOfRawData = sizeOfRawData;
+        header.Name = sectionName;
+        
+        header;
+      };
+     
+      // Input: a list of sections and an RVA
+      def sections = List.[ISectionHeader]();
+      sections.Add(createSectionHeader(".text", 0x200, 0x2000, 0x200));
+      sections.Add(createSectionHeader(".reloc", 0x400, 0x4000, 0x200));
+      
+      def inputSections : IEnumerable.[ISectionHeader] = sections;    
+      def sectionResolver = SectionResolver();
+                  
+      def testHeader(name : string, rva : uint) : void
+      {
+        def actualSection : ISectionHeader = sectionResolver.Resolve(inputSections, rva);
+        def sectionName = actualSection.Name;
+        assert sectionName equals name otherwiseprint string.Format("The section resolver should have returned the {0} section", name);
+      }                  
+      
+      // This call should return the .text section
+      testHeader(".text", 0x217C);
+      testHeader(".reloc", 0x4000);
+    }
+    
+    public ShouldThrowArgumentExceptionIfRvaDoesNotMatchAnyExistingSections() : void 
+        expects ArgumentException
+    {
+      throw NotImplementedException();
+    }
+    
+    public ShouldBeAbleToFindMetadataRoot() : void
+    {
+      throw NotImplementedException();      
+    }
+  }
+}

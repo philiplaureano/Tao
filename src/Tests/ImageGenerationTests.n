@@ -56,7 +56,67 @@ namespace Tests
     }
     public ShouldSetTheDllSectionFlagWhenCreatingNetModulesAndDLLLibraries() : void
     {
-        throw NotImplementedException();
+      throw NotImplementedException();
+    }
+    public ShouldGenerateDefaultImportAddressTableDataDirectory() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldGenerateDefaultImportAddressTableData() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteEmptyExportTableDirectory() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteImportTableDirectory() : void
+    {
+      throw NotImplementedException();
+    }    
+    public ShouldWriteEmptyExceptionDirectory() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteEmptyCopyrightDirectory() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteEmptyGlobalPtrDirectory() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteEmptyTLSDirectory() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteEmptyLoadConfigDirectory() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteEmptyBoundImportDirectory() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteEmptyDelayedImportDescDirectory() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteEmptyReservedDirectory() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteEmptyStrongNameSignature() : void
+    {
+      throw NotImplementedException();
+    }    
+    public ShouldWriteCLR20AsTheDefaultVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteI386AsTheDefaultMachineType() : void
+    {
+      throw NotImplementedException();
     }
   }
 }

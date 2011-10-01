@@ -1,0 +1,29 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class SectionResolver : ISectionResolver
+  {
+    public Resolve([NotNull] sections : IEnumerable.[ISectionHeader], rva : uint) : ISectionHeader
+    {
+      def matchesRva(header : ISectionHeader, currentRva : uint) : bool
+      {
+          def startAddress = header.VirtualAddress;
+          def boundary = startAddress + header.SizeOfRawData;
+          
+          currentRva >= startAddress && currentRva <= boundary;
+      }
+      
+      def matchesGivenRva = matchesRva(_, rva);
+      sections.First(matchesGivenRva);
+    }
+  }
+}
