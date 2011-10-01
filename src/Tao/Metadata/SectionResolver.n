@@ -16,14 +16,22 @@ namespace Tao
     {
       def matchesRva(header : ISectionHeader, currentRva : uint) : bool
       {
-          def startAddress = header.VirtualAddress;
-          def boundary = startAddress + header.SizeOfRawData;
+        def startAddress = header.VirtualAddress;
+        def boundary = startAddress + header.SizeOfRawData;
           
-          currentRva >= startAddress && currentRva <= boundary;
+        currentRva >= startAddress && currentRva <= boundary;
       }
       
       def matchesGivenRva = matchesRva(_, rva);
-      sections.First(matchesGivenRva);
+      def result = sections.FirstOrDefault(matchesGivenRva);
+      
+      when(result == null)
+      {
+        def message = string.Format("The Rva '{0}' doesn't correspond to any of the given sections", rva);
+        throw ArgumentException(message);
+      }
+      
+      result;
     }
   }
 }

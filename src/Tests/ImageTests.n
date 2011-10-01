@@ -19,7 +19,7 @@ namespace Tests
     public ShouldReadDosHeader() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-      def image = GetImage(imageFile);      
+      def image = Image.ReadFrom(imageFile);      
       def expectedHash = GetDosHeader().GetHash();
       def actualHash = image.DOSHeader.Data.GetHash();
         
@@ -29,7 +29,7 @@ namespace Tests
     public ShouldReadCoffHeader() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-      def image = GetImage(imageFile);      
+      def image = Image.ReadFrom(imageFile);      
       def coffHeader = image.CoffHeader;
       
       assert coffHeader notnull otherwiseprint "Invalid CoffHeader";
@@ -44,7 +44,7 @@ namespace Tests
     public ShouldReadOptionalHeader32() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-      def image = GetImage(imageFile);
+      def image = Image.ReadFrom(imageFile);
       def header = image.OptionalHeader :> OptionalHeader.OptionalHeader32;
       assert header notnull otherwiseprint "Invalid OptionalHeader";
       
@@ -93,7 +93,7 @@ namespace Tests
     public ShouldReadOptionalHeader64() : void
     {
       def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
-      def image = GetImage(imageFile);
+      def image = Image.ReadFrom(imageFile);
       def header = image.OptionalHeader :> OptionalHeader.OptionalHeader64;
       assert header notnull otherwiseprint "Invalid OptionalHeader";
       
@@ -144,7 +144,7 @@ namespace Tests
       def emptyDataDirectoryIndices = array[0, 4, 7, 8, 9, 10, 11, 13, 15];
         
       def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
-      def image = GetImage(imageFile);
+      def image = Image.ReadFrom(imageFile);
       
       def directories = image.DataDirectories;
       assert directories.Count equals 0x10 otherwiseprint "Invalid number of data directories";
@@ -191,7 +191,7 @@ namespace Tests
       def relocSectionHash = GetRelocSectionHash();
       
       def imageFile = @"..\..\SampleBinaries\skeleton.exe";
-      def image = GetImage(imageFile);
+      def image = Image.ReadFrom(imageFile);
       
       def sectionCount = image.Sections.Count;
       assert sectionCount equals 2 otherwiseprint "Invalid number of sections";  
@@ -232,7 +232,7 @@ namespace Tests
     public ShouldWriteCorrectNumberOfSectionsThatCorrespondWithTheNumberOfSectionObjectsOnTheImage() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-      def inputImage = GetImage(imageFile);
+      def inputImage = Image.ReadFrom(imageFile);
       
       // The original image should have two sections
       assert inputImage.CoffHeader.NumberOfSections equals 2 otherwiseprint "Invalid number of sections in the input image";
@@ -257,7 +257,7 @@ namespace Tests
     public ShouldWriteNumberOfRvaAndSizesThatCorrespondWithTheNumberOfDataDirectories() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-      def inputImage = GetImage(imageFile);
+      def inputImage = Image.ReadFrom(imageFile);
       
       // Write the entire image to the output stream
       def outputStream = MemoryStream();
@@ -281,7 +281,7 @@ namespace Tests
     public ShouldHaveWrittenMSDosHeaderPointingToPositionOfCoffHeader() : void
     {           
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-      def inputImage = GetImage(imageFile);
+      def inputImage = Image.ReadFrom(imageFile);
       
       // Write the entire image to the output stream
       def outputStream = MemoryStream();
@@ -308,7 +308,7 @@ namespace Tests
     public ShouldWriteOptionalHeaderAfterCoffHeaderPosition() : void
     {                  
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-      def inputImage = GetImage(imageFile);
+      def inputImage = Image.ReadFrom(imageFile);
       
       // Write the entire image to the output stream
       def outputStream = MemoryStream();
@@ -343,7 +343,7 @@ namespace Tests
     public ShouldWriteDataDirectoriesImmediatelyAfterOptionalHeaderWritePosition() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-      def inputImage = GetImage(imageFile);
+      def inputImage = Image.ReadFrom(imageFile);
       
       // Write the entire image to the output stream
       def outputStream = MemoryStream();
@@ -364,7 +364,7 @@ namespace Tests
     }
     private TestImageBlockWrite(imageFile : string, startPosition : uint, size : uint, failureMessage : string, params args : array[object]) : void
     {        
-      def inputImage = GetImage(imageFile);
+      def inputImage = Image.ReadFrom(imageFile);
       
       // Write the entire image to the output stream
       def outputStream = MemoryStream();
@@ -394,7 +394,7 @@ namespace Tests
     public ShouldWriteSectionDataAfterSectionHeaders() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-      def inputImage = GetImage(imageFile);
+      def inputImage = Image.ReadFrom(imageFile);
       
       foreach(section in inputImage.Sections)
       {
@@ -408,7 +408,7 @@ namespace Tests
     
     private TestImageRoundTripping(imageFile : string, outputFile : string) : void
     {
-      def image = GetImage(imageFile);
+      def image = Image.ReadFrom(imageFile);
            
       
       using(def outputStream = FileStream(outputFile, FileMode.Create))
@@ -433,16 +433,7 @@ namespace Tests
       }                
       
       assert exitCode equals 0 otherwiseprint "Invalid Image";
-    }
-    
-    private GetImage(imageFile : string) : IImage
-    {
-      using(def imageStream = System.IO.FileStream(imageFile, FileMode.Open))
-      {
-        def reader = ImageReader();
-        reader.Read(imageStream);
-      }      
-    }
+    }        
     
     private GetDosHeader() : array[byte]
     {

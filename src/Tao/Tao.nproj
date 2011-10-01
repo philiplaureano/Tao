@@ -59,6 +59,12 @@
     </MacroReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Image.ReaderExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="API\ImageExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CoffHeader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -110,7 +116,13 @@
     <Compile Include="Metadata\MetadataRootReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\MetadataRootRvaResolver.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\MetadataRootWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\SectionDataReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\SectionResolver.n">
@@ -183,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Metadata" />
+    <Folder Include="API" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

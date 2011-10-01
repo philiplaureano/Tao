@@ -6,6 +6,7 @@ using Tao.Interfaces;
 using Tests.Macros;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -49,12 +50,23 @@ namespace Tests
     public ShouldThrowArgumentExceptionIfRvaDoesNotMatchAnyExistingSections() : void 
         expects ArgumentException
     {
-      throw NotImplementedException();
+      def sectionResolver = SectionResolver();
+      def header = SectionHeader();
+      def headers = List.[ISectionHeader]();
+      headers.Add(header);
+      
+      sectionResolver.Resolve(headers, 0xFEED);
     }
     
-    public ShouldBeAbleToFindMetadataRoot() : void
+    public ShouldBeAbleToResolveMetadataRootRva() : void
     {
-      throw NotImplementedException();      
-    }
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def image : IImage = Image.ReadFrom(imageFile);
+      
+      def resolver = MetadataRootRvaResolver();
+      def rva = resolver.ResolveFrom(image);
+      
+      assert rva equals 0x2060 otherwiseprint "Invalid Metadata Rva";
+    }        
   }
 }

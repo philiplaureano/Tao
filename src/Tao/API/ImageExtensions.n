@@ -1,0 +1,52 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public static class ImageExtensions
+  {
+    public GetCLRHeader([NotNull] this image : IImage) : ICLIHeader    
+        requires image.DataDirectories != null
+    {
+      mutable result : ICLIHeader = null;
+      def directories = image.DataDirectories;
+      
+      when (directories.Count >= 15)
+      {
+        def cliHeaderDirectory = image.DataDirectories[14];
+              
+        def rva = cliHeaderDirectory.Rva;
+        def size = cliHeaderDirectory.Size;
+        
+        when(rva > 0 && size > 0)
+        {
+          def data = image.ReadBlock(rva, size);        
+          def reader = CLIHeaderReader();
+          result = reader.Read(data);
+        }
+      }
+      
+      result;
+    }
+    
+    public HasCLRHeader([NotNull] this image : IImage) : bool
+    {
+        image.GetCLRHeader() != null;
+    }
+    
+    public ReadBlock([NotNull] this image : IImage, rva : uint, size : uint) : Stream
+    {
+      def reader = SectionDataReader();
+      def data = reader.ReadBlock(rva, size, image);
+      data;
+    }      
+  }
+}

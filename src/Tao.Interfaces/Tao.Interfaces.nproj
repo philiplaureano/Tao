@@ -138,6 +138,9 @@
     <Compile Include="Machine.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\IAddressResolver.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\ICLIHeader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -148,6 +151,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\IMetadataRootWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\ISectionDataReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\ISectionResolver.n">

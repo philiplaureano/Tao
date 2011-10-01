@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class Image : IImage
+  public partial class Image : IImage
   {
     private _dataDirectories : List.[IDataDirectory] = List.[IDataDirectory]();      
     private _sections : List.[ISection] = List.[ISection]();

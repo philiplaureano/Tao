@@ -1,0 +1,50 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+  public class SectionDataReader : ISectionDataReader
+  {
+      public ReadBlock(rva : uint, size : uint, [NotNull] image : IImage) : Stream
+        requires image.Sections != null && image.Sections.Count > 0
+        ensures value != null && value.Length == (size :> long)
+      {
+          // Map the given sections
+          def sections = image.Sections;          
+          def sectionHeaders = List.[ISectionHeader]();
+          def sectionMap = Dictionary.[string, ISection]();
+          foreach(section in sections)
+          {              
+              def header = section.Header;
+              def sectionName = header.Name;
+              sectionMap[sectionName] = section;
+              sectionHeaders.Add(header);
+          }
+          
+          // Find the section that contains the 
+          // given RVA
+          def sectionResolver = SectionResolver();
+          def targetHeader = sectionResolver.Resolve(sectionHeaders, rva);
+          def targetSection = sectionMap[targetHeader.Name];
+          
+          // Calculate the start position
+          def offset = rva - targetHeader.VirtualAddress;
+          
+          def sectionData = targetSection.Data;
+          _ = sectionData.Seek(offset, SeekOrigin.Begin);
+          def reader = BinaryReader(sectionData);          
+          def bytes = reader.ReadBytes(size :> int);
+          
+          def result = MemoryStream(bytes);
+          result;
+      }
+  }
+}

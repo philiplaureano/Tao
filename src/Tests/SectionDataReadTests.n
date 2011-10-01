@@ -1,8 +1,12 @@
 ﻿using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao;
+using Tao.Interfaces;
+using Tests.Macros;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,9 +14,54 @@ namespace Tests
 {  
   public class SectionDataReadTests
   {
-      public ShouldBeAbleToReadSectionDataUsingAGivenDataDirectoryIndex() : void
-      {
-          throw NotImplementedException();
-      }
+    public ShouldBeAbleToReadSectionDataUsingAGivenRvaAndSize() : void
+    {
+      // Use the CLI header address for the sample RVA and size
+      def rva : uint = 0x419c;
+      def size : uint = 0x48;
+      
+      def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
+      def image = Image.ReadFrom(imageFile);
+      
+      def reader = SectionDataReader();
+      def data = reader.ReadBlock(rva, size, image);
+          
+      def expectedData = GetCLIHeader();
+      def expectedHash = expectedData.GetHash();
+      
+      def actualHash = data.GetHash();
+      assert actualHash equals expectedHash otherwiseprint "Invalid data block";
+    }
+    
+    public ShouldBeAbleToReadSectionDataUsingAGivenRvaAndSizeUsingAnImageObject() : void
+    {
+      // Use the CLI header address for the sample RVA and size
+      def rva : uint = 0x419c;
+      def size : uint = 0x48;
+      
+      def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
+      def image = Image.ReadFrom(imageFile);
+      
+      def reader = SectionDataReader();
+      def data = image.ReadBlock(rva, size);
+          
+      def expectedData = GetCLIHeader();
+      def expectedHash = expectedData.GetHash();
+      
+      def actualHash = data.GetHash();
+      assert actualHash equals expectedHash otherwiseprint "Invalid data block";
+    }        
+    
+    private GetCLIHeader() : array[byte]
+    {
+      def sampleData = array[
+	0x48 : byte, 0x00, 0x00, 0x00, 0x02, 0x00, 0x05, 0x00, 0x48, 0x42, 0x00, 0x00, 0x8C, 0xA6, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x30, 0xE9, 0x00, 0x00, 0xE8, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+];        
+      sampleData;
+    }
   }
 }

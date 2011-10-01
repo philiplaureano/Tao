@@ -14,6 +14,52 @@ namespace Tests
 {
   public class CLIHeaderTests
   {
+    public ShouldBeAbleToReadCLIHeaderFromImageFile() : void
+    {        
+      def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
+      def readImage() : IImage
+      {
+        using(def imageStream = System.IO.FileStream(imageFile, FileMode.Open))
+        {
+          def reader = ImageReader();
+          reader.Read(imageStream);
+        }      
+      }
+      
+      def image = readImage();
+      def expectedData = GetSampleHeader();
+      
+      def cliHeader = image.GetCLRHeader();
+      assert cliHeader notnull otherwiseprint "Invalid CLI Header";
+      
+      def writer = CLIHeaderWriter();
+      def outputStream = MemoryStream();
+      writer.Write(cliHeader, outputStream);
+      
+      def expectedHash = expectedData.GetHash();
+      def actualHash = outputStream.GetHash();
+      
+      assert expectedHash equals actualHash otherwiseprint "The read CLI header does not match the expected CLI header data";
+    }
+    
+    public ShouldBeAbleToDetectIfCLRHeaderExistsInImageFileIfCLIHeaderExists() : void
+    {
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def image = Image.ReadFrom(imageFile);
+      
+      def result = image.HasCLRHeader();
+      assert result equals true otherwiseprint "The image file wasn't able to detect if a CLR header was present even when there was a header present";
+    }
+    
+    public ShouldBeAbleToDetectIfCLRHeaderExistsInImageFileIfCLIHeaderDoesntExist() : void
+    {
+      def imageFile = @"..\..\SampleBinaries\UnmanagedSkeleton.exe";
+      def image = Image.ReadFrom(imageFile);
+      
+      def result = image.HasCLRHeader();
+      assert result equals false otherwiseprint "The image file wasn't able to detect if a CLR header was absent even when there wasn't a header present";
+    }
+    
     public ShouldReadCb() : void
     {
       TestRead("Cb", 0x48 :> uint);
