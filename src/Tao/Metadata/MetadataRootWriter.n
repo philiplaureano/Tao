@@ -26,14 +26,18 @@ namespace Tao
       // Write the Version string length
       def version =  root.Version;
       when (string.IsNullOrEmpty(version))
-        throw BadImageFormatException("The version string in the MetadataRoot header cannot be null");
-        
-      def length = version.Length;
-      writer.Write(length :> uint);
+        throw BadImageFormatException("The version string in the MetadataRoot header cannot be null");              
           
       // Write the version string
+      def stringStream = MemoryStream();
       def stringWriter = PaddedNullTerminatedStringWriter();
-      stringWriter.Write(root.Version, outputStream);
+      stringWriter.Write(root.Version, stringStream);
+      
+      def length = stringStream.Length;
+      writer.Write(length :> uint);
+      
+      def versionStringBytes = stringStream.ToArray();
+      writer.Write(versionStringBytes);
           
       // Write the flags field
       writer.Write(0 : ushort);

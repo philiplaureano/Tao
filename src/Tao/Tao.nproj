@@ -113,6 +113,9 @@
     <Compile Include="Metadata\MetadataRoot.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\MetadataRootExtractor.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\MetadataRootReader.n">
       <SubType>Code</SubType>
     </Compile>

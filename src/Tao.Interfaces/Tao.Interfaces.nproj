@@ -90,6 +90,9 @@
     <Compile Include="IDosHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IExtractor.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="IImage.n">
       <SubType>Code</SubType>
     </Compile>
