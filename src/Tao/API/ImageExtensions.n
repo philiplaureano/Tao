@@ -28,9 +28,11 @@ namespace Tao
         
         when(rva > 0 && size > 0)
         {
-          def data = image.ReadBlock(rva, size);        
-          def reader = CLIHeaderReader();
-          result = reader.Read(data);
+          using(def data = image.ReadBlock(rva, size))
+          {
+            def reader = CLIHeaderReader();
+            result = reader.Read(data);
+          }
         }
       }
       
@@ -39,7 +41,7 @@ namespace Tao
     
     public HasCLRHeader([NotNull] this image : IImage) : bool
     {
-        image.GetCLRHeader() != null;
+      image.GetCLRHeader() != null;
     }
     
     public ReadBlock([NotNull] this image : IImage, rva : uint, size : uint) : Stream

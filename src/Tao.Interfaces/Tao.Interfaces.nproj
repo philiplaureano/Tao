@@ -96,6 +96,9 @@
     <Compile Include="IImage.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IImageBlockReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ImageType.n">
       <SubType>Code</SubType>
     </Compile>
@@ -154,6 +157,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\IMetadataRootWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\IMetadataStreamReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\ISectionDataReader.n">

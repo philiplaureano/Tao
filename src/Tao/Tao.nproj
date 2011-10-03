@@ -110,6 +110,9 @@
     <Compile Include="Metadata\CLIHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\MetadataBlockReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\MetadataRoot.n">
       <SubType>Code</SubType>
     </Compile>
@@ -123,6 +126,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\MetadataRootWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\MetadataStreamReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\SectionDataReader.n">

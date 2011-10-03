@@ -1,23 +1,45 @@
 ﻿using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao;
+using Tao.Interfaces;
+using Tests.Macros;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Tests
 {
   public class MetadataStreamBlockReadTests
-  {
-      public ShouldBeAbleToSeekAbsolutePositionOfStreamUsingMetadataRootRvaAndStreamHeaderOffset() : void
-      {
-          throw NotImplementedException();
-      }
+  {      
+    public ShouldBeAbleToReadMetadataStreamUsingGivenStreamHeaderAndStream() : void
+    {
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def image = Image.ReadFrom(imageFile);
+      def blockReader = MetadataBlockReader();
+      def metadataBlock = blockReader.ExtractFrom(image);           
       
-      public ShouldBeAbleToReadMetadataStreamUsingGivenStreamHeaderAndStream() : void
-      {
-          throw NotImplementedException();
-      }
+      def streamHeaderData = array[
+	        0x04 : byte, 0x01, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x23, 0x47, 0x55, 0x49, 0x44, 0x00, 0x00, 0x00
+      ];
+      
+      def streamHeaderReader = StreamHeaderReader();
+      def streamHeaders = streamHeaderReader.Read(1, MemoryStream(streamHeaderData));
+      def streamHeader = streamHeaders.First();
+      def metadataStreamReader = MetadataStreamReader();
+      
+      def metadataHeap = metadataStreamReader.Read(streamHeader, metadataBlock);
+      
+      def expectedData = array[
+	        0xCD : byte, 0xEE, 0x79, 0x0E, 0xD5, 0x88, 0x8F, 0x43, 0x86, 0x84, 0x11, 0x81, 0x81, 0x89, 0xFF, 0x1D
+        ];
+
+      def actualHash = metadataHeap.GetHash();
+      def expectedHash = expectedData.GetHash();
+      
+      assert actualHash equals expectedHash otherwiseprint "Metadata stream does not match expected data";
+    }
   }
 }

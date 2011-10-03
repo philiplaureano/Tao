@@ -12,18 +12,17 @@ namespace Tao
 {
   public class MetadataRootExtractor : IExtractor[IMetadataRoot]
   {
-      public ExtractFrom([NotNull] image : IImage) : IMetadataRoot
+    public ExtractFrom([NotNull] image : IImage) : IMetadataRoot
         requires image.HasCLRHeader()
         ensures value != null
-      {
-          def clrHeader = image.GetCLRHeader();
-          def rootRva = clrHeader.MetadataRva;
-          def size = clrHeader.MetadataSize;
+    {
+      def blockReader = MetadataBlockReader();
+      def reader = MetadataRootReader();
+      def rootBlock = blockReader.ExtractFrom(image);
+      def result = reader.Read(rootBlock);
+      rootBlock.Dispose();
           
-          def rootBlock = image.ReadBlock(rootRva, size);
-          def reader = MetadataRootReader();
-
-          reader.Read(rootBlock);
-      }
+      result;
+    }
   }
 }

@@ -1,0 +1,28 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MetadataStreamReader : IMetadataStreamReader
+  {
+      public Read([NotNull] header : IStreamHeader, [NotNull] stream : Stream) : Stream
+      {
+          def offset = header.Offset;
+          def size = header.Size;
+          
+          def reader = BinaryReader(stream);
+          _ = stream.Seek(offset, SeekOrigin.Begin);
+          
+          def bytes = reader.ReadBytes(size :> int);
+          MemoryStream(bytes);
+      }
+  }
+}
