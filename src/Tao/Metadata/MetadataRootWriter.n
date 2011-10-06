@@ -15,6 +15,8 @@ namespace Tao
   {
     public Write([NotNull] root : IMetadataRoot, [NotNull] outputStream : Stream) : void
     {
+      // Keep track of the metadata root start position 
+      def startPosition = outputStream.Position;
       def writer = BinaryWriter(outputStream);
       writer.Write(root.Signature);
       writer.Write(root.MajorVersion);
@@ -44,9 +46,39 @@ namespace Tao
           
       def streamCount = root.StreamHeaders.Count;
       writer.Write(streamCount :> ushort);
+                  
+      def writeHeaders() : void
+      {
+        def streamHeaderWriter = StreamHeaderWriter();
+        streamHeaderWriter.Write(root.StreamHeaders, outputStream);
+      }
+      
+      // Determine the length of the headers
+      // before writing the actual header values
+      def headerStartPosition = outputStream.Position;      
+      writeHeaders();
+      
+      def heaps = root.Heaps;
+      foreach(header in root.StreamHeaders)
+      {
+        def currentPosition = outputStream.Position;
+        def offset = currentPosition - startPosition;
+        def name = header.Name;
+        def heap = heaps[name];
           
-      def streamHeaderWriter = StreamHeaderWriter();
-      streamHeaderWriter.Write(root.StreamHeaders, outputStream);
+        def heapReader = BinaryReader(heap);
+        def heapBytes = heapReader.ReadBytes(heap.Length :> int);
+        writer.Write(heapBytes);
+          
+        header.Offset = offset :> uint;                    
+        header.Size = heapBytes.Length :> uint;
+      }
+      
+      // Write the actual header values using
+      // the stream info gathered during the 
+      // heap writing operations
+      _ = outputStream.Seek(headerStartPosition, SeekOrigin.Begin);
+      writeHeaders();
     }
   }
 }
