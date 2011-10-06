@@ -13,7 +13,8 @@ namespace Tao.Interfaces
   public class MetadataRootReader : IMetadataRootReader
   {
     public Read(inputStream : Stream) : IMetadataRoot
-    {
+    { 
+      def startPosition = inputStream.Position;
       def reader = BinaryReader(inputStream);
           
           // Search for the magic signature
@@ -48,9 +49,19 @@ namespace Tao.Interfaces
           
       foreach(header in streamHeaders)
       {
+        def offset = header.Offset;
+        def size = header.Size;
+        def position = startPosition + offset;
+        def name = header.Name;
+        
+        // Read the attached table heap
+        _ = inputStream.Seek(position, SeekOrigin.Begin);
+        def bytes = reader.ReadBytes(size :> int);
+        root.Heaps[name] = MemoryStream(bytes);
+        
         root.StreamHeaders.Add(header);
       }
-          
+            
       root;
     }
   }

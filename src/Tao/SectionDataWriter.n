@@ -1,0 +1,46 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao.Interfaces;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class SectionDataWriter
+  {
+    public WriteTo(rva : uint, [NotNull] dataToWrite : Stream, [NotNull] image : IImage) : void
+        requires dataToWrite.Length > 0
+    {      
+      def sections = image.Sections;      
+      def targetHeader = image.ResolveSectionHeaderFrom(rva);
+      
+      def matchesHeader(section : ISection) : bool
+      {
+          def header = section.Header;
+          def startAddress = header.VirtualAddress;
+          targetHeader.VirtualAddress == startAddress;                    
+      }
+                 
+      def targetSection = sections.Where(matchesHeader).First();
+      def offset = rva - targetHeader.VirtualAddress;
+      
+      def sectionData = targetSection.Data;
+      _ = sectionData.Seek(offset, SeekOrigin.Begin);
+      
+      def length = dataToWrite.Length;
+      
+      // Start from the beginning of the input data
+      _ = dataToWrite.Seek(0, SeekOrigin.Begin);
+      def reader = BinaryReader(dataToWrite);
+      def bytes = reader.ReadBytes(length :> int);
+      
+      def writer = BinaryWriter(sectionData);
+      writer.Write(bytes);      
+    }
+  }
+}

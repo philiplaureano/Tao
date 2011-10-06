@@ -2,6 +2,7 @@
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tests.Macros;
 
 using System;
 using System.Collections.Generic;
@@ -21,20 +22,33 @@ namespace Tests
       
       bytes.GetHash();
     }
-    
+    public static ShouldMatch(this stream : Stream, otherArray : array[byte]) : void
+    {
+      def hash = stream.GetHash();
+      def otherHash = otherArray.GetHash();
+          
+      assert hash equals otherHash otherwiseprint "The given data streams don't match";
+    }    
+     public static ShouldMatch(this stream : Stream, other : Stream) : void
+    {
+      def hash = stream.GetHash();
+      def otherHash = other.GetHash();
+          
+      assert hash equals otherHash otherwiseprint "The given data streams don't match";
+    }   
     public static GetReader([NotNull] this stream: Stream) : BinaryReader
     {
-        BinaryReader(stream);
+      BinaryReader(stream);
     }
     
     public static ShouldMatch([NotNull] this currentStream : Stream, [NotNull] otherStream : Stream, startPosition : uint, length : uint, 
     failureMessage : string, params args : array[object]) : void
     {
-        def matchesOtherStream = currentStream.Matches(otherStream, startPosition, length);
-        when (!matchesOtherStream)
-        {
-            NUnit.Framework.Assert.Fail(failureMessage, args);
-        }
+      def matchesOtherStream = currentStream.Matches(otherStream, startPosition, length);
+      when (!matchesOtherStream)
+      {
+        NUnit.Framework.Assert.Fail(failureMessage, args);
+      }
     }
     public static Matches([NotNull] this currentStream : Stream, [NotNull] otherStream : Stream, startPosition : uint, length : uint) : bool
         requires startPosition <= currentStream.Length

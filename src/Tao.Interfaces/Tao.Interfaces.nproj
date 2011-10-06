@@ -102,9 +102,6 @@
     <Compile Include="ImageType.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IMemoryLocation.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="INTHeader.n">
       <SubType>Code</SubType>
     </Compile>

@@ -3,6 +3,7 @@ using Nemerle.Text;
 using Nemerle.Utility;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,5 +20,6 @@ namespace Tao.Interfaces
     Flags : ushort { get; set; }
     NumberOfStreamHeaders : ushort { get; set; }    
     StreamHeaders : IList[IStreamHeader] { get; }
+    Heaps : IDictionary[string, Stream] { get; }
   }
 }
