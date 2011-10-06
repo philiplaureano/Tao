@@ -15,7 +15,44 @@ using System.Linq;
 namespace Tests
 {
   public partial class ImageTests
-  {    
+  { 
+    public ShouldBeAbleToWriteToAGivenImageUsingAnRva() : void
+    {
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def image = Image.ReadFrom(imageFile);
+      
+      def sampleData = GetDosHeader();
+      def size = sampleData.Length :> uint;
+      def rva : uint = 0x4000;
+      
+      def sampleStream = MemoryStream(sampleData);
+      image.WriteBlock(rva, sampleStream);
+            
+      def writtenData = image.ReadBlock(rva, size);
+      
+      def expectedHash = sampleData.GetHash();
+      def actualHash = writtenData.GetHash();
+      assert expectedHash equals actualHash otherwiseprint "Invalid image write operation";
+    }
+    public ShouldBeAbleToWriteToAGivenLocationUsingAnExistingRva() : void
+    {
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def image = Image.ReadFrom(imageFile);
+      
+      def sampleData = GetDosHeader();
+      def size = sampleData.Length :> uint;
+      def rva : uint = 0x4000;
+      
+      def sampleStream = MemoryStream(sampleData);
+      def sectionWriter = SectionDataWriter();
+      sectionWriter.WriteTo(rva, sampleStream, image);
+            
+      def writtenData = image.ReadBlock(rva, size);
+      
+      def expectedHash = sampleData.GetHash();
+      def actualHash = writtenData.GetHash();
+      assert expectedHash equals actualHash otherwiseprint "Invalid section write operation";
+    }           
     public ShouldReadDosHeader() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";

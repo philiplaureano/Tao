@@ -37,18 +37,29 @@ namespace Tao
       }
       
       result;
-    }
-    
+    }    
     public HasCLRHeader([NotNull] this image : IImage) : bool
     {
       image.GetCLRHeader() != null;
-    }
-    
+    }    
     public ReadBlock([NotNull] this image : IImage, rva : uint, size : uint) : Stream
     {
       def reader = SectionDataReader();
       def data = reader.ReadBlock(rva, size, image);
       data;
-    }      
+    }  
+    public WriteBlock([NotNull] this image : IImage, rva : uint, data : Stream) : void
+    {
+      def sectionWriter = SectionDataWriter();
+      sectionWriter.WriteTo(rva, data, image);
+    }  
+    public ResolveSectionHeaderFrom([NotNull] this image : IImage, rva : uint) : ISectionHeader
+    {
+      def resolver = SectionResolver();
+      def sections = image.Sections;
+      def headers = sections.Select(s => s.Header);
+        
+      resolver.Resolve(headers, rva);
+    }
   }
 }

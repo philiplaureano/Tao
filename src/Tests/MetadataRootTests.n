@@ -74,7 +74,8 @@ namespace Tests
 	    // Name = "#Blob"
 	    0x23, 0x42, 0x6C, 0x6F, 0x62, 0x00, 0x00, 0x00	    
       ];
-        
+      
+      // TODO: Add the sample raw data for the attached metadata heaps
       def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
       def image = Image.ReadFrom(imageFile);
       
