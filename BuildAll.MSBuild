@@ -1,0 +1,25 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="RunTests">
+  <Target Name="Clean">
+    <PropertyGroup>
+      <TargetDirectory>$(MSBuildProjectDirectory)\build\</TargetDirectory>
+      <UnitTestDirectory>$(MSBuildProjectDirectory)\src\Tests\bin\Debug\</UnitTestDirectory>
+    </PropertyGroup>
+    <ItemGroup>
+      <BinFiles Include="$(UnitTestDirectory)\*.dll" />
+      <UnitTestAssemblies Include="Tests.dll"/>
+    </ItemGroup>
+    <RemoveDir Directories="$(TargetDirectory)" ContinueOnError="true" />
+    <Delete Files="@(BinFiles)" />
+  </Target>
+  <Target Name="Compile" DependsOnTargets="Clean">
+    <MSBuild Projects="Tao.sln" />
+  </Target>
+  <Target Name="Publish" DependsOnTargets="Compile">
+    <Message Importance="High" Text="Copying files to $(TargetDirectory)"/>
+    <Copy SourceFiles ="@(BinFiles)" DestinationFolder="$(TargetDirectory)" />
+  </Target>  
+  <Target Name="RunTests" DependsOnTargets="Publish">
+    <Exec Command="$(MSBuildProjectDirectory)\tools\nunit\nunit-console.exe @(UnitTestAssemblies) /nologo" WorkingDirectory="$(UnitTestDirectory)"/>
+    <Message Text="Finished Running Unit Tests for @(UnitTestAssemblies)"/>
+  </Target>  
+</Project>

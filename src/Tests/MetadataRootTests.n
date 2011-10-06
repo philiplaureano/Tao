@@ -69,6 +69,11 @@ namespace Tests
       
       assert actualHash equals expectedHash otherwiseprint "Unable to read MetadataRoot from image";
     }    
+    public ShouldThrowBadImageFormatExceptionWhenWritingMetadataHeapHeaderWithoutTheCorrespondingHeapStream() : void
+        expects BadImageFormatException
+    {
+      throw NotImplementedException();
+    }
     public ShouldBeAbleToInjectMetadataRootIntoAnExistingImageObject() : void
     {        
       throw NotImplementedException();
