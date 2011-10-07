@@ -61,12 +61,47 @@ namespace Tao
       sectionWriter.WriteTo(rva, data, image);
     } 
     public Write([NotNull] this image : IImage, [NotNull] root : IMetadataRoot, rva : uint) : void
+        requires image.HasCLRHeader()
     {
       def outputStream = MemoryStream();
       def writer = MetadataRootWriter();
       writer.Write(root, outputStream);
       
       image.WriteBlock(rva, outputStream);      
+      
+      def clrHeader = image.GetCLRHeader();
+      clrHeader.MetadataRva = rva;
+      clrHeader.MetadataSize = outputStream.Length :> uint;
+      
+      image.Write(clrHeader);
+    }
+    public Write([NotNull] this image : IImage, [NotNull] clrHeader : ICLIHeader) : void
+        requires image.DataDirectories != null && image.DataDirectories.Count >= 15
+    {      
+      def directories = image.DataDirectories;      
+      def clrDataDirectory = directories[14];
+      def clrHeaderRva = clrDataDirectory.Rva;
+      
+      image.Write(clrHeader, clrHeaderRva);
+    }
+    public Write([NotNull] this image : IImage, [NotNull] clrHeader : ICLIHeader, rva : uint) : void
+        requires image.DataDirectories != null && image.DataDirectories.Count >= 15
+    {
+      // Write the header bytes to a temporary buffer
+      def clrHeaderStream = MemoryStream();
+      def clrHeaderWriter = CLIHeaderWriter();
+      clrHeaderWriter.Write(clrHeader, clrHeaderStream);
+            
+      image.WriteBlock(rva, clrHeaderStream);
+      
+      def size = clrHeaderStream.Length :> uint;
+      
+      // Update the CLR directory to point to the new directory
+      def directories = image.DataDirectories;      
+      def clrDataDirectory = directories[14];
+      
+      clrDataDirectory.Rva = rva;
+      clrDataDirectory.Size = size;
     }
     public ResolveSectionHeaderFrom([NotNull] this image : IImage, rva : uint) : ISectionHeader
     {

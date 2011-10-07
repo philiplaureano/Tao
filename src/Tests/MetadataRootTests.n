@@ -97,7 +97,22 @@ namespace Tests
       def root = image.GetMetadataRoot();
       writer.Write(root, expectedStream);
       
-      // Clear out the existing root data
+      // Clear the metadata RVA/Size from the CLR header
+      clrHeader.MetadataRva = 0x4000;
+      clrHeader.MetadataSize = 0x42;      
+      
+      assert image.DataDirectories.Count equals 16 otherwiseprint "Invalid number of data directories";
+      
+      def clrHeaderDirectory = image.DataDirectories[14];
+      
+      // Save the CLR header RVA 
+      def clrHeaderRva = clrHeaderDirectory.Rva;            
+      image.Write(clrHeader, clrHeaderRva);
+      
+      def expectedSize = expectedStream.Length;
+      def expectedRva = rootRva;
+      
+      // Clear the existing root data
       def bytes = array(size :> int) : array[byte];
       def nullStream = MemoryStream(bytes);
       
@@ -110,7 +125,13 @@ namespace Tests
       def writtenRoot = image.GetMetadataRoot();
       writer.Write(writtenRoot, actualStream);
       
-      expectedStream.ShouldMatch(actualStream);
+      expectedStream.ShouldMatch(actualStream);      
+      
+      // Verify that the CLR header itself points to the correct metadata root RVA and has the correct size
+      def modifiedHeader = image.GetCLRHeader();
+      
+      assert modifiedHeader?.MetadataRva equals expectedRva otherwiseprint "Invalid MetadataRva";
+      assert modifiedHeader?.MetadataSize equals expectedSize otherwiseprint "Invalid MetadataSize";
     }
 
     public ShouldBeAbleToReadAttachedMetadataHeaps() : void
