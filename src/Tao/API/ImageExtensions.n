@@ -38,6 +38,13 @@ namespace Tao
       
       result;
     }    
+    public GetMetadataRoot([NotNull] this image : IImage) : IMetadataRoot
+        requires image.HasCLRHeader()
+    {
+      def reader = MetadataRootExtractor();
+      def header = reader.ExtractFrom(image);
+      header;
+    }    
     public HasCLRHeader([NotNull] this image : IImage) : bool
     {
       image.GetCLRHeader() != null;
@@ -52,7 +59,16 @@ namespace Tao
     {
       def sectionWriter = SectionDataWriter();
       sectionWriter.WriteTo(rva, data, image);
-    }  
+    } 
+    public Write([NotNull] this image : IImage, [NotNull] root : IMetadataRoot, rva : uint) : void
+        requires image.HasCLRHeader()
+    {
+      def outputStream = MemoryStream();
+      def writer = MetadataRootWriter();
+      writer.Write(root, outputStream);
+      
+      image.WriteBlock(rva, outputStream);      
+    }
     public ResolveSectionHeaderFrom([NotNull] this image : IImage, rva : uint) : ISectionHeader
     {
       def resolver = SectionResolver();

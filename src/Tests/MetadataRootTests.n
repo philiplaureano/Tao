@@ -40,8 +40,7 @@ namespace Tests
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
       def image = Image.ReadFrom(imageFile);
       
-      def reader = MetadataRootExtractor();
-      def header = reader.ExtractFrom(image);
+      def header = image.GetMetadataRoot();
       
       def writer = MetadataRootWriter();
       def outputStream = MemoryStream();
@@ -74,9 +73,36 @@ namespace Tests
     {
       throw NotImplementedException();
     }
-    public ShouldBeAbleToInjectMetadataRootIntoAnExistingImageObject() : void
+    public ShouldBeAbleToWriteMetadataRootIntoAnExistingImageObject() : void
     {        
-      throw NotImplementedException();
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def image = Image.ReadFrom(imageFile);
+      
+      def clrHeader : ICLIHeader = image.GetCLRHeader();
+      def rootRva = clrHeader.MetadataRva;
+      def size = clrHeader.MetadataSize;
+      
+      def writer = MetadataRootWriter();
+      def expectedStream = MemoryStream();
+      
+      // Get the sample root header
+      def root = image.GetMetadataRoot();
+      writer.Write(root, expectedStream);
+      
+      // Clear out the existing root data
+      def bytes = array(size :> int) : array[byte];
+      def nullStream = MemoryStream(bytes);
+      
+      image.WriteBlock(rootRva, nullStream);
+      
+      // Inject the sample root object
+      image.Write(root, rootRva);
+      
+      def actualStream = MemoryStream();
+      def writtenRoot = image.GetMetadataRoot();
+      writer.Write(writtenRoot, actualStream);
+      
+      expectedStream.ShouldMatch(actualStream);
     }
     public ShouldThrowInvalidOperationExceptionWhenTryingToInjectAMetadataRootIntoAnUnmanagedImage() : void
     {

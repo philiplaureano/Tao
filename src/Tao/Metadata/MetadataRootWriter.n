@@ -65,7 +65,10 @@ namespace Tao
         def offset = currentPosition - startPosition;
         def name = header.Name;
         def heap = heaps[name];
-          
+        
+        // Reset the heap position
+        _ = heap.Seek(0, SeekOrigin.Begin);
+        
         def heapReader = BinaryReader(heap);
         def heapBytes = heapReader.ReadBytes(heap.Length :> int);
         writer.Write(heapBytes);
