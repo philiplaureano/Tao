@@ -61,7 +61,6 @@ namespace Tao
       sectionWriter.WriteTo(rva, data, image);
     } 
     public Write([NotNull] this image : IImage, [NotNull] root : IMetadataRoot, rva : uint) : void
-        requires image.HasCLRHeader()
     {
       def outputStream = MemoryStream();
       def writer = MetadataRootWriter();

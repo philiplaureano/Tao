@@ -71,7 +71,15 @@ namespace Tests
     public ShouldThrowBadImageFormatExceptionWhenWritingMetadataHeapHeaderWithoutTheCorrespondingHeapStream() : void
         expects BadImageFormatException
     {
-      throw NotImplementedException();
+      def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
+      def image = Image.ReadFrom(imageFile);
+      def root = image.GetMetadataRoot();
+      
+      // Removing the attached metadata heaps should cause the
+      // write call to fail
+      root.Heaps.Clear();
+      def writer = MetadataRootWriter();
+      writer.Write(root, MemoryStream());      
     }
     public ShouldBeAbleToWriteMetadataRootIntoAnExistingImageObject() : void
     {        
@@ -104,10 +112,7 @@ namespace Tests
       
       expectedStream.ShouldMatch(actualStream);
     }
-    public ShouldThrowInvalidOperationExceptionWhenTryingToInjectAMetadataRootIntoAnUnmanagedImage() : void
-    {
-      throw NotImplementedException();
-    }
+
     public ShouldBeAbleToReadAttachedMetadataHeaps() : void
     {
       def imageFile = @"..\..\SampleBinaries\Skeleton.exe";

@@ -64,6 +64,13 @@ namespace Tao
         def currentPosition = outputStream.Position;
         def offset = currentPosition - startPosition;
         def name = header.Name;
+        
+        when(!heaps.ContainsKey(name))
+        {
+            def message = string.Format("There is no corresponding heap stream that matches the '{0}' metadata stream header", name);
+            throw BadImageFormatException(message);
+        }
+        
         def heap = heaps[name];
         
         // Reset the heap position
