@@ -10,6 +10,14 @@ namespace Tests
 {
   public class ImageGenerationTests
   {
+    public ShouldWriteDefaultCLRDataDirectory() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldGenerateDefaultMetadataRoot() : void
+    {
+      throw NotImplementedException();
+    }
     public ShouldHaveCorrectDefaultCoffHeaderCharacteristicsFor32BitImages() : void
     {
       throw NotImplementedException();
@@ -111,6 +119,14 @@ namespace Tests
       throw NotImplementedException();
     }    
     public ShouldWriteCLR20AsTheDefaultVersion() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldBeAbleToGenerateAssemblyThatRequiresNET35() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldBeAbleToGenerateAssemblyThatRequiresNET40() : void
     {
       throw NotImplementedException();
     }

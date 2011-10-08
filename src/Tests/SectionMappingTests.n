@@ -1,0 +1,50 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class SectionMappingTests
+  {
+    public ShouldBeAbleToEnumerateWhichSectionElementsAreMapped() : void
+    {
+      throw NotImplementedException();
+    }    
+    public ShouldBeAbleToExplicitlyMarkSectionBlocksForUse() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldBeAbleToEnumerateAvailableSectionBlocks() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldBeAbleToDetermineNumberOfBytesUsedInAGivenSection() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldBeAbleToDetermineNumberOfBytesFreeInAGivenSection() : void
+    {
+      throw NotImplementedException();
+    }    
+    public ShouldBeAbleToReturnTheRVAandSizeOfAnExistingSectionBlock() : void
+    {
+      throw NotImplementedException();
+    }    
+    public ShouldBeAbleToReturnRVAOfExistingSectionBlock() : void
+    {
+      throw NotImplementedException();
+    }    
+    public ShouldBeAbleToGiveCorrectRVAsEvenIfSectionSizesGrow() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldBeAbleToGiveCorrectRVAsEvenIfSectionSizesShrink() : void
+    {
+      throw NotImplementedException();
+    }
+  }
+}
