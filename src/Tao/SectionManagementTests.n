@@ -13,7 +13,11 @@ namespace Tao
     public ShouldBeAbleToWriteToANamedSectionWithoutExplicitlySpecifyingAnRVA() : void
     {
       throw NotImplementedException();
-    }	
+    }	    
+    public ShouldBeAbleToReadSectionElementUsingOnlyASectionElementType() : void
+    {
+      throw NotImplementedException();
+    }
     public ShouldBeAbleToRemapAllSectionElementRVAsIfSectionSizesChange() : void
     {
       throw NotImplementedException();
