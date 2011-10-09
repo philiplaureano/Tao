@@ -126,10 +126,19 @@
     <Compile Include="RvaMappingTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SectionAddressWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SectionDataReadTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionHeaderTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionMapperTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionAddressResolutionTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StartupStubTests.n">

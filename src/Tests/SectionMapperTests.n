@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Tests
 {
-  public class SectionMappingTests
+  public class SectionMapperTests
   {
     public ShouldBeAbleToEnumerateWhichSectionElementsAreMapped() : void
     {

@@ -64,7 +64,7 @@ namespace Tests
       def image : IImage = Image.ReadFrom(imageFile);
       
       def resolver = MetadataRootRvaResolver();
-      def rva = resolver.ResolveFrom(image);
+      def rva = resolver.ResolveFrom(image).Rva;
       
       assert rva equals 0x2060 otherwiseprint "Invalid Metadata Rva";
     }        

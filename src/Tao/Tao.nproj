@@ -59,6 +59,9 @@
     </MacroReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="API\Image.ReaderExtensions.n">
       <SubType>Code</SubType>
     </Compile>
@@ -199,6 +202,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionManagementTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionResolver.n">

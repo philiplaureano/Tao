@@ -1,0 +1,28 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class Address : IAddress
+  {
+      public this(rva : uint, size : uint)
+      {
+          Rva = rva;
+          Size = size;
+      }
+      public Rva : uint 
+      {
+          get; set;
+      }
+      public Size : uint 
+      {
+          get; set;
+      }
+  }
+}

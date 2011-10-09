@@ -1,0 +1,94 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class SectionAddressWriteTests
+  {
+    public ShouldWriteExportTableAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteImportTableAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteResourceTableAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteExceptionTableAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteCertificateTableAddress() : void
+    {
+      throw NotImplementedException();
+    }		
+    public ShouldWriteDebugAddress() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldWriteBaseRelocationTableAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteCopyrightAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteGlobalPtrAddress() : void
+    {
+      throw NotImplementedException();
+    }    
+    public ShouldWriteTLSAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteLoadConfigAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteBoundImportAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteIATAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteDelayImportDescriptorAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteCLIHeaderAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteMetadataRootAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteMetadataStreamHeaderAddresses() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteMetadataHeapAddresses() : void
+    {
+      throw NotImplementedException();
+    }    
+    public ShouldWriteRelocationTableAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldWriteIndividualMethodAddress() : void
+    {
+      throw NotImplementedException();
+    }
+  }
+}

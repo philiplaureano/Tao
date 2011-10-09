@@ -1,0 +1,94 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class SectionAddressResolutionTests
+  {      
+    public ShouldResolveExportTableAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveImportTableAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveResourceTableAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveExceptionTableAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveCertificateTableAddress() : void
+    {
+      throw NotImplementedException();
+    }		
+    public ShouldResolveDebugAddress() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldResolveBaseRelocationTableAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveCopyrightAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveGlobalPtrAddress() : void
+    {
+      throw NotImplementedException();
+    }    
+    public ShouldResolveTLSAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveLoadConfigAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveBoundImportAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveIATAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveDelayImportDescriptorAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveCLIHeaderAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveMetadataRootAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveMetadataStreamHeaderAddresses() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveMetadataHeapAddresses() : void
+    {
+      throw NotImplementedException();
+    }    
+    public ShouldResolveRelocationTableAddress() : void
+    {
+      throw NotImplementedException();
+    }	
+    public ShouldResolveIndividualMethodAddress() : void
+    {
+      throw NotImplementedException();
+    }
+  }
+}

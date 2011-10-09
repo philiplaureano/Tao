@@ -13,13 +13,13 @@ namespace Tao
 {  
   public class MetadataRootRvaResolver : IAddressResolver
   {
-    public ResolveFrom([NotNull] image : IImage) : uint
+    public ResolveFrom([NotNull] image : IImage) : IAddress
         requires image.HasCLRHeader()
     { 
       // Read the CLI header block       
       def clrHeader = image.GetCLRHeader();
       
-      clrHeader.MetadataRva;
+      Address(clrHeader.MetadataRva, clrHeader.MetadataSize);
     }
   }
 }

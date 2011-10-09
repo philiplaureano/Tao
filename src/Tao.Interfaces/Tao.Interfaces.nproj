@@ -65,6 +65,12 @@
     <Compile Include="DLLCharacteristics.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IAddress.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IAddressResolver.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ICoffHeader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -148,9 +154,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\IAddressResolver.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\ICLIHeader.n">
