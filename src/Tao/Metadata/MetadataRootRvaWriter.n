@@ -1,0 +1,27 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MetadataRootRvaWriter : IAddressWriter
+  {
+    public WriteTo([NotNull] image : IImage, [NotNull] address: IAddress) : void
+    {
+      // Get the CLI header block       
+      def clrHeader = image.GetCLRHeader();
+      
+      // Assign the given address
+      clrHeader.MetadataRva = address.Rva;
+      clrHeader.MetadataSize = address.Size;
+      
+      image.Write(clrHeader);
+    }
+  }
+}

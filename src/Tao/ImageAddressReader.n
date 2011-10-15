@@ -1,0 +1,32 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Extensions;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class ImageAddressReader : IImageAddressReader
+  {
+    private _resolvers : Dictionary.[Location, IAddressResolver] = ImageAddressResolverMap();
+
+    public ReadAddressOf(location : Location, [NotNull] image: IImage) : IAddress
+        ensures value != null
+    {
+      if(_resolvers.ContainsKey(location))
+      {
+        def resolver = _resolvers[location];
+        resolver.ResolveFrom(image);
+      }
+      else
+      {
+        throw ArgumentException("location", string.Format("Unsupported location: {0}", location));
+      }
+    }
+  }
+}

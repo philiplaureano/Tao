@@ -1,0 +1,30 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class DataDirectoryAddressResolver : IAddressResolver
+  {
+      private _targetIndex : int;
+      public this(targetIndex : int)
+      {
+          _targetIndex = targetIndex;
+      }
+      
+      public ResolveFrom([NotNull] image : IImage) : IAddress
+        requires image.DataDirectories != null
+      {
+          def directories = image.DataDirectories.ToArray();
+          def targetDirectory = directories[_targetIndex];
+          
+          Address(targetDirectory.Rva, targetDirectory.Size);
+      }
+  }
+}

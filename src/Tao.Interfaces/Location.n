@@ -1,0 +1,30 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Interfaces
+{
+  public enum Location : uint
+  {
+    |ExportTable
+    |ImportTable
+    |ResourceTable
+    |ExceptionTable
+    |CertificateTable
+    |Debug
+    |Copyright
+    |GlobalPtr
+    |TLS
+    |LoadConfig
+    |BoundImport
+    |ImportAddressTable
+    |DelayImportDescriptor
+    |CLIHeader
+    |MetadataRoot
+    |Relocations
+  }
+}

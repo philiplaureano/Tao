@@ -68,6 +68,12 @@
     <Compile Include="IAddress.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IAddressWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IImageAddressReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="IAddressResolver.n">
       <SubType>Code</SubType>
     </Compile>
@@ -103,6 +109,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IImageBlockReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IImageAddressWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ImageType.n">
@@ -151,6 +160,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Location.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine.n">

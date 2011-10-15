@@ -1,0 +1,27 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class ImageAddressWriterMap : Dictionary.[Location, IAddressWriter]
+  {
+    public this()
+    {          
+      def dataDirectoryMap = DataDirectoryLocationMap();          
+      foreach(location in dataDirectoryMap.Keys)
+      {
+        def index = dataDirectoryMap[location];
+        Add(location, DataDirectoryAddressWriter(index));
+      }
+      
+      // Add the writer for writing the MetadatRva address
+      Add(Location.MetadataRoot, MetadataRootRvaWriter());
+    }
+  }
+}

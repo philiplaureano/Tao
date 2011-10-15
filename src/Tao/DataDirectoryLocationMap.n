@@ -1,0 +1,37 @@
+﻿using Nemerle.Collections;
+using Nemerle.Extensions;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class DataDirectoryLocationMap : Dictionary.[Location, int]
+  {
+    public this()
+    {
+        this<-
+        [
+          (Location.ExportTable, 0),
+          (Location.ImportTable, 1),
+          (Location.ResourceTable, 2),
+          (Location.ExceptionTable, 3),
+          (Location.CertificateTable, 4),
+          (Location.Relocations, 5),
+          (Location.Debug, 6),
+          (Location.Copyright, 7),
+          (Location.GlobalPtr, 8),
+          (Location.TLS, 9),
+          (Location.LoadConfig, 10),
+          (Location.BoundImport, 11),
+          (Location.ImportAddressTable, 12),
+          (Location.DelayImportDescriptor, 13),
+          (Location.CLIHeader, 14)
+        ];
+    }
+  }
+}

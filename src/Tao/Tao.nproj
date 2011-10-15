@@ -62,6 +62,21 @@
     <Compile Include="Address.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataDirectoryAddressWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataDirectoryLocationMap.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageAddressReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageAddressResolverMap.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageAddressWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="API\Image.ReaderExtensions.n">
       <SubType>Code</SubType>
     </Compile>
@@ -98,10 +113,16 @@
     <Compile Include="Image.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ImageAddressWriterMap.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ImageReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ImageWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataDirectoryAddressResolver.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\CLIHeader.n">
@@ -126,6 +147,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\MetadataRootRvaResolver.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\MetadataRootRvaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\MetadataRootWriter.n">

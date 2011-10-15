@@ -1,0 +1,29 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class ImageAddressResolverMap : Dictionary.[Location, IAddressResolver]
+  {
+    public this()
+    {          
+      // Add the resolvers for the individual data directory entries
+      def dataDirectoryMap = DataDirectoryLocationMap();          
+      foreach(location in dataDirectoryMap.Keys)
+      {
+        def index = dataDirectoryMap[location];
+        Add(location, DataDirectoryAddressResolver(index));
+      }
+      
+      // Add the metadata root writer resolver
+      Add(Location.MetadataRoot, MetadataRootRvaResolver());
+    }
+  }
+}

@@ -1,6 +1,10 @@
-﻿using Nemerle.Collections;
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Tao;
+using Tao.Interfaces;
+using Tests.Macros;
 
 using System;
 using System.Collections.Generic;
@@ -12,83 +16,103 @@ namespace Tests
   {      
     public ShouldResolveExportTableAddress() : void
     {
-      throw NotImplementedException();
+      TestResolve(Location.ExportTable);
     }	
     public ShouldResolveImportTableAddress() : void
     {
-      throw NotImplementedException();
-    }	
+      def location = Location.ImportTable;
+      def expectedRva : uint = 0x0000EE98;
+      def expectedSize : uint = 0x50;
+      
+      TestResolve(location, expectedRva, expectedSize);
+    }	        
+    
     public ShouldResolveResourceTableAddress() : void
     {
-      throw NotImplementedException();
+      TestResolve(Location.ResourceTable);
     }	
+    
     public ShouldResolveExceptionTableAddress() : void
     {
-      throw NotImplementedException();
+      TestResolve(Location.ExceptionTable);
     }	
     public ShouldResolveCertificateTableAddress() : void
     {
-      throw NotImplementedException();
+      TestResolve(Location.CertificateTable);
     }		
     public ShouldResolveDebugAddress() : void
     {
-      throw NotImplementedException();
-    }
-    public ShouldResolveBaseRelocationTableAddress() : void
-    {
-      throw NotImplementedException();
-    }	
+      TestResolve(Location.Debug);
+    }    
     public ShouldResolveCopyrightAddress() : void
     {
-      throw NotImplementedException();
+      TestResolve(Location.Copyright);
     }	
     public ShouldResolveGlobalPtrAddress() : void
     {
-      throw NotImplementedException();
+      TestResolve(Location.GlobalPtr);
     }    
     public ShouldResolveTLSAddress() : void
     {
-      throw NotImplementedException();
+      TestResolve(Location.TLS);
     }	
     public ShouldResolveLoadConfigAddress() : void
     {
-      throw NotImplementedException();
+      TestResolve(Location.LoadConfig);
     }	
     public ShouldResolveBoundImportAddress() : void
     {
-      throw NotImplementedException();
+      TestResolve(Location.BoundImport);
     }	
     public ShouldResolveIATAddress() : void
     {
-      throw NotImplementedException();
+      TestResolve(Location.ImportAddressTable);
     }	
     public ShouldResolveDelayImportDescriptorAddress() : void
     {
-      throw NotImplementedException();
+      TestResolve(Location.DelayImportDescriptor);
     }	
     public ShouldResolveCLIHeaderAddress() : void
     {
-      throw NotImplementedException();
+      TestResolve(Location.CLIHeader);
     }	
     public ShouldResolveMetadataRootAddress() : void
     {
-      throw NotImplementedException();
+      TestResolve(Location.MetadataRoot);
     }	
-    public ShouldResolveMetadataStreamHeaderAddresses() : void
-    {
-      throw NotImplementedException();
-    }	
-    public ShouldResolveMetadataHeapAddresses() : void
-    {
-      throw NotImplementedException();
-    }    
     public ShouldResolveRelocationTableAddress() : void
     {
-      throw NotImplementedException();
-    }	
-    public ShouldResolveIndividualMethodAddress() : void
+      TestResolve(Location.Relocations);
+    }	   
+    private TestResolve(location : Location) : void
     {
-      throw NotImplementedException();
+      def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
+      def image = Image.ReadFrom(imageFile);
+      
+      def expectedRva : uint = 0xFEED;
+      def expectedSize : uint = 0xFEEE;      
+      
+      // Write the dummy values to the target location
+      def writer = ImageAddressWriter();
+      writer.WriteAddressOf(location, Address(expectedRva, expectedSize), image);
+      
+      // The address should match the dummy values
+      TestResolve(image, location, expectedRva, expectedSize);
+    }
+    private TestResolve(image : IImage, location : Location, expectedRva : uint, expectedSize : uint) : void
+    {
+      def resolver = ImageAddressReader();
+      def address = resolver.ReadAddressOf(location, image);
+      
+      assert address.Rva equals expectedRva otherwiseprint "Invalid Rva";
+      assert address.Size equals expectedSize otherwiseprint "Invalid Size";
+    }    
+    private TestResolve(location : Location, expectedRva : uint, expectedSize : uint) : void
+    {
+      def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
+      def image = Image.ReadFrom(imageFile);
+      
+      TestResolve(image, location, expectedRva, expectedSize);
     }
   }
 }

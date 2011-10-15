@@ -1,0 +1,32 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Extensions;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class ImageAddressWriter : IImageAddressWriter
+  {
+    private _writers : Dictionary.[Location, IAddressWriter] = ImageAddressWriterMap();
+    
+    public WriteAddressOf(location : Location, [NotNull] address : IAddress, [NotNull] image : IImage) : void
+    {              
+      if(_writers.ContainsKey(location))
+      {
+        def writer = _writers[location];
+        writer.WriteTo(image, address);
+      }
+      else
+      {
+        throw ArgumentException("location", string.Format("Unsupported location: {0}", location));
+      }
+    }
+  }
+}
