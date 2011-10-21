@@ -155,17 +155,6 @@
 <node CREATED="1318027961590" ID="ID_1331242742" MODIFIED="1318027985663" TEXT="Throwing an exception when trying to write to a read-only section"/>
 </node>
 </node>
-<node CREATED="1318036909399" FOLDED="true" ID="ID_549912511" MODIFIED="1318143447269" TEXT="Section Mapping">
-<node CREATED="1318114029377" ID="ID_414925228" MODIFIED="1318114039961" TEXT="Enumerating the section elements that are mapped"/>
-<node CREATED="1318114040793" ID="ID_1459863832" MODIFIED="1318114054696" TEXT="Explicitly marking section blocks/regions for use"/>
-<node CREATED="1318114057216" ID="ID_728667992" MODIFIED="1318114068552" TEXT="Enumerate available section blocks"/>
-<node CREATED="1318114078192" ID="ID_1951840111" MODIFIED="1318114097425" TEXT="Determining how many bytes are used in a given section"/>
-<node CREATED="1318114098528" ID="ID_1394728050" MODIFIED="1318114106416" TEXT="Determining how many bytes are free in a given section"/>
-<node CREATED="1318114165503" ID="ID_166588815" MODIFIED="1318114190583" TEXT="Returning correct RVAs">
-<node CREATED="1318114192535" ID="ID_1256935242" MODIFIED="1318114205680" TEXT="Even if section sizes grow"/>
-<node CREATED="1318114206831" ID="ID_1067491301" MODIFIED="1318114211632" TEXT="Even if section sizes shrink"/>
-</node>
-</node>
 <node CREATED="1318038595293" FOLDED="true" ID="ID_130459162" MODIFIED="1318138607407" TEXT="Import Table Read/Write Tests">
 <node CREATED="1318038711059" ID="ID_947149357" MODIFIED="1318038728976" TEXT="Import Lookup Table Read/Write Tests">
 <node CREATED="1318038766818" ID="ID_822697380" MODIFIED="1318038774648" TEXT="Resolving the Hint/Name Table RVA">
@@ -174,13 +163,7 @@
 </node>
 </node>
 <node CREATED="1318038850930" ID="ID_811524035" MODIFIED="1318038854904" TEXT="Relocations"/>
-<node CREATED="1318114856499" ID="ID_1969016483" MODIFIED="1318208550741" TEXT="Section Management">
-<node CREATED="1318114867731" ID="ID_41134109" MODIFIED="1318114881115" TEXT="Writing to a named section without explicitly specifying an RVA"/>
-<node CREATED="1318114882218" ID="ID_1058239399" MODIFIED="1318114893341" TEXT="Remapping section elements when section sizes change"/>
-<node CREATED="1318114897610" ID="ID_1483141100" MODIFIED="1318114912100" TEXT="Resizing sections to eliminate unused space"/>
-<node CREATED="1318114922258" ID="ID_912772700" MODIFIED="1318114927844" TEXT="Resizing sections according to file alignment"/>
-</node>
-<node CREATED="1318135329826" FOLDED="true" ID="ID_941786757" MODIFIED="1318676060599" TEXT="Section Address Resolution Targets">
+<node CREATED="1318135329826" FOLDED="true" ID="ID_941786757" MODIFIED="1319227278533" TEXT="Section Address Resolution Targets">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1318135345602" ID="ID_1789955068" MODIFIED="1318676056183" TEXT="Export Table">
 <icon BUILTIN="button_ok"/>
@@ -243,7 +226,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1318137341612" FOLDED="true" ID="ID_298670663" MODIFIED="1318676043439" TEXT="Writing Section Addresses">
+<node CREATED="1318137341612" FOLDED="true" ID="ID_298670663" MODIFIED="1319227280173" TEXT="Writing Section Addresses">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1318135345602" ID="ID_798809380" MODIFIED="1318676037314" TEXT="Export Table">
 <icon BUILTIN="button_ok"/>
