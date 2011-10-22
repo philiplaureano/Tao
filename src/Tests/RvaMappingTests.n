@@ -55,7 +55,7 @@ namespace Tests
       def headers = List.[ISectionHeader]();
       headers.Add(header);
       
-      sectionResolver.Resolve(headers, 0xFEED);
+      _ = sectionResolver.Resolve(headers, 0xFEED);
     }
     
     public ShouldBeAbleToResolveMetadataRootRva() : void

@@ -47,11 +47,7 @@ namespace Tests
       
       writer.Write(header, outputStream);
       
-      def rootReader = MetadataRootReader();
       def expectedHash = expectedData.GetHash();
-      def expectedHeader = rootReader.Read(MemoryStream(expectedData));
-      
-      def blah = expectedHeader.ToString();
       
       def actualHash = outputStream.GetHash();
       def actualBytes = outputStream.ToArray();
@@ -223,15 +219,6 @@ namespace Tests
     }
     public ShouldWriteReservedFieldAsZero() : void
     {
-      def createHeader() : IMetadataRoot
-      {
-        def header = MetadataRoot();
-        header.Signature = 0x424A5342 :> uint;
-        header.Version =  "v1.2345";
-        header.Reserved = 0xFEED;
-        
-        header;
-      }
       def getReserved(reader : BinaryReader) : uint
       {
         def headerReader = MetadataRootReader();
@@ -332,14 +319,6 @@ namespace Tests
     public ShouldWriteVersionLength() : void
     {
       def text = "v1.2345";
-      def createHeader() : IMetadataRoot
-      {
-        def header = MetadataRoot();
-        header.Signature = 0x424A5342 :> uint;
-        header.Version = text;
-        
-        header;
-      }
       def getLength(reader : BinaryReader) : uint
       {
         def headerReader = MetadataRootReader();
@@ -397,7 +376,7 @@ namespace Tests
         def headerReader = MetadataRootReader();
         def underlyingStream = reader.BaseStream;
         def header = headerReader.Read(underlyingStream);
-        header.NumberOfStreamHeaders :> ushort;
+        header.NumberOfStreamHeaders;
       };
       
       Tester.TestWrite.[ushort, IMetadataRoot, MetadataRootWriter]("NumberOfStreamHeaders", expectedNumberOfHeaders :> ushort, createHeader, getCount);
@@ -451,7 +430,7 @@ namespace Tests
     {
       def dummyData = array[0 : byte, 0, 0, 0];
       def reader = MetadataRootReader();
-      def root = reader.Read(MemoryStream(dummyData));      
+      _ = reader.Read(MemoryStream(dummyData));      
     }
     private TestWrite[TValue](propertyName : string, value : TValue) : void
     {

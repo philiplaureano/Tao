@@ -224,9 +224,6 @@ namespace Tests
     
     public ShouldBeAbleToReadSections() : void
     {
-      def textSectionHash = GetTextSectionHash();
-      def relocSectionHash = GetRelocSectionHash();
-      
       def imageFile = @"..\..\SampleBinaries\skeleton.exe";
       def image = Image.ReadFrom(imageFile);
       
@@ -302,7 +299,6 @@ namespace Tests
       writer.Write(inputImage, outputStream);                  
             
       def startPosition = 0xF4;
-      def length = 4;
       
       def optionalHeader = inputImage.OptionalHeader :> OptionalHeader.OptionalHeader32;
       def numberOfDataDirectories : uint = optionalHeader.Header.NumberOfRvaAndSizes;

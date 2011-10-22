@@ -22,7 +22,7 @@ namespace Tests
           
           def length : uint = 8;
           def reader = NullTerminatedStringReader();
-          def result = reader.Read(8, inputStream);
+          def result = reader.Read(length, inputStream);
           
           assert result equals expectedText otherwiseprint "Invalid string";
       }

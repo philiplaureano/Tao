@@ -97,10 +97,6 @@
     <Compile Include="ImageTests.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ImageTests.RawData.n">
-      <SubType>Code</SubType>
-      <DependentUpon>ImageTests.n</DependentUpon>
-    </Compile>
     <Compile Include="MetadataRootTests.n">
       <SubType>Code</SubType>
     </Compile>

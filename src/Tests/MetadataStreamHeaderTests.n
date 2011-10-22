@@ -118,19 +118,7 @@ namespace Tests
       def expectedHash = expectedBytes.GetHash();
       
       assert actualHash equals expectedHash otherwiseprint "The input header bytes do not match the expected output bytes";
-    }
-    private VerifyHeader(index : ushort, expectedOffset : uint, expectedSize : uint, expectedName : string) : array[IStreamHeader] -> void
-    {
-      def verifyHeader(actualHeaders: array[IStreamHeader]) : void
-      {
-        VerifyValue.[uint](index, "Offset", expectedOffset)(actualHeaders);
-        VerifyValue.[uint](index, "Size", expectedSize)(actualHeaders);
-        VerifyValue.[string](index, "Name", expectedName)(actualHeaders);
-      }
-      
-      def result = verifyHeader;
-      result;
-    }
+    }    
     private VerifyValue[TValue](targetIndex : ushort, propertyName : string, expectedValue : TValue) : array[IStreamHeader] -> void
     {
       VerifyHeaderValue.[TValue](targetIndex, propertyName, expectedValue, _);
@@ -162,7 +150,7 @@ namespace Tests
       {
         def targetProperty = typeof(IStreamHeader).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
         def stream = reader.BaseStream;
-        stream.Seek(0, SeekOrigin.Begin);
+        _ = stream.Seek(0, SeekOrigin.Begin);
         def streamReader = StreamHeaderReader();
         def header = streamReader.Read(1, stream).First();
         def result = targetProperty.GetValue(header, null) :> TValue;

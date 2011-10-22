@@ -117,7 +117,7 @@ namespace Tests
            0x02, 0x01
            ];
       
-           def header = ReadHeader(data);
+           _ = ReadHeader(data);
     }  
     
     public ShouldReadCharacteristics() : void
@@ -142,14 +142,18 @@ namespace Tests
                
     public ShouldBeAbleToWriteNumberOfSections() : void
     {
-      def expectedBytes = GetData();
-      def expectedHash = expectedBytes.GetHash();
-      
+      def numberOfSections = 2;
       def header = CreateDefaultHeader(null);      
+      header.NumberOfSections = numberOfSections :> ushort;
       
       def outputStream = MemoryStream();
       def writer = CoffHeaderWriter();
       writer.Write(header, outputStream);      
+      
+      def reader = CoffHeaderReader();
+      def result = reader.Read(outputStream);
+      
+      assert result.NumberOfSections equals numberOfSections otherwiseprint "Invalid number of sections";
     }
     
     public ShouldWriteTimeDateStamp() : void

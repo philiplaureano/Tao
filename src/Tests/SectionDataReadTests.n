@@ -42,7 +42,6 @@ namespace Tests
       def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
       def image = Image.ReadFrom(imageFile);
       
-      def reader = SectionDataReader();
       def data = image.ReadBlock(rva, size);
           
       def expectedData = GetCLIHeader();
