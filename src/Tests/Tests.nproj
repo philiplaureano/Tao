@@ -135,9 +135,6 @@
     <Compile Include="SectionHeaderTests.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SectionMapperTests.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SectionAddressResolutionTests.n">
       <SubType>Code</SubType>
     </Compile>

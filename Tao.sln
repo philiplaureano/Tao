@@ -1,6 +1,12 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{964A6B02-747E-44BF-AB54-17914EEFB7C0}"
+	ProjectSection(SolutionItems) = preProject
+		BuildAll.MSBuild = BuildAll.MSBuild
+		go.bat = go.bat
+	EndProjectSection
+EndProject
 Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "Tao", "src\Tao\Tao.nproj", "{D911E1DC-AAF7-426A-B3EC-A9E336AC83CE}"
 EndProject
 Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "Tests", "src\Tests\Tests.nproj", "{C0F7B9C1-6109-4612-BAF1-4941AD4D3F14}"
@@ -8,12 +14,6 @@ EndProject
 Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "Tests.Macros", "src\Tests\Tests.Macros\Tests.Macros.nproj", "{1E8A64C1-E4D6-4B2A-9A2F-DF9536217CBD}"
 EndProject
 Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "Tao.Interfaces", "src\Tao.Interfaces\Tao.Interfaces.nproj", "{453795B0-1351-452C-8C7A-8E1B9D3BE97C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{964A6B02-747E-44BF-AB54-17914EEFB7C0}"
-	ProjectSection(SolutionItems) = preProject
-		BuildAll.MSBuild = BuildAll.MSBuild
-		go.bat = go.bat
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
