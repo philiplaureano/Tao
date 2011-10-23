@@ -51,6 +51,22 @@ namespace Tests
       assert actualHash equals expectedHash otherwiseprint "Invalid data block";
     }        
     
+    public ShouldBeAbleToReadSectionDataUsingALocationEnum() : void
+    {
+      def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
+      def image = Image.ReadFrom(imageFile);
+      
+      def location = Location.CLIHeader;
+      def reader = SectionDataReader();
+      def data = reader.ReadBlock(location, image);
+      
+      def expectedData = GetCLIHeader();
+      def expectedHash = expectedData.GetHash();
+      
+      def actualHash = data.GetHash();
+      assert actualHash equals expectedHash otherwiseprint "Invalid data block";
+    }
+    
     private GetCLIHeader() : array[byte]
     {
       def sampleData = array[

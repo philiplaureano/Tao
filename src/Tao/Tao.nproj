@@ -216,6 +216,9 @@
     <Compile Include="SectionDataReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SectionDataReaderExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SectionDataWriter.n">
       <SubType>Code</SubType>
     </Compile>
