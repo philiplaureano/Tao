@@ -1,8 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <NemerleVersion>Net-4.0</NemerleVersion>
+    <NemerleBinPathRoot>$(ProgramFiles)\Nemerle</NemerleBinPathRoot>
     <NoStdLib>true</NoStdLib>
-    <Nemerle Condition=" '$(Nemerle)' == '' ">$(ProgramFiles)\Nemerle</Nemerle>
+    <Nemerle Condition=" '$(Nemerle)' == '' ">$(NemerleBinPathRoot)\$(NemerleVersion)</Nemerle>
     <Name>Tao</Name>
   </PropertyGroup>
   <PropertyGroup>
@@ -15,7 +17,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tao</RootNamespace>
     <AssemblyName>Tao</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -37,10 +39,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="Nemerle, Version=1.0.0.9832, Culture=neutral, PublicKeyToken=e080a9c724e2bfcd">
+    <Reference Include="Nemerle, Version=1.1.48.0, Culture=neutral, PublicKeyToken=e080a9c724e2bfcd">
       <Name>Nemerle</Name>
       <AssemblyName>Nemerle.dll</AssemblyName>
-      <HintPath>..\..\tools\Nemerle\Nemerle.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\Nemerle\net-4.0\Nemerle.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -214,9 +216,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionDataReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SectionDataReaderExtensions.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionDataWriter.n">

@@ -28,17 +28,10 @@ namespace Tests.Macros
   {
     <[NUnit.Framework.Assert.IsTrue( $exp1, $errorMessage)]>;  
   }
-      macro assert_equals(exp1,exp2, errorMessage) 
+  macro assert_equals(exp1,exp2, errorMessage) 
   syntax("assert", exp1, "equals", exp2, "otherwiseprint", errorMessage)
   {
     <[NUnit.Framework.Assert.AreEqual( $exp2 ,$exp1, $errorMessage )]>;
-  }
-  
-  macro assert_does_not_equal(exp, exp2, errorMessage) 
-  syntax("assert", exp, "does", "not", "equal", exp2, "otherwiseprint", errorMessage)
-  {
-    def message = $"at line $(exp.Location.Line)"; 
-   <[NUnit.Framework.Assert.IsFalse($exp2.Equals($exp),$errorMessage)]>;
   }
   
   macro assert_not_null(exp, errorMessage)

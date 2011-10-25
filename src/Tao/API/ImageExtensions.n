@@ -55,6 +55,12 @@ namespace Tao
       def data = reader.ReadBlock(rva, size, image);
       data;
     }  
+    public ReadBlock([NotNull] this image: IImage, location: Location) : Stream
+    {
+      def addressReader = ImageAddressReader();
+      def location = addressReader.ReadAddressOf(location, image);
+      image.ReadBlock(location.Rva, location.Size);
+    }
     public WriteBlock([NotNull] this image : IImage, rva : uint, data : Stream) : void
     {
       def sectionWriter = SectionDataWriter();

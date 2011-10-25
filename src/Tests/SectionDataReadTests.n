@@ -57,8 +57,7 @@ namespace Tests
       def image = Image.ReadFrom(imageFile);
       
       def location = Location.CLIHeader;
-      def reader = SectionDataReader();
-      def data = reader.ReadBlock(location, image);
+      def data = image.ReadBlock(location);
       
       def expectedData = GetCLIHeader();
       def expectedHash = expectedData.GetHash();
