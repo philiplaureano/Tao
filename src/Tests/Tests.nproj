@@ -87,6 +87,9 @@
     <Compile Include="CLIHeaderTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CompressedIntegerTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DataDirectoryTests.n">
       <SubType>Code</SubType>
     </Compile>

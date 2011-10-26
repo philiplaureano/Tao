@@ -1,0 +1,41 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class CompressedIntegerReader
+  {
+    public Read([NotNull] input : Stream) : uint
+    { 
+      mutable result : uint = 0;
+      def leadingByte = input.ReadByte() :> byte;        
+      if((leadingByte & 0x80) == 0)
+      {
+        result = leadingByte;
+      }
+      else 
+      {
+        if((leadingByte & 0xC0) == 0x80)
+        {
+          result = ((leadingByte & 0x3F) << 8 | input.ReadByte() :> byte) :> uint;
+        }
+        else
+        {
+          result = ((leadingByte & 0x1F) << 24 | 
+                       input.ReadByte() :> byte << 16 | 
+                       input.ReadByte() :> byte << 8 |
+                       input.ReadByte() :> byte) :> uint;
+        }
+      }        
+      result;
+    }
+  }
+}
