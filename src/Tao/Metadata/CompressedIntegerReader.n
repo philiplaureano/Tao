@@ -13,7 +13,7 @@ namespace Tao
 {
   public class CompressedIntegerReader
   {
-    public Read([NotNull] input : Stream) : uint
+    public ReadInteger([NotNull] input : Stream) : uint
     { 
       mutable result : uint = 0;
       def leadingByte = input.ReadByte() :> byte;        
@@ -36,6 +36,16 @@ namespace Tao
         }
       }        
       result;
+    }
+    public ReadSignedInteger([NotNull] input : Stream) : int
+    {
+      def value : uint = ReadInteger(input);
+      
+      def shiftedValue : int = (value >> 1) :> int;
+      if ((value & 1) == 0)
+        shiftedValue;
+      else
+        -shiftedValue;
     }
   }
 }

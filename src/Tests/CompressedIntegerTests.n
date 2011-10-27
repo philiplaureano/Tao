@@ -41,8 +41,7 @@ namespace Tests
       mutable stream = MemoryStream();
       def writer = BinaryWriter(stream);
       writer.Write(compressedValue);
-         
-      
+               
       def bigEndianContents = List.[byte](stream.ToArray());
       bigEndianContents.Reverse();
       
@@ -68,15 +67,31 @@ namespace Tests
     }    
     public ShouldBeAbleToDecodeCompressedSignedByteValue() : void
     {
-      throw NotImplementedException();
+      def expectedValue : sbyte = -3;
+      def expectedStreamPosition = 1;
+      
+      def signBit : byte = 1;
+      def absoluteValue = 3;
+      def encodedValue : byte = ((absoluteValue << 1) | signBit) :> byte;
+      def bytes = array[encodedValue];
+      
+      TestCompressedSignedIntegerRead(expectedValue, expectedStreamPosition, bytes);
     }
     public ShouldBeAbleToDecodeCompressedSignedWordValue() : void
     {
-      throw NotImplementedException();
+      def expectedValue : short = -8000;
+      def expectedStreamPosition = 2;
+        
+      def bytes = array[0xBE : byte, 0x81];
+      TestCompressedSignedIntegerRead(expectedValue, expectedStreamPosition, bytes);
     }
     public ShouldBeAbleToDecodeCompressedSignedDWordValue() : void
     {
-      throw NotImplementedException();
+      def expectedValue = 268435455;
+      def expectedStreamPosition = 4;
+      def bytes = array[0xDF : byte, 0xFF, 0xFF, 0xFE];
+        
+      TestCompressedSignedIntegerRead(expectedValue, expectedStreamPosition, bytes);
     }
     public ShouldBeAbleToEncodeCompressedSignedByteValue() : void
     {
@@ -90,17 +105,34 @@ namespace Tests
     {
       throw NotImplementedException();
     }
-        
-    private TestCompressedIntegerRead[TValue](expectedValue : TValue, expectedStreamPosition : int, bytes : array[byte]) : void
+    
+    private TestCompressedIntegerRead[TValue](expectedValue : TValue, expectedStreamPosition : int, bytes : array[byte], 
+    readValue: CompressedIntegerReader * Stream -> TValue) : void
         where TValue : struct
     {
-      def stream = MemoryStream(bytes);
-      
+      def stream = MemoryStream(bytes);      
       def reader = CompressedIntegerReader();
-      def actualValue : uint = reader.Read(stream);
+      def actualValue : TValue = readValue(reader, stream);
       
       assert actualValue equals expectedValue otherwiseprint "Invalid Integer Value";
-      assert stream.Position equals expectedStreamPosition otherwiseprint "Invalid Position";  
+      assert stream.Position equals expectedStreamPosition otherwiseprint "Invalid Position";    
+    }
+    private TestCompressedSignedIntegerRead(expectedValue : int, expectedStreamPosition : int, bytes : array[byte]) : void
+    {      
+      def readValue(reader: CompressedIntegerReader, stream: Stream) : int
+      {
+        reader.ReadSignedInteger(stream);
+      }
+      TestCompressedIntegerRead.[int](expectedValue, expectedStreamPosition, bytes, readValue);
+    }
+    
+    private TestCompressedIntegerRead(expectedValue : uint, expectedStreamPosition : int, bytes : array[byte]) : void
+    {      
+      def readValue(reader: CompressedIntegerReader, stream: Stream) : uint
+      {
+        reader.ReadInteger(stream);
+      }
+      TestCompressedIntegerRead.[uint](expectedValue, expectedStreamPosition, bytes, readValue);
     }
   }
 }

@@ -10,13 +10,17 @@ namespace Tests
 {  
   public class BlobHeapTests
   {
-      public ShouldBeAbleToReadBlobBytesFromGivenIndex() : void
-      {
-          throw NotImplementedException();
-      }
-      public ShouldAutomaticallyEncodeBlobSizeWhenWritingBlobFromGivenBytes() : void
-      {
-          throw NotImplementedException();
-      }
+    public ShouldBeAbleToReadBlobBytesFromGivenIndex() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldAutomaticallyEncodeBlobSizeWhenWritingBlobFromGivenBytes() : void
+    {
+      throw NotImplementedException();
+    }
+    public ShouldBeAbleToEncodeBytesAsBlobStream() : void
+    {
+      throw NotImplementedException();
+    }
   }
 }
