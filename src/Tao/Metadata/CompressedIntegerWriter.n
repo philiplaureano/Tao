@@ -14,7 +14,9 @@ namespace Tao
   public class CompressedIntegerWriter
   {
     public WriteInteger(value : uint, [NotNull] stream: Stream) : void
-    {
+        requires value <=  0x1FFFFFFF otherwise 
+        throw ArgumentOutOfRangeException("value", string.Format("The maximum value of a compressed integer cannot exceed 0x1FFFFFFF. You entered: {0}", value))
+    {      
       if(value <= 0x7F)
       {
         def singleByteValue : byte = value :> byte;
@@ -25,7 +27,6 @@ namespace Tao
         if(value >= 0x80 && value <= 0x3FFF)
         {
           def wordValue : ushort = value :> ushort;
-          def bitMask : ushort = 0xFF00;
           def highByte = (wordValue >> 8) :> byte;         
           def lowByte = (wordValue  - (highByte << 8)) :> byte;
           
