@@ -1,0 +1,55 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class CompressedIntegerWriter
+  {
+    public WriteInteger(value : uint, [NotNull] stream: Stream) : void
+    {
+      if(value <= 0x7F)
+      {
+        def singleByteValue : byte = value :> byte;
+        stream.WriteByte(singleByteValue);
+      }
+      else
+      {
+        if(value >= 0x80 && value <= 0x3FFF)
+        {
+          def wordValue : ushort = value :> ushort;
+          def bitMask : ushort = 0xFF00;
+          def highByte = (wordValue >> 8) :> byte;         
+          def lowByte = (wordValue  - (highByte << 8)) :> byte;
+          
+          stream.WriteByte((highByte | 0x80 : byte) :> byte);
+          stream.WriteByte(lowByte);
+        }
+        else 
+        {            
+          def bitMask = 0xE0000000;
+          def uncompressedValue = (value & ~bitMask);          
+          
+          // Write the compressed value as little endian          
+          def tempStream = MemoryStream();
+          def tempWriter = BinaryWriter(tempStream);
+          tempWriter.Write((uncompressedValue | 0xC0000000) : uint);
+          
+          def bytes = tempStream.ToArray();
+          def byteList = List.[byte](bytes);
+          byteList.Reverse();
+          
+          def writer = BinaryWriter(stream);
+          writer.Write(byteList.ToArray());
+        }
+      }
+    }
+  }
+}

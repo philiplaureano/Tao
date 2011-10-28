@@ -29,8 +29,7 @@ namespace Tests
       def bytes = array[0xAE : byte, 0x57];
       
       TestCompressedIntegerRead(expectedValue, expectedStreamPosition, bytes);
-    }
-   
+    }   
     public ShouldBeAbleToDecodeCompressedDoubleWordValue() : void
     {         
       def compressedValue : uint = 0xC0004000;
@@ -55,15 +54,41 @@ namespace Tests
     }    
     public ShouldBeAbleToEncodeCompressedSingleByteValue() : void
     {      
-      throw NotImplementedException();
-    }    
+      def value : uint = 0x3;
+      def expectedStreamPosition = 1;      
+      def expectedBytes = array[value :> byte];
+      
+      TestByteEncoding(value, expectedStreamPosition, expectedBytes);
+    }        
     public ShouldBeAbleToEncodeCompressedWordValue() : void
     {
-      throw NotImplementedException();
+      def value : uint = 0x2E57;
+      def expectedStreamPosition = 2;
+      def expectedBytes = array[0xAE : byte, 0x57];
+      
+      TestByteEncoding(value, expectedStreamPosition, expectedBytes);
     }        
     public ShouldBeAbleToEncodeCompressedDoubleWordValue() : void
     {
-      throw NotImplementedException();
+      def compressedValue : uint = 0xC0004000;
+      def value : uint = 0x4000;
+      def expectedStreamPosition = 4;
+      
+      // Construct the byte array that represents the compressed integer value
+      mutable stream = MemoryStream();
+      def writer = BinaryWriter(stream);
+      writer.Write(compressedValue);
+               
+      def bigEndianContents = List.[byte](stream.ToArray());
+      bigEndianContents.Reverse();
+      
+      stream = MemoryStream(bigEndianContents.ToArray());
+      
+      // Reset the stream pointer to point to the beginning of the stream
+      _ = stream.Seek(0, SeekOrigin.Begin);            
+      def expectedBytes = stream.ToArray();
+      
+      TestByteEncoding(value, expectedStreamPosition, expectedBytes);
     }    
     public ShouldBeAbleToDecodeCompressedSignedByteValue() : void
     {
@@ -116,6 +141,14 @@ namespace Tests
       
       assert actualValue equals expectedValue otherwiseprint "Invalid Integer Value";
       assert stream.Position equals expectedStreamPosition otherwiseprint "Invalid Position";    
+    }
+    private TestByteEncoding(value : uint, expectedStreamPosition : int, expectedBytes : array[byte]) : void
+    {
+      def outputStream = MemoryStream();
+      def writer = CompressedIntegerWriter();
+      writer.WriteInteger(value, outputStream);
+      
+      outputStream.ShouldMatch(expectedBytes);  
     }
     private TestCompressedSignedIntegerRead(expectedValue : int, expectedStreamPosition : int, bytes : array[byte]) : void
     {      
