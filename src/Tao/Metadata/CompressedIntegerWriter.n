@@ -8,12 +8,14 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Math;
 
 namespace Tao
 {
   public class CompressedIntegerWriter
   {
     public WriteInteger(value : uint, [NotNull] stream: Stream) : void
+        requires BitConverter.IsLittleEndian
         requires value <=  0x1FFFFFFF otherwise 
         throw ArgumentOutOfRangeException("value", string.Format("The maximum value of a compressed integer cannot exceed 0x1FFFFFFF. You entered: {0}", value))
     {      
@@ -39,18 +41,104 @@ namespace Tao
           def uncompressedValue = (value & ~bitMask);          
           
           // Write the compressed value as little endian          
-          def tempStream = MemoryStream();
-          def tempWriter = BinaryWriter(tempStream);
-          tempWriter.Write((uncompressedValue | 0xC0000000) : uint);
-          
-          def bytes = tempStream.ToArray();
-          def byteList = List.[byte](bytes);
-          byteList.Reverse();
-          
-          def writer = BinaryWriter(stream);
-          writer.Write(byteList.ToArray());
+          def compressedValue : uint = (uncompressedValue | 0xC0000000);
+          WriteDword(compressedValue, stream);
         }
       }
+    }
+    public WriteSignedInteger(value : int, [NotNull] stream: Stream) : void
+        requires BitConverter.IsLittleEndian
+    {            
+      def isByte = value <= 63 && value >= -64;
+      def isWord = value <= 8191 && value >= -8192 && !isByte;
+      def isDword = value <= 268435455 && value >= -268435456 && !isWord && !isByte;
+                  
+      when(isWord)
+      {
+        WriteWordValue(value, stream);
+      }
+      
+      when(isDword)
+      {                  
+        WriteDwordValue(value, stream);
+      }
+      
+      when (isByte)
+      {        
+        WriteByteValue(value, stream);
+      }      
+    }
+    private WriteDwordValue(value : int, [NotNull] stream: Stream) : void
+    {
+      mutable absoluteValue = Math.Abs(value) :> uint;
+      absoluteValue = (absoluteValue << 1);
+      mutable dwordValue : uint = 0;
+      if (value < 0)
+      {
+        dwordValue = (absoluteValue | 1);
+      }
+      else
+      {
+        dwordValue = absoluteValue;
+      }              
+        
+      // Add the top '110' bits that mark the value as a compressed signed integer
+      def bitMask : uint = 0xC0000000;
+      def compressedValue : uint = dwordValue | bitMask;
+      WriteDword(compressedValue, stream);
+    }
+    private WriteWordValue(value : int, [NotNull] stream: Stream) : void
+    {
+      mutable absoluteValue = Math.Abs(value) :> ushort;
+      absoluteValue = (absoluteValue << 1) :> ushort;
+      mutable wordValue : ushort = 0;
+      if (value < 0)
+      {
+        wordValue = (absoluteValue | 1) :> ushort;
+      }
+      else
+      {
+        wordValue = absoluteValue;
+      }
+        
+      // Add the top '10' bits to mark this value
+      // as a compressed word
+      def compressionMask : ushort = 2 << 14;
+      wordValue = (wordValue | compressionMask) :> ushort;
+        
+      def highByte = (wordValue >> 8) :> byte;         
+      def lowByte = (wordValue  - (highByte << 8)) :> byte;
+        
+      stream.WriteByte(highByte);
+      stream.WriteByte(lowByte);
+    }
+    private WriteByteValue(value : int, [NotNull] stream: Stream) : void
+    {
+      mutable absoluteValue = Math.Abs(value) :> byte;        
+      mutable byteValue : byte = 0;
+      absoluteValue = (absoluteValue << 1) :> byte;
+      if (value < 0)
+      {
+        byteValue = (absoluteValue | 1) :> byte;
+      }
+      else
+      {          
+        byteValue = absoluteValue;
+      }
+      stream.WriteByte(byteValue);        
+    }
+    private WriteDword(value : uint, [NotNull] stream: Stream) : void
+    {
+      def tempStream = MemoryStream();
+      def tempWriter = BinaryWriter(tempStream);
+      tempWriter.Write(value : uint);
+          
+      def bytes = tempStream.ToArray();
+      def byteList = List.[byte](bytes);
+      byteList.Reverse();
+          
+      def writer = BinaryWriter(stream);
+      writer.Write(byteList.ToArray());
     }
   }
 }

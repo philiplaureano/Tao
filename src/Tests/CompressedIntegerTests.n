@@ -130,15 +130,30 @@ namespace Tests
     
     public ShouldBeAbleToEncodeCompressedSignedByteValue() : void
     {
-      throw NotImplementedException();
+      def value : sbyte = -3;
+      def expectedStreamPosition = 1;
+      
+      def signBit : byte = 1;
+      def absoluteValue = 3;
+      def encodedValue : byte = ((absoluteValue << 1) | signBit) :> byte;
+      def expectedBytes = array[encodedValue];
+      
+      TestCompressedSignedIntegerEncoding(value, expectedStreamPosition, expectedBytes);
     }
     public ShouldBeAbleToEncodeCompressedSignedWordValue() : void
     {
-      throw NotImplementedException();
+      def value = -8000;
+      def expectedStreamPosition = 2;        
+      def expectedBytes = array[0xBE : byte, 0x81];
+      
+      TestCompressedSignedIntegerEncoding(value, expectedStreamPosition, expectedBytes);
     }
     public ShouldBeAbleToEncodeCompressedSignedDWordValue() : void
-    {
-      throw NotImplementedException();
+    {        
+      def value = 268435455;
+      def expectedStreamPosition = 4;
+      def expectedBytes = array[0xDF : byte, 0xFF, 0xFF, 0xFE];
+      TestCompressedSignedIntegerEncoding(value, expectedStreamPosition, expectedBytes);
     }
     
     private TestCompressedIntegerRead[TValue](expectedValue : TValue, expectedStreamPosition : int, bytes : array[byte], 
@@ -152,16 +167,35 @@ namespace Tests
       assert actualValue equals expectedValue otherwiseprint "Invalid Integer Value";
       assert stream.Position equals expectedStreamPosition otherwiseprint "Invalid Position";    
     }
+    private TestCompressedSignedIntegerEncoding(value : int, expectedStreamPosition : int, expectedBytes : array[byte]) : void
+    {
+      def writeStream(outputStream : Stream) : void
+      {
+        def writer = CompressedIntegerWriter();
+        writer.WriteSignedInteger(value, outputStream);    
+      }
+      
+      TestCompressedIntegerEncoding(expectedStreamPosition, expectedBytes, writeStream);      
+    }
     private TestCompressedIntegerEncoding(value : uint, expectedStreamPosition : int, expectedBytes : array[byte]) : void
     {
+      def writeStream(outputStream : Stream) : void
+      {
+        def writer = CompressedIntegerWriter();
+        writer.WriteInteger(value, outputStream);    
+      }
+      TestCompressedIntegerEncoding(expectedStreamPosition, expectedBytes, writeStream);
+    }
+    
+    private TestCompressedIntegerEncoding(expectedStreamPosition : int, expectedBytes : array[byte], writeStream : Stream -> void) : void
+    {
       def outputStream = MemoryStream();
-      def writer = CompressedIntegerWriter();
-      writer.WriteInteger(value, outputStream);
-      
+      writeStream(outputStream);      
       outputStream.ShouldMatch(expectedBytes);
       
       assert outputStream.Position equals expectedStreamPosition otherwiseprint "Invalid Position";   
     }
+    
     private TestCompressedSignedIntegerRead(expectedValue : int, expectedStreamPosition : int, bytes : array[byte]) : void
     {      
       def readValue(reader: CompressedIntegerReader, stream: Stream) : int
