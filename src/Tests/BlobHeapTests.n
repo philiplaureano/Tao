@@ -1,8 +1,10 @@
 ﻿using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
-
+using Tao;
+using Tests.Macros;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,15 +14,30 @@ namespace Tests
   {
     public ShouldBeAbleToReadBlobBytesFromGivenIndex() : void
     {
-      throw NotImplementedException();
+      def blobBytes = array[0x00 : byte, 0x03, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00];
+      def expectedBytes = array[0x00 : byte, 0x00, 0x01];
+      def index : uint = 1;
+      
+      def blobStream = MemoryStream(blobBytes);
+      def reader = BlobReader();
+      def blob : Stream = reader.Read(index, blobStream);
+      
+      def expectedData = MemoryStream(expectedBytes);
+      expectedData.ShouldMatch(blob);
     }
     public ShouldAutomaticallyEncodeBlobSizeWhenWritingBlobFromGivenBytes() : void
     {
-      throw NotImplementedException();
-    }
-    public ShouldBeAbleToEncodeBytesAsBlobStream() : void
-    {
-      throw NotImplementedException();
-    }
+      def blobBytes = array[0x00 : byte, 0x00, 0x01];
+      def blobData = MemoryStream(blobBytes);
+      
+      def outputStream = MemoryStream();
+      def writer = BlobWriter();
+      def blobIndex = writer.Write(blobData, outputStream);
+      
+      def expectedData = array[0x03 : byte, 0x00, 0x00, 0x01];
+      outputStream.ShouldMatch(expectedData);
+      
+      assert blobIndex equals 0 otherwiseprint "Invalid Blob Index";
+    }    
   }
 }

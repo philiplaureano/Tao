@@ -127,6 +127,12 @@
     <Compile Include="DataDirectoryAddressResolver.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\BlobReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\BlobWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\CLIHeader.n">
       <SubType>Code</SubType>
     </Compile>

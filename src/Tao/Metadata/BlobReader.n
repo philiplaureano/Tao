@@ -1,0 +1,32 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao.Interfaces;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class BlobReader
+  {
+    public Read(index : uint, [NotNull] blobStream : Stream) : Stream
+        requires index <= blobStream.Length
+    {          
+      // Move to the target index
+      _ = blobStream.Seek(index :> int, SeekOrigin.Begin);
+      
+      def integerReader = CompressedIntegerReader();
+      def length = integerReader.ReadInteger(blobStream);
+      
+      def reader = BinaryReader(blobStream);
+      def blobData = reader.ReadBytes(length :> int);
+      
+      MemoryStream(blobData);
+    }
+  }
+}
