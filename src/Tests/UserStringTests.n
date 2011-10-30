@@ -1,0 +1,42 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tests.Macros;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class UserStringTests
+  {
+    public ShouldBeAbleToReadUserString() : void
+    {
+      TestRead(1 : uint, "Hello, World!");
+      TestRead(0x1D : uint, "Hello, World Again!");
+    }
+    public ShouldReturnEmptyStringOnZeroIndex() : void
+    {
+      def index : uint = 0;
+      def expectedString = string.Empty;
+
+      TestRead(index, expectedString);
+    }
+    private TestRead(index : uint, expectedString: string) : void
+    {
+      def imageFile = @"..\..\SampleBinaries\HelloWorld.exe";
+      def image = Image.ReadFrom(imageFile);
+      def metadataRoot = image.GetMetadataRoot();
+      def heap = metadataRoot.Heaps["#US"];
+      
+      def reader = UserStringHeapReader();
+      def text = reader.Read(index, heap);
+      
+      assert text equals expectedString otherwiseprint "Invalid user string";
+    }
+  }
+}

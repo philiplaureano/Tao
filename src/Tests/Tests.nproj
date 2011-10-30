@@ -160,12 +160,18 @@
     <Compile Include="UserStringsTest.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UserStringTests.n">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SampleBinaries" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SampleBinaries\HelloWorld.exe">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="SampleBinaries\SamplePE32PlusApp.exe">
       <SubType>Content</SubType>
     </Content>

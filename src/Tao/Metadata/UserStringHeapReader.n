@@ -1,0 +1,49 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class UserStringHeapReader
+  {
+    public Read(index: uint, [NotNull] stream: Stream) : string
+        requires index <= stream.Length
+    {
+      // Seek the target offset
+      _ = stream.Seek(index :> int, SeekOrigin.Begin);
+      
+      def integerReader = CompressedIntegerReader();
+      def length = integerReader.ReadInteger(stream);
+      def actualLength = length / 2 : uint;
+      
+      def characters = List.[char]();     
+      mutable charactersRead : uint= 0;
+      for(mutable i : uint = 0; i < length; i += 2)
+      {
+        def highByte = stream.ReadByte();
+        def lowByte = stream.ReadByte();
+        
+        when (charactersRead < actualLength)
+        {
+          def currentCharacter : char = (lowByte << 8 | highByte) :> char;        
+          characters.Add(currentCharacter);
+        }
+        
+        charactersRead++;
+      }
+      
+      def result = string(characters.ToArray());
+      result;
+    }
+  }
+}
