@@ -127,6 +127,24 @@ namespace Tests
       def writer = CompressedIntegerWriter();
       writer.WriteInteger(value, outputStream);
     }     
+    public ShouldThrowArgumentExceptionIfSignedValueIsBelowExpectedValues() : void
+        expects ArgumentOutOfRangeException
+    {
+      def lowValue = -268435456;
+      def value = lowValue - 1;
+      def outputStream = MemoryStream();
+      def writer = CompressedIntegerWriter();
+      writer.WriteSignedInteger(value, outputStream);      
+    }
+    public ShouldThrowArgumentExceptionIfSignedValueIsAboveExpectedValues() : void
+        expects ArgumentOutOfRangeException
+    {
+      def highValue = 268435455;
+      def value = highValue + 1;
+      def outputStream = MemoryStream();
+      def writer = CompressedIntegerWriter();
+      writer.WriteSignedInteger(value, outputStream);      
+    }
     
     public ShouldBeAbleToEncodeCompressedSignedByteValue() : void
     {
