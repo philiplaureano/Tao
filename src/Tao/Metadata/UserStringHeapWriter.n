@@ -1,0 +1,41 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class UserStringHeapWriter
+  {
+    public Write([NotNull] text : string, [NotNull] stream: Stream) : uint
+    {
+      mutable startPosition = stream.Position :> uint;
+      def length = text.Length;
+      
+      def byteCount = length * 2 + 1;
+      def integerWriter = CompressedIntegerWriter();
+      integerWriter.WriteInteger(byteCount :> uint, stream);
+      
+      def writer = BinaryWriter(stream);      
+      for(mutable i = 0; i < length; i++)
+      {
+          def currentCharacter : ushort = text[i];
+          def lowByte = (currentCharacter & ~ 0xFF00) :> byte;
+          def highByte = ((currentCharacter - (lowByte :> ushort)) >> 8) :> byte;
+                    
+          writer.Write(lowByte : byte);
+          writer.Write(highByte : byte);          
+      }
+      
+      // Write the last padding byte
+      writer.Write(0 : byte);      
+      startPosition;
+    }
+  }
+}

@@ -184,6 +184,9 @@
     <Compile Include="Metadata\UserStringHeapReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\UserStringHeapWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NTHeader.n">
       <SubType>Code</SubType>
     </Compile>

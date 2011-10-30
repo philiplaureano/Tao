@@ -7,6 +7,7 @@ using Tao;
 using Tests.Macros;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,6 +26,26 @@ namespace Tests
       def expectedString = string.Empty;
 
       TestRead(index, expectedString);
+    }
+    public ShouldBeAbleToWriteUserString() : void
+    {
+      def expectedData = array[
+	    0x00 : byte, 0x1B, 0x48, 0x00, 0x65, 0x00, 0x6C, 0x00, 0x6C, 0x00, 0x6F, 0x00, 0x2C, 0x00, 0x20, 0x00,
+	    0x57, 0x00, 0x6F, 0x00, 0x72, 0x00, 0x6C, 0x00, 0x64, 0x00, 0x21, 0x00, 0x00];
+	  
+      def expectedOffset = 1;      
+      def inputString = "Hello, World!";
+      
+      // Create an empty heap
+      def outputStream = MemoryStream(29);
+      def binaryWriter = BinaryWriter(outputStream);
+      binaryWriter.Write(0 : byte);
+	  
+      def writer = UserStringHeapWriter();
+      def offset = writer.Write(inputString, outputStream);
+	  
+      outputStream.ShouldMatch(expectedData);
+      assert offset equals expectedOffset otherwiseprint "Invalid offset";
     }
     private TestRead(index : uint, expectedString: string) : void
     {
