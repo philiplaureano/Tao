@@ -1,0 +1,93 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+
+using Tests.Macros;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class GUIDHeapTests
+  {
+    public ShouldReturnEmptyGUIDWhenReadingIndexZero() : void
+    {
+      def guidData = array[0xF2 : byte, 0x5F, 0xF8, 0x3B, 0x3F, 0x90, 0xC6, 0x46, 0xA7, 0x08, 0xA7, 0xED, 0x90, 0xDF, 0x9A, 0xF0];
+      def guidStream = MemoryStream(guidData);
+      
+      def index : uint = 0;
+      def reader = GuidReader();
+      def guid = reader.Read(index, guidStream);
+      
+      def expectedGuid = Guid.Empty;
+      assert guid equals expectedGuid otherwiseprint "Invalid GUID";
+    }
+    
+    public ShouldBeAbleToReadGUID() : void
+    {
+      def guidData = array[0xF2 : byte, 0x5F, 0xF8, 0x3B, 0x3F, 0x90, 0xC6, 0x46, 0xA7, 0x08, 0xA7, 0xED, 0x90, 0xDF, 0x9A, 0xF0];
+      def guidStream = MemoryStream(guidData);
+      
+      def index : uint = 1;
+      def reader = GuidReader();
+      def guid = reader.Read(index, guidStream);
+      
+      def expectedGuid = Guid(guidData);      
+      assert guid equals expectedGuid otherwiseprint "Invalid GUID";
+    }
+    
+    public ShouldBeAbleToReadMultipleGUIDs() : void
+    {
+      def guidData = array[0xF2 : byte, 0x5F, 0xF8, 0x3B, 0x3F, 0x90, 0xC6, 0x46, 0xA7, 0x08, 0xA7, 0xED, 0x90, 0xDF, 0x9A, 0xF0,
+      0x35, 0xC1, 0x12, 0x96, 0xA2, 0xE2, 0x4C, 0x47, 0xA7, 0x87, 0x3D, 0x44, 0xCE, 0xAD, 0x6F, 0xAE];
+            
+      def guidStream = MemoryStream(guidData);
+            
+      def firstExpectedGuid = Guid(array[0xF2 : byte, 0x5F, 0xF8, 0x3B, 0x3F, 0x90, 0xC6, 0x46, 0xA7, 0x08, 0xA7, 0xED, 0x90, 0xDF, 0x9A, 0xF0]);
+      def secondExpectedGuid = Guid(array[0x35 : byte, 0xC1, 0x12, 0x96, 0xA2, 0xE2, 0x4C, 0x47, 0xA7, 0x87, 0x3D, 0x44, 0xCE, 0xAD, 0x6F, 0xAE]);
+      
+      def reader = GuidReader();
+      def firstGuid = reader.Read(1, guidStream);
+      def secondGuid = reader.Read(2, guidStream);
+      
+      assert firstGuid equals firstExpectedGuid otherwiseprint "Invalid GUID";
+      assert secondGuid equals secondExpectedGuid otherwiseprint "Invalid GUID";
+    }
+    
+    public ShouldBeAbleToWriteMultipleGUIDs() : void
+    {
+      def expectedGuidData = array[0xF2 : byte, 0x5F, 0xF8, 0x3B, 0x3F, 0x90, 0xC6, 0x46, 0xA7, 0x08, 0xA7, 0xED, 0x90, 0xDF, 0x9A, 0xF0,
+      0x35, 0xC1, 0x12, 0x96, 0xA2, 0xE2, 0x4C, 0x47, 0xA7, 0x87, 0x3D, 0x44, 0xCE, 0xAD, 0x6F, 0xAE];
+      
+      def firstExpectedGuid = Guid(array[0xF2 : byte, 0x5F, 0xF8, 0x3B, 0x3F, 0x90, 0xC6, 0x46, 0xA7, 0x08, 0xA7, 0xED, 0x90, 0xDF, 0x9A, 0xF0]);
+      def secondExpectedGuid = Guid(array[0x35 : byte, 0xC1, 0x12, 0x96, 0xA2, 0xE2, 0x4C, 0x47, 0xA7, 0x87, 0x3D, 0x44, 0xCE, 0xAD, 0x6F, 0xAE]);
+      
+      def guidStream = MemoryStream();
+      def guids = array[firstExpectedGuid, secondExpectedGuid];
+      
+      def writer = GuidWriter();
+      writer.Write(guids, guidStream);
+      
+      guidStream.ShouldMatch(expectedGuidData);
+    }
+    
+    public ShouldBeAbleToWriteGUID() : void
+    {
+      def expectedGuidData = array[0xF2 : byte, 0x5F, 0xF8, 0x3B, 0x3F, 0x90, 0xC6, 0x46, 0xA7, 0x08, 0xA7, 0xED, 0x90, 0xDF, 0x9A, 0xF0];
+      
+      def guidStream = MemoryStream();
+      def guids = array[Guid(expectedGuidData)];
+      
+      def writer = GuidWriter();
+      writer.Write(guids, guidStream);
+      
+      guidStream.ShouldMatch(expectedGuidData);
+    }    
+  }
+}

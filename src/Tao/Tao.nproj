@@ -148,6 +148,12 @@
     <Compile Include="Metadata\CompressedIntegerWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\GuidReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\GuidWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\MetadataBlockReader.n">
       <SubType>Code</SubType>
     </Compile>
