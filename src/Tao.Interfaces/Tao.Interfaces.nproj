@@ -194,6 +194,12 @@
     <Compile Include="Metadata\IStreamHeaderReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\IStringHeapReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\IStringHeapWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\RuntimeFlags.n">
       <SubType>Code</SubType>
     </Compile>

@@ -5,6 +5,8 @@ using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tao.Interfaces;
+
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -12,7 +14,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class StringHeapReader
+  public class StringHeapReader : IStringHeapReader
   {
     public Read(index: uint, [NotNull] stream: Stream) : string
         requires index <= stream.Length

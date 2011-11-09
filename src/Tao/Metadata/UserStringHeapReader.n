@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class UserStringHeapReader
+  public class UserStringHeapReader : IStringHeapReader
   {
     public Read(index: uint, [NotNull] stream: Stream) : string
         requires index <= stream.Length
