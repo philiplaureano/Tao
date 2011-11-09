@@ -1,8 +1,12 @@
 ﻿using Nemerle.Collections;
+using Nemerle.Extensions;
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tao;
+using Tests.Macros;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,7 +16,53 @@ namespace Tests
   {
     public ShouldBeAbleToReadStringFromStringHeapUsingGivenIndex() : void
     {
-      throw NotImplementedException();
+      def stringData = array[
+        0x00 : byte, 0x3C, 0x4D, 0x6F, 0x64, 0x75, 0x6C, 0x65, 0x3E, 0x00, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x57,
+        0x6F, 0x72, 0x6C, 0x64, 0x2E, 0x65, 0x78, 0x65, 0x00];
+        
+      def expectedItems = Dictionary.[int, string]();
+      _ = expectedItems<-
+            [
+              (0, string.Empty),
+              (1, "<Module>"),
+              (0xA, "HelloWorld.exe")
+            ];
+      
+      def stringHeap = MemoryStream(stringData);
+      def stringHeapReader = StringHeapReader();      
+      
+      foreach(index in expectedItems.Keys)
+      {
+        def actualString = stringHeapReader.Read(index :> uint, stringHeap);
+        assert actualString equals expectedItems[index] otherwiseprint "Invalid String";
+      }      
+    }
+    
+    public ShouldBeAbleToCreateStringHeapUsingGivenStrings() : void
+    {
+      def expectedData = array[
+        0x00 : byte, 0x3C, 0x4D, 0x6F, 0x64, 0x75, 0x6C, 0x65, 0x3E, 0x00, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x57,
+        0x6F, 0x72, 0x6C, 0x64, 0x2E, 0x65, 0x78, 0x65, 0x00];
+      
+      def expectedItems = System.Collections.Generic.Dictionary.[int, string]();
+      _ = expectedItems<-
+            [
+              (1, "<Module>"),
+              (0xA, "HelloWorld.exe")
+            ];
+                    
+      def stringHeap = MemoryStream();
+      def stringHeapWriter = StringHeapWriter();
+        
+      foreach(index in expectedItems.Keys)
+      {
+          def value = expectedItems[index];
+          def targetIndex = stringHeapWriter.Write(value, stringHeap);
+          
+          assert targetIndex equals index otherwiseprint "Invalid target index";
+      }
+      
+      stringHeap.ShouldMatch(expectedData);
     }
   }
 }

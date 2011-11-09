@@ -187,6 +187,12 @@
     <Compile Include="Metadata\StreamHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\StringHeapReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\StringHeapWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\UserStringHeapReader.n">
       <SubType>Code</SubType>
     </Compile>

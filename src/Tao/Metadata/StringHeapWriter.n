@@ -1,0 +1,37 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Extensions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class StringHeapWriter
+  {
+    public Write([NotNull] text : string, [NotNull] stream: Stream) : uint
+    {
+      // Write the null string entry "0" by default
+      when(stream.Length == 0)
+      {
+        _ = DoWrite(string.Empty, stream);
+      }
+     
+      DoWrite(text, stream);
+    }
+    private DoWrite([NotNull] text : string, [NotNull] stream: Stream) : uint
+    {
+      mutable startPosition = stream.Position :> uint;
+      
+      def writer = NullTerminatedStringWriter();
+      writer.Write(text, stream);
+      
+      startPosition;
+    }
+  }
+}

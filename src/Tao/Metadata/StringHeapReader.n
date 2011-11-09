@@ -1,0 +1,41 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Extensions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class StringHeapReader
+  {
+    public Read(index: uint, [NotNull] stream: Stream) : string
+        requires index <= stream.Length
+    {
+      // Seek the target position
+      _ = stream.Seek(index :> int, SeekOrigin.Begin);
+      
+      def data = System.Collections.Generic.Queue.[char]();
+      def readData() : void
+      {          
+        def value = stream.ReadByte();
+        def character = value :> char;
+          
+        when (character != 0)
+        {
+          data.Enqueue(character);
+          readData();   
+        }          
+      }
+      
+      readData();
+      def result = string(data.ToArray());      
+      result;
+    }
+  }
+}
