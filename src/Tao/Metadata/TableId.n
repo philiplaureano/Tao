@@ -1,0 +1,53 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public enum TableId : byte
+  {
+    |Assembly = 0x20
+    |AssemblyOS = 0x22
+    |AssemblyProcessor = 0x21
+    |AssemblyRef = 0x23
+    |AssemblyRefOS = 0x25
+    |AssemblyRefProcessor = 0x24
+    |ClassLayout = 0x0f
+    |Constant = 0x0b
+    |CustomAttribute = 0x0c
+    |DeclSecurity = 0x0e
+    |EventMap = 0x12
+    |Event = 0x14
+    |ExportedType = 0x27
+    |Field = 0x04
+    |FieldLayout = 0x10
+    |FieldMarshal = 0x0d
+    |FieldRVA = 0x1d
+    |File = 0x26
+    |GenericParam = 0x2a
+    |GenericParamConstraint = 0x2c
+    |ImplMap = 0x1c
+    |InterfaceImpl = 0x09
+    |ManifestResource = 0x28
+    |MemberRef = 0x0a
+    |MethodDef = 0x06
+    |MethodImpl = 0x19
+    |MethodSemantics = 0x18
+    |MethodSpec =  0x2b
+    |Module = 0x00
+    |ModuleRef = 0x1A
+    |NestedClass = 0x29
+    |Param = 0x08
+    |Property = 0x17
+    |PropertyMap = 0x15
+    |StandAloneSig = 0x11
+    |TypeDef = 0x02
+    |TypeRef = 0x01
+    |TypeSpec = 0x1b
+  }
+}

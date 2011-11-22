@@ -130,7 +130,7 @@ namespace Tests
     public ShouldThrowArgumentExceptionIfSignedValueIsBelowExpectedValues() : void
         expects ArgumentOutOfRangeException
     {
-      def lowValue = -268435456;
+      def lowValue = -268435460;
       def value = lowValue - 1;
       def outputStream = MemoryStream();
       def writer = CompressedIntegerWriter();
@@ -139,7 +139,7 @@ namespace Tests
     public ShouldThrowArgumentExceptionIfSignedValueIsAboveExpectedValues() : void
         expects ArgumentOutOfRangeException
     {
-      def highValue = 268435455;
+      def highValue = 268435457;
       def value = highValue + 1;
       def outputStream = MemoryStream();
       def writer = CompressedIntegerWriter();

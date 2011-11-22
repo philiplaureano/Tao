@@ -48,7 +48,7 @@ namespace Tao
     }
     public WriteSignedInteger(value : int, [NotNull] stream: Stream) : void
         requires BitConverter.IsLittleEndian
-        requires value <= 268435455 && value >= -268435456
+        requires value <= 268435455 && value >= -268435456 otherwise throw ArgumentOutOfRangeException("value")
     {            
       def isByte = value <= 63 && value >= -64;
       def isWord = value <= 8191 && value >= -8192 && !isByte;

@@ -142,6 +142,15 @@
     <Compile Include="Metadata\CLIHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\CodedTokenBitCountMap.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\CodedTokenConverter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\CodedTokenDecoder.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\CompressedIntegerReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -191,6 +200,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\StringHeapWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\TableId.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\TableReferenceDecoder.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\UserStringHeapReader.n">

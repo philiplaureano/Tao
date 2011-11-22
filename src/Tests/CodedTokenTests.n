@@ -1,0 +1,151 @@
+﻿using Nemerle;
+using Nemerle.Extensions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using Tests.Macros;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public partial class CodedTokenTests
+  {       
+    public ShouldBeAbleToDecodeDwordTokenIntoTagAndRow() : void
+    {
+      def token : int = 0x321;
+      def expectedRow = 0xC8;
+      def expectedToken = 1;
+
+      def decoder = CodedTokenDecoder();
+      def result = decoder.Decode(CodedTokenType.HasConstant, token);
+
+      match(result)
+      {
+        |(token, row)=>
+          {
+            expectedToken.ShouldBeEqualTo(token, "Invalid token");
+            expectedRow.ShouldBeEqualTo(row, "Invalid row");
+          }
+      }
+    }
+
+        
+    public ShouldBeAbleToDecodeWordTokenIntoTagAndRow() : void
+    {
+      def token : short = 0x321;
+      def expectedRow = 0xC8;
+      def expectedToken = 1;
+
+      def decoder = CodedTokenDecoder();
+      def result = decoder.Decode(CodedTokenType.HasConstant, token);
+
+      match(result)
+      {
+        |(token, row)=>
+          {
+            expectedToken.ShouldBeEqualTo(token, "Invalid token");
+            expectedRow.ShouldBeEqualTo(row, "Invalid row");
+          }
+      }
+    }
+        
+    public ShouldBeAbleToReportTheCorrectNumberOfBitsToEncodeCustomAttributeType() : void
+    {
+      def expectedBitCount = 3;
+      def codedTokenType = CodedTokenType.CustomAttributeType;
+
+      Test(codedTokenType, expectedBitCount);
+    }
+        
+    public ShouldBeAbleToReportTheCorrectNumberOfBitsToEncodeHasConstant() : void
+    {
+      Test(CodedTokenType.HasConstant, 2);
+    }
+        
+    public ShouldBeAbleToReportTheCorrectNumberOfBitsToEncodeTypeDefOrTypeRef() : void
+    {
+      Test(CodedTokenType.TypeDefOrTypeRef, 2);
+    }
+        
+    public ShouldBeAbleToReportTheCorrectNumberOfBitsToEncodeHasCustomAttribute() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 5);
+    }
+        
+    public ShouldBeAbleToReportTheCorrectNumberOfBitsToEncodeHasDeclSecurity() : void
+    {
+      Test(CodedTokenType.HasDeclSecurity, 2);
+    }
+        
+    public ShouldBeAbleToReportTheCorrectNumberOfBitsToEncodeMemberRefParent() : void
+    {
+      Test(CodedTokenType.MemberRefParent, 3);
+    }
+        
+    public ShouldBeAbleToReportTheCorrectNumberOfBitsToEncodeHasSemantics() : void
+    {
+      Test(CodedTokenType.HasSemantics, 1);
+    }
+        
+    public ShouldBeAbleToReportTheCorrectNumberOfBitsToEncodeMethodDefOrRef() : void
+    {
+      Test(CodedTokenType.MethodDefOrRef, 1);
+    }
+        
+    public ShouldBeAbleToReportTheCorrectNumberOfBitsToEncodeMemberForwarded() : void
+    {
+      Test(CodedTokenType.MemberForwarded, 1);
+    }
+        
+    public ShouldBeAbleToReportTheCorrectNumberOfBitsToEncodeImplementation() : void
+    {
+      Test(CodedTokenType.Implementation, 2);
+    }
+        
+    public ShouldBeAbleToReportTheCorrectNumberOfBitsToEncodeResolutionScope() : void
+    {
+      Test(CodedTokenType.ResolutionScope, 2);
+    }
+    public ShouldBeAbleToReportTheCorrectNumberOfBitsToEncodeTypeOrMethodDef() : void
+    {
+      Test(CodedTokenType.TypeOrMethodDef, 1);
+    }
+    
+    public ShouldBeAbleToConvertCodedTokenIntoTableIdAndRow() : void
+    {
+      def decoder = TableReferenceDecoder();        
+      def codedToken = 0x321;
+      def expectedRow = 0xC8;
+      def expectedTableId = TableId.Param;
+
+      def result = decoder.GetTableReference(CodedTokenType.HasConstant, codedToken);
+      def tableId = result[0];
+      def row = result[1];
+      
+      tableId.ShouldBeEqualTo(expectedTableId, "Invalid Table Id");
+      row.ShouldBeEqualTo(expectedRow, "Invalid Row");
+    }    
+    
+    private Test(tokenType : CodedTokenType, tag : byte, expectedTableId : TableId) : void
+    {
+      def converter = CodedTokenConverter();
+      def tableId = converter.GetTableId(tokenType, tag);
+      
+      expectedTableId.ShouldBeEqualTo(tableId, "Wrong TableId! Expected: {0}", expectedTableId.ToString());
+    }
+    
+    private Test(codedTokenType : CodedTokenType, expectedBitCount : int) : void
+    {
+      def bitCountMap = CodedTokenBitCountMap();
+      
+      def bitCount = bitCountMap[codedTokenType] :> int;
+      expectedBitCount.ShouldBeEqualTo(bitCount, "Wrong bit count!");
+    }       
+  }
+}

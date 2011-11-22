@@ -1,0 +1,35 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class CodedTokenDecoder
+  {
+      public Decode(tokenType : CodedTokenType, index : int) : byte * int
+      {
+          def map = CodedTokenBitCountMap();
+          def bitsToEncodeTag = map[tokenType] :> int;
+          
+          def row : int = index >> bitsToEncodeTag;
+          def tag = index - (row << bitsToEncodeTag);
+          
+          (tag :> byte, row);
+      }
+      public Decode(tokenType : CodedTokenType, index : short) : byte * int
+      {
+          def map = CodedTokenBitCountMap();
+          def bitsToEncodeTag = map[tokenType] :> int;
+          
+          def row : int = index >> bitsToEncodeTag;
+          def tag = index - (row << bitsToEncodeTag);
+          
+          (tag :> byte, row);
+      }
+  }
+}

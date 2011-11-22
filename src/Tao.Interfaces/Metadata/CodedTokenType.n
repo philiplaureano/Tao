@@ -1,0 +1,28 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+  public enum CodedTokenType
+  {
+    |TypeDefOrTypeRef
+    |HasConstant
+    |HasCustomAttribute
+    |HasFieldMarshall
+    |HasDeclSecurity
+    |MemberRefParent
+    |HasSemantics
+    |MethodDefOrRef
+    |MemberForwarded
+    |Implementation
+    |CustomAttributeType
+    |ResolutionScope
+    |TypeOrMethodDef
+  }
+}

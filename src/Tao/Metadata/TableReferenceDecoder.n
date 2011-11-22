@@ -1,0 +1,28 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class TableReferenceDecoder
+  {
+      public GetTableReference(tokenType : CodedTokenType, token : int) : TableId * int
+      {
+          def codedTokenDecoder = CodedTokenDecoder();
+          def token = codedTokenDecoder.Decode(tokenType, token);
+          
+          def tag = token[0];
+          def row = token[1];
+          
+          def tableDecoder = CodedTokenConverter();
+          def tableId = tableDecoder.GetTableId(tokenType, tag);
+          
+          (tableId, row);
+      }
+  }
+}

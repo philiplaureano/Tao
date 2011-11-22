@@ -170,6 +170,9 @@
     <Compile Include="Machine.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\CodedTokenType.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\ICLIHeader.n">
       <SubType>Code</SubType>
     </Compile>

@@ -78,6 +78,9 @@
     </MacroReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssertionExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="BlobHeapTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -86,6 +89,13 @@
     </Compile>
     <Compile Include="CLIHeaderTests.n">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CodedTokenTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CodedTokenTests.TagConversionTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>CodedTokenTests.n</DependentUpon>
     </Compile>
     <Compile Include="CompressedIntegerTests.n">
       <SubType>Code</SubType>

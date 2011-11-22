@@ -1,0 +1,270 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public partial class CodedTokenTests
+  {
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_TypeDefOrTypeRef_And_RowAndTagFrom_TypeDef() : void
+    {
+      Test(CodedTokenType.TypeDefOrTypeRef, 0, TableId.TypeDef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_TypeDefOrTypeRef_And_RowAndTagFrom_TypeRef() : void
+    {
+      Test(CodedTokenType.TypeDefOrTypeRef, 1, TableId.TypeRef);
+    }
+        
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_TypeDefOrTypeRef_And_RowAndTagFrom_TypeSpec() : void
+    {
+      Test(CodedTokenType.TypeDefOrTypeRef, 2, TableId.TypeSpec);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasConstant_And_RowAndTagFrom_Field() : void
+    {
+      Test(CodedTokenType.HasConstant, 0, TableId.Field);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasConstant_And_RowAndTagFrom_Param() : void
+    {
+      Test(CodedTokenType.HasConstant, 1, TableId.Param);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasConstant_And_RowAndTagFrom_Property() : void
+    {
+      Test(CodedTokenType.HasConstant, 2, TableId.Property);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_MethodDef() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 0, TableId.MethodDef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_Field() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 1, TableId.Field);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_TypeRef() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 2, TableId.TypeRef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_TypeDef() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 3, TableId.TypeDef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_Param() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 4, TableId.Param);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_InterfaceImpl() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 5, TableId.InterfaceImpl);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_MemberRef() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 6, TableId.MemberRef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_Module() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 7, TableId.Module);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_DeclSecurity() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 8, TableId.DeclSecurity);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_Property() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 9, TableId.Property);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_Event() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 10, TableId.Event);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_StandAloneSig() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 11, TableId.StandAloneSig);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_ModuleRef() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 12, TableId.ModuleRef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_TypeSpec() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 13, TableId.TypeSpec);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_Assembly() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 14, TableId.Assembly);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_AssemblyRef() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 15, TableId.AssemblyRef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_File() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 16, TableId.File);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_ExportedType() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 17, TableId.ExportedType);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasCustomAttribute_And_RowAndTagFrom_ManifestResource() : void
+    {
+      Test(CodedTokenType.HasCustomAttribute, 18, TableId.ManifestResource);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasFieldMarshall_And_RowAndTagFrom_Field() : void
+    {
+      Test(CodedTokenType.HasFieldMarshall, 0, TableId.Field);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasFieldMarshall_And_RowAndTagFrom_Param() : void
+    {
+      Test(CodedTokenType.HasFieldMarshall, 1, TableId.Param);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasDeclSecurity_And_RowAndTagFrom_TypeDef() : void
+    {
+      Test(CodedTokenType.HasDeclSecurity, 0, TableId.TypeDef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasDeclSecurity_And_RowAndTagFrom_MethodDef() : void
+    {
+      Test(CodedTokenType.HasDeclSecurity, 1, TableId.MethodDef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasDeclSecurity_And_RowAndTagFrom_Assembly() : void
+    {
+      Test(CodedTokenType.HasDeclSecurity, 2, TableId.Assembly);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_MemberRefParent_And_RowAndTagFrom_TypeRef() : void
+    {
+      Test(CodedTokenType.MemberRefParent, 1, TableId.TypeRef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_MemberRefParent_And_RowAndTagFrom_ModuleRef() : void
+    {
+      Test(CodedTokenType.MemberRefParent, 2, TableId.ModuleRef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_MemberRefParent_And_RowAndTagFrom_MethodDef() : void
+    {
+      Test(CodedTokenType.MemberRefParent, 3, TableId.MethodDef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_MemberRefParent_And_RowAndTagFrom_TypeSpec() : void
+    {
+      Test(CodedTokenType.MemberRefParent, 4, TableId.TypeSpec);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasSemantics_And_RowAndTagFrom_Event() : void
+    {
+      Test(CodedTokenType.HasSemantics, 0, TableId.Event);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasSemantics_And_RowAndTagFrom_Property() : void
+    {
+      Test(CodedTokenType.HasSemantics, 1, TableId.Property);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_MethodDefOrRef_And_RowAndTagFrom_MethodDef() : void
+    {
+      Test(CodedTokenType.MethodDefOrRef, 0, TableId.MethodDef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_MethodDefOrRef_And_RowAndTagFrom_MemberRef() : void
+    {
+      Test(CodedTokenType.MethodDefOrRef, 1, TableId.MemberRef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_MemberForwarded_And_RowAndTagFrom_Field() : void
+    {
+      Test(CodedTokenType.MemberForwarded, 0, TableId.Field);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_MemberForwarded_And_RowAndTagFrom_MethodDef() : void
+    {
+      Test(CodedTokenType.MemberForwarded, 1, TableId.MethodDef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_Implementation_And_RowAndTagFrom_File() : void
+    {
+      Test(CodedTokenType.Implementation, 0, TableId.File);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_Implementation_And_RowAndTagFrom_AssemblyRef() : void
+    {
+      Test(CodedTokenType.Implementation, 2, TableId.AssemblyRef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_Implementation_And_RowAndTagFrom_ExportedType() : void
+    {
+      Test(CodedTokenType.Implementation, 3, TableId.ExportedType);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_CustomAttributeType_And_RowAndTagFrom_MethodDef() : void
+    {
+      Test(CodedTokenType.CustomAttributeType, 2, TableId.MethodDef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_CustomAttributeType_And_RowAndTagFrom_MemberRef() : void
+    {
+      Test(CodedTokenType.CustomAttributeType, 3, TableId.MemberRef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_ResolutionScope_And_RowAndTagFrom_Module() : void
+    {
+      Test(CodedTokenType.ResolutionScope, 0, TableId.Module);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_ResolutionScope_And_RowAndTagFrom_ModuleRef() : void
+    {
+      Test(CodedTokenType.ResolutionScope, 1, TableId.ModuleRef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_ResolutionScope_And_RowAndTagFrom_AssemblyRef() : void
+    {
+      Test(CodedTokenType.ResolutionScope, 2, TableId.AssemblyRef);
+    }
+
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_ResolutionScope_And_RowAndTagFrom_TypeRef() : void
+    {
+      Test(CodedTokenType.ResolutionScope, 3, TableId.TypeRef);
+    }
+    
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_TypeDefOrMethodDef_AndRowAndTagFrom_TypeDef() : void
+    {
+        Test(CodedTokenType.TypeOrMethodDef, 0, TableId.TypeDef);
+    }
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_TypeDefOrMethodDef_AndRowAndTagFrom_MethodDef() : void
+    {
+        Test(CodedTokenType.TypeOrMethodDef, 1, TableId.MethodDef);
+    }
+  }
+}

@@ -1,0 +1,30 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class CodedTokenBitCountMap : Dictionary.[CodedTokenType, uint]
+  {
+    public this()
+    {
+      this[CodedTokenType.CustomAttributeType] = 3;
+      this[CodedTokenType.HasConstant] = 2;
+      this[CodedTokenType.TypeDefOrTypeRef] = 2;
+      this[CodedTokenType.HasCustomAttribute] = 5;
+      this[CodedTokenType.HasDeclSecurity] = 2;
+      this[CodedTokenType.MemberRefParent] = 3;
+      this[CodedTokenType.HasSemantics] = 1;
+      this[CodedTokenType.MethodDefOrRef] = 1;
+      this[CodedTokenType.MemberForwarded] = 1;
+      this[CodedTokenType.Implementation] = 2;
+      this[CodedTokenType.ResolutionScope] = 2;
+      this[CodedTokenType.TypeOrMethodDef] = 1;
+    }
+  }
+}
