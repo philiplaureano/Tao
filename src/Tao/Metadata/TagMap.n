@@ -1,0 +1,95 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class TagMap : Dictionary.[CodedTokenType, IDictionary.[byte, TableId]]
+  {
+    public this()
+    {
+      this[CodedTokenType.CustomAttributeType] = Dictionary.[byte, TableId]();
+      this[CodedTokenType.HasConstant] = Dictionary.[byte, TableId]();
+      this[CodedTokenType.HasCustomAttribute] = Dictionary.[byte, TableId]();
+      this[CodedTokenType.HasDeclSecurity] = Dictionary.[byte, TableId]();
+      this[CodedTokenType.HasFieldMarshall] = Dictionary.[byte, TableId]();
+      this[CodedTokenType.HasSemantics] = Dictionary.[byte, TableId]();
+      this[CodedTokenType.Implementation] = Dictionary.[byte, TableId]();
+      this[CodedTokenType.MemberForwarded] = Dictionary.[byte, TableId]();
+      this[CodedTokenType.MemberRefParent] = Dictionary.[byte, TableId]();
+      this[CodedTokenType.MethodDefOrRef] = Dictionary.[byte, TableId]();
+      this[CodedTokenType.ResolutionScope] = Dictionary.[byte, TableId]();
+      this[CodedTokenType.TypeDefOrTypeRef] = Dictionary.[byte, TableId]();
+      this[CodedTokenType.TypeOrMethodDef] = Dictionary.[byte, TableId]();
+
+      this[CodedTokenType.CustomAttributeType][2] = TableId.MethodDef;
+      this[CodedTokenType.CustomAttributeType][3] = TableId.MemberRef;
+
+      this[CodedTokenType.HasConstant][0] = TableId.Field;
+      this[CodedTokenType.HasConstant][1] = TableId.Param;
+      this[CodedTokenType.HasConstant][2] = TableId.Property;
+
+      this[CodedTokenType.HasCustomAttribute][0] = TableId.MethodDef;
+      this[CodedTokenType.HasCustomAttribute][1] = TableId.Field;
+      this[CodedTokenType.HasCustomAttribute][2] = TableId.TypeRef;
+      this[CodedTokenType.HasCustomAttribute][3] = TableId.TypeDef;
+      this[CodedTokenType.HasCustomAttribute][4] = TableId.Param;
+      this[CodedTokenType.HasCustomAttribute][5] = TableId.InterfaceImpl;
+      this[CodedTokenType.HasCustomAttribute][6] = TableId.MemberRef;
+      this[CodedTokenType.HasCustomAttribute][7] = TableId.Module;
+      this[CodedTokenType.HasCustomAttribute][8] = TableId.DeclSecurity;
+      this[CodedTokenType.HasCustomAttribute][9] = TableId.Property;
+      this[CodedTokenType.HasCustomAttribute][10] = TableId.Event;
+      this[CodedTokenType.HasCustomAttribute][11] = TableId.StandAloneSig;
+      this[CodedTokenType.HasCustomAttribute][12] = TableId.ModuleRef;
+      this[CodedTokenType.HasCustomAttribute][13] = TableId.TypeSpec;
+      this[CodedTokenType.HasCustomAttribute][14] = TableId.Assembly;
+      this[CodedTokenType.HasCustomAttribute][15] = TableId.AssemblyRef;
+      this[CodedTokenType.HasCustomAttribute][16] = TableId.File;
+      this[CodedTokenType.HasCustomAttribute][17] = TableId.ExportedType;
+      this[CodedTokenType.HasCustomAttribute][18] = TableId.ManifestResource;
+
+      this[CodedTokenType.HasDeclSecurity][0] = TableId.TypeDef;
+      this[CodedTokenType.HasDeclSecurity][1] = TableId.MethodDef;
+      this[CodedTokenType.HasDeclSecurity][2] = TableId.Assembly;
+
+      this[CodedTokenType.HasFieldMarshall][0] = TableId.Field;
+      this[CodedTokenType.HasFieldMarshall][1] = TableId.Param;
+
+      this[CodedTokenType.HasSemantics][0] = TableId.Event;
+      this[CodedTokenType.HasSemantics][1] = TableId.Property;
+
+      this[CodedTokenType.Implementation][0] = TableId.File;
+      this[CodedTokenType.Implementation][2] = TableId.AssemblyRef;
+      this[CodedTokenType.Implementation][3] = TableId.ExportedType;
+
+      this[CodedTokenType.MemberForwarded][0] = TableId.Field;
+      this[CodedTokenType.MemberForwarded][1] = TableId.MethodDef;
+
+      this[CodedTokenType.MemberRefParent][1] = TableId.TypeRef;
+      this[CodedTokenType.MemberRefParent][2] = TableId.ModuleRef;
+      this[CodedTokenType.MemberRefParent][3] = TableId.MethodDef;
+      this[CodedTokenType.MemberRefParent][4] = TableId.TypeSpec;
+
+      this[CodedTokenType.MethodDefOrRef][0] = TableId.MethodDef;
+      this[CodedTokenType.MethodDefOrRef][1] = TableId.MemberRef;
+
+      this[CodedTokenType.ResolutionScope][0] = TableId.Module;
+      this[CodedTokenType.ResolutionScope][1] = TableId.ModuleRef;
+      this[CodedTokenType.ResolutionScope][2] = TableId.AssemblyRef;
+      this[CodedTokenType.ResolutionScope][3] = TableId.TypeRef;
+
+      this[CodedTokenType.TypeDefOrTypeRef][0] = TableId.TypeDef;
+      this[CodedTokenType.TypeDefOrTypeRef][1] = TableId.TypeRef;
+      this[CodedTokenType.TypeDefOrTypeRef][2] = TableId.TypeSpec;
+      
+      this[CodedTokenType.TypeOrMethodDef][0] = TableId.TypeDef;
+      this[CodedTokenType.TypeOrMethodDef][1] = TableId.MethodDef;
+    }
+  }
+}

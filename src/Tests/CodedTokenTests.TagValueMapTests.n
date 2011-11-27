@@ -1,0 +1,106 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Extensions;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tests.Macros;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public partial class CodedTokenTests
+  {
+    public ShouldBeAbleToMapCustomAttributeCodedTokenValues() : void
+    {      
+      def shouldHaveExpectedValue = BindShouldHaveExpectedTagValue(CodedTokenType.CustomAttributeType);
+      shouldHaveExpectedValue(TableId.MethodDef, 2);
+      shouldHaveExpectedValue(TableId.MemberRef, 3);      
+    }
+    public ShouldBeAbleToMapHasConstantCodedTokenValues() : void
+    {
+      def values = System.Collections.Generic.Dictionary.[TableId, byte]()<-
+                     [
+                       (TableId.Field, 0 : byte),
+                       (TableId.Param, 1 : byte),
+                       (TableId.Property, 2 : byte)
+                     ];
+      
+      ShouldHaveExpectedTagValues(CodedTokenType.HasConstant, values);
+    }
+    public ShouldBeAbleToMapHasCustomAttributeTokenValues() : void
+    {      
+      def values = System.Collections.Generic.Dictionary.[TableId, byte]()<-
+                     [
+                       (TableId.MethodDef, 0 : byte),
+                       (TableId.Field, 1 : byte),
+                       (TableId.TypeRef, 2 : byte),
+                       (TableId.TypeDef, 3 : byte),
+                       (TableId.Param, 4 : byte),
+                       (TableId.InterfaceImpl, 5 : byte),
+                       (TableId.MemberRef, 6 : byte),
+                       (TableId.Module, 7 : byte),
+                       (TableId.DeclSecurity, 8 : byte),
+                       (TableId.Property, 9 : byte),
+                       (TableId.Event, 10 : byte),
+                       (TableId.StandAloneSig, 11 : byte),
+                       (TableId.ModuleRef, 12 : byte),
+                       (TableId.TypeSpec, 13 : byte),
+                       (TableId.Assembly, 14 : byte),
+                       (TableId.AssemblyRef, 15 : byte),
+                       (TableId.File, 16 : byte),
+                       (TableId.ExportedType, 17 : byte),
+                       (TableId.ManifestResource, 18 : byte)
+                     ];
+      
+      ShouldHaveExpectedTagValues(CodedTokenType.HasCustomAttribute, values);  
+    }
+    public ShouldBeAbleToMapHasDeclSecurityTokenValues() : void
+    {
+      def values = System.Collections.Generic.Dictionary.[TableId, byte]()<-
+                     [
+                       (TableId.TypeDef, 0 : byte),
+                       (TableId.MethodDef, 1 : byte),
+                       (TableId.Assembly, 2 : byte)
+                     ];
+      
+      ShouldHaveExpectedTagValues(CodedTokenType.HasDeclSecurity, values);
+    }
+    public ShouldBeAbleToMapHasFieldMarshallTokenValues() : void
+    {
+      def values = System.Collections.Generic.Dictionary.[TableId, byte]()<-
+                     [
+                        (TableId.Field, 0 : byte),
+                        (TableId.Param, 1 : byte)
+                     ];
+      
+      ShouldHaveExpectedTagValues(CodedTokenType.HasFieldMarshall, values);
+    }
+    private ShouldHaveExpectedTagValues(tokenType : CodedTokenType, values : IDictionary.[TableId, byte]) : void
+    {
+      def shouldHaveExpectedValue = BindShouldHaveExpectedTagValue(tokenType);
+      foreach(pair in values)
+      {
+        def tableId = pair.Key;
+        def value = pair.Value;
+        shouldHaveExpectedValue(tableId, value);
+      }
+    }    
+    private BindShouldHaveExpectedTagValue(tokenType : CodedTokenType) : TableId * byte -> void
+    {
+      ShouldHaveExpectedTagValue(tokenType, _, _);
+    }
+    
+    private ShouldHaveExpectedTagValue(tokenType : CodedTokenType, tableId : TableId, expectedTagValue : byte) : void
+    {
+      def converter = CodedTokenConverter();
+      def actualValue = converter.GetTagValue(tokenType, tableId);
+        
+      actualValue.ShouldBeEqualTo(expectedTagValue, "The expected tag value doesn't match the actual tag value");
+    }
+  }
+}

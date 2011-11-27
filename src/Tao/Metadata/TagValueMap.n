@@ -1,0 +1,63 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Extensions;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class TagValueMap : Dictionary.[CodedTokenType, IDictionary.[TableId, byte]]
+  {
+    public this() 
+    {
+      this[CodedTokenType.CustomAttributeType] = Dictionary.[TableId, byte]();      
+      this[CodedTokenType.CustomAttributeType][TableId.MethodDef] = 2;
+      this[CodedTokenType.CustomAttributeType][TableId.MemberRef] = 3;
+      
+      this[CodedTokenType.HasConstant] = Dictionary.[TableId, byte]();                                           
+      this[CodedTokenType.HasConstant][TableId.Field] = 0;
+      this[CodedTokenType.HasConstant][TableId.Param] = 1;
+      this[CodedTokenType.HasConstant][TableId.Property] = 2;        
+      
+      this[CodedTokenType.HasCustomAttribute] = System.Collections.Generic.Dictionary.[TableId, byte]()<-
+      [
+        (TableId.MethodDef, 0 : byte),
+        (TableId.Field, 1 : byte),
+        (TableId.TypeRef, 2 : byte),
+        (TableId.TypeDef, 3 : byte),
+        (TableId.Param, 4 : byte),
+        (TableId.InterfaceImpl, 5 : byte),
+        (TableId.MemberRef, 6 : byte),
+        (TableId.Module, 7 : byte),
+        (TableId.DeclSecurity, 8 : byte),
+        (TableId.Property, 9 : byte),
+        (TableId.Event, 10 : byte),
+        (TableId.StandAloneSig, 11 : byte),
+        (TableId.ModuleRef, 12 : byte),
+        (TableId.TypeSpec, 13 : byte),
+        (TableId.Assembly, 14 : byte),
+        (TableId.AssemblyRef, 15 : byte),
+        (TableId.File, 16 : byte),
+        (TableId.ExportedType, 17 : byte),
+        (TableId.ManifestResource, 18 : byte)
+      ];
+      
+      this[CodedTokenType.HasDeclSecurity] = System.Collections.Generic.Dictionary.[TableId, byte]()<-
+      [
+        (TableId.TypeDef, 0 : byte),
+        (TableId.MethodDef, 1 : byte),
+        (TableId.Assembly, 2 : byte)
+      ];      
+      
+      this[CodedTokenType.HasFieldMarshall] = System.Collections.Generic.Dictionary.[TableId, byte]()<-
+      [
+        (TableId.Field, 0 : byte),
+        (TableId.Param, 1 : byte)
+      ];
+    }
+  }
+}

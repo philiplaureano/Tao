@@ -208,6 +208,12 @@
     <Compile Include="Metadata\TableReferenceDecoder.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\TagMap.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\TagValueMap.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\UserStringHeapReader.n">
       <SubType>Code</SubType>
     </Compile>

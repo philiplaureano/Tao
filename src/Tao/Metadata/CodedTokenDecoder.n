@@ -11,23 +11,23 @@ namespace Tao
 {
   public class CodedTokenDecoder
   {
-      public Decode(tokenType : CodedTokenType, index : int) : byte * int
+      public Decode(tokenType : CodedTokenType, token : int) : byte * int
       {
           def map = CodedTokenBitCountMap();
           def bitsToEncodeTag = map[tokenType] :> int;
           
-          def row : int = index >> bitsToEncodeTag;
-          def tag = index - (row << bitsToEncodeTag);
+          def row : int = token >> bitsToEncodeTag;
+          def tag = token - (row << bitsToEncodeTag);
           
           (tag :> byte, row);
       }
-      public Decode(tokenType : CodedTokenType, index : short) : byte * int
+      public Decode(tokenType : CodedTokenType, token : short) : byte * int
       {
           def map = CodedTokenBitCountMap();
           def bitsToEncodeTag = map[tokenType] :> int;
           
-          def row : int = index >> bitsToEncodeTag;
-          def tag = index - (row << bitsToEncodeTag);
+          def row : int = token >> bitsToEncodeTag;
+          def tag = token - (row << bitsToEncodeTag);
           
           (tag :> byte, row);
       }
