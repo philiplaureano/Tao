@@ -65,8 +65,8 @@ namespace Tao
       this[CodedTokenType.HasSemantics][1] = TableId.Property;
 
       this[CodedTokenType.Implementation][0] = TableId.File;
-      this[CodedTokenType.Implementation][2] = TableId.AssemblyRef;
-      this[CodedTokenType.Implementation][3] = TableId.ExportedType;
+      this[CodedTokenType.Implementation][1] = TableId.AssemblyRef;
+      this[CodedTokenType.Implementation][2] = TableId.ExportedType;
 
       this[CodedTokenType.MemberForwarded][0] = TableId.Field;
       this[CodedTokenType.MemberForwarded][1] = TableId.MethodDef;

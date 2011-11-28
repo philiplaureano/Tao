@@ -124,7 +124,14 @@ namespace Tests
       // Note: There should be one encoding test per CodedTokenType
       throw NotImplementedException();  
     }
-    
+    public ShouldBeAbleToEncodeSimpleTokenIntoTableAndRow() : void
+    {
+      throw NotImplementedException();  
+    }
+    public ShouldBeAbleToDecodeSimpleTokenIntoTableAndRow() : void
+    {
+      throw NotImplementedException();  
+    }
     private Test(tokenType : CodedTokenType, tag : byte, expectedTableId : TableId) : void
     {
       def converter = CodedTokenConverter();

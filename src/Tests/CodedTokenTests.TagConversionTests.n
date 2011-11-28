@@ -220,12 +220,12 @@ namespace Tests
 
     public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_Implementation_And_RowAndTagFrom_AssemblyRef() : void
     {
-      Test(CodedTokenType.Implementation, 2, TableId.AssemblyRef);
+      Test(CodedTokenType.Implementation, 1, TableId.AssemblyRef);
     }
 
     public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_Implementation_And_RowAndTagFrom_ExportedType() : void
     {
-      Test(CodedTokenType.Implementation, 3, TableId.ExportedType);
+      Test(CodedTokenType.Implementation, 2, TableId.ExportedType);
     }
 
     public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_CustomAttributeType_And_RowAndTagFrom_MethodDef() : void

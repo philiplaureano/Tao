@@ -74,11 +74,66 @@ namespace Tests
     {
       def values = System.Collections.Generic.Dictionary.[TableId, byte]()<-
                      [
-                        (TableId.Field, 0 : byte),
-                        (TableId.Param, 1 : byte)
+                       (TableId.Field, 0 : byte),
+                       (TableId.Param, 1 : byte)
                      ];
       
       ShouldHaveExpectedTagValues(CodedTokenType.HasFieldMarshall, values);
+    }
+    public ShouldBeAbleToMapHasSemanticsTokenValues() : void
+    {
+      def values = System.Collections.Generic.Dictionary.[TableId, byte]()<-
+                     [
+                       (TableId.Event, 0 : byte),
+                       (TableId.Property, 1 : byte)
+                     ];
+      ShouldHaveExpectedTagValues(CodedTokenType.HasSemantics, values);
+    }
+    public ShouldBeAbleToMapImplementationTokenValues() : void
+    {
+      def values = System.Collections.Generic.Dictionary.[TableId, byte]()<-
+                     [
+                       (TableId.File, 0 : byte),
+                       (TableId.AssemblyRef, 1 : byte),
+                       (TableId.ExportedType, 2 : byte)
+                     ];
+      ShouldHaveExpectedTagValues(CodedTokenType.Implementation, values);
+    }
+    public ShouldBeAbleToMapMemberForwardedTokenValues() : void
+    {      
+      ShouldHaveExpectedTagValues(CodedTokenType.MemberForwarded, TableId.Field, TableId.MethodDef);
+    }
+    public ShouldBeAbleToMapMemberRefParentTokenValues() : void
+    {
+      ShouldHaveExpectedTagValues(CodedTokenType.MemberRefParent, TableId.TypeRef, TableId.ModuleRef, TableId.MethodDef, TableId.TypeSpec);
+    }
+    public ShouldBeAbleToMapMethodDefOrRefTokenValues() : void
+    {
+      ShouldHaveExpectedTagValues(CodedTokenType.MethodDefOrRef, TableId.MethodDef, TableId.MemberRef);
+    }
+    public ShouldBeAbleToMapResolutionScopeTokenValues() : void
+    {
+      ShouldHaveExpectedTagValues(CodedTokenType.ResolutionScope, TableId.Module, TableId.ModuleRef, TableId.AssemblyRef, TableId.TypeRef);
+    }
+    public ShouldBeAbleToMapTypeDefOrTypeRefTokenValues() : void
+    {
+      ShouldHaveExpectedTagValues(CodedTokenType.TypeDefOrTypeRef, TableId.TypeDef, TableId.TypeRef, TableId.TypeSpec);
+    }
+    public ShouldBeAbleToMapTypeOrMethodDefTokenValues() : void
+    {
+      ShouldHaveExpectedTagValues(CodedTokenType.TypeOrMethodDef, TableId.TypeDef, TableId.MethodDef);
+    }
+    private ShouldHaveExpectedTagValues(tokenType : CodedTokenType, params tableIds : array[TableId]) : void
+    {
+      def values = System.Collections.Generic.Dictionary.[TableId, byte]();
+      mutable index : byte = 0;
+      foreach(tableId in tableIds)
+      {
+        values[tableId] = index;
+        index++;
+      }
+        
+      ShouldHaveExpectedTagValues(tokenType, values);
     }
     private ShouldHaveExpectedTagValues(tokenType : CodedTokenType, values : IDictionary.[TableId, byte]) : void
     {
