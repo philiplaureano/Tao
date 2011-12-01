@@ -151,6 +151,9 @@
     <Compile Include="Metadata\CodedTokenDecoder.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\CodedTokenEncoder.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\CompressedIntegerReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -185,6 +188,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\MetadataStreamReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\SimpleTokenDecoder.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\SimpleTokenEncoder.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\StreamHeader.n">

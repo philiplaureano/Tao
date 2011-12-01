@@ -61,14 +61,7 @@ namespace Tests
     }
     public ShouldBeAbleToMapHasDeclSecurityTokenValues() : void
     {
-      def values = System.Collections.Generic.Dictionary.[TableId, byte]()<-
-                     [
-                       (TableId.TypeDef, 0 : byte),
-                       (TableId.MethodDef, 1 : byte),
-                       (TableId.Assembly, 2 : byte)
-                     ];
-      
-      ShouldHaveExpectedTagValues(CodedTokenType.HasDeclSecurity, values);
+      ShouldHaveExpectedTagValues(CodedTokenType.HasDeclSecurity, TableId.TypeDef, TableId.MethodDef, TableId.Assembly);
     }
     public ShouldBeAbleToMapHasFieldMarshallTokenValues() : void
     {

@@ -121,16 +121,40 @@ namespace Tests
 
     public ShouldBeAbleToEncodeTokenTypeTableIdAndRowIntoDwordToken() : void
     {
-      // Note: There should be one encoding test per CodedTokenType
-      throw NotImplementedException();  
-    }
+      def row = 0x123u;
+      def table = TableId.TypeSpec;
+      def tokenType = CodedTokenType.TypeDefOrTypeRef;
+      
+      def expectedToken = 0x0000048Eu;
+      
+      def encoder = CodedTokenEncoder();
+      def result = encoder.Encode(tokenType, table, row);
+      
+      expectedToken.ShouldBeEqualTo(result, "Invalid token");
+    }    
     public ShouldBeAbleToEncodeSimpleTokenIntoTableAndRow() : void
     {
-      throw NotImplementedException();  
+      def row = 0x123u;
+      def table = TableId.TypeSpec;
+      
+      def expectedToken = 0x1B000123u;
+      
+      def encoder = SimpleTokenEncoder();
+      def result = encoder.Encode(table, row);
+      
+      expectedToken.ShouldBeEqualTo(result, "Invalid token");
     }
     public ShouldBeAbleToDecodeSimpleTokenIntoTableAndRow() : void
     {
-      throw NotImplementedException();  
+      def token =  0x1B000123u;
+      def expectedRow = 0x123u;
+      def expectedTable = TableId.TypeSpec;
+      
+      def decoder = SimpleTokenDecoder();
+      def results = decoder.Decode(token);
+      
+      expectedTable.ShouldBeEqualTo(results[0], "Invalid TableId");
+      expectedRow.ShouldBeEqualTo(results[1], "Invalid Row");
     }
     private Test(tokenType : CodedTokenType, tag : byte, expectedTableId : TableId) : void
     {

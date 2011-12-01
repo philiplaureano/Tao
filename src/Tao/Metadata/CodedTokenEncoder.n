@@ -1,0 +1,27 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class CodedTokenEncoder
+  {
+      public Encode(tokenType : CodedTokenType, tableId : TableId, row : uint) : uint
+      {
+          def converter = CodedTokenConverter();
+          def tag = converter.GetTagValue(tokenType, tableId);
+          
+          def bitCountMap = CodedTokenBitCountMap();
+          def bitsToEncodeTag : byte = bitCountMap[tokenType] :> byte;
+          
+          def token : uint = (row << bitsToEncodeTag) | tag;
+          
+          token;
+      }
+  }
+}
