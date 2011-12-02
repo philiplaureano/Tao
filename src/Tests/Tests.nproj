@@ -171,6 +171,9 @@
     <Compile Include="StringsHeapTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TablesHeaderStreamTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tester.n">
       <SubType>Code</SubType>
     </Compile>
