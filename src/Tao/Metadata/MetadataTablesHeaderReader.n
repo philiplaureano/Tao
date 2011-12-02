@@ -1,0 +1,52 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Extensions;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MetadataTablesHeaderReader
+  {
+    public Read(tableStream : Stream) : MetadataTablesHeader
+    {
+      def reader = System.IO.BinaryReader(tableStream);
+      def header = MetadataTablesHeader();
+      
+      // Skip the reserved dword
+      _ = tableStream.Seek(4, SeekOrigin.Current);
+      
+      header.MajorVersion = reader.ReadByte();
+      header.MinorVersion = reader.ReadByte();
+      header.HeapSizes = reader.ReadByte();
+      
+      // Skip the other reserved byte
+      _ = tableStream.Seek(1, SeekOrigin.Current);
+      
+      header.Valid = reader.ReadUInt64();
+      header.Sorted = reader.ReadUInt64();
+      
+      foreach(tableId in typeof(TableId).GetEnumValues())
+      {
+        def bitPosition : byte = tableId :> byte;
+        def baseValue : ulong = 1;
+        def mask = (baseValue << bitPosition);
+        def hasTable : bool = (header.Valid & mask) != 0;
+        
+        when (hasTable)
+        {
+          def rowCount = reader.ReadUInt32();
+          header.Rows[tableId :> TableId] = rowCount; 
+        }          
+      }
+      
+      header;
+    }
+  }
+}

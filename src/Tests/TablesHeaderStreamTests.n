@@ -4,6 +4,8 @@ using Nemerle.Extensions;
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tao;
+using Tao.Interfaces;
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -15,39 +17,84 @@ namespace Tests
   {
     public ShouldReadMajorVersion() : void
     {
-      throw NotImplementedException();
+      TestRead(header => header.MajorVersion.ShouldBeEqualTo(2, "Invalid MajorVersion"));
     }
     public ShouldReadMinorVersion() : void
     {
-      throw NotImplementedException();
+      TestRead(header => header.MinorVersion.ShouldBeEqualTo(0, "Invalid MinorVersion"));
     }
     public ShouldReadHeapSizes() : void
     {
-      throw NotImplementedException();
+      TestRead(header => header.HeapSizes.ShouldBeEqualTo(0, "Invalid HeapSizes"));
     }
     public ShouldReadBitVectorOfPresentTables() : void
     {
-      throw NotImplementedException();
+      def expectedValue : ulong = 0x0000000100000045l;
+      
+      TestRead(header => header.Valid.ShouldBeEqualTo(expectedValue, "Invalid 'Valid' bit vector"));
     }
+    
     public ShouldReadBitVectorOfSortedTables() : void
     {
-      throw NotImplementedException();
+      def expectedValue : ulong = 0x000016003301FA00l;
+      
+      TestRead(header => header.Sorted.ShouldBeEqualTo(expectedValue, "Invalid 'Sorted' bit vector"));
     }
     public ShouldReadRowCountsForPresentTables() : void
     {
-      throw NotImplementedException();
+      def shouldHaveRowCount(counts : IDictionary.[TableId, uint], tableId : TableId, expectedCount : uint) : void
+      {
+          counts.ContainsKey(tableId).ShouldBeTrue("Missing table count for table '{0}'", tableId.ToString());          
+          counts[tableId].ShouldBeEqualTo(expectedCount, "Invalid {0} count", tableId.ToString());
+      }
+      
+      def testHeader(header : MetadataTablesHeader) : void
+      {
+          def counts = header.Rows;
+          def verifyCount = shouldHaveRowCount(counts, _, _);
+          verifyCount(TableId.Module, 1);
+          verifyCount(TableId.Assembly, 1);
+          verifyCount(TableId.MethodDef, 1);
+          verifyCount(TableId.TypeDef, 1);
+      };
+      
+      TestRead(testHeader);
     }    
-    
+    private TestRead(verifyHeader : MetadataTablesHeader -> void) : void
+    {
+      def data = GetData();
+      def reader = MetadataTablesHeaderReader();
+      def header = reader.Read(data);
+      
+      verifyHeader(header);
+    }
     private GetData() : Stream
     {
       def tableData = array[
-	    0x00 : byte, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x01, 0x45, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
-	    0x00, 0xFA, 0x01, 0x33, 0x00, 0x16, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+        // Reserved
+	    0x00 : byte, 0x00, 0x00, 0x00, 
+	    // MajorVersion = 2
+	    0x02, 
+	    // MinorVersion = 0	    
+	    0x00, 
+	    // HeapOffsetSizes = 0
+	    0x00, 
+	    // Reserved = 1
+	    0x01, 
+	    // MaskValid = 0x0000000100000045
+	    0x45, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+	    
+	    // MaskSorted = 0x000016003301FA00
+	    0x00, 0xFA, 0x01, 0x33, 0x00, 0x16, 0x00, 0x00, 
+	    
+	    // ---Begin Table Data---
+	    0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
 	    0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x01, 0x00, 0x00, 0x00,
 	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00,
 	    0x50, 0x20, 0x00, 0x00, 0x00, 0x00, 0x16, 0x00, 0x17, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00,
 	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	    0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
+	    // ---End Table Data---
 	    
       MemoryStream(tableData);
     }

@@ -1,0 +1,32 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MetadataTablesHeader
+  {
+      private _rows : IDictionary.[TableId, uint] = Dictionary.[TableId, uint]();
+      
+      public MajorVersion : byte { get; set; }
+      public MinorVersion : byte { get; set; }
+      public HeapSizes : byte { get;set; }
+      public Valid : ulong { get; set; }
+      public Sorted : ulong { get; set; }
+      
+      public Rows : IDictionary.[TableId, uint] 
+      { 
+        get 
+        {
+            _rows;
+        }
+      }
+  }
+}
