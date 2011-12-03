@@ -165,9 +165,7 @@ namespace Tests
       writer.Write(dosHeader, outputStream);
       
       _ = outputStream.Read(outputBytes, 0, bytes.Length);
-      
-      Console.WriteLine("Output Stream Length: {0}", outputStream.Length);
-            
+                  
       def actualHash = outputStream.GetHash();
       assert expectedHash equals actualHash otherwiseprint "Invalid DOS header";
     }     
