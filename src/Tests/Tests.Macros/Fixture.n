@@ -41,6 +41,13 @@ namespace Tests.Macros
   }
   
   [MacroUsage(MacroPhase.BeforeInheritance, MacroTargets.Method)]
+  macro IgnoreTest(typeBuilder : TypeBuilder, method : ParsedMethod)
+  syntax ("ignored")
+  {
+    method.AddCustomAttribute(<[ NUnit.Framework.IgnoreAttribute() ]>);
+  }
+  
+  [MacroUsage(MacroPhase.BeforeInheritance, MacroTargets.Method)]
   macro TestExpects(typeBuilder : TypeBuilder, method : ParsedMethod, exception)
   syntax ("expects", exception)
   {

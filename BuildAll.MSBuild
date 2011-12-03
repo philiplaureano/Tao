@@ -2,7 +2,7 @@
   <Target Name="Clean">
     <PropertyGroup>
       <TargetDirectory>$(MSBuildProjectDirectory)\build\</TargetDirectory>
-      <UnitTestDirectory>$(MSBuildProjectDirectory)\src\Tests\bin\Debug\</UnitTestDirectory>
+      <UnitTestDirectory>$(MSBuildProjectDirectory)\src\Tests\bin\Debug</UnitTestDirectory>
     </PropertyGroup>
     <ItemGroup>
       <BinFiles Include="$(UnitTestDirectory)\*.dll" />

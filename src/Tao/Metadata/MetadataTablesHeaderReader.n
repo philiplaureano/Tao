@@ -14,7 +14,8 @@ namespace Tao
 {
   public class MetadataTablesHeaderReader
   {
-    public Read(tableStream : Stream) : MetadataTablesHeader
+    public Read([NotNull] tableStream : Stream) : MetadataTablesHeader
+        requires tableStream.Length > 0
     {
       def reader = System.IO.BinaryReader(tableStream);
       def header = MetadataTablesHeader();

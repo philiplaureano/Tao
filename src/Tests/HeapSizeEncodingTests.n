@@ -2,6 +2,7 @@
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tests.Macros;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,27 +11,27 @@ namespace Tests
 {  
   public class HeapSizeEncodingTests
   {
-    public ShouldBeAbleToDecodeSingleByteHeapSize() : void
+    public ignored ShouldBeAbleToDecodeSingleByteHeapSize() : void
     {
       throw NotImplementedException();
     }
-    public ShouldBeAbleToDecodeDoubleByteHeapSize() : void
+    public ignored ShouldBeAbleToDecodeDoubleByteHeapSize() : void
     {
       throw NotImplementedException();
     }
-    public ShouldBeAbleToDecodeDoubleWordHeapSize() : void
+    public ignored ShouldBeAbleToDecodeDoubleWordHeapSize() : void
     {
       throw NotImplementedException();
     }
-    public ShouldBeAbleToEncodeSingleByteHeapSize() : void
+    public ignored ShouldBeAbleToEncodeSingleByteHeapSize() : void
     {
       throw NotImplementedException();
     }
-    public ShouldBeAbleToEncodeDoubleByteHeapSize() : void
+    public ignored ShouldBeAbleToEncodeDoubleByteHeapSize() : void
     {
       throw NotImplementedException();
     }
-    public ShouldBeAbleToEncodeDoubleWordHeapSize() : void
+    public ignored ShouldBeAbleToEncodeDoubleWordHeapSize() : void
     {
       throw NotImplementedException();
     }

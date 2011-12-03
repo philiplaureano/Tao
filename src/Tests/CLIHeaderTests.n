@@ -204,16 +204,16 @@ namespace Tests
     {
       TestDwordWrite("ManagedNativeHeaderRva");
     }    
-    public ShouldWriteVTableFixupsInAReadWriteSectionOfTheFile() : void
+    public ignored ShouldWriteVTableFixupsInAReadWriteSectionOfTheFile() : void
     {
       throw NotImplementedException();  
     }
-    public ShouldAlwaysHaveEitherAMethodDefTokenOrAFileTokenAsTheEntryPointForTheAssembly() : void
+    public ignored ShouldAlwaysHaveEitherAMethodDefTokenOrAFileTokenAsTheEntryPointForTheAssembly() : void
     {
       throw NotImplementedException();    
     }
     
-    public ShouldRaiseErrorIfEntryPointTokenIsInvalid() : void
+    public ignored ShouldRaiseErrorIfEntryPointTokenIsInvalid() : void
         expects InvalidOperationException
     {
       throw NotImplementedException();

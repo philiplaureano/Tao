@@ -2,6 +2,7 @@
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tests.Macros;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,19 +11,19 @@ namespace Tests
 {
   public class StartupStubTests
   {
-    public ShouldWriteStartupStubForI386Machine() : void
+    public ignored ShouldWriteStartupStubForI386Machine() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteStartupStubForAmd64Machine() : void
+    public ignored ShouldWriteStartupStubForAmd64Machine() : void
     {
       throw NotImplementedException();
     }    
-    public ShouldWriteStartupStubForIA64Machine() : void
+    public ignored ShouldWriteStartupStubForIA64Machine() : void
     {
       throw NotImplementedException();
     }    
-    public ShouldWriteStartupStubImmediatelyAfterImportDirectoryPosition() : void
+    public ignored ShouldWriteStartupStubImmediatelyAfterImportDirectoryPosition() : void
     {
       throw NotImplementedException();
     }

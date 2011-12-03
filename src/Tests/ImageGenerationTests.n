@@ -2,6 +2,7 @@
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tests.Macros;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,127 +11,127 @@ namespace Tests
 {
   public class ImageGenerationTests
   {
-    public ShouldWriteDefaultCLRDataDirectory() : void
+    public ignored ShouldWriteDefaultCLRDataDirectory() : void
     {
       throw NotImplementedException();
     }
-    public ShouldGenerateDefaultMetadataRoot() : void
+    public ignored ShouldGenerateDefaultMetadataRoot() : void
     {
       throw NotImplementedException();
     }
-    public ShouldHaveCorrectDefaultCoffHeaderCharacteristicsFor32BitImages() : void
+    public ignored ShouldHaveCorrectDefaultCoffHeaderCharacteristicsFor32BitImages() : void
     {
       throw NotImplementedException();
     }
-    public ShouldHaveCorrectDefaultCoffHeaderCharacteristicsFor64BitImages() : void
+    public ignored ShouldHaveCorrectDefaultCoffHeaderCharacteristicsFor64BitImages() : void
     {
       throw NotImplementedException();
     }
-    public ShouldBeAbleToGenerateDefaultImportDirectory() : void
+    public ignored ShouldBeAbleToGenerateDefaultImportDirectory() : void
     {
       throw NotImplementedException();  
     }
-    public ShouldWriteCorrectOptionalHeaderSizeFor32BitHeaders() : void
+    public ignored ShouldWriteCorrectOptionalHeaderSizeFor32BitHeaders() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteCorrectOptionalHeaderSizeFor64BitHeaders() : void
+    public ignored ShouldWriteCorrectOptionalHeaderSizeFor64BitHeaders() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteNumberOfSymbolsAsZero() : void
+    public ignored ShouldWriteNumberOfSymbolsAsZero() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteNullPointerToSymbolTable() : void
+    public ignored ShouldWriteNullPointerToSymbolTable() : void
     {
       throw NotImplementedException();
     }    
-    public ShouldWriteCorrectDateTimeStamp() :  void
+    public ignored ShouldWriteCorrectDateTimeStamp() :  void
     {
       throw NotImplementedException();
     }
-    public ShouldAlignWrittenSectionsAccordingToFileAlignment() : void
+    public ignored ShouldAlignWrittenSectionsAccordingToFileAlignment() : void
     {
       throw NotImplementedException();  
     }
-    public ShouldWriteSectionHeadersThatPointToTheActualPositionOfEachCorrespondingSectionDataBlock() : void
+    public ignored ShouldWriteSectionHeadersThatPointToTheActualPositionOfEachCorrespondingSectionDataBlock() : void
     {
       throw NotImplementedException();    
     }
-    public ShouldWriteCorrectSectionHeaderSizes() : void
+    public ignored ShouldWriteCorrectSectionHeaderSizes() : void
     {
       throw NotImplementedException();
     }
-    public ShouldSetTheDllSectionFlagWhenCreatingNetModulesAndDLLLibraries() : void
+    public ignored ShouldSetTheDllSectionFlagWhenCreatingNetModulesAndDLLLibraries() : void
     {
       throw NotImplementedException();
     }
-    public ShouldGenerateDefaultImportAddressTableDataDirectory() : void
+    public ignored ShouldGenerateDefaultImportAddressTableDataDirectory() : void
     {
       throw NotImplementedException();
     }
-    public ShouldGenerateDefaultImportAddressTableData() : void
+    public ignored ShouldGenerateDefaultImportAddressTableData() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteEmptyExportTableDirectory() : void
+    public ignored ShouldWriteEmptyExportTableDirectory() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteImportTableDirectory() : void
+    public ignored ShouldWriteImportTableDirectory() : void
     {
       throw NotImplementedException();
     }    
-    public ShouldWriteEmptyExceptionDirectory() : void
+    public ignored ShouldWriteEmptyExceptionDirectory() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteEmptyCopyrightDirectory() : void
+    public ignored ShouldWriteEmptyCopyrightDirectory() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteEmptyGlobalPtrDirectory() : void
+    public ignored ShouldWriteEmptyGlobalPtrDirectory() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteEmptyTLSDirectory() : void
+    public ignored ShouldWriteEmptyTLSDirectory() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteEmptyLoadConfigDirectory() : void
+    public ignored ShouldWriteEmptyLoadConfigDirectory() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteEmptyBoundImportDirectory() : void
+    public ignored ShouldWriteEmptyBoundImportDirectory() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteEmptyDelayedImportDescDirectory() : void
+    public ignored ShouldWriteEmptyDelayedImportDescDirectory() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteEmptyReservedDirectory() : void
+    public ignored ShouldWriteEmptyReservedDirectory() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteEmptyStrongNameSignature() : void
+    public ignored ShouldWriteEmptyStrongNameSignature() : void
     {
       throw NotImplementedException();
     }    
-    public ShouldWriteCLR20AsTheDefaultVersion() : void
+    public ignored ShouldWriteCLR20AsTheDefaultVersion() : void
     {
       throw NotImplementedException();
     }
-    public ShouldBeAbleToGenerateAssemblyThatRequiresNET35() : void
+    public ignored ShouldBeAbleToGenerateAssemblyThatRequiresNET35() : void
     {
       throw NotImplementedException();
     }
-    public ShouldBeAbleToGenerateAssemblyThatRequiresNET40() : void
+    public ignored ShouldBeAbleToGenerateAssemblyThatRequiresNET40() : void
     {
       throw NotImplementedException();
     }
-    public ShouldWriteI386AsTheDefaultMachineType() : void
+    public ignored ShouldWriteI386AsTheDefaultMachineType() : void
     {
       throw NotImplementedException();
     }
