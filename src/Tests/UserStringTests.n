@@ -28,6 +28,10 @@ namespace Tests
 
       TestRead(index, expectedString);
     }
+    public ignored ShouldBeAbleToWriteUnicodeString() : void
+    {
+        throw NotImplementedException();
+    }
     public ShouldBeAbleToWriteUserString() : void
     {
       def expectedData = array[

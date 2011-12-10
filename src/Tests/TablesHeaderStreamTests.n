@@ -44,22 +44,34 @@ namespace Tests
     {
       def shouldHaveRowCount(counts : IDictionary.[TableId, uint], tableId : TableId, expectedCount : uint) : void
       {
-          counts.ContainsKey(tableId).ShouldBeTrue("Missing table count for table '{0}'", tableId.ToString());          
-          counts[tableId].ShouldBeEqualTo(expectedCount, "Invalid {0} count", tableId.ToString());
+        counts.ContainsKey(tableId).ShouldBeTrue("Missing table count for table '{0}'", tableId.ToString());          
+        counts[tableId].ShouldBeEqualTo(expectedCount, "Invalid {0} count", tableId.ToString());
       }
       
       def testHeader(header : MetadataTablesHeader) : void
       {
-          def counts = header.Rows;
-          def verifyCount = shouldHaveRowCount(counts, _, _);
-          verifyCount(TableId.Module, 1);
-          verifyCount(TableId.Assembly, 4);
-          verifyCount(TableId.MethodDef, 3);
-          verifyCount(TableId.TypeDef, 2);
+        def counts = header.Rows;
+        def verifyCount = shouldHaveRowCount(counts, _, _);
+        verifyCount(TableId.Module, 1);
+        verifyCount(TableId.Assembly, 4);
+        verifyCount(TableId.MethodDef, 3);
+        verifyCount(TableId.TypeDef, 2);
       };
       
       TestRead(testHeader);
     }    
+    public ShouldBeAbleToWriteMetadataTablesHeader() : void
+    {
+      def expectedData = GetData();
+      def reader = MetadataTablesHeaderReader();
+      def expectedHeader = reader.Read(expectedData);
+      
+      def outputStream = MemoryStream();
+      def writer = MetadataTablesHeaderWriter();
+      writer.Write(expectedHeader, outputStream);
+      
+      expectedData.ShouldMatch(outputStream);
+    }
     private TestRead(verifyHeader : MetadataTablesHeader -> void) : void
     {
       def data = GetData();

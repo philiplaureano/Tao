@@ -193,6 +193,9 @@
     <Compile Include="Metadata\MetadataTablesHeader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\MetadataTablesHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\SimpleTokenDecoder.n">
       <SubType>Code</SubType>
     </Compile>
