@@ -10,19 +10,7 @@ using System.Linq;
 namespace Tests
 {  
   public class HeapSizeEncodingTests
-  {
-    public ignored ShouldBeAbleToDecodeSingleByteHeapSize() : void
-    {
-      throw NotImplementedException();
-    }
-    public ignored ShouldBeAbleToDecodeDoubleByteHeapSize() : void
-    {
-      throw NotImplementedException();
-    }
-    public ignored ShouldBeAbleToDecodeDoubleWordHeapSize() : void
-    {
-      throw NotImplementedException();
-    }
+  {    
     public ignored ShouldBeAbleToEncodeSingleByteHeapSize() : void
     {
       throw NotImplementedException();

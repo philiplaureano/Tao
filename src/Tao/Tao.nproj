@@ -166,6 +166,9 @@
     <Compile Include="Metadata\GuidWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\HeapSizeFlags.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\MetadataBlockReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -194,6 +197,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\MetadataTablesHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\RowReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\SimpleTokenDecoder.n">

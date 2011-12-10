@@ -1,0 +1,18 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+  public enum HeapSizeFlags : byte
+  {
+    |RequiresWideStringIndex = 0x01;
+    |RequiresWideGuidIndex = 0x02;
+    |RequiresWideBlobIndex = 0x04;    
+  }
+}

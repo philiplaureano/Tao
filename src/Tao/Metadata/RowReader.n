@@ -1,0 +1,75 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class RowReader[TRow] : IRowReader[TRow]
+  {
+    private _reader : BinaryReader;
+    private _row : TRow;
+    private _heapSizes : byte;
+  
+    public this(heapSizes : byte, [NotNull] reader : BinaryReader, row : TRow)
+    {
+      _reader = reader;
+      _row = row;
+      _heapSizes = heapSizes;
+    }    
+    public ReadStringIndex([NotNull] setWord : TRow * ushort -> void, [NotNull] setDword: TRow * uint -> void) : void
+    {
+      ReadIndex(HeapSizeFlags.RequiresWideStringIndex, _heapSizes, setWord, setDword);
+    }  
+    public ReadGuidIndex([NotNull] setWord : TRow * ushort -> void, [NotNull] setDword: TRow * uint -> void) : void
+    {
+      ReadIndex(HeapSizeFlags.RequiresWideGuidIndex, _heapSizes, setWord, setDword);
+    }
+    public ReadBlobIndex([NotNull] setWord : TRow * ushort -> void, [NotNull] setDword: TRow * uint -> void) : void
+    {
+      ReadIndex(HeapSizeFlags.RequiresWideBlobIndex, _heapSizes, setWord, setDword);
+    }
+    public ReadDword([NotNull] setValue : TRow * uint -> void) : void
+    {
+      def readDword = CreateReader(_row, r => r.ReadUInt32(), _);
+      readDword(setValue);
+    }  
+    public ReadWord([NotNull] setValue : TRow * ushort -> void) : void
+    {
+      def readWord = CreateReader(_row, r => r.ReadUInt16(), _);
+      readWord(setValue);
+    }  
+    public ReadByte([NotNull] setValue : TRow * byte -> void) : void
+    {
+      def readByte = CreateReader(_row, r => r.ReadByte(), _);
+      readByte(setValue);
+    }  
+    private CreateReader[TValue](row : TRow, [NotNull] getValue : BinaryReader -> TValue, [NotNull]  setValue : TRow * TValue -> void) : void
+    {
+      def value = getValue(_reader);
+      setValue(row, value);
+    };
+    private ReadIndex(targetFlag : HeapSizeFlags, heapSizes : byte, [NotNull] setWord : TRow * ushort -> void, [NotNull] setDword: TRow * uint -> void) : void
+    {
+      def flag = targetFlag :> byte;
+      def shouldReadDword = (heapSizes & flag) != 0;
+        
+      if (shouldReadDword)
+      {
+        ReadDword(setDword);
+      }
+      else
+      {
+        ReadWord(setWord);
+      }
+    };
+  }
+}

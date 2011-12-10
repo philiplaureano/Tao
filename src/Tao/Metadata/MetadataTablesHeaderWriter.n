@@ -1,0 +1,50 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao.Interfaces;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MetadataTablesHeaderWriter
+  {
+    public Write(header : MetadataTablesHeader, outputStream : Stream) : void
+    {
+      def writer = BinaryWriter(outputStream);
+          
+      // Skip the reserved word
+      writer.Write(0 : uint);
+      writer.Write(header.MajorVersion);
+      writer.Write(header.MinorVersion);
+      writer.Write(header.HeapSizes);
+          
+      // Write the other reserved byte
+      // Note: It's always 1
+      writer.Write(1 : byte);
+      writer.Write(header.Valid);
+      writer.Write(header.Sorted);
+          
+      // Write the row counts in the correct positions here
+      foreach(tableId in typeof(TableId).GetEnumValues())
+      {
+        def bitPosition : byte = tableId :> byte;
+        def baseValue : ulong = 1;
+        def mask = (baseValue << bitPosition);
+        def hasTable : bool = (header.Valid & mask) != 0;
+        
+        when(hasTable)
+        {
+            def currentId = tableId :> TableId;
+            def rowCount : uint = header.Rows[currentId];
+            writer.Write(rowCount : uint);
+        }
+      }
+    }
+  }
+}

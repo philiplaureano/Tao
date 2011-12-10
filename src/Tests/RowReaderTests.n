@@ -1,0 +1,164 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using Tests.Macros;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class RowReaderTests
+  {
+    public ShouldBeAbleToReadByte() : void
+    {
+      def expectedValue : byte = 42;
+      def data = array[expectedValue];
+      TestRead.[byte](expectedValue, r => r.ReadByte, data);
+    }
+    public ShouldBeAbleToReadWord() : void
+    {
+      def expectedValue : ushort = 42;
+      def data = array[42 : byte, 0];
+      TestRead.[ushort](expectedValue, r => r.ReadWord, data);
+    }
+    
+    public ShouldBeAbleToReadDword() : void
+    {
+      def expectedValue : uint = 42;
+      def data = array[42 : byte, 0, 0, 0];
+      TestRead.[uint](expectedValue, r => r.ReadDword, data);
+    }
+    public ShouldReadNarrowStringIndex() : void
+    {
+      // HeapSizes = 110 binary
+      def heapSizes : byte = 6;
+      def data = array[42 : byte, 0];           
+      def expectedValue : ushort = 42;      
+      
+      ShouldReadNarrowIndex(heapSizes, expectedValue, data, r => r.ReadStringIndex);
+    }        
+    public ShouldReadWideStringIndex() : void
+    {
+      // HeapSizes = 001 binary
+      def heapSizes : byte = 1;
+      def data = array[42 : byte, 0, 0, 0];           
+      def expectedValue : uint = 42;      
+      
+      ShouldReadWideIndex(heapSizes, expectedValue, data, r => r.ReadStringIndex);  
+    }    
+    public ShouldReadNarrowBlobIndex() : void
+    {
+      // HeapSizes = 011 binary
+      def heapSizes : byte = 3;
+      def data = array[42 : byte, 0];           
+      def expectedValue : ushort = 42;      
+      
+      ShouldReadNarrowIndex(heapSizes, expectedValue, data, r => r.ReadBlobIndex);
+    }
+    public ShouldReadWideBlobIndex() : void
+    {
+      // HeapSizes = 100 binary
+      def heapSizes : byte = 4;
+      def data = array[42 : byte, 0, 0, 0];           
+      def expectedValue : uint = 42;      
+      
+      ShouldReadWideIndex(heapSizes, expectedValue, data, r => r.ReadBlobIndex);  
+    }
+    
+    public ShouldReadNarrowGuidIndex() : void
+    {
+      // HeapSizes = 101 binary
+      def heapSizes : byte = 5;
+      def data = array[42 : byte, 0];           
+      def expectedValue : ushort = 42;      
+      
+      ShouldReadNarrowIndex(heapSizes, expectedValue, data, r => r.ReadGuidIndex);
+    }
+    
+    public ShouldReadWideGuidIndex() : void
+    {
+      // HeapSizes = 010 binary
+      def heapSizes : byte = 2;
+      def data = array[42 : byte, 0, 0, 0];           
+      def expectedValue : uint = 42;      
+      
+      ShouldReadWideIndex(heapSizes, expectedValue, data, r => r.ReadGuidIndex);  
+    }
+    
+    private ShouldReadNarrowIndex(heapSizes : byte, expectedValue : ushort, data : array[byte], getReadIndex : IRowReader.[object] -> (object * ushort -> void) * (object * uint -> void) -> void) : void
+    {
+      def results = List.[ushort]();
+      def setWord(row : object, value : ushort) : void
+      {
+        results.Add(value);
+      };
+      
+      def setDword(row : object, value : uint) : void
+      {
+          // Do nothing
+      }
+      
+      def inputStream = MemoryStream(data);
+      def reader = BinaryReader(inputStream);            
+      
+      def dummyRow = object();
+      def rowReader = RowReader.[object](heapSizes, reader, dummyRow);      
+      def readIndex = getReadIndex(rowReader);
+      readIndex(setWord, setDword);
+            
+      results[0].ShouldBeEqualTo(expectedValue, "The values don't match");
+      results[0].GetType().ShouldBeEqualTo(typeof(ushort), "Wrong result type");
+    }    
+    private ShouldReadWideIndex(heapSizes : byte, expectedValue : uint, data : array[byte], getReadIndex : IRowReader.[object] -> (object * ushort -> void) * (object * uint -> void) -> void) : void
+    {
+      def results = List.[uint]();
+      def setWord(row : object, value : ushort) : void
+      {
+          // Do nothing 
+      };
+      
+      def setDword(row : object, value : uint) : void
+      {
+        results.Add(value);
+      }
+      
+      def inputStream = MemoryStream(data);
+      def reader = BinaryReader(inputStream);            
+      
+      def dummyRow = object();
+      def rowReader = RowReader.[object](heapSizes, reader, dummyRow);      
+      def readIndex = getReadIndex(rowReader);
+      readIndex(setWord, setDword);
+            
+      results[0].ShouldBeEqualTo(expectedValue, "The values don't match");
+      results[0].GetType().ShouldBeEqualTo(typeof(uint), "Wrong result type");
+    }    
+    private TestRead[TValue](expectedValue : TValue, getReadValue : IRowReader.[object] -> (object * TValue -> void) -> void, data : array[byte]) : void
+    {
+      def inputStream = MemoryStream(data);
+      def reader = BinaryReader(inputStream);
+      
+      def heapSizes : byte = 0;
+      def dummyRow = object();
+      
+      def results = List.[TValue]();
+      def setValue(row : object, value : TValue) : void
+      {
+        results.Add(value);
+      };
+      
+      def rowReader = RowReader.[object](heapSizes, reader, dummyRow);      
+      def readValue = getReadValue(rowReader);
+      readValue((row, value) => results.Add(value));
+      
+      results[0].ShouldBeEqualTo(expectedValue, "The values don't match");
+    }
+  }
+}

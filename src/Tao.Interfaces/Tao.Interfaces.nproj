@@ -188,6 +188,9 @@
     <Compile Include="Metadata\IMetadataStreamReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\IRowReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\IStreamHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
