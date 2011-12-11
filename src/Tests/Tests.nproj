@@ -88,6 +88,10 @@
     <Compile Include="CLIHeaderTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CodedTokenTests.IndexSizeTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>CodedTokenTests.n</DependentUpon>
+    </Compile>
     <Compile Include="CodedTokenTests.n">
       <SubType>Code</SubType>
     </Compile>
