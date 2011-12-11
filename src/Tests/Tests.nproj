@@ -161,6 +161,9 @@
     <Compile Include="SectionAddressResolutionTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SortedTableTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="StartupStubTests.n">
       <SubType>Code</SubType>
     </Compile>

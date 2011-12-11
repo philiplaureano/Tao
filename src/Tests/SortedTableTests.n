@@ -1,0 +1,47 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{  
+  public class SortedTableTests
+  {
+    public ShouldBeAbleToConvertSortedBitVectorToSortedTableFlag() : void
+    {
+      foreach(tableId in typeof(TableId).GetEnumValues())
+      {
+        def bitPosition : byte = tableId :> byte;
+        def baseValue : ulong = 1;
+        def maskValue : ulong = (baseValue << bitPosition);
+              
+        def sortedVector : ulong = maskValue;
+        def isSorted = sortedVector.IsSorted(tableId :> TableId);
+              
+        isSorted.ShouldBeTrue("The tableId '{0}' should be sorted", tableId.ToString());
+      }
+    }
+    public ShouldBeAbleToConvertSortedBitVectorToListOfSortedTables() : void
+    {
+        foreach(tableId in typeof(TableId).GetEnumValues())
+      {
+        def bitPosition : byte = tableId :> byte;
+        def baseValue : ulong = 1;
+        def maskValue : ulong = (baseValue << bitPosition);
+              
+        def sortedVector : ulong = maskValue;
+        def sortedTables = sortedVector.GetSortedTables();
+              
+        sortedTables.Contains(tableId :> TableId).ShouldBeTrue("The tableId '{0}' should be sorted", tableId.ToString());
+      }
+    }
+  }
+}

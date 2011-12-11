@@ -25,7 +25,7 @@ namespace Tao
       _targetTable = targetTable;
     }
   
-    public Read(heapSizes : byte, [NotNull] rowCounts : IDictionary.[TableId, uint], [NotNull] inputStream : Stream) : void
+    public Read(heapSizes : byte, [NotNull] rowCounts : IDictionary.[TableId, uint], sortedTables : IEnumerable.[TableId], [NotNull] inputStream : Stream) : void
     {
       def tableReader = MetadataTableReader.[TRow](_schemaReader);
       mutable rowsToRead : uint = 0;
@@ -34,7 +34,7 @@ namespace Tao
         rowsToRead = rowCounts[_targetTable];
       }
     
-      def rows = tableReader.ReadRows(rowsToRead, heapSizes, rowCounts, inputStream);
+      def rows = tableReader.ReadRows(rowsToRead, heapSizes, rowCounts, sortedTables, inputStream);
       _rows.AddRange(rows);
     }
   

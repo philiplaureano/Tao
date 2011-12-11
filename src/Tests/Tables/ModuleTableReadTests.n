@@ -41,9 +41,9 @@ namespace Tests
       def stream = MemoryStream(GetTableStreamData());
       def headerReader = MetadataTablesHeaderReader();
       def header = headerReader.Read(stream);
-      
+      def sortedTables = array(0) : array[TableId];
       def moduleTable = ModuleTable();
-      moduleTable.Read(header.HeapSizes, header.Rows, stream);
+      moduleTable.Read(header.HeapSizes, header.Rows, sortedTables, stream);
       def row = moduleTable.Rows[0];
       testRow(row);
     }

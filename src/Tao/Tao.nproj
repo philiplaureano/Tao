@@ -262,6 +262,9 @@
     <Compile Include="Metadata\Tables\Schemas\SchemaReaderExtensions.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\SortedBitVectorExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\TableId.n">
       <SubType>Code</SubType>
     </Compile>
