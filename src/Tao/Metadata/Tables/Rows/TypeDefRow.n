@@ -1,0 +1,24 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+  public class TypeDefRow
+  {
+      public Flags : uint { get; set; }
+      public TypeName : Index { get; set; }
+      public TypeNamespace : Index { get; set; }
+      public Extends : Index { get; set; }
+      public FieldList : Index { get; set; }
+      public MethodList : Index { get; set; }
+  }
+}

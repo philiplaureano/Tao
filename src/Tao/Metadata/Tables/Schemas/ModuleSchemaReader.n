@@ -20,16 +20,16 @@ namespace Tao
       rowReader.ReadWord((row, value) => row.Generation = value);
 
       // Read the Name column
-      rowReader.ReadStringIndex((row, value) => row.Name = HeapIndex.Narrow(value), (row, value) => row.Name = HeapIndex.Wide(value));
+      rowReader.ReadStringIndex((row, value) => row.Name = value);
     
       // Read the Mvid column
-      rowReader.ReadGuidIndex((row, value) => row.Mvid = HeapIndex.Narrow(value), (row, value) => row.Mvid = HeapIndex.Wide(value));
+      rowReader.ReadGuidIndex((row, value) => row.Mvid = value);
     
       // Read the EncId column
-      rowReader.ReadGuidIndex((row, value) => row.EncId = HeapIndex.Narrow(value), (row, value) => row.EncId = HeapIndex.Wide(value));
+      rowReader.ReadGuidIndex((row, value) => row.EncId = value);
     
       // Read the EncBaseId column
-      rowReader.ReadGuidIndex((row, value) => row.EncBaseId = HeapIndex.Narrow(value), (row, value) => row.EncBaseId = HeapIndex.Wide(value));
+      rowReader.ReadGuidIndex((row, value) => row.EncBaseId = value);
     }
   }
 }

@@ -12,9 +12,9 @@ namespace Tao
   public class ModuleRow
   {
     public Generation : ushort { get; set; }
-    public Name : HeapIndex { get; set; }
-    public Mvid : HeapIndex { get; set; }
-    public EncId : HeapIndex { get; set; }
-    public EncBaseId : HeapIndex { get; set; }
+    public Name : Index { get; set; }
+    public Mvid : Index { get; set; }
+    public EncId : Index { get; set; }
+    public EncBaseId : Index { get; set; }
   }
 }

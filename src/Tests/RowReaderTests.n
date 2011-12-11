@@ -92,42 +92,45 @@ namespace Tests
       ShouldReadWideIndex(heapSizes, expectedValue, data, r => r.ReadGuidIndex);  
     }
     
-    private ShouldReadNarrowIndex(heapSizes : byte, expectedValue : ushort, data : array[byte], getReadIndex : IRowReader.[object] -> (object * ushort -> void) * (object * uint -> void) -> void) : void
+    private ShouldReadNarrowIndex(heapSizes : byte, expectedValue : ushort, data : array[byte], getReadIndex : IRowReader.[object] -> (object * Index -> void) -> void) : void
     {
       def results = List.[ushort]();
-      def setWord(row : object, value : ushort) : void
-      {
-        results.Add(value);
-      };
-      
-      def setDword(row : object, value : uint) : void
-      {
-          // Do nothing
-      }
-      
+     
       def inputStream = MemoryStream(data);
       def reader = BinaryReader(inputStream);            
+      
+      mutable index : Index.Narrow = null;
+      
+      def setValue(row : object, value : Index) : void
+      {
+          def valueType = value.GetType();
+          valueType.ShouldBeEqualTo(typeof(Index.Narrow), "Invalid index type");
+          
+          index = value :> Index.Narrow;
+          results.Add(index.Value);
+      };
       
       def dummyRow = object();
       def rowReader = RowReader.[object](heapSizes, reader, dummyRow);      
       def readIndex = getReadIndex(rowReader);
-      readIndex(setWord, setDword);
+      readIndex(setValue);
             
       results[0].ShouldBeEqualTo(expectedValue, "The values don't match");
       results[0].GetType().ShouldBeEqualTo(typeof(ushort), "Wrong result type");
     }    
-    private ShouldReadWideIndex(heapSizes : byte, expectedValue : uint, data : array[byte], getReadIndex : IRowReader.[object] -> (object * ushort -> void) * (object * uint -> void) -> void) : void
+    private ShouldReadWideIndex(heapSizes : byte, expectedValue : uint, data : array[byte], getReadIndex : IRowReader.[object] -> (object * Index -> void) -> void) : void
     {
       def results = List.[uint]();
-      def setWord(row : object, value : ushort) : void
-      {
-          // Do nothing 
-      };
+      mutable index : Index.Wide = null;
       
-      def setDword(row : object, value : uint) : void
+      def setValue(row : object, value : Index) : void
       {
-        results.Add(value);
-      }
+          def valueType = value.GetType();
+          valueType.ShouldBeEqualTo(typeof(Index.Wide), "Invalid index type");
+          
+          index = value :> Index.Wide;
+          results.Add(index.Value);
+      };
       
       def inputStream = MemoryStream(data);
       def reader = BinaryReader(inputStream);            
@@ -135,7 +138,7 @@ namespace Tests
       def dummyRow = object();
       def rowReader = RowReader.[object](heapSizes, reader, dummyRow);      
       def readIndex = getReadIndex(rowReader);
-      readIndex(setWord, setDword);
+      readIndex(setValue);
             
       results[0].ShouldBeEqualTo(expectedValue, "The values don't match");
       results[0].GetType().ShouldBeEqualTo(typeof(uint), "Wrong result type");

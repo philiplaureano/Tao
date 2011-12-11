@@ -25,17 +25,17 @@ namespace Tao
       _row = row;
       _heapSizes = heapSizes;
     }    
-    public ReadStringIndex([NotNull] setWord : TRow * ushort -> void, [NotNull] setDword: TRow * uint -> void) : void
+    public ReadStringIndex([NotNull] setValue : TRow * Index -> void) : void
     {
-      ReadIndex(HeapSizeFlags.RequiresWideStringIndex, _heapSizes, setWord, setDword);
+      ReadIndex(HeapSizeFlags.RequiresWideStringIndex, _heapSizes, setValue);
     }  
-    public ReadGuidIndex([NotNull] setWord : TRow * ushort -> void, [NotNull] setDword: TRow * uint -> void) : void
+    public ReadGuidIndex([NotNull] setValue : TRow * Index -> void) : void
     {
-      ReadIndex(HeapSizeFlags.RequiresWideGuidIndex, _heapSizes, setWord, setDword);
+      ReadIndex(HeapSizeFlags.RequiresWideGuidIndex, _heapSizes, setValue);
     }
-    public ReadBlobIndex([NotNull] setWord : TRow * ushort -> void, [NotNull] setDword: TRow * uint -> void) : void
+    public ReadBlobIndex([NotNull] setValue : TRow * Index -> void) : void
     {
-      ReadIndex(HeapSizeFlags.RequiresWideBlobIndex, _heapSizes, setWord, setDword);
+      ReadIndex(HeapSizeFlags.RequiresWideBlobIndex, _heapSizes, setValue);
     }
     public ReadDword([NotNull] setValue : TRow * uint -> void) : void
     {
@@ -51,25 +51,48 @@ namespace Tao
     {
       def readByte = CreateReader(_row, r => r.ReadByte(), _);
       readByte(setValue);
-    }  
+    }
+    public ReadIndex(tableId : TableId, rowCounts : IDictionary.[TableId, uint], [NotNull] setValue : TRow * Index -> void) : void
+    {
+        ReadIndex(() => rowCounts.RequiresWideIndices(tableId), setValue);
+    }
+    public ReadIndex(tokenType : CodedTokenType, rowCounts : IDictionary.[TableId, uint], [NotNull] setValue : TRow * Index -> void) : void
+    {
+        ReadIndex(() => rowCounts.RequiresWideIndices(tokenType), setValue);
+    }
+    private ReadIndex(shouldUseWideIndex : void -> bool, [NotNull] setValue : TRow * Index -> void) : void
+    {
+        mutable index : Index = null;
+        def setWord(row : TRow, value : ushort) : void
+        {
+            setValue(row, Index.Narrow(value));           
+        };
+        
+        def setDword(row : TRow, value : uint) : void
+        {
+            setValue(row, Index.Wide(value));
+        };
+        
+        if (shouldUseWideIndex())
+        {
+            ReadDword(setDword);
+        }
+        else
+        {
+            ReadWord(setWord);
+        }        
+    }
     private CreateReader[TValue](row : TRow, [NotNull] getValue : BinaryReader -> TValue, [NotNull]  setValue : TRow * TValue -> void) : void
     {
       def value = getValue(_reader);
       setValue(row, value);
     };
-    private ReadIndex(targetFlag : HeapSizeFlags, heapSizes : byte, [NotNull] setWord : TRow * ushort -> void, [NotNull] setDword: TRow * uint -> void) : void
+    private ReadIndex(targetFlag : HeapSizeFlags, heapSizes : byte, [NotNull] setValue : TRow * Index -> void) : void
     {
       def flag = targetFlag :> byte;
       def shouldReadDword = (heapSizes & flag) != 0;
-        
-      if (shouldReadDword)
-      {
-        ReadDword(setDword);
-      }
-      else
-      {
-        ReadWord(setWord);
-      }
+      
+      ReadIndex(() => shouldReadDword, setValue);
     };
   }
 }

@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public variant HeapIndex
+  public variant Index
   {
     |Narrow { Value : ushort; }
     |Wide   { Value : uint; }

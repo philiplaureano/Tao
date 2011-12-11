@@ -1,0 +1,41 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Extensions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class TypeDefSchemaReader : ISchemaReader.[TypeDefRow]
+  {
+    public ReadRowInto([NotNull] rowCounts : IDictionary.[TableId, uint], 
+      sortedTables : IEnumerable.[TableId], [NotNull] rowReader : IRowReader.[TypeDefRow]) : void
+    {
+      // Read type type flags
+      rowReader.ReadDword((row, value) => row.Flags = value);
+      
+      // Read the TypeName
+      rowReader.ReadStringIndex((row, value) => row.TypeName = value);
+      
+      // Read the TypeNamespace
+      rowReader.ReadStringIndex((row, value) => row.TypeNamespace = value);
+      
+      // Read the Extends column
+      rowReader.ReadIndex(CodedTokenType.TypeDefOrTypeRef, rowCounts, (row, value) => row.Extends = value);
+      
+      // Read the FieldList column
+      rowReader.ReadIndex(TableId.Field, rowCounts, (row, value) => row.FieldList = value);
+      
+      // Read the MethodList column      
+      rowReader.ReadIndex(TableId.MethodDef, rowCounts, (row, value) => row.MethodList = value);
+    }
+  }
+}
