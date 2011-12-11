@@ -55,7 +55,7 @@ namespace Tao
                    ];
                    
     }
-    public RequiresWideIndicesFor([NotNull] this rowCounts : IDictionary[TableId, uint], tokenType : CodedTokenType) : bool
+    public RequiresWideIndices([NotNull] this rowCounts : IDictionary[TableId, uint], tokenType : CodedTokenType) : bool
         requires _entries.ContainsKey(tokenType)
     {
       def tables = _entries[tokenType];
@@ -63,17 +63,29 @@ namespace Tao
       
       foreach(tableId in tables)
       {
-          mutable rowCount : uint = 0;          
-          when(rowCounts.ContainsKey(tableId))
-          {
-              rowCount = rowCounts[tableId];
-          }
+        mutable rowCount : uint = 0;          
+        when(rowCounts.ContainsKey(tableId))
+        {
+          rowCount = rowCounts[tableId];
+        }
           
-          def requiresWideIndex = rowCount >= (ushort.MaxValue :> uint);
-          result |= requiresWideIndex;
+        def requiresWideIndex = rowCount >= (ushort.MaxValue :> uint);
+        result |= requiresWideIndex;
+      }
+      
+      result;
+    }
+    public RequiresWideIndices([NotNull] this rowCounts : IDictionary[TableId, uint], tableId : TableId) : bool
+    {
+      mutable result = false;
+      
+      when(rowCounts.ContainsKey(tableId))
+      {
+        result = rowCounts[tableId] >= (ushort.MaxValue :> uint);
       }
       
       result;
     }
   }
+  
 }

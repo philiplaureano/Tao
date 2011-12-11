@@ -83,6 +83,23 @@ namespace Tests
                        TableId.ManifestResource
                         );
     }
+    
+    public ShouldUseCorrectIndexForSimpleTokens() : void
+    {
+      foreach(tableId in typeof(TableId).GetEnumValues())
+      {
+        def rowCounts = Dictionary.[TableId, uint]();
+        def currentId = tableId :> TableId;
+        
+        // Make sure that narrow indices are used by default
+        rowCounts.RequiresWideIndices(currentId).ShouldBeFalse("By default, tables should use only narrow (16-bit) indices");
+        
+        // Widen the row count for the current table
+        // and make sure that it uses a wide index
+        rowCounts[currentId] = (ushort.MaxValue + 1) :> uint;        
+        rowCounts.RequiresWideIndices(currentId).ShouldBeTrue("The table '{0}' should be using wide (32-bit) indices", currentId.ToString());        
+      }
+    }
     private TestIndexWidth(codedTokenType : CodedTokenType, params targetTables : array[TableId]) : void
     {
       foreach(tableId in targetTables)
@@ -90,7 +107,7 @@ namespace Tests
         def rowCounts = Dictionary.[TableId, uint]();
               
         // The row counts should require a 16-bit index by default
-        rowCounts.RequiresWideIndicesFor(codedTokenType)
+        rowCounts.RequiresWideIndices(codedTokenType)
           .ShouldBeFalse("This coded token type should be using a narrow (16-bit) index");
                 
         // Initialize the row counts
@@ -104,7 +121,7 @@ namespace Tests
               
         // This dictionary should automatically say that it
         // requires a wide index for the target token type
-        rowCounts.RequiresWideIndicesFor(codedTokenType)
+        rowCounts.RequiresWideIndices(codedTokenType)
           .ShouldBeTrue("This coded token type should be using a wide (32-bit) index");
       }
     }
