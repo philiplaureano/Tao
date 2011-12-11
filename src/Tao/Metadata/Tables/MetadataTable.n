@@ -1,0 +1,54 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Extensions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MetadataTable[TRow] : IMetadataTable
+    where TRow : new(), class
+  {
+    private _rows : List.[TRow] = List.[TRow]();
+    private _schemaReader : ISchemaReader[TRow];
+    private _targetTable : TableId;
+    
+    public this(targetTable : TableId, schemaReader : ISchemaReader[TRow])
+    {
+      _schemaReader = schemaReader;
+      _targetTable = targetTable;
+    }
+  
+    public Read(heapSizes : byte, [NotNull] rowCounts : IDictionary.[TableId, uint], [NotNull] inputStream : Stream) : void
+    {
+      def tableReader = MetadataTableReader.[TRow](_schemaReader);
+      mutable rowsToRead : uint = 0;
+      when (rowCounts.ContainsKey(_targetTable))
+      {
+        rowsToRead = rowCounts[_targetTable];
+      }
+    
+      def rows = tableReader.ReadRows(rowsToRead, heapSizes, rowCounts, inputStream);
+      _rows.AddRange(rows);
+    }
+  
+    public Rows : IList.[TRow]
+    {
+      get 
+      {
+        _rows;
+      }
+    }
+  
+    public override GetHashCode() : int
+    {
+      _targetTable :> int;
+    }
+  }
+}

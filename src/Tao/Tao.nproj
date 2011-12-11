@@ -166,6 +166,9 @@
     <Compile Include="Metadata\GuidWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\HeapIndex.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\HeapSizeFlags.n">
       <SubType>Code</SubType>
     </Compile>
@@ -193,12 +196,6 @@
     <Compile Include="Metadata\MetadataStreamReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\MetadataTablesHeader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\MetadataTablesHeaderWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Metadata\RowReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -223,13 +220,46 @@
     <Compile Include="Metadata\StringHeapWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\TableId.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Metadata\TableReferenceDecoder.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\MetadataTablesHeaderReader.n">
+    <Compile Include="Metadata\Tables\IMetadataTable.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\IMetadataTableReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\MetadataTable.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\MetadataTableReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\MetadataTablesHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\MetadataTablesHeaderReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\MetadataTablesHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\ModuleTable.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\ModuleRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\ISchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\ModuleSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\SchemaReaderExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\TableId.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\TagMap.n">
@@ -315,6 +345,9 @@
   <ItemGroup>
     <Folder Include="Metadata" />
     <Folder Include="API" />
+    <Folder Include="Metadata\Tables" />
+    <Folder Include="Metadata\Tables\Schemas" />
+    <Folder Include="Metadata\Tables\Rows" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

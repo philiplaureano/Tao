@@ -1,0 +1,38 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MetadataTableReader[TRow] : IMetadataTableReader[TRow]
+    where TRow : new(), class
+{
+  private _schema : ISchemaReader[TRow];
+    
+  public this([NotNull] schema : ISchemaReader[TRow])
+  {
+    _schema = schema;
+  }
+  
+  public ReadRows(numberOfRowsToRead : uint, heapSizes : byte, [NotNull] rowCounts : IDictionary.[TableId, uint], [NotNull] inputStream : Stream) : IEnumerable[TRow]
+  {
+    def reader = BinaryReader(inputStream);    
+    def rowsToRead = numberOfRowsToRead :> int;
+        
+    for(mutable i = 0; i < rowsToRead; i++)
+    {
+      def row = TRow();
+      def rowReader = RowReader.[TRow](heapSizes, reader, row);
+      _schema.ReadRowInto(rowCounts, rowReader);
+      yield row;
+    }    
+  }
+}
+}

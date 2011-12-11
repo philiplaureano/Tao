@@ -1,0 +1,21 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public interface ISchemaReader[TRow]
+    where TRow : new(), class
+  {    
+    ReadRowInto(rowCounts : IDictionary.[TableId, uint], rowReader : IRowReader.[TRow]) : void;
+  }
+}

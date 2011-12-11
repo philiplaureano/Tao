@@ -1,0 +1,64 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{  
+  public class ModuleTableReadTests
+  {
+    public ShouldBeAbleToReadGeneration() : void
+    {          
+      TestRead(r => r.Generation.ShouldBeEqualTo(0, "Wrong Generation value"));
+    }
+    public ShouldBeAbleToReadName() : void
+    {
+        TestRead(row => row.Name.ShouldBeEqualTo(0xA : ushort, "Wrong Name value"));
+    }
+    public ShouldBeAbleToReadMvid() : void
+    {
+      TestRead(row => row.Mvid.ShouldBeEqualTo(1 : ushort, "Wrong Mvid value"));
+    }
+    public ShouldBeAbleToReadEncId() : void
+    {
+      TestRead(row => row.EncId.ShouldBeEqualTo(0 : ushort, "Wrong EncId value"));
+    }
+    public ShouldBeAbleToReadEncBaseId() : void
+    {
+      TestRead(row => row.EncBaseId.ShouldBeEqualTo(0 : ushort, "Wrong EncBaseId value"));
+    }
+    private TestRead(testRow : ModuleRow -> void) : void
+    {
+      def stream = MemoryStream(GetTableStreamData());
+      def headerReader = MetadataTablesHeaderReader();
+      def header = headerReader.Read(stream);
+      
+      def moduleTable = ModuleTable();
+      moduleTable.Read(header.HeapSizes, header.Rows, stream);
+      def row = moduleTable.Rows[0];
+      testRow(row);
+    }
+    
+    private GetTableStreamData() : array[byte]
+    {
+    array[
+        0x00 : byte, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x01, 0x45, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+	    0x00, 0xFA, 0x01, 0x33, 0x00, 0x16, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+	    0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x01, 0x00, 0x00, 0x00,
+	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00,
+	    0x50, 0x20, 0x00, 0x00, 0x00, 0x00, 0x16, 0x00, 0x17, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00,
+	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	    0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    ];
+    }
+  }
+}

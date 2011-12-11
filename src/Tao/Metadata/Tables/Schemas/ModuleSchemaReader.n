@@ -1,0 +1,35 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao.Interfaces;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class ModuleSchemaReader : ISchemaReader[ModuleRow]
+  {
+    public ReadRowInto([NotNull] rowCounts : IDictionary.[TableId, uint], [NotNull] rowReader : IRowReader.[ModuleRow]) : void
+    {
+      // Read the generation column
+      rowReader.ReadWord((row, value) => row.Generation = value);
+
+      // Read the Name column
+      rowReader.ReadStringIndex((row, value) => row.Name = HeapIndex.Narrow(value), (row, value) => row.Name = HeapIndex.Wide(value));
+    
+      // Read the Mvid column
+      rowReader.ReadGuidIndex((row, value) => row.Mvid = HeapIndex.Narrow(value), (row, value) => row.Mvid = HeapIndex.Wide(value));
+    
+      // Read the EncId column
+      rowReader.ReadGuidIndex((row, value) => row.EncId = HeapIndex.Narrow(value), (row, value) => row.EncId = HeapIndex.Wide(value));
+    
+      // Read the EncBaseId column
+      rowReader.ReadGuidIndex((row, value) => row.EncBaseId = HeapIndex.Narrow(value), (row, value) => row.EncBaseId = HeapIndex.Wide(value));
+    }
+  }
+}

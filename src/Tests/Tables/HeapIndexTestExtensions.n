@@ -1,0 +1,42 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public static class HeapIndexTestExtensions
+  {
+    public ShouldBeUsingNarrowIndices(this index : HeapIndex) : void
+    {
+      def isNarrow = (index is HeapIndex.Narrow);
+      isNarrow.ShouldBeTrue("The current index should be a narrow (16-bit) index");
+    }
+    public ShouldBeUsingWideIndices(this index : HeapIndex) : void
+    {
+      def isWide = (index is HeapIndex.Wide);
+      isWide.ShouldBeTrue("The current index should be a wide (32-bit) index");
+    }
+    public ShouldBeEqualTo(this index : HeapIndex, value : uint, message : string, params args : array[object]) : void
+    {
+      index.ShouldBeUsingWideIndices();
+      
+      def targetIndex : HeapIndex.Wide = index :> HeapIndex.Wide;
+      targetIndex.Value.ShouldBeEqualTo(value, message, args);
+    }
+    public ShouldBeEqualTo(this index : HeapIndex, value : ushort, message : string, params args : array[object]) : void
+    {
+      index.ShouldBeUsingNarrowIndices();
+      
+      def targetIndex : HeapIndex.Narrow = index :> HeapIndex.Narrow;
+      targetIndex.Value.ShouldBeEqualTo(value, message, args);
+    }
+  }
+}
