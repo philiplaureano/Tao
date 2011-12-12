@@ -1,0 +1,46 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Extensions;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao.Interfaces;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class AggregateTable : IMetadataTable
+  {
+    private _tables : ISet.[IMetadataTable] ;
+    public this()
+    {
+      this(DefaultMetadataTableSet());
+    }
+      
+    public this(tables : ISet.[IMetadataTable])
+    {
+      _tables = tables;
+    }
+      
+    public Read(heapSizes : byte, [NotNull] rowCounts : IDictionary.[TableId, uint], 
+        sortedTables : IEnumerable.[TableId], [NotNull] inputStream : Stream) : void
+    {
+      foreach(table in _tables)
+      {
+        table.Read(heapSizes, rowCounts, sortedTables, inputStream);
+      }
+    }
+      
+    public Tables : IEnumerable.[IMetadataTable]
+    {
+      get
+      {
+        _tables;
+      }
+    }
+  }
+}

@@ -14,4 +14,8 @@ namespace Tao
   {
     Read(heapSizes : byte, rowCounts : IDictionary.[TableId, uint], sortedTables : IEnumerable.[TableId], inputStream : Stream) : void;
   }
+  public interface IMetadataTable[TRow]
+  {
+      Rows : IList.[TRow] { get; }
+  }
 }

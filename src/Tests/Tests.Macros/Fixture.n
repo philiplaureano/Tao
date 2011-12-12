@@ -68,9 +68,9 @@ namespace Tests.Macros
       def typeBuilders = typer.Manager.CoreEnv.NameTree.NamespaceTree.GetTypeBuilders(onlyTopDeclarations = true);
       foreach (typeBuilder in typeBuilders)
       {
-        // Add the NUnit attributes to classes that end with "Tests" by default
+        // Add the NUnit attributes to concrete classes that end with the word "Tests" by default
         def typeName = typeBuilder.Name;
-        when(typeName.EndsWith("Tests"))
+        when(typeName.EndsWith("Tests") && !typeBuilder.IsAbstract)
         {
           AddAttributes(typeBuilder);
         }

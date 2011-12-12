@@ -1,0 +1,45 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using Tests.Macros;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public abstract class BaseTableReaderTest
+  {
+    protected TestRead[TRow, TTable](testRow : TRow -> void) : void    
+        where TTable : IMetadataTable[TRow]
+    {
+      def stream = MemoryStream(GetTableStreamData());
+      
+      // Skip past the header stream
+      def headerReader = MetadataTablesHeaderReader();
+      def header = headerReader.Read(stream);            
+      
+      def sortedTables = array(0) : array[TableId];
+      def heapSizes = header.HeapSizes;
+      
+      def rowCounts = header.Rows;      
+      
+      def aggregateTable = AggregateTable();
+      aggregateTable.Read(heapSizes, rowCounts, sortedTables, stream);
+      
+      def tables : IEnumerable.[IMetadataTable] = aggregateTable.Tables;
+      def targetTable = tables.Where(t => t.GetType() == typeof(TTable)).First() :> TTable;
+      
+      def row = targetTable.Rows[0];
+      testRow(row);
+    }
+    
+    protected abstract GetTableStreamData() : array[byte];
+  }
+}

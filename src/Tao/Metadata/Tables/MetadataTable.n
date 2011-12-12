@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class MetadataTable[TRow] : IMetadataTable
+  public class MetadataTable[TRow] : IMetadataTable, IMetadataTable[TRow]
     where TRow : new(), class
   {
     private _rows : List.[TRow] = List.[TRow]();
@@ -37,7 +37,7 @@ namespace Tao
       def rows = tableReader.ReadRows(rowsToRead, heapSizes, rowCounts, sortedTables, inputStream);
       _rows.AddRange(rows);
     }
-  
+      
     public Rows : IList.[TRow]
     {
       get 

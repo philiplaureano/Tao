@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Tests
 {  
-  public class ModuleTableReadTests
+  public class ModuleTableReadTests : BaseTableReaderTest
   {
     public ShouldBeAbleToReadGeneration() : void
     {          
@@ -35,20 +35,14 @@ namespace Tests
     public ShouldBeAbleToReadEncBaseId() : void
     {
       TestRead(row => row.EncBaseId.ShouldBeEqualTo(0 : ushort, "Wrong EncBaseId value"));
-    }
+    }    
+    
     private TestRead(testRow : ModuleRow -> void) : void
-    {
-      def stream = MemoryStream(GetTableStreamData());
-      def headerReader = MetadataTablesHeaderReader();
-      def header = headerReader.Read(stream);
-      def sortedTables = array(0) : array[TableId];
-      def moduleTable = ModuleTable();
-      moduleTable.Read(header.HeapSizes, header.Rows, sortedTables, stream);
-      def row = moduleTable.Rows[0];
-      testRow(row);
+    {      
+      base.TestRead.[ModuleRow, ModuleTable](testRow);
     }
     
-    private GetTableStreamData() : array[byte]
+    protected override GetTableStreamData() : array[byte]
     {
     array[
         0x00 : byte, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x01, 0x45, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,

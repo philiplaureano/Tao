@@ -182,6 +182,9 @@
     <Compile Include="TablesHeaderStreamTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\BaseTableReaderTest.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tables\HeapIndexTestExtensions.n">
       <SubType>Code</SubType>
     </Compile>

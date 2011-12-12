@@ -217,6 +217,12 @@
     <Compile Include="Metadata\TableReferenceDecoder.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\AggregateTable.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\DefaultMetadataTableSet.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\IMetadataTable.n">
       <SubType>Code</SubType>
     </Compile>
