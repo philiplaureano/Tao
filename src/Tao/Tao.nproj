@@ -193,12 +193,6 @@
     <Compile Include="Metadata\MetadataStreamReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\RowCountExtensions.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\RowReader.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Metadata\SimpleTokenDecoder.n">
       <SubType>Code</SubType>
     </Compile>
@@ -248,6 +242,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\ModuleTable.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\RowCountExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\RowReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\ModuleRow.n">

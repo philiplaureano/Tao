@@ -13,26 +13,26 @@ namespace Tao
 {
   public class MetadataTableReader[TRow] : IMetadataTableReader[TRow]
     where TRow : new(), class
-{
-  private _schema : ISchemaReader[TRow];
+  {
+    private _schema : ISchemaReader[TRow];
     
-  public this([NotNull] schema : ISchemaReader[TRow])
-  {
-    _schema = schema;
-  }
-  
-  public ReadRows(numberOfRowsToRead : uint, heapSizes : byte, [NotNull] rowCounts : IDictionary.[TableId, uint], sortedTables : IEnumerable.[TableId], [NotNull] inputStream : Stream) : IEnumerable[TRow]
-  {
-    def reader = BinaryReader(inputStream);    
-    def rowsToRead = numberOfRowsToRead :> int;
-        
-    for(mutable i = 0; i < rowsToRead; i++)
+    public this([NotNull] schema : ISchemaReader[TRow])
     {
-      def row = TRow();
-      def rowReader = RowReader.[TRow](heapSizes, reader, row);
-      _schema.ReadRowInto(rowCounts, sortedTables, rowReader);
-      yield row;
-    }    
+      _schema = schema;
+    }
+  
+    public ReadRows(numberOfRowsToRead : uint, heapSizes : byte, [NotNull] rowCounts : IDictionary.[TableId, uint], sortedTables : IEnumerable.[TableId], [NotNull] inputStream : Stream) : IEnumerable[TRow]
+    {
+      def reader = BinaryReader(inputStream);    
+      def rowsToRead = numberOfRowsToRead :> int;
+        
+      for(mutable i = 0; i < rowsToRead; i++)
+      {
+        def row = TRow();
+        def rowReader = RowReader.[TRow](heapSizes, reader, row);
+        _schema.ReadRowInto(rowCounts, sortedTables, rowReader);
+        yield row;
+      }    
+    }
   }
-}
 }

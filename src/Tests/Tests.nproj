@@ -188,6 +188,9 @@
     <Compile Include="Tables\ModuleTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\TypeDefTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tester.n">
       <SubType>Code</SubType>
     </Compile>

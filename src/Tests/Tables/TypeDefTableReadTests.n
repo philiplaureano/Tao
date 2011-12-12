@@ -1,0 +1,80 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using Tests.Macros;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class TypeDefTableReadTests
+  {
+    public ShouldReadFlags() : void
+    {
+      TestRead(r => r.Flags.ShouldBeEqualTo(0 : uint, "Invalid Flags value"));
+    }
+    public ShouldReadTypeName() : void
+    {
+      TestRead(r => r.TypeName.ShouldBeEqualTo(1 : ushort, "Invalid TypeName index"));
+    }
+    public ShouldReadTypeNamespace() : void
+    {
+      TestRead(r => r.TypeNamespace.ShouldBeEqualTo(0 : ushort, "Invalid TypeNamespace index"));
+    }
+    public ShouldReadExtends() : void
+    {
+      TestRead(r => r.Extends.ShouldBeEqualTo(0 : ushort, "Invalid Extends index"));
+    }
+    public ShouldReadFieldList() : void
+    {
+      TestRead(r => r.FieldList.ShouldBeEqualTo(1 : ushort, "Invalid FieldList index"));
+    }
+    public ShouldReadMethodList() : void
+    {
+      TestRead(r => r.MethodList.ShouldBeEqualTo(1 : ushort, "Invalid MethodList index"));
+    }
+    private TestRead(testRow : TypeDefRow -> void) : void
+    {
+      def stream = MemoryStream(GetTableStreamData());
+      
+      // Skip past the header stream
+      def headerReader = MetadataTablesHeaderReader();
+      _ = headerReader.Read(stream);
+            
+      // Skip to the TypeDef table position
+      _ = stream.Seek(10, SeekOrigin.Current);
+      
+      def sortedTables = array(0) : array[TableId];
+      def heapSizes : byte = 0;
+      
+      def rowCounts = Dictionary.[TableId, uint]();
+      rowCounts[TableId.TypeDef] = 1;
+      
+      def moduleTable = TypeDefTable();
+      moduleTable.Read(heapSizes, rowCounts, sortedTables, stream);
+      
+      def row = moduleTable.Rows[0];
+      testRow(row);
+    }
+    
+    private GetTableStreamData() : array[byte]
+    {
+    array[
+        0x00 : byte, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x01, 0x45, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+	    0x00, 0xFA, 0x01, 0x33, 0x00, 0x16, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+	    0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x01, 0x00, 0x00, 0x00,
+	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00,
+	    0x50, 0x20, 0x00, 0x00, 0x00, 0x00, 0x16, 0x00, 0x17, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00,
+	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	    0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    ];
+    }
+  }
+}
