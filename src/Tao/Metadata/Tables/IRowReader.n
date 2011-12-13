@@ -18,7 +18,7 @@ namespace Tao
     ReadWord(setValue : TRow * ushort -> void) : void;  
     ReadByte(setValue : TRow * byte -> void) : void;
     
-    ReadIndex(tableId : TableId, rowCounts : IDictionary.[TableId, uint], setValue : TRow * Index -> void) : void;
-    ReadIndex(tokenType : CodedTokenType, rowCounts : IDictionary.[TableId, uint], setValue : TRow * Index -> void) : void;
+    ReadIndex(tableId : TableId, setValue : TRow * Index -> void) : void;
+    ReadIndex(tokenType : CodedTokenType, setValue : TRow * Index -> void) : void;
   }
 }

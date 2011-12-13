@@ -29,7 +29,7 @@ namespace Tao
       for(mutable i = 0; i < rowsToRead; i++)
       {
         def row = TRow();
-        def rowReader = RowReader.[TRow](heapSizes, reader, row);
+        def rowReader = RowReader.[TRow](heapSizes, rowCounts, reader, row);
         _schema.ReadRowInto(rowCounts, sortedTables, rowReader);
         yield row;
       }    

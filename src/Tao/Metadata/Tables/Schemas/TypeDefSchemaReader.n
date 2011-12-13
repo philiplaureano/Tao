@@ -29,13 +29,13 @@ namespace Tao
       rowReader.ReadStringIndex((row, value) => row.TypeNamespace = value);
       
       // Read the Extends column
-      rowReader.ReadIndex(CodedTokenType.TypeDefOrTypeRef, rowCounts, (row, value) => row.Extends = value);
+      rowReader.ReadIndex(CodedTokenType.TypeDefOrTypeRef, (row, value) => row.Extends = value);
       
       // Read the FieldList column
-      rowReader.ReadIndex(TableId.Field, rowCounts, (row, value) => row.FieldList = value);
+      rowReader.ReadIndex(TableId.Field, (row, value) => row.FieldList = value);
       
       // Read the MethodList column      
-      rowReader.ReadIndex(TableId.MethodDef, rowCounts, (row, value) => row.MethodList = value);
+      rowReader.ReadIndex(TableId.MethodDef, (row, value) => row.MethodList = value);
     }
   }
 }

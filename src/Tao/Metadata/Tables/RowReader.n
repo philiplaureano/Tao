@@ -18,12 +18,14 @@ namespace Tao
     private _reader : BinaryReader;
     private _row : TRow;
     private _heapSizes : byte;
-  
-    public this(heapSizes : byte, [NotNull] reader : BinaryReader, row : TRow)
+    private _rowCounts : IDictionary.[TableId, uint];
+    
+    public this(heapSizes : byte, rowCounts : IDictionary.[TableId, uint], [NotNull] reader : BinaryReader, row : TRow)
     {
       _reader = reader;
       _row = row;
       _heapSizes = heapSizes;
+      _rowCounts = rowCounts;
     }    
     public ReadStringIndex([NotNull] setValue : TRow * Index -> void) : void
     {
@@ -52,13 +54,13 @@ namespace Tao
       def readByte = CreateReader(_row, r => r.ReadByte(), _);
       readByte(setValue);
     }
-    public ReadIndex(tableId : TableId, rowCounts : IDictionary.[TableId, uint], [NotNull] setValue : TRow * Index -> void) : void
+    public ReadIndex(tableId : TableId, [NotNull] setValue : TRow * Index -> void) : void
     {
-        ReadIndex(() => rowCounts.RequiresWideIndices(tableId), setValue);
+        ReadIndex(() => _rowCounts.RequiresWideIndices(tableId), setValue);
     }
-    public ReadIndex(tokenType : CodedTokenType, rowCounts : IDictionary.[TableId, uint], [NotNull] setValue : TRow * Index -> void) : void
+    public ReadIndex(tokenType : CodedTokenType, [NotNull] setValue : TRow * Index -> void) : void
     {
-        ReadIndex(() => rowCounts.RequiresWideIndices(tokenType), setValue);
+        ReadIndex(() => _rowCounts.RequiresWideIndices(tokenType), setValue);
     }
     private ReadIndex(shouldUseWideIndex : void -> bool, [NotNull] setValue : TRow * Index -> void) : void
     {

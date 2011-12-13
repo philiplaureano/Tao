@@ -111,7 +111,9 @@ namespace Tests
       };
       
       def dummyRow = object();
-      def rowReader = RowReader.[object](heapSizes, reader, dummyRow);      
+      
+      def rowCounts = Dictionary.[TableId, uint]();
+      def rowReader = RowReader.[object](heapSizes, rowCounts, reader, dummyRow);          
       def readIndex = getReadIndex(rowReader);
       readIndex(setValue);
             
@@ -135,8 +137,8 @@ namespace Tests
       def inputStream = MemoryStream(data);
       def reader = BinaryReader(inputStream);            
       
-      def dummyRow = object();
-      def rowReader = RowReader.[object](heapSizes, reader, dummyRow);      
+      def rowCounts = Dictionary.[TableId, uint]();
+      def rowReader = RowReader.[object](heapSizes, rowCounts, reader, object());           
       def readIndex = getReadIndex(rowReader);
       readIndex(setValue);
             
@@ -157,7 +159,8 @@ namespace Tests
         results.Add(value);
       };
       
-      def rowReader = RowReader.[object](heapSizes, reader, dummyRow);      
+      def rowCounts = Dictionary.[TableId, uint]();
+      def rowReader = RowReader.[object](heapSizes, rowCounts, reader, dummyRow);      
       def readValue = getReadValue(rowReader);
       readValue((row, value) => results.Add(value));
       
