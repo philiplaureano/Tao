@@ -17,11 +17,13 @@ namespace Tao
   {
     private _rows : List.[TRow] = List.[TRow]();
     private _schemaReader : ISchemaReader[TRow];
+    private _schemaWriter : ISchemaWriter[TRow];
     private _targetTable : TableId;
     
-    public this(targetTable : TableId, schemaReader : ISchemaReader[TRow])
+    public this(targetTable : TableId, schemaReader : ISchemaReader[TRow], schemaWriter : ISchemaWriter[TRow])
     {
       _schemaReader = schemaReader;
+      _schemaWriter = schemaWriter;
       _targetTable = targetTable;
     }
   
@@ -37,7 +39,17 @@ namespace Tao
       def rows = tableReader.ReadRows(rowsToRead, heapSizes, rowCounts, sortedTables, inputStream);
       _rows.AddRange(rows);
     }
-      
+    
+    public Write(heapSizeFlags : IEnumerable.[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
+        [NotNull] outputStream : Stream) : void
+    {
+      def rowWriter = RowWriter.[TRow](heapSizeFlags, rowCounts, BinaryWriter(outputStream));
+      foreach(row in Rows)
+      {
+        _schemaWriter.WriteRow(rowCounts, rowWriter);
+      }
+    }
+  
     public Rows : IList.[TRow]
     {
       get 

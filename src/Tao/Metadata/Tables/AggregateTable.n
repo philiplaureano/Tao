@@ -34,7 +34,14 @@ namespace Tao
         table.Read(heapSizes, rowCounts, sortedTables, inputStream);
       }
     }
-      
+    public Write(heapSizeFlags : IEnumerable.[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
+        outputStream : Stream) : void
+    {
+        foreach(table in _tables)
+        {
+            table.Write(heapSizeFlags, rowCounts, outputStream);
+        }
+    }
     public Tables : IEnumerable.[IMetadataTable]
     {
       get

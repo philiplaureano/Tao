@@ -1,0 +1,24 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public interface IRowWriter[TRow]
+  {
+    WriteStringIndex(value : uint) : void;  
+    WriteGuidIndex(value : uint) : void;  
+    WriteBlobIndex(value : uint) : void;  
+    WriteDword(value : uint) : void;  
+    WriteWord(value : ushort) : void;  
+    WriteByte(value : byte) : void;
+    
+    WriteIndex(tableId : TableId, value : uint) : void;
+    WriteIndex(tokenType : CodedTokenType, value : uint) : void;
+  }
+}

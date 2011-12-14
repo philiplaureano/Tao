@@ -9,11 +9,8 @@ using System.Linq;
 
 namespace Tao
 {
-  public class TypeDefTable : MetadataTable[TypeDefRow]
-  {
-    public this() 
-    {
-      base(TableId.TypeDef, TypeDefSchemaReader(), TypeDefSchemaWriter());       
-    }
+  public interface ISchemaWriter[TRow]
+  {    
+    WriteRow(rowCounts : IDictionary.[TableId, uint], rowWriter : IRowWriter.[TRow]) : void;
   }
 }

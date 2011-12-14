@@ -1,0 +1,97 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class RowWriter[TRow] : IRowWriter[TRow]
+{
+  private _heapSizeFlags : ISet.[HeapSizeFlags];
+  private _rowCounts : IDictionary.[TableId, uint];
+  private _writer : BinaryWriter;
+  
+  public this(heapSizeFlags : IEnumerable.[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint],
+    writer : BinaryWriter)
+  {
+    _heapSizeFlags = HashSet.[HeapSizeFlags](heapSizeFlags);
+    _rowCounts = rowCounts;
+    _writer = writer;
+  }
+  
+  public WriteStringIndex(value : uint) : void
+  {
+    if (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideStringIndex))
+    {
+      _writer.Write(value : uint);
+    }
+    else
+    {
+      _writer.Write(value :> ushort);
+    }
+  }
+  public WriteGuidIndex(value : uint) : void
+  {
+    if (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideGuidIndex))
+    {
+      _writer.Write(value : uint);
+    }
+    else
+    {
+      _writer.Write(value :> ushort);
+    }
+  }
+  public WriteBlobIndex(value : uint) : void
+  {
+    if (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideBlobIndex))
+    {
+      _writer.Write(value : uint);
+    }
+    else
+    {
+      _writer.Write(value :> ushort);
+    }
+  }
+  public WriteDword(value : uint) : void
+  {
+    _writer.Write(value : uint);
+  }
+  public WriteWord(value : ushort) : void
+  {
+    _writer.Write(value : ushort);
+  }
+  public WriteByte(value : byte) : void
+  {
+    _writer.Write(value : byte);
+  }    
+  public WriteIndex(tableId : TableId, value : uint) : void
+  {
+    def useWideIndex = _rowCounts.RequiresWideIndices(tableId);
+    if (useWideIndex)
+    {
+      WriteDword(value);
+    }
+    else
+    {
+      WriteWord(value :> ushort);
+    }
+  }
+  public WriteIndex(tokenType : CodedTokenType, value : uint) : void
+  {
+    def useWideIndex = _rowCounts.RequiresWideIndices(tokenType);
+    if (useWideIndex)
+    {
+      WriteDword(value);
+    }
+    else
+    {
+      WriteWord(value :> ushort);
+    }
+  }
+}
+}
