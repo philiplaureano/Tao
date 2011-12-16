@@ -11,7 +11,7 @@ namespace Tao
 {
   public class ModuleSchemaWriter : ISchemaWriter.[ModuleRow]
   {
-    public WriteRow(rowCounts : IDictionary.[TableId, uint], rowWriter : IRowWriter.[ModuleRow]) : void
+    public WriteRow(row : ModuleRow, rowCounts : IDictionary.[TableId, uint], rowWriter : IRowWriter.[ModuleRow]) : void
     {
       throw NotImplementedException();
     }

@@ -1,0 +1,49 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Extensions;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public static class IndexExtensions
+  {
+    public ToUInt32(this index : Index) : uint
+        requires index != null
+    {         
+      match(index)
+      {
+        |index is Index.Narrow =>
+         {
+            (index : Index.Narrow).Value;
+         }
+        |index is Index.Wide =>
+         {
+            (index : Index.Wide).Value;
+         }
+      }          
+    }
+    public ToUInt16(this index : Index) : ushort
+        requires index != null
+    {
+      match(index)
+      {
+        |index is Index.Narrow =>
+         {
+            (index : Index.Narrow).Value;
+         }
+        |index is Index.Wide =>
+         {
+            (index : Index.Wide).Value :> ushort;
+         }
+      }
+    }
+  }
+}

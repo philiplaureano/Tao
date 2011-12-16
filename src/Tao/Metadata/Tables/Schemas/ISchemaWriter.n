@@ -11,6 +11,6 @@ namespace Tao
 {
   public interface ISchemaWriter[TRow]
   {    
-    WriteRow(rowCounts : IDictionary.[TableId, uint], rowWriter : IRowWriter.[TRow]) : void;
+    WriteRow(row : TRow, rowCounts : IDictionary.[TableId, uint], rowWriter : IRowWriter.[TRow]) : void;
   }
 }

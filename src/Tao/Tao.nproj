@@ -229,6 +229,9 @@
     <Compile Include="Metadata\Tables\IMetadataTableReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\IndexExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\IRowReader.n">
       <SubType>Code</SubType>
     </Compile>

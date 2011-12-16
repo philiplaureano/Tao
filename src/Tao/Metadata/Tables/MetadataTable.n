@@ -46,7 +46,7 @@ namespace Tao
       def rowWriter = RowWriter.[TRow](heapSizeFlags, rowCounts, BinaryWriter(outputStream));
       foreach(row in Rows)
       {
-        _schemaWriter.WriteRow(rowCounts, rowWriter);
+        _schemaWriter.WriteRow(row, rowCounts, rowWriter);
       }
     }
   

@@ -11,14 +11,14 @@ namespace Tao
 {
   public interface IRowWriter[TRow]
   {
-    WriteStringIndex(value : uint) : void;  
-    WriteGuidIndex(value : uint) : void;  
-    WriteBlobIndex(value : uint) : void;  
+    WriteStringIndex(value : void -> Index) : void;  
+    WriteGuidIndex(value : void -> Index) : void;  
+    WriteBlobIndex(value : void -> Index) : void;  
     WriteDword(value : uint) : void;  
     WriteWord(value : ushort) : void;  
     WriteByte(value : byte) : void;
     
-    WriteIndex(tableId : TableId, value : uint) : void;
-    WriteIndex(tokenType : CodedTokenType, value : uint) : void;
+    WriteIndex(tableId : TableId, value : void -> Index) : void;
+    WriteIndex(tokenType : CodedTokenType, value : void -> Index) : void;
   }
 }
