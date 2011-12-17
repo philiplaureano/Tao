@@ -1,0 +1,227 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using Tests.Macros;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class RowWriterTests
+  {
+    public ShouldBeAbleToWriteByte() : void
+    {
+      def rowCounts = Dictionary.[TableId, uint]();
+      def createWriter = RowWriter.[object](array(0) : array[HeapSizeFlags], rowCounts, _);
+      
+      def expectedValue : byte = 42;
+      def expectedData = array[expectedValue];      
+      def outputStream = MemoryStream();
+      def binaryWriter = BinaryWriter(outputStream);
+      def writer = createWriter(binaryWriter);
+      
+      writer.WriteByte(expectedValue);
+      
+      outputStream.ShouldMatch(expectedData);
+    }
+    public ShouldBeAbleToWriteWord() : void
+    {
+      def rowCounts = Dictionary.[TableId, uint]();
+      def createWriter = RowWriter.[object](array(0) : array[HeapSizeFlags], rowCounts, _);
+      
+      def expectedValue : ushort = 42;
+      def expectedData = array[42 : byte, 0];      
+      def outputStream = MemoryStream();
+      def binaryWriter = BinaryWriter(outputStream);
+      def writer = createWriter(binaryWriter);
+      
+      writer.WriteWord(expectedValue);
+      
+      outputStream.ShouldMatch(expectedData);
+    }    
+    public ShouldBeAbleToWriteDword() : void
+    {
+      def rowCounts = Dictionary.[TableId, uint]();
+      def heapSizeFlags = array(0) : array[HeapSizeFlags];
+      def createWriter = RowWriter.[object](heapSizeFlags, rowCounts, _);
+      
+      def expectedValue : uint = 42;
+      def expectedData = array[42 : byte, 0, 0, 0];      
+      def outputStream = MemoryStream();
+      def binaryWriter = BinaryWriter(outputStream);
+      def writer = createWriter(binaryWriter);
+      
+      writer.WriteDword(expectedValue);
+      
+      outputStream.ShouldMatch(expectedData);
+    }
+    public ShouldWriteNarrowStringIndex() : void
+    {                  
+      ShouldWriteNarrowHeapIndex(HeapSizeFlags.RequiresWideStringIndex, w => w.WriteStringIndex);
+    }        
+    public ShouldWriteWideStringIndex() : void
+    {
+      ShouldWriteWideHeapIndex(HeapSizeFlags.RequiresWideStringIndex,  w => w.WriteStringIndex);
+    }    
+    public ShouldWriteNarrowBlobIndex() : void
+    {
+      ShouldWriteNarrowHeapIndex(HeapSizeFlags.RequiresWideBlobIndex, w => w.WriteBlobIndex);
+    }
+    public ShouldWriteWideBlobIndex() : void
+    {
+      ShouldWriteWideHeapIndex(HeapSizeFlags.RequiresWideBlobIndex,  w => w.WriteBlobIndex);
+    }    
+    public ShouldWriteNarrowGuidIndex() : void
+    {
+      ShouldWriteNarrowHeapIndex(HeapSizeFlags.RequiresWideGuidIndex, w => w.WriteGuidIndex);
+    }
+    public ShouldWriteWideGuidIndex() : void
+    {
+      ShouldWriteWideHeapIndex(HeapSizeFlags.RequiresWideGuidIndex,  w => w.WriteGuidIndex);
+    }
+    public ShouldWriteNarrowTableIndex() : void
+    {
+      foreach(tableId in typeof(TableId).GetEnumValues())
+      {
+        def currentId = tableId :> TableId;
+        ShouldWriteNarrowTableIndex(currentId);
+      }
+    }        
+    
+    public ShouldWriteWideTableIndex(): void
+    {
+      foreach(tableId in typeof(TableId).GetEnumValues())
+      {
+        def currentId = tableId :> TableId;
+        ShouldWriteWideTableIndex(currentId);
+      }
+    }
+    public ShouldWriteNarrowCodedIndex() : void
+    {
+      def codedTokenType = CodedTokenType.HasFieldMarshall;      
+      def rowCounts = Dictionary.[TableId, uint]();
+                  
+      def heapSizeFlags = array(0) : array[HeapSizeFlags];
+      def outputStream = MemoryStream();
+      def binaryWriter = BinaryWriter(outputStream);
+      
+      def index = Index.Narrow(42);     
+      def writer = RowWriter.[object](heapSizeFlags, rowCounts, binaryWriter);
+      writer.WriteIndex(codedTokenType, () => index);
+      
+      def expectedData = array[42 : byte, 0]; 
+      outputStream.ShouldMatch(expectedData);       
+    }
+    public ShouldWriteWideCodedIndex() : void
+    {
+      def tableMap = CodedTokenTableMap();
+      foreach(tokenType in tableMap.Keys)
+      {
+        def rowCounts = Dictionary.[TableId, uint]();
+        foreach(id in tableMap[tokenType])
+        {
+          rowCounts[id : TableId] = ushort.MaxValue + 1 :> uint;
+        }
+      
+        def heapSizeFlags = array(0) : array[HeapSizeFlags];
+        def outputStream = MemoryStream();
+        def binaryWriter = BinaryWriter(outputStream);
+      
+        def index = Index.Wide(42);     
+        def writer = RowWriter.[object](heapSizeFlags, rowCounts, binaryWriter);
+        writer.WriteIndex(tokenType, () => index);
+        def expectedData = array[42 : byte, 0, 0, 0]; 
+        outputStream.ShouldMatch(expectedData);
+      }     
+    }    
+    private ShouldWriteNarrowTableIndex(targetId : TableId) : void
+    {
+      def rowCounts = Dictionary.[TableId, uint]();
+      foreach(tableId in typeof(TableId).GetEnumValues())
+      {
+        def currentId = tableId :> TableId;
+        when(currentId != targetId)
+        {
+          rowCounts[currentId] = ushort.MaxValue + 1 :> uint;
+        }
+      }
+      
+      def heapSizeFlags = array(0) : array[HeapSizeFlags];
+      def outputStream = MemoryStream();
+      def binaryWriter = BinaryWriter(outputStream);
+      
+      def index = Index.Narrow(42);
+      def writer = RowWriter.[object](heapSizeFlags, rowCounts, binaryWriter);
+      writer.WriteIndex(targetId, () => index);
+      
+      def expectedData = array[42 : byte, 0]; 
+      outputStream.ShouldMatch(expectedData); 
+    }
+    private ShouldWriteWideTableIndex(targetId : TableId) : void
+    {
+      def rowCounts = Dictionary.[TableId, uint]();
+      rowCounts[targetId] = ushort.MaxValue + 1 :> uint;
+      
+      def heapSizeFlags = array(0) : array[HeapSizeFlags];
+      def outputStream = MemoryStream();
+      def binaryWriter = BinaryWriter(outputStream);
+      
+      def index = Index.Wide(42);
+      def writer = RowWriter.[object](heapSizeFlags, rowCounts, binaryWriter);
+      writer.WriteIndex(targetId, () => index);
+      
+      def expectedData = array[42 : byte, 0, 0, 0]; 
+      outputStream.ShouldMatch(expectedData); 
+    }    
+    private ShouldWriteWideHeapIndex(heapSizeFlag : HeapSizeFlags, getWriteIndex : RowWriter.[object] -> (void -> Index) -> void) : void
+    {
+      def rowCounts = Dictionary.[TableId, uint]();
+      def heapSizeFlags = List(array[HeapSizeFlags.RequiresWideBlobIndex, HeapSizeFlags.RequiresWideGuidIndex, HeapSizeFlags.RequiresWideStringIndex]);
+      foreach(flag in heapSizeFlags.ToArray())
+      {
+        when (flag != heapSizeFlag)
+        {
+          _ = heapSizeFlags.Remove(flag);
+        }
+      }
+      
+      def index = Index.Wide(42);     
+      def outputStream = MemoryStream();
+      def binaryWriter = BinaryWriter(outputStream);
+      def writer = RowWriter.[object](heapSizeFlags, rowCounts, binaryWriter);
+      
+      def expectedData = array[42 : byte, 0, 0, 0]; 
+            
+      def writeIndex : (void -> Index) -> void = getWriteIndex(writer);     
+      def doWriteIndex : Index -> void = idx => writeIndex(()=> idx);
+      doWriteIndex(index);
+      
+      outputStream.ShouldMatch(expectedData);  
+    }
+    private ShouldWriteNarrowHeapIndex(heapSizeFlag : HeapSizeFlags, getWriteIndex : RowWriter.[object] -> (void -> Index) -> void) : void
+    {
+      def rowCounts = Dictionary.[TableId, uint]();
+      def heapSizeFlags = List(array[HeapSizeFlags.RequiresWideBlobIndex, HeapSizeFlags.RequiresWideGuidIndex, HeapSizeFlags.RequiresWideStringIndex]);
+      _ = heapSizeFlags.Remove(heapSizeFlag);
+      
+      def index = Index.Narrow(42);     
+      def outputStream = MemoryStream();
+      def binaryWriter = BinaryWriter(outputStream);
+      def writer = RowWriter.[object](heapSizeFlags, rowCounts, binaryWriter);
+      
+      def expectedData = array[42 : byte, 0]; 
+      def writeIndex : (void -> Index) -> void = getWriteIndex(writer);     
+      def doWriteIndex : Index -> void = idx => writeIndex(()=> idx);
+      doWriteIndex(index);
+      
+      outputStream.ShouldMatch(expectedData);
+    }
+  }
+}

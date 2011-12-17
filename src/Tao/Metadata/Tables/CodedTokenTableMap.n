@@ -1,0 +1,55 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Extensions;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class CodedTokenTableMap : Dictionary.[CodedTokenType, IEnumerable.[TableId]]
+  {
+      public this()
+      {
+          _ = this<- [
+                     (CodedTokenType.TypeDefOrTypeRef, array[TableId.TypeDef, TableId.TypeRef, TableId.TypeSpec]),
+                     (CodedTokenType.HasConstant, array[TableId.Field, TableId.Param, TableId.Property]),
+                     (CodedTokenType.HasCustomAttribute, 
+                     array[
+                        TableId.MethodDef, 
+                        TableId.Field, 
+                        TableId.TypeRef,
+                        TableId.TypeDef,
+                        TableId.Param,
+                        TableId.InterfaceImpl,
+                        TableId.MemberRef,
+                        TableId.Module,
+                        TableId.DeclSecurity,
+                        TableId.Property,
+                        TableId.Event,
+                        TableId.StandAloneSig,
+                        TableId.ModuleRef,
+                        TableId.TypeSpec,
+                        TableId.Assembly,
+                        TableId.AssemblyRef,
+                        TableId.File,
+                        TableId.ExportedType,
+                        TableId.ManifestResource
+                        ]),
+                     (CodedTokenType.HasFieldMarshall, array[TableId.Field, TableId.Param]),
+                     (CodedTokenType.HasDeclSecurity, array[TableId.TypeDef, TableId.MethodDef, TableId.Assembly]),
+                     (CodedTokenType.MemberRefParent, array[TableId.TypeDef, TableId.TypeRef, TableId.ModuleRef, TableId.MethodDef, TableId.TypeSpec]),
+                     (CodedTokenType.HasSemantics, array[TableId.Event, TableId.Property]),
+                     (CodedTokenType.MethodDefOrRef, array[TableId.MethodDef, TableId.MemberRef]),
+                     (CodedTokenType.MemberForwarded, array[TableId.Field, TableId.MethodDef]),
+                     (CodedTokenType.Implementation, array[TableId.File, TableId.AssemblyRef, TableId.ExportedType]),
+                     (CodedTokenType.CustomAttributeType, array[TableId.MethodDef, TableId.MemberRef]),
+                     (CodedTokenType.ResolutionScope, array[TableId.Module, TableId.ModuleRef, TableId.AssemblyRef, TableId.TypeRef]),
+                     (CodedTokenType.TypeOrMethodDef, array[TableId.TypeDef, TableId.MethodDef])
+                   ];
+      }
+  }
+}

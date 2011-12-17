@@ -31,7 +31,7 @@ namespace Tao
       }          
     }
     public ToUInt16(this index : Index) : ushort
-        requires index != null
+        requires index != null && (index is Index.Wide|| index is Index.Narrow)
     {
       match(index)
       {
@@ -43,7 +43,8 @@ namespace Tao
          {
             (index : Index.Wide).Value :> ushort;
          }
-      }
+         | _ => throw NotSupportedException();
+      }            
     }
   }
 }
