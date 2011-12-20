@@ -17,23 +17,28 @@ namespace Tests
   {
     public ShouldBeAbleToWriteGeneration() : void
     {          
-      TestWrite.[uint](0 : uint, r => r.Generation, "Wrong Generation");
+      def rowIndex = 0;
+      TestWrite.[uint](rowIndex, 0 : uint, r => r.Generation, "Wrong Generation");
     }        
     public ShouldBeAbleToWriteName() : void
     {
-      TestWrite(Index.Narrow(0xA), r => r.Name, "Wrong Name");
+      def rowIndex = 0;
+      TestWrite(rowIndex, Index.Narrow(0xA), r => r.Name, "Wrong Name");
     }
     public ShouldBeAbleToWriteMvid() : void
     {
-      TestWrite(Index.Narrow(1), r => r.Mvid, "Wrong Mvid");
+      def rowIndex = 0;
+      TestWrite(rowIndex, Index.Narrow(1), r => r.Mvid, "Wrong Mvid");
     }
     public ShouldBeAbleToWriteEncId() : void
     {
-      TestWrite(Index.Narrow(0), r => r.EncId, "Wrong Encid");
+      def rowIndex = 0;
+      TestWrite(rowIndex, Index.Narrow(0), r => r.EncId, "Wrong Encid");
     }
     public ShouldBeAbleToWriteEncBaseId() : void
     {
-      TestWrite(Index.Narrow(0), r =>r.EncBaseId, "Wrong EncBaseId");
+      def rowIndex = 0;
+      TestWrite(rowIndex, Index.Narrow(0), r =>r.EncBaseId, "Wrong EncBaseId");
     }        
     protected override GetTableStreamData() : array[byte]
     {

@@ -1,42 +1,18 @@
 ﻿using Nemerle;
-using Nemerle.Assertions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
 using Tao;
 using Tao.Interfaces;
-
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Tests
-{  
-  public class ModuleTableReadTests : BaseTableReaderTest[ModuleRow, ModuleTable]
+{
+  public class MethodDefTableReadTests : BaseTableReaderTest[MethodDefRow, MethodDefTable]
   {
-    public ShouldBeAbleToReadGeneration() : void
-    {          
-      TestRead(r => r.Generation.ShouldBeEqualTo(0, "Wrong Generation value"));
-    }
-    public ShouldBeAbleToReadName() : void
-    {
-        TestRead(row => row.Name.ShouldBeEqualTo(0xA : ushort, "Wrong Name value"));
-    }
-    public ShouldBeAbleToReadMvid() : void
-    {
-      TestRead(row => row.Mvid.ShouldBeEqualTo(1 : ushort, "Wrong Mvid value"));
-    }
-    public ShouldBeAbleToReadEncId() : void
-    {
-      TestRead(row => row.EncId.ShouldBeEqualTo(0 : ushort, "Wrong EncId value"));
-    }
-    public ShouldBeAbleToReadEncBaseId() : void
-    {
-      TestRead(row => row.EncBaseId.ShouldBeEqualTo(0 : ushort, "Wrong EncBaseId value"));
-    }        
-    
     protected override GetTableStreamData() : array[byte]
     {
     array[

@@ -256,6 +256,9 @@
     <Compile Include="Metadata\Tables\MetadataTablesHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\MethodDefTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\ModuleTable.n">
       <SubType>Code</SubType>
     </Compile>
@@ -263,6 +266,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\RowReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\MethodDefRow.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\ModuleRow.n">
@@ -278,6 +284,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\ISchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\MethodDefSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\MethodDefSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\ModuleSchemaReader.n">

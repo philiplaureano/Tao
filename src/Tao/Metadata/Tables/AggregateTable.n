@@ -28,7 +28,7 @@ namespace Tao
       
     public Read(heapSizes : byte, [NotNull] rowCounts : IDictionary.[TableId, uint], 
         sortedTables : IEnumerable.[TableId], [NotNull] inputStream : Stream) : void
-    {
+    {   
       foreach(table in _tables)
       {
         table.Read(heapSizes, rowCounts, sortedTables, inputStream);

@@ -1,0 +1,27 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using Tests.Macros;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public abstract class TableWriterTest[TRow, TTable] : BaseTableWriterTest
+    where TTable : IMetadataTable[TRow], new() 
+  {
+    protected TestWrite(rowIndex : int, value : Index, getValue : TRow -> Index, failureMessage : string, params args : array[object]) : void
+    {
+      base.TestWrite(rowIndex, value, getValue, (actual, expected) => actual.IsEqualTo(expected), failureMessage, args);
+    }
+    protected TestWrite[T](rowIndex : int, value : T, getValue : TRow -> T, failureMessage : string, params args : array[object]) : void
+    {
+      TestWrite.[T, TRow, TTable](rowIndex, value, getValue, failureMessage, args);
+    }
+  }
+}

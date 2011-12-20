@@ -16,15 +16,15 @@ namespace Tests
 {
   public abstract class BaseTableWriterTest
   {
-    protected TestWrite[TRow, TTable](value : Index, getValue : TRow -> Index, failureMessage : string, params args : array[object]) : void
+    protected TestWrite[TRow, TTable](rowIndex : int, value : Index, getValue : TRow -> Index, failureMessage : string, params args : array[object]) : void
     {
-      TestWrite(value, getValue, (actual, expected) => actual.IsEqualTo(expected), failureMessage, args);
+      TestWrite(rowIndex, value, getValue, (actual, expected) => actual.IsEqualTo(expected), failureMessage, args);
     }
-    protected TestWrite[T, TRow, TTable](value : T, getValue : TRow -> T, failureMessage : string, params args : array[object]) : void
+    protected TestWrite[T, TRow, TTable](rowIndex : int, value : T, getValue : TRow -> T, failureMessage : string, params args : array[object]) : void
     {
-      TestWrite(value, getValue, (actual, expected) => object.Equals(actual, expected), failureMessage, args);
+      TestWrite(rowIndex, value, getValue, (actual, expected) => object.Equals(actual, expected), failureMessage, args);
     }    
-    protected TestWrite[T, TRow, TTable](value : T, getValue : TRow -> T, compareValue: T * T-> bool,
+    protected TestWrite[T, TRow, TTable](rowIndex : int, value : T, getValue : TRow -> T, compareValue: T * T-> bool,
         failureMessage : string, params args : array[object]) : void
         where TTable : IMetadataTable[TRow], class
     {
@@ -39,10 +39,9 @@ namespace Tests
         // If the current value does not match the expected value, that means that the write failed
         compareValue(expectedValue, currentValue).ShouldBeTrue(failureMessage, args);
       };
-      TestWrite.[TRow, TTable](compareRows(_, _, getValue, failureMessage));
-    }
-    
-    protected TestWrite[TRow, TTable](compareRows : TRow * TRow -> void) : void
+      TestWrite.[TRow, TTable](compareRows(_, _, getValue, failureMessage), rowIndex);
+    }    
+    protected TestWrite[TRow, TTable](compareRows : TRow * TRow -> void, rowIndex : int = 0) : void
         where TTable : IMetadataTable[TRow], class
     { 
       def heapSizeFlags = array(0) : array[HeapSizeFlags];
@@ -52,7 +51,9 @@ namespace Tests
       // Read the expected data
       def inputStream = MemoryStream(GetTableStreamData());
       def headerReader = MetadataTablesHeaderReader();
-      def header = headerReader.Read(inputStream);     
+      def header = headerReader.Read(inputStream); 
+      // TODO: Convert the header heap size flags to a list of heap size flags
+      
       def expectedRow = ReadRow(inputStream, aggregateTable);
             
       // Write the target table (this assumes that the target table is part of the aggregate)
@@ -74,12 +75,12 @@ namespace Tests
       
       targetTable.ShouldBeNotNull("Unable to find the target table type '{0}'", typeof(TTable));
       
-      def actualRow = targetTable.Rows[0];
+      def actualRow = targetTable.Rows[rowIndex];
       
       compareRows(actualRow, expectedRow);
     }
     protected abstract GetTableStreamData() : array[byte];
-    private ReadRow[TRow, TTable](inputStream : Stream, aggregateTable : AggregateTable) : TRow
+    private ReadRow[TRow, TTable](inputStream : Stream, aggregateTable : AggregateTable, rowIndex : int = 0) : TRow
         where TTable : IMetadataTable[TRow], class
     {
       def stream = MemoryStream(GetTableStreamData());
@@ -106,7 +107,7 @@ namespace Tests
       }
       
       targetTable.ShouldBeNotNull("Unable to find the target table type '{0}'", typeof(TTable));
-      def row = targetTable.Rows[0];
+      def row = targetTable.Rows[rowIndex];
       
       row;
     }    

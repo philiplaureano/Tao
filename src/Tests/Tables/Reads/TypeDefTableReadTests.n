@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Tests
 {
-  public class TypeDefTableReadTests : BaseTableReaderTest
+  public class TypeDefTableReadTests : BaseTableReaderTest[TypeDefRow, TypeDefTable]
   {
     public ShouldReadFlags() : void
     {
@@ -39,10 +39,6 @@ namespace Tests
     public ShouldReadMethodList() : void
     {
       TestRead(r => r.MethodList.ShouldBeEqualTo(1 : ushort, "Invalid MethodList index"));
-    }
-    private TestRead(testRow : TypeDefRow -> void) : void
-    {      
-      base.TestRead.[TypeDefRow, TypeDefTable](testRow);
     }
     
     protected override GetTableStreamData() : array[byte]

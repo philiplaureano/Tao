@@ -1,0 +1,20 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MethodDefSchemaWriter : ISchemaWriter[MethodDefRow]
+  {
+    public WriteRow(row : MethodDefRow, rowCounts : IDictionary.[TableId, uint], 
+        rowWriter : IRowWriter.[MethodDefRow]) : void
+    {
+        throw NotImplementedException();
+    }
+  }
+}

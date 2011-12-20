@@ -15,27 +15,33 @@ namespace Tests
   {
     public ShouldWriteFlags() : void
     {
-      TestWrite.[uint](0, r => r.Flags, "Wrong Flags");
+      def rowIndex = 0;
+      TestWrite.[uint](rowIndex, 0, r => r.Flags, "Wrong Flags");
     }
     public ShouldWriteName() : void
     {
-      TestWrite(Index.Narrow(1), r => r.TypeName, "Wrong TypeName");
+      def rowIndex = 0;
+      TestWrite(rowIndex,Index.Narrow(1), r => r.TypeName, "Wrong TypeName");
     }
     public ShouldWriteNamespace() : void
     {
-      TestWrite(Index.Narrow(0), r => r.TypeNamespace, "Wrong TypeNamespace");
+      def rowIndex = 0;
+      TestWrite(rowIndex,Index.Narrow(0), r => r.TypeNamespace, "Wrong TypeNamespace");
     }
     public ShouldWriteExtends() : void
     {
-      TestWrite(Index.Narrow(0), r => r.Extends, "Wrong Extends");
+      def rowIndex = 0;
+      TestWrite(rowIndex,Index.Narrow(0), r => r.Extends, "Wrong Extends");
     }
     public ShouldWriteFieldList() : void
     {
-      TestWrite(Index.Narrow(1), r => r.FieldList, "Wrong FieldList");
+      def rowIndex = 0;
+      TestWrite(rowIndex,Index.Narrow(1), r => r.FieldList, "Wrong FieldList");
     }
     public ShouldWriteMethodList() : void
     {
-      TestWrite(Index.Narrow(1), r => r.MethodList, "Wrong MethodList");
+      def rowIndex = 0;
+      TestWrite(rowIndex,Index.Narrow(1), r => r.MethodList, "Wrong MethodList");
     }
     
     protected override GetTableStreamData() : array[byte]

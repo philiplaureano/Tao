@@ -14,9 +14,15 @@ using System.Linq;
 
 namespace Tests
 {
-  public abstract class BaseTableReaderTest
+  public abstract class BaseTableReaderTest[TRowType, TTableType]
+    where TTableType : IMetadataTable[TRowType], class
   {
-    protected TestRead[TRow, TTable](testRow : TRow -> void) : void    
+    protected TestRead(testRow : TRowType -> void, rowIndex : int = 0) : void
+    {      
+      TestRead.[TRowType, TTableType](testRow, rowIndex);
+    }
+    
+    protected TestRead[TRow, TTable](testRow : TRow -> void, rowIndex : int = 0) : void    
         where TTable : IMetadataTable[TRow]
     {
       def stream = MemoryStream(GetTableStreamData());
@@ -36,7 +42,7 @@ namespace Tests
       def tables : IEnumerable.[IMetadataTable] = aggregateTable.Tables;
       def targetTable = tables.Where(t => t.GetType() == typeof(TTable)).First() :> TTable;
       
-      def row = targetTable.Rows[0];
+      def row = targetTable.Rows[rowIndex];
       testRow(row);
     }
     
