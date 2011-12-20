@@ -3,6 +3,8 @@ using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tao;
+using Tao.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,12 @@ namespace Tao
   {
     public WriteRow(row : TypeDefRow, rowCounts : IDictionary.[TableId, uint], rowWriter : IRowWriter.[TypeDefRow]) : void
     {
-      throw NotImplementedException();
+      rowWriter.WriteDword(row.Flags);
+      rowWriter.WriteStringIndex(row.get_TypeName);
+      rowWriter.WriteStringIndex(row.get_TypeNamespace);
+      rowWriter.WriteIndex(CodedTokenType.TypeDefOrTypeRef, row.get_Extends);
+      rowWriter.WriteIndex(TableId.Field, row.get_FieldList);
+      rowWriter.WriteIndex(TableId.MethodDef, row.get_MethodList);
     }
   }
 }

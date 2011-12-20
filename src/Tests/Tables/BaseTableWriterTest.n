@@ -1,0 +1,114 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public abstract class BaseTableWriterTest
+  {
+    protected TestWrite[TRow, TTable](value : Index, getValue : TRow -> Index, failureMessage : string, params args : array[object]) : void
+    {
+      TestWrite(value, getValue, (actual, expected) => actual.IsEqualTo(expected), failureMessage, args);
+    }
+    protected TestWrite[T, TRow, TTable](value : T, getValue : TRow -> T, failureMessage : string, params args : array[object]) : void
+    {
+      TestWrite(value, getValue, (actual, expected) => object.Equals(actual, expected), failureMessage, args);
+    }    
+    protected TestWrite[T, TRow, TTable](value : T, getValue : TRow -> T, compareValue: T * T-> bool,
+        failureMessage : string, params args : array[object]) : void
+        where TTable : IMetadataTable[TRow], class
+    {
+      def compareRows(actualRow : TRow, expectedRow : TRow, getValue : TRow -> T, failureMessage : string) : void
+      {
+        def currentValue = getValue(actualRow);
+        def expectedValue = getValue(expectedRow);
+        
+        // If the expected value does not match the given value, that means the read failed        
+        compareValue(expectedValue, value).ShouldBeTrue("Metadata Table Read Failed for '{0}' row type", typeof(TRow).Name);                
+        
+        // If the current value does not match the expected value, that means that the write failed
+        compareValue(expectedValue, currentValue).ShouldBeTrue(failureMessage, args);
+      };
+      TestWrite.[TRow, TTable](compareRows(_, _, getValue, failureMessage));
+    }
+    
+    protected TestWrite[TRow, TTable](compareRows : TRow * TRow -> void) : void
+        where TTable : IMetadataTable[TRow], class
+    { 
+      def heapSizeFlags = array(0) : array[HeapSizeFlags];
+      
+      def aggregateTable = AggregateTable();
+                              
+      // Read the expected data
+      def inputStream = MemoryStream(GetTableStreamData());
+      def headerReader = MetadataTablesHeaderReader();
+      def header = headerReader.Read(inputStream);     
+      def expectedRow = ReadRow(inputStream, aggregateTable);
+            
+      // Write the target table (this assumes that the target table is part of the aggregate)
+      def outputStream = MemoryStream();
+      def headerWriter = MetadataTablesHeaderWriter();
+      headerWriter.Write(header, outputStream);
+      aggregateTable.Write(heapSizeFlags, header.Rows, outputStream);
+                  
+      def tables : IEnumerable.[IMetadataTable] = aggregateTable.Tables;
+      mutable targetTable : TTable = null;
+      
+      foreach(table in tables)
+      {
+        when (typeof(TTable).IsAssignableFrom(table.GetType()))
+        {
+          targetTable = table :> TTable;
+        }
+      }
+      
+      targetTable.ShouldBeNotNull("Unable to find the target table type '{0}'", typeof(TTable));
+      
+      def actualRow = targetTable.Rows[0];
+      
+      compareRows(actualRow, expectedRow);
+    }
+    protected abstract GetTableStreamData() : array[byte];
+    private ReadRow[TRow, TTable](inputStream : Stream, aggregateTable : AggregateTable) : TRow
+        where TTable : IMetadataTable[TRow], class
+    {
+      def stream = MemoryStream(GetTableStreamData());
+      
+      // Skip past the header stream
+      def headerReader = MetadataTablesHeaderReader();
+      def header = headerReader.Read(stream);            
+      
+      def sortedTables = array(0) : array[TableId];
+      def heapSizes = header.HeapSizes;
+      
+      def rowCounts = header.Rows;            
+      aggregateTable.Read(heapSizes, rowCounts, sortedTables, stream);
+      
+      def tables : IEnumerable.[IMetadataTable] = aggregateTable.Tables;
+      mutable targetTable : TTable = null;
+      
+      foreach(table in tables)
+      {
+        when (typeof(TTable).IsAssignableFrom(table.GetType()))
+        {
+          targetTable = table :> TTable;
+        }
+      }
+      
+      targetTable.ShouldBeNotNull("Unable to find the target table type '{0}'", typeof(TTable));
+      def row = targetTable.Rows[0];
+      
+      row;
+    }    
+  }
+}

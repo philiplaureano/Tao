@@ -45,6 +45,6 @@ namespace Tao
          }
          | _ => throw NotSupportedException();
       }            
-    }
+    }    
   }
 }

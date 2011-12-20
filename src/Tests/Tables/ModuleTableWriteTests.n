@@ -7,11 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tao
+namespace Tests
 {
-  public variant Index
+  public class ModuleTableWriteTests
   {
-    |Narrow { Value : ushort; }
-    |Wide   { Value : uint; }    
   }
 }

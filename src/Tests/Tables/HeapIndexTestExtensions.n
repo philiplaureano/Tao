@@ -38,5 +38,19 @@ namespace Tests
       def targetIndex : Index.Narrow = index :> Index.Narrow;
       targetIndex.Value.ShouldBeEqualTo(value, message, args);
     }
+    public IsEqualTo(this index : Index, otherIndex : Index) : bool
+    {
+      def indexTypesMatch = (index.GetType() == otherIndex.GetType());
+      
+      index.ToUInt32() == otherIndex.ToUInt32() && indexTypesMatch;
+    }
+    
+    public ShouldBeEqualTo(this index : Index, otherIndex : Index) : void
+    {
+      def indexTypesMatch = (index.GetType() == otherIndex.GetType());
+      indexTypesMatch.ShouldBeTrue("The index types don't match");    
+      
+      index.ToUInt32().ShouldBeEqualTo(otherIndex.ToUInt32(), "Index values don't match");
+    }
   }
 }

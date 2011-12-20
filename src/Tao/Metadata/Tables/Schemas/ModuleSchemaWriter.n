@@ -13,7 +13,11 @@ namespace Tao
   {
     public WriteRow(row : ModuleRow, rowCounts : IDictionary.[TableId, uint], rowWriter : IRowWriter.[ModuleRow]) : void
     {
-      throw NotImplementedException();
+      rowWriter.WriteWord(row.Generation);
+      rowWriter.WriteStringIndex(row.get_Name);
+      rowWriter.WriteGuidIndex(row.get_Mvid);
+      rowWriter.WriteGuidIndex(row.get_EncId);
+      rowWriter.WriteGuidIndex(row.get_EncBaseId);
     }
   }
 }
