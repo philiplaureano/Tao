@@ -4,17 +4,24 @@ using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tao.Interfaces;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Tao
 {
-  public class MethodDefSchemaReader : ISchemaReader[MethodDefRow]
+  public class MethodDefSchemaReader : ISchemaReader.[MethodDefRow]
   {
     public ReadRowInto([NotNull] rowCounts : IDictionary.[TableId, uint], sortedTables: IEnumerable.[TableId], [NotNull] rowReader : IRowReader.[MethodDefRow]) : void
     {
-      throw NotImplementedException();
+      rowReader.ReadDword((row, value) => row.Rva = value);
+      rowReader.ReadWord((row, value) => row.ImplFlags = value);
+      rowReader.ReadWord((row, value) => row.Flags = value);
+      rowReader.ReadStringIndex((row, value) => row.Name = value);
+      rowReader.ReadBlobIndex((row, value) => row.Signature = value);
+      rowReader.ReadIndex(TableId.Param, (row, value) => row.ParamList = value);
     }
   }
 }

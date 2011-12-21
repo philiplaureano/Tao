@@ -203,6 +203,9 @@
     <Compile Include="Tables\Writes\BaseTableWriterTest.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\Writes\MethodDefTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tables\Writes\ModuleTableWriteTests.n">
       <SubType>Code</SubType>
     </Compile>

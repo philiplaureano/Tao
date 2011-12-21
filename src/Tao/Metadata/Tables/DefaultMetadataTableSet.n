@@ -21,6 +21,7 @@ namespace Tao
     {
       _ = Add(ModuleTable());
       _ = Add(TypeDefTable());
+      _ = Add(MethodDefTable());
     }
   }
 }

@@ -14,7 +14,12 @@ namespace Tao
     public WriteRow(row : MethodDefRow, rowCounts : IDictionary.[TableId, uint], 
         rowWriter : IRowWriter.[MethodDefRow]) : void
     {
-        throw NotImplementedException();
+      rowWriter.WriteDword(row.Rva);
+      rowWriter.WriteWord(row.ImplFlags);
+      rowWriter.WriteWord(row.Flags);
+      rowWriter.WriteStringIndex(row.get_Name);
+      rowWriter.WriteBlobIndex(row.get_Signature);
+      rowWriter.WriteIndex(TableId.Param, row.get_ParamList);      
     }
   }
 }
