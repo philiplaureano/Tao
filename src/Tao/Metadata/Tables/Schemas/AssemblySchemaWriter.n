@@ -1,0 +1,31 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class AssemblySchemaWriter : ISchemaWriter.[AssemblyRow]
+  {
+    public WriteRow([NotNull] row : AssemblyRow,  [NotNull] rowCounts : IDictionary.[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[AssemblyRow]) : void
+    {
+      rowWriter.WriteDword(row.HashAlgId);
+      
+      rowWriter.WriteWord(row.MajorVersion);
+      rowWriter.WriteWord(row.MinorVersion);
+      rowWriter.WriteWord(row.BuildNumber);
+      rowWriter.WriteWord(row.RevisionNumber);
+      
+      rowWriter.WriteDword(row.Flags);
+      rowWriter.WriteBlobIndex(row.get_PublicKey);
+      rowWriter.WriteStringIndex(row.get_Name);
+      rowWriter.WriteStringIndex(row.get_Culture);
+    }
+  }
+}

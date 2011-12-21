@@ -1,0 +1,31 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class AssemblySchemaReader : ISchemaReader.[AssemblyRow]
+  {
+    public ReadRowInto([NotNull] rowCounts : IDictionary.[TableId, uint], 
+        sortedTables: IEnumerable.[TableId], [NotNull] rowReader : IRowReader.[AssemblyRow]) : void
+    {
+      rowReader.ReadDword((r, value) => r.HashAlgId = value);
+      
+      rowReader.ReadWord((r, value) => r.MajorVersion = value);
+      rowReader.ReadWord((r, value) => r.MinorVersion = value);
+      rowReader.ReadWord((r, value) => r.BuildNumber = value);
+      rowReader.ReadWord((r, value) => r.RevisionNumber = value);
+      
+      rowReader.ReadDword((r, value) => r.Flags = value);
+      rowReader.ReadBlobIndex((r, value) => r.PublicKey = value);
+      rowReader.ReadStringIndex((r, value) => r.Name = value);
+      rowReader.ReadStringIndex((r, value) => r.Culture = value);      
+    }
+  }
+}

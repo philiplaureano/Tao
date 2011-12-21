@@ -15,7 +15,7 @@ namespace Tao
 {
   public class AggregateTable : IMetadataTable
   {
-    private _tables : ISet.[IMetadataTable] ;
+    private _tables : IDictionary.[TableId, IMetadataTable] ;
     public this()
     {
       this(DefaultMetadataTableSet());
@@ -23,13 +23,27 @@ namespace Tao
       
     public this(tables : ISet.[IMetadataTable])
     {
-      _tables = tables;
+      _tables = Dictionary.[TableId, IMetadataTable]();
+      foreach(table in tables)
+      {
+        def tableId = table.GetHashCode() :> TableId;
+        _tables[tableId] = table;
+      }
     }
       
     public Read(heapSizes : byte, [NotNull] rowCounts : IDictionary.[TableId, uint], 
         sortedTables : IEnumerable.[TableId], [NotNull] inputStream : Stream) : void
     {   
-      foreach(table in _tables)
+      // Check for any unsupported tables
+      foreach(tableId in rowCounts.Keys)
+      {
+        when (rowCounts[tableId] > 0 && !_tables.ContainsKey(tableId))
+        {
+          throw NotSupportedException(string.Format("Reads for the metadata table '{0}' are currently not supported", tableId));
+        }
+      }
+      
+      foreach(table in _tables.Values)
       {
         table.Read(heapSizes, rowCounts, sortedTables, inputStream);
       }
@@ -37,16 +51,25 @@ namespace Tao
     public Write(heapSizeFlags : IEnumerable.[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
         outputStream : Stream) : void
     {
-        foreach(table in _tables)
+      // Check for any unsupported tables
+      foreach(tableId in rowCounts.Keys)
+      {
+        when (rowCounts[tableId] > 0 && !_tables.ContainsKey(tableId))
         {
-            table.Write(heapSizeFlags, rowCounts, outputStream);
+          throw NotSupportedException(string.Format("Writes for the metadata table '{0}' are currently not supported", tableId));
         }
+      }
+      
+      foreach(table in _tables.Values)
+      {
+        table.Write(heapSizeFlags, rowCounts, outputStream);
+      }
     }
     public Tables : IEnumerable.[IMetadataTable]
     {
       get
       {
-        _tables;
+        _tables.Values;
       }
     }
   }

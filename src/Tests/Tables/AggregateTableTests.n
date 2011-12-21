@@ -1,0 +1,40 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using Tests.Macros;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class AggregateTableTests
+  {
+    public ShouldFailReadOperationWhenGivenRowCountForTableThatCannotBeRead() : void
+        expects NotSupportedException
+    {
+      def supportedTables = HashSet.[IMetadataTable]();
+      def table = AggregateTable(supportedTables);
+      def rowCounts = Dictionary.[TableId, uint]();
+      rowCounts[TableId.AssemblyOS] = 12345;
+          
+      table.Read(0, rowCounts, array(0) : array[TableId], MemoryStream());
+    }
+    public ShouldFailWriteOperationWhenGivenRowCountForTableThatCannotBeWritten() : void
+        expects NotSupportedException
+    {
+      def supportedTables = HashSet.[IMetadataTable]();
+      def table = AggregateTable(supportedTables);
+      def rowCounts = Dictionary.[TableId, uint]();
+      rowCounts[TableId.AssemblyProcessor] = 12345;
+      
+      table.Write(array(0) : array[HeapSizeFlags], rowCounts, MemoryStream());
+    }
+  }
+}

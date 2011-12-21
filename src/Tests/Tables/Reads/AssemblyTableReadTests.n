@@ -1,0 +1,66 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class AssemblyTableReadTests : BaseTableReaderTest[AssemblyRow, AssemblyTable]
+  {
+    public ShouldReadHashAlgId() : void
+    {
+      TestRead(r => r.HashAlgId.ShouldBeEqualTo(0, "Invalid HashAlgId"));
+    }
+    public ShouldReadMajorVersion() : void
+    {
+      TestRead(r => r.MajorVersion.ShouldBeEqualTo(0, "Invalid MajorVersion"));
+    }
+    public ShouldReadMinorVersion() : void
+    {
+      TestRead(r => r.MinorVersion.ShouldBeEqualTo(0, "Invalid MinorVersion"));
+    }
+    public ShouldReadBuildNumber() : void
+    {
+      TestRead(r => r.BuildNumber.ShouldBeEqualTo(0, "Invalid BuildNumber"));
+    }
+    public ShouldReadRevisionNumber() : void
+    {
+      TestRead(r => r.RevisionNumber.ShouldBeEqualTo(0 : ushort, "Invalid RevisionNumber"));
+    }
+    public ShouldReadFlags() : void
+    {
+      TestRead(r => r.Flags.ShouldBeEqualTo(0, "Invalid Flags"));
+    }
+    public ShouldReadPublicKey() : void
+    {
+      TestRead(r => r.PublicKey.ShouldBeEqualTo(0 : ushort, "Invalid Public Key"));
+    }
+    public ShouldReadName() : void
+    {
+      TestRead(r => r.Name.ShouldBeEqualTo(0x1C : ushort, "Invalid Name"));
+    }
+    public ShouldReadCulture() : void
+    {
+      TestRead(r => r.Culture.ShouldBeEqualTo(0 : ushort, "Invalid Culture"));
+    }
+    protected override GetTableStreamData() : array[byte]
+    {
+    array[
+        0x00 : byte, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x01, 0x45, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+	    0x00, 0xFA, 0x01, 0x33, 0x00, 0x16, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+	    0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x01, 0x00, 0x00, 0x00,
+	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00,
+	    0x50, 0x20, 0x00, 0x00, 0x00, 0x00, 0x16, 0x00, 0x17, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00,
+	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	    0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    ];
+    }
+  }
+}

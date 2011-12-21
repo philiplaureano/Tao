@@ -1,0 +1,53 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public static class RowReaderExtensions
+  {
+    // The following code currently does not compile with Nemerle: 
+    //public ReadIndex[TRow]([NotNull] this rowReader : IRowReader[TRow], tokenType : CodedTokenType, [NotNull] getSetter : TRow -> (Index -> void)) : void
+    //{
+    //  rowReader.ReadIndex(tokenType, (row, value) => getSetter(row)(value));
+    //}
+    //public ReadIndex[TRow]([NotNull] this rowReader : IRowReader[TRow], 
+    //    tableId : TableId, [NotNull] getSetter : TRow -> (Index -> void)) : void
+    //{
+    //  rowReader.ReadIndex(tableId, (row, value) => getSetter(row)(value));
+    //}
+    //public ReadDword[TRow]([NotNull] this rowReader : IRowReader[TRow], [NotNull] getSetter : TRow -> (uint -> void)) : void
+    //{
+    //  rowReader.ReadDword((row, value) => getSetter(row)(value));
+    //}
+    //public ReadWord[TRow]([NotNull] this rowReader : IRowReader[TRow], [NotNull] getSetter : TRow -> (ushort -> void)) : void
+    //{
+    //  rowReader.ReadWord((row, value) => getSetter(row)(value));
+    //}
+    //public ReadByte[TRow]([NotNull] this rowReader : IRowReader[TRow], [NotNull] getSetter : TRow -> (byte -> void)) : void
+    //{
+    //  rowReader.ReadByte((row, value) => getSetter(row)(value));
+    //}
+    //public ReadStringIndex[TRow]([NotNull] this rowReader : IRowReader[TRow], 
+    //    [NotNull] getSetter : TRow -> (Index -> void)) : void
+    //{
+    //  rowReader.ReadStringIndex((row, value) => getSetter(row)(value));
+    //}
+    //public ReadGuidIndex[TRow]([NotNull] this rowReader : IRowReader[TRow],
+    //    [NotNull] getSetter : TRow -> (Index -> void)) : void
+    //{
+    //  rowReader.ReadGuidIndex((row, value) => getSetter(row)(value));
+    //}
+    //public ReadBlobIndex[TRow]([NotNull] this rowReader : IRowReader[TRow],
+    //    [NotNull] getSetter : TRow -> (Index -> void)) : void
+    //{
+    //  rowReader.ReadBlobIndex((row, value) => getSetter(row)(value));
+    //}
+  }
+}
