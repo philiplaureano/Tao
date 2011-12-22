@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class CodedTokenBitCountMap : Dictionary.[CodedTokenType, uint]
+  public class CodedTokenBitCountMap : Dictionary[CodedTokenType, uint]
   {
     public this()
     {

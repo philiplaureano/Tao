@@ -12,7 +12,7 @@ namespace Tao
 {
   public class SectionResolver : ISectionResolver
   {
-    public Resolve([NotNull] sections : IEnumerable.[ISectionHeader], rva : uint) : ISectionHeader
+    public Resolve([NotNull] sections : IEnumerable[ISectionHeader], rva : uint) : ISectionHeader
     {
       def matchesRva(header : ISectionHeader, currentRva : uint) : bool
       {

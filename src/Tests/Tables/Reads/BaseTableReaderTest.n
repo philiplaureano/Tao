@@ -39,7 +39,7 @@ namespace Tests
       def aggregateTable = AggregateTable();
       aggregateTable.Read(heapSizes, rowCounts, sortedTables, stream);
       
-      def tables : IEnumerable.[IMetadataTable] = aggregateTable.Tables;
+      def tables      = aggregateTable.Tables;
       def targetTable = tables.Where(t => t.GetType() == typeof(TTable)).First() :> TTable;
       
       def row = targetTable.Rows[rowIndex];

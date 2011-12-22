@@ -12,6 +12,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using SCG = System.Collections.Generic;
+
 namespace Tao
 {
   public class StringHeapReader : IStringHeapReader
@@ -22,7 +24,7 @@ namespace Tao
       // Seek the target position
       _ = stream.Seek(index :> int, SeekOrigin.Begin);
       
-      def data = System.Collections.Generic.Queue.[char]();
+      def data = SCG.Queue();
       def readData() : void
       {          
         def value = stream.ReadByte();

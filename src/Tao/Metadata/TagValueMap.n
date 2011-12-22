@@ -10,11 +10,11 @@ using System.Linq;
 
 namespace Tao
 {
-  public class TagValueMap : Dictionary.[CodedTokenType, IDictionary.[TableId, byte]]
+  public class TagValueMap : Dictionary[CodedTokenType, IDictionary[TableId, byte]]
   {
     public this() 
     {
-      this[CodedTokenType.CustomAttributeType] = Dictionary.[TableId, byte]();
+      this[CodedTokenType.CustomAttributeType] = Dictionary();
       this[CodedTokenType.CustomAttributeType][TableId.MethodDef] = 2;
       this[CodedTokenType.CustomAttributeType][TableId.MemberRef] = 3;
       
@@ -57,7 +57,7 @@ namespace Tao
       {        
         unless(this.ContainsKey(tokenType))
         {
-          this[tokenType] = System.Collections.Generic.Dictionary.[TableId, byte]();
+          this[tokenType] = System.Collections.Generic.Dictionary();
         }
         
         this[tokenType][tableId] = index;

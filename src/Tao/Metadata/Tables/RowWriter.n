@@ -13,16 +13,16 @@ namespace Tao
 {
   public class RowWriter[TRow] : IRowWriter[TRow]
   {
-    private _heapSizeFlags : ISet.[HeapSizeFlags];
-    private _rowCounts : IDictionary.[TableId, uint];
+    private _heapSizeFlags : ISet[HeapSizeFlags];
+    private _rowCounts : IDictionary[TableId, uint];
     private _writer : BinaryWriter;
   
-    public this(heapSizeFlags : IEnumerable.[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint],
+    public this(heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint],
     writer : BinaryWriter)
     {
-      _heapSizeFlags = HashSet.[HeapSizeFlags](heapSizeFlags);
-      _rowCounts = rowCounts;
-      _writer = writer;
+      _heapSizeFlags = HashSet(heapSizeFlags);
+      _rowCounts     = rowCounts;
+      _writer        = writer;
     }
   
     public WriteStringIndex(value : void -> Index) : void

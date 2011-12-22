@@ -13,7 +13,7 @@ namespace Tao
 {
   public class GuidWriter
   {
-    public Write([NotNull] guids: IEnumerable.[Guid], [NotNull] guidStream: Stream) : void
+    public Write([NotNull] guids: IEnumerable[Guid], [NotNull] guidStream: Stream) : void
     {
       def writer = BinaryWriter(guidStream);
       foreach(guid in guids)

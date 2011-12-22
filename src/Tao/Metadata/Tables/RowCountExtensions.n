@@ -13,7 +13,7 @@ namespace Tao
 {
   public static class RowCountExtensions
   {
-    private static _entries : IDictionary.[CodedTokenType, IEnumerable.[TableId]];
+    private static _entries : IDictionary[CodedTokenType, IEnumerable.[TableId]];
     static this()
     {
       _entries = CodedTokenTableMap();

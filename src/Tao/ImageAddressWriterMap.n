@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class ImageAddressWriterMap : Dictionary.[Location, IAddressWriter]
+  public class ImageAddressWriterMap : Dictionary[Location, IAddressWriter]
   {
     public this()
     {          

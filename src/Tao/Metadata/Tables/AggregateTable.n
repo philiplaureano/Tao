@@ -15,15 +15,15 @@ namespace Tao
 {
   public class AggregateTable : IMetadataTable
   {
-    private _tables : IDictionary.[TableId, IMetadataTable] ;
+    private _tables : IDictionary[TableId, IMetadataTable] ;
     public this()
     {
       this(DefaultMetadataTableSet());
     }
       
-    public this(tables : ISet.[IMetadataTable])
+    public this(tables : ISet[IMetadataTable])
     {
-      _tables = Dictionary.[TableId, IMetadataTable]();
+      _tables = Dictionary();
       foreach(table in tables)
       {
         def tableId = table.GetHashCode() :> TableId;
@@ -31,8 +31,8 @@ namespace Tao
       }
     }
       
-    public Read(heapSizes : byte, [NotNull] rowCounts : IDictionary.[TableId, uint], 
-        sortedTables : IEnumerable.[TableId], [NotNull] inputStream : Stream) : void
+    public Read(heapSizes : byte, [NotNull] rowCounts : IDictionary[TableId, uint], 
+        sortedTables : IEnumerable[TableId], [NotNull] inputStream : Stream) : void
     {   
       // Check for any unsupported tables
       foreach(tableId in rowCounts.Keys)
@@ -48,7 +48,7 @@ namespace Tao
         table.Read(heapSizes, rowCounts, sortedTables, inputStream);
       }
     }
-    public Write(heapSizeFlags : IEnumerable.[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
+    public Write(heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
         outputStream : Stream) : void
     {
       // Check for any unsupported tables
@@ -65,7 +65,7 @@ namespace Tao
         table.Write(heapSizeFlags, rowCounts, outputStream);
       }
     }
-    public Tables : IEnumerable.[IMetadataTable]
+    public Tables : IEnumerable[IMetadataTable]
     {
       get
       {

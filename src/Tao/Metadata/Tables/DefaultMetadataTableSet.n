@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class DefaultMetadataTableSet : HashSet.[IMetadataTable]
+  public class DefaultMetadataTableSet : HashSet[IMetadataTable]
   {
     public this()
     {

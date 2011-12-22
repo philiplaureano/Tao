@@ -13,7 +13,7 @@ namespace Tao
 {
   public class ImageAddressReader : IImageAddressReader
   {
-    private _resolvers : Dictionary.[Location, IAddressResolver] = ImageAddressResolverMap();
+    private _resolvers : Dictionary[Location, IAddressResolver] = ImageAddressResolverMap();
 
     public ReadAddressOf(location : Location, [NotNull] image: IImage) : IAddress
         ensures value != null

@@ -12,9 +12,9 @@ using System.Linq;
 
 namespace Tao
 {
-  public class MethodDefSchemaReader : ISchemaReader.[MethodDefRow]
+  public class MethodDefSchemaReader : ISchemaReader[MethodDefRow]
   {
-    public ReadRowInto([NotNull] rowCounts : IDictionary.[TableId, uint], sortedTables: IEnumerable.[TableId], [NotNull] rowReader : IRowReader.[MethodDefRow]) : void
+    public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], _sortedTables: IEnumerable.[TableId], [NotNull] rowReader : IRowReader.[MethodDefRow]) : void
     {
       rowReader.ReadDword((row, value) => row.Rva = value);
       rowReader.ReadWord((row, value) => row.ImplFlags = value);

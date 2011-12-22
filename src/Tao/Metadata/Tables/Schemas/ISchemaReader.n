@@ -16,6 +16,6 @@ namespace Tao
   public interface ISchemaReader[TRow]
     where TRow : new(), class
   {    
-    ReadRowInto(rowCounts : IDictionary.[TableId, uint], sortedTables: IEnumerable.[TableId], rowReader : IRowReader.[TRow]) : void;
+    ReadRowInto(rowCounts : IDictionary[TableId, uint], sortedTables: IEnumerable.[TableId], rowReader : IRowReader.[TRow]) : void;
   }
 }

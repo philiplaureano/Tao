@@ -16,7 +16,7 @@ namespace Tao
     public Read(numberOfDirectories : ushort, [NotNull] stream : Stream) : IEnumerable[IDataDirectory]
         requires stream.Length > 0
     {
-      def results = List.[IDataDirectory]();
+      def results = List();
       for(mutable i = 0; i < numberOfDirectories; i++)
       {
         def reader = BinaryReader(stream);          

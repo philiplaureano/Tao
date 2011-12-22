@@ -13,7 +13,7 @@ namespace Tao
 {
   public class DataDirectoryWriter : IDataDirectoryWriter
   {
-    public Write([NotNull] directories : IEnumerable.[IDataDirectory], [NotNull] stream : Stream) : void
+    public Write([NotNull] directories : IEnumerable[IDataDirectory], [NotNull] stream : Stream) : void
         requires directories.Count() > 0 otherwise throw ArgumentException("There are no data directories to be written")
     {          
       def writer = BinaryWriter(stream);

@@ -19,7 +19,7 @@ namespace Tao
           
       (sortedVector & mask) != 0;
     }
-    public GetSortedTables(this sortedVector : ulong) : IEnumerable.[TableId]
+    public GetSortedTables(this sortedVector : ulong) : IEnumerable[TableId]
     {
       foreach(tableId in typeof(TableId).GetEnumValues())
       {

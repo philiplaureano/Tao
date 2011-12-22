@@ -14,7 +14,7 @@ namespace Tao
 {
   public class ImageAddressWriter : IImageAddressWriter
   {
-    private _writers : Dictionary.[Location, IAddressWriter] = ImageAddressWriterMap();
+    private _writers : Dictionary[Location, IAddressWriter] = ImageAddressWriterMap();
     
     public WriteAddressOf(location : Location, [NotNull] address : IAddress, [NotNull] image : IImage) : void
     {              

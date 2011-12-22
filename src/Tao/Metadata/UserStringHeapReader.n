@@ -26,9 +26,9 @@ namespace Tao
       def length = integerReader.ReadInteger(stream);
       def actualLength = length / 2 : uint;
       
-      def characters = List.[char]();     
+      def characters = List();
       mutable charactersRead : uint= 0;
-      for(mutable i : uint = 0; i < length; i += 2)
+      for (mutable i : uint = 0; i < length; i += 2)
       {
         def highByte = stream.ReadByte();
         def lowByte = stream.ReadByte();

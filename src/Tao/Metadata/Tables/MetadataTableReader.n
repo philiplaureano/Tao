@@ -21,7 +21,7 @@ namespace Tao
       _schema = schema;
     }
   
-    public ReadRows(numberOfRowsToRead : uint, heapSizes : byte, [NotNull] rowCounts : IDictionary.[TableId, uint], sortedTables : IEnumerable.[TableId], [NotNull] inputStream : Stream) : IEnumerable[TRow]
+    public ReadRows(numberOfRowsToRead : uint, heapSizes : byte, [NotNull] rowCounts : IDictionary[TableId, uint], sortedTables : IEnumerable.[TableId], [NotNull] inputStream : Stream) : IEnumerable[TRow]
     {
       def reader = BinaryReader(inputStream);    
       def rowsToRead = numberOfRowsToRead :> int;
@@ -29,7 +29,7 @@ namespace Tao
       for(mutable i = 0; i < rowsToRead; i++)
       {
         def row = TRow();
-        def rowReader = RowReader.[TRow](heapSizes, rowCounts, reader, row);
+        def rowReader = RowReader(heapSizes, rowCounts, reader, row);
         _schema.ReadRowInto(rowCounts, sortedTables, rowReader);
         yield row;
       }    

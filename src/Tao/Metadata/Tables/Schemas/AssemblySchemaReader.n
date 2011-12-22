@@ -12,8 +12,8 @@ namespace Tao
 {
   public class AssemblySchemaReader : ISchemaReader.[AssemblyRow]
   {
-    public ReadRowInto([NotNull] rowCounts : IDictionary.[TableId, uint], 
-        sortedTables: IEnumerable.[TableId], [NotNull] rowReader : IRowReader.[AssemblyRow]) : void
+    public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
+        _sortedTables: IEnumerable[TableId], [NotNull] rowReader : IRowReader.[AssemblyRow]) : void
     {
       rowReader.ReadDword((r, value) => r.HashAlgId = value);
       

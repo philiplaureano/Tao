@@ -10,9 +10,9 @@ using System.Linq;
 
 namespace Tao
 {
-  public class ModuleSchemaWriter : ISchemaWriter.[ModuleRow]
+  public class ModuleSchemaWriter : ISchemaWriter[ModuleRow]
   {
-    public WriteRow([NotNull] row : ModuleRow, [NotNull] rowCounts : IDictionary.[TableId, uint], [NotNull] rowWriter : IRowWriter.[ModuleRow]) : void
+    public WriteRow([NotNull] row : ModuleRow, [NotNull] rowCounts : IDictionary[TableId, uint], [NotNull] rowWriter : IRowWriter.[ModuleRow]) : void
     {
       rowWriter.WriteWord(row.Generation);
       rowWriter.WriteStringIndex(row.get_Name);

@@ -13,7 +13,7 @@ namespace Tao
 {
   public class MetadataTablesHeader
   {
-      private _rows : IDictionary.[TableId, uint] = Dictionary.[TableId, uint]();
+      private _rows : IDictionary[TableId, uint] = Dictionary.[TableId, uint]();
       
       public MajorVersion : byte { get; set; }
       public MinorVersion : byte { get; set; }
@@ -21,7 +21,7 @@ namespace Tao
       public Valid : ulong { get; set; }
       public Sorted : ulong { get; set; }
       
-      public Rows : IDictionary.[TableId, uint] 
+      public Rows : IDictionary[TableId, uint] 
       { 
         get 
         {

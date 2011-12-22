@@ -12,8 +12,8 @@ namespace Tao
 {
   public class MethodDefSchemaWriter : ISchemaWriter[MethodDefRow]
   {
-    public WriteRow([NotNull] row : MethodDefRow, [NotNull] rowCounts : IDictionary.[TableId, uint], 
-        [NotNull] rowWriter : IRowWriter.[MethodDefRow]) : void
+    public WriteRow([NotNull] row : MethodDefRow, [NotNull] rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter[MethodDefRow]) : void
     {
       rowWriter.WriteDword(row.Rva);
       rowWriter.WriteWord(row.ImplFlags);
