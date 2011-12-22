@@ -14,12 +14,12 @@ namespace Tao
 {
   public class StreamHeaderReader : IStreamHeaderReader
   {
-    public Read(count: ushort, [NotNull] inputStream : Stream) : IEnumerable.[IStreamHeader]
+    public Read(count: ushort, [NotNull] inputStream : Stream) : IEnumerable[IStreamHeader]
     {
-      def results = List.[IStreamHeader]();
+      def results = List();
       def reader = BinaryReader(inputStream);
       def stringReader = PaddedNullTerminatedStringReader();
-      for(mutable i = 0; i < count; i++)
+      repeat(count)
       {
         def header = StreamHeader();
         header.Offset = reader.ReadUInt32();

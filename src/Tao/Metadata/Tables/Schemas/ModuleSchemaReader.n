@@ -14,7 +14,7 @@ namespace Tao
 {
   public class ModuleSchemaReader : ISchemaReader[ModuleRow]
   {
-    public ReadRowInto([NotNull] rowCounts : IDictionary.[TableId, uint], sortedTables: IEnumerable.[TableId], [NotNull] rowReader : IRowReader.[ModuleRow]) : void
+    public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], _sortedTables: IEnumerable[TableId], [NotNull] rowReader : IRowReader[ModuleRow]) : void
     {
       // Read the generation column
       rowReader.ReadWord((row, value) => row.Generation = value);

@@ -18,9 +18,9 @@ namespace Tao
     private _reader : BinaryReader;
     private _row : TRow;
     private _heapSizes : byte;
-    private _rowCounts : IDictionary.[TableId, uint];
+    private _rowCounts : IDictionary[TableId, uint];
     
-    public this(heapSizes : byte, rowCounts : IDictionary.[TableId, uint], [NotNull] reader : BinaryReader, row : TRow)
+    public this(heapSizes : byte, rowCounts : IDictionary[TableId, uint], [NotNull] reader : BinaryReader, row : TRow)
     {
       _reader = reader;
       _row = row;
@@ -64,7 +64,7 @@ namespace Tao
     }
     private ReadIndex(shouldUseWideIndex : void -> bool, [NotNull] setValue : TRow * Index -> void) : void
     {
-        mutable index : Index = null;
+        //mutable index : Index = null;
         def setWord(row : TRow, value : ushort) : void
         {
             setValue(row, Index.Narrow(value));           

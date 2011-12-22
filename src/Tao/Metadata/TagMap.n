@@ -9,23 +9,23 @@ using System.Linq;
 
 namespace Tao
 {
-  public class TagMap : Dictionary.[CodedTokenType, IDictionary.[byte, TableId]]
+  public class TagMap : Dictionary[CodedTokenType, IDictionary[byte, TableId]]
   {
     public this()
     {
-      this[CodedTokenType.CustomAttributeType] = Dictionary.[byte, TableId]();
-      this[CodedTokenType.HasConstant] = Dictionary.[byte, TableId]();
-      this[CodedTokenType.HasCustomAttribute] = Dictionary.[byte, TableId]();
-      this[CodedTokenType.HasDeclSecurity] = Dictionary.[byte, TableId]();
-      this[CodedTokenType.HasFieldMarshall] = Dictionary.[byte, TableId]();
-      this[CodedTokenType.HasSemantics] = Dictionary.[byte, TableId]();
-      this[CodedTokenType.Implementation] = Dictionary.[byte, TableId]();
-      this[CodedTokenType.MemberForwarded] = Dictionary.[byte, TableId]();
-      this[CodedTokenType.MemberRefParent] = Dictionary.[byte, TableId]();
-      this[CodedTokenType.MethodDefOrRef] = Dictionary.[byte, TableId]();
-      this[CodedTokenType.ResolutionScope] = Dictionary.[byte, TableId]();
-      this[CodedTokenType.TypeDefOrTypeRef] = Dictionary.[byte, TableId]();
-      this[CodedTokenType.TypeOrMethodDef] = Dictionary.[byte, TableId]();
+      this[CodedTokenType.CustomAttributeType] = Dictionary();
+      this[CodedTokenType.HasConstant]         = Dictionary();
+      this[CodedTokenType.HasCustomAttribute]  = Dictionary();
+      this[CodedTokenType.HasDeclSecurity]     = Dictionary();
+      this[CodedTokenType.HasFieldMarshall]    = Dictionary();
+      this[CodedTokenType.HasSemantics]        = Dictionary();
+      this[CodedTokenType.Implementation]      = Dictionary();
+      this[CodedTokenType.MemberForwarded]     = Dictionary();
+      this[CodedTokenType.MemberRefParent]     = Dictionary();
+      this[CodedTokenType.MethodDefOrRef]      = Dictionary();
+      this[CodedTokenType.ResolutionScope]     = Dictionary();
+      this[CodedTokenType.TypeDefOrTypeRef]    = Dictionary();
+      this[CodedTokenType.TypeOrMethodDef]     = Dictionary();
 
       this[CodedTokenType.CustomAttributeType][2] = TableId.MethodDef;
       this[CodedTokenType.CustomAttributeType][3] = TableId.MemberRef;
@@ -34,16 +34,16 @@ namespace Tao
       this[CodedTokenType.HasConstant][1] = TableId.Param;
       this[CodedTokenType.HasConstant][2] = TableId.Property;
 
-      this[CodedTokenType.HasCustomAttribute][0] = TableId.MethodDef;
-      this[CodedTokenType.HasCustomAttribute][1] = TableId.Field;
-      this[CodedTokenType.HasCustomAttribute][2] = TableId.TypeRef;
-      this[CodedTokenType.HasCustomAttribute][3] = TableId.TypeDef;
-      this[CodedTokenType.HasCustomAttribute][4] = TableId.Param;
-      this[CodedTokenType.HasCustomAttribute][5] = TableId.InterfaceImpl;
-      this[CodedTokenType.HasCustomAttribute][6] = TableId.MemberRef;
-      this[CodedTokenType.HasCustomAttribute][7] = TableId.Module;
-      this[CodedTokenType.HasCustomAttribute][8] = TableId.DeclSecurity;
-      this[CodedTokenType.HasCustomAttribute][9] = TableId.Property;
+      this[CodedTokenType.HasCustomAttribute][0]  = TableId.MethodDef;
+      this[CodedTokenType.HasCustomAttribute][1]  = TableId.Field;
+      this[CodedTokenType.HasCustomAttribute][2]  = TableId.TypeRef;
+      this[CodedTokenType.HasCustomAttribute][3]  = TableId.TypeDef;
+      this[CodedTokenType.HasCustomAttribute][4]  = TableId.Param;
+      this[CodedTokenType.HasCustomAttribute][5]  = TableId.InterfaceImpl;
+      this[CodedTokenType.HasCustomAttribute][6]  = TableId.MemberRef;
+      this[CodedTokenType.HasCustomAttribute][7]  = TableId.Module;
+      this[CodedTokenType.HasCustomAttribute][8]  = TableId.DeclSecurity;
+      this[CodedTokenType.HasCustomAttribute][9]  = TableId.Property;
       this[CodedTokenType.HasCustomAttribute][10] = TableId.Event;
       this[CodedTokenType.HasCustomAttribute][11] = TableId.StandAloneSig;
       this[CodedTokenType.HasCustomAttribute][12] = TableId.ModuleRef;

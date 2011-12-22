@@ -15,7 +15,7 @@ namespace Tao
   public class MetadataTable[TRow] : IMetadataTable, IMetadataTable[TRow]
     where TRow : new(), class
   {
-    private _rows : List.[TRow] = List.[TRow]();
+    private _rows : List[TRow] = List.[TRow]();
     private _schemaReader : ISchemaReader[TRow];
     private _schemaWriter : ISchemaWriter[TRow];
     private _targetTable : TableId;
@@ -27,9 +27,9 @@ namespace Tao
       _targetTable = targetTable;
     }
   
-    public Read(heapSizes : byte, [NotNull] rowCounts : IDictionary.[TableId, uint], sortedTables : IEnumerable.[TableId], [NotNull] inputStream : Stream) : void
+    public Read(heapSizes : byte, [NotNull] rowCounts : IDictionary[TableId, uint], sortedTables : IEnumerable.[TableId], [NotNull] inputStream : Stream) : void
     {
-      def tableReader = MetadataTableReader.[TRow](_schemaReader);
+      def tableReader = MetadataTableReader(_schemaReader);
       mutable rowsToRead : uint = 0;
       when (rowCounts.ContainsKey(_targetTable))
       {
@@ -40,17 +40,17 @@ namespace Tao
       _rows.AddRange(rows);
     }
     
-    public Write(heapSizeFlags : IEnumerable.[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
+    public Write(heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
         [NotNull] outputStream : Stream) : void
     {
-      def rowWriter = RowWriter.[TRow](heapSizeFlags, rowCounts, BinaryWriter(outputStream));
+      def rowWriter = RowWriter(heapSizeFlags, rowCounts, BinaryWriter(outputStream));
       foreach(row in Rows)
       {
         _schemaWriter.WriteRow(row, rowCounts, rowWriter);
       }
     }
   
-    public Rows : IList.[TRow]
+    public Rows : IList[TRow]
     {
       get 
       {

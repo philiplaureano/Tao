@@ -13,12 +13,12 @@ namespace Tao
 {  
   public class SectionHeaderReader : ISectionHeaderReader
   {
-    public Read(numberOfSections : uint, [NotNull] inputStream : Stream) : IEnumerable.[ISectionHeader]
+    public Read(numberOfSections : uint, [NotNull] inputStream : Stream) : IEnumerable[ISectionHeader]
         requires inputStream.Length > 0
         ensures value != null
     {
       def reader = BinaryReader(inputStream);
-      def results = List.[ISectionHeader]();
+      def results = List();
           
       def stringReader = NullTerminatedStringReader();
       for(mutable i : uint = 0; i < numberOfSections; i++)

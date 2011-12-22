@@ -12,8 +12,8 @@ namespace Tao
 {  
   public class MetadataRoot : IMetadataRoot
   {
-    private _headers : IList[IStreamHeader] = List.[IStreamHeader]();
-    private _heaps : IDictionary[string, Stream] = Dictionary.[string, Stream]();
+    private _headers : IList[IStreamHeader] = List();
+    private _heaps : IDictionary[string, Stream] = Dictionary();
     public Signature : uint { get; set; }
     public MajorVersion : ushort { get; set; }
     public MinorVersion : ushort { get; set; }

@@ -13,7 +13,7 @@ namespace Tao
 {
   public class SectionHeaderWriter : ISectionHeaderWriter
   {
-      public Write([NotNull] headers : IEnumerable.[ISectionHeader], [NotNull] outputStream : Stream) : void
+      public Write([NotNull] headers : IEnumerable[ISectionHeader], [NotNull] outputStream : Stream) : void
       {
           def stringWriter = NullTerminatedStringWriter();
           def writer = BinaryWriter(outputStream);

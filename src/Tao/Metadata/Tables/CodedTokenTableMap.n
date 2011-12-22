@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class CodedTokenTableMap : Dictionary.[CodedTokenType, IEnumerable.[TableId]]
+  public class CodedTokenTableMap : Dictionary[CodedTokenType, IEnumerable.[TableId]]
   {
       public this()
       {

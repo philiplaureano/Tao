@@ -18,16 +18,10 @@ namespace Tao
     public ToUInt32(this index : Index) : uint
         requires index != null
     {         
-      match(index)
+      match (index)
       {
-        |index is Index.Narrow =>
-         {
-            (index : Index.Narrow).Value;
-         }
-        |index is Index.Wide =>
-         {
-            (index : Index.Wide).Value;
-         }
+        | Index.Narrow(value) => value
+        | Index.Wide  (value) => value
       }          
     }
     public ToUInt16(this index : Index) : ushort

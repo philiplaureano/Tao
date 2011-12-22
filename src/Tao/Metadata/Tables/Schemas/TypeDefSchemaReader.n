@@ -14,10 +14,10 @@ using System.Linq;
 
 namespace Tao
 {
-  public class TypeDefSchemaReader : ISchemaReader.[TypeDefRow]
+  public class TypeDefSchemaReader : ISchemaReader[TypeDefRow]
   {
-    public ReadRowInto([NotNull] rowCounts : IDictionary.[TableId, uint], 
-      sortedTables : IEnumerable.[TableId], [NotNull] rowReader : IRowReader.[TypeDefRow]) : void
+    public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
+      sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[TypeDefRow]) : void
     {
       // Read type type flags
       rowReader.ReadDword((row, value) => row.Flags = value);

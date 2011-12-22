@@ -18,9 +18,9 @@ namespace Tao
         ensures value != null && value.Length == (size :> long)
       {
           // Map the given sections
-          def sections = image.Sections;          
-          def sectionHeaders = List.[ISectionHeader]();
-          def sectionMap = Dictionary.[string, ISection]();
+          def sections       = image.Sections;          
+          def sectionHeaders = List();
+          def sectionMap     = Dictionary();
           foreach(section in sections)
           {              
               def header = section.Header;

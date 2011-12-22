@@ -15,7 +15,7 @@ namespace Tao
   {
     protected override CreateHeader() : INTHeader[ulong]
     {
-      NTHeader.[ulong]();
+      NTHeader()
     }
     
     protected override ReadValue(reader : BinaryReader) : ulong

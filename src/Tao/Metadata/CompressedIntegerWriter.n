@@ -32,7 +32,7 @@ namespace Tao
           def highByte = (wordValue >> 8) :> byte;         
           def lowByte = (wordValue  - (highByte << 8)) :> byte;
           
-          stream.WriteByte((highByte | 0x80 : byte) :> byte);
+          stream.WriteByte(highByte | 0x80 : byte);
           stream.WriteByte(lowByte);
         }
         else 
@@ -91,11 +91,11 @@ namespace Tao
     private WriteWordValue(value : int, [NotNull] stream: Stream) : void
     {
       mutable absoluteValue = Math.Abs(value) :> ushort;
-      absoluteValue = (absoluteValue << 1) :> ushort;
+      absoluteValue = absoluteValue << 1;
       mutable wordValue : ushort = 0;
       if (value < 0)
       {
-        wordValue = (absoluteValue | 1) :> ushort;
+        wordValue = absoluteValue | 1us;
       }
       else
       {
@@ -104,8 +104,8 @@ namespace Tao
         
       // Add the top '10' bits to mark this value
       // as a compressed word
-      def compressionMask : ushort = 2 << 14;
-      wordValue = (wordValue | compressionMask) :> ushort;
+      def compressionMask : ushort = 2us << 14;
+      wordValue = wordValue | compressionMask;
         
       def highByte = (wordValue >> 8) :> byte;         
       def lowByte = (wordValue  - (highByte << 8)) :> byte;
@@ -117,10 +117,10 @@ namespace Tao
     {
       mutable absoluteValue = Math.Abs(value) :> byte;        
       mutable byteValue : byte = 0;
-      absoluteValue = (absoluteValue << 1) :> byte;
+      absoluteValue = absoluteValue << 1b;
       if (value < 0)
       {
-        byteValue = (absoluteValue | 1) :> byte;
+        byteValue = absoluteValue | 1b;
       }
       else
       {          
@@ -135,7 +135,7 @@ namespace Tao
       tempWriter.Write(value : uint);
           
       def bytes = tempStream.ToArray();
-      def byteList = List.[byte](bytes);
+      def byteList = List(bytes);
       byteList.Reverse();
           
       def writer = BinaryWriter(stream);

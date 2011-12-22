@@ -10,10 +10,10 @@ using System.Linq;
 
 namespace Tao
 {
-  public class AssemblySchemaWriter : ISchemaWriter.[AssemblyRow]
+  public class AssemblySchemaWriter : ISchemaWriter[AssemblyRow]
   {
-    public WriteRow([NotNull] row : AssemblyRow,  [NotNull] rowCounts : IDictionary.[TableId, uint], 
-        [NotNull] rowWriter : IRowWriter.[AssemblyRow]) : void
+    public WriteRow([NotNull] row : AssemblyRow,  [NotNull] rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter[AssemblyRow]) : void
     {
       rowWriter.WriteDword(row.HashAlgId);
       

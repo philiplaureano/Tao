@@ -11,7 +11,7 @@ namespace Tao
 {
   public variant Index
   {
-    |Narrow { Value : ushort; }
-    |Wide   { Value : uint; }    
+    | Narrow { Value : ushort; }
+    | Wide   { Value : uint; }    
   }
 }

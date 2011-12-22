@@ -12,9 +12,9 @@ using System.Linq;
 
 namespace Tao
 {
-  public class TypeDefSchemaWriter : ISchemaWriter.[TypeDefRow]
+  public class TypeDefSchemaWriter : ISchemaWriter[TypeDefRow]
   {
-    public WriteRow([NotNull] row : TypeDefRow, [NotNull] rowCounts : IDictionary.[TableId, uint], [NotNull] rowWriter : IRowWriter.[TypeDefRow]) : void
+    public WriteRow([NotNull] row : TypeDefRow, [NotNull] rowCounts : IDictionary[TableId, uint], [NotNull] rowWriter : IRowWriter.[TypeDefRow]) : void
     {
       rowWriter.WriteDword(row.Flags);
       rowWriter.WriteStringIndex(row.get_TypeName);
