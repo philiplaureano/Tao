@@ -44,6 +44,11 @@
       <AssemblyName>nunit.core.dll</AssemblyName>
       <HintPath>..\..\tools\nunit\lib\nunit.core.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.core.interfaces, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Name>nunit.core.interfaces</Name>
+      <AssemblyName>nunit.core.interfaces.dll</AssemblyName>
+      <HintPath>..\..\tools\nunit\lib\nunit.core.interfaces.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <Name>nunit.framework</Name>
       <AssemblyName>nunit.framework.dll</AssemblyName>
@@ -69,7 +74,6 @@
     <Reference Include="Nemerle">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(Nemerle)\Nemerle.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <MacroReference Include="Nemerle.Linq">
       <HintPath>$(Nemerle)\Nemerle.Linq.dll</HintPath>
@@ -274,7 +278,7 @@
   </ItemGroup>
   <Import Project="$(Nemerle)\Nemerle.MSBuild.targets" />
   <!--
-		To modify your build process, add your task inside one of the targets below and uncomment it. 
+		To modify your build process, add your task inside one of the targets below and uncomment it.
 		Other similar extension points exist, see Microsoft.Common.targets.
 
 	<Target Name="BeforeBuild">
