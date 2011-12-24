@@ -14,34 +14,38 @@ using System.Linq;
 
 namespace Tests
 {  
-  public class ModuleTableReadTests : BaseTableReaderTest[ModuleRow, ModuleTable]
-  {
-    public ShouldBeAbleToReadGeneration() : void
-    {          
-      TestRead(r => r.Generation.ShouldBeEqualTo(0, "Wrong Generation value"));
-    }
-    public ShouldBeAbleToReadName() : void
+    public class ModuleTableReadTests : BaseTableReaderTest[ModuleRow, ModuleTable]
     {
-        TestRead(row => row.Name.ShouldBeEqualTo(0xA : ushort, "Wrong Name value"));
-    }
-    public ShouldBeAbleToReadMvid() : void
-    {
-      TestRead(row => row.Mvid.ShouldBeEqualTo(1 : ushort, "Wrong Mvid value"));
-    }
-    public ShouldBeAbleToReadEncId() : void
-    {
-      TestRead(row => row.EncId.ShouldBeEqualTo(0 : ushort, "Wrong EncId value"));
-    }
-    public ShouldBeAbleToReadEncBaseId() : void
-    {
-      TestRead(row => row.EncBaseId.ShouldBeEqualTo(0 : ushort, "Wrong EncBaseId value"));
-    } 
-    protected override TargetAssemblyFileName : string
-    {
-        get
+        public this()
         {
-            @"..\..\SampleBinaries\Skeleton.exe";
+            base(TableId.Module);
         }
-    } 
-  }
+        public ShouldBeAbleToReadGeneration() : void
+        {          
+            TestRead(r => r.Generation.ShouldBeEqualTo(0, "Wrong Generation value"));
+        }
+        public ShouldBeAbleToReadName() : void
+        {
+            TestRead(row => row.Name.ShouldBeEqualTo(0xA : ushort, "Wrong Name value"));
+        }
+        public ShouldBeAbleToReadMvid() : void
+        {
+            TestRead(row => row.Mvid.ShouldBeEqualTo(1 : ushort, "Wrong Mvid value"));
+        }
+        public ShouldBeAbleToReadEncId() : void
+        {
+            TestRead(row => row.EncId.ShouldBeEqualTo(0 : ushort, "Wrong EncId value"));
+        }
+        public ShouldBeAbleToReadEncBaseId() : void
+        {
+            TestRead(row => row.EncBaseId.ShouldBeEqualTo(0 : ushort, "Wrong EncBaseId value"));
+        } 
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\Skeleton.exe";
+            }
+        } 
+    }
 }

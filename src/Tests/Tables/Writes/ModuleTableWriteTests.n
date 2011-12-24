@@ -15,6 +15,10 @@ namespace Tests
 {
     public class ModuleTableWriteTests : TableWriterTest[ModuleRow, ModuleTable]
     {
+        public this()
+        {
+            base(TableId.Module);
+        }
         public ShouldBeAbleToWriteGeneration() : void
         {          
             def rowIndex = 0;

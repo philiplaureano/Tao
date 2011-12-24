@@ -14,36 +14,50 @@ using System.Linq;
 
 namespace Tests
 {
-  public abstract class BaseTableReaderTest[TRowType, TTableType] : FileBasedTableTest
+    public abstract class BaseTableReaderTest[TRowType, TTableType] : FileBasedTableTest
     where TTableType : IMetadataTable[TRowType], class
-  {
-    protected TestRead(testRow : TRowType -> void, rowIndex : int = 0) : void
-    {      
-      TestRead.[TRowType, TTableType](testRow, rowIndex);
-    }
-    
-    protected TestRead[TRow, TTable](testRow : TRow -> void, rowIndex : int = 0) : void    
-        where TTable : IMetadataTable[TRow]
     {
-      def stream = MemoryStream(GetTableStreamData());
-      
-      // Skip past the header stream
-      def headerReader = MetadataTablesHeaderReader();
-      def header = headerReader.Read(stream);            
-      
-      def sortedTables = array(0) : array[TableId];
-      def heapSizes = header.HeapSizes;
-      
-      def rowCounts = header.Rows;      
-      
-      def aggregateTable = AggregateTable();
-      aggregateTable.Read(heapSizes, rowCounts, sortedTables, stream);
-      
-      def tables      = aggregateTable.Tables;
-      def targetTable = tables.Where(t => t.GetType() == typeof(TTable)).First() :> TTable;
-      
-      def row = targetTable.Rows[rowIndex];
-      testRow(row);
-    }       
-  }
+        private _tableId : TableId;
+        protected this(targetTableId : TableId)
+        {
+            _tableId = targetTableId;
+        }
+
+        protected TestRead(testRow : TRowType -> void, rowIndex : int = 0) : void
+        {      
+            TestRead.[TRowType, TTableType](testRow, rowIndex);
+        }
+
+        protected TestRead[TRow, TTable](testRow : TRow -> void, rowIndex : int = 0) : void    
+        where TTable : IMetadataTable[TRow]
+        {
+            def stream = MemoryStream(GetTableStreamData());
+
+    // Skip past the header stream
+            def headerReader = MetadataTablesHeaderReader();
+            def header = headerReader.Read(stream);            
+
+            def sortedTables = array(0) : array[TableId];
+            def heapSizes = header.HeapSizes;
+
+            def rowCounts = header.Rows;
+            
+            // Make sure that the reader only reads every table up to
+            // the target table ID
+            def targetIdsForRemoval = rowCounts.Keys.Where(k => (k :> uint) > (_tableId :> uint)).ToArray();
+            foreach(key in targetIdsForRemoval)
+            {
+                rowCounts[key] = 0;
+            }
+
+            def aggregateTable = AggregateTable();
+            aggregateTable.Read(heapSizes, rowCounts, sortedTables, stream);
+
+            def tables      = aggregateTable.Tables;
+            def targetTable = tables.Where(t => t.GetType() == typeof(TTable)).First() :> TTable;
+
+            def row = targetTable.Rows[rowIndex];
+            testRow(row);
+        }       
+    }
 }

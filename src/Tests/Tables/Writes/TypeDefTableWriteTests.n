@@ -13,6 +13,10 @@ namespace Tests
 {
     public class TypeDefTableWriteTests : TableWriterTest[TypeDefRow, TypeDefTable]
     {
+        public this()
+        {
+            base(TableId.TypeDef);
+        }
         public ShouldWriteFlags() : void
         {
             def rowIndex = 0;

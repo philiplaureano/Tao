@@ -14,102 +14,117 @@ using System.Linq;
 
 namespace Tests
 {
-  public abstract class BaseTableWriterTest : FileBasedTableTest
-  {
-    protected TestWrite[TRow, TTable](rowIndex : int, value : Index, getValue : TRow -> Index, failureMessage : string, params args : array[object]) : void
+    public abstract class BaseTableWriterTest : FileBasedTableTest
     {
-      TestWrite(rowIndex, value, getValue, (actual, expected) => actual.IsEqualTo(expected), failureMessage, args);
-    }
-    protected TestWrite[T, TRow, TTable](rowIndex : int, value : T, getValue : TRow -> T, failureMessage : string, params args : array[object]) : void
-    {
-      TestWrite(rowIndex, value, getValue, (actual, expected) => object.Equals(actual, expected), failureMessage, args);
-    }    
-    protected TestWrite[T, TRow, TTable](rowIndex : int, value : T, getValue : TRow -> T, compareValue: T * T-> bool,
+        private _tableId : TableId;
+        protected this(targetTableId : TableId)
+        {
+            _tableId = targetTableId;
+        }
+        
+        protected TestWrite[TRow, TTable](rowIndex : int, value : Index, getValue : TRow -> Index, failureMessage : string, params args : array[object]) : void
+        {
+            TestWrite(rowIndex, value, getValue, (actual, expected) => actual.IsEqualTo(expected), failureMessage, args);
+        }
+        protected TestWrite[T, TRow, TTable](rowIndex : int, value : T, getValue : TRow -> T, failureMessage : string, params args : array[object]) : void
+        {
+            TestWrite(rowIndex, value, getValue, (actual, expected) => object.Equals(actual, expected), failureMessage, args);
+        }    
+        protected TestWrite[T, TRow, TTable](rowIndex : int, value : T, getValue : TRow -> T, compareValue: T * T-> bool,
         failureMessage : string, params args : array[object]) : void
         where TTable : IMetadataTable[TRow], class
-    {
-      def compareRows(actualRow : TRow, expectedRow : TRow, getValue : TRow -> T, failureMessage : string) : void
-      {
-        def currentValue = getValue(actualRow);
-        def expectedValue = getValue(expectedRow);
-        
-        // If the expected value does not match the given value, that means the read failed        
-        compareValue(expectedValue, value).ShouldBeTrue("Metadata Table Read Failed for '{0}' row type", typeof(TRow).Name);                
-        
-        // If the current value does not match the expected value, that means that the write failed
-        compareValue(expectedValue, currentValue).ShouldBeTrue(failureMessage, args);
-      };
-      TestWrite.[TRow, TTable](compareRows(_, _, getValue, failureMessage), rowIndex);
-    }    
-    protected TestWrite[TRow, TTable](compareRows : TRow * TRow -> void, rowIndex : int = 0) : void
-        where TTable : IMetadataTable[TRow], class
-    { 
-      def heapSizeFlags = array(0) : array[HeapSizeFlags];
-      
-      def aggregateTable = AggregateTable();
-                              
-      // Read the expected data
-      def inputStream = MemoryStream(GetTableStreamData());
-      def headerReader = MetadataTablesHeaderReader();
-      def header = headerReader.Read(inputStream); 
-      // TODO: Convert the header heap size flags to a list of heap size flags
-      
-      def expectedRow = ReadRow(inputStream, aggregateTable);
-            
-      // Write the target table (this assumes that the target table is part of the aggregate)
-      def outputStream = MemoryStream();
-      def headerWriter = MetadataTablesHeaderWriter();
-      headerWriter.Write(header, outputStream);
-      aggregateTable.Write(heapSizeFlags, header.Rows, outputStream);
-                  
-      def tables : IEnumerable.[IMetadataTable] = aggregateTable.Tables;
-      mutable targetTable : TTable = null;
-      
-      foreach(table in tables)
-      {
-        when (typeof(TTable).IsAssignableFrom(table.GetType()))
         {
-          targetTable = table :> TTable;
-        }
-      }
-      
-      targetTable.ShouldBeNotNull("Unable to find the target table type '{0}'", typeof(TTable));
-      
-      def actualRow = targetTable.Rows[rowIndex];
-      
-      compareRows(actualRow, expectedRow);
-    }
+            def compareRows(actualRow : TRow, expectedRow : TRow, getValue : TRow -> T, failureMessage : string) : void
+            {
+                def currentValue = getValue(actualRow);
+                def expectedValue = getValue(expectedRow);
 
-    private ReadRow[TRow, TTable](inputStream : Stream, aggregateTable : AggregateTable, rowIndex : int = 0) : TRow
+        // If the expected value does not match the given value, that means the read failed        
+                compareValue(expectedValue, value).ShouldBeTrue("Metadata Table Read Failed for '{0}' row type", typeof(TRow).Name);                
+
+        // If the current value does not match the expected value, that means that the write failed
+                compareValue(expectedValue, currentValue).ShouldBeTrue(failureMessage, args);
+            };
+            TestWrite.[TRow, TTable](compareRows(_, _, getValue, failureMessage), rowIndex);
+        }    
+        protected TestWrite[TRow, TTable](compareRows : TRow * TRow -> void, rowIndex : int = 0) : void
         where TTable : IMetadataTable[TRow], class
-    {
-      def stream = MemoryStream(GetTableStreamData());
-      
-      // Skip past the header stream
-      def headerReader = MetadataTablesHeaderReader();
-      def header = headerReader.Read(stream);            
-      
-      def sortedTables = array(0) : array[TableId];
-      def heapSizes = header.HeapSizes;
-      
-      def rowCounts = header.Rows;            
-      aggregateTable.Read(heapSizes, rowCounts, sortedTables, stream);
-      
-      def tables : IEnumerable.[IMetadataTable] = aggregateTable.Tables;
-      mutable targetTable : TTable = null;
-      
-      foreach(table in tables)
-      {
-        when (typeof(TTable).IsAssignableFrom(table.GetType()))
-        {
-          targetTable = table :> TTable;
+        { 
+            def heapSizeFlags = array(0) : array[HeapSizeFlags];
+
+            def aggregateTable = AggregateTable();
+
+            // Read the expected data
+            def inputStream = MemoryStream(GetTableStreamData());
+            def headerReader = MetadataTablesHeaderReader();
+            def header = headerReader.Read(inputStream); 
+            // TODO: Convert the header heap size flags to a list of heap size flags
+
+            def expectedRow = ReadRow(inputStream, aggregateTable);
+
+            // Write the target table (this assumes that the target table is part of the aggregate)
+            def outputStream = MemoryStream();
+            def headerWriter = MetadataTablesHeaderWriter();
+            headerWriter.Write(header, outputStream);
+            aggregateTable.Write(heapSizeFlags, header.Rows, outputStream);
+
+            def tables : IEnumerable.[IMetadataTable] = aggregateTable.Tables;
+            mutable targetTable : TTable = null;
+
+            foreach(table in tables)
+            {
+                when (typeof(TTable).IsAssignableFrom(table.GetType()))
+                {
+                targetTable = table :> TTable;
+                }
+            }
+
+            targetTable.ShouldBeNotNull("Unable to find the target table type '{0}'", typeof(TTable));
+
+            def actualRow = targetTable.Rows[rowIndex];
+
+            compareRows(actualRow, expectedRow);
         }
-      }
-      
-      targetTable.ShouldBeNotNull("Unable to find the target table type '{0}'", typeof(TTable));
-      def row = targetTable.Rows[rowIndex];
-      
-      row;
-    }    
-  }
+
+        private ReadRow[TRow, TTable](inputStream : Stream, aggregateTable : AggregateTable, rowIndex : int = 0) : TRow
+            where TTable : IMetadataTable[TRow], class
+        {
+            def stream = MemoryStream(GetTableStreamData());
+
+            // Skip past the header stream
+            def headerReader = MetadataTablesHeaderReader();
+            def header = headerReader.Read(stream);            
+
+            def sortedTables = array(0) : array[TableId];
+            def heapSizes = header.HeapSizes;
+
+            def rowCounts = header.Rows;
+
+            // Make sure that the reader only reads every table up to
+            // the target table ID
+            def targetIdsForRemoval = rowCounts.Keys.Where(k => (k :> uint) > (_tableId :> uint)).ToArray();
+            foreach(key in targetIdsForRemoval)
+            {
+                rowCounts[key] = 0;
+            }
+
+            aggregateTable.Read(heapSizes, rowCounts, sortedTables, stream);
+
+            def tables : IEnumerable.[IMetadataTable] = aggregateTable.Tables;
+            mutable targetTable : TTable = null;
+
+            foreach(table in tables)
+            {
+                when (typeof(TTable).IsAssignableFrom(table.GetType()))
+                {
+                targetTable = table :> TTable;
+                }
+            }
+
+            targetTable.ShouldBeNotNull("Unable to find the target table type '{0}'", typeof(TTable));
+            def row = targetTable.Rows[rowIndex];
+
+            row;
+        }    
+    }
 }

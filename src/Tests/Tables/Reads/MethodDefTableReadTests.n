@@ -11,38 +11,42 @@ using System.Linq;
 
 namespace Tests
 {
-  public class MethodDefTableReadTests : BaseTableReaderTest[MethodDefRow, MethodDefTable]
-  {
-    public ShouldReadRva() : void
+    public class MethodDefTableReadTests : BaseTableReaderTest[MethodDefRow, MethodDefTable]
     {
-      TestRead(r => r.Rva.ShouldBeEqualTo(0x00002050 : uint, "Invalid Rva"));
-    }
-    public ShouldReadImplFlags() : void
-    {
-      TestRead(r => r.ImplFlags.ShouldBeEqualTo(0 : ushort, "Invalid ImplFlags"));
-    }
-    public ShouldReadFlags() : void
-    {
-      TestRead(r => r.Flags.ShouldBeEqualTo(0x16 : ushort, "Invalid Flags"));
-    }
-    public ShouldReadName() : void
-    {
-      TestRead(r => r.Name.ShouldBeEqualTo(0x17 : ushort, "Invalid Name"));
-    }
-    public ShouldReadSignature() : void
-    {
-      TestRead(r => r.Signature.ShouldBeEqualTo(1 : ushort, "Invalid Signature"));
-    }    
-    public ShouldReadParamList() : void
-    {
-      TestRead(r => r.ParamList.ShouldBeEqualTo(1 : ushort, "Invalid ParamList"));
-    }    
-    protected override TargetAssemblyFileName : string
-    {
-        get
+        public this()
         {
-            @"..\..\SampleBinaries\Skeleton.exe";
+            base(TableId.MethodDef);
         }
-    } 
-  }
+        public ShouldReadRva() : void
+        {
+            TestRead(r => r.Rva.ShouldBeEqualTo(0x00002050 : uint, "Invalid Rva"));
+        }
+        public ShouldReadImplFlags() : void
+        {
+            TestRead(r => r.ImplFlags.ShouldBeEqualTo(0 : ushort, "Invalid ImplFlags"));
+        }
+        public ShouldReadFlags() : void
+        {
+            TestRead(r => r.Flags.ShouldBeEqualTo(0x16 : ushort, "Invalid Flags"));
+        }
+        public ShouldReadName() : void
+        {
+            TestRead(r => r.Name.ShouldBeEqualTo(0x17 : ushort, "Invalid Name"));
+        }
+        public ShouldReadSignature() : void
+        {
+            TestRead(r => r.Signature.ShouldBeEqualTo(1 : ushort, "Invalid Signature"));
+        }    
+        public ShouldReadParamList() : void
+        {
+            TestRead(r => r.ParamList.ShouldBeEqualTo(1 : ushort, "Invalid ParamList"));
+        }    
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\Skeleton.exe";
+            }
+        } 
+    }
 }

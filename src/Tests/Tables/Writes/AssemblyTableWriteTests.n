@@ -15,6 +15,10 @@ namespace Tests
 {
   public class AssemblyTableWriteTests : TableWriterTest[AssemblyRow, AssemblyTable]
   {
+    public this()
+    {
+        base(TableId.Assembly);
+    }
     public ShouldWriteHashAlgId() : void
     {
       TestWrite.[uint](0, 0 : uint, r => r.HashAlgId, "Invalid HashAlgId");

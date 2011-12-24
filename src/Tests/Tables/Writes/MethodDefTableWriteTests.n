@@ -14,6 +14,10 @@ namespace Tests
 {
     public class MethodDefTableWriteTests : TableWriterTest[MethodDefRow, MethodDefTable]
     {
+        public this()
+        {
+            base(TableId.MethodDef);
+        }
         public ShouldWriteRva() : void
         {
             TestWrite.[uint](0, 0x00002050 : uint, r => r.Rva, "Invalid Rva");

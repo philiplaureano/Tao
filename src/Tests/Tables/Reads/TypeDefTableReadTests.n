@@ -14,39 +14,43 @@ using System.Linq;
 
 namespace Tests
 {
-  public class TypeDefTableReadTests : BaseTableReaderTest[TypeDefRow, TypeDefTable]
-  {
-    public ShouldReadFlags() : void
+    public class TypeDefTableReadTests : BaseTableReaderTest[TypeDefRow, TypeDefTable]
     {
-      TestRead(r => r.Flags.ShouldBeEqualTo(0 : uint, "Invalid Flags value"));
-    }
-    public ShouldReadTypeName() : void
-    {
-      TestRead(r => r.TypeName.ShouldBeEqualTo(1 : ushort, "Invalid TypeName index"));
-    }
-    public ShouldReadTypeNamespace() : void
-    {
-      TestRead(r => r.TypeNamespace.ShouldBeEqualTo(0 : ushort, "Invalid TypeNamespace index"));
-    }
-    public ShouldReadExtends() : void
-    {
-      TestRead(r => r.Extends.ShouldBeEqualTo(0 : ushort, "Invalid Extends index"));
-    }
-    public ShouldReadFieldList() : void
-    {
-      TestRead(r => r.FieldList.ShouldBeEqualTo(1 : ushort, "Invalid FieldList index"));
-    }
-    public ShouldReadMethodList() : void
-    {
-      TestRead(r => r.MethodList.ShouldBeEqualTo(1 : ushort, "Invalid MethodList index"));
-    }
-    
-    protected override TargetAssemblyFileName : string
-    {
-        get
+        public this()
         {
-            @"..\..\SampleBinaries\Skeleton.exe";
+            base(TableId.TypeDef);
         }
-    } 
-  }
+        public ShouldReadFlags() : void
+        {
+            TestRead(r => r.Flags.ShouldBeEqualTo(0 : uint, "Invalid Flags value"));
+        }
+        public ShouldReadTypeName() : void
+        {
+            TestRead(r => r.TypeName.ShouldBeEqualTo(1 : ushort, "Invalid TypeName index"));
+        }
+        public ShouldReadTypeNamespace() : void
+        {
+            TestRead(r => r.TypeNamespace.ShouldBeEqualTo(0 : ushort, "Invalid TypeNamespace index"));
+        }
+        public ShouldReadExtends() : void
+        {
+            TestRead(r => r.Extends.ShouldBeEqualTo(0 : ushort, "Invalid Extends index"));
+        }
+        public ShouldReadFieldList() : void
+        {
+            TestRead(r => r.FieldList.ShouldBeEqualTo(1 : ushort, "Invalid FieldList index"));
+        }
+        public ShouldReadMethodList() : void
+        {
+            TestRead(r => r.MethodList.ShouldBeEqualTo(1 : ushort, "Invalid MethodList index"));
+        }
+
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\Skeleton.exe";
+            }
+        } 
+    }
 }
