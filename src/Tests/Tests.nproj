@@ -45,7 +45,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" /-->
-
     <MacroReference Include="Nemerle.Linq">
       <HintPath>$(Nemerle)\Nemerle.Linq.dll</HintPath>
     </MacroReference>
@@ -63,6 +62,10 @@
       <Name>nunit.framework</Name>
       <AssemblyName>nunit.framework.dll</AssemblyName>
       <HintPath>..\..\tools\nunit\framework\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll</HintPath>
     </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -191,6 +194,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\AggregateTableTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\FileBasedTableTest.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\HeapIndexTestExtensions.n">

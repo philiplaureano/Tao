@@ -12,43 +12,38 @@ using System.Linq;
 
 namespace Tests
 {
-  public class MethodDefTableWriteTests : TableWriterTest[MethodDefRow, MethodDefTable]
-  {
-    public ShouldWriteRva() : void
+    public class MethodDefTableWriteTests : TableWriterTest[MethodDefRow, MethodDefTable]
     {
-      TestWrite.[uint](0, 0x00002050 : uint, r => r.Rva, "Invalid Rva");
+        public ShouldWriteRva() : void
+        {
+            TestWrite.[uint](0, 0x00002050 : uint, r => r.Rva, "Invalid Rva");
+        }
+        public ShouldWriteImplFlags() : void
+        {
+            TestWrite.[ushort](0, 0 : ushort, r => r.ImplFlags, "Invalid ImplFlags");
+        }
+        public ShouldWriteFlags() : void
+        {
+            TestWrite.[ushort](0, 0x16 : ushort, r => r.Flags, "Invalid Flags");
+        }
+        public ShouldWriteName() : void
+        {
+            TestWrite(0, Index.Narrow(0x17), r => r.Name, "Invalid Name");
+        }
+        public ShouldWriteSignature() : void
+        {
+            TestWrite(0, Index.Narrow(1), r => r.Signature, "Invalid Signature");
+        }
+        public ShouldWriteParamList() : void
+        {
+            TestWrite(0, Index.Narrow(1), r => r.ParamList, "Invalid ParamList");
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\Skeleton.exe";
+            }
+        } 
     }
-    public ShouldWriteImplFlags() : void
-    {
-      TestWrite.[ushort](0, 0 : ushort, r => r.ImplFlags, "Invalid ImplFlags");
-    }
-    public ShouldWriteFlags() : void
-    {
-      TestWrite.[ushort](0, 0x16 : ushort, r => r.Flags, "Invalid Flags");
-    }
-    public ShouldWriteName() : void
-    {
-      TestWrite(0, Index.Narrow(0x17), r => r.Name, "Invalid Name");
-    }
-    public ShouldWriteSignature() : void
-    {
-      TestWrite(0, Index.Narrow(1), r => r.Signature, "Invalid Signature");
-    }
-    public ShouldWriteParamList() : void
-    {
-      TestWrite(0, Index.Narrow(1), r => r.ParamList, "Invalid ParamList");
-    }
-    protected override GetTableStreamData() : array[byte]
-    {
-    array[
-        0x00 : byte, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x01, 0x45, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
-	    0x00, 0xFA, 0x01, 0x33, 0x00, 0x16, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
-	    0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x01, 0x00, 0x00, 0x00,
-	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00,
-	    0x50, 0x20, 0x00, 0x00, 0x00, 0x00, 0x16, 0x00, 0x17, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00,
-	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	    0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    ];
-    }
-  }
 }

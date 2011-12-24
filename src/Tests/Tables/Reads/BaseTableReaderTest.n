@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Tests
 {
-  public abstract class BaseTableReaderTest[TRowType, TTableType]
+  public abstract class BaseTableReaderTest[TRowType, TTableType] : FileBasedTableTest
     where TTableType : IMetadataTable[TRowType], class
   {
     protected TestRead(testRow : TRowType -> void, rowIndex : int = 0) : void
@@ -44,8 +44,6 @@ namespace Tests
       
       def row = targetTable.Rows[rowIndex];
       testRow(row);
-    }
-    
-    protected abstract GetTableStreamData() : array[byte];
+    }       
   }
 }

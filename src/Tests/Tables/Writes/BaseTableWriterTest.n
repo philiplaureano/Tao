@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Tests
 {
-  public abstract class BaseTableWriterTest
+  public abstract class BaseTableWriterTest : FileBasedTableTest
   {
     protected TestWrite[TRow, TTable](rowIndex : int, value : Index, getValue : TRow -> Index, failureMessage : string, params args : array[object]) : void
     {
@@ -79,7 +79,7 @@ namespace Tests
       
       compareRows(actualRow, expectedRow);
     }
-    protected abstract GetTableStreamData() : array[byte];
+
     private ReadRow[TRow, TTable](inputStream : Stream, aggregateTable : AggregateTable, rowIndex : int = 0) : TRow
         where TTable : IMetadataTable[TRow], class
     {
