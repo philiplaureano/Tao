@@ -1,0 +1,40 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class DeclSecurityTableWriteTests : TableWriterTest[DeclSecurityRow, DeclSecurityTable]
+    {
+        public this()
+        {
+            base(TableId.DeclSecurity);
+        }
+        public ShouldWriteAction() : void
+        {
+            TestWrite.[ushort](5, 6, r=>r.Action, "Invalid Action");
+        }
+        public ShouldWriteParent() : void
+        {
+            TestWrite(5, Index.Wide(0x0000A115), r => r.Parent, "Invalid Parent");
+        }
+        public ShouldWritePermissionSet() : void
+        {
+            TestWrite(5, Index.Wide(0x00018D65), r => r.PermissionSet, "Invalid PermissionSet");
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

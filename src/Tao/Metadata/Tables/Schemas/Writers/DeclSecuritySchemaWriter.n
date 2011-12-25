@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class DeclSecuritySchemaWriter : ISchemaWriter[DeclSecurityRow]
+  {
+      public WriteRow([NotNull] row : DeclSecurityRow, [NotNull] _rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[DeclSecurityRow]) : void
+      {
+          rowWriter.WriteWord(row.Action);
+          rowWriter.WriteIndex(CodedTokenType.HasDeclSecurity, row.get_Parent);
+          rowWriter.WriteBlobIndex(row.get_PermissionSet);
+      }
+  }
+}

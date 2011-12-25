@@ -30,6 +30,7 @@ namespace Tao
             _ = Add(MemberRefTable());
             _ = Add(ConstantTable());
             _ = Add(CustomAttributeTable());
+            _ = Add(DeclSecurityTable());
         }
     }
 }

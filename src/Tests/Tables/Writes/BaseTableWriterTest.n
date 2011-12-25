@@ -59,7 +59,7 @@ namespace Tests
             def header = headerReader.Read(inputStream); 
             
             // TODO: Convert the header heap size flags to a list of heap size flags
-            def expectedRow = ReadRow(inputStream, aggregateTable);
+            def expectedRow = ReadRow(MemoryStream(base.GetTableStreamData()), aggregateTable);
 
             // Write the target table (this assumes that the target table is part of the aggregate)
             def outputStream = MemoryStream();
@@ -85,10 +85,9 @@ namespace Tests
             compareRows(actualRow, expectedRow);
         }
 
-        private ReadRow[TRow, TTable](inputStream : Stream, aggregateTable : AggregateTable, rowIndex : int = 0) : TRow
+        private ReadRow[TRow, TTable](stream : Stream, aggregateTable : AggregateTable, rowIndex : int = 0) : TRow
             where TTable : IMetadataTable[TRow], class
         {
-            def stream = MemoryStream(GetTableStreamData());
 
             // Skip past the header stream
             def headerReader = MetadataTablesHeaderReader();

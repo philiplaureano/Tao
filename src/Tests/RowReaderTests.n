@@ -101,7 +101,7 @@ namespace Tests
       
       mutable index : Index.Narrow = null;
       
-      def setValue(row : object, value : Index) : void
+      def setValue(_row : object, value : Index) : void
       {
           def valueType = value.GetType();
           valueType.ShouldBeEqualTo(typeof(Index.Narrow), "Invalid index type");
@@ -125,7 +125,7 @@ namespace Tests
       def results = List.[uint]();
       mutable index : Index.Wide = null;
       
-      def setValue(row : object, value : Index) : void
+      def setValue(_row : object, value : Index) : void
       {
           def valueType = value.GetType();
           valueType.ShouldBeEqualTo(typeof(Index.Wide), "Invalid index type");
@@ -154,15 +154,11 @@ namespace Tests
       def dummyRow = object();
       
       def results = List.[TValue]();
-      def setValue(row : object, value : TValue) : void
-      {
-        results.Add(value);
-      };
       
       def rowCounts = Dictionary.[TableId, uint]();
       def rowReader = RowReader.[object](heapSizes, rowCounts, reader, dummyRow);      
       def readValue = getReadValue(rowReader);
-      readValue((row, value) => results.Add(value));
+      readValue((_row, value) => results.Add(value));
       
       results[0].ShouldBeEqualTo(expectedValue, "The values don't match");
     }

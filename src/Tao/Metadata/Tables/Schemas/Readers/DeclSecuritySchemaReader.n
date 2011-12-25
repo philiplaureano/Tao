@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class DeclSecuritySchemaReader : ISchemaReader[DeclSecurityRow]
+    {
+        public ReadRowInto([NotNull] _rowCounts : IDictionary[TableId, uint], 
+        _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[DeclSecurityRow]) : void
+        {
+           rowReader.ReadWord((row, value) => row.Action = value);
+           rowReader.ReadIndex(CodedTokenType.HasDeclSecurity, (row, value) => row.Parent = value);
+           rowReader.ReadBlobIndex((row, value) => row.PermissionSet = value);
+        }
+    }
+}

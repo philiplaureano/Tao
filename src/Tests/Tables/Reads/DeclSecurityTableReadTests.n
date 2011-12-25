@@ -1,0 +1,40 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class DeclSecurityTableReadTests : BaseTableReaderTest[DeclSecurityRow, DeclSecurityTable]
+    {        
+        public this()
+        {
+            base(TableId.DeclSecurity);
+        }
+        public ShouldReadAction() : void
+        {
+            TestRead(r => r.Action.ShouldBeEqualTo(6, "Invalid Action"), 10);
+        }
+        public ShouldReadParent() : void
+        {
+            TestRead(r => r.Parent.ShouldBeEqualTo(0x0001378D : uint, "Invalid Parent"), 10);
+        }
+        public ShouldReadPermissionSet() : void
+        {
+            TestRead(r => r.PermissionSet.ShouldBeEqualTo(0x00018D65 : uint, "Invalid PermissionSet"), 10);
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}
