@@ -1,0 +1,24 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class TypeRefSchemaWriter : ISchemaWriter[TypeRefRow]
+  {
+      public WriteRow([NotNull] row : TypeRefRow, [NotNull] rowCounts : IDictionary[TableId, uint], [NotNull] rowWriter : IRowWriter.[TypeRefRow]) : void
+      {
+          rowWriter.WriteIndex(CodedTokenType.ResolutionScope, row.get_ResolutionScope);
+          rowWriter.WriteStringIndex(row.get_TypeName);
+          rowWriter.WriteStringIndex(row.get_TypeNamespace);
+      }
+  }
+}

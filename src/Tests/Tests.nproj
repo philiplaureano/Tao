@@ -217,6 +217,9 @@
     <Compile Include="Tables\Reads\TypeDefTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\Reads\TypeRefTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tables\Writes\AssemblyTableWriteTests.n">
       <SubType>Code</SubType>
     </Compile>

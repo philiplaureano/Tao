@@ -1,0 +1,26 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class TypeRefSchemaReader : ISchemaReader[TypeRefRow]
+  {
+    public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
+      sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[TypeRefRow]) : void
+    {
+        rowReader.ReadIndex(CodedTokenType.ResolutionScope, (row, value) => row.ResolutionScope = value);
+        rowReader.ReadStringIndex((row, value) => row.TypeName = value);
+        rowReader.ReadStringIndex((row, value) => row.TypeNamespace = value);
+    }
+  }
+}

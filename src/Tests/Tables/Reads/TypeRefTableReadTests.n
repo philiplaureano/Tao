@@ -1,0 +1,41 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using Tests.Macros;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class TypeRefTableReadTests : BaseTableReaderTest[TypeRefRow, TypeRefTable]
+    {
+        public this()
+        {
+            base(TableId.TypeRef);
+        }
+        public ShouldReadResolutionScope() : void
+        {
+            TestRead(r => r.ResolutionScope.ShouldBeEqualTo(6 : ushort, "Invalid Resolution Scope"), 2);
+        }
+        public ShouldReadTypeName() : void
+        {
+            TestRead(r => r.TypeName.ShouldBeEqualTo(0x000592E6 : uint, "Invalid TypeName"), 2);
+        }
+        public ShouldReadTypeNamespace() : void
+        {
+            TestRead(r => r.TypeNamespace.ShouldBeEqualTo(0x000592AB : uint, "Invalid TypeNamespace"), 2);
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        } 
+    }
+}

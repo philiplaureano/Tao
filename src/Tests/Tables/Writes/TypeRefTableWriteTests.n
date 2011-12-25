@@ -1,0 +1,43 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class TypeRefTableWriteTests : TableWriterTest[TypeRefRow, TypeRefTable]
+    {
+        public this()
+        {
+            base(TableId.TypeRef);
+        }
+        
+        public ShouldWriteResolutionScope() : void
+        {
+            TestWrite(2, Index.Narrow(6), r => r.ResolutionScope, "Invalid Resolution Scope");
+        }
+        public ShouldWriteTypeName() : void
+        {
+            TestWrite(2, Index.Wide(0x000592E6 : uint), r => r.TypeName, "Invalid TypeName");
+        }
+        public ShouldWriteTypeNamespace() : void
+        {
+            TestWrite(2, Index.Wide(0x000592AB : uint), r => r.TypeNamespace, "Invalid TypeNamespace");
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        } 
+    }
+}
