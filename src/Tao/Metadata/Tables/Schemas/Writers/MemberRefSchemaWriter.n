@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class MemberRefSchemaWriter : ISchemaWriter[MemberRefRow]
+    {
+        public WriteRow([NotNull] row : MemberRefRow, [NotNull] _rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[MemberRefRow]) : void
+        {
+            rowWriter.WriteIndex(CodedTokenType.MemberRefParent, row.get_Class);
+            rowWriter.WriteStringIndex(row.get_Name);
+            rowWriter.WriteBlobIndex(row.get_Signature);
+        }
+    }
+}

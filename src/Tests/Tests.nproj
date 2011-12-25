@@ -214,6 +214,9 @@
     <Compile Include="Tables\Reads\InterfaceImplTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\Reads\MemberRefTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tables\Reads\MethodDefTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -239,6 +242,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Writes\InterfaceImplTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\MemberRefTableWriteTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Writes\MethodDefTableWriteTests.n">

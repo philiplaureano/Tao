@@ -26,14 +26,14 @@ namespace Tao
       mutable result = false;
       
       foreach(tableId in tables)
-      {
-        mutable rowCount : uint = 0;          
+      {          
+        mutable currentCount : uint = 0;
         when(rowCounts.ContainsKey(tableId))
         {
-          rowCount = rowCounts[tableId];
+            currentCount = rowCounts[tableId];
         }
-          
-        def requiresWideIndex = rowCount >= (ushort.MaxValue :> uint);
+        
+        def requiresWideIndex = currentCount > 16383;
         result |= requiresWideIndex;
       }
       
@@ -45,7 +45,7 @@ namespace Tao
       
       when(rowCounts.ContainsKey(tableId))
       {
-        result = rowCounts[tableId] >= (ushort.MaxValue :> uint);
+        result = rowCounts[tableId] > (65535 :> uint);
       }
       
       result;

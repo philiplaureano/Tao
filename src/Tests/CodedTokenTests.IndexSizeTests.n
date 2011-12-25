@@ -96,7 +96,7 @@ namespace Tests
         
         // Widen the row count for the current table
         // and make sure that it uses a wide index
-        rowCounts[currentId] = (ushort.MaxValue + 1) :> uint;        
+        rowCounts[currentId] = (65535 + 1) :> uint;        
         rowCounts.RequiresWideIndices(currentId).ShouldBeTrue("The table '{0}' should be using wide (32-bit) indices", currentId.ToString());        
       }
     }
@@ -117,7 +117,7 @@ namespace Tests
         }
               
         // Max out the row count for the target TableId;
-        rowCounts[tableId] = (ushort.MaxValue + 1) :> uint;
+        rowCounts[tableId] = (16383 + 1) :> uint;
               
         // This dictionary should automatically say that it
         // requires a wide index for the target token type

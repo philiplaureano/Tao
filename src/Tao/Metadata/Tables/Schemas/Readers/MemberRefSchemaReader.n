@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class MemberRefSchemaReader : ISchemaReader[MemberRefRow]
+    {
+        public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
+        _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[MemberRefRow]) : void
+        {
+           rowReader.ReadIndex(CodedTokenType.MemberRefParent, (row, value) => row.Class = value);
+           rowReader.ReadStringIndex((row, value) => row.Name = value);
+           rowReader.ReadBlobIndex((row, value) => row.Signature = value);
+        }
+    }
+}

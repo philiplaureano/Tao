@@ -1,0 +1,40 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class MemberRefTableReadTests : BaseTableReaderTest[MemberRefRow, MemberRefTable]
+    {        
+        public this()
+        {
+            base(TableId.MemberRef);
+        }
+        public ShouldReadClass() : void
+        {
+            TestRead(r => r.Class.ShouldBeEqualTo(0x00000B8C : uint, "Invalid Class"), 5783);
+        }
+        public ShouldReadName() : void
+        {
+            TestRead(r => r.Name.ShouldBeEqualTo(0x000195A0 : uint, "Invalid Name"), 5783);
+        }
+        public ShouldReadSignature() : void
+        {
+            TestRead(r => r.Signature.ShouldBeEqualTo(0x0001B66C : uint, "Invalid Signature"), 5783);
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

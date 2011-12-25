@@ -11,20 +11,24 @@ using System.Linq;
 
 namespace Tests
 {
-    public class InterfaceImplTableWriteTests : TableWriterTest[InterfaceImplRow, InterfaceImplTable]
+    public class MemberRefTableWriteTests : TableWriterTest[MemberRefRow, MemberRefTable]
     {
         public this()
         {
-            base(TableId.InterfaceImpl);
+            base(TableId.MemberRef);
         }
         public ShouldWriteClass() : void
         {
-            TestWrite(42, Index.Narrow(0x005B), r => r.Class, "Invalid Class property");
+            TestWrite(2500, Index.Wide(0x00002634), r => r.Class, "Invalid Class");
         }
-        public ShouldWriteInterface() : void
+        public ShouldWriteName() : void
         {
-            TestWrite(42, Index.Narrow(0x0120), r => r.Interface, "Invalid Interface property");
-        }        
+            TestWrite(2500, Index.Wide(0x00029313), r => r.Name, "Invalid Name");
+        }
+        public ShouldWriteSignature() : void
+        {
+            TestWrite(2500, Index.Wide(0x0001B729), r => r.Signature, "Invalid Signature");
+        }
         protected override TargetAssemblyFileName : string
         {
             get
