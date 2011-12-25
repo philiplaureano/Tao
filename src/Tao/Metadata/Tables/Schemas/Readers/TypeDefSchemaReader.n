@@ -17,7 +17,7 @@ namespace Tao
   public class TypeDefSchemaReader : ISchemaReader[TypeDefRow]
   {
     public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
-      sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[TypeDefRow]) : void
+      _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[TypeDefRow]) : void
     {
       // Read type type flags
       rowReader.ReadDword((row, value) => row.Flags = value);

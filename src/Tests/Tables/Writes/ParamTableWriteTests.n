@@ -1,0 +1,42 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class ParamTableWriteTests : TableWriterTest[ParamRow, ParamTable]
+    {
+        public this()
+        {
+            base(TableId.Param);
+        }
+        
+        public ShouldWriteFlags() : void
+        {
+            TestWrite.[ushort](100, 0, r => r.Flags, "Invalid Flags");
+        }
+        public ShouldWriteSequence() : void
+        {
+            TestWrite.[ushort](100, 0, r => r.Sequence, "Invalid Sequence");
+        }
+        public ShouldWriteName() : void
+        {
+            TestWrite(100, Index.Wide(0x00003AD1), r => r.Name, "Invalid Name");
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        } 
+    }
+}

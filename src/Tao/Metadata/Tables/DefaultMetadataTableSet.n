@@ -25,6 +25,7 @@ namespace Tao
       _ = Add(AssemblyTable());
       _ = Add(TypeRefTable());
       _ = Add(FieldTable());
+      _ = Add(ParamTable());
     }
   }
 }

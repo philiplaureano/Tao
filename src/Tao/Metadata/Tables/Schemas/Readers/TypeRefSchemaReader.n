@@ -16,7 +16,7 @@ namespace Tao
   public class TypeRefSchemaReader : ISchemaReader[TypeRefRow]
   {
     public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
-      sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[TypeRefRow]) : void
+      _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[TypeRefRow]) : void
     {
         rowReader.ReadIndex(CodedTokenType.ResolutionScope, (row, value) => row.ResolutionScope = value);
         rowReader.ReadStringIndex((row, value) => row.TypeName = value);

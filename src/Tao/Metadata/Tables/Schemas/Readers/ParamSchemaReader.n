@@ -4,21 +4,20 @@ using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
-using Tao.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Tao
 {
-    public class FieldSchemaReader : ISchemaReader[FieldRow]
+    public class ParamSchemaReader : ISchemaReader[ParamRow]
     {
         public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
-            _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[FieldRow]) : void
+        _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[ParamRow]) : void
         {
             rowReader.ReadWord((row, value) => row.Flags = value);
+            rowReader.ReadWord((row, value) => row.Sequence = value);
             rowReader.ReadStringIndex((row, value) => row.Name = value);
-            rowReader.ReadBlobIndex((row, value) => row.Signature = value);
         }
     }
 }

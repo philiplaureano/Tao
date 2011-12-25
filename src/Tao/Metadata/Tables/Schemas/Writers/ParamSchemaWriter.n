@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class ParamSchemaWriter : ISchemaWriter[ParamRow]
+  {
+      public WriteRow([NotNull] row : ParamRow, [NotNull] rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[ParamRow]) : void
+      {
+          rowWriter.WriteWord(row.Flags);
+          rowWriter.WriteWord(row.Sequence);
+          rowWriter.WriteStringIndex(row.get_Name);
+      }
+  }
+}
