@@ -1,0 +1,40 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class CustomAttributeTableReadTests : BaseTableReaderTest[CustomAttributeRow, CustomAttributeTable]
+    {        
+        public this()
+        {
+            base(TableId.CustomAttribute);
+        }
+        public ShouldReadParent() : void
+        {
+            TestRead(r => r.Parent.ShouldBeEqualTo(0x00001383 : uint, "Invalid Parent"), 35);
+        }
+        public ShouldReadType() : void
+        {
+            TestRead(r => r.Type.ShouldBeEqualTo(0x0000B073 : uint, "Invalid Type"), 35);
+        }
+        public ShouldReadValue() : void
+        {
+            TestRead(r => r.Value.ShouldBeEqualTo(0x0000AE0B : uint, "Invalid Value"), 35);
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

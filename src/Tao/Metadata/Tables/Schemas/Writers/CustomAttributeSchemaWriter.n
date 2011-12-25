@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class CustomAttributeSchemaWriter : ISchemaWriter[CustomAttributeRow]
+  {
+      public WriteRow([NotNull] row : CustomAttributeRow, [NotNull] _rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[CustomAttributeRow]) : void
+      {
+          rowWriter.WriteIndex(CodedTokenType.HasCustomAttribute, row.get_Parent);
+          rowWriter.WriteIndex(CodedTokenType.CustomAttributeType, row.get_Type);
+          rowWriter.WriteBlobIndex(row.get_Value);
+      }
+  }
+}

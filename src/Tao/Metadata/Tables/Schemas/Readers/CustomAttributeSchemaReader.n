@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class CustomAttributeSchemaReader : ISchemaReader[CustomAttributeRow]
+    {
+        public ReadRowInto([NotNull] _rowCounts : IDictionary[TableId, uint], 
+        _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[CustomAttributeRow]) : void
+        {
+           rowReader.ReadIndex(CodedTokenType.HasCustomAttribute, (row, value) => row.Parent = value);
+           rowReader.ReadIndex(CodedTokenType.CustomAttributeType, (row, value) => row.Type = value);
+           rowReader.ReadBlobIndex((row, value) => row.Value = value);
+        }
+    }
+}
