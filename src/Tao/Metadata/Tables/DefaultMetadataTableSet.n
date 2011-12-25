@@ -28,6 +28,7 @@ namespace Tao
             _ = Add(ParamTable());
             _ = Add(InterfaceImplTable());
             _ = Add(MemberRefTable());
+            _ = Add(ConstantTable());
         }
     }
 }

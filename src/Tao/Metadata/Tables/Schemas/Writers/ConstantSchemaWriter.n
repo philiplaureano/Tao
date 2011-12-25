@@ -1,0 +1,27 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class ConstantSchemaWriter : ISchemaWriter[ConstantRow]
+  {
+      public WriteRow([NotNull] row : ConstantRow, [NotNull] _rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[ConstantRow]) : void
+      {
+          rowWriter.WriteByte(row.Type);
+          
+          // Write the padding byte
+          rowWriter.WriteByte(0);
+          
+          rowWriter.WriteIndex(CodedTokenType.HasConstant, row.get_Parent);
+          rowWriter.WriteBlobIndex(row.get_Value);
+      }
+  }
+}

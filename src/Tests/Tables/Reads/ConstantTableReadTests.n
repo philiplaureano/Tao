@@ -1,0 +1,41 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class ConstantTableReadTests : BaseTableReaderTest[ConstantRow, ConstantTable]
+    {        
+        public this()
+        {
+            base(TableId.Constant);
+        }
+        
+        public ShouldReadType() : void
+        {
+            TestRead(r => r.Type.ShouldBeEqualTo(8, "Invalid Type"), 32);
+        }
+        public ShouldReadParent() : void
+        {
+            TestRead(r => r.Parent.ShouldBeEqualTo(0x000006D4 : uint, "Invalid Parent"), 32);
+        }
+        public ShouldReadValue() : void
+        {
+            TestRead(r => r.Value.ShouldBeEqualTo(0x00006964 : uint, "Invalid Value"), 32);
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

@@ -222,6 +222,9 @@
     <Compile Include="Metadata\Tables\CodedTokenTableMap.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\ConstantTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\DefaultMetadataTableSet.n">
       <SubType>Code</SubType>
     </Compile>
@@ -285,6 +288,9 @@
     <Compile Include="Metadata\Tables\Rows\AssemblyRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\ConstantRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\FieldRow.n">
       <SubType>Code</SubType>
     </Compile>
@@ -321,6 +327,9 @@
     <Compile Include="Metadata\Tables\Schemas\Readers\AssemblySchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\ConstantSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\FieldSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -346,6 +355,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\AssemblySchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\ConstantSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\FieldSchemaWriter.n">

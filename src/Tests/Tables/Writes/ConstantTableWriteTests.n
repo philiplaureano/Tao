@@ -1,0 +1,40 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class ConstantTableWriteTests : TableWriterTest[ConstantRow, ConstantTable]
+    {
+        public this()
+        {
+            base(TableId.Constant);
+        }
+        public ShouldWriteType() : void
+        {
+            TestWrite.[byte](220, 08, r => r.Type, "Invalid Type");
+        }
+        public ShouldWriteParent() : void
+        {
+            TestWrite(220, Index.Wide(0x00001CCC), r => r.Parent, "Invalid Parent");
+        }
+        public ShouldWriteValue() : void
+        {
+            TestWrite(220, Index.Wide(0x00007DE7), r => r.Value, "Invalid Value");
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

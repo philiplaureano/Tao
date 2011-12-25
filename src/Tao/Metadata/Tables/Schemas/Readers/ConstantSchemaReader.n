@@ -1,0 +1,26 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class ConstantSchemaReader : ISchemaReader[ConstantRow]
+    {
+        public ReadRowInto([NotNull] _rowCounts : IDictionary[TableId, uint], 
+        _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[ConstantRow]) : void
+        {
+           rowReader.ReadByte((row, value) => row.Type = value);
+           
+           // Ignore the padding byte
+           rowReader.ReadByte((_row, _value) => {});           
+           rowReader.ReadIndex(CodedTokenType.HasConstant, (row, value) => row.Parent = value);
+           rowReader.ReadBlobIndex((row, value) => row.Value = value);
+        }
+    }
+}
