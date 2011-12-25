@@ -52,14 +52,13 @@ namespace Tests
         { 
             def heapSizeFlags = array(0) : array[HeapSizeFlags];
 
-            def aggregateTable = AggregateTable();
-
+            def aggregateTable = AggregateTable();            
             // Read the expected data
             def inputStream = MemoryStream(GetTableStreamData());
             def headerReader = MetadataTablesHeaderReader();
             def header = headerReader.Read(inputStream); 
+            
             // TODO: Convert the header heap size flags to a list of heap size flags
-
             def expectedRow = ReadRow(inputStream, aggregateTable);
 
             // Write the target table (this assumes that the target table is part of the aggregate)

@@ -225,6 +225,9 @@
     <Compile Include="Metadata\Tables\DefaultMetadataTableSet.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\FieldTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\IMetadataTable.n">
       <SubType>Code</SubType>
     </Compile>
@@ -273,6 +276,9 @@
     <Compile Include="Metadata\Tables\Rows\AssemblyRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\FieldRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\MethodDefRow.n">
       <SubType>Code</SubType>
     </Compile>
@@ -288,40 +294,46 @@
     <Compile Include="Metadata\Tables\RowWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Tables\Schemas\AssemblySchemaReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\Schemas\AssemblySchemaWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Metadata\Tables\Schemas\ISchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\ISchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Tables\Schemas\MethodDefSchemaReader.n">
+    <Compile Include="Metadata\Tables\Schemas\Readers\AssemblySchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Tables\Schemas\MethodDefSchemaWriter.n">
+    <Compile Include="Metadata\Tables\Schemas\Readers\FieldSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Tables\Schemas\ModuleSchemaReader.n">
+    <Compile Include="Metadata\Tables\Schemas\Readers\MethodDefSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Tables\Schemas\ModuleSchemaWriter.n">
+    <Compile Include="Metadata\Tables\Schemas\Readers\ModuleSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Tables\Schemas\TypeDefSchemaReader.n">
+    <Compile Include="Metadata\Tables\Schemas\Readers\TypeDefSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Tables\Schemas\TypeDefSchemaWriter.n">
+    <Compile Include="Metadata\Tables\Schemas\Readers\TypeRefSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Tables\Schemas\TypeRefSchemaReader.n">
+    <Compile Include="Metadata\Tables\Schemas\Writers\AssemblySchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Tables\Schemas\TypeRefSchemaWriter.n">
+    <Compile Include="Metadata\Tables\Schemas\Writers\FieldSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\MethodDefSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\ModuleSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\TypeDefSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\TypeRefSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\SortedBitVectorExtensions.n">
@@ -422,6 +434,8 @@
     <Folder Include="Metadata\Tables" />
     <Folder Include="Metadata\Tables\Schemas" />
     <Folder Include="Metadata\Tables\Rows" />
+    <Folder Include="Metadata\Tables\Schemas\Readers" />
+    <Folder Include="Metadata\Tables\Schemas\Writers" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,24 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class FieldSchemaReader : ISchemaReader[FieldRow]
+    {
+        public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
+            sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[FieldRow]) : void
+        {
+            rowReader.ReadWord((row, value) => row.Flags = value);
+            rowReader.ReadStringIndex((row, value) => row.Name = value);
+            rowReader.ReadBlobIndex((row, value) => row.Signature = value);
+        }
+    }
+}

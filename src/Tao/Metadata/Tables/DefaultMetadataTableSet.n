@@ -24,6 +24,7 @@ namespace Tao
       _ = Add(MethodDefTable());
       _ = Add(AssemblyTable());
       _ = Add(TypeRefTable());
+      _ = Add(FieldTable());
     }
   }
 }

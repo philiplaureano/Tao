@@ -1,0 +1,41 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tests.Macros;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class FieldTableReadTests : BaseTableReaderTest[FieldRow, FieldTable]
+    {
+        public this()
+        {
+            base(TableId.Field);
+        }
+        public ShouldReadFlags() : void
+        {
+            TestRead(r => r.Flags.ShouldBeEqualTo(0x8054 : ushort, "Invalid Flags"), 42);
+        }
+        public ShouldReadName() : void
+        {
+            TestRead(r => r.Name.ShouldBeEqualTo(0x0000093A : uint, "Invalid Name"), 42);
+        }
+        public ShouldReadSignature() : void
+        {
+            TestRead(r => r.Signature.ShouldBeEqualTo(0x00018E99 : uint, "Invalid Signature"), 42);
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        } 
+    }
+}
