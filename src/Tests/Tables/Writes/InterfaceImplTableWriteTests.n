@@ -1,0 +1,37 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class InterfaceImplTableWriteTests : TableWriterTest[InterfaceImplRow, InterfaceImplTable]
+    {
+        public this()
+        {
+            base(TableId.InterfaceImpl);
+        }
+        public ShouldWriteClass() : void
+        {
+            TestWrite(42, Index.Narrow(0x005B), r => r.Class, "Invalid Class property");
+        }
+        public ShouldWriteInterface() : void
+        {
+            TestWrite(42, Index.Narrow(0x0120), r => r.Interface, "Invalid Interface property");
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

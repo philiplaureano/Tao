@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class InterfaceImplSchemaWriter : ISchemaWriter[InterfaceImplRow]
+  {
+      public WriteRow([NotNull] row : InterfaceImplRow, [NotNull] _rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[InterfaceImplRow]) : void
+      {
+          rowWriter.WriteIndex(TableId.TypeDef, row.get_Class);
+          rowWriter.WriteIndex(CodedTokenType.TypeDefOrTypeRef, row.get_Interface);
+      }
+  }
+}

@@ -15,17 +15,18 @@ using System.Linq;
 
 namespace Tao
 {
-  public class DefaultMetadataTableSet : HashSet[IMetadataTable]
-  {
-    public this()
+    public class DefaultMetadataTableSet : HashSet[IMetadataTable]
     {
-      _ = Add(ModuleTable());
-      _ = Add(TypeDefTable());
-      _ = Add(MethodDefTable());
-      _ = Add(AssemblyTable());
-      _ = Add(TypeRefTable());
-      _ = Add(FieldTable());
-      _ = Add(ParamTable());
+        public this()
+        {
+            _ = Add(ModuleTable());
+            _ = Add(TypeDefTable());
+            _ = Add(MethodDefTable());
+            _ = Add(AssemblyTable());
+            _ = Add(TypeRefTable());
+            _ = Add(FieldTable());
+            _ = Add(ParamTable());
+            _ = Add(InterfaceImplTable());
+        }
     }
-  }
 }

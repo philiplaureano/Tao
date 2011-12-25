@@ -237,6 +237,9 @@
     <Compile Include="Metadata\Tables\IndexExtensions.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\InterfaceImplTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\IRowReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -282,6 +285,9 @@
     <Compile Include="Metadata\Tables\Rows\FieldRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\InterfaceImplRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\MethodDefRow.n">
       <SubType>Code</SubType>
     </Compile>
@@ -312,6 +318,9 @@
     <Compile Include="Metadata\Tables\Schemas\Readers\FieldSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\InterfaceImplSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\MethodDefSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -331,6 +340,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\FieldSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\InterfaceImplSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\MethodDefSchemaWriter.n">
