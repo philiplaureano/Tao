@@ -1,0 +1,43 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class ClassLayoutTableReadTests : BaseTableReaderTest[ClassLayoutRow, ClassLayoutTable]
+    {        
+        public this()
+        {
+            base(TableId.ClassLayout);
+        }
+        
+        public ShouldReadPackingSize() : void
+        {
+            TestRead(r => r.PackingSize.ShouldBeEqualTo(1, "Invalid PackingSize"), 5);
+        }
+        
+        public ShouldReadClassSize() : void
+        {
+            TestRead(r => r.ClassSize.ShouldBeEqualTo(1, "Invalid ClassSize"), 3);
+        }
+        public ShouldReadParent() : void
+        {
+            TestRead(r => r.Parent.ShouldBeEqualTo(0x0431 : ushort, "Invalid Parent"));
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

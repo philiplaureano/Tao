@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class ClassLayoutSchemaWriter : ISchemaWriter[ClassLayoutRow]
+  {
+      public WriteRow([NotNull] row : ClassLayoutRow, [NotNull] _ : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[ClassLayoutRow]) : void
+      {
+          rowWriter.WriteWord(row.PackingSize);
+          rowWriter.WriteDword(row.ClassSize);
+          rowWriter.WriteIndex(TableId.TypeDef, row.get_Parent);
+      }
+  }
+}

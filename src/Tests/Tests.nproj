@@ -208,6 +208,9 @@
     <Compile Include="Tables\Reads\BaseTableReaderTest.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\Reads\ClassLayoutTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tables\Reads\ConstantTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -245,6 +248,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Writes\BaseTableWriterTest.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\ClassLayoutWriteTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Writes\ConstantTableWriteTests.n">
