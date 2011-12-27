@@ -1,0 +1,41 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class MethodSemanticsTableReadTests : BaseTableReaderTest[MethodSemanticsRow, MethodSemanticsTable]
+    {        
+        public this()
+        {
+            base(TableId.MethodSemantics);
+        }
+        public ShouldReadSemantics() : void
+        {
+            TestRead(r => r.Semantics.ShouldBeEqualTo(8 : ushort, "Invalid Semantics"), 42);
+        }
+        public ShouldReadMethod() : void
+        {
+            TestRead(r => r.Method.ShouldBeEqualTo(0x3633 : ushort, "Invalid Method"), 42);
+        }
+        public ShouldReadAssociation() : void
+        {
+            TestRead(r => r.Association.ShouldBeEqualTo(0x001E : ushort, "Invalid Association"), 42);
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

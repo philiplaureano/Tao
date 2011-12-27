@@ -1,0 +1,41 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class MethodSemanticsTableWriteTests : TableWriterTest[MethodSemanticsRow, MethodSemanticsTable]
+    {
+        public this()
+        {
+            base(TableId.MethodSemantics);
+        }
+        public ShouldWriteSemantics() : void
+        {
+            TestWrite.[ushort](450, 2, r => r.Semantics, "Invalid Semantics");
+        }
+        public ShouldWriteMethod() : void
+        {
+            TestWrite(450, Index.Narrow(0x0443), r => r.Method, "Invalid Method");
+        }
+        public ShouldWriteAssociation() : void
+        {
+            TestWrite(450, Index.Narrow(0x025F), r => r.Association, "Invalid Association");
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

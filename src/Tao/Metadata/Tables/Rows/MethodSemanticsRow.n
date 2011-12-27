@@ -1,0 +1,18 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MethodSemanticsRow
+  {
+      public Semantics : ushort { get; set; }
+      public Method : Index { get; set; }
+      public Association : Index { get; set; }
+  }
+}

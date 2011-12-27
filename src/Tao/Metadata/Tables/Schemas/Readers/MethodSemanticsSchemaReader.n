@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class MethodSemanticsSchemaReader : ISchemaReader[MethodSemanticsRow]
+    {
+        public ReadRowInto([NotNull] _ : IDictionary[TableId, uint], 
+        _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[MethodSemanticsRow]) : void
+        {
+           rowReader.ReadWord((row, value) => row.Semantics = value);
+           rowReader.ReadIndex(TableId.MethodDef, (row, value) => row.Method = value);
+           rowReader.ReadIndex(CodedTokenType.HasSemantics, (row, value) => row.Association = value);
+        }
+    }
+}

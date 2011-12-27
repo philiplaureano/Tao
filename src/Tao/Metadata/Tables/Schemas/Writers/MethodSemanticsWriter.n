@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MethodSemanticsSchemaWriter : ISchemaWriter[MethodSemanticsRow]
+  {
+      public WriteRow([NotNull] row : MethodSemanticsRow, [NotNull] _rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[MethodSemanticsRow]) : void
+      {
+          rowWriter.WriteWord(row.Semantics);
+          rowWriter.WriteIndex(TableId.MethodDef, row.get_Method);
+          rowWriter.WriteIndex(CodedTokenType.HasSemantics, row.get_Association);
+      }
+  }
+}
