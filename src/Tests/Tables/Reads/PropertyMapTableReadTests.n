@@ -1,0 +1,36 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class PropertyMapTableReadTests : BaseTableReaderTest[PropertyMapRow, PropertyMapTable]
+    {        
+        public this()
+        {
+            base(TableId.PropertyMap);
+        }
+        public ShouldReadParent() : void
+        {
+            TestRead(r => r.Parent.ShouldBeEqualTo(0x0042 : ushort, "Invalid Parent"), 30);
+        }
+        public ShouldReadPropertyList() : void
+        {
+            TestRead(r => r.PropertyList.ShouldBeEqualTo(0x0061 : ushort, "Invalid PropertyList"), 30);
+        }        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

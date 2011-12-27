@@ -1,0 +1,40 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class EventTableReadTests : BaseTableReaderTest[EventRow, EventTable]
+    {        
+        public this()
+        {
+            base(TableId.Event);
+        }
+        public ShouldReadEventFlags() : void
+        {
+            TestRead(r => r.EventFlags.ShouldBeEqualTo(0 : ushort, "Invalid EventFlags"), 44);
+        }
+        public ShouldReadName() : void
+        {
+            TestRead(r => r.Name.ShouldBeEqualTo(0x000006D3 : uint, "Invalid Name"), 29);
+        }
+        public ShouldReadEventType() : void
+        {
+            TestRead(r => r.EventType.ShouldBeEqualTo(0x17D8 : ushort, "Invalid EventType"), 40);
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

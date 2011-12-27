@@ -244,6 +244,9 @@
     <Compile Include="Tables\Reads\ParamTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\Reads\PropertyMapTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tables\Reads\StandAloneSigTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -293,6 +296,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Writes\ParamTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\PropertyMapTableWriteTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Writes\StandAloneSigTableWriteTests.n">

@@ -1,0 +1,40 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class EventTableWriteTests : TableWriterTest[EventRow, EventTable]
+    {
+        public this()
+        {
+            base(TableId.Event);
+        }
+        public ShouldWriteEventFlags() : void
+        {
+            TestWrite.[ushort](12, 0, r => r.EventFlags, "Invalid EventFlags");
+        }
+        public ShouldWriteName() : void
+        {
+            TestWrite(13, Index.Wide(0x000005BA), r => r.Name, "Invalid Name");
+        }
+        public ShouldWriteEventType() : void
+        {
+            TestWrite(40, Index.Narrow(0x17D8), r => r.EventType, "Invalid EventType");
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

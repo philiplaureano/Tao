@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class PropertyMapSchemaReader : ISchemaReader[PropertyMapRow]
+    {
+        public ReadRowInto([NotNull] _ : IDictionary[TableId, uint], 
+        _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[PropertyMapRow]) : void
+        {
+           rowReader.ReadIndex(TableId.TypeDef, (row, value) => row.Parent = value);
+           rowReader.ReadIndex(TableId.Property, (row, value) => row.PropertyList = value);
+        }
+    }
+}

@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class EventSchemaWriter : ISchemaWriter[EventRow]
+  {
+      public WriteRow([NotNull] row : EventRow, [NotNull] _rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[EventRow]) : void
+      {
+          rowWriter.WriteDword(row.EventFlags);
+          rowWriter.WriteStringIndex(row.get_Name);
+          rowWriter.WriteIndex(CodedTokenType.TypeDefOrTypeRef, row.get_EventType);
+      }
+  }
+}
