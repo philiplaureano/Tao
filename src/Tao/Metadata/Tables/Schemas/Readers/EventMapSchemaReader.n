@@ -15,8 +15,8 @@ namespace Tao
         public ReadRowInto([NotNull] _ : IDictionary[TableId, uint], 
         _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[EventMapRow]) : void
         {
-           rowReader.ReadIndex(TableId.TypeDef, (row, value) => row.Parent = value);
-           rowReader.ReadIndex(TableId.Event, (row, value) => row.EventList = value);
+            rowReader.ReadIndex(TableId.TypeDef, r => r.set_Parent : (Index -> void));
+            rowReader.ReadIndex(TableId.Event, r => r.set_EventList : (Index -> void));
         }
     }
 }

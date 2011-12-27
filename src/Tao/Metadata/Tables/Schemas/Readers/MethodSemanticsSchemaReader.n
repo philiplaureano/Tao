@@ -15,9 +15,9 @@ namespace Tao
         public ReadRowInto([NotNull] _ : IDictionary[TableId, uint], 
         _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[MethodSemanticsRow]) : void
         {
-           rowReader.ReadWord((row, value) => row.Semantics = value);
-           rowReader.ReadIndex(TableId.MethodDef, (row, value) => row.Method = value);
-           rowReader.ReadIndex(CodedTokenType.HasSemantics, (row, value) => row.Association = value);
+            rowReader.ReadWord(r => r.set_Semantics);
+            rowReader.ReadIndex(TableId.MethodDef, r => r.set_Method : (Index -> void));
+            rowReader.ReadIndex(CodedTokenType.HasSemantics, r => r.set_Association : (Index -> void));
         }
     }
 }

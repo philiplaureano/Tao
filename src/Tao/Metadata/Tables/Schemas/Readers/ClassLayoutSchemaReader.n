@@ -15,9 +15,9 @@ namespace Tao
         public ReadRowInto([NotNull] _ : IDictionary[TableId, uint], 
         _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[ClassLayoutRow]) : void
         {
-           rowReader.ReadWord((row, value) => row.PackingSize = value);
-           rowReader.ReadDword((row, value) => row.ClassSize = value);
-           rowReader.ReadIndex(TableId.TypeDef, (row, value) => row.Parent = value);
+            rowReader.ReadWord(r => r.set_PackingSize);
+            rowReader.ReadDword(r => r.set_ClassSize);
+            rowReader.ReadIndex(TableId.TypeDef, r => r.set_Parent : (Index -> void));
         }
     }
 }

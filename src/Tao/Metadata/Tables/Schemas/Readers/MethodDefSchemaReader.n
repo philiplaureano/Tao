@@ -12,16 +12,16 @@ using System.Linq;
 
 namespace Tao
 {
-  public class MethodDefSchemaReader : ISchemaReader[MethodDefRow]
-  {
-    public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], _sortedTables: IEnumerable.[TableId], [NotNull] rowReader : IRowReader.[MethodDefRow]) : void
+    public class MethodDefSchemaReader : ISchemaReader[MethodDefRow]
     {
-      rowReader.ReadDword((row, value) => row.Rva = value);
-      rowReader.ReadWord((row, value) => row.ImplFlags = value);
-      rowReader.ReadWord((row, value) => row.Flags = value);
-      rowReader.ReadStringIndex((row, value) => row.Name = value);
-      rowReader.ReadBlobIndex((row, value) => row.Signature = value);
-      rowReader.ReadIndex(TableId.Param, (row, value) => row.ParamList = value);
+        public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], _sortedTables: IEnumerable.[TableId], [NotNull] rowReader : IRowReader.[MethodDefRow]) : void
+        {        
+            rowReader.ReadDword(r => r.set_Rva);
+            rowReader.ReadWord(r => r.set_ImplFlags);
+            rowReader.ReadWord(r => r.set_Flags);
+            rowReader.ReadStringIndex(r => r.set_Name);
+            rowReader.ReadBlobIndex(r => r.set_Signature);
+            rowReader.ReadIndex(TableId.Param, r => r.set_ParamList : (Index -> void));
+        }
     }
-  }
 }

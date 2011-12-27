@@ -15,12 +15,12 @@ namespace Tao
         public ReadRowInto([NotNull] _rowCounts : IDictionary[TableId, uint], 
         _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[ConstantRow]) : void
         {
-           rowReader.ReadByte((row, value) => row.Type = value);
+           rowReader.ReadByte(r => r.set_Type);
            
            // Ignore the padding byte
-           rowReader.ReadByte((_row, _value) => {});           
-           rowReader.ReadIndex(CodedTokenType.HasConstant, (row, value) => row.Parent = value);
-           rowReader.ReadBlobIndex((row, value) => row.Value = value);
+           rowReader.ReadByte((_, _) => {});           
+           rowReader.ReadIndex(CodedTokenType.HasConstant, r => r.set_Parent);
+           rowReader.ReadBlobIndex(r => r.set_Value);
         }
     }
 }

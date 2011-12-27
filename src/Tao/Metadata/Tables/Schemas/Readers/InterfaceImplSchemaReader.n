@@ -14,9 +14,9 @@ namespace Tao
     {
         public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
         _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[InterfaceImplRow]) : void
-        {
-            rowReader.ReadIndex(TableId.TypeDef, (row, value) => row.Class = value);
-            rowReader.ReadIndex(CodedTokenType.TypeDefOrTypeRef, (row, value) => row.Interface = value);
+        {            
+            rowReader.ReadIndex(TableId.TypeDef, r => r.set_Class : (Index -> void));
+            rowReader.ReadIndex(CodedTokenType.TypeDefOrTypeRef, r => r.set_Interface : (Index -> void));
         }
     }
 }

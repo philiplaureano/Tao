@@ -14,28 +14,29 @@ using System.Linq;
 
 namespace Tao
 {
-  public class TypeDefSchemaReader : ISchemaReader[TypeDefRow]
-  {
-    public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
-      _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[TypeDefRow]) : void
+    public class TypeDefSchemaReader : ISchemaReader[TypeDefRow]
     {
-      // Read type type flags
-      rowReader.ReadDword((row, value) => row.Flags = value);
-      
-      // Read the TypeName
-      rowReader.ReadStringIndex((row, value) => row.TypeName = value);
-      
-      // Read the TypeNamespace
-      rowReader.ReadStringIndex((row, value) => row.TypeNamespace = value);
-      
-      // Read the Extends column
-      rowReader.ReadIndex(CodedTokenType.TypeDefOrTypeRef, (row, value) => row.Extends = value);
-      
-      // Read the FieldList column
-      rowReader.ReadIndex(TableId.Field, (row, value) => row.FieldList = value);
-      
-      // Read the MethodList column      
-      rowReader.ReadIndex(TableId.MethodDef, (row, value) => row.MethodList = value);
+        public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
+    _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[TypeDefRow]) : void
+        {
+            // Read type type flags       
+            rowReader.ReadDword(r => r.set_Flags);
+
+            // Read the TypeName
+            //rowReader.ReadStringIndex((row, value) => row.TypeName = value);
+            rowReader.ReadStringIndex(r => r.set_TypeName);
+
+            // Read the TypeNamespace
+            rowReader.ReadStringIndex(r => r.set_TypeNamespace);
+
+            // Read the Extends column
+            rowReader.ReadIndex(CodedTokenType.TypeDefOrTypeRef, r => r.set_Extends : (Index -> void));
+
+            // Read the FieldList column
+            rowReader.ReadIndex(TableId.Field, r => r.set_FieldList : (Index -> void));
+
+            // Read the MethodList column      
+            rowReader.ReadIndex(TableId.MethodDef, r => r.set_MethodList : (Index -> void));
+        }
     }
-  }
 }

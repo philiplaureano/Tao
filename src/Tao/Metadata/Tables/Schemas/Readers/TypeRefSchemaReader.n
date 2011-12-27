@@ -18,9 +18,9 @@ namespace Tao
     public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
       _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[TypeRefRow]) : void
     {
-        rowReader.ReadIndex(CodedTokenType.ResolutionScope, (row, value) => row.ResolutionScope = value);
-        rowReader.ReadStringIndex((row, value) => row.TypeName = value);
-        rowReader.ReadStringIndex((row, value) => row.TypeNamespace = value);
+        rowReader.ReadIndex(CodedTokenType.ResolutionScope, r => r.set_ResolutionScope : (Index -> void));
+        rowReader.ReadStringIndex(r => r.set_TypeName);
+        rowReader.ReadStringIndex(r => r.set_TypeNamespace);
     }
   }
 }

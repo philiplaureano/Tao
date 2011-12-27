@@ -15,9 +15,9 @@ namespace Tao
         public ReadRowInto([NotNull] _rowCounts : IDictionary[TableId, uint], 
         _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[CustomAttributeRow]) : void
         {
-           rowReader.ReadIndex(CodedTokenType.HasCustomAttribute, (row, value) => row.Parent = value);
-           rowReader.ReadIndex(CodedTokenType.CustomAttributeType, (row, value) => row.Type = value);
-           rowReader.ReadBlobIndex((row, value) => row.Value = value);
+            rowReader.ReadIndex(CodedTokenType.HasCustomAttribute, r => r.set_Parent : (Index -> void));
+            rowReader.ReadIndex(CodedTokenType.CustomAttributeType, r => r.set_Type : (Index -> void));
+            rowReader.ReadBlobIndex(r => r.set_Value);
         }
     }
 }

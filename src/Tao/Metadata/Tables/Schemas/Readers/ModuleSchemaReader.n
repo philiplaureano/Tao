@@ -12,24 +12,24 @@ using System.Linq;
 
 namespace Tao
 {
-  public class ModuleSchemaReader : ISchemaReader[ModuleRow]
-  {
-    public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], _sortedTables: IEnumerable[TableId], [NotNull] rowReader : IRowReader[ModuleRow]) : void
+    public class ModuleSchemaReader : ISchemaReader[ModuleRow]
     {
-      // Read the generation column
-      rowReader.ReadWord((row, value) => row.Generation = value);
+        public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], _sortedTables: IEnumerable[TableId], [NotNull] rowReader : IRowReader[ModuleRow]) : void
+        {
+            // Read the generation column
+            rowReader.ReadWord(r => r.set_Generation);            
+            
+            // Read the Name column
+            rowReader.ReadStringIndex(r => r.set_Name);
 
-      // Read the Name column
-      rowReader.ReadStringIndex((row, value) => row.Name = value);
-    
-      // Read the Mvid column
-      rowReader.ReadGuidIndex((row, value) => row.Mvid = value);
-    
-      // Read the EncId column
-      rowReader.ReadGuidIndex((row, value) => row.EncId = value);
-    
-      // Read the EncBaseId column
-      rowReader.ReadGuidIndex((row, value) => row.EncBaseId = value);
+            // Read the Mvid column
+            rowReader.ReadGuidIndex(r => r.set_Mvid);
+
+            // Read the EncId column
+            rowReader.ReadGuidIndex(r => r.set_EncId);
+
+            // Read the EncBaseId column
+            rowReader.ReadGuidIndex(r => r.set_EncBaseId);
+        }
     }
-  }
 }

@@ -15,9 +15,9 @@ namespace Tao
         public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
         _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[ParamRow]) : void
         {
-            rowReader.ReadWord((row, value) => row.Flags = value);
-            rowReader.ReadWord((row, value) => row.Sequence = value);
-            rowReader.ReadStringIndex((row, value) => row.Name = value);
+            rowReader.ReadWord(r => r.set_Flags);
+            rowReader.ReadWord(r => r.set_Sequence);
+            rowReader.ReadStringIndex(r => r.set_Name);
         }
     }
 }

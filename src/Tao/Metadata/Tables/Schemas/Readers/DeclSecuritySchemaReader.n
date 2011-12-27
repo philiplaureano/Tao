@@ -15,9 +15,9 @@ namespace Tao
         public ReadRowInto([NotNull] _rowCounts : IDictionary[TableId, uint], 
         _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[DeclSecurityRow]) : void
         {
-           rowReader.ReadWord((row, value) => row.Action = value);
-           rowReader.ReadIndex(CodedTokenType.HasDeclSecurity, (row, value) => row.Parent = value);
-           rowReader.ReadBlobIndex((row, value) => row.PermissionSet = value);
+            rowReader.ReadWord(r => r.set_Action);
+            rowReader.ReadIndex(CodedTokenType.HasDeclSecurity, r => r.set_Parent);
+            rowReader.ReadBlobIndex(r => r.set_PermissionSet);
         }
     }
 }

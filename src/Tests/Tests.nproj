@@ -48,6 +48,11 @@
     <MacroReference Include="Nemerle.Linq">
       <HintPath>$(Nemerle)\Nemerle.Linq.dll</HintPath>
     </MacroReference>
+    <Reference Include="Nemerle, Version=1.1.406.0, Culture=neutral, PublicKeyToken=e080a9c724e2bfcd">
+      <Name>Nemerle</Name>
+      <AssemblyName>Nemerle.dll</AssemblyName>
+      <HintPath>..\..\..\..\Program Files (x86)\Nemerle\net-4.0\Nemerle.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.core, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <Name>nunit.core</Name>
       <AssemblyName>nunit.core.dll</AssemblyName>

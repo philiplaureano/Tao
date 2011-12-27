@@ -15,17 +15,17 @@ namespace Tao
     public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
         _sortedTables: IEnumerable[TableId], [NotNull] rowReader : IRowReader.[AssemblyRow]) : void
     {
-      rowReader.ReadDword((r, value) => r.HashAlgId = value);
+      rowReader.ReadDword(r => r.set_HashAlgId);
       
-      rowReader.ReadWord((r, value) => r.MajorVersion = value);
-      rowReader.ReadWord((r, value) => r.MinorVersion = value);
-      rowReader.ReadWord((r, value) => r.BuildNumber = value);
-      rowReader.ReadWord((r, value) => r.RevisionNumber = value);
+      rowReader.ReadWord(r => r.set_MajorVersion);
+      rowReader.ReadWord(r => r.set_MinorVersion);
+      rowReader.ReadWord(r => r.set_BuildNumber);
+      rowReader.ReadWord(r => r.set_RevisionNumber);
       
-      rowReader.ReadDword((r, value) => r.Flags = value);
-      rowReader.ReadBlobIndex((r, value) => r.PublicKey = value);
-      rowReader.ReadStringIndex((r, value) => r.Name = value);
-      rowReader.ReadStringIndex((r, value) => r.Culture = value);      
+      rowReader.ReadDword(r => r.set_Flags);
+      rowReader.ReadBlobIndex(r => r.set_PublicKey);
+      rowReader.ReadStringIndex(r => r.set_Name);
+      rowReader.ReadStringIndex(r => r.set_Culture);
     }
   }
 }

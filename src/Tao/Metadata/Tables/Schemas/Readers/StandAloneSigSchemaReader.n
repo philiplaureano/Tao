@@ -15,7 +15,7 @@ namespace Tao
         public ReadRowInto([NotNull] _ : IDictionary[TableId, uint], 
         _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[StandAloneSigRow]) : void
         {
-           rowReader.ReadBlobIndex((row, value) => row.Signature = value);
+            rowReader.ReadBlobIndex(r => r.set_Signature);
         }
     }
 }
