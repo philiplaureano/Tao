@@ -237,6 +237,9 @@
     <Compile Include="Metadata\Tables\DefaultMetadataTableSet.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\EventMapTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\FieldTable.n">
       <SubType>Code</SubType>
     </Compile>
@@ -309,6 +312,9 @@
     <Compile Include="Metadata\Tables\Rows\DeclSecurityRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\EventMapRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\FieldRow.n">
       <SubType>Code</SubType>
     </Compile>
@@ -360,6 +366,9 @@
     <Compile Include="Metadata\Tables\Schemas\Readers\DeclSecuritySchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\EventMapSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\FieldSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -400,6 +409,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\DeclSecuritySchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\EventMapSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\FieldSchemaWriter.n">

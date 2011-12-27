@@ -33,6 +33,7 @@ namespace Tao
             _ = Add(DeclSecurityTable());  
             _ = Add(ClassLayoutTable());
             _ = Add(StandAloneSigTable());
+            _ = Add(EventMapTable());
         }
     }
 }

@@ -1,0 +1,36 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class EventMapTableWriteTests : TableWriterTest[EventMapRow, EventMapTable]
+    {
+        public this()
+        {
+            base(TableId.EventMap);
+        }
+        public ShouldWriteParent() : void
+        {
+            TestWrite(1, Index.Narrow(0x0131), r => r.Parent, "Invalid Parent");            
+        }        
+        public ShouldWriteEventList() : void
+        {
+            TestWrite(3, Index.Narrow(0x0004), r => r.EventList, "Invalid EventList");
+        }        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}
