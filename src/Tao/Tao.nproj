@@ -294,6 +294,9 @@
     <Compile Include="Metadata\Tables\PropertyMapTable.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\PropertyTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\RowCountExtensions.n">
       <SubType>Code</SubType>
     </Compile>
@@ -343,6 +346,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\PropertyMapRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\PropertyRow.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\StandAloneSigRow.n">
@@ -405,6 +411,9 @@
     <Compile Include="Metadata\Tables\Schemas\Readers\PropertyMapSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\PropertySchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\StandAloneSigSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -454,6 +463,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\PropertyMapSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\PropertySchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\StandAloneSigSchemaWriter.n">

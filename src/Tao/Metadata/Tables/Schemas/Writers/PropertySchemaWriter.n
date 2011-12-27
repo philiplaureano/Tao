@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class PropertySchemaWriter : ISchemaWriter[PropertyRow]
+  {
+      public WriteRow([NotNull] row : PropertyRow, [NotNull] _rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[PropertyRow]) : void
+      {
+          rowWriter.WriteWord(row.Flags);
+          rowWriter.WriteStringIndex(row.get_Name);
+          rowWriter.WriteBlobIndex(row.get_Type);
+      }
+  }
+}

@@ -247,6 +247,9 @@
     <Compile Include="Tables\Reads\PropertyMapTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\Reads\PropertyTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tables\Reads\StandAloneSigTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
