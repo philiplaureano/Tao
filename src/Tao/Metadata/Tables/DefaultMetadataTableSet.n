@@ -32,6 +32,7 @@ namespace Tao
             _ = Add(CustomAttributeTable());
             _ = Add(DeclSecurityTable());  
             _ = Add(ClassLayoutTable());
+            _ = Add(StandAloneSigTable());
         }
     }
 }

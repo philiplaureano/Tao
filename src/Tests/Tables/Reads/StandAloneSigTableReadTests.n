@@ -1,0 +1,33 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class StandAloneSigTableReadTests : BaseTableReaderTest[StandAloneSigRow, StandAloneSigTable]
+    {        
+        public this()
+        {
+            base(TableId.StandAloneSig);
+        }
+        public ShouldReadSignature() : void
+        {
+            TestRead(r => r.Signature.ShouldBeEqualTo(0x00018E99 : uint, "Invalid Signature"), 11);
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

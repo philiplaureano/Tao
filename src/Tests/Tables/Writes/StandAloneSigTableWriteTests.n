@@ -1,0 +1,33 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class StandAloneSigTableWriteTests : TableWriterTest[StandAloneSigRow, StandAloneSigTable]
+    {
+        public this()
+        {
+            base(TableId.StandAloneSig);
+        }
+        public ShouldWriteSignature() : void
+        {
+            TestWrite(140, Index.Wide(0x00019836), r => r.Signature, "Invalid Signature");
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}
