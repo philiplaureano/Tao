@@ -223,6 +223,9 @@
     <Compile Include="Tables\Reads\EventMapTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\Reads\EventTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tables\Reads\FieldTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -269,6 +272,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Writes\EventMapTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\EventTableWriteTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Writes\FieldTableWriteTests.n">

@@ -34,6 +34,7 @@ namespace Tao
             _ = Add(ClassLayoutTable());
             _ = Add(StandAloneSigTable());
             _ = Add(EventMapTable());
+            _ = Add(EventTable());
         }
     }
 }
