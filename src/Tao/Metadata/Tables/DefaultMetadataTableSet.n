@@ -40,6 +40,7 @@ namespace Tao
             _ = Add(MethodSemanticsTable());
             _ = Add(MethodImplTable());
             _ = Add(TypeSpecTable());
+            _ = Add(FieldRvaTable());
         }
     }
 }

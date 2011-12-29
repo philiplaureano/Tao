@@ -1,0 +1,37 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class FieldRvaTableReadTests : BaseTableReaderTest[FieldRvaRow, FieldRvaTable]
+    {        
+        public this()
+        {
+            base(TableId.FieldRVA);
+        }
+        public ShouldReadRva() : void
+        {
+            TestRead(r => r.Rva.ShouldBeEqualTo(0x0014B128, "Invalid Rva"), 20);
+        }
+        public ShouldReadField() : void
+        {
+            TestRead(r => r.Field.ShouldBeEqualTo(0x1BB5, "Invalid Field"), 20);
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

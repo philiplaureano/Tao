@@ -103,6 +103,10 @@ namespace Tests
     {
       Test(CodedTokenType.TypeOrMethodDef, 1);
     }
+    public ShouldBeAbleTOReportTheCorrectNumberOfBitsToEncodeHasFieldMarshall() : void
+    {
+        Test(CodedTokenType.HasFieldMarshall, 1);
+    }
     
     public ShouldBeAbleToConvertCodedTokenIntoTableIdAndRow() : void
     {

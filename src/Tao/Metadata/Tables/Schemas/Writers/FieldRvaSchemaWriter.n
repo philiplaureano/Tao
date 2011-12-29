@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class FieldRvaSchemaWriter : ISchemaWriter[FieldRvaRow]
+  {
+      public WriteRow([NotNull] row : FieldRvaRow, [NotNull] _rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[FieldRvaRow]) : void
+      {
+          rowWriter.WriteDword(row.Rva);
+          rowWriter.WriteIndex(TableId.Field, row.get_Field);
+      }
+  }
+}
