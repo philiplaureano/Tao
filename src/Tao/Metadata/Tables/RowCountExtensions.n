@@ -25,6 +25,11 @@ namespace Tao
       def tables = _entries[tokenType];
       mutable result = false;
       
+      def bitCountMap = CodedTokenBitCountMap();
+      def bits = bitCountMap[tokenType] :> int;
+      def leftShift = (16 - bits);
+      def maxRows = (1 << leftShift) :> uint;
+      
       foreach(tableId in tables)
       {          
         mutable currentCount : uint = 0;
@@ -33,7 +38,7 @@ namespace Tao
             currentCount = rowCounts[tableId];
         }
         
-        def requiresWideIndex = currentCount > 16383;
+        def requiresWideIndex = currentCount > maxRows;
         result |= requiresWideIndex;
       }
       

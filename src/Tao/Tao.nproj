@@ -372,6 +372,9 @@
     <Compile Include="Metadata\Tables\Rows\TypeRefRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\TypeSpecRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\RowWriter.n">
       <SubType>Code</SubType>
     </Compile>
@@ -441,6 +444,9 @@
     <Compile Include="Metadata\Tables\Schemas\Readers\TypeRefSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\TypeSpecSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\AssemblySchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
@@ -501,6 +507,9 @@
     <Compile Include="Metadata\Tables\Schemas\Writers\TypeRefSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\TypeSpecSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\SortedBitVectorExtensions.n">
       <SubType>Code</SubType>
     </Compile>
@@ -514,6 +523,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\TypeRefTable.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\TypeSpecTable.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\TagMap.n">

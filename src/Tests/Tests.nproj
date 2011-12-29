@@ -270,6 +270,9 @@
     <Compile Include="Tables\Reads\TypeRefTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\Reads\TypeSpecTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tables\Writes\AssemblyTableWriteTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -334,6 +337,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Writes\TypeRefTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\TypeSpecTableWriteTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tester.n">

@@ -13,117 +13,123 @@ using System.Linq;
 
 namespace Tests
 {
-  public partial class CodedTokenTests
-  {
-    public ShouldUseCorrectIndexFor_TypeDefOrRef_CodedIndices() : void
-    {      
-      TestIndexWidth(CodedTokenType.TypeDefOrTypeRef, TableId.TypeDef, TableId.TypeRef, TableId.TypeSpec);
-    }
-    public ShouldUseCorrectIndexFor_HasConstant_CodedIndices() : void
+    public partial class CodedTokenTests
     {
-      TestIndexWidth(CodedTokenType.HasConstant, array[TableId.Field, TableId.Param, TableId.Property]);
-    }
-    public ShouldUseCorrectIndexFor_HasFieldMarshall_CodedIndices() : void
-    {
-      TestIndexWidth(CodedTokenType.HasFieldMarshall, array[TableId.Field, TableId.Param]);
-    }    
-    public ShouldUseCorrectIndexFor_HasDeclSecurity_CodedIndices() : void
-    {
-      TestIndexWidth(CodedTokenType.HasDeclSecurity, array[TableId.TypeDef, TableId.MethodDef, TableId.Assembly]);
-    }
-    public ShouldUseCorrectIndexFor_HasSemantics_CodedIndices() : void
-    {
-      TestIndexWidth(CodedTokenType.HasSemantics, array[TableId.Event, TableId.Property]);
-    }
-    public ShouldUseCorrectIndexFor_MemberForwarded_CodedIndices() : void
-    {
-      TestIndexWidth(CodedTokenType.MemberForwarded, array[TableId.Field, TableId.MethodDef]);
-    }
-    public ShouldUseCorrectIndexFor_Implementation_CodedIndices() : void
-    {
-      TestIndexWidth(CodedTokenType.Implementation, array[TableId.File, TableId.AssemblyRef, TableId.ExportedType]);
-    }
-    public ShouldUseCorrectIndexFor_CustomAttributeType_CodedIndices() : void
-    {
-      TestIndexWidth(CodedTokenType.CustomAttributeType, array[TableId.MethodDef, TableId.MemberRef]);
-    }
-    public ShouldUseCorrectIndexFor_MemberRefParent_CodedIndices() : void
-    {
-      TestIndexWidth(CodedTokenType.MemberRefParent, array[TableId.TypeDef, TableId.TypeRef, TableId.ModuleRef, TableId.MethodDef, TableId.TypeSpec]);
-    }
-    public ShouldUseCorrectIndexFor_ResolutionScope_CodedIndices() : void
-    {
-      TestIndexWidth(CodedTokenType.ResolutionScope, array[TableId.Module, TableId.ModuleRef, TableId.AssemblyRef, TableId.TypeRef]);
-    }
-    public ShouldUseCorrectIndexFor_TypeOrMethodDef_CodedIndices() : void
-    {
-      TestIndexWidth(CodedTokenType.TypeOrMethodDef, array[TableId.TypeDef, TableId.MethodDef]);
-    }
-    public ShouldUseCorrectIndexFor_HasCustomAttribute_CodedIndices() : void
-    {
-      TestIndexWidth(CodedTokenType.HasCustomAttribute, 
-                       TableId.MethodDef, 
-                       TableId.Field, 
-                       TableId.TypeRef,
-                       TableId.TypeDef,
-                       TableId.Param,
-                       TableId.InterfaceImpl,
-                       TableId.MemberRef,
-                       TableId.Module,
-                       TableId.DeclSecurity,
-                       TableId.Property,
-                       TableId.Event,
-                       TableId.StandAloneSig,
-                       TableId.ModuleRef,
-                       TableId.TypeSpec,
-                       TableId.Assembly,
-                       TableId.AssemblyRef,
-                       TableId.File,
-                       TableId.ExportedType,
-                       TableId.ManifestResource
-                        );
-    }
-    
-    public ShouldUseCorrectIndexForSimpleTokens() : void
-    {
-      foreach(tableId in typeof(TableId).GetEnumValues())
-      {
-        def rowCounts = Dictionary.[TableId, uint]();
-        def currentId = tableId :> TableId;
-        
-        // Make sure that narrow indices are used by default
-        rowCounts.RequiresWideIndices(currentId).ShouldBeFalse("By default, tables should use only narrow (16-bit) indices");
-        
-        // Widen the row count for the current table
-        // and make sure that it uses a wide index
-        rowCounts[currentId] = (65535 + 1) :> uint;        
-        rowCounts.RequiresWideIndices(currentId).ShouldBeTrue("The table '{0}' should be using wide (32-bit) indices", currentId.ToString());        
-      }
-    }
-    private TestIndexWidth(codedTokenType : CodedTokenType, params targetTables : array[TableId]) : void
-    {
-      foreach(tableId in targetTables)
-      {
-        def rowCounts = Dictionary.[TableId, uint]();
-              
-        // The row counts should require a 16-bit index by default
-        rowCounts.RequiresWideIndices(codedTokenType)
-          .ShouldBeFalse("This coded token type should be using a narrow (16-bit) index");
-                
-        // Initialize the row counts
-        foreach(id in targetTables)    
-        {
-          rowCounts[id] = 0;
+        public ShouldUseCorrectIndexFor_TypeDefOrRef_CodedIndices() : void
+        {      
+            TestIndexWidth(CodedTokenType.TypeDefOrTypeRef, TableId.TypeDef, TableId.TypeRef, TableId.TypeSpec);
         }
-              
-        // Max out the row count for the target TableId;
-        rowCounts[tableId] = (16383 + 1) :> uint;
-              
-        // This dictionary should automatically say that it
-        // requires a wide index for the target token type
-        rowCounts.RequiresWideIndices(codedTokenType)
-          .ShouldBeTrue("This coded token type should be using a wide (32-bit) index");
-      }
+        public ShouldUseCorrectIndexFor_HasConstant_CodedIndices() : void
+        {
+            TestIndexWidth(CodedTokenType.HasConstant, array[TableId.Field, TableId.Param, TableId.Property]);
+        }
+        public ShouldUseCorrectIndexFor_HasFieldMarshall_CodedIndices() : void
+        {
+            TestIndexWidth(CodedTokenType.HasFieldMarshall, array[TableId.Field, TableId.Param]);
+        }    
+        public ShouldUseCorrectIndexFor_HasDeclSecurity_CodedIndices() : void
+        {
+            TestIndexWidth(CodedTokenType.HasDeclSecurity, array[TableId.TypeDef, TableId.MethodDef, TableId.Assembly]);
+        }
+        public ShouldUseCorrectIndexFor_HasSemantics_CodedIndices() : void
+        {
+            TestIndexWidth(CodedTokenType.HasSemantics, array[TableId.Event, TableId.Property]);
+        }
+        public ShouldUseCorrectIndexFor_MemberForwarded_CodedIndices() : void
+        {
+            TestIndexWidth(CodedTokenType.MemberForwarded, array[TableId.Field, TableId.MethodDef]);
+        }
+        public ShouldUseCorrectIndexFor_Implementation_CodedIndices() : void
+        {
+            TestIndexWidth(CodedTokenType.Implementation, array[TableId.File, TableId.AssemblyRef, TableId.ExportedType]);
+        }
+        public ShouldUseCorrectIndexFor_CustomAttributeType_CodedIndices() : void
+        {
+            TestIndexWidth(CodedTokenType.CustomAttributeType, array[TableId.MethodDef, TableId.MemberRef]);
+        }
+        public ShouldUseCorrectIndexFor_MemberRefParent_CodedIndices() : void
+        {
+            TestIndexWidth(CodedTokenType.MemberRefParent, array[TableId.TypeDef, TableId.TypeRef, TableId.ModuleRef, TableId.MethodDef, TableId.TypeSpec]);
+        }
+        public ShouldUseCorrectIndexFor_ResolutionScope_CodedIndices() : void
+        {
+            TestIndexWidth(CodedTokenType.ResolutionScope, array[TableId.Module, TableId.ModuleRef, TableId.AssemblyRef, TableId.TypeRef]);
+        }
+        public ShouldUseCorrectIndexFor_TypeOrMethodDef_CodedIndices() : void
+        {
+            TestIndexWidth(CodedTokenType.TypeOrMethodDef, array[TableId.TypeDef, TableId.MethodDef]);
+        }
+        public ShouldUseCorrectIndexFor_HasCustomAttribute_CodedIndices() : void
+        {
+            TestIndexWidth(CodedTokenType.HasCustomAttribute, 
+                           TableId.MethodDef, 
+                           TableId.Field, 
+                           TableId.TypeRef,
+                           TableId.TypeDef,
+                           TableId.Param,
+                           TableId.InterfaceImpl,
+                           TableId.MemberRef,
+                           TableId.Module,
+                           TableId.DeclSecurity,
+                           TableId.Property,
+                           TableId.Event,
+                           TableId.StandAloneSig,
+                           TableId.ModuleRef,
+                           TableId.TypeSpec,
+                           TableId.Assembly,
+                           TableId.AssemblyRef,
+                           TableId.File,
+                           TableId.ExportedType,
+                           TableId.ManifestResource
+                        );
+        }
+
+        public ShouldUseCorrectIndexForSimpleTokens() : void
+        {
+            foreach(tableId in typeof(TableId).GetEnumValues())
+            {
+                def rowCounts = Dictionary.[TableId, uint]();
+                def currentId = tableId :> TableId;
+
+                // Make sure that narrow indices are used by default
+                rowCounts.RequiresWideIndices(currentId).ShouldBeFalse("By default, tables should use only narrow (16-bit) indices");
+
+                // Widen the row count for the current table
+                // and make sure that it uses a wide index
+                rowCounts[currentId] = (65535 + 1) :> uint;        
+                rowCounts.RequiresWideIndices(currentId).ShouldBeTrue("The table '{0}' should be using wide (32-bit) indices", currentId.ToString());        
+            }
+        }
+        private TestIndexWidth(codedTokenType : CodedTokenType, params targetTables : array[TableId]) : void
+        {
+            def bitCountMap = CodedTokenBitCountMap();
+
+            def bits = bitCountMap[codedTokenType] :> int;
+            def leftShift = (16 - bits);
+            def maxRows = (1 << leftShift) :> uint;
+
+            foreach(tableId in targetTables)
+            {
+                def rowCounts = Dictionary.[TableId, uint]();
+                
+                // The row counts should require a 16-bit index by default
+                rowCounts.RequiresWideIndices(codedTokenType)
+                    .ShouldBeFalse("This coded token type should be using a narrow (16-bit) index");
+
+                // Initialize the row counts
+                foreach(id in targetTables)    
+                {
+                    rowCounts[id] = 0;
+                }
+
+                // Max out the row count for the target TableId;
+                rowCounts[tableId] = (maxRows + 1);
+
+                // This dictionary should automatically say that it
+                // requires a wide index for the target token type
+                rowCounts.RequiresWideIndices(codedTokenType)
+                    .ShouldBeTrue("This coded token type should be using a wide (32-bit) index");
+            }
+        }
     }
-  }
 }

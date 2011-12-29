@@ -1,0 +1,33 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class TypeSpecTableWriteTests : TableWriterTest[TypeSpecRow, TypeSpecTable]
+    {
+        public this()
+        {
+            base(TableId.TypeSpec);
+        }
+        public ShouldWriteSignature() : void
+        {
+            TestWrite(50, Index.Wide(0x0000019D), r => r.Signature, "Invalid Signature");
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}
