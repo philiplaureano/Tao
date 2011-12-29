@@ -285,6 +285,9 @@
     <Compile Include="Metadata\Tables\MethodDefTable.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\MethodImplTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\MethodSemanticsTable.n">
       <SubType>Code</SubType>
     </Compile>
@@ -340,6 +343,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\MethodDefRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\MethodImplRow.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\MethodSemanticsRow.n">
@@ -408,6 +414,9 @@
     <Compile Include="Metadata\Tables\Schemas\Readers\MethodDefSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\MethodImplSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\MethodSemanticsSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -463,6 +472,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\MethodDefSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\MethodImplSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\MethodSemanticsWriter.n">

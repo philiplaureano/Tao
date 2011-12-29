@@ -1,0 +1,41 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class MethodImplTableWriteTests : TableWriterTest[MethodImplRow, MethodImplTable]
+    {
+        public this()
+        {
+            base(TableId.MethodImpl);
+        }
+        public ShouldWriteClass() : void
+        {
+            TestWrite(50, Index.Narrow(0x0159), r => r.Class, "Invalid Class");
+        }
+        public ShouldWriteMethodBody() : void
+        {
+            TestWrite(50, Index.Narrow(0x1646), r => r.MethodBody, "Invalid Method Body");
+        }
+        public ShouldWriteMethodDeclaration() : void
+        {
+            TestWrite(50, Index.Narrow(0x06AD), r => r.MethodDeclaration, "Invalid Method Declaration");
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

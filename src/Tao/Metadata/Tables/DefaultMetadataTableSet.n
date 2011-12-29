@@ -38,6 +38,7 @@ namespace Tao
             _ = Add(PropertyMapTable());
             _ = Add(PropertyTable());
             _ = Add(MethodSemanticsTable());
+            _ = Add(MethodImplTable());
         }
     }
 }

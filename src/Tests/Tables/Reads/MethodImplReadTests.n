@@ -1,0 +1,40 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class MethodImplTableReadTests : BaseTableReaderTest[MethodImplRow, MethodImplTable]
+    {        
+        public this()
+        {
+            base(TableId.MethodImpl);
+        }
+        public ShouldReadClass() : void
+        {
+            TestRead(r => r.Class.ShouldBeEqualTo(0x155 : ushort, "Invalid Class"), 25);
+        }
+        public ShouldReadMethodBody() : void
+        {
+            TestRead(r => r.MethodBody.ShouldBeEqualTo(0x1540 : ushort, "Invalid MethodBody"), 25);
+        }
+        public ShouldReadMethodDeclaration() : void
+        {
+            TestRead(r => r.MethodDeclaration.ShouldBeEqualTo(0x0639 : ushort, "Invalid MethodDeclaration"), 25);
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}
