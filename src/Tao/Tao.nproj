@@ -303,6 +303,9 @@
     <Compile Include="Metadata\Tables\ModuleTable.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\NestedClassTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\ParamTable.n">
       <SubType>Code</SubType>
     </Compile>
@@ -370,6 +373,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\ModuleRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\NestedClassRow.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\ParamRow.n">
@@ -453,6 +459,9 @@
     <Compile Include="Metadata\Tables\Schemas\Readers\ModuleSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\NestedClassSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\ParamSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -523,6 +532,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\ModuleSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\NestedClassSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\ParamSchemaWriter.n">

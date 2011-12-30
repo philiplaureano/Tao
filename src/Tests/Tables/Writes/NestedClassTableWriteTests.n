@@ -1,0 +1,36 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class NestedClassTableWriteTests : TableWriterTest[NestedClassRow, NestedClassTable]
+    {
+        public this()
+        {
+            base(TableId.NestedClass);
+        }
+        public ShouldWriteNestedClass() : void
+        {
+            TestWrite(10, Index.Narrow(0x0929), r => r.NestedClass, "Invalid NestedClass");
+        }
+        public ShouldWriteEnclosingClass() : void
+        {
+            TestWrite(10, Index.Narrow(0x24), r => r.EnclosingClass, "Invalid EnclosingClass");
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

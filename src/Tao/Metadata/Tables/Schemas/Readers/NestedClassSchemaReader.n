@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class NestedClassSchemaReader : ISchemaReader[NestedClassRow]
+    {
+        public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
+        _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[NestedClassRow]) : void
+        {
+           rowReader.ReadIndex(TableId.TypeDef, r => r.set_NestedClass);
+           rowReader.ReadIndex(TableId.TypeDef, r => r.set_EnclosingClass);
+        }
+    }
+}
