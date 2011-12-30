@@ -1,0 +1,44 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class ManifestResourceTableWriteTests : TableWriterTest[ManifestResourceRow, ManifestResourceTable]
+    {
+        public this()
+        {
+            base(TableId.ManifestResource);
+        }
+        public ShouldWriteOffset() : void
+        {
+            TestWrite.[uint](2, 0x0000326A : uint, r => r.Offset, "Invalid Offset");
+        }
+        public ShouldWriteFlags() : void
+        {
+            TestWrite.[uint](2, 1 : uint, r => r.Flags, "Invalid Flags");
+        }
+        public ShoudlWriteName() : void
+        {
+            TestWrite(2, Index.Wide(0x186F6), r => r.Name, "Invalid Name");
+        }
+        public ShouldWriteImplementation() : void
+        {
+            TestWrite(2, Index.Narrow(0), r => r.Implementation, "Invalid Implementation");
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

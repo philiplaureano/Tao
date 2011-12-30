@@ -1,0 +1,44 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class ManifestResourceTableReadTests : BaseTableReaderTest[ManifestResourceRow, ManifestResourceTable]
+    {        
+        public this()
+        {
+            base(TableId.ManifestResource);
+        }
+        public ShouldReadOffset() : void
+        {
+            TestRead(r => r.Offset.ShouldBeEqualTo(0x13764 : uint, "Invalid Offset"), 3);
+        }
+        public ShouldReadFlags() : void
+        {
+            TestRead(r => r.Flags.ShouldBeEqualTo(1 : uint, "Invalid Flags"), 3);
+        }
+        public ShouldReadName() : void
+        {
+            TestRead(r => r.Name.ShouldBeEqualTo(0x18718, "Invalid Name"), 3);
+        }
+        public ShouldReadImplementation() : void
+        {
+            TestRead(r => r.Implementation.ShouldBeEqualTo(0 : ushort, "Invalid Implementation"));
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

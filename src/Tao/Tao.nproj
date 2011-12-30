@@ -270,6 +270,9 @@
     <Compile Include="Metadata\Tables\IRowWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\ManifestResourceTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\MemberRefTable.n">
       <SubType>Code</SubType>
     </Compile>
@@ -351,6 +354,9 @@
     <Compile Include="Metadata\Tables\Rows\InterfaceImplRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\ManifestResourceRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\MemberRefRow.n">
       <SubType>Code</SubType>
     </Compile>
@@ -429,6 +435,9 @@
     <Compile Include="Metadata\Tables\Schemas\Readers\InterfaceImplSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\ManifestResourceSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\MemberRefSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -496,6 +505,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\InterfaceImplSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\ManifestResourceSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\MemberRefSchemaWriter.n">

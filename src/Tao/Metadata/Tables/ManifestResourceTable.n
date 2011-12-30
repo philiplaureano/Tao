@@ -1,0 +1,19 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+    public class ManifestResourceTable : MetadataTable[ManifestResourceRow]
+    {
+        public this()
+        {
+            base(TableId.ManifestResource, ManifestResourceSchemaReader(), ManifestResourceSchemaWriter());
+        }
+    }
+}
