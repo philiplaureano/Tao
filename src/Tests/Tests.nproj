@@ -207,6 +207,9 @@
     <Compile Include="Tables\HeapIndexTestExtensions.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\Reads\AssemblyRefTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tables\Reads\AssemblyTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -274,6 +277,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Reads\TypeSpecTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\AssemblyRefTableWriteTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Writes\AssemblyTableWriteTests.n">

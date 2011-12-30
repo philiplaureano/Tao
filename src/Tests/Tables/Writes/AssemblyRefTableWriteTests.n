@@ -1,0 +1,64 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class AssemblyRefTableWriteTests : TableWriterTest[AssemblyRefRow, AssemblyRefTable]
+    {
+        public this()
+        {
+            base(TableId.AssemblyRef);
+        }
+        public ShouldWriteMajorVersion() : void
+        {
+            TestWrite.[ushort](0, 1, r => r.MajorVersion, "Invalid MajorVersion");
+        }
+        public ShouldWriteMinorVersion() : void
+        {
+            TestWrite.[ushort](0, 0, r => r.MinorVersion, "Invalid MinorVersion");
+        }
+        public ShouldWriteBuildNumber() : void
+        {
+            TestWrite.[ushort](0, 1, r => r.BuildNumber, "Invalid BuildNumber");
+        }
+        public ShouldWriteRevisionNumber() : void
+        {
+            TestWrite.[ushort](0, 0, r => r.RevisionNumber, "Invalid RevisionNumber");
+        }
+        public ShouldWriteFlags() : void
+        {
+            TestWrite.[uint](0, 0, r => r.Flags, "Invalid Flags");
+        }
+        public ShouldWritePublicKeyOrToken() : void
+        {
+            TestWrite(0, Index.Wide(0x0003B4E8), r => r.PublicKeyOrToken, "Invalid PublicKeyOrToken");
+        }
+        public ShouldWriteName() : void
+        {
+            TestWrite(0, Index.Wide(0x0005980F), r => r.Name, "Invalid Name");
+        }
+        public ShouldReadCulture() : void
+        {
+            TestWrite(0, Index.Wide(0), r => r.Culture, "Invalid Culture");
+        }
+        public ShouldWriteHashValue() : void
+        {
+            TestWrite(0, Index.Wide(0), r => r.HashValue, "Invalid HashValue");
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

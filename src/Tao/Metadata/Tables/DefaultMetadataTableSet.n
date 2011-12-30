@@ -41,6 +41,7 @@ namespace Tao
             _ = Add(MethodImplTable());
             _ = Add(TypeSpecTable());
             _ = Add(FieldRvaTable());
+            _ = Add(AssemblyRefTable());
         }
     }
 }

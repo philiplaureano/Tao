@@ -1,0 +1,30 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class AssemblyRefSchemaReader : ISchemaReader[AssemblyRefRow]
+    {
+        public ReadRowInto([NotNull] _ : IDictionary[TableId, uint], 
+        _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[AssemblyRefRow]) : void
+        {
+           rowReader.ReadWord(r => r.set_MajorVersion);
+           rowReader.ReadWord(r => r.set_MinorVersion);
+           rowReader.ReadWord(r => r.set_BuildNumber);
+           rowReader.ReadWord(r => r.set_RevisionNumber);
+           rowReader.ReadDword(r => r.set_Flags);
+           
+           rowReader.ReadBlobIndex(r => r.set_PublicKeyOrToken);
+           rowReader.ReadStringIndex(r => r.set_Name);
+           rowReader.ReadStringIndex(r => r.set_Culture);
+           rowReader.ReadBlobIndex(r => r.set_HashValue);
+        }
+    }
+}

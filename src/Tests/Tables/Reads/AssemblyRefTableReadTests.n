@@ -1,0 +1,64 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class AssemblyRefTableReadTests : BaseTableReaderTest[AssemblyRefRow, AssemblyRefTable]
+    {        
+        public this()
+        {
+            base(TableId.AssemblyRef);
+        }
+        public ShouldReadMajorVersion() : void
+        {
+            TestRead(r => r.MajorVersion.ShouldBeEqualTo(3, "Invalid MajorVersion"), 5);
+        }
+        public ShouldReadMinorVersion() : void
+        {
+            TestRead(r => r.MinorVersion.ShouldBeEqualTo(5, "Invalid MinorVersion"), 5);
+        }
+        public ShouldReadBuildNumber() : void
+        {
+            TestRead(r => r.BuildNumber.ShouldBeEqualTo(0, "Invalid BuildNumber"), 5);
+        }
+        public ShouldReadRevisionNumber() : void
+        {
+            TestRead(r => r.RevisionNumber.ShouldBeEqualTo(0, "Invalid RevisionNumber"), 5);
+        }
+        public ShouldReadFlags() : void
+        {
+            TestRead(r => r.Flags.ShouldBeEqualTo(0, "Invalid Flags"), 5);
+        }
+        public ShouldReadPublicKeyOrToken() : void
+        {
+            TestRead(r => r.PublicKeyOrToken.ShouldBeEqualTo(0x0003B4F1 : uint, "Invalid PublicKeyOrToken"),5 );
+        }
+        public ShouldReadName() : void
+        {
+            TestRead(r => r.Name.ShouldBeEqualTo(0x5acdc : uint, "Invalid Name"), 5);
+        }
+        public ShouldReadCulture() : void
+        {
+            TestRead(r => r.Culture.ShouldBeEqualTo(0 : uint, "Invalid Culture"), 5);
+        }
+        public ShouldReadHashValue() : void
+        {
+            TestRead(r => r.HashValue.ShouldBeEqualTo(0 : uint, "Invalid HashValue"), 5);
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

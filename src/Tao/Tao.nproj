@@ -216,6 +216,9 @@
     <Compile Include="Metadata\Tables\AggregateTable.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\AssemblyRefTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\AssemblyTable.n">
       <SubType>Code</SubType>
     </Compile>
@@ -315,6 +318,9 @@
     <Compile Include="Metadata\Tables\RowReaderExtensions.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\AssemblyRefRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\AssemblyRow.n">
       <SubType>Code</SubType>
     </Compile>
@@ -390,6 +396,9 @@
     <Compile Include="Metadata\Tables\Schemas\ISchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\AssemblyRefSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\AssemblySchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -454,6 +463,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\TypeSpecSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\AssemblyRefSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\AssemblySchemaWriter.n">
