@@ -1,0 +1,49 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tests.Macros;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{  
+    public class TableSupportTests
+    {
+        public ShouldSupportAllKnownMetadataTables() : void
+        {          
+            def aggregateTable = AggregateTable();
+            def supportedTables = aggregateTable.Tables;
+            def supportedTableIds = HashSet.[TableId]();
+            foreach(table in supportedTables)
+            {
+                def currentId = table.GetHashCode() :> TableId;
+                _ = supportedTableIds.Add(currentId);
+            }
+
+            def unsupportedTables = HashSet.[TableId]();
+            foreach(currentId in typeof(TableId).GetEnumValues())
+            {
+                def currentTableId = currentId :> TableId;
+                when (!supportedTableIds.Contains(currentTableId))
+                {
+                    unsupportedTables.Add(currentTableId);
+                }
+            }
+
+            when(unsupportedTables.Count > 0)
+            {
+                Console.WriteLine("The following tables are currently not supported: ");
+                foreach(tableId in unsupportedTables)
+                {
+                    Console.WriteLine(typeof(TableId).GetEnumName(tableId));
+                }
+
+                unsupportedTables.Count.ShouldBeEqualTo(0, "Tao must support every known metadata table");
+            }
+        }
+    }
+}

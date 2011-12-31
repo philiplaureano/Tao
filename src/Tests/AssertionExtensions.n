@@ -36,22 +36,22 @@ namespace Tests
     public ShouldBeEqualTo[T](this target : T, other : T,  message : string, params args : array[object]) : void
         requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()    
     {
-      Assert.AreEqual(target, other, message, args);
+      Assert.AreEqual(other, target, message, args);
     }
     public ShouldBeTheSameReferenceAs[T](this target : T, other : T,  message : string, params args : array[object]) : void
         requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()    
     {
-      Assert.AreSame(target, other, message, args);
+      Assert.AreSame(other, target, message, args);
     }
     public ShouldNotBeEqualTo[T](this target : T, other : T,  message : string, params args : array[object]) : void
         requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()    
     {
-      Assert.AreNotEqual(target, other, message, args);
+      Assert.AreNotEqual(other, target, message, args);
     }
     public ShouldNotBeTheSameReferenceAs[T](this target : T, other : T,  message : string, params args : array[object]) : void
         requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()
     {
-      Assert.AreNotSame(target, other, message, args);
+      Assert.AreNotSame(other, target, message, args);
     }
     private ThrowPutADamnAssertionMessageThereYouLazyBastard() : void
     {

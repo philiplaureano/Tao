@@ -12,24 +12,23 @@ namespace Tao
   public enum TableId : byte
   {
     |Assembly = 0x20
+    |AssemblyRef = 0x23
+    /* Unused
     |AssemblyOS = 0x22
     |AssemblyProcessor = 0x21
-    |AssemblyRef = 0x23
+    
     |AssemblyRefOS = 0x25
     |AssemblyRefProcessor = 0x24
+    */
     |ClassLayout = 0x0f
     |Constant = 0x0b
     |CustomAttribute = 0x0c
     |DeclSecurity = 0x0e
-    |ENCLog = 0x1e
-    |ENCMap = 0x1f
     |Event = 0x14
     |EventMap = 0x12
-    |EventPtr = 0x13
     |ExportedType = 0x27
     |Field = 0x04
     |FieldLayout = 0x10
-    |FieldPtr = 0x03
     |FieldMarshal = 0x0d
     |FieldRVA = 0x1d
     |File = 0x26
@@ -41,17 +40,14 @@ namespace Tao
     |MemberRef = 0x0a
     |MethodDef = 0x06
     |MethodImpl = 0x19
-    |MethodPtr = 0x05
     |MethodSemantics = 0x18
     |MethodSpec =  0x2b
     |Module = 0x00
     |ModuleRef = 0x1A
     |NestedClass = 0x29
     |Param = 0x08
-    |ParamRef = 0x07
     |Property = 0x17
     |PropertyMap = 0x15
-    |PropertyPtr = 0x16
     |StandAloneSig = 0x11
     |TypeDef = 0x02
     |TypeRef = 0x01

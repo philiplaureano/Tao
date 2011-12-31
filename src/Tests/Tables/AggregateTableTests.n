@@ -22,7 +22,7 @@ namespace Tests
       def supportedTables = HashSet.[IMetadataTable]();
       def table = AggregateTable(supportedTables);
       def rowCounts = Dictionary.[TableId, uint]();
-      rowCounts[TableId.AssemblyOS] = 12345;
+      rowCounts[TableId.File] = 12345;
           
       table.Read(0, rowCounts, array(0) : array[TableId], MemoryStream());
     }
@@ -32,7 +32,7 @@ namespace Tests
       def supportedTables = HashSet.[IMetadataTable]();
       def table = AggregateTable(supportedTables);
       def rowCounts = Dictionary.[TableId, uint]();
-      rowCounts[TableId.AssemblyProcessor] = 12345;
+      rowCounts[TableId.File] = 12345;
       
       table.Write(array(0) : array[HeapSizeFlags], rowCounts, MemoryStream());
     }
