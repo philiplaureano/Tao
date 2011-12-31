@@ -11,19 +11,19 @@ using System.Linq;
 
 namespace Tests
 {
-    public class EventMapTableWriteTests : TableWriterTest[EventMapRow, EventMapTable]
+    public class GenericParamConstraintTableWriteTests : TableWriterTest[GenericParamConstraintRow, GenericParamConstraintTable]
     {
         public this()
         {
-            base(TableId.EventMap);
+            base(TableId.GenericParamConstraint);
         }
-        public ShouldWriteParent() : void
+        public ShouldWriteOwner() : void
         {
-            TestWrite(1, Index.Narrow(0x005D0), r => r.Parent, "Invalid Parent");            
-        }        
-        public ShouldWriteEventList() : void
+            TestWrite(0, Index.Narrow(0x00000c), r => r.Owner, "Invalid Owner");
+        }
+        public ShouldWriteConstraint() : void
         {
-            TestWrite(3, Index.Narrow(0x2A), r => r.EventList, "Invalid EventList");
+            TestWrite(0, Index.Narrow(0x63E), r => r.Constraint, "Invalid Constraint");
         }        
         protected override TargetAssemblyFileName : string
         {

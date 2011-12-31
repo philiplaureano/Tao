@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class GenericParamConstraintSchemaReader : ISchemaReader[GenericParamConstraintRow]
+    {
+        public ReadRowInto([NotNull] _ : IDictionary[TableId, uint], 
+        _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[GenericParamConstraintRow]) : void
+        {
+           rowReader.ReadIndex(TableId.GenericParam, r => r.set_Owner);
+           rowReader.ReadIndex(CodedTokenType.TypeDefOrTypeRef, r => r.set_Constraint);
+        }
+    }
+}

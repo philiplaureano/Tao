@@ -1,0 +1,17 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class GenericParamConstraintRow
+  {
+      public Owner : Index { get; set; }
+      public Constraint : Index { get; set; }
+  }
+}

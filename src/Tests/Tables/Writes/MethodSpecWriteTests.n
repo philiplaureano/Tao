@@ -11,20 +11,21 @@ using System.Linq;
 
 namespace Tests
 {
-    public class EventMapTableWriteTests : TableWriterTest[EventMapRow, EventMapTable]
+    public class MethodSpecTableWriteTests : TableWriterTest[MethodSpecRow, MethodSpecTable]
     {
         public this()
         {
-            base(TableId.EventMap);
+            base(TableId.MethodSpec);
         }
-        public ShouldWriteParent() : void
+        public ShouldWriteMethod() : void
         {
-            TestWrite(1, Index.Narrow(0x005D0), r => r.Parent, "Invalid Parent");            
-        }        
-        public ShouldWriteEventList() : void
+            TestWrite(1146, Index.Narrow(0xA9C8), r => r.Method, "Invalid Method");
+        }
+        public ShouldWriteInstantiation() : void
         {
-            TestWrite(3, Index.Narrow(0x2A), r => r.EventList, "Invalid EventList");
-        }        
+            TestWrite(1146, Index.Wide(0x00000F87), r => r.Instantiation, "Invalid Instantiation");
+        }
+        
         protected override TargetAssemblyFileName : string
         {
             get

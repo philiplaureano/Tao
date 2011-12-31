@@ -11,24 +11,27 @@ using System.Linq;
 
 namespace Tests
 {
-    public class ParamTableWriteTests : TableWriterTest[ParamRow, ParamTable]
+    public class GenericParamTableWriteTests : TableWriterTest[GenericParamRow, GenericParamTable]
     {
         public this()
         {
-            base(TableId.Param);
+            base(TableId.GenericParam);
         }
-        
+        public ShouldWriteNumber() : void
+        {
+            TestWrite.[ushort](15, 1, r => r.Number, "Invalid Number");
+        }
         public ShouldWriteFlags() : void
         {
-            TestWrite.[ushort](100, 0, r => r.Flags, "Invalid Flags");
+            TestWrite.[ushort](50, 0x10, r => r.Flags, "Invalid Flags");
         }
-        public ShouldWriteSequence() : void
+        public ShouldWriteOwner() : void
         {
-            TestWrite.[ushort](100, 2, r => r.Sequence, "Invalid Sequence");
+            TestWrite(70, Index.Narrow(0x0386), r => r.Owner, "Invalid Owner");
         }
         public ShouldWriteName() : void
         {
-            TestWrite(100, Index.Wide(0x00003AD1), r => r.Name, "Invalid Name");
+            TestWrite(70, Index.Wide(0x0000002A), r => r.Name, "Invalid Name");
         }
         
         protected override TargetAssemblyFileName : string
@@ -37,6 +40,6 @@ namespace Tests
             {
                 @"..\..\SampleBinaries\NHibernate.dll";
             }
-        } 
+        }
     }
 }

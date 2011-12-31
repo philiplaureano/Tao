@@ -16,22 +16,35 @@ namespace Tests
 {
     public abstract class FileBasedTableTest
     {
+        private static _fileCache : Dictionary.[string, array[byte]] = Dictionary();
+
         protected virtual GetTableStreamData() : array[byte]
         {
-            def fileStream = FileStream(TargetAssemblyFileName, FileMode.Open, FileAccess.Read);
-            def imageReader = ImageReader();
-            def image = imageReader.Read(fileStream);
+            def getData() : array[byte]
+            {
+                def fileStream = FileStream(TargetAssemblyFileName, FileMode.Open, FileAccess.Read);
+                def imageReader = ImageReader();
+                def image = imageReader.Read(fileStream);
 
-            def root = image.GetMetadataRoot();
-            root.ShouldBeNotNull("The file '{0}' is not a valid .NET assembly", TargetAssemblyFileName);
+                def root = image.GetMetadataRoot();
+                root.ShouldBeNotNull("The file '{0}' is not a valid .NET assembly", TargetAssemblyFileName);
 
-            def tableStream = root.Heaps["#~"];
-            def resultStream = MemoryStream();
-            tableStream.CopyTo(resultStream);
+                def tableStream = root.Heaps["#~"];
+                def resultStream = MemoryStream();
+                tableStream.CopyTo(resultStream);
 
-            fileStream.Close();
-            fileStream.Dispose();
-            resultStream.ToArray();
+                fileStream.Close();
+                fileStream.Dispose();
+                resultStream.ToArray();
+            }
+            
+            when(!_fileCache.ContainsKey(TargetAssemblyFileName))
+            {
+                def result = getData();
+                _fileCache[TargetAssemblyFileName] = result;
+            }
+            
+            _fileCache[TargetAssemblyFileName];
         }
         protected abstract TargetAssemblyFileName : string { get; }
     }

@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MethodSpecSchemaWriter : ISchemaWriter[MethodSpecRow]
+  {
+      public WriteRow([NotNull] row : MethodSpecRow, [NotNull] _rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[MethodSpecRow]) : void
+      {
+          rowWriter.WriteIndex(CodedTokenType.MethodDefOrRef, row.get_Method);
+          rowWriter.WriteBlobIndex(row.get_Instantiation);
+      }
+  }
+}

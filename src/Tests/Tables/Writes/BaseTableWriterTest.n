@@ -21,7 +21,7 @@ namespace Tests
         {
             _tableId = targetTableId;
         }
-        
+
         protected TestWrite[TRow, TTable](rowIndex : int, value : Index, getValue : TRow -> Index, failureMessage : string, params args : array[object]) : void
         {
             TestWrite(rowIndex, value, getValue, (actual, expected) => actual.IsEqualTo(expected), failureMessage, args);
@@ -37,29 +37,40 @@ namespace Tests
             def compareRows(actualRow : TRow, expectedRow : TRow, getValue : TRow -> T, failureMessage : string) : void
             {
                 def currentValue = getValue(actualRow);
-                def expectedValue = getValue(expectedRow);
-
-        // If the expected value does not match the given value, that means the read failed        
-                compareValue(expectedValue, value).ShouldBeTrue("Metadata Table Read Failed for '{0}' row type", typeof(TRow).Name);                
-
-        // If the current value does not match the expected value, that means that the write failed
-                compareValue(expectedValue, currentValue).ShouldBeTrue(failureMessage, args);
+                def readValue = getValue(expectedRow);
+                def givenValue = value;
+                
+                _ = givenValue.ToString();
+                
+                // If the read value does not match the given value, that means the read failed        
+                compareValue(readValue, givenValue).ShouldBeTrue("Metadata Table Read Failed for '{0}' row type\r\nReadValue: {0}\r\nActual:{1}", typeof(TRow).Name, readValue.ToString(), givenValue.ToString());                
+            
+                compareValue(readValue, currentValue).ShouldBeTrue(failureMessage, args);
             };
             TestWrite.[TRow, TTable](compareRows(_, _, getValue, failureMessage), rowIndex);
         }    
         protected TestWrite[TRow, TTable](compareRows : TRow * TRow -> void, rowIndex : int = 0) : void
         where TTable : IMetadataTable[TRow], class
         { 
-            def heapSizeFlags = array(0) : array[HeapSizeFlags];
+            def heapSizeFlags = List.[HeapSizeFlags]();
 
             def aggregateTable = AggregateTable();            
             // Read the expected data
             def inputStream = MemoryStream(GetTableStreamData());
             def headerReader = MetadataTablesHeaderReader();
             def header = headerReader.Read(inputStream); 
-            
-            // TODO: Convert the header heap size flags to a list of heap size flags
-            def expectedRow = ReadRow(MemoryStream(base.GetTableStreamData()), aggregateTable);
+
+            // Convert the header heap size flags to a list of heap size flags
+            foreach(flag in typeof(HeapSizeFlags).GetEnumValues())
+            {
+                def currentFlag = flag :> byte;
+                when ((header.HeapSizes & currentFlag) != 0)
+                {
+                    heapSizeFlags.Add(flag :> HeapSizeFlags);
+                }
+            }
+
+            def expectedRow = ReadRow(MemoryStream(base.GetTableStreamData()), aggregateTable, rowIndex);
 
             // Write the target table (this assumes that the target table is part of the aggregate)
             def outputStream = MemoryStream();
@@ -74,7 +85,7 @@ namespace Tests
             {
                 when (typeof(TTable).IsAssignableFrom(table.GetType()))
                 {
-                targetTable = table :> TTable;
+                    targetTable = table :> TTable;
                 }
             }
 
@@ -115,7 +126,7 @@ namespace Tests
             {
                 when (typeof(TTable).IsAssignableFrom(table.GetType()))
                 {
-                targetTable = table :> TTable;
+                    targetTable = table :> TTable;
                 }
             }
 

@@ -44,6 +44,9 @@ namespace Tao
             _ = Add(AssemblyRefTable());
             _ = Add(ManifestResourceTable());
             _ = Add(NestedClassTable());
+            _ = Add(GenericParamTable());
+            _ = Add(MethodSpecTable());
+            _ = Add(GenericParamConstraintTable());
         }
     }
 }

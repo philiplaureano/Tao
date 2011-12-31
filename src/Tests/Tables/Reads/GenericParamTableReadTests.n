@@ -1,0 +1,45 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class GenericParamTableReadTests : BaseTableReaderTest[GenericParamRow, GenericParamTable]
+    {        
+        public this()
+        {
+            base(TableId.GenericParam);
+        }
+        public ShouldReadNumber() : void
+        {
+            TestRead(r => r.Number.ShouldBeEqualTo(1 : ushort, "Invalid Number"), 17);
+        }
+        public ShouldReadFlags() : void
+        {
+            TestRead(r => r.Flags.ShouldBeEqualTo(0x10 : ushort, "Invalid Flags"), 50);
+        }
+        public ShouldReadOwner() : void
+        {
+            TestRead(r => r.Owner.ShouldBeEqualTo(0x02EC : ushort, "Invalid Owner"), 27);
+        }
+        public ShouldReadName() : void 
+        {
+            TestRead(r => r.Name.ShouldBeEqualTo(0x00000377 : uint, "Invalid Name"), 100);
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class MethodSpecSchemaReader : ISchemaReader[MethodSpecRow]
+    {
+        public ReadRowInto([NotNull] _ : IDictionary[TableId, uint], 
+        _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[MethodSpecRow]) : void
+        {
+           rowReader.ReadIndex(CodedTokenType.MethodDefOrRef, r => r.set_Method);
+           rowReader.ReadBlobIndex(r => r.set_Instantiation);
+        }
+    }
+}

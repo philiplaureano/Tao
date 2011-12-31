@@ -1,0 +1,40 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class GenericParamConstraintTableReadTests : BaseTableReaderTest[GenericParamConstraintRow, GenericParamConstraintTable]
+    {        
+        public this()
+        {
+            base(TableId.GenericParamConstraint);
+        }
+        public ShouldReadOwner() : void
+        {
+            TestRead(r => r.Owner.ShouldBeEqualTo(0x00000c : ushort, "Invalid Owner"));
+        }
+        public ShouldReadConstraint() : void
+        {
+            def encoder = CodedTokenEncoder();
+            def expectedToken = encoder.Encode(CodedTokenType.TypeDefOrTypeRef, TableId.TypeSpec, 0x00018f);
+            
+            TestRead(r => r.Constraint.ShouldBeEqualTo(expectedToken :> ushort, "Invalid Constraint"));
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

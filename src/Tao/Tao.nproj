@@ -252,6 +252,12 @@
     <Compile Include="Metadata\Tables\FieldTable.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\GenericParamConstraintTable.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\GenericParamTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\IMetadataTable.n">
       <SubType>Code</SubType>
     </Compile>
@@ -298,6 +304,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\MethodSemanticsTable.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\MethodSpecTable.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\ModuleTable.n">
@@ -354,6 +363,12 @@
     <Compile Include="Metadata\Tables\Rows\FieldRvaRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\GenericParamConstraintRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\GenericParamRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\InterfaceImplRow.n">
       <SubType>Code</SubType>
     </Compile>
@@ -370,6 +385,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\MethodSemanticsRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\MethodSpecRow.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\ModuleRow.n">
@@ -438,6 +456,12 @@
     <Compile Include="Metadata\Tables\Schemas\Readers\FieldSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\GenericParamConstraintSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\GenericParamSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\InterfaceImplSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -454,6 +478,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\MethodSemanticsSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\MethodSpecSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\ModuleSchemaReader.n">
@@ -513,6 +540,12 @@
     <Compile Include="Metadata\Tables\Schemas\Writers\FieldSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\GenericParamConstraintSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\GenericParamSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\InterfaceImplSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
@@ -529,6 +562,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\MethodSemanticsWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\MethodSpecSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\ModuleSchemaWriter.n">
