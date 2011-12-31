@@ -1,0 +1,40 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class FileTableWriteTests : TableWriterTest[FileRow, FileTable]
+    {
+        public this()
+        {
+            base(TableId.File);
+        }
+        public ShouldWriteFlags() : void
+        {
+            TestWrite.[uint](1, 0, r=> r.Flags, "Invalid Flags");
+        }
+        public ShouldWriteName() : void
+        {
+            TestWrite(1, Index.Narrow(0x7E), r => r.Name, "Invalid Name");
+        }
+        public ShouldWriteHashValue() : void
+        {
+            TestWrite(1, Index.Narrow(0x46), r => r.HashValue, "invalid HashValue");
+        }
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\MultiModuleAssembly.exe";
+            }
+        }
+    }
+}

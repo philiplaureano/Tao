@@ -1,0 +1,33 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class ModuleRefTableReadTests : BaseTableReaderTest[ModuleRefRow, ModuleRefTable]
+    {        
+        public this()
+        {
+            base(TableId.ModuleRef);
+        }
+        public ShouldReadName() : void
+        {
+            TestRead(r => r.Name.ShouldBeEqualTo(0x007E : ushort, "Invalid Name"));
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\MultiModuleAssembly.exe";
+            }
+        }
+    }
+}

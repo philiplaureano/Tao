@@ -47,6 +47,9 @@ namespace Tao
             _ = Add(GenericParamTable());
             _ = Add(MethodSpecTable());
             _ = Add(GenericParamConstraintTable());
+            _ = Add(ModuleRefTable());
+            _ = Add(FileTable());
+            _ = Add(ExportedTypeTable());
         }
     }
 }

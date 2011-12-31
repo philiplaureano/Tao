@@ -1,0 +1,49 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class ExportedTypeTableReadTests : BaseTableReaderTest[ExportedTypeRow, ExportedTypeTable]
+    {        
+        public this()
+        {
+            base(TableId.ExportedType);
+        }
+        public ShouldReadFlags() : void
+        {
+            TestRead(r => r.Flags.ShouldBeEqualTo(0x00100001, "Invalid Flags"));
+        }
+        public ShouldReadTypeDefId() : void
+        {
+            TestRead(r => r.TypeDefId.ShouldBeEqualTo(0x02000002, "Invalid TypeDefId"));
+        }
+        public ShouldReadTypeName() : void
+        {
+            TestRead(r => r.TypeName.ShouldBeEqualTo(0x0068 : ushort, "Invalid TypeName"));
+        }
+        public ShouldReadTypeNamespace() : void
+        {
+            TestRead(r => r.TypeNamespace.ShouldBeEqualTo(0x6F : ushort, "Invalid TypeNamespace"));
+        }
+        public ShouldReadImplementation() : void
+        {
+            TestRead(r => r.Implementation.ShouldBeEqualTo(4 : ushort, "Invalid Implementation"));
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\MultiModuleAssembly.exe";
+            }
+        }
+    }
+}

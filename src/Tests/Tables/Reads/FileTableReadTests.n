@@ -1,0 +1,41 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class FileTableReadTests : BaseTableReaderTest[FileRow, FileTable]
+    {        
+        public this()
+        {
+            base(TableId.File);
+        }
+        public ShouldReadFlags() : void
+        {
+            TestRead(r => r.Flags.ShouldBeEqualTo(0, "Invalid Flags"));
+        }
+        public ShouldReadName() : void
+        {
+            TestRead(r => r.Name.ShouldBeEqualTo(0xA : ushort, "Invalid Name"));
+        }
+        public ShouldReadHashValue() : void
+        {
+            TestRead(r => r.HashValue.ShouldBeEqualTo(0x31 : ushort, "Invalid HashValue"));
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\MultiModuleAssembly.exe";
+            }
+        }
+    }
+}

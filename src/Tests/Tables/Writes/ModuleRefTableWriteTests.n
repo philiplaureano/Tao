@@ -1,0 +1,33 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class ModuleRefTableWriteTests : TableWriterTest[ModuleRefRow, ModuleRefTable]
+    {
+        public this()
+        {
+            base(TableId.ModuleRef);
+        }
+        public ShouldWriteName() : void
+        {
+            TestWrite(0, Index.Narrow(0x7E), r => r.Name, "Invalid Name");
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\MultiModuleAssembly.exe";
+            }
+        }
+    }
+}

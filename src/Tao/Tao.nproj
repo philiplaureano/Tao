@@ -246,10 +246,16 @@
     <Compile Include="Metadata\Tables\EventTable.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\ExportedTypeTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\FieldRvaTable.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\FieldTable.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\FileTable.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\GenericParamConstraintTable.n">
@@ -309,6 +315,9 @@
     <Compile Include="Metadata\Tables\MethodSpecTable.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\ModuleRefTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\ModuleTable.n">
       <SubType>Code</SubType>
     </Compile>
@@ -357,10 +366,16 @@
     <Compile Include="Metadata\Tables\Rows\EventRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\ExportedTypeRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\FieldRow.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\FieldRvaRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\FileRow.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\GenericParamConstraintRow.n">
@@ -388,6 +403,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\MethodSpecRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\ModuleRefRow.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\ModuleRow.n">
@@ -450,10 +468,16 @@
     <Compile Include="Metadata\Tables\Schemas\Readers\EventSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\ExportedTypeSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\FieldRvaSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\FieldSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\FileSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\GenericParamConstraintSchemaReader.n">
@@ -481,6 +505,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\MethodSpecSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\ModuleRefSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\ModuleSchemaReader.n">
@@ -534,10 +561,16 @@
     <Compile Include="Metadata\Tables\Schemas\Writers\EventSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\ExportedTypeSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\FieldRvaSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\FieldSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\FileSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\GenericParamConstraintSchemaWriter.n">
@@ -565,6 +598,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\MethodSpecSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\ModuleRefSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\ModuleSchemaWriter.n">

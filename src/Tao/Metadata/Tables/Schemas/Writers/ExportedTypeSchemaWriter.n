@@ -1,0 +1,25 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class ExportedTypeSchemaWriter : ISchemaWriter[ExportedTypeRow]
+  {
+      public WriteRow([NotNull] row : ExportedTypeRow, [NotNull] _ : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[ExportedTypeRow]) : void
+      {
+          rowWriter.WriteDword(row.Flags);
+          rowWriter.WriteDword(row.TypeDefId);
+          rowWriter.WriteStringIndex(row.get_TypeName);
+          rowWriter.WriteStringIndex(row.get_TypeNamespace);
+          rowWriter.WriteIndex(CodedTokenType.Implementation, row.get_Implementation);
+      }
+  }
+}

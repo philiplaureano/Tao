@@ -1,0 +1,21 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class ModuleRefSchemaReader : ISchemaReader[ModuleRefRow]
+    {
+        public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
+        _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[ModuleRefRow]) : void
+        {
+           rowReader.ReadStringIndex(r => r.set_Name);
+        }
+    }
+}
