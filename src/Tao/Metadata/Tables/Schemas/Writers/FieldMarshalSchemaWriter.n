@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class FieldMarshalSchemaWriter : ISchemaWriter[FieldMarshalRow]
+  {
+      public WriteRow([NotNull] row : FieldMarshalRow, [NotNull] _rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter.[FieldMarshalRow]) : void
+      {
+          rowWriter.WriteIndex(CodedTokenType.HasFieldMarshal, row.get_Parent);
+          rowWriter.WriteBlobIndex(row.get_NativeType);
+      }
+  }
+}

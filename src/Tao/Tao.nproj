@@ -249,6 +249,12 @@
     <Compile Include="Metadata\Tables\ExportedTypeTable.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\FieldLayoutTable.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\FieldMarshalTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\FieldRvaTable.n">
       <SubType>Code</SubType>
     </Compile>
@@ -268,6 +274,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\IMetadataTableReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\ImplMapTable.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\IndexExtensions.n">
@@ -369,6 +378,12 @@
     <Compile Include="Metadata\Tables\Rows\ExportedTypeRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\FieldLayoutRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\FieldMarshalRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\FieldRow.n">
       <SubType>Code</SubType>
     </Compile>
@@ -382,6 +397,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\GenericParamRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\ImplMapRow.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\InterfaceImplRow.n">
@@ -471,6 +489,12 @@
     <Compile Include="Metadata\Tables\Schemas\Readers\ExportedTypeSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\FieldLayoutSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\FieldMarshalSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\FieldRvaSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -484,6 +508,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\GenericParamSchemaReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Readers\ImplMapSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Readers\InterfaceImplSchemaReader.n">
@@ -564,6 +591,12 @@
     <Compile Include="Metadata\Tables\Schemas\Writers\ExportedTypeSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\FieldLayoutSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\FieldMarshalSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\FieldRvaSchemaWriter.n">
       <SubType>Code</SubType>
     </Compile>
@@ -577,6 +610,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\GenericParamSchemaWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Schemas\Writers\ImplMapSchemaReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Schemas\Writers\InterfaceImplSchemaWriter.n">

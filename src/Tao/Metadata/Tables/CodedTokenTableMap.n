@@ -39,7 +39,7 @@ namespace Tao
                         TableId.ExportedType,
                         TableId.ManifestResource
                         ]),
-                     (CodedTokenType.HasFieldMarshall, array[TableId.Field, TableId.Param]),
+                     (CodedTokenType.HasFieldMarshal, array[TableId.Field, TableId.Param]),
                      (CodedTokenType.HasDeclSecurity, array[TableId.TypeDef, TableId.MethodDef, TableId.Assembly]),
                      (CodedTokenType.MemberRefParent, array[TableId.TypeDef, TableId.TypeRef, TableId.ModuleRef, TableId.MethodDef, TableId.TypeSpec]),
                      (CodedTokenType.HasSemantics, array[TableId.Event, TableId.Property]),

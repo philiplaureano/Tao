@@ -1,0 +1,19 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class ImplMapRow
+  {
+      public MappingFlags : ushort { get; set; }
+      public MemberForwarded : Index { get; set; }
+      public ImportName : Index { get; set; }
+      public ImportScope : Index { get; set; }
+  }
+}

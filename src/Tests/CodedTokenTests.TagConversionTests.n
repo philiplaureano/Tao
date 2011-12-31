@@ -138,14 +138,14 @@ namespace Tests
       Test(CodedTokenType.HasCustomAttribute, 18, TableId.ManifestResource);
     }
 
-    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasFieldMarshall_And_RowAndTagFrom_Field() : void
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasFieldMarshal_And_RowAndTagFrom_Field() : void
     {
-      Test(CodedTokenType.HasFieldMarshall, 0, TableId.Field);
+      Test(CodedTokenType.HasFieldMarshal, 0, TableId.Field);
     }
 
-    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasFieldMarshall_And_RowAndTagFrom_Param() : void
+    public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasFieldMarshal_And_RowAndTagFrom_Param() : void
     {
-      Test(CodedTokenType.HasFieldMarshall, 1, TableId.Param);
+      Test(CodedTokenType.HasFieldMarshal, 1, TableId.Param);
     }
 
     public ShouldBeAbleToGiveCorrectTableIdFromCodedTokenId_HasDeclSecurity_And_RowAndTagFrom_TypeDef() : void

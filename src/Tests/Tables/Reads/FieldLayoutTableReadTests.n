@@ -1,0 +1,37 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class FieldLayoutTableReadTests : BaseTableReaderTest[FieldLayoutRow, FieldLayoutTable]
+    {        
+        public this()
+        {
+            base(TableId.FieldLayout);
+        }
+        public ShouldReadOffset() : void
+        {
+            TestRead(r => r.Offset.ShouldBeEqualTo(8, "Invalid Offset"), 11);
+        }
+        public ShouldReadField() : void
+        {
+            TestRead(r => r.Field.ShouldBeEqualTo(0x089D : ushort, "Invalid Field"), 11);
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\mono-mscorlib.dll";
+            }
+        }
+    }
+}

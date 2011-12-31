@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class FieldMarshalSchemaReader : ISchemaReader[FieldMarshalRow]
+    {
+        public ReadRowInto([NotNull] _ : IDictionary[TableId, uint], 
+        _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[FieldMarshalRow]) : void
+        {
+           rowReader.ReadIndex(CodedTokenType.HasFieldMarshal, r => r.set_Parent);  
+           rowReader.ReadBlobIndex(r => r.set_NativeType);
+        }
+    }
+}

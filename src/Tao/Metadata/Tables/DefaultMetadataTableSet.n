@@ -50,6 +50,9 @@ namespace Tao
             _ = Add(ModuleRefTable());
             _ = Add(FileTable());
             _ = Add(ExportedTypeTable());
+            _ = Add(FieldMarshalTable());
+            _ = Add(FieldLayoutTable());
+            _ = Add(ImplMapTable());
         }
     }
 }

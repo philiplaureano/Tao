@@ -17,7 +17,7 @@ namespace Tao
       this[CodedTokenType.HasConstant]         = Dictionary();
       this[CodedTokenType.HasCustomAttribute]  = Dictionary();
       this[CodedTokenType.HasDeclSecurity]     = Dictionary();
-      this[CodedTokenType.HasFieldMarshall]    = Dictionary();
+      this[CodedTokenType.HasFieldMarshal]    = Dictionary();
       this[CodedTokenType.HasSemantics]        = Dictionary();
       this[CodedTokenType.Implementation]      = Dictionary();
       this[CodedTokenType.MemberForwarded]     = Dictionary();
@@ -58,8 +58,8 @@ namespace Tao
       this[CodedTokenType.HasDeclSecurity][1] = TableId.MethodDef;
       this[CodedTokenType.HasDeclSecurity][2] = TableId.Assembly;
 
-      this[CodedTokenType.HasFieldMarshall][0] = TableId.Field;
-      this[CodedTokenType.HasFieldMarshall][1] = TableId.Param;
+      this[CodedTokenType.HasFieldMarshal][0] = TableId.Field;
+      this[CodedTokenType.HasFieldMarshal][1] = TableId.Param;
 
       this[CodedTokenType.HasSemantics][0] = TableId.Event;
       this[CodedTokenType.HasSemantics][1] = TableId.Property;

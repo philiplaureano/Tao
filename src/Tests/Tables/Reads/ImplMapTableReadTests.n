@@ -1,0 +1,45 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class ImplMapTableReadTests : BaseTableReaderTest[ImplMapRow, ImplMapTable]
+    {        
+        public this()
+        {
+            base(TableId.ImplMap);
+        }
+        public ShouldReadMappingFlags() : void
+        {
+            TestRead(r => r.MappingFlags.ShouldBeEqualTo(0x104 : ushort, "Invalid MappingFlags"));
+        }
+        public ShouldReadMemberForwarded() : void
+        {
+            TestRead(r => r.MemberForwarded.ShouldBeEqualTo(0x12F : ushort, "Invalid MemberForwarded"));
+        }
+        public ShouldReadImportName() : void
+        {
+            TestRead(r => r.ImportName.ShouldBeEqualTo(0x93AA : uint, "Invalid Import Name"));
+        }
+        public ShouldReadImportScope() : void
+        {
+            TestRead(r => r.ImportScope.ShouldBeEqualTo(1 : ushort, "Invalid ImportScope"));
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\mono-mscorlib.dll";
+            }
+        }
+    }
+}

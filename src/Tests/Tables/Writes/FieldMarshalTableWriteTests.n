@@ -1,0 +1,37 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class FieldMarshalTableWriteTests : TableWriterTest[FieldMarshalRow, FieldMarshalTable]
+    {
+        public this()
+        {
+            base(TableId.FieldMarshal);
+        }
+        public ShouldWriteParent() : void
+        {
+            TestWrite(123, Index.Narrow(0x81DD), r => r.Parent, "Invalid Parent");
+        }
+        public ShouldWriteNativeType() : void
+        {
+            TestWrite(123, Index.Wide(0x00006FEB), r => r.NativeType, "Invalid NativeType");
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\mono-mscorlib.dll";
+            }
+        }
+    }
+}

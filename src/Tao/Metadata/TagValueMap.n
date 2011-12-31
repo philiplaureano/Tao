@@ -40,7 +40,7 @@ namespace Tao
                                                 TableId.ManifestResource);
       
       AddSet(CodedTokenType.HasDeclSecurity, TableId.TypeDef, TableId.MethodDef, TableId.Assembly);      
-      AddSet(CodedTokenType.HasFieldMarshall, TableId.Field, TableId.Param);
+      AddSet(CodedTokenType.HasFieldMarshal, TableId.Field, TableId.Param);
       AddSet(CodedTokenType.HasSemantics, TableId.Event, TableId.Property);
       AddSet(CodedTokenType.Implementation, TableId.File, TableId.AssemblyRef, TableId.ExportedType);                                           
       AddSet(CodedTokenType.MemberForwarded, TableId.Field, TableId.MethodDef);

@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class FieldLayoutSchemaReader : ISchemaReader[FieldLayoutRow]
+    {
+        public ReadRowInto([NotNull] _ : IDictionary[TableId, uint], 
+        _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[FieldLayoutRow]) : void
+        {
+           rowReader.ReadDword(r => r.set_Offset);
+           rowReader.ReadIndex(TableId.Field, r => r.set_Field);
+        }
+    }
+}

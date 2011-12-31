@@ -14,7 +14,7 @@ namespace Tao
     |TypeDefOrTypeRef
     |HasConstant
     |HasCustomAttribute
-    |HasFieldMarshall
+    |HasFieldMarshal
     |HasDeclSecurity
     |MemberRefParent
     |HasSemantics

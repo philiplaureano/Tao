@@ -23,9 +23,9 @@ namespace Tests
         {
             TestIndexWidth(CodedTokenType.HasConstant, array[TableId.Field, TableId.Param, TableId.Property]);
         }
-        public ShouldUseCorrectIndexFor_HasFieldMarshall_CodedIndices() : void
+        public ShouldUseCorrectIndexFor_HasFieldMarshal_CodedIndices() : void
         {
-            TestIndexWidth(CodedTokenType.HasFieldMarshall, array[TableId.Field, TableId.Param]);
+            TestIndexWidth(CodedTokenType.HasFieldMarshal, array[TableId.Field, TableId.Param]);
         }    
         public ShouldUseCorrectIndexFor_HasDeclSecurity_CodedIndices() : void
         {

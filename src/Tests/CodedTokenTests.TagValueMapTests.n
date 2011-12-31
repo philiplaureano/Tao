@@ -63,7 +63,7 @@ namespace Tests
     {
       ShouldHaveExpectedTagValues(CodedTokenType.HasDeclSecurity, TableId.TypeDef, TableId.MethodDef, TableId.Assembly);
     }
-    public ShouldBeAbleToMapHasFieldMarshallTokenValues() : void
+    public ShouldBeAbleToMapHasFieldMarshalTokenValues() : void
     {
       def values = System.Collections.Generic.Dictionary.[TableId, byte]()<-
                      [
@@ -71,7 +71,7 @@ namespace Tests
                        (TableId.Param, 1 : byte)
                      ];
       
-      ShouldHaveExpectedTagValues(CodedTokenType.HasFieldMarshall, values);
+      ShouldHaveExpectedTagValues(CodedTokenType.HasFieldMarshal, values);
     }
     public ShouldBeAbleToMapHasSemanticsTokenValues() : void
     {

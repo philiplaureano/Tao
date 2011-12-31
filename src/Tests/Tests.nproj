@@ -237,6 +237,12 @@
     <Compile Include="Tables\Reads\ExportedTypeTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\Reads\FieldLayoutTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\FieldMarshalTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tables\Reads\FieldRvaTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -250,6 +256,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Reads\GenericParamTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\ImplMapTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Reads\InterfaceImplTableReadTests.n">
@@ -336,6 +345,12 @@
     <Compile Include="Tables\Writes\ExportedTypeTableWriteTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\Writes\FieldLayoutTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\FieldMarshalTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tables\Writes\FieldRvaTableWriteTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -349,6 +364,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Writes\GenericParamTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\ImplMapTableWriteTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tables\Writes\InterfaceImplTableWriteTests.n">

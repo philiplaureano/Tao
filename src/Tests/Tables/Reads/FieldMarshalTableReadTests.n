@@ -1,0 +1,37 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class FieldMarshalTableReadTests : BaseTableReaderTest[FieldMarshalRow, FieldMarshalTable]
+    {        
+        public this()
+        {
+            base(TableId.FieldMarshal);
+        }
+        public ShouldReadParent() : void
+        {
+            TestRead(r => r.Parent.ShouldBeEqualTo(0x2396 : ushort, "Invalid Parent"));
+        }
+        public ShouldReadNativeType() : void
+        {
+            TestRead(r => r.NativeType.ShouldBeEqualTo(0x00006C90 : uint, "Invalid NativeType"));
+        }
+        
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\mono-mscorlib.dll";
+            }
+        }
+    }
+}

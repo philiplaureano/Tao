@@ -25,7 +25,7 @@ namespace Tao
       this[CodedTokenType.Implementation] = 2;
       this[CodedTokenType.ResolutionScope] = 2;
       this[CodedTokenType.TypeOrMethodDef] = 1;
-      this[CodedTokenType.HasFieldMarshall] = 1;
+      this[CodedTokenType.HasFieldMarshal] = 1;
     }
   }
 }
