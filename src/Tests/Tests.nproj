@@ -312,6 +312,9 @@
     <Compile Include="Tables\Reads\TypeSpecTableReadTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tables\TablesHeapTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tables\TableSupportTests.n">
       <SubType>Code</SubType>
     </Compile>

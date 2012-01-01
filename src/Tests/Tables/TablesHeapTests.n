@@ -1,0 +1,57 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tests.Macros;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class TableHeapTests : FileBasedTableTest
+    {
+        public ShouldHaveCorrectMajorVersion() : void
+        {
+            def heap = TablesHeap();
+            def tableData = MemoryStream(base.GetTableStreamData());
+            heap.ReadFrom(tableData);
+
+            heap.MajorVersion.ShouldBeEqualTo(2, "Invalid MajorVersion");            
+        }
+        public ShouldHaveCorrectMinorVersion() : void
+        {
+            def heap = TablesHeap();
+            def tableData = MemoryStream(base.GetTableStreamData());
+            heap.ReadFrom(tableData);
+
+            heap.MinorVersion.ShouldBeEqualTo(0, "Invalid MinorVersion");            
+        }
+        public ShouldBeAbleToRoundTripTableHeap() : void
+        {
+            def heap = TablesHeap();
+            def tableData = MemoryStream(base.GetTableStreamData());
+            heap.ReadFrom(tableData);
+
+            def outputStream = MemoryStream();
+            heap.WriteTo(outputStream);
+
+             //The written stream should be an exact copy of
+             //the original stream after the tables have been
+             //roundtripped
+            outputStream.ShouldMatch(tableData);
+        }
+
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\NHibernate.dll";
+            }
+        }
+    }
+}

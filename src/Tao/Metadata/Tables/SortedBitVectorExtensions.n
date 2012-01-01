@@ -9,26 +9,39 @@ using System.Linq;
 
 namespace Tao
 {
-  public static class SortedBitVectorExtensions
-  {
-    public IsSorted(this sortedVector : ulong, tableId : TableId) : bool
+    public static class SortedBitVectorExtensions
     {
-      def idValue = tableId :> byte;
-      def baseValue : ulong = 1;
-      def mask = baseValue << idValue;
-          
-      (sortedVector & mask) != 0;
-    }
-    public GetSortedTables(this sortedVector : ulong) : IEnumerable[TableId]
-    {
-      foreach(tableId in typeof(TableId).GetEnumValues())
-      {
-        def currentId = tableId :> TableId;
-        when(sortedVector.IsSorted(currentId))
+        public IsSorted(this sortedVector : ulong, tableId : TableId) : bool
         {
-          yield currentId;
+            def idValue = tableId :> byte;
+            def baseValue : ulong = 1;
+            def mask = baseValue << idValue;
+
+            (sortedVector & mask) != 0;
         }
-      }
+        public GetSortedTables(this sortedVector : ulong) : IEnumerable[TableId]
+        {
+            foreach(tableId in typeof(TableId).GetEnumValues())
+            {
+                def currentId = tableId :> TableId;
+                when(sortedVector.IsSorted(currentId))
+                {
+                    yield currentId;
+                }
+            }
+        }
+        public GetSortedBitVector(this tables : IEnumerable.[TableId]) : ulong
+        {
+            mutable result : ulong = 0;
+            foreach(tableId in tables)
+            {
+                def bitPosition = tableId :> byte;
+                def baseValue : ulong = 1;
+                def tableValue : ulong = (baseValue << bitPosition);
+                result |= tableValue;
+            }
+            
+            result;
+        }
     }
-  }
 }

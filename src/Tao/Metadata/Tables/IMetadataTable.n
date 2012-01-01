@@ -18,6 +18,7 @@ namespace Tao
   }
   public interface IMetadataTable[TRow]
   {
+      IsSorted : bool { get; set; }
       Rows : IList[TRow] { get; }
   }
 }

@@ -1,0 +1,83 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class TablesHeap
+    {
+        private mutable _header : MetadataTablesHeader;
+        private mutable _tables : AggregateTable;
+
+        public this()
+        {            
+        }
+        public this(header : MetadataTablesHeader, tables : AggregateTable)
+        {
+            _header = header;
+            _tables = tables;
+        }
+        public MajorVersion : byte 
+        {
+            get;set;
+        }
+        public MinorVersion : byte
+        {
+            get;set;
+        }        
+        public ReadFrom([NotNull] inputStream : Stream) : void
+        {
+            def reader = MetadataTablesHeaderReader();
+            def header = reader.Read(inputStream);
+
+            // Match the Major and Minor version
+            MajorVersion = header.MajorVersion;
+            MinorVersion = header.MinorVersion;
+            
+            def heapSizes = header.HeapSizes;
+            def sortedVector = header.Sorted;
+            def sortedTables = sortedVector.GetSortedTables();
+            def rowCounts = header.Rows;
+            
+            def tables = AggregateTable();
+            tables.Read(heapSizes, rowCounts, sortedTables, inputStream);
+            
+            _header = header;
+            _tables = tables;
+        }
+        public WriteTo([NotNull] outputStream : Stream) : void
+            requires _header != null && _tables != null otherwise 
+            throw InvalidOperationException("Unable to write the TablesHeap since the header and the tables are still null")
+        {
+            // Update the row counts for each table
+            def rowCounts = _header.Rows;
+            foreach(table in _tables.Tables)
+            {
+                def info = table :> IMetadataTableInfo;
+                def tableId = info.TableId;
+                def rowCount = info.RowCount;
+                
+                rowCounts[tableId] = rowCount;
+            }
+            
+            // TODO: Expose the HeapSizeFlags?
+            // TODO: Update the heapSizes based on the actual size of the other heaps
+            def heapSizes = _header.HeapSizes;
+
+            // TODO: Update the sorted vector based on the existing tables with IsSorted = true
+            // Write the tables header
+            def writer = MetadataTablesHeaderWriter();
+            writer.Write(_header, outputStream);
+            
+            // Write the table data
+            _tables.Write(heapSizes.ToHeapSizeArray(), rowCounts, outputStream);
+        }
+    }
+}

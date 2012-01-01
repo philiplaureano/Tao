@@ -12,55 +12,73 @@ using System.Linq;
 
 namespace Tao
 {
-  public class MetadataTable[TRow] : IMetadataTable, IMetadataTable[TRow]
+    public class MetadataTable[TRow] : IMetadataTable, IMetadataTable[TRow], IMetadataTableInfo
     where TRow : new(), class
-  {
-    private _rows : List[TRow] = List.[TRow]();
-    private _schemaReader : ISchemaReader[TRow];
-    private _schemaWriter : ISchemaWriter[TRow];
-    private _targetTable : TableId;
-    
-    public this(targetTable : TableId, schemaReader : ISchemaReader[TRow], schemaWriter : ISchemaWriter[TRow])
     {
-      _schemaReader = schemaReader;
-      _schemaWriter = schemaWriter;
-      _targetTable = targetTable;
-    }
-  
-    public Read(heapSizes : byte, [NotNull] rowCounts : IDictionary[TableId, uint], sortedTables : IEnumerable.[TableId], [NotNull] inputStream : Stream) : void
-    {
-      def tableReader = MetadataTableReader(_schemaReader);
-      mutable rowsToRead : uint = 0;
-      when (rowCounts.ContainsKey(_targetTable))
-      {
-        rowsToRead = rowCounts[_targetTable];
-      }
-    
-      def rows = tableReader.ReadRows(rowsToRead, heapSizes, rowCounts, sortedTables, inputStream);
-      _rows.AddRange(rows);
-    }
-    
-    public Write(heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
+        private _rows : List[TRow] = List.[TRow]();
+        private _schemaReader : ISchemaReader[TRow];
+        private _schemaWriter : ISchemaWriter[TRow];
+        private _targetTable : TableId;
+
+        public this(targetTable : TableId, schemaReader : ISchemaReader[TRow], schemaWriter : ISchemaWriter[TRow])
+        {
+            _schemaReader = schemaReader;
+            _schemaWriter = schemaWriter;
+            _targetTable = targetTable;
+        }
+
+        public Read(heapSizes : byte, [NotNull] rowCounts : IDictionary[TableId, uint], sortedTables : IEnumerable.[TableId], [NotNull] inputStream : Stream) : void
+        {
+            def tableReader = MetadataTableReader(_schemaReader);
+            mutable rowsToRead : uint = 0;
+            when (rowCounts.ContainsKey(_targetTable))
+            {
+                rowsToRead = rowCounts[_targetTable];
+            }
+
+            def rows = tableReader.ReadRows(rowsToRead, heapSizes, rowCounts, sortedTables, inputStream);
+            _rows.AddRange(rows);
+        }
+
+        public Write(heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
         [NotNull] outputStream : Stream) : void
-    {
-      def rowWriter = RowWriter(heapSizeFlags, rowCounts, BinaryWriter(outputStream));
-      foreach(row in Rows)
-      {
-        _schemaWriter.WriteRow(row, rowCounts, rowWriter);
-      }
+        {
+            def rowWriter = RowWriter(heapSizeFlags, rowCounts, BinaryWriter(outputStream));
+            foreach(row in Rows)
+            {
+                _schemaWriter.WriteRow(row, rowCounts, rowWriter);
+            }
+        }
+        public IsSorted : bool 
+        { 
+        get; set; 
+        }
+        public Rows : IList[TRow]
+        {
+            get 
+            {
+                _rows;
+            }
+        }
+
+        public override GetHashCode() : int
+        {
+            _targetTable :> int;
+        }
+
+        public RowCount : uint
+        {
+            get       
+            {
+                _rows.Count :> uint;
+            }
+        }
+        public TableId : TableId
+        {
+            get
+            {
+                _targetTable;
+            }
+        }
     }
-  
-    public Rows : IList[TRow]
-    {
-      get 
-      {
-        _rows;
-      }
-    }
-  
-    public override GetHashCode() : int
-    {
-      _targetTable :> int;
-    }
-  }
 }

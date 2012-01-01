@@ -210,6 +210,9 @@
     <Compile Include="Metadata\StringHeapWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\TablesHeap.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\TableReferenceDecoder.n">
       <SubType>Code</SubType>
     </Compile>
@@ -270,7 +273,13 @@
     <Compile Include="Metadata\Tables\GenericParamTable.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\HeapSizeFlagExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\IMetadataTable.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\IMetadataTableInfo.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\IMetadataTableReader.n">

@@ -2,6 +2,7 @@
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tao;
 using Tests.Macros;
 using System;
 using System.Collections.Generic;
@@ -9,19 +10,25 @@ using System.Linq;
 
 namespace Tests
 {  
-  public class HeapSizeEncodingTests
-  {    
-    public ignored ShouldBeAbleToEncodeSingleByteHeapSize() : void
-    {
-      throw NotImplementedException();
+    public class HeapSizeEncodingTests
+    {    
+        public ShouldBeAbleToConvertHeapSizeBitVectorIntoASetOfHeapSizeFlags() : void
+        {
+            mutable heapSizes : byte = (HeapSizeFlags.RequiresWideBlobIndex | HeapSizeFlags.RequiresWideGuidIndex) :> byte;
+            def flags = heapSizes.ToHeapSizeArray();
+            
+            flags.Contains(HeapSizeFlags.RequiresWideBlobIndex).ShouldBeTrue("Invalid HeapSizes");
+            flags.Contains(HeapSizeFlags.RequiresWideGuidIndex).ShouldBeTrue("Invalid HeapSizes");
+            flags.Contains(HeapSizeFlags.RequiresWideStringIndex).ShouldBeFalse("Invalid HeapSizes");            
+        }
+        public ShouldBeAbleToConvertListOfHeapSizeFlagsIntoBitVector() : void
+        {
+            mutable expectedValue : byte = (HeapSizeFlags.RequiresWideBlobIndex | HeapSizeFlags.RequiresWideGuidIndex) :> byte;
+            def flags = array[HeapSizeFlags.RequiresWideBlobIndex, HeapSizeFlags.RequiresWideGuidIndex];
+            
+            def vector = flags.ToBitVector();
+            
+            vector.ShouldBeEqualTo(expectedValue, "Invalid HeapSizeFlags");
+        }
     }
-    public ignored ShouldBeAbleToEncodeDoubleByteHeapSize() : void
-    {
-      throw NotImplementedException();
-    }
-    public ignored ShouldBeAbleToEncodeDoubleWordHeapSize() : void
-    {
-      throw NotImplementedException();
-    }
-  }
 }

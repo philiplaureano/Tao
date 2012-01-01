@@ -1,0 +1,38 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public static class HeapSizeFlagExtensions
+  {
+      public ToHeapSizeArray(this bitVector : byte) : IEnumerable.[HeapSizeFlags]
+      {
+          foreach(flag in typeof(HeapSizeFlags).GetEnumValues())
+          {
+              def currentFlag = flag :> byte;
+              def hasFlag = (bitVector & currentFlag) != 0;
+              when(hasFlag)
+              {
+                  yield currentFlag :> HeapSizeFlags;
+              }
+          }
+      }
+      public ToBitVector([NotNull] this flags : IEnumerable.[HeapSizeFlags]) : byte
+      {
+          mutable result : byte = 0;
+          foreach(flag in flags)
+          {
+              result |= (flag :> byte);
+          }
+          
+          result;
+      }
+  }
+}

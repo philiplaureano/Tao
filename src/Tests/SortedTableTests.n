@@ -13,35 +13,44 @@ using System.Linq;
 
 namespace Tests
 {  
-  public class SortedTableTests
-  {
-    public ShouldBeAbleToConvertSortedBitVectorToSortedTableFlag() : void
+    public class SortedTableTests
     {
-      foreach(tableId in typeof(TableId).GetEnumValues())
-      {
-        def bitPosition : byte = tableId :> byte;
-        def baseValue : ulong = 1;
-        def maskValue : ulong = (baseValue << bitPosition);
-              
-        def sortedVector : ulong = maskValue;
-        def isSorted = sortedVector.IsSorted(tableId :> TableId);
-              
-        isSorted.ShouldBeTrue("The tableId '{0}' should be sorted", tableId.ToString());
-      }
+        public ShouldBeAbleToConvertSortedBitVectorToSortedTableFlag() : void
+        {
+            foreach(tableId in typeof(TableId).GetEnumValues())
+            {
+                def bitPosition : byte = tableId :> byte;
+                def baseValue : ulong = 1;
+                def maskValue : ulong = (baseValue << bitPosition);
+
+                def sortedVector : ulong = maskValue;
+                def isSorted = sortedVector.IsSorted(tableId :> TableId);
+
+                isSorted.ShouldBeTrue("The tableId '{0}' should be sorted", tableId.ToString());
+            }
+        }
+        public ShouldBeAbleToConvertSortedBitVectorToListOfSortedTables() : void
+        {
+            foreach(tableId in typeof(TableId).GetEnumValues())
+            {
+                def bitPosition : byte = tableId :> byte;
+                def baseValue : ulong = 1;
+                def maskValue : ulong = (baseValue << bitPosition);
+
+                def sortedVector : ulong = maskValue;
+                def sortedTables = sortedVector.GetSortedTables();
+
+                sortedTables.Contains(tableId :> TableId).ShouldBeTrue("The tableId '{0}' should be sorted", tableId.ToString());
+            }
+        }
+        public ShouldBeAbleToConvertListOfSortedTablesToBitVector() : void
+        {
+            def sortedTables = array[TableId.Assembly, TableId.Module];
+            def bitVector = sortedTables.GetSortedBitVector();
+            
+            def resultTables = bitVector.GetSortedTables();
+            resultTables.Contains(TableId.Assembly).ShouldBeTrue("Invalid Sorted Bit Vector");
+            resultTables.Contains(TableId.Module).ShouldBeTrue("Invalid Sorted Bit Vector");
+        }
     }
-    public ShouldBeAbleToConvertSortedBitVectorToListOfSortedTables() : void
-    {
-        foreach(tableId in typeof(TableId).GetEnumValues())
-      {
-        def bitPosition : byte = tableId :> byte;
-        def baseValue : ulong = 1;
-        def maskValue : ulong = (baseValue << bitPosition);
-              
-        def sortedVector : ulong = maskValue;
-        def sortedTables = sortedVector.GetSortedTables();
-              
-        sortedTables.Contains(tableId :> TableId).ShouldBeTrue("The tableId '{0}' should be sorted", tableId.ToString());
-      }
-    }
-  }
 }

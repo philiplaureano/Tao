@@ -11,63 +11,102 @@ using System.Linq;
 
 namespace Tests
 {
-  public class StreamExtensions
-  {
-    public static GetHash([NotNull] this stream : Stream) : string
+    public class StreamExtensions
     {
-      _ = stream.Seek(0, SeekOrigin.Begin);
-      def reader = BinaryReader(stream);
-      def streamLength = stream.Length;
-      def bytes = reader.ReadBytes(streamLength :> int);
-      
-      bytes.GetHash();
-    }
-    public static ShouldMatch(this stream : Stream, otherArray : array[byte]) : void
-    {
-      def hash = stream.GetHash();
-      def otherHash = otherArray.GetHash();
-          
-      assert hash equals otherHash otherwiseprint "The given data streams don't match";
-    }    
-     public static ShouldMatch(this stream : Stream, other : Stream) : void
-    {
-      def hash = stream.GetHash();
-      def otherHash = other.GetHash();
-          
-      assert hash equals otherHash otherwiseprint "The given data streams don't match";
-    }   
-    public static GetReader([NotNull] this stream: Stream) : BinaryReader
-    {
-      BinaryReader(stream);
-    }
-    
-    public static ShouldMatch([NotNull] this currentStream : Stream, [NotNull] otherStream : Stream, startPosition : uint, length : uint, 
+        public static GetHash([NotNull] this stream : Stream) : string
+        {
+            _ = stream.Seek(0, SeekOrigin.Begin);
+            def reader = BinaryReader(stream);
+            def streamLength = stream.Length;
+            def bytes = reader.ReadBytes(streamLength :> int);
+
+            bytes.GetHash();
+        }
+        public static ShouldMatch(this stream : Stream, otherArray : array[byte]) : void
+        {
+            def otherStream = MemoryStream(otherArray);
+            stream.ShouldMatch(otherStream);
+        }    
+
+        public static ShouldMatch(this stream : Stream, other : Stream) : void
+        {
+            def hash = stream.GetHash();
+            def otherHash = other.GetHash();
+
+            mutable smallerStream = other;            
+            when(other.Length > stream.Length)
+            {
+                smallerStream = stream;
+            }
+            
+            when(hash != otherHash)
+            {
+                def getMismatchPosition(startPosition : int, windowSize : int, firstStream : Stream, 
+            secondStream : Stream) : int
+
+                {
+                    firstStream.Seek(startPosition, SeekOrigin.Begin);
+                    secondStream.Seek(startPosition, SeekOrigin.Begin);
+
+                    def outputReader = BinaryReader(firstStream);
+                    def inputReader = BinaryReader(secondStream);
+
+                    def firstBytes = outputReader.ReadBytes(windowSize);
+                    def secondBytes = inputReader.ReadBytes(windowSize);
+
+                    mutable result = startPosition;
+                    def newStartPosition = startPosition + windowSize;
+                    if(firstBytes.GetHash() == secondBytes.GetHash())
+                    {                    
+                        result = getMismatchPosition(newStartPosition, windowSize, firstStream, secondStream);
+                    }
+                    else 
+                    {
+                        when(firstBytes.Length > 1)
+                        {
+                            result = startPosition + getMismatchPosition(0, windowSize / 2, MemoryStream(firstBytes), MemoryStream(secondBytes));
+                        }
+                    }
+
+                    result;
+                }
+
+                def mismatchPosition = getMismatchPosition(0, smallerStream.Length :> int, stream, other);
+                NUnit.Framework.Assert.Fail("Streams don't match, starting at byte position {0}", mismatchPosition);
+            }
+        }   
+        public static GetReader([NotNull] this stream: Stream) : BinaryReader
+        {
+            BinaryReader(stream);
+        }
+
+        public static ShouldMatch([NotNull] this currentStream : Stream, [NotNull] otherStream : Stream, startPosition : uint, length : uint, 
     failureMessage : string, params args : array[object]) : void
-    {
-      def matchesOtherStream = currentStream.Matches(otherStream, startPosition, length);
-      when (!matchesOtherStream)
-      {
-        NUnit.Framework.Assert.Fail(failureMessage, args);
-      }
-    }
-    public static Matches([NotNull] this currentStream : Stream, [NotNull] otherStream : Stream, startPosition : uint, length : uint) : bool
+        {
+            def matchesOtherStream = currentStream.Matches(otherStream, startPosition, length);
+            when (!matchesOtherStream)
+            {
+                NUnit.Framework.Assert.Fail(failureMessage, args);
+            }
+        }
+        public static Matches([NotNull] this currentStream : Stream, [NotNull] otherStream : Stream, startPosition : uint, length : uint) : bool
         requires startPosition <= currentStream.Length
-    {
-      def expectedData = currentStream.GetData(startPosition, length);
-      def actualData = otherStream.GetData(startPosition, length);
-      def expectedHash = expectedData.GetHash();
-      def actualHash = actualData.GetHash();
-      
-      expectedHash == actualHash;
-    }
-    
-    public static GetData([NotNull] this currentStream : Stream, startPosition : uint, size : uint) : array[byte]
+        {
+            def expectedData = currentStream.GetData(startPosition, length);
+            def actualData = otherStream.GetData(startPosition, length);
+            def expectedHash = expectedData.GetHash();
+            def actualHash = actualData.GetHash();
+
+            expectedHash == actualHash;
+        }
+
+        public static GetData([NotNull] this currentStream : Stream, startPosition : uint, size : uint) : array[byte]
         requires startPosition <= currentStream.Length
-    {            
-      _ = currentStream.Seek(startPosition, SeekOrigin.Begin);
-      def reader = BinaryReader(currentStream);
-      
-      reader.ReadBytes(size :> int);
+        {            
+            _ = currentStream.Seek(startPosition, SeekOrigin.Begin);
+            def reader = BinaryReader(currentStream);
+
+            reader.ReadBytes(size :> int);
+        }
     }
-  }
 }
