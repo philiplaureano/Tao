@@ -72,6 +72,11 @@
       <Name>System</Name>
       <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Name>System.Configuration</Name>
+      <AssemblyName>System.configuration.dll</AssemblyName>
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.configuration.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -136,6 +141,10 @@
     </Compile>
     <Compile Include="MetadataRootTests.n">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MetadataRootTests.RoundTripping.n">
+      <SubType>Code</SubType>
+      <DependentUpon>MetadataRootTests.n</DependentUpon>
     </Compile>
     <Compile Include="MetadataStreamBlockReadTests.n">
       <SubType>Code</SubType>
@@ -444,6 +453,10 @@
     <Folder Include="Tables\Writes" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config">
+      <SubType>Content</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="SampleBinaries\HelloWorld.exe">
       <SubType>Content</SubType>
     </Content>

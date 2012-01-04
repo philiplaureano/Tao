@@ -50,7 +50,7 @@ namespace Tests
         {
             get
             {
-                @"..\..\SampleBinaries\NHibernate.dll";
+                @"..\..\SampleBinaries\Skeleton.exe";
             }
         }
     }

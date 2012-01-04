@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace Tests
 {
-  public class MetadataRootTests
+  public partial class MetadataRootTests
   {
     public ShouldBeAbleToExtractMetadataRootFromAnImageObject() : void
     {

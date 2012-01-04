@@ -3,9 +3,11 @@ using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 using Tests.Macros;
-
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -13,6 +15,77 @@ namespace Tests
 {
     public class StreamExtensions
     {
+        public static PEVerifyIt([NotNull] this bytes : array[byte]) : void
+        {
+            def stream = MemoryStream(bytes);
+            stream.PEVerifyIt();
+        }
+
+        public static PEVerifyIt([NotNull] this stream : Stream) : void
+        {
+            def pathKeys = array["sdkDir", "sdkx86SdkDir", "sdkDirUnderWin7"];                       
+            def verifierPath = GetPEVerifyLocation(pathKeys);
+
+            def tempFileName = Path.GetTempFileName();            
+            def memoryStream = MemoryStream();
+            stream.CopyTo(memoryStream);
+
+            try
+            {
+                // Save the stream to a temp file
+            File.WriteAllBytes(tempFileName, memoryStream.ToArray());
+
+            def process = Process();
+            def info = process.StartInfo;
+            info.FileName = verifierPath;
+            info.RedirectStandardOutput = true;
+            info.UseShellExecute = false;
+            info.WorkingDirectory = AppDomain.CurrentDomain.SetupInformation.PrivateBinPath;
+            info.Arguments = "\"" + tempFileName + "\" /VERBOSE";
+            info.CreateNoWindow = true;
+
+            _ = process.Start();
+
+            def output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();            
+
+            when (process.ExitCode != 0)
+            {
+                def result = string.Format("PEVerify Failed! Exit Code: {0}", process.ExitCode);
+                Console.WriteLine(result);
+                Console.WriteLine(output);
+                Assert.Fail("PEVerify output: " + Environment.NewLine + output, result);
+            }
+            
+            }
+            finally
+            {
+                when (File.Exists(tempFileName))
+                {
+                    File.Delete(tempFileName);
+                }
+            }
+        }
+        private static GetPEVerifyLocation([NotNull] pathKeys : IEnumerable.[string]) : string
+            ensures File.Exists(value) otherwise throw FileNotFoundException("Unable to find PEVerify.exe")
+        {
+            mutable result = string.Empty;
+            foreach(key in pathKeys)
+            {
+                def directory = ConfigurationManager.AppSettings[key];
+
+                when (!string.IsNullOrWhiteSpace(directory))
+                {
+                    def location = Path.Combine(directory, "PEVerify.exe");
+
+                    when(File.Exists(location))
+                    {
+                        result = location;
+                    }
+                }
+            }
+            result;
+        }
         public static GetHash([NotNull] this stream : Stream) : string
         {
             _ = stream.Seek(0, SeekOrigin.Begin);
@@ -38,41 +111,46 @@ namespace Tests
             {
                 smallerStream = stream;
             }
-            
-            when(hash != otherHash)
-            {
-                def getMismatchPosition(startPosition : int, windowSize : int, firstStream : Stream, 
+
+            def getMismatchPosition(startPosition : int, windowSize : int, firstStream : Stream, 
             secondStream : Stream) : int
 
+            {
+                _ = firstStream.Seek(startPosition, SeekOrigin.Begin);
+                _ = secondStream.Seek(startPosition, SeekOrigin.Begin);
+
+                def outputReader = BinaryReader(firstStream);
+                def inputReader = BinaryReader(secondStream);
+
+                def firstBytes = outputReader.ReadBytes(windowSize);
+                def secondBytes = inputReader.ReadBytes(windowSize);
+
+                mutable result = startPosition;
+                def newStartPosition = startPosition + windowSize;
+                if(firstBytes.GetHash() == secondBytes.GetHash())
+                {                    
+                    result = getMismatchPosition(newStartPosition, windowSize, firstStream, secondStream);
+                }
+                else 
                 {
-                    firstStream.Seek(startPosition, SeekOrigin.Begin);
-                    secondStream.Seek(startPosition, SeekOrigin.Begin);
-
-                    def outputReader = BinaryReader(firstStream);
-                    def inputReader = BinaryReader(secondStream);
-
-                    def firstBytes = outputReader.ReadBytes(windowSize);
-                    def secondBytes = inputReader.ReadBytes(windowSize);
-
-                    mutable result = startPosition;
-                    def newStartPosition = startPosition + windowSize;
-                    if(firstBytes.GetHash() == secondBytes.GetHash())
-                    {                    
-                        result = getMismatchPosition(newStartPosition, windowSize, firstStream, secondStream);
-                    }
-                    else 
+                    when(firstBytes.Length > 1)
                     {
-                        when(firstBytes.Length > 1)
-                        {
-                            result = startPosition + getMismatchPosition(0, windowSize / 2, MemoryStream(firstBytes), MemoryStream(secondBytes));
-                        }
-                    }
-
-                    result;
+                        result = startPosition + getMismatchPosition(0, windowSize / 2, MemoryStream(firstBytes), MemoryStream(secondBytes));
+                    }                    
                 }
 
-                def mismatchPosition = getMismatchPosition(0, smallerStream.Length :> int, stream, other);
-                NUnit.Framework.Assert.Fail("Streams don't match, starting at byte position {0}", mismatchPosition);
+                result;
+            }
+
+            when(hash != otherHash)
+            {
+                def mismatchPosition : int = getMismatchPosition(0, smallerStream.Length :> int, stream, other);
+                _ = stream.Seek(mismatchPosition, SeekOrigin.Begin);
+                _ = other.Seek(mismatchPosition, SeekOrigin.Begin);
+
+                def expected = other.ReadByte();
+                def actual = stream.ReadByte();
+                NUnit.Framework.Assert.Fail("Streams don't match, starting at byte position {0}; Expected Value: {1}, Actual Value: {2}", mismatchPosition, expected, actual);
             }
         }   
         public static GetReader([NotNull] this stream: Stream) : BinaryReader

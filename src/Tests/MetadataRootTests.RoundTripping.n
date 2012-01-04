@@ -1,0 +1,56 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public partial class MetadataRootTests
+    {
+        public ShouldBeAbleToRunPEVerifyAgainstSkeletonAssembly() : void
+        {
+            def targetFile = @"..\..\SampleBinaries\Skeleton.exe";
+            def assemblyBytes = File.ReadAllBytes(targetFile);
+            assemblyBytes.PEVerifyIt();          
+        }
+        public ShouldBeAbleToPassPEVerifyAgainstARoundTrippedMetadataRoot() : void
+        {
+            def targetFile = @"..\..\SampleBinaries\Skeleton.exe";
+            def assemblyBytes = File.ReadAllBytes(targetFile);
+            def inputStream = MemoryStream(assemblyBytes);
+
+            def imageReader = ImageReader();
+            def image = imageReader.Read(inputStream);
+            def root = image.GetMetadataRoot();
+            root.ShouldBeNotNull("There should be a CLR header here");
+
+            def clrHeader : ICLIHeader = image.GetCLRHeader();
+            def rootRva = clrHeader.MetadataRva;
+            def size = clrHeader.MetadataSize;         
+
+            // Clear the existing root data
+            def bytes = array(size :> int) : array[byte];
+            def nullStream = MemoryStream(bytes);
+            image.WriteBlock(rootRva, nullStream);
+
+            // Reinject the original metadata root
+            image.Write(root, rootRva);                        
+            
+            // Run PEVerify on the roundtripped image
+            def outputStream = MemoryStream();
+            def imageWriter = ImageWriter();
+            
+            imageWriter.Write(image, outputStream);
+            
+            outputStream.PEVerifyIt();
+        }
+    }
+}
