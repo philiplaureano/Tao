@@ -30,7 +30,7 @@ namespace Tests
                 def currentTableId = currentId :> TableId;
                 when (!supportedTableIds.Contains(currentTableId))
                 {
-                    unsupportedTables.Add(currentTableId);
+                    _ = unsupportedTables.Add(currentTableId);
                 }
             }
 

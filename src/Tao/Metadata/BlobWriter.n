@@ -26,7 +26,7 @@ namespace Tao
       def blobBytes = reader.ReadBytes(length :> int);
       
       def writer = BinaryWriter(outputStream);
-      writer.Write(blobBytes);
+      writer.Write(blobBytes);           
       
       blobIndex;
     }

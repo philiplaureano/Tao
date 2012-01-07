@@ -1,0 +1,114 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class WriteProtectedRegion
+    {
+        public this(startPosition : uint, length : uint)
+        {
+            StartPosition = startPosition;
+            EndPosition = startPosition + length;
+        }
+        public StartPosition : uint;
+        public EndPosition : uint;
+
+        public Contains(position : int) : bool
+        {
+            def currentPosition = position :> uint;
+            currentPosition >= StartPosition && currentPosition <= EndPosition;
+        }
+    }
+
+    public class WriteProtectedStream : Stream
+    {
+        private _stream : Stream;
+        private _regions : System.Collections.Generic.ICollection.[WriteProtectedRegion] = List.[WriteProtectedRegion]();
+        private _writtenRegions : ISet.[WriteProtectedRegion] = HashSet.[WriteProtectedRegion]();
+
+        public this(stream : Stream)
+        {
+            _stream = stream;
+        }
+
+        public override Flush() : void
+        {
+            _stream.Flush();
+        }
+
+        public override Seek(offset : long, origin : SeekOrigin) : long
+        {
+            _stream.Seek(offset, origin);
+        }
+
+        public override SetLength(value : long) : void
+        {
+            _stream.SetLength(value);
+        }
+
+        public override Read(buffer : array[byte], offset : int, count : int) : int
+        {
+            _stream.Read(buffer, offset, count);
+        }
+
+        public override Write(buffer : array[byte], offset : int, count : int) : void
+        {
+            def currentPosition = Position :> int;
+            foreach (region in Regions)
+            {
+                when (region.Contains(currentPosition))
+                {
+                    def hasRegion = _writtenRegions.Contains(region);
+                    if(hasRegion)
+                    {
+                        throw InvalidOperationException("You can't write to a write-protected region");
+                    }
+                    else
+                    {
+                        _writtenRegions.Add(region);
+                    }
+                }
+
+            }
+            _stream.Write(buffer, offset, count);
+        }
+
+        public override CanRead : bool
+        {
+            get { _stream.CanRead; }
+        }
+
+        public override CanSeek : bool
+        {
+            get { _stream.CanSeek; }
+        }
+
+        public override CanWrite : bool
+        {
+            get { _stream.CanWrite; }
+        }
+
+        public override Length : long
+        {
+            get { _stream.Length; }
+        }
+
+        public override Position : long
+        {
+            get { _stream.Position; }
+            set { _stream.Position = value; }
+        }
+
+        public Regions : System.Collections.Generic.ICollection.[WriteProtectedRegion]
+        {
+            get { _regions; }
+        }
+    }
+}

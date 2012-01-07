@@ -139,6 +139,10 @@
     <Compile Include="ImageTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ImageTests.RoundTrippingTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>ImageTests.n</DependentUpon>
+    </Compile>
     <Compile Include="MetadataRootTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -442,6 +446,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UserStringTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WriteProtectedStream.n">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

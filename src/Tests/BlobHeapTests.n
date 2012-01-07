@@ -11,34 +11,49 @@ using System.Linq;
 
 namespace Tests
 {  
-  public class BlobHeapTests
-  {
-    public ShouldBeAbleToReadBlobBytesFromGivenIndex() : void
+    public class BlobHeapTests
     {
-      def blobBytes = array[0x00 : byte, 0x03, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00];
-      def expectedBytes = array[0x00 : byte, 0x00, 0x01];
-      def index : uint = 1;
-      
-      def blobStream = MemoryStream(blobBytes);
-      def reader = BlobReader();
-      def blob : Stream = reader.Read(index, blobStream);
-      
-      def expectedData = MemoryStream(expectedBytes);
-      expectedData.ShouldMatch(blob);
+        public ShouldBeAbleToReadBlobBytesFromGivenIndex() : void
+        {
+            def blobBytes = array[0x00 : byte, 0x03, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00];
+            def expectedBytes = array[0x00 : byte, 0x00, 0x01];
+            def index : uint = 1;
+
+            def blobStream = MemoryStream(blobBytes);
+            def reader = BlobReader();
+            def blob : Stream = reader.Read(index, blobStream);
+
+            def expectedData = MemoryStream(expectedBytes);
+            expectedData.ShouldMatch(blob);
+        }
+        public ShouldAutomaticallyEncodeBlobSizeWhenWritingBlobFromGivenBytes() : void
+        {
+            def blobBytes = array[0x00 : byte, 0x00, 0x01];
+            def blobData = MemoryStream(blobBytes);
+
+            def outputStream = MemoryStream();
+            def writer = BlobWriter();
+            def blobIndex = writer.Write(blobData, outputStream);
+
+            def expectedData = array[0x03 : byte, 0x00, 0x00, 0x01];
+            outputStream.ShouldMatch(expectedData);
+
+            assert blobIndex equals 0 otherwiseprint "Invalid Blob Index";
+        } 
+        public ignored ShouldAlignEntireBlobHeapToNext4ByteBoundary() : void
+        {
+            // TODO: Create a blob heap writer that writes the entire blob heap instead of just a single blob
+            //def blobBytes = array[0x00 : byte, 0x00, 0x01, 0x42];
+            //def blobData = MemoryStream(blobBytes);
+
+            //def outputStream = MemoryStream();
+            //def writer = BlobWriter();
+            //_ = writer.Write(blobData, outputStream);            
+            
+            //def actualLength = 5;
+            //def expectedLength = actualLength.GetNextBoundary(4);
+            //outputStream.Length.ShouldBeEqualTo(expectedLength, "The Blob Stream should be aligned to the next 4 byte boundary");
+            throw NotImplementedException();
+        }
     }
-    public ShouldAutomaticallyEncodeBlobSizeWhenWritingBlobFromGivenBytes() : void
-    {
-      def blobBytes = array[0x00 : byte, 0x00, 0x01];
-      def blobData = MemoryStream(blobBytes);
-      
-      def outputStream = MemoryStream();
-      def writer = BlobWriter();
-      def blobIndex = writer.Write(blobData, outputStream);
-      
-      def expectedData = array[0x03 : byte, 0x00, 0x00, 0x01];
-      outputStream.ShouldMatch(expectedData);
-      
-      assert blobIndex equals 0 otherwiseprint "Invalid Blob Index";
-    }    
-  }
 }

@@ -18,6 +18,7 @@ namespace Tao
   {    
     public Read([NotNull] inputStream : Stream) : IDosHeader
         requires inputStream.Length > 128 otherwise throw BadImageFormatException("Invalid MS-DOS Header")
+        requires inputStream.Position == 0
         ensures value != null && value.Data.Length > 0
     {
       def binaryReader = BinaryReader(inputStream);

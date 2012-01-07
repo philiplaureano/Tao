@@ -1,0 +1,39 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+    public static class AlignmentExtensions
+    {
+        public GetNextBoundary(this length : int, alignment : int) : int
+        {
+            def value = length :> uint;
+            value.GetNextBoundary(alignment);
+        }
+        public GetNextBoundary(this length : uint, alignment : int) : int
+        {
+          ((length :> int) + alignment) & ~alignment;
+        }
+        
+        public Align(this stream : Stream, alignment : int) : void
+        {
+            def length = stream.Length :> int;
+            def alignedLength = length.GetNextBoundary(alignment);
+            def bytesToPad = alignedLength - length;
+
+            when(bytesToPad > 0)
+            {
+                def binaryWriter = BinaryWriter(stream);
+                def paddingBytes = array(bytesToPad) : array[byte];
+                binaryWriter.Write(paddingBytes);
+            }
+        }
+    }
+}

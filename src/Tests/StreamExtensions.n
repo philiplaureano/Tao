@@ -13,8 +13,23 @@ using System.Linq;
 
 namespace Tests
 {
-    public class StreamExtensions
+    public static class StreamExtensions
     {
+        public static WriteAllBytesTo([NotNull] this bytes : array[byte], filename : string) : void
+        {
+            def stream = MemoryStream(bytes);
+            stream.WriteAllBytesTo(filename);
+        }
+        
+        public static WriteAllBytesTo([NotNull] this stream : Stream, filename : string) : void
+        {
+            _ = stream.Seek(0, SeekOrigin.Begin);
+            
+            def reader = BinaryReader(stream);
+            def bytes = reader.ReadBytes(stream.Length:> int);
+            File.WriteAllBytes(filename, bytes);
+        }
+        
         public static PEVerifyIt([NotNull] this bytes : array[byte]) : void
         {
             def stream = MemoryStream(bytes);
@@ -23,17 +38,22 @@ namespace Tests
 
         public static PEVerifyIt([NotNull] this stream : Stream) : void
         {
+            _ = stream.Seek(0, SeekOrigin.Begin);
+            stream.PEVerifyItAs(Path.GetTempFileName());
+        }
+        
+        public static PEVerifyItAs([NotNull] this stream : Stream, filename : string) : void
+        {
             def pathKeys = array["sdkDir", "sdkx86SdkDir", "sdkDirUnderWin7"];                       
             def verifierPath = GetPEVerifyLocation(pathKeys);
 
-            def tempFileName = Path.GetTempFileName();            
             def memoryStream = MemoryStream();
             stream.CopyTo(memoryStream);
 
             try
             {
                 // Save the stream to a temp file
-            File.WriteAllBytes(tempFileName, memoryStream.ToArray());
+            File.WriteAllBytes(filename, memoryStream.ToArray());
 
             def process = Process();
             def info = process.StartInfo;
@@ -41,7 +61,7 @@ namespace Tests
             info.RedirectStandardOutput = true;
             info.UseShellExecute = false;
             info.WorkingDirectory = AppDomain.CurrentDomain.SetupInformation.PrivateBinPath;
-            info.Arguments = "\"" + tempFileName + "\" /VERBOSE";
+            info.Arguments = "\"" + filename + "\" /VERBOSE";
             info.CreateNoWindow = true;
 
             _ = process.Start();
@@ -60,9 +80,9 @@ namespace Tests
             }
             finally
             {
-                when (File.Exists(tempFileName))
+                when (File.Exists(filename) && filename.EndsWith("tmp"))
                 {
-                    File.Delete(tempFileName);
+                    File.Delete(filename);
                 }
             }
         }

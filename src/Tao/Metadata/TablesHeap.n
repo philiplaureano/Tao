@@ -78,6 +78,9 @@ namespace Tao
             
             // Write the table data
             _tables.Write(heapSizes.ToHeapSizeArray(), rowCounts, outputStream);
+            
+            // Pad the stream to next 4-byte boundary
+            outputStream.Align(4);            
         }
     }
 }

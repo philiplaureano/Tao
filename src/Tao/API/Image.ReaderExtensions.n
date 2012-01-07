@@ -14,10 +14,9 @@ namespace Tao
   {
     public static ReadFrom(imageFile : string) : IImage
     {
-      using(def imageStream = System.IO.FileStream(imageFile, FileMode.Open))
-      {
-        ReadFrom(imageStream);
-      }      
+      def bytes = File.ReadAllBytes(imageFile);
+      def imageStream = MemoryStream(bytes);
+      ReadFrom(imageStream);
     }    
     public static ReadFrom(imageStream : Stream) : IImage
     {

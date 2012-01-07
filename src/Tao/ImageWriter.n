@@ -11,82 +11,111 @@ using System.Linq;
 
 namespace Tao
 {  
-  public class ImageWriter
-  {
-    public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : void
+    public class ImageWriter
     {
-      def dosHeader = image.DOSHeader;
-      def dosHeaderWriter = DosHeaderWriter();
-      dosHeaderWriter.Write(dosHeader, outputStream);
-                      
-      // Seek the COFF header position
-      def lfaNew = dosHeader.LfaNew;
-      _ = outputStream.Seek(lfaNew, SeekOrigin.Begin);
-          
-      def coffHeader = image.CoffHeader;
-      
-      // Write the number of sections to the COFF header
-      def sections = image.Sections;
-      coffHeader.NumberOfSections = sections.Count :> ushort;
-      
-      def coffHeaderWriter = CoffHeaderWriter();
-      coffHeaderWriter.Write(coffHeader, outputStream);
-      
-      def standardFieldsWriter = OptionalHeaderStandardFieldsWriter();
-      def optionalHeader = image.OptionalHeader;
-          
-      def directoryCount = image.DataDirectories.Count :> uint;
-      match(optionalHeader)
-      {
-        |OptionalHeader.OptionalHeader32 =>
-         {
-            def currentHeader = optionalHeader :> OptionalHeader.OptionalHeader32;
-            def standardFields = currentHeader.StandardFields;
-            def ntHeaderWriter = NTHeader32Writer();
+        private _dosHeaderWriter : IDosHeaderWriter;
+        private _coffHeaderWriter : ICoffHeaderWriter;
+        private _fieldsWriter : IOptionalHeaderStandardFieldsWriter;
+        private _dataDirectoryWriter : IDataDirectoryWriter;
+        private _sectionHeaderWriter : ISectionHeaderWriter;
+
+        public this() 
+        {
+            this(DosHeaderWriter(), CoffHeaderWriter(), OptionalHeaderStandardFieldsWriter(), DataDirectoryWriter(), SectionHeaderWriter());
+        }
+
+        public this(dosHeaderWriter : IDosHeaderWriter, 
+            coffHeaderWriter : ICoffHeaderWriter, 
+            optionalHeaderStandardFieldsWriter : IOptionalHeaderStandardFieldsWriter,
+            dataDirectoryWriter : IDataDirectoryWriter,
+            sectionHeaderWriter : ISectionHeaderWriter)
+        {
+            _dosHeaderWriter = dosHeaderWriter;
+            _coffHeaderWriter  = coffHeaderWriter;
+            _fieldsWriter = optionalHeaderStandardFieldsWriter;
+            _dataDirectoryWriter = dataDirectoryWriter;
+            _sectionHeaderWriter = sectionHeaderWriter;
+        }
+
+        public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : void
+        {
+            def dosHeader = image.DOSHeader;
+            _dosHeaderWriter.Write(dosHeader, outputStream);
+
+            // Seek the COFF header position
+            def lfaNew = dosHeader.LfaNew;
+            _ = outputStream.Seek(lfaNew, SeekOrigin.Begin);
+
+            def coffHeader = image.CoffHeader;
+
+            // Write the number of sections to the COFF header
+            def sections = image.Sections;
+            coffHeader.NumberOfSections = sections.Count :> ushort;
+
+            _coffHeaderWriter.Write(coffHeader, outputStream);
+
+            def optionalHeader = image.OptionalHeader;
+
+            def directoryCount = image.DataDirectories.Count :> uint;
+            mutable sectionAlignment : uint = 0x2000;
             
-            // Make sure that the number of directories is consistent with 
-            // the value in the header
-            currentHeader.Header.NumberOfRvaAndSizes = directoryCount;
-            standardFieldsWriter.Write(standardFields, outputStream);
-            ntHeaderWriter.Write(currentHeader.Header, outputStream);
-         }
-        |OptionalHeader.OptionalHeader64 =>
-         {
-            def currentHeader = optionalHeader :> OptionalHeader.OptionalHeader64;
-            def standardFields = currentHeader.StandardFields;
-            def ntHeaderWriter = NTHeader64Writer();
-            
-            // Make sure that the number of directories is consistent with 
-            // the value in the header
-            currentHeader.Header.NumberOfRvaAndSizes = directoryCount;
-            standardFieldsWriter.Write(standardFields, outputStream);
-            ntHeaderWriter.Write(currentHeader.Header, outputStream);
-         }
-      }                
-      
-      // Write the data directories
-      def dataDirectoryWriter = DataDirectoryWriter();
-      dataDirectoryWriter.Write(image.DataDirectories, outputStream);
-      
-      // Write the sections      
-      def sectionHeaderWriter = SectionHeaderWriter();
-      def sectionHeaders = sections.Select(s => s.Header);
-      sectionHeaderWriter.Write(sectionHeaders, outputStream);
-      
-      def writer = BinaryWriter(outputStream);
-      foreach(section in sections)
-      {
-          def sectionData = section.Data;
-          def header = section.Header;
-          def reader = BinaryReader(sectionData);
-                              
-          def length = header.SizeOfRawData;                    
-          def sectionBytes = reader.ReadBytes(length :> int);
-          
-          def startPosition = header.PointerToRawData;
-          _ = outputStream.Seek(startPosition, SeekOrigin.Begin);
-          writer.Write(sectionBytes);
-      }
+            match(optionalHeader)
+            {
+                |OptionalHeader.OptionalHeader32 =>
+                {                    
+                        def currentHeader = optionalHeader :> OptionalHeader.OptionalHeader32;
+                        def standardFields = currentHeader.StandardFields;
+                        def ntHeaderWriter = NTHeader32Writer();
+
+                        // Make sure that the number of directories is consistent with 
+                        // the value in the header
+                        currentHeader.Header.NumberOfRvaAndSizes = directoryCount;
+                        _fieldsWriter.Write(standardFields, outputStream);
+                        ntHeaderWriter.Write(currentHeader.Header, outputStream);
+                        
+                        sectionAlignment = currentHeader.Header.SectionAlignment;
+                }
+
+                |OptionalHeader.OptionalHeader64 =>
+                {
+                        def currentHeader = optionalHeader :> OptionalHeader.OptionalHeader64;
+                        def standardFields = currentHeader.StandardFields;
+                        def ntHeaderWriter = NTHeader64Writer();
+
+                        // Make sure that the number of directories is consistent with 
+                        // the value in the header
+                        currentHeader.Header.NumberOfRvaAndSizes = directoryCount;
+                        _fieldsWriter.Write(standardFields, outputStream);
+                        ntHeaderWriter.Write(currentHeader.Header, outputStream);
+                        
+                        sectionAlignment = currentHeader.Header.SectionAlignment;
+                }
+            }                
+
+            // Write the data directories
+            _dataDirectoryWriter.Write(image.DataDirectories, outputStream);
+
+            // Write the sections      
+            def sectionHeaders = sections.Select(s => s.Header);
+            _sectionHeaderWriter.Write(sectionHeaders, outputStream);
+
+            def writer = BinaryWriter(outputStream);
+            foreach(section in sections)
+            {
+                def sectionData = section.Data;
+                def header = section.Header;
+                def reader = BinaryReader(sectionData);
+
+                def length = header.SizeOfRawData;                    
+                def sectionBytes = reader.ReadBytes(length :> int);
+
+                def startPosition = header.PointerToRawData;
+                _ = outputStream.Seek(startPosition, SeekOrigin.Begin);
+                writer.Write(sectionBytes);
+                
+                // Align the sections to the nearest boundary
+                outputStream.Align(sectionAlignment :> int);
+            }
+        }
     }
-  }
 }

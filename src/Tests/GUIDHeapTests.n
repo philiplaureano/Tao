@@ -89,5 +89,10 @@ namespace Tests
       
       guidStream.ShouldMatch(expectedGuidData);
     }    
+    public ignored ShouldAlignGuidHeapToNext4ByteBoundary() : void
+    {
+        // TODO: Create a GUID heap writer that writes the entire guid heap instead of just one GUID
+        throw NotImplementedException();
+    }
   }
 }
