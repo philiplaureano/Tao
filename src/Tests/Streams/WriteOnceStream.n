@@ -1,0 +1,40 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class WriteOnceStream : ProtectedStream
+    {
+        private _writtenRegions : IList.[WriteProtectedRegion] = List.[WriteProtectedRegion]();
+
+        public this(stream : Stream) 
+        {
+            base(stream);
+        }
+        protected override CanWriteTo(offset : long, count : int) : bool
+        {
+            mutable result = true;
+            foreach(region in _writtenRegions)
+            {
+                when(region.Contains(offset :> int, count))
+                {
+                    result = false;
+                }
+            }
+
+            // Protect the current region from further writes
+            when(!result)
+            {
+                _writtenRegions.Add(WriteProtectedRegion(offset :> uint, count :> uint));
+            }
+            result;
+        }
+    }
+}

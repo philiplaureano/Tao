@@ -20,16 +20,19 @@ namespace Tests
             def stream = MemoryStream(bytes);
             stream.WriteAllBytesTo(filename);
         }
-        
+
         public static WriteAllBytesTo([NotNull] this stream : Stream, filename : string) : void
         {
             _ = stream.Seek(0, SeekOrigin.Begin);
-            
+
             def reader = BinaryReader(stream);
             def bytes = reader.ReadBytes(stream.Length:> int);
+
+            bytes.Length.ShouldNotBeEqualTo(0, "You can't run PEVerify against an empty file");
+
             File.WriteAllBytes(filename, bytes);
         }
-        
+
         public static PEVerifyIt([NotNull] this bytes : array[byte]) : void
         {
             def stream = MemoryStream(bytes);
@@ -41,19 +44,21 @@ namespace Tests
             _ = stream.Seek(0, SeekOrigin.Begin);
             stream.PEVerifyItAs(Path.GetTempFileName());
         }
-        
+
         public static PEVerifyItAs([NotNull] this stream : Stream, filename : string) : void
+            requires stream.Length > 0 otherwise throw ArgumentException("stream", "You can't run PEVerify against an empty stream")
         {
+            def memoryStream = MemoryStream();
+            stream.CopyTo(memoryStream);
+            
+            // Save the stream to a temp file
+            File.WriteAllBytes(filename, memoryStream.ToArray());
+
             def pathKeys = array["sdkDir", "sdkx86SdkDir", "sdkDirUnderWin7"];                       
             def verifierPath = GetPEVerifyLocation(pathKeys);
 
-            def memoryStream = MemoryStream();
-            stream.CopyTo(memoryStream);
-
             try
             {
-                // Save the stream to a temp file
-            File.WriteAllBytes(filename, memoryStream.ToArray());
 
             def process = Process();
             def info = process.StartInfo;
@@ -76,7 +81,7 @@ namespace Tests
                 Console.WriteLine(output);
                 Assert.Fail("PEVerify output: " + Environment.NewLine + output, result);
             }
-            
+
             }
             finally
             {

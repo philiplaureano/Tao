@@ -103,6 +103,8 @@ namespace Tao
             foreach(section in sections)
             {
                 def sectionData = section.Data;
+                _ = sectionData.Seek(0, SeekOrigin.Begin);
+                
                 def header = section.Header;
                 def reader = BinaryReader(sectionData);
 

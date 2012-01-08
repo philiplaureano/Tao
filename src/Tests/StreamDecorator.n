@@ -1,0 +1,72 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public abstract class StreamDecorator : Stream
+    {
+        private _stream : Stream;
+        protected this(actualStream : Stream) 
+        {
+            _stream = actualStream;
+        }
+
+        public override Flush() : void
+        {
+            _stream.Flush();
+        }
+
+        public override Seek(offset : long, origin : SeekOrigin) : long
+        {
+            _stream.Seek(offset, origin);
+        }
+
+        public override SetLength(value : long) : void
+        {
+            _stream.SetLength(value);
+        }
+
+        public override Read(buffer : array[byte], offset : int, count : int) : int
+        {
+            _stream.Read(buffer, offset, count);
+        }
+
+        public override CanRead : bool
+        {
+            get { _stream.CanRead; }
+        }
+
+        public override CanSeek : bool
+        {
+            get { _stream.CanSeek; }
+        }
+
+        public override CanWrite : bool
+        {
+            get { _stream.CanWrite; }
+        }
+
+        public override Length : long
+        {
+            get { _stream.Length; }
+        }
+
+        public override Position : long
+        {
+            get { _stream.Position; }
+            set { _stream.Position = value; }
+        }
+        
+        public override Write(buffer : array[byte], offset : int, count : int) : void
+        {
+            _stream.Write(buffer, offset, count);
+        }
+    }
+}

@@ -11,111 +11,112 @@ using System.Linq;
 
 namespace Tao
 {
-  public static class ImageExtensions
-  {
-    public GetCLRHeader([NotNull] this image : IImage) : ICLIHeader    
+    public static class ImageExtensions
+    {
+        public GetCLRHeader([NotNull] this image : IImage) : ICLIHeader    
         requires image.DataDirectories != null
-    {
-      mutable result : ICLIHeader = null;
-      def directories = image.DataDirectories;
-      
-      when (directories.Count >= 15)
-      {
-        def cliHeaderDirectory = image.DataDirectories[14];
-              
-        def rva = cliHeaderDirectory.Rva;
-        def size = cliHeaderDirectory.Size;
-        
-        when(rva > 0 && size > 0)
         {
-          using(def data = image.ReadBlock(rva, size))
-          {
-            def reader = CLIHeaderReader();
-            result = reader.Read(data);
-          }
+            mutable result : ICLIHeader = null;
+            def directories = image.DataDirectories;
+
+            when (directories.Count >= 15)
+            {
+                def cliHeaderDirectory = image.DataDirectories[14];
+
+                def rva = cliHeaderDirectory.Rva;
+                def size = cliHeaderDirectory.Size;
+
+                when(rva > 0 && size > 0)
+                {
+                    using(def data = image.ReadBlock(rva, size))
+                    {
+                        def reader = CLIHeaderReader();
+                        result = reader.Read(data);
+                    }
+                }
+            }
+
+            result;
+        }    
+        public GetMetadataRoot([NotNull] this image : IImage) : IMetadataRoot
+        requires image.HasCLRHeader()
+        {
+            def reader = MetadataRootExtractor();
+            def header = reader.ExtractFrom(image);
+            header;
+        }    
+        public HasCLRHeader([NotNull] this image : IImage) : bool
+        {
+            image.GetCLRHeader() != null;
+        }    
+        public ReadBlock([NotNull] this image : IImage, rva : uint, size : uint) : Stream
+        {
+            def reader = SectionDataReader();
+            def data = reader.ReadBlock(rva, size, image);
+            data;
+        }  
+        public ReadBlock([NotNull] this image: IImage, location: Location) : Stream
+        {
+            def addressReader = ImageAddressReader();
+            def location = addressReader.ReadAddressOf(location, image);
+            image.ReadBlock(location.Rva, location.Size);
         }
-      }
-      
-      result;
-    }    
-    public GetMetadataRoot([NotNull] this image : IImage) : IMetadataRoot
+        public WriteBlock([NotNull] this image : IImage, rva : uint, data : Stream) : void
+        {
+            def sectionWriter = SectionDataWriter();
+            sectionWriter.WriteTo(rva, data, image);
+        } 
+        public Write([NotNull] this image : IImage, [NotNull] root : IMetadataRoot, rva : uint) : void
         requires image.HasCLRHeader()
-    {
-      def reader = MetadataRootExtractor();
-      def header = reader.ExtractFrom(image);
-      header;
-    }    
-    public HasCLRHeader([NotNull] this image : IImage) : bool
-    {
-      image.GetCLRHeader() != null;
-    }    
-    public ReadBlock([NotNull] this image : IImage, rva : uint, size : uint) : Stream
-    {
-      def reader = SectionDataReader();
-      def data = reader.ReadBlock(rva, size, image);
-      data;
-    }  
-    public ReadBlock([NotNull] this image: IImage, location: Location) : Stream
-    {
-      def addressReader = ImageAddressReader();
-      def location = addressReader.ReadAddressOf(location, image);
-      image.ReadBlock(location.Rva, location.Size);
-    }
-    public WriteBlock([NotNull] this image : IImage, rva : uint, data : Stream) : void
-    {
-      def sectionWriter = SectionDataWriter();
-      sectionWriter.WriteTo(rva, data, image);
-    } 
-    public Write([NotNull] this image : IImage, [NotNull] root : IMetadataRoot, rva : uint) : void
-        requires image.HasCLRHeader()
-    {
-      def outputStream = MemoryStream();
-      def writer = MetadataRootWriter();
-      writer.Write(root, outputStream);
-      
-      image.WriteBlock(rva, outputStream);      
-      
-      def clrHeader = image.GetCLRHeader();
-      clrHeader.MetadataRva = rva;
-      clrHeader.MetadataSize = outputStream.Length :> uint;
-      
-      image.Write(clrHeader);
-    }
-    public Write([NotNull] this image : IImage, [NotNull] clrHeader : ICLIHeader) : void
-        requires image.DataDirectories != null && image.DataDirectories.Count >= 15
-    {      
-      def directories = image.DataDirectories;      
-      def clrDataDirectory = directories[14];
-      def clrHeaderRva = clrDataDirectory.Rva;
-      
-      image.Write(clrHeader, clrHeaderRva);
-    }
-    public Write([NotNull] this image : IImage, [NotNull] clrHeader : ICLIHeader, rva : uint) : void
-        requires image.DataDirectories != null && image.DataDirectories.Count >= 15
-    {
-      // Write the header bytes to a temporary buffer
-      def clrHeaderStream = MemoryStream();
-      def clrHeaderWriter = CLIHeaderWriter();
-      clrHeaderWriter.Write(clrHeader, clrHeaderStream);
+        {
+            def outputStream = MemoryStream();
+            def writer = MetadataRootWriter();
+            writer.Write(root, outputStream);
             
-      image.WriteBlock(rva, clrHeaderStream);
-      
-      def size = clrHeaderStream.Length :> uint;
-      
-      // Update the CLR directory to point to the new directory
-      def directories = image.DataDirectories;      
-      def clrDataDirectory = directories[14];
-      
-      clrDataDirectory.Rva = rva;
-      clrDataDirectory.Size = size;
+            def clrHeader = image.GetCLRHeader();
+            clrHeader.MetadataRva = rva;
+            clrHeader.MetadataSize = outputStream.Length :> uint;
+
+            image.Write(clrHeader);            
+            
+            _ = outputStream.Seek(0, SeekOrigin.Begin);
+            image.WriteBlock(rva, outputStream);      
+        }
+        public Write([NotNull] this image : IImage, [NotNull] clrHeader : ICLIHeader) : void
+        requires image.DataDirectories != null && image.DataDirectories.Count >= 15
+        {      
+            def directories = image.DataDirectories;      
+            def clrDataDirectory = directories[14];
+            def clrHeaderRva = clrDataDirectory.Rva;
+
+            image.Write(clrHeader, clrHeaderRva);
+        }
+        public Write([NotNull] this image : IImage, [NotNull] clrHeader : ICLIHeader, rva : uint) : void
+        requires image.DataDirectories != null && image.DataDirectories.Count >= 15
+        {
+            // Write the header bytes to a temporary buffer
+            def clrHeaderStream = MemoryStream();
+            def clrHeaderWriter = CLIHeaderWriter();
+            clrHeaderWriter.Write(clrHeader, clrHeaderStream);
+
+            image.WriteBlock(rva, clrHeaderStream);
+
+            def size = clrHeaderStream.Length :> uint;
+
+            // Update the CLR directory to point to the new directory
+            def directories = image.DataDirectories;      
+            def clrDataDirectory = directories[14];
+
+            clrDataDirectory.Rva = rva;
+            clrDataDirectory.Size = size;
+        }
+        public ResolveSectionHeaderFrom([NotNull] this image : IImage, rva : uint) : ISectionHeader
+        {
+            def resolver = SectionResolver();
+            def sections = image.Sections;
+            def headers = sections.Select(s => s.Header);
+
+            resolver.Resolve(headers, rva);
+        }
     }
-    public ResolveSectionHeaderFrom([NotNull] this image : IImage, rva : uint) : ISectionHeader
-    {
-      def resolver = SectionResolver();
-      def sections = image.Sections;
-      def headers = sections.Select(s => s.Header);
-        
-      resolver.Resolve(headers, rva);
-    }
-  }
 }

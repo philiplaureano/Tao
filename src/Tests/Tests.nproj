@@ -196,6 +196,9 @@
     <Compile Include="StartupStubTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="StreamDecorator.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="StreamExtensions.n">
       <SubType>Code</SubType>
     </Compile>
@@ -203,6 +206,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MetadataStreamHeaderTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\ProtectedStream.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\WriteOnceStream.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\WriteProtectedRegion.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StringsHeapTests.n">
@@ -448,11 +460,9 @@
     <Compile Include="UserStringTests.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WriteProtectedStream.n">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Streams" />
     <Folder Include="Tables" />
     <Folder Include="SampleBinaries" />
     <Folder Include="Properties\" />

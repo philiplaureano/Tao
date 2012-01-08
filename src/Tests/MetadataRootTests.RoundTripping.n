@@ -20,6 +20,35 @@ namespace Tests
             def targetFile = @"..\..\SampleBinaries\Skeleton.exe";
             def assemblyBytes = File.ReadAllBytes(targetFile);
             assemblyBytes.PEVerifyIt();          
-        }        
+        }   
+        public ShouldBeAbleToSwapMetadataRootWithCloneOfTheOriginalRoot() : void
+        {
+            def targetFile = @"..\..\SampleBinaries\Skeleton.exe";
+            def image = Image.ReadFrom(targetFile);
+
+            def clrHeader = image.GetCLRHeader();
+
+            def root = image.GetMetadataRoot();
+            def rootRva = clrHeader.MetadataRva;
+            def rootSize = clrHeader.MetadataSize;
+
+            // Remove the original root
+            image.WriteBlock(rootRva, MemoryStream(array(rootSize :> int) : array[byte]));
+
+            // Inject the cloned metadata root
+            def outputStream = WriteOnceStream(MemoryStream());
+            image.Write(root, rootRva);
+
+            def writer = ImageWriter();
+            writer.Write(image, outputStream);              
+            
+            outputStream.WriteAllBytesTo("ShouldBeAbleToSwapMetadataRootWithCloneOfTheOriginalRoot.exe");
+            
+            def originalBytes = File.ReadAllBytes(targetFile);
+            outputStream.ShouldMatch(originalBytes);                       
+            
+            _ = outputStream.Seek(0, SeekOrigin.Begin);
+            outputStream.PEVerifyIt();
+        }
     }
 }
