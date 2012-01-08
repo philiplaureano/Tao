@@ -117,7 +117,7 @@ namespace Tests
                 rowCounts[key] = 0;
             }
 
-            aggregateTable.Read(heapSizes, rowCounts, sortedTables, stream);
+            aggregateTable.Read(heapSizes, rowCounts, sortedTables, Dictionary(), stream);
 
             def tables : IEnumerable.[IMetadataTable] = aggregateTable.Tables;
             mutable targetTable : TTable = null;

@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Tests
 {
-  public class RowReaderTests
+  public partial class RowReaderTests
   {
     public ShouldBeAbleToReadByte() : void
     {
@@ -113,7 +113,7 @@ namespace Tests
       def dummyRow = object();
       
       def rowCounts = Dictionary.[TableId, uint]();
-      def rowReader = RowReader.[object](heapSizes, rowCounts, reader, dummyRow);          
+      def rowReader = RowReader.[object](heapSizes, rowCounts, reader, dummyRow, Dictionary());          
       def readIndex = getReadIndex(rowReader);
       readIndex(setValue);
             
@@ -138,7 +138,7 @@ namespace Tests
       def reader = BinaryReader(inputStream);            
       
       def rowCounts = Dictionary.[TableId, uint]();
-      def rowReader = RowReader.[object](heapSizes, rowCounts, reader, object());           
+      def rowReader = RowReader.[object](heapSizes, rowCounts, reader, object(), Dictionary());           
       def readIndex = getReadIndex(rowReader);
       readIndex(setValue);
             
@@ -156,9 +156,9 @@ namespace Tests
       def results = List.[TValue]();
       
       def rowCounts = Dictionary.[TableId, uint]();
-      def rowReader = RowReader.[object](heapSizes, rowCounts, reader, dummyRow);      
+      def rowReader = RowReader.[object](heapSizes, rowCounts, reader, dummyRow, Dictionary());      
       def readValue = getReadValue(rowReader);
-      readValue((_row, value) => results.Add(value));
+      readValue((_, value) => results.Add(value));
       
       results[0].ShouldBeEqualTo(expectedValue, "The values don't match");
     }

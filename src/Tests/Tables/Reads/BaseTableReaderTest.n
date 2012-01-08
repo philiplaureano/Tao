@@ -51,7 +51,7 @@ namespace Tests
             }
 
             def aggregateTable = AggregateTable();
-            aggregateTable.Read(heapSizes, rowCounts, sortedTables, stream);
+            aggregateTable.Read(heapSizes, rowCounts, sortedTables, Dictionary(), stream);
 
             def tables      = aggregateTable.Tables;
             def targetTable = tables.Where(t => t.GetType() == typeof(TTable)).First() :> TTable;

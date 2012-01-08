@@ -12,8 +12,8 @@ namespace Tao
 {
   public interface IMetadataTable
   {
-    Read(heapSizes : byte, rowCounts : IDictionary[TableId, uint], sortedTables : IEnumerable.[TableId], inputStream : Stream) : void;
-    Write(heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
+    Read(heapSizes : byte, rowCounts : IDictionary[TableId, uint], sortedTables : IEnumerable.[TableId], indexes : IDictionary.[HeapSizeFlags, ISet.[uint]], inputStream : Stream) : void;
+    Write(heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint],
         outputStream : Stream) : void;
   }
   public interface IMetadataTable[TRow]

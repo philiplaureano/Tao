@@ -17,7 +17,7 @@ namespace Tao
           Header : INTHeader[uint];
         }
       
-    |OptionalHeader64
+    |OptionalHeader64 
         {
           StandardFields : IOptionalHeaderStandardFields;
           Header : INTHeader[ulong];

@@ -19,13 +19,15 @@ namespace Tao
     private _row : TRow;
     private _heapSizes : byte;
     private _rowCounts : IDictionary[TableId, uint];
+    private _indexes : IDictionary.[HeapSizeFlags, ISet.[uint]] =  Dictionary();
     
-    public this(heapSizes : byte, rowCounts : IDictionary[TableId, uint], [NotNull] reader : BinaryReader, row : TRow)
+    public this(heapSizes : byte, rowCounts : IDictionary[TableId, uint], [NotNull] reader : BinaryReader, row : TRow, indexes: IDictionary.[HeapSizeFlags, ISet.[uint]])
     {
       _reader = reader;
       _row = row;
       _heapSizes = heapSizes;
       _rowCounts = rowCounts;
+      _indexes = indexes;
     }    
     public ReadStringIndex([NotNull] setValue : TRow * Index -> void) : void
     {
@@ -64,7 +66,6 @@ namespace Tao
     }
     private ReadIndex(shouldUseWideIndex : void -> bool, [NotNull] setValue : TRow * Index -> void) : void
     {
-        //mutable index : Index = null;
         def setWord(row : TRow, value : ushort) : void
         {
             setValue(row, Index.Narrow(value));           
@@ -94,7 +95,26 @@ namespace Tao
       def flag = targetFlag :> byte;
       def shouldReadDword = (heapSizes & flag) != 0;
       
-      ReadIndex(() => shouldReadDword, setValue);
+      def captureIndexValue(row : TRow, value : Index) : void
+      {
+          when(!_indexes.ContainsKey(targetFlag))
+          {
+              _indexes[targetFlag] = HashSet();
+          }
+          
+          // Record all the heap, string, guid, and blob indices that are
+          // used by all rows
+          def token = value.ToUInt32();
+          def index = _indexes[targetFlag];
+          when(!index.Contains(token))
+          {
+              _ = index.Add(token);
+          }
+          
+          setValue(row, value);
+      }
+      
+      ReadIndex(() => shouldReadDword, captureIndexValue);
     };
   }
 }

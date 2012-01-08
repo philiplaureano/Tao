@@ -169,6 +169,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
+    <Compile Include="RowReaderTests.IndexingTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>RowReaderTests.n</DependentUpon>
+    </Compile>
     <Compile Include="RowReaderTests.n">
       <SubType>Code</SubType>
     </Compile>

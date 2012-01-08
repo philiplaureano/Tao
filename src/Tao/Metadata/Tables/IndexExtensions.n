@@ -20,8 +20,9 @@ namespace Tao
     {         
       match (index)
       {
-        | Index.Narrow(value) => value
-        | Index.Wide  (value) => value
+        | index is Index.Narrow => (index : Index.Narrow).Value;
+        | index is Index.Wide => (index : Index.Wide).Value;
+        | _ => throw NotSupportedException();
       }          
     }
     public ToUInt16(this index : Index) : ushort

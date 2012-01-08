@@ -32,7 +32,7 @@ namespace Tao
     }
       
     public Read(heapSizes : byte, [NotNull] rowCounts : IDictionary[TableId, uint], 
-        sortedTables : IEnumerable[TableId], [NotNull] inputStream : Stream) : void
+        sortedTables : IEnumerable[TableId], [NotNull] indexes : IDictionary.[HeapSizeFlags, ISet.[uint]], [NotNull] inputStream : Stream) : void
     {   
       // Check for any unsupported tables
       foreach(tableId in rowCounts.Keys)
@@ -45,7 +45,7 @@ namespace Tao
       
       foreach(table in _tables.Values)
       {
-        table.Read(heapSizes, rowCounts, sortedTables, inputStream);
+        table.Read(heapSizes, rowCounts, sortedTables, indexes, inputStream);
       }
     }
     public Write(heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 

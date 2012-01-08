@@ -80,7 +80,7 @@ namespace Tests
             
             // Use the heap itself to verify the written data
             def tables = AggregateTable();
-            tables.Read(heapSizes, rowCounts, sortedTables, outputStream);
+            tables.Read(heapSizes, rowCounts, sortedTables, Dictionary(), outputStream);
             
             def align = 4;
             def actualLength = outputStream.Length :> int;

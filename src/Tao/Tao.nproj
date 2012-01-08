@@ -168,6 +168,9 @@
     <Compile Include="Metadata\HeapSizeFlags.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\IIndex.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\MetadataBlockReader.n">
       <SubType>Code</SubType>
     </Compile>

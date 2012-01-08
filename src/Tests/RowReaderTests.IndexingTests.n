@@ -1,0 +1,39 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tests.Macros;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public partial class RowReaderTests
+    {
+        public ShouldRecordListOfUsedStringIndices() : void
+        {
+            def data = array[42 : byte, 0];
+            def inputStream = MemoryStream(data);
+            def reader = BinaryReader(inputStream);
+
+            def heapSizes : byte = 0;
+            def dummyRow = AssemblyRow();
+
+            def rowCounts = Dictionary.[TableId, uint]();
+            def indices = Dictionary.[HeapSizeFlags, ISet.[uint]]();
+            
+            def rowReader = RowReader.[AssemblyRow](heapSizes, rowCounts, reader, dummyRow, indices);
+            
+            rowReader.ReadStringIndex(r => r.set_Name);
+            
+            indices.ContainsKey(HeapSizeFlags.RequiresWideStringIndex).ShouldBeTrue("There should be at least one index index here");
+            
+            def indexList = indices[HeapSizeFlags.RequiresWideStringIndex];
+            indexList.Count.ShouldNotBeEqualTo(0, "The target index cannot be empty");
+        }
+    }
+}

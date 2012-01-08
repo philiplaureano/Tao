@@ -9,9 +9,24 @@ using System.Linq;
 
 namespace Tao
 {
-  public variant Index
-  {
-    | Narrow { Value : ushort; }
-    | Wide   { Value : uint; }    
-  }
+    public class Index
+    {
+        public class Narrow : Index
+        {
+            public this(value : ushort)
+            {
+                Value = value;
+            }
+            public Value : ushort { get; set; }
+        }
+
+        public class Wide : Index
+        {
+            public this(value : uint)
+            {
+                Value = value;
+            }
+            public Value : uint { get; set; }
+        }
+    }  
 }

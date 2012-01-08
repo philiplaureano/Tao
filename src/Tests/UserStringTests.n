@@ -52,6 +52,10 @@ namespace Tests
       outputStream.ShouldMatch(expectedData);
       assert offset equals expectedOffset otherwiseprint "Invalid offset";
     }
+    public ShouldBeAbleToConvertCollectionOfUserStringsIntoAStream() : void
+    {
+        throw NotImplementedException();
+    }
     private TestRead(index : uint, expectedString: string) : void
     {
       def imageFile = @"..\..\SampleBinaries\HelloWorld.exe";
