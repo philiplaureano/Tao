@@ -306,6 +306,9 @@
     <Compile Include="Metadata\Tables\IRowWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\ITableWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\ManifestResourceTable.n">
       <SubType>Code</SubType>
     </Compile>
@@ -688,6 +691,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\TableId.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\TableWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\TypeDefTable.n">

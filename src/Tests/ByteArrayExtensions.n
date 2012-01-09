@@ -29,10 +29,7 @@ namespace Tests
       
       public static ShouldMatch(this byteArray : array[byte], otherArray : array[byte]) : void
       {
-          def hash = byteArray.GetHash();
-          def otherHash = otherArray.GetHash();
-          
-          assert hash equals otherHash otherwiseprint "The given byte arrays don't match";
+          byteArray.ToStream().ShouldMatch(otherArray.ToStream());
       }
   }
 }

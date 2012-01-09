@@ -28,11 +28,21 @@ namespace Tests
             def reader = BinaryReader(stream);
             def bytes = reader.ReadBytes(stream.Length:> int);
 
-            bytes.Length.ShouldNotBeEqualTo(0, "You can't run PEVerify against an empty file");
-
             File.WriteAllBytes(filename, bytes);
         }
-
+        
+        public ReadBytes([NotNull] this stream : Stream, count : int, startPosition : long = 0) : array[byte]
+        {
+            stream.Seek(startPosition);
+            def reader = BinaryReader(stream);
+            reader.ReadBytes(count);
+        }
+        
+        public Seek([NotNull] this stream : Stream, position : long, origin : SeekOrigin = SeekOrigin.Begin) : void
+        {
+            stream.Seek(position, origin);
+        }
+        
         public static PEVerifyIt([NotNull] this bytes : array[byte]) : void
         {
             def stream = MemoryStream(bytes);

@@ -16,13 +16,23 @@ namespace Tao
   public class AggregateTable : IMetadataTable
   {
     private _tables : IDictionary[TableId, IMetadataTable] ;
+    private _tableWriter : ITableWriter;
     public this()
     {
-      this(DefaultMetadataTableSet());
+      this(DefaultMetadataTableSet(), TableWriter());
     }
-      
+    
+    public this(tableWriter : ITableWriter)
+    {
+        this(DefaultMetadataTableSet(), tableWriter);
+    }
     public this(tables : ISet[IMetadataTable])
     {
+        this(tables, TableWriter());
+    }
+    public this(tables : ISet[IMetadataTable], tableWriter : ITableWriter)
+    {
+      _tableWriter = tableWriter;
       _tables = Dictionary();
       foreach(table in tables)
       {
@@ -62,7 +72,7 @@ namespace Tao
       
       foreach(table in _tables.Values)
       {
-        table.Write(heapSizeFlags, rowCounts, outputStream);
+        _tableWriter.Write(table, heapSizeFlags, rowCounts, outputStream);
       }
     }
     public Tables : IEnumerable[IMetadataTable]

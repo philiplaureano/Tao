@@ -15,9 +15,12 @@ namespace Tao
   {
       private _rows : IDictionary[TableId, uint] = Dictionary.[TableId, uint]();
       
+      internal Reserved1 : uint { get; set; }
+      internal Reserved2 : byte { get; set; }
+      
       public MajorVersion : byte { get; set; }
       public MinorVersion : byte { get; set; }
-      public HeapSizes : byte { get;set; }
+      public HeapSizes : byte { get;set; }                  
       public Valid : ulong { get; set; }
       public Sorted : ulong { get; set; }
       

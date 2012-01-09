@@ -18,8 +18,15 @@ namespace Tao
         private mutable _indexes : IDictionary.[HeapSizeFlags, ISet.[uint]];
 
         public this()
-        {                        
+        {    
+            _tables = AggregateTable();
         }
+        
+        public this(tables : AggregateTable)
+        {
+            _tables = tables;
+        }
+        
         public this(header : MetadataTablesHeader, tables : AggregateTable)
         {
             _header = header;
@@ -55,11 +62,9 @@ namespace Tao
             def sortedTables = sortedVector.GetSortedTables();
             def rowCounts = header.Rows;
 
-            def tables = AggregateTable();
-            tables.Read(heapSizes, rowCounts, sortedTables, indexes, inputStream);
+            _tables.Read(heapSizes, rowCounts, sortedTables, indexes, inputStream);
 
             _header = header;
-            _tables = tables;
             _indexes = indexes;
         }
         public WriteTo([NotNull] outputStream : Stream) : void
@@ -83,6 +88,7 @@ namespace Tao
 
             // TODO: Update the sorted vector based on the existing tables with IsSorted = true
             // Write the tables header
+            _ = outputStream.Seek(0, SeekOrigin.Begin);
             def writer = MetadataTablesHeaderWriter();
             writer.Write(_header, outputStream);
 

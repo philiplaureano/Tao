@@ -200,12 +200,6 @@
     <Compile Include="StartupStubTests.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StreamDecorator.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="StreamExtensions.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="NullTerminatedStringTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -213,6 +207,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Streams\ProtectedStream.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\StreamDecorator.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\StreamExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\TracerStream.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\TracerTableWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Streams\WriteOnceStream.n">

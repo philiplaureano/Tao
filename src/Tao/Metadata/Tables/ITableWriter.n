@@ -1,0 +1,18 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+  public interface ITableWriter
+  {
+      Write(table : IMetadataTable, heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
+        outputStream : Stream) : void;
+  }
+}

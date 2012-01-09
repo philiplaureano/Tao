@@ -1,0 +1,56 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    /// <summary>
+    /// A stream that fails the test if the bytes being written don't match the ones
+    /// given in the original stream
+    /// </summary>
+    public class TracerStream : StreamDecorator
+    {
+        private _reader : BinaryReader;
+        private _expectedStream : Stream;
+        private _outputStream : Stream;
+        public this(expectedStream : Stream, outputStream : Stream)
+        {
+            base(outputStream);
+
+            _expectedStream = expectedStream;
+            _reader = BinaryReader(expectedStream);
+
+            _outputStream = outputStream;
+        }
+        public override Write(buffer : array[byte], offset : int, count : int) : void
+        {
+            // Seek the matching point in the expected stream
+            def bufferData = buffer.ToStream();
+            def bufferReader = BinaryReader(bufferData);
+            _ = bufferData.Seek(offset, SeekOrigin.Begin);
+
+            def actualBytes = bufferReader.ReadBytes(count);            
+            def startPosition = _outputStream.Position;
+
+            base.Write(buffer, offset, count);
+
+            def endPosition = _outputStream.Position;;
+
+            // Determine the expected bytes
+            def reader = BinaryReader(_expectedStream);
+            def length = endPosition - startPosition;
+            when(length > 0)
+            {
+                _ = _expectedStream.Seek(startPosition, SeekOrigin.Begin);
+                def expectedBytes = reader.ReadBytes(length :> int);
+                expectedBytes.ShouldMatch(actualBytes);
+            }
+        }
+    }
+}

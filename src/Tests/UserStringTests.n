@@ -52,7 +52,7 @@ namespace Tests
       outputStream.ShouldMatch(expectedData);
       assert offset equals expectedOffset otherwiseprint "Invalid offset";
     }
-    public ShouldBeAbleToConvertCollectionOfUserStringsIntoAStream() : void
+    public ignored ShouldBeAbleToConvertCollectionOfUserStringsIntoAStream() : void
     {
         throw NotImplementedException();
     }

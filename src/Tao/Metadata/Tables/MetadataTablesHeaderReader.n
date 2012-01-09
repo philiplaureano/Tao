@@ -20,15 +20,15 @@ namespace Tao
       def reader = System.IO.BinaryReader(tableStream);
       def header = MetadataTablesHeader();
       
-      // Skip the reserved dword
-      _ = tableStream.Seek(4, SeekOrigin.Current);
+      // Read the reserved dword
+      header.Reserved1 = reader.ReadUInt32();
       
       header.MajorVersion = reader.ReadByte();
       header.MinorVersion = reader.ReadByte();
       header.HeapSizes = reader.ReadByte();
       
-      // Skip the other reserved byte
-      _ = tableStream.Seek(1, SeekOrigin.Current);
+      // Read the other reserved byte
+      header.Reserved2 = reader.ReadByte();
       
       header.Valid = reader.ReadUInt64();
       header.Sorted = reader.ReadUInt64();
