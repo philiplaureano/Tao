@@ -32,12 +32,11 @@ namespace Tests
             heap.MinorVersion.ShouldBeEqualTo(0, "Invalid MinorVersion");            
         }
         public ShouldBeAbleToRoundTripTableHeapAndTableHeapMustBeAlignedToNext4ByteBoundary() : void
-        {
-
+        {            
             def tableData = MemoryStream(base.GetTableStreamData());
-
+            
             def tableWriter = TracerTableWriter(TableWriter(), tableData);
-            def heap = TablesHeap(AggregateTable(DefaultMetadataTableSet(), tableWriter));
+            def heap = TablesHeap(AggregateTable(TableReader(), tableWriter));
             heap.ReadFrom(tableData);
 
             def tableDataLength = tableData.Length;
@@ -46,7 +45,7 @@ namespace Tests
             {
                 Console.WriteLine("Note: There's a slack space of {0} bytes", slackSpace);
             }
-
+            
             def outputStream = TracerStream(tableData, MemoryStream());
             heap.WriteTo(outputStream);
 
@@ -55,7 +54,7 @@ namespace Tests
             //roundtripped
             outputStream.WriteAllBytesTo("ActualTableData");
             tableData.WriteAllBytesTo("ExpectedTableData");
-
+            
             // The two heaps should have exactly the same table headers
             _ = outputStream.Seek(0, SeekOrigin.Begin);
             _ = tableData.Seek(0, SeekOrigin.Begin);
@@ -65,48 +64,48 @@ namespace Tests
             {
                 writer.Write(header, targetStream);                
             }
-
+            
             def reader = MetadataTablesHeaderReader();
             def expectedHeader = reader.Read(tableData);
             def actualHeader = reader.Read(outputStream);
 
             def expectedHeaderStream = MemoryStream();
             def actualHeaderStream = MemoryStream();
-
+            
             writeHeader(expectedHeader, expectedHeaderStream);
             writeHeader(actualHeader, actualHeaderStream);
 
             expectedHeaderStream.ShouldMatch(actualHeaderStream);
-
+            
             // Skip the header bytes
             _ = outputStream.Seek(actualHeaderStream.Length, SeekOrigin.Begin);
-
+            
             def header = actualHeader;
             def heapSizes = header.HeapSizes;
             def sortedVector = header.Sorted;
             def sortedTables = sortedVector.GetSortedTables();
             def rowCounts = header.Rows;
-
+            
             // Use the heap itself to verify the written data
             def tables = AggregateTable();
             tables.Read(heapSizes, rowCounts, sortedTables, Dictionary(), outputStream);
-
+            
             outputStream.ShouldMatch(tableData);            
-
+            
             // Verify that the size of the actual table data matches the stream length in the CLR header
             def image = Image.ReadFrom(TargetAssemblyFileName);
             def root = image.GetMetadataRoot();
             def tableHeapHeader = root.StreamHeaders.Where(s=>s.Name == "#~").First();
             tableHeapHeader.Size.ShouldBeEqualTo(outputStream.Length :> uint, "The actual stream length must match the length specified in the TablesHeap stream header position");
-
+            
             tableData.Length.ShouldBeEqualTo(outputStream.Length, "The streams must have exactly the same length, which should be {0} bytes. The actual length of the stream is {1} bytes", tableData.Length, outputStream.Length);                        
         }       
-
+        
         protected override TargetAssemblyFileName : string
         {
             get
             {
-                @"..\..\SampleBinaries\NHibernate.dll";
+                @"..\..\SampleBinaries\SampleAssemblyThatUsesTheConstantTable.exe";
             }
         }
     }

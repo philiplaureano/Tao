@@ -41,7 +41,7 @@ namespace Tao
         }
 
         public Write(heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
-        [NotNull] outputStream : Stream) : void
+            [NotNull] outputStream : Stream) : void
         {
             def rowWriter = RowWriter(heapSizeFlags, rowCounts, BinaryWriter(outputStream));
             foreach(row in Rows)
@@ -51,7 +51,7 @@ namespace Tao
         }
         public IsSorted : bool 
         { 
-        get; set; 
+            get; set; 
         }
         public Rows : IList[TRow]
         {

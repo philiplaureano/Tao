@@ -43,13 +43,12 @@ namespace Tests
                 if (expectedBytes.GetHash() != actualBytes.GetHash())
                 {
                     Console.WriteLine("The written table doesn't match the original table bytes", tableId);                    
+                    expectedBytes.ShouldMatch(actualBytes);
                 }
                 else
                 {
                     Console.WriteLine("Success");
-                }
-                
-                expectedBytes.ShouldMatch(actualBytes);
+                }                
             }
         }
     }

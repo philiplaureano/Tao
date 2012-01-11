@@ -17,20 +17,24 @@ namespace Tao
   {
     private _tables : IDictionary[TableId, IMetadataTable] ;
     private _tableWriter : ITableWriter;
+    private _tableReader : ITableReader;
+    
     public this()
     {
-      this(DefaultMetadataTableSet(), TableWriter());
+      this(DefaultMetadataTableSet(), TableReader(), TableWriter());
     }
     
-    public this(tableWriter : ITableWriter)
+    public this(tableReader : ITableReader, tableWriter : ITableWriter)
     {
-        this(DefaultMetadataTableSet(), tableWriter);
+        this(DefaultMetadataTableSet(), tableReader, tableWriter);
     }
+    
     public this(tables : ISet[IMetadataTable])
     {
-        this(tables, TableWriter());
+        this(tables, TableReader(), TableWriter());
     }
-    public this(tables : ISet[IMetadataTable], tableWriter : ITableWriter)
+    
+    public this(tables : ISet[IMetadataTable], tableReader : ITableReader, tableWriter : ITableWriter)
     {
       _tableWriter = tableWriter;
       _tables = Dictionary();
@@ -55,7 +59,7 @@ namespace Tao
       
       foreach(table in _tables.Values)
       {
-        table.Read(heapSizes, rowCounts, sortedTables, indexes, inputStream);
+        _tableReader.Read(table, heapSizes, rowCounts, sortedTables, indexes, inputStream);
       }
     }
     public Write(heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 

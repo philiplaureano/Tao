@@ -1,0 +1,18 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public interface ITableReader
+    {
+        Read(table : IMetadataTable, heapSizes : byte,  rowCounts : IDictionary[TableId, uint], 
+            sortedTables : IEnumerable[TableId],  indexes : IDictionary.[HeapSizeFlags, ISet.[uint]],  inputStream : Stream) : void;
+    }
+}

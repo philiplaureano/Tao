@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class TableReader : ITableReader
+    {
+        public Read([NotNull] table : IMetadataTable, heapSizes : byte, [NotNull] rowCounts : IDictionary[TableId, uint], 
+            [NotNull] sortedTables : IEnumerable[TableId], [NotNull] indexes : IDictionary.[HeapSizeFlags, ISet.[uint]], [NotNull]  inputStream : Stream) : void
+            requires table is IMetadataTableInfo
+        {
+            table.Read(heapSizes, rowCounts, sortedTables, indexes, inputStream);
+        }
+    }
+}
