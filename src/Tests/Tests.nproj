@@ -218,7 +218,10 @@
     <Compile Include="Streams\TracerStream.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Streams\TracerTableWriter.n">
+    <Compile Include="Streams\TracingTableReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\TracingTableWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Streams\WriteOnceStream.n">

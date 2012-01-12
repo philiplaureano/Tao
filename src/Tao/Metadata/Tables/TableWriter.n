@@ -1,4 +1,6 @@
 ﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Extensions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
@@ -14,8 +16,15 @@ namespace Tao
     {
         public Write(table : IMetadataTable, heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
             outputStream : Stream) : void
+            requires table is IMetadataTableInfo
         {
-            table.Write(heapSizeFlags, rowCounts, outputStream);
+            def info = table :> IMetadataTableInfo;
+            def tableId = info.TableId;
+
+            when(rowCounts.ContainsKey(tableId) && rowCounts[tableId] > 0)
+            {
+                table.Write(heapSizeFlags, rowCounts, outputStream);
+            }
         }
     }
 }

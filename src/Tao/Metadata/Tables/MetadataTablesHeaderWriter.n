@@ -12,38 +12,39 @@ using System.Linq;
 
 namespace Tao
 {
-  public class MetadataTablesHeaderWriter
-  {
-    public Write(header : MetadataTablesHeader, outputStream : Stream) : void
+    public class MetadataTablesHeaderWriter
     {
-      def writer = BinaryWriter(outputStream);
-          
-      // Skip the reserved word
-      writer.Write(header.Reserved1);
-      writer.Write(header.MajorVersion);
-      writer.Write(header.MinorVersion);
-      writer.Write(header.HeapSizes);
-      
-      // Write the other reserved byte
-      writer.Write(header.Reserved2);
-      writer.Write(header.Valid);
-      writer.Write(header.Sorted);
-          
-      // Write the row counts in the correct positions here
-      foreach(tableId in typeof(TableId).GetEnumValues())
-      {
-        def bitPosition : byte = tableId :> byte;
-        def baseValue : ulong = 1;
-        def mask = (baseValue << bitPosition);
-        def hasTable : bool = (header.Valid & mask) != 0;
-        
-        when(hasTable)
+        public Write(header : MetadataTablesHeader, outputStream : Stream) : void
         {
-            def currentId = tableId :> TableId;
-            def rowCount : uint = header.Rows[currentId];
-            writer.Write(rowCount : uint);
+            def writer = BinaryWriter(outputStream);
+
+            // Write the reserved dword
+            writer.Write(header.Reserved1);
+            writer.Write(header.MajorVersion);
+            writer.Write(header.MinorVersion);
+            writer.Write(header.HeapSizes);
+
+            // Write the other reserved byte
+            writer.Write(header.Reserved2);
+            writer.Write(header.Valid);
+            writer.Write(header.Sorted);
+
+            // Write the row counts in the correct positions here
+            def values = typeof(TableId).GetEnumValues().Cast.[TableId]().OrderBy(t=>t);
+            foreach(tableId in values)
+            {
+                def bitPosition : byte = tableId :> byte;
+                def baseValue : ulong = 1;
+                def mask = (baseValue << bitPosition);
+                def hasTable : bool = (header.Valid & mask) != 0;
+
+                when(hasTable)
+                {
+                    def currentId = tableId :> TableId;
+                    def rowCount : uint = header.Rows[currentId];
+                    writer.Write(rowCount : uint);
+                }
+            }
         }
-      }
     }
-  }
 }

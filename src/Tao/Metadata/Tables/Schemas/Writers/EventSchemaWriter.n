@@ -15,7 +15,7 @@ namespace Tao
       public WriteRow([NotNull] row : EventRow, [NotNull] _rowCounts : IDictionary[TableId, uint], 
         [NotNull] rowWriter : IRowWriter.[EventRow]) : void
       {
-          rowWriter.WriteDword(row.EventFlags);
+          rowWriter.WriteWord(row.EventFlags);
           rowWriter.WriteStringIndex(row.get_Name);
           rowWriter.WriteIndex(CodedTokenType.TypeDefOrTypeRef, row.get_EventType);
       }

@@ -1,0 +1,45 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class TracingTableReader : ITableReader
+    {
+        private _reader : ITableReader;
+        private _tableStreams : IDictionary[TableId, array[byte]];
+        
+        public this(reader : ITableReader, tableStreams : IDictionary[TableId, array[byte]])
+        {
+            _reader = reader;
+            _tableStreams = tableStreams;
+        }
+        public Read([NotNull] table : IMetadataTable, heapSizes : byte, [NotNull] rowCounts : IDictionary[TableId, uint], 
+            [NotNull] sortedTables : IEnumerable[TableId], [NotNull] indexes : IDictionary.[HeapSizeFlags, ISet.[uint]], [NotNull]  inputStream : Stream) : void
+            requires table is IMetadataTableInfo
+        {
+            // Keep track of the bytes used to read the table stream
+            def startPosition = inputStream.Position;            
+            _reader.Read(table, heapSizes, rowCounts, sortedTables, indexes, inputStream);
+            
+            def endPosition = inputStream.Position;
+            def size = endPosition - startPosition;            
+            
+            // Save the bytes read
+            def info = table :> IMetadataTableInfo;
+            def tableId = info.TableId;
+            def tableBytes = inputStream.ReadBytes(size :> int, startPosition);
+            _tableStreams[tableId] = tableBytes;
+            
+            inputStream.Seek(endPosition);
+        }
+    }
+}

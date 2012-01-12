@@ -19,40 +19,47 @@ namespace Tao
     {
         public this()
         {
-            _ = Add(ModuleTable());
-            _ = Add(TypeDefTable());
-            _ = Add(MethodDefTable());
-            _ = Add(AssemblyTable());
-            _ = Add(TypeRefTable());
-            _ = Add(FieldTable());
-            _ = Add(ParamTable());
-            _ = Add(InterfaceImplTable());
-            _ = Add(MemberRefTable());
-            _ = Add(ConstantTable());
-            _ = Add(CustomAttributeTable());
-            _ = Add(DeclSecurityTable());  
-            _ = Add(ClassLayoutTable());
-            _ = Add(StandAloneSigTable());
-            _ = Add(EventMapTable());
-            _ = Add(EventTable());
-            _ = Add(PropertyMapTable());
-            _ = Add(PropertyTable());
-            _ = Add(MethodSemanticsTable());
-            _ = Add(MethodImplTable());
-            _ = Add(TypeSpecTable());
-            _ = Add(FieldRvaTable());
-            _ = Add(AssemblyRefTable());
-            _ = Add(ManifestResourceTable());
-            _ = Add(NestedClassTable());
-            _ = Add(GenericParamTable());
-            _ = Add(MethodSpecTable());
-            _ = Add(GenericParamConstraintTable());
-            _ = Add(ModuleRefTable());
-            _ = Add(FileTable());
-            _ = Add(ExportedTypeTable());
-            _ = Add(FieldMarshalTable());
-            _ = Add(FieldLayoutTable());
-            _ = Add(ImplMapTable());
+            def tables : IList.[IMetadataTable] = List();            
+            tables.Add(ModuleTable());
+            tables.Add(TypeDefTable());
+            tables.Add(MethodDefTable());
+            tables.Add(AssemblyTable());
+            tables.Add(TypeRefTable());
+            tables.Add(FieldTable());
+            tables.Add(ParamTable());
+            tables.Add(InterfaceImplTable());
+            tables.Add(MemberRefTable());
+            tables.Add(ConstantTable());
+            tables.Add(CustomAttributeTable());
+            tables.Add(DeclSecurityTable());  
+            tables.Add(ClassLayoutTable());
+            tables.Add(StandAloneSigTable());
+            tables.Add(EventMapTable());
+            tables.Add(EventTable());
+            tables.Add(PropertyMapTable());
+            tables.Add(PropertyTable());
+            tables.Add(MethodSemanticsTable());
+            tables.Add(MethodImplTable());
+            tables.Add(TypeSpecTable());
+            tables.Add(FieldRvaTable());
+            tables.Add(AssemblyRefTable());
+            tables.Add(ManifestResourceTable());
+            tables.Add(NestedClassTable());
+            tables.Add(GenericParamTable());
+            tables.Add(MethodSpecTable());
+            tables.Add(GenericParamConstraintTable());
+            tables.Add(ModuleRefTable());
+            tables.Add(FileTable());
+            tables.Add(ExportedTypeTable());
+            tables.Add(FieldMarshalTable());
+            tables.Add(FieldLayoutTable());
+            tables.Add(ImplMapTable());
+
+            def orderedTables = tables.OrderBy(t=>t.GetHashCode());
+            foreach(table in orderedTables)
+            {
+                Add(table);
+            }
         }
     }
 }

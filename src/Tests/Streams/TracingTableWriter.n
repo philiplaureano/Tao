@@ -1,0 +1,71 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class TracingTableWriter: ITableWriter
+    {
+        private _writer : ITableWriter;
+        private _expectedStream : Stream;
+        private _tableStreams : IDictionary[TableId, array[byte]];
+
+        public this(writer : ITableWriter, tableStreams : IDictionary[TableId, array[byte]])
+        {
+            _writer = writer;
+            _tableStreams = tableStreams;
+        }
+
+        public Write(table : IMetadataTable, heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint], 
+            outputStream : Stream) : void
+            requires table is IMetadataTableInfo
+        {
+            def info = table :> IMetadataTableInfo;
+            def tableId = info.TableId;
+            def startPosition = outputStream.Position;
+            _writer.Write(table, heapSizeFlags, rowCounts, outputStream);
+            def endPosition = outputStream.Position;
+
+            when(rowCounts[tableId] > 0)
+            {
+                Console.Write("Writing Table {0}...", tableId);                
+
+                // Determine the expected bytes
+                def length = endPosition - startPosition;
+                if(length > 0)
+                {                
+                    _tableStreams.ContainsKey(tableId).ShouldBeTrue("The expected table stream should contain the {0} table", tableId);
+
+                    def expectedStream = MemoryStream(_tableStreams[tableId]);
+                    expectedStream.Seek(0);
+
+                    def expectedBytes = expectedStream.ReadBytes(length :> int, 0);
+                    def actualBytes = outputStream.ReadBytes(length :> int, startPosition);
+                    if (expectedBytes.GetHash() != actualBytes.GetHash())
+                    {
+                        File.WriteAllBytes(string.Format("Expected.{0}.TableData", tableId), expectedBytes);
+                        File.WriteAllBytes(string.Format("Actual.{0}.TableData", tableId), actualBytes);
+                        
+                        NUnit.Framework.Assert.Fail("The {0} table doesn't match the original table bytes", tableId);                                        
+                    }
+                    else
+                    {
+                        Console.WriteLine("Success");
+                    }                
+                }
+                else
+                {
+                    Console.WriteLine("Success");
+                }
+            }
+        }
+    }
+}
