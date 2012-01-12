@@ -93,9 +93,7 @@ namespace Tao
             writer.Write(_header, outputStream);
 
             // Write the table data
-            _tables.Write(heapSizes.ToHeapSizeArray(), rowCounts, outputStream);
-            
-            outputStream.Align(4);
+            _tables.Write(heapSizes.ToHeapSizeArray(), rowCounts, outputStream);            
         }
     }
 }

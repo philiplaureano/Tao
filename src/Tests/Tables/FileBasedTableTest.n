@@ -18,11 +18,11 @@ namespace Tests
     {
         private static _fileCache : Dictionary.[string, array[byte]] = Dictionary();
 
-        protected virtual GetTableStreamData() : array[byte]
+        protected GetTableStreamData(filename : string) : array[byte]
         {
             def getData() : array[byte]
             {
-                def fileStream = FileStream(TargetAssemblyFileName, FileMode.Open, FileAccess.Read);
+                def fileStream = FileStream(filename, FileMode.Open, FileAccess.Read);
                 def imageReader = ImageReader();
                 def image = imageReader.Read(fileStream);
 
@@ -45,6 +45,10 @@ namespace Tests
             }
             
             _fileCache[TargetAssemblyFileName];
+        }
+        protected virtual GetTableStreamData() : array[byte]
+        {
+            GetTableStreamData(TargetAssemblyFileName);
         }
         protected abstract TargetAssemblyFileName : string { get; }
     }

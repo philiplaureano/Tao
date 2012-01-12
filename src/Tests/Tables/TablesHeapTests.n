@@ -31,14 +31,51 @@ namespace Tests
 
             heap.MinorVersion.ShouldBeEqualTo(0, "Invalid MinorVersion");            
         }
-        public ShouldHaveMatchingTableDataForReadsAndWrites() : void
+        public ShouldHaveMatchingTableDataForReadsAndWritesWithSampleNHibernateAssembly() : void
         {            
+            TestTableDataRoundTrip(@"..\..\SampleBinaries\NHibernate.dll");
+        }   
+
+        public ShouldHaveMatchingTableDataForReadsAndWritesWithSampleMonoMSCorlibAssembly() : void
+        {
+            TestTableDataRoundTrip(@"..\..\SampleBinaries\mono-mscorlib.dll");
+        }                
+
+        public ShouldHaveMatchingTableHeaders() : void
+        {
             def tableData = MemoryStream(base.GetTableStreamData());
-            
+            def reader = MetadataTablesHeaderReader();            
+            def header = reader.Read(tableData);
+
+
+            def outputStream = TracerStream(tableData, MemoryStream());
+
+            def headerSize = tableData.Position :> int;
+            def expectedHeaderData = MemoryStream(tableData.ReadBytes(headerSize, 0));
+
+            def writer = MetadataTablesHeaderWriter();
+            writer.Write(header, outputStream);
+
+            def actualHash = outputStream.GetHash();
+            expectedHeaderData.ShouldMatch(outputStream);
+        }
+
+        protected override TargetAssemblyFileName : string
+        {
+            get
+            {
+                @"..\..\SampleBinaries\mono-mscorlib.dll";
+            }
+        }
+
+        private TestTableDataRoundTrip(filename : string) : void
+        {
+            def tableData = MemoryStream(base.GetTableStreamData(filename));
+
             def tableStreams = Dictionary.[TableId, array[byte]]();
             def tableReader = TracingTableReader(TableReader(), tableStreams);
             def tableWriter = TracingTableWriter(TableWriter(), tableStreams);
-            
+
             def heap = TablesHeap(AggregateTable(tableReader, tableWriter));
             heap.ReadFrom(tableData);
 
@@ -48,41 +85,12 @@ namespace Tests
             {
                 Console.WriteLine("Note: There's a slack space of {0} bytes", slackSpace);
             }
-            
-            def outputStream = MemoryStream();
-            outputStream.Seek(0);
-            tableData.Seek(0);
-            
-            heap.WriteTo(outputStream);       
-            
-            tableData.Length.ShouldBeEqualTo(outputStream.Length, "The two streams should have exactly the same length");
-            outputStream.ShouldMatch(tableData);
-        }       
-        public ShouldHaveMatchingTableHeaders() : void
-        {
-            def tableData = MemoryStream(base.GetTableStreamData());
-            def reader = MetadataTablesHeaderReader();            
-            def header = reader.Read(tableData);
-            
 
             def outputStream = TracerStream(tableData, MemoryStream());
-            
-            def headerSize = tableData.Position :> int;
-            def expectedHeaderData = MemoryStream(tableData.ReadBytes(headerSize, 0));
-            
-            def writer = MetadataTablesHeaderWriter();
-            writer.Write(header, outputStream);
-            
-            def actualHash = outputStream.GetHash();
-            expectedHeaderData.ShouldMatch(outputStream);
-        }
-        
-        protected override TargetAssemblyFileName : string
-        {
-            get
-            {
-                @"..\..\SampleBinaries\NHibernate.dll";
-            }
+            outputStream.Seek(0);
+            tableData.Seek(0);
+
+            heap.WriteTo(outputStream);
         }
     }
 }
