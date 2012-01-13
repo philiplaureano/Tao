@@ -40,9 +40,7 @@ namespace Tests
             image.Write(root, rootRva);
 
             def writer = ImageWriter();
-            writer.Write(image, outputStream);              
-            
-            outputStream.WriteAllBytesTo("ShouldBeAbleToSwapMetadataRootWithCloneOfTheOriginalRoot.exe");
+            writer.Write(image, outputStream);                         
             
             def originalBytes = File.ReadAllBytes(targetFile);
             outputStream.ShouldMatch(originalBytes);                       

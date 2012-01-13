@@ -1,0 +1,59 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using Tests.Macros;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class MethodBodyTests
+    {
+        public ShouldBeAbleToDetermineThinHeader() : void
+        {
+            def bytes = GetData();
+            def body = MethodBody();
+            
+            body.IsTinyFormat.ShouldBeFalse("The IsTinyFormat should be false by default");
+            
+            body.Read(MemoryStream(bytes));
+            body.IsTinyFormat.ShouldBeTrue("This method body should have a tiny header format");
+        }
+        public ShouldBeAbleToDetermineFatHeader() : void
+        {
+            def bytes = array[0x63 : byte];
+            def body = MethodBody();            
+            
+            body.IsFatFormat.ShouldBeFalse("The IsFatFormat should be false by default");
+            
+            body.Read(MemoryStream(bytes));
+            body.IsFatFormat.ShouldBeTrue("This method body should have a fat header format");            
+        }
+        public ShouldBeAbleToDetermineMethodBodySize() : void
+        {
+            def bytes = GetData();
+            def body = MethodBody();
+            body.Read(MemoryStream(bytes));
+            
+            body.Size.ShouldBeEqualTo(0x18, "Wrong method body size");
+        }
+        public ignored ShouldBeAbleToRetrieveMethodBodyRVAs() : void
+        {
+            throw NotImplementedException();
+        }
+        private GetData() : array[byte]
+        {
+            def methodData = array[0x62 : byte, 0x00, 0x72, 0x01, 0x00, 0x00, 0x70, 0x28, 0x11, 0x00, 0x00, 0x0A, 0x00, 0x72, 0x1D, 0x00,
+                0x00, 0x70, 0x28, 0x11, 0x00, 0x00, 0x0A, 0x00, 0x2A
+            ];
+
+            methodData;
+        }
+    }
+}

@@ -18,6 +18,7 @@ namespace Tests
         {
             throw NotImplementedException();
         }
+        
         public ShouldBeAbleToReadStringFromStringHeapUsingGivenIndex() : void
         {
             def stringData = array[
@@ -67,11 +68,6 @@ namespace Tests
             }
 
             stringHeap.ShouldMatch(expectedData);
-        }
-        public ignored ShouldAlignStringsHeapToNext4ByteBoundary() : void
-        {
-        // TODO: Create a StringsHeapWriter that writes the entire string heap
-            throw NotImplementedException();
-        }
+        }       
     }
 }

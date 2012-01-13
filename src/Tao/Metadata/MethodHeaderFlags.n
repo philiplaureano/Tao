@@ -1,0 +1,19 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+    public enum MethodHeaderFlags : byte
+    {
+        |FatFormat = 0x03
+        |TinyFormat = 0x02
+        |MoreSects = 0x08
+        |InitLocals = 0x10
+    }
+}

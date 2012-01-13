@@ -195,6 +195,12 @@
     <Compile Include="Metadata\MetadataStreamReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\MethodBody.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\MethodHeaderFlags.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\SimpleTokenDecoder.n">
       <SubType>Code</SubType>
     </Compile>
