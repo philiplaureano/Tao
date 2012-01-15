@@ -1,0 +1,25 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Visitors
+{
+    public static class VisitorExtensions
+    {
+        public Accept[TVisitable](this visitable : TVisitable, visitor : object) : void
+        {
+            def walker = TreeWalker(visitor);
+            walker.Visit.[TVisitable](visitable);
+        }
+
+        public ToVisitor[T](this action : Action[T]) : IVisitor[T]
+        {
+            FunctorVisitor(action);
+        }    
+    }
+}

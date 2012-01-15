@@ -11,39 +11,16 @@ using System.Linq;
 
 namespace Tao
 {
-  public class MethodBody
-  {
-      public this() 
-      {
-      }
-      public IsTinyFormat : bool
-      {
-          get;
-          private set;
-      }
-      public IsFatFormat : bool
-      {
-          get;
-          private set;
-      }
-      
-      public Size : uint
-      {
-          get;
-          private set;
-      }
-      public Read([NotNull] methodStream : Stream) : void
-      {
-          def leadingByte = methodStream.ReadByte() :> byte;
-          
-          def tinyFlag = MethodHeaderFlags.TinyFormat :> byte;
-          IsTinyFormat = (leadingByte & tinyFlag) != 0;
-          
-          def fatFlag = MethodHeaderFlags.FatFormat :> byte;
-          IsFatFormat = (leadingByte & fatFlag) != 0;
-          
-          def size = leadingByte >> 2;
-          Size = size :> uint;          
-      }
-  }
+    public abstract class MethodBody
+    {
+        protected this() 
+        {
+        }     
+
+        public CodeSize : uint
+        {
+            get;
+            set;
+        }      
+    }
 }

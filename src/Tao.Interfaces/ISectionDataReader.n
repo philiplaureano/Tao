@@ -12,5 +12,6 @@ namespace Tao.Interfaces
   public interface ISectionDataReader
   {
       ReadBlock(rva : uint, size : uint, image : IImage) : Stream;
+      GetDataAt(image : IImage, rva : uint) : Stream;
   }
 }

@@ -13,6 +13,12 @@ namespace Tao
 {
     public static class ImageExtensions
     {
+        public GetDataAt([NotNull] this image : IImage, rva : uint) : Stream
+        {
+            def reader = SectionDataReader();
+            reader.GetDataAt(image, rva);
+        }
+        
         public GetCLRHeader([NotNull] this image : IImage) : ICLIHeader    
         requires image.DataDirectories != null
         {

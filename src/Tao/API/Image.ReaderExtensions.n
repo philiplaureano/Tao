@@ -22,6 +22,6 @@ namespace Tao
     {
         def reader = ImageReader();
         reader.Read(imageStream);
-    }
+    }   
   }
 }

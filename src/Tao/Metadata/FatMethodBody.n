@@ -1,0 +1,37 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class FatMethodBody : MethodBody
+  {
+      public Flags : ushort
+      {
+          get;set;
+      }
+      public MaxStack : ushort
+      {
+          get;set;
+      }
+      public LocalVarSigToken : uint
+      {
+          get;set;
+      }
+      
+      public InitLocals : bool
+      {
+          get;set;
+      }
+      
+      public Bytes : array[byte]
+      {
+          get;set;
+      }
+  }
+}

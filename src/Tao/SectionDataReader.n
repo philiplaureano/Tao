@@ -17,10 +17,34 @@ namespace Tao
         requires image.Sections != null && image.Sections.Count > 0
         ensures value != null && value.Length == (size :> long)
       {
+          def sectionData = GetDataAt(image, rva);
+          def reader = BinaryReader(sectionData);          
+          def bytes = reader.ReadBytes(size :> int);
+          
+          def result = MemoryStream(bytes);
+          result;
+      }
+      
+      public GetDataAt([NotNull] image : IImage, rva : uint) : Stream
+        requires image.Sections != null && image.Sections.Count > 0
+      {
+          def sectionMap     = Dictionary();          
+          def targetHeader = GetTargetHeader(image, rva, sectionMap);
+          
+          // Calculate the start position
+          def offset = rva - targetHeader.VirtualAddress;
+          
+          def targetSection = sectionMap[targetHeader.Name];
+          def sectionData = targetSection.Data;
+          _ = sectionData.Seek(offset, SeekOrigin.Begin);
+          sectionData;
+      }
+      private GetTargetHeader(image : IImage, rva : uint, sectionMap : IDictionary[string, ISection]) : ISectionHeader
+      {
           // Map the given sections
           def sections       = image.Sections;          
           def sectionHeaders = List();
-          def sectionMap     = Dictionary();
+          
           foreach(section in sections)
           {              
               def header = section.Header;
@@ -32,19 +56,8 @@ namespace Tao
           // Find the section that contains the 
           // given RVA
           def sectionResolver = SectionResolver();
-          def targetHeader = sectionResolver.Resolve(sectionHeaders, rva);
-          def targetSection = sectionMap[targetHeader.Name];
-          
-          // Calculate the start position
-          def offset = rva - targetHeader.VirtualAddress;
-          
-          def sectionData = targetSection.Data;
-          _ = sectionData.Seek(offset, SeekOrigin.Begin);
-          def reader = BinaryReader(sectionData);          
-          def bytes = reader.ReadBytes(size :> int);
-          
-          def result = MemoryStream(bytes);
-          result;
+          def targetHeader = sectionResolver.Resolve(sectionHeaders, rva);          
+          targetHeader;
       }
   }
 }

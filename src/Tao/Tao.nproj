@@ -159,6 +159,9 @@
     <Compile Include="Metadata\CompressedIntegerWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\FatMethodBody.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\GuidReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -196,6 +199,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\MethodBody.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\MethodBodyReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\MethodHeaderFlags.n">
@@ -315,6 +321,9 @@
     <Compile Include="Metadata\Tables\ITableReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\ITablesHeap.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\ITableWriter.n">
       <SubType>Code</SubType>
     </Compile>
@@ -370,6 +379,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\RowCountExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\RowExtractor.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\RowReader.n">
@@ -699,6 +711,9 @@
     <Compile Include="Metadata\Tables\StandAloneSigTable.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\TableHeapExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\TableId.n">
       <SubType>Code</SubType>
     </Compile>
@@ -721,6 +736,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\TagValueMap.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\TinyMethodBody.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\UserStringHeapReader.n">
@@ -796,6 +814,21 @@
     <Compile Include="SectionResolver.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Visitors\ActionExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\FunctorVisitor.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\IVisitor.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\TreeWalker.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\VisitorExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Metadata" />
@@ -805,6 +838,7 @@
     <Folder Include="Metadata\Tables\Rows" />
     <Folder Include="Metadata\Tables\Schemas\Readers" />
     <Folder Include="Metadata\Tables\Schemas\Writers" />
+    <Folder Include="Visitors" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

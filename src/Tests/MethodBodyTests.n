@@ -18,34 +18,81 @@ namespace Tests
         public ShouldBeAbleToDetermineThinHeader() : void
         {
             def bytes = GetData();
-            def body = MethodBody();
-            
-            body.IsTinyFormat.ShouldBeFalse("The IsTinyFormat should be false by default");
-            
-            body.Read(MemoryStream(bytes));
-            body.IsTinyFormat.ShouldBeTrue("This method body should have a tiny header format");
-        }
-        public ShouldBeAbleToDetermineFatHeader() : void
-        {
-            def bytes = array[0x63 : byte];
-            def body = MethodBody();            
-            
-            body.IsFatFormat.ShouldBeFalse("The IsFatFormat should be false by default");
-            
-            body.Read(MemoryStream(bytes));
-            body.IsFatFormat.ShouldBeTrue("This method body should have a fat header format");            
+            def reader = MethodBodyReader();
+
+            def body = reader.Read(MemoryStream(bytes));
+            body.ShouldBeOfType.[TinyMethodBody]();            
         }
         public ShouldBeAbleToDetermineMethodBodySize() : void
         {
             def bytes = GetData();
-            def body = MethodBody();
-            body.Read(MemoryStream(bytes));
-            
-            body.Size.ShouldBeEqualTo(0x18, "Wrong method body size");
+            def reader = MethodBodyReader();
+
+            def body = reader.Read(MemoryStream(bytes));
+            body.ShouldBeOfType.[TinyMethodBody]();            
+
+            body.CodeSize.ShouldBeEqualTo(0x18, "Wrong method body size");
         }
-        public ignored ShouldBeAbleToRetrieveMethodBodyRVAs() : void
+        //public ShouldBeAbleToDetermineFatHeader() : void
+        //{
+        //    def bytes = array[0x63 : byte];
+        //    def body = MethodBody();            
+
+        //    body.IsFatFormat.ShouldBeFalse("The IsFatFormat should be false by default");
+
+        //    body.Read(MemoryStream(bytes));
+        //    body.IsFatFormat.ShouldBeTrue("This method body should have a fat header format");            
+        //}
+
+        public ShouldBeAbleToReadFatHeader() : void
         {
-            throw NotImplementedException();
+            def imageStream = File.ReadAllBytes(@"..\..\SampleBinaries\SampleAppWithFatMethodBody.exe");
+            
+            def image = Image.ReadFrom(imageStream.ToStream());
+            def root = image.GetMetadataRoot();
+
+            def tableStream = root.Heaps["#~"];
+            def tableHeap = TablesHeap();
+            tableHeap.ReadFrom(tableStream);
+            
+            // Find the target method
+            def rows = tableHeap.GetRows.[MethodDefRow, MethodDefTable]().ToArray();            
+            def fatMethodRow = rows[1];
+            
+            def rva = fatMethodRow.Rva;
+            def methodStream = image.GetDataAt(rva);
+            def reader = MethodBodyReader();
+            
+            def body = reader.Read(methodStream);
+            body.ShouldBeOfType.[FatMethodBody]();
+            
+            body.CodeSize.ShouldBeEqualTo(11, "Invalid code size");
+            
+            def fatBody = body.As.[FatMethodBody]();
+            fatBody.Flags.ShouldBeEqualTo(0x3013, "Invalid Flags");
+            fatBody.MaxStack.ShouldBeEqualTo(2, "Invalid MaxStack value");
+            fatBody.LocalVarSigToken.ShouldBeEqualTo(0x11000001, "Invalid LocalVarSigToken");
+            fatBody.InitLocals.ShouldBeTrue("InitLocals should be true");
+            
+            // Match the instructions in the method body
+            def expectedBytes = array[0x00 : byte, 0x02, 0x03, 0x58, 0x0A, 0x06, 0x0B, 0x2B, 0x00, 0x07, 0x2A];
+            fatBody.Bytes.ShouldMatch(expectedBytes);
+        }
+        public ShouldBeAbleToExtractMethodRowsAndMethodRVAs() : void
+        {
+            def targetAssembly = @"..\..\SampleBinaries\SampleAppWithFatMethodBody.exe";
+            def image = Image.ReadFrom(targetAssembly);
+            def root = image.GetMetadataRoot();
+
+            def tableStream = root.Heaps["#~"];
+            def tableHeap = TablesHeap();
+            tableHeap.ReadFrom(tableStream);
+            
+            def rows = tableHeap.GetRows.[MethodDefRow, MethodDefTable]().ToArray();
+            rows.Length.ShouldBeEqualTo(4, "Invalid row count");
+                                    
+            rows[0].Rva.ShouldBeEqualTo(0x00002050, "Invalid Rva");
+            rows[3].Rva.ShouldBeEqualTo(0x0000207C, "Invalid Rva");
         }
         private GetData() : array[byte]
         {

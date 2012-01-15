@@ -1,0 +1,64 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class MethodBodyReader
+    {
+        public Read([NotNull] methodStream : Stream) : MethodBody
+        ensures value != null
+        {          
+            def leadingByte = methodStream.ReadByte() :> byte;
+            def mask = (leadingByte >> 1) << 1;
+            def isFat = (leadingByte ^ mask) != 0;
+
+            mutable result : MethodBody = null;
+            if(!isFat)
+            {              
+                def size = (leadingByte >> 2) :> uint;
+                def reader = BinaryReader(methodStream);
+                def bytes = reader.ReadBytes(size :> int);
+
+                def body = TinyMethodBody();
+                body.Bytes = bytes;
+                body.CodeSize = size;
+
+                result = body;
+            }
+            else
+            {
+                // Reset the header position and read the flags
+                def reader = BinaryReader(methodStream);                
+                _ = methodStream.Seek(-1, SeekOrigin.Current);
+
+                def body = FatMethodBody();
+                body.Flags = reader.ReadUInt16();
+                body.MaxStack = reader.ReadUInt16();
+                
+                def codeSize = reader.ReadUInt32();
+                body.CodeSize = codeSize;
+                
+                body.LocalVarSigToken = reader.ReadUInt32();
+                body.InitLocals = (body.Flags & (MethodHeaderFlags.InitLocals :> byte)) != 0;
+
+                def bytes = reader.ReadBytes(codeSize :> int);
+                body.Bytes = bytes;
+                
+                result = body;
+            }
+
+            when(result == null)
+                throw NotSupportedException("Invalid or unknown method body type");
+
+            result;
+        }
+    }
+}

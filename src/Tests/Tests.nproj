@@ -165,6 +165,9 @@
     <Compile Include="NTHeader32Tests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ObjectExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="OptionalHeaderStandardFieldTests.n">
       <SubType>Code</SubType>
     </Compile>

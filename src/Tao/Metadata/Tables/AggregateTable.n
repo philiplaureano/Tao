@@ -15,7 +15,7 @@ namespace Tao
 {
     public class AggregateTable : IMetadataTable
     {
-        private _tables : IDictionary[TableId, IMetadataTable] ;
+        private _tables : IDictionary[TableId, IMetadataTable];
         private _tableWriter : ITableWriter;
         private _tableReader : ITableReader;
 

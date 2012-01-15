@@ -1,0 +1,41 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao.Visitors;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public static class ActionExtensions
+    {
+        public Widen[TBase, TDerived](this action : Action[TDerived]) : Action[TBase]
+            where TDerived : TBase
+        {                        
+            def widen(target : TBase)
+            {
+                when(target is TDerived)
+                {
+                    def derived = target :> TDerived;
+                    action(derived);
+                }
+            };
+
+            def widerAction(target : TBase) : void
+            {
+                def visitor = FunctorVisitor.[TBase](widen);
+                target.Accept(visitor);
+            }
+            widerAction;
+        }
+        public Narrow[TDerived, TBase](this action : Action[TBase]) : Action[TDerived]
+            where TDerived : TBase
+        {
+            target => action(target);
+        }
+
+    }
+}

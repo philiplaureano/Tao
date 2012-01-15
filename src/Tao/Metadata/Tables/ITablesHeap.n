@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public interface ITablesHeap
+    {
+        MajorVersion : byte { get;set; }
+        MinorVersion : byte { get;set; }        
+        Indexes : IDictionary.[HeapSizeFlags, ISet.[uint]] { get; }
+        Tables : IEnumerable[IMetadataTable] { get; }
+        ReadFrom(inputStream : Stream) : void;
+        WriteTo(outputStream : Stream) : void;
+    }
+}

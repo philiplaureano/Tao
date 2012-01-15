@@ -11,51 +11,58 @@ using System.Linq;
 
 namespace Tests
 {
-  public static class AssertionExtensions
-  {
-    public ShouldBeTrue(this condition : bool, message : string, params args : array[object]) : void
-        requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()
+    public static class AssertionExtensions
     {
-      Assert.IsTrue(condition, message, args);
-    }
-    public ShouldBeFalse(this condition : bool, message : string, params args : array[object]) : void
+        public ShouldBeOfType[T]([NotNull] this target : object)  : void
+        {
+            def targetType = target.GetType();
+            def isSameType = targetType == typeof(T);
+            isSameType.ShouldBeTrue("Expected type: {0}, Actual Type: {1}", typeof(T).FullName, targetType.FullName);            
+        }
+        
+        public ShouldBeTrue(this condition : bool, message : string, params args : array[object]) : void
         requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()
-    {
-      Assert.IsFalse(condition, message, args);  
-    }
-    public ShouldBeNotNull(this target : object,  message : string, params args : array[object]) : void
+        {
+            Assert.IsTrue(condition, message, args);
+        }
+        public ShouldBeFalse(this condition : bool, message : string, params args : array[object]) : void
         requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()
-    {
-      Assert.IsNotNull(target, message, args);
-    }
-    public ShouldBeNull(this target : object,  message : string, params args : array[object]) : void
+        {
+            Assert.IsFalse(condition, message, args);  
+        }
+        public ShouldBeNotNull(this target : object,  message : string, params args : array[object]) : void
         requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()
-    {
-      Assert.IsNull(target, message, args);
-    }
-    public ShouldBeEqualTo[T](this target : T, other : T,  message : string, params args : array[object]) : void
+        {
+            Assert.IsNotNull(target, message, args);
+        }
+        public ShouldBeNull(this target : object,  message : string, params args : array[object]) : void
+        requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()
+        {
+            Assert.IsNull(target, message, args);
+        }
+        public ShouldBeEqualTo[T](this target : T, other : T,  message : string, params args : array[object]) : void
         requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()    
-    {
-      Assert.AreEqual(other, target, message, args);
-    }
-    public ShouldBeTheSameReferenceAs[T](this target : T, other : T,  message : string, params args : array[object]) : void
+        {
+            Assert.AreEqual(other, target, message, args);
+        }
+        public ShouldBeTheSameReferenceAs[T](this target : T, other : T,  message : string, params args : array[object]) : void
         requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()    
-    {
-      Assert.AreSame(other, target, message, args);
-    }
-    public ShouldNotBeEqualTo[T](this target : T, other : T,  message : string, params args : array[object]) : void
+        {
+            Assert.AreSame(other, target, message, args);
+        }
+        public ShouldNotBeEqualTo[T](this target : T, other : T,  message : string, params args : array[object]) : void
         requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()    
-    {
-      Assert.AreNotEqual(other, target, message, args);
-    }
-    public ShouldNotBeTheSameReferenceAs[T](this target : T, other : T,  message : string, params args : array[object]) : void
+        {
+            Assert.AreNotEqual(other, target, message, args);
+        }
+        public ShouldNotBeTheSameReferenceAs[T](this target : T, other : T,  message : string, params args : array[object]) : void
         requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()
-    {
-      Assert.AreNotSame(other, target, message, args);
+        {
+            Assert.AreNotSame(other, target, message, args);
+        }
+        private ThrowPutADamnAssertionMessageThereYouLazyBastard() : void
+        {
+            throw ArgumentException("message", "You need to put a failure message here if the assertion fails");
+        }    
     }
-    private ThrowPutADamnAssertionMessageThereYouLazyBastard() : void
-    {
-      throw ArgumentException("message", "You need to put a failure message here if the assertion fails");
-    }    
-  }
 }

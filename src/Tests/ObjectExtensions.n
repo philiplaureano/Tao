@@ -1,0 +1,19 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public static class ObjectExtensions
+  {
+      public As[T](this target : object) : T
+      {
+          target :> T;
+      }
+  }
+}

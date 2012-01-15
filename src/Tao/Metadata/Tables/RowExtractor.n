@@ -1,0 +1,38 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao.Visitors;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class RowExtractor[TRow, TTable]
+    where TTable : IMetadataTable[TRow], IMetadataTable
+  {
+      public ExtractFrom([NotNull] tableHeap : ITablesHeap) : IEnumerable[TRow]
+        ensures value != null
+      {
+          def results = List.[TRow]();
+          def addResults : Action.[TTable] = table =>
+          {
+              results.AddRange(table.Rows);
+          };
+          
+          // Go through all the tables and
+          // collect the target rows
+          def visitTable = addResults.Widen.[IMetadataTable, TTable]();
+          def visitor = visitTable.ToVisitor.[IMetadataTable]();
+          foreach(table in tableHeap.Tables)
+          {
+              table.Accept(visitor);
+          }
+          
+          results;
+      }
+  }
+}

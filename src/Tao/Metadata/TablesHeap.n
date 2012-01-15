@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-    public class TablesHeap
+    public class TablesHeap : ITablesHeap
     {
         private mutable _header : MetadataTablesHeader;
         private mutable _tables : AggregateTable;
@@ -21,12 +21,12 @@ namespace Tao
         {    
             _tables = AggregateTable();
         }
-        
+
         public this(tables : AggregateTable)
         {
             _tables = tables;
         }
-        
+
         public this(header : MetadataTablesHeader, tables : AggregateTable)
         {
             _header = header;
@@ -47,6 +47,14 @@ namespace Tao
                 _indexes;
             }
         }
+        public Tables : IEnumerable[IMetadataTable]
+        {
+            get
+            {
+                _tables.Tables;
+            }
+        }
+
         public ReadFrom([NotNull] inputStream : Stream) : void
         {
             def indexes : IDictionary.[HeapSizeFlags, ISet.[uint]] = Dictionary();

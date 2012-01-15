@@ -40,7 +40,7 @@ namespace Tao
 
                 when(hasTable)
                 {
-                    def currentId = tableId :> TableId;
+                    def currentId = tableId : TableId;
                     def rowCount : uint = header.Rows[currentId];
                     writer.Write(rowCount : uint);
                 }
