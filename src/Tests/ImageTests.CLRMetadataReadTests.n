@@ -1,0 +1,27 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tests.Macros;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{  
+  public partial class ImageTests
+  {
+      public ShouldBeAbleToAccessMetadataRootFromValidCLRImageInstance() : void 
+      {
+          def imageStream = File.ReadAllBytes(@"..\..\SampleBinaries\NHibernate.dll").ToStream();
+          def image = Image.ReadFrom(imageStream);
+          image.ShouldBeOfType.[CLRImage]();
+          
+          def clrImage = image.As.[CLRImage]();
+          clrImage.MetadataRoot.ShouldBeNotNull("The metadata root is missing");
+      }
+  }
+}

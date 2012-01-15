@@ -1,0 +1,87 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+    public class CLRImage : IImage
+    {
+        private _image : IImage;
+        private mutable _root : IMetadataRoot;
+
+        public this([NotNull] image : IImage)
+        {
+            _image = image;
+        }
+
+        public DOSHeader : IDosHeader 
+        { 
+            get 
+            {
+                _image.DOSHeader;
+            }
+            set
+            {
+                _image.DOSHeader = value;
+            }
+        }
+
+        public CoffHeader : ICoffHeader 
+        { 
+            get
+            {
+                _image.CoffHeader;
+            }
+            set
+            {
+                _image.CoffHeader = value;
+            }
+        }
+
+        public OptionalHeader : OptionalHeader 
+        { 
+            get
+            {
+                _image.OptionalHeader;
+            }
+            set
+            {
+                _image.OptionalHeader = value;
+            }
+        }
+
+        public DataDirectories : IList.[IDataDirectory] 
+        {
+            get
+            {
+                _image.DataDirectories;
+            }
+        }   
+
+        public Sections : IList.[ISection] 
+        { 
+            get
+            {
+                _image.Sections;
+            }
+        }
+
+        public MetadataRoot : IMetadataRoot
+        {
+            get
+            {
+                when(_root == null)
+                    _root = _image.GetMetadataRoot();
+
+                _root;
+            }
+        }
+    }
+}

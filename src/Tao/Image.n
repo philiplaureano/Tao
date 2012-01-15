@@ -11,13 +11,13 @@ using System.Linq;
 
 namespace Tao
 {
-  public partial class Image : IImage
-  {
-    [Accessor] private _dataDirectories : List[IDataDirectory] = List();
-    [Accessor] private _sections        : List[ISection]       = List();
-    
-    public DOSHeader       : IDosHeader     { get; set; }
-    public CoffHeader      : ICoffHeader    { get; set; }
-    public OptionalHeader  : OptionalHeader { get; set; }
-  }
+    public partial class Image : IImage
+    {
+        [Accessor] private _dataDirectories : List[IDataDirectory] = List();
+        [Accessor] private _sections        : List[ISection]       = List();
+
+        public DOSHeader       : IDosHeader     { get; set; }
+        public CoffHeader      : ICoffHeader    { get; set; }
+        public OptionalHeader  : OptionalHeader { get; set; }
+    }
 }

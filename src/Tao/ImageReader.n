@@ -49,12 +49,12 @@ namespace Tao
       _sectionHeaderReader  = sectionHeaderReader;
     }
     
-    public Read([NotNull] imageStream : Stream) : Image
+    public Read([NotNull] imageStream : Stream) : IImage
         requires imageStream.Length > 0 otherwise throw ArgumentException("imageStream", "Unable to read from an empty image stream")
         ensures value.DOSHeader != null
         ensures value.CoffHeader != null        
     {
-      def image = Image();
+      mutable image : IImage = Image();
           
       def dosHeader = _dosHeaderReader.Read(imageStream);
       image.DOSHeader = dosHeader;          
@@ -125,6 +125,10 @@ namespace Tao
       // Restore the original stream position after the stream header read
       imageStream.Position = originalPosition;
       
+      when(image.HasCLRHeader())
+      {
+          image = CLRImage(image);
+      }
       image;
     }
   }

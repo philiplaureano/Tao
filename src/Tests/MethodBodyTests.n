@@ -33,17 +33,7 @@ namespace Tests
 
             body.CodeSize.ShouldBeEqualTo(0x18, "Wrong method body size");
         }
-        //public ShouldBeAbleToDetermineFatHeader() : void
-        //{
-        //    def bytes = array[0x63 : byte];
-        //    def body = MethodBody();            
-
-        //    body.IsFatFormat.ShouldBeFalse("The IsFatFormat should be false by default");
-
-        //    body.Read(MemoryStream(bytes));
-        //    body.IsFatFormat.ShouldBeTrue("This method body should have a fat header format");            
-        //}
-
+        
         public ShouldBeAbleToReadFatHeader() : void
         {
             def imageStream = File.ReadAllBytes(@"..\..\SampleBinaries\SampleAppWithFatMethodBody.exe");

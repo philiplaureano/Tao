@@ -63,6 +63,9 @@
     <Compile Include="AlignmentExtensions.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CLRImage.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DataDirectoryAddressWriter.n">
       <SubType>Code</SubType>
     </Compile>
