@@ -174,6 +174,9 @@
     <Compile Include="Metadata\HeapSizeFlags.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\ICLRMetadata.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\IIndex.n">
       <SubType>Code</SubType>
     </Compile>
@@ -809,9 +812,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionHeaderWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SectionManagementTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionResolver.n">

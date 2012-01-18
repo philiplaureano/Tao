@@ -11,21 +11,17 @@ namespace Tests
 {
   public class StartupStubTests
   {
-    public ignored ShouldWriteStartupStubForI386Machine() : void
+    public ignored stub ShouldWriteStartupStubForI386Machine() : void
     {
-      throw NotImplementedException();
     }
-    public ignored ShouldWriteStartupStubForAmd64Machine() : void
+    public ignored stub ShouldWriteStartupStubForAmd64Machine() : void
     {
-      throw NotImplementedException();
     }    
-    public ignored ShouldWriteStartupStubForIA64Machine() : void
+    public ignored stub ShouldWriteStartupStubForIA64Machine() : void
     {
-      throw NotImplementedException();
     }    
-    public ignored ShouldWriteStartupStubImmediatelyAfterImportDirectoryPosition() : void
+    public ignored stub ShouldWriteStartupStubImmediatelyAfterImportDirectoryPosition() : void
     {
-      throw NotImplementedException();
     }
   }
 }

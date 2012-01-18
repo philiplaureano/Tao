@@ -11,129 +11,129 @@ namespace Tests
 {
   public class ImageGenerationTests
   {
-    public ignored ShouldWriteDefaultCLRDataDirectory() : void
+    public ignored stub ShouldWriteDefaultCLRDataDirectory() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldGenerateDefaultMetadataRoot() : void
+    public ignored stub ShouldGenerateDefaultMetadataRoot() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldHaveCorrectDefaultCoffHeaderCharacteristicsFor32BitImages() : void
+    public ignored stub ShouldHaveCorrectDefaultCoffHeaderCharacteristicsFor32BitImages() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldHaveCorrectDefaultCoffHeaderCharacteristicsFor64BitImages() : void
+    public ignored stub ShouldHaveCorrectDefaultCoffHeaderCharacteristicsFor64BitImages() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldBeAbleToGenerateDefaultImportDirectory() : void
+    public ignored stub ShouldBeAbleToGenerateDefaultImportDirectory() : void
     {
-      throw NotImplementedException();  
+
     }
-    public ignored ShouldWriteCorrectOptionalHeaderSizeFor32BitHeaders() : void
+    public ignored stub ShouldWriteCorrectOptionalHeaderSizeFor32BitHeaders() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteCorrectOptionalHeaderSizeFor64BitHeaders() : void
+    public ignored stub ShouldWriteCorrectOptionalHeaderSizeFor64BitHeaders() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteNumberOfSymbolsAsZero() : void
+    public ignored stub ShouldWriteNumberOfSymbolsAsZero() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteNullPointerToSymbolTable() : void
+    public ignored stub ShouldWriteNullPointerToSymbolTable() : void
     {
-      throw NotImplementedException();
+
     }    
-    public ignored ShouldWriteCorrectDateTimeStamp() :  void
+    public ignored stub ShouldWriteCorrectDateTimeStamp() :  void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldAlignWrittenSectionsAccordingToFileAlignment() : void
+    public ignored stub ShouldAlignWrittenSectionsAccordingToFileAlignment() : void
     {
-      throw NotImplementedException();  
+
     }
-    public ignored ShouldWriteSectionHeadersThatPointToTheActualPositionOfEachCorrespondingSectionDataBlock() : void
+    public ignored stub ShouldWriteSectionHeadersThatPointToTheActualPositionOfEachCorrespondingSectionDataBlock() : void
     {
-      throw NotImplementedException();    
+
     }
-    public ignored ShouldWriteCorrectSectionHeaderSizes() : void
+    public ignored stub ShouldWriteCorrectSectionHeaderSizes() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldSetTheDllSectionFlagWhenCreatingNetModulesAndDLLLibraries() : void
+    public ignored stub ShouldSetTheDllSectionFlagWhenCreatingNetModulesAndDLLLibraries() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldGenerateDefaultImportAddressTableDataDirectory() : void
+    public ignored stub ShouldGenerateDefaultImportAddressTableDataDirectory() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldGenerateDefaultImportAddressTableData() : void
+    public ignored stub ShouldGenerateDefaultImportAddressTableData() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteEmptyExportTableDirectory() : void
+    public ignored stub ShouldWriteEmptyExportTableDirectory() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteImportTableDirectory() : void
+    public ignored stub ShouldWriteImportTableDirectory() : void
     {
-      throw NotImplementedException();
+
     }    
-    public ignored ShouldWriteEmptyExceptionDirectory() : void
+    public ignored stub ShouldWriteEmptyExceptionDirectory() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteEmptyCopyrightDirectory() : void
+    public ignored stub ShouldWriteEmptyCopyrightDirectory() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteEmptyGlobalPtrDirectory() : void
+    public ignored stub ShouldWriteEmptyGlobalPtrDirectory() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteEmptyTLSDirectory() : void
+    public ignored stub ShouldWriteEmptyTLSDirectory() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteEmptyLoadConfigDirectory() : void
+    public ignored stub ShouldWriteEmptyLoadConfigDirectory() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteEmptyBoundImportDirectory() : void
+    public ignored stub ShouldWriteEmptyBoundImportDirectory() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteEmptyDelayedImportDescDirectory() : void
+    public ignored stub ShouldWriteEmptyDelayedImportDescDirectory() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteEmptyReservedDirectory() : void
+    public ignored stub ShouldWriteEmptyReservedDirectory() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteEmptyStrongNameSignature() : void
+    public ignored stub ShouldWriteEmptyStrongNameSignature() : void
     {
-      throw NotImplementedException();
+
     }    
-    public ignored ShouldWriteCLR20AsTheDefaultVersion() : void
+    public ignored stub ShouldWriteCLR20AsTheDefaultVersion() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldBeAbleToGenerateAssemblyThatRequiresNET35() : void
+    public ignored stub ShouldBeAbleToGenerateAssemblyThatRequiresNET35() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldBeAbleToGenerateAssemblyThatRequiresNET40() : void
+    public ignored stub ShouldBeAbleToGenerateAssemblyThatRequiresNET40() : void
     {
-      throw NotImplementedException();
+
     }
-    public ignored ShouldWriteI386AsTheDefaultMachineType() : void
+    public ignored stub ShouldWriteI386AsTheDefaultMachineType() : void
     {
-      throw NotImplementedException();
+
     }
   }
 }

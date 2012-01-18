@@ -14,9 +14,8 @@ namespace Tests
 {  
     public class StringsHeapTests
     {
-        public ignored ShouldBeAbleToConvertCollectionOfStringsIntoAStream() : void
+        public ignored stub ShouldBeAbleToConvertCollectionOfStringsIntoAStream() : void
         {
-            throw NotImplementedException();
         }
         
         public ShouldBeAbleToReadStringFromStringHeapUsingGivenIndex() : void

@@ -106,6 +106,9 @@
     <Compile Include="CLIHeaderTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CLRMetadataTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CodedTokenTests.IndexSizeTests.n">
       <SubType>Code</SubType>
       <DependentUpon>CodedTokenTests.n</DependentUpon>
@@ -202,6 +205,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionAddressResolutionTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionManagementTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SortedTableTests.n">
@@ -498,6 +504,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="SampleBinaries\HelloWorld.exe">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\mono-mscorlib.dll">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\MultiModuleAssembly.exe">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\NHibernate.dll">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\SampleAppWithFatMethodBody.exe">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\SampleAssemblyThatUsesTheConstantTable.exe">
       <SubType>Content</SubType>
     </Content>
     <Content Include="SampleBinaries\SamplePE32PlusApp.exe">

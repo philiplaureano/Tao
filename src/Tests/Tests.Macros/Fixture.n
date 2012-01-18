@@ -48,6 +48,17 @@ namespace Tests.Macros
   }
   
   [MacroUsage(MacroPhase.BeforeInheritance, MacroTargets.Method)]
+  macro NotImplemented(_typeBuilder : TypeBuilder, method : ParsedMethod)
+  syntax ("stub")
+  {
+    def body = method.Body;
+    method.Body = Util.locate(body.Location, 
+  <[ 
+    throw System.NotImplementedException();
+   ]>);
+  }
+  
+  [MacroUsage(MacroPhase.BeforeInheritance, MacroTargets.Method)]
   macro TestExpects(_typeBuilder : TypeBuilder, method : ParsedMethod, exception)
   syntax ("expects", exception)
   {

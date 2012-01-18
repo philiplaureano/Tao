@@ -1,0 +1,28 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class CLRMetadataTests
+  {
+      public stub ShouldBeAbleToReadBlobs() : void
+      {
+      }
+      public stub ShouldBeAbleToReadStrings() : void
+      {
+      }
+      public stub ShouldBeAbleToReadUserStrings() : void
+      {
+      }
+      public stub ShouldBeAbleToReadGuids() : void
+      {
+      }
+  }
+}

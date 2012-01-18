@@ -1,0 +1,30 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class SectionManagementTests
+  {      
+    public ignored stub ShouldBeAbleToWriteToANamedSectionWithoutExplicitlySpecifyingAnRVA() : void
+    {
+    }	    
+    public ignored stub ShouldBeAbleToReadSectionElementUsingOnlyASectionElementType() : void
+    {
+    }
+    public ignored stub ShouldBeAbleToRemapAllSectionElementRVAsIfSectionSizesChange() : void
+    {
+    }	
+    public ignored stub ShouldBeAbleToResizeSectionsAndEliminateUnusedSpace() : void
+    {
+    }	
+    public ignored stub ShouldResizeSectionsAccordingToFileAlignment() : void
+    {
+    }
+  }
+}

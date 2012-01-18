@@ -28,9 +28,8 @@ namespace Tests
 
       TestRead(index, expectedString);
     }
-    public ignored ShouldBeAbleToWriteUnicodeString() : void
-    {
-        throw NotImplementedException();
+    public ignored stub ShouldBeAbleToWriteUnicodeString() : void
+    {        
     }
     public ShouldBeAbleToWriteUserString() : void
     {
@@ -52,9 +51,8 @@ namespace Tests
       outputStream.ShouldMatch(expectedData);
       assert offset equals expectedOffset otherwiseprint "Invalid offset";
     }
-    public ignored ShouldBeAbleToConvertCollectionOfUserStringsIntoAStream() : void
+    public ignored stub ShouldBeAbleToConvertCollectionOfUserStringsIntoAStream() : void
     {
-        throw NotImplementedException();
     }
     private TestRead(index : uint, expectedString: string) : void
     {

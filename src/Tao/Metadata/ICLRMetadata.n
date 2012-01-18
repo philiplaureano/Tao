@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public interface IAssemblyMetadata
+  public interface ICLRMetadata
   {
       ReadBlob(index : uint) : Stream;
       ReadGuid(index : uint) : Guid;
