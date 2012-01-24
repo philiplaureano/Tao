@@ -20,7 +20,10 @@ namespace Tests
           def root = image.GetMetadataRoot();
           def metadata = CLRMetadata(root);
           
-          def expectedData = array[0x03 : byte, 0x00, 0x00];
+          def expectedData = array[0x00 : byte, 0x00, 0x01];
+          def actualData = metadata.ReadBlob(1);
+          
+          actualData.ShouldMatch(expectedData);
       }
       public stub ShouldBeAbleToReadStrings() : void
       {

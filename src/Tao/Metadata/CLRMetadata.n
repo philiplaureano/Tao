@@ -1,0 +1,56 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao.Interfaces;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class CLRMetadata : ICLRMetadata
+    {
+        private _root : IMetadataRoot;
+        private _tablesHeap : ITablesHeap;
+        public this(root : IMetadataRoot)
+            requires root != null && root.Heaps.ContainsKey("#~")
+        {
+            _root = root;
+                       
+            def tableStream = root.Heaps["#~"];
+            
+            _tablesHeap = TablesHeap();
+            _tablesHeap.ReadFrom(tableStream);            
+        }
+        
+        public ReadBlob(index : uint) : Stream
+        {
+            def blobStream = _root.Heaps["#Blob"];
+            def reader = BlobReader();
+            reader.Read(index, blobStream);            
+        }
+        public ReadGuid(index : uint) : Guid
+        {
+            throw NotImplementedException();
+        }
+        public ReadString(index : uint) : string
+        {
+            throw NotImplementedException();
+        }
+        public ReadUserString(index : uint) : string
+        {
+            throw NotImplementedException();
+        }
+        public Tables : IEnumerable.[IMetadataTable]
+        {
+            get
+            {
+                _tablesHeap.Tables;    
+            }
+        }
+    }
+}
