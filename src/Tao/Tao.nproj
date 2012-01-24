@@ -144,6 +144,9 @@
     <Compile Include="Metadata\CLIHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\CLRMetadata.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\CodedTokenBitCountMap.n">
       <SubType>Code</SubType>
     </Compile>

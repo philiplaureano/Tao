@@ -3,6 +3,7 @@ using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tao;
 using Tests.Macros;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,14 @@ namespace Tests
 {
   public class CLRMetadataTests
   {
-      public stub ShouldBeAbleToReadBlobs() : void
+      public ShouldBeAbleToReadBlobs() : void
       {
+          def targetFile = @"..\..\SampleBinaries\Skeleton.exe";
+          def image = Image.ReadFrom(targetFile);
+          def root = image.GetMetadataRoot();
+          def metadata = CLRMetadata(root);
+          
+          def expectedData = array[0x03 : byte, 0x00, 0x00];
       }
       public stub ShouldBeAbleToReadStrings() : void
       {
