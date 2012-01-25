@@ -28,23 +28,34 @@ namespace Tao
         }
         
         public ReadBlob(index : uint) : Stream
+            requires _root.Heaps != null && _root.Heaps.ContainsKey("#Blob")
         {
             def blobStream = _root.Heaps["#Blob"];
             def reader = BlobReader();
             reader.Read(index, blobStream);            
         }
         public ReadGuid(index : uint) : Guid
+            requires _root.Heaps != null && _root.Heaps.ContainsKey("#GUID")
         {
-            throw NotImplementedException();
+            def guidHeap = _root.Heaps["#GUID"];
+            def reader = GuidReader();
+            reader.Read(index, guidHeap);
         }
         public ReadString(index : uint) : string
+            requires _root.Heaps != null && _root.Heaps.ContainsKey("#Strings")
         {
-            throw NotImplementedException();
+            def stringHeap = _root.Heaps["#Strings"];
+            def reader = StringHeapReader();
+            reader.Read(index, stringHeap);            
         }
         public ReadUserString(index : uint) : string
+            requires _root.Heaps != null && _root.Heaps.ContainsKey("#US")
         {
-            throw NotImplementedException();
+            def userStringHeap = _root.Heaps["#US"];
+            def reader = UserStringHeapReader();
+            reader.Read(index, userStringHeap);
         }
+        
         public Tables : IEnumerable.[IMetadataTable]
         {
             get

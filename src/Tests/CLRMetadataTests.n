@@ -4,35 +4,54 @@ using Nemerle.Text;
 using Nemerle.Utility;
 
 using Tao;
+using Tao.Interfaces;
 using Tests.Macros;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Tests
 {
-  public class CLRMetadataTests
-  {
-      public ShouldBeAbleToReadBlobs() : void
-      {
-          def targetFile = @"..\..\SampleBinaries\Skeleton.exe";
-          def image = Image.ReadFrom(targetFile);
-          def root = image.GetMetadataRoot();
-          def metadata = CLRMetadata(root);
-          
-          def expectedData = array[0x00 : byte, 0x00, 0x01];
-          def actualData = metadata.ReadBlob(1);
-          
-          actualData.ShouldMatch(expectedData);
-      }
-      public stub ShouldBeAbleToReadStrings() : void
-      {
-      }
-      public stub ShouldBeAbleToReadUserStrings() : void
-      {
-      }
-      public stub ShouldBeAbleToReadGuids() : void
-      {
-      }
-  }
+    public class CLRMetadataTests
+    {
+        public ShouldBeAbleToReadBlobs() : void
+        {
+            def targetFile = @"..\..\SampleBinaries\Skeleton.exe";
+            def expectedData = array[0x00 : byte, 0x00, 0x01];
+            TestRead(targetFile, expectedData, m => m.ReadBlob(1).ReadAllBytes(), 
+                     (actual, expected)=>actual.ShouldMatch(expected));
+        }
+        public ShouldBeAbleToReadStrings() : void
+        {
+            def targetFile = @"..\..\SampleBinaries\NHibernate.dll";
+            def expectedData = "NHibernate";
+
+            TestRead(targetFile, expectedData, m => m.ReadString(1), (actual : string, expected : string) => actual.ShouldBeEqualTo(expected, "Invalid String"));            
+        }
+        public ShouldBeAbleToReadUserStrings() : void
+        {
+            def targetFile = @"..\..\SampleBinaries\NHibernate.dll";
+            def expectedData = "collection == null";
+
+            TestRead(targetFile, expectedData, m => m.ReadUserString(1), (actual : string, expected : string) => actual.ShouldBeEqualTo(expected, "Invalid UserString"));                        
+        }
+        public ShouldBeAbleToReadGuids() : void
+        {
+            def targetFile = @"..\..\SampleBinaries\NHibernate.dll";
+            def bytes = array[0x0B : byte, 0xB4, 0x0C, 0xFB, 0xA8, 0x31, 0x1D, 0x43, 0xAE, 0x46, 0xC6, 0x0C, 0x3D, 0xFD, 0x0A, 0x19];
+            def expectedData = Guid(bytes);
+
+            TestRead(targetFile, expectedData, m => m.ReadGuid(1), (actual : Guid, expected : Guid) => actual.ShouldBeEqualTo(expected, "Invalid Guid"));                        
+        }
+
+        private TestRead[T](targetFile : string, expectedData : T, getActualData : ICLRMetadata-> T, compareData : T * T -> void) : void
+        {
+            def image = Image.ReadFrom(targetFile);
+            def root = image.GetMetadataRoot();
+            def metadata = CLRMetadata(root);
+            def actualData = getActualData(metadata);          
+            compareData(actualData, expectedData);
+        }      
+    }
 }

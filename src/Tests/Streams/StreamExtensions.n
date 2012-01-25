@@ -31,6 +31,10 @@ namespace Tests
             File.WriteAllBytes(filename, bytes);
         }
         
+        public ReadAllBytes([NotNull] this stream : Stream) : array[byte]
+        {
+            stream.ReadBytes(stream.Length :> int);
+        }
         public ReadBytes([NotNull] this stream : Stream, count : int, startPosition : long = 0) : array[byte]
         {
             stream.Seek(startPosition);
