@@ -210,6 +210,9 @@
     <Compile Include="SectionManagementTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Signatures\CustomModTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SortedTableTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -491,6 +494,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Signatures" />
     <Folder Include="Streams" />
     <Folder Include="Tables" />
     <Folder Include="SampleBinaries" />

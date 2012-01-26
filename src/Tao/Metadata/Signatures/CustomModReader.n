@@ -1,0 +1,37 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class CustomModReader
+  {
+      public Read(stream : Stream) : CustomMod
+      {
+          def elementType = stream.ReadByte() :> ElementType;
+          def secondByte = stream.ReadByte();
+          
+          def decoder = CodedTokenDecoder();                    
+          def decodedToken = decoder.Decode(CodedTokenType.TypeDefOrTypeRef, secondByte :> short);
+          
+          def tag = decodedToken[0];
+          def row = decodedToken[1];
+          
+          def converter = CodedTokenConverter();
+          def tableId = converter.GetTableId(CodedTokenType.TypeDefOrTypeRef, tag);
+          
+          def result = CustomMod();
+          result.IsRequired = (elementType == ElementType.CMOD_REQD);
+          result.Row = row :> uint;
+          result.TableId = tableId;
+          
+          result;
+      }
+  }
+}

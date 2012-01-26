@@ -216,6 +216,15 @@
     <Compile Include="Metadata\MethodHeaderFlags.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\CustomMod.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\CustomModReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\ElementType.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\SimpleTokenDecoder.n">
       <SubType>Code</SubType>
     </Compile>
@@ -839,6 +848,7 @@
   <ItemGroup>
     <Folder Include="Metadata" />
     <Folder Include="API" />
+    <Folder Include="Metadata\Signatures" />
     <Folder Include="Metadata\Tables" />
     <Folder Include="Metadata\Tables\Schemas" />
     <Folder Include="Metadata\Tables\Rows" />

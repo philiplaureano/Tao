@@ -1,0 +1,48 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tests.Macros;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class CustomModTests
+    {
+        public ShouldReadCustomModOptSignature() : void
+        {
+            def expectedTableId = TableId.TypeRef;            
+            def expectedRow : byte = 0x12;
+            def elementType = ElementType.CMOD_OPT;            
+            TestRead(elementType, expectedTableId, expectedRow, false);
+        }
+        public ShouldReadCustomModReqSignature() : void
+        {
+            def expectedTableId = TableId.TypeDef;       
+            def expectedRow : byte = 0x12;
+            def elementType = ElementType.CMOD_REQD;
+            
+            TestRead(elementType, expectedTableId, expectedRow, true);
+        }
+        private TestRead(elementType : ElementType, expectedTableId : TableId, expectedRow : byte, isRequired : bool) : void
+        {
+            def encoder = CodedTokenEncoder();
+            def codedToken = encoder.Encode(CodedTokenType.TypeDefOrTypeRef, expectedTableId, expectedRow) :> byte;                       
+
+            def bytes = array[elementType :> byte, codedToken];
+            def stream = MemoryStream(bytes);
+
+            def reader = CustomModReader();          
+            def result = reader.Read(stream);
+
+            result.IsRequired.ShouldBeEqualTo(isRequired, "Invalid IsRequired value");
+            result.Row.ShouldBeEqualTo(expectedRow, "Wrong row");
+            result.TableId.ShouldBeEqualTo(expectedTableId, "Wrong TableId");
+        }
+    }
+}

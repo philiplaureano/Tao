@@ -27,11 +27,6 @@ namespace Tao
       public InitLocals : bool
       {
           get;set;
-      }
-      
-      public Bytes : array[byte]
-      {
-          get;set;
-      }
+      }     
   }
 }

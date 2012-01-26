@@ -1,5 +1,4 @@
 ﻿using Nemerle;
-using Nemerle.Assertions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
@@ -10,7 +9,10 @@ using System.Linq;
 
 namespace Tao
 {
-  public class TinyMethodBody : MethodBody
-  {      
+  public class CustomMod
+  {
+      public IsRequired : bool { get; set; }
+      public Row : uint { get; set; }
+      public TableId : TableId { get; set; }
   }
 }
