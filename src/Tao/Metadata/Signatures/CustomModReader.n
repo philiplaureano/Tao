@@ -16,10 +16,10 @@ namespace Tao
       {
           def reader = CompressedIntegerReader();          
           def elementType = reader.ReadInteger(stream) :> ElementType;
-          def secondByte = stream.ReadByte();
+          def secondByte = reader.ReadInteger(stream) :> short;
           
           def decoder = CodedTokenDecoder();                    
-          def decodedToken = decoder.Decode(CodedTokenType.TypeDefOrTypeRef, secondByte :> short);
+          def decodedToken = decoder.Decode(CodedTokenType.TypeDefOrTypeRef, secondByte : short);
           
           def tag = decodedToken[0];
           def row = decodedToken[1];

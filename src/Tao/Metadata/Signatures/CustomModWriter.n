@@ -1,0 +1,37 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class CustomModWriter
+    {
+        public Write([NotNull] customMod : CustomMod, [NotNull]  stream : Stream) : void
+        {
+            mutable elementType = ElementType.CMOD_OPT;          
+            when(customMod.IsRequired)
+            {
+                elementType = ElementType.CMOD_REQD;
+            }
+
+            def tableId = customMod.TableId;
+            def row = customMod.Row;
+            def encoder = CodedTokenEncoder();
+            def codedToken = encoder.Encode(CodedTokenType.TypeDefOrTypeRef, tableId, row);                       
+            
+            // Write the element type
+            def compressedIntegerWriter = CompressedIntegerWriter();
+            compressedIntegerWriter.WriteInteger(elementType :> byte, stream);
+            
+            // Write the compressed token
+            compressedIntegerWriter.WriteInteger(codedToken, stream);
+        }
+    }
+}

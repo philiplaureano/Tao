@@ -29,6 +29,37 @@ namespace Tests
             
             TestRead(elementType, expectedTableId, expectedRow, true);
         }
+        public ShouldWriteCustomModOptSignature() : void
+        {
+            def elementType = ElementType.CMOD_OPT;
+            TestWrite(elementType, false);
+        }
+        public ShouldWriteCustomModReqSignature() : void
+        {
+            def elementType = ElementType.CMOD_REQD;
+            TestWrite(elementType, true);
+        }
+        private TestWrite(elementType : ElementType, isRequired : bool) : void
+        {
+            def expectedTableId = TableId.TypeRef;
+            def expectedRow : uint = 0x12;
+            
+            def customMod = CustomMod();
+            customMod.IsRequired = isRequired;
+            customMod.Row = expectedRow;
+            customMod.TableId = expectedTableId;
+            
+            def stream = MemoryStream();
+            def writer = CustomModWriter();
+            writer.Write(customMod, stream);
+            
+            // Create the expected bytes
+            def encoder = CodedTokenEncoder();
+            def codedToken = encoder.Encode(CodedTokenType.TypeDefOrTypeRef, expectedTableId, expectedRow) :> byte;                       
+            def expectedBytes = array[elementType :> byte, codedToken];
+            
+            stream.ShouldMatch(expectedBytes);
+        }
         private TestRead(elementType : ElementType, expectedTableId : TableId, expectedRow : byte, isRequired : bool) : void
         {
             def encoder = CodedTokenEncoder();
