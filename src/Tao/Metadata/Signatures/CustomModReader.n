@@ -14,7 +14,8 @@ namespace Tao
   {
       public Read(stream : Stream) : CustomMod
       {
-          def elementType = stream.ReadByte() :> ElementType;
+          def reader = CompressedIntegerReader();          
+          def elementType = reader.ReadInteger(stream) :> ElementType;
           def secondByte = stream.ReadByte();
           
           def decoder = CodedTokenDecoder();                    
