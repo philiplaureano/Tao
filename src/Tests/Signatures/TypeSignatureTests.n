@@ -1,0 +1,97 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class TypeSignatureTests
+    {      
+        public ShouldReadBooleanType() : void
+        {
+            def elementType = ElementType.Boolean;
+            TestElementTypeRead(elementType);
+        }
+
+        public ShouldReadCharType() : void
+        {
+            def elementType = ElementType.Char;
+            TestElementTypeRead(elementType);
+        }
+
+        public ShouldReadI1Type() : void
+        {
+            def elementType = ElementType.I1;
+            TestElementTypeRead(elementType);
+        }
+
+        public ShouldReadI2Type() : void
+        {
+            def elementType = ElementType.I2;
+            TestElementTypeRead(elementType);
+        }
+
+        public ShouldReadI4Type() : void
+        {
+            def elementType = ElementType.I4;
+            TestElementTypeRead(elementType);
+        }
+
+        public ShouldReadI8Type() : void
+        {
+            def elementType = ElementType.I8;
+            TestElementTypeRead(elementType);
+        }
+
+        public ShouldReadU1Type() : void
+        {
+            def elementType = ElementType.U1;
+            TestElementTypeRead(elementType);
+        }
+
+        public ShouldReadU2Type() : void
+        {
+            def elementType = ElementType.U2;
+            TestElementTypeRead(elementType);
+        }
+
+        public ShouldReadU4Type() : void
+        {
+            def elementType = ElementType.U4;
+            TestElementTypeRead(elementType);
+        }
+
+        public ShouldReadU8Type() : void
+        {
+            def elementType = ElementType.U8;
+            TestElementTypeRead(elementType);
+        }
+
+        public ShouldReadR4Type() : void
+        {
+            def elementType = ElementType.R4;
+            TestElementTypeRead(elementType);
+        }
+
+        public ShouldReadR8Type() : void
+        {
+            def elementType = ElementType.R8;
+            TestElementTypeRead(elementType);
+        }
+        private TestElementTypeRead(elementType : ElementType) : void
+        {            
+            def stream = MemoryStream(array[elementType :> byte]);            
+            def reader = TypeSignatureReader();
+            def result = reader.ReadFrom(stream);            
+            result.ElementType.ShouldBeEqualTo(elementType, "Wrong element type");
+        }
+    }
+}
