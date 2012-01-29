@@ -1,0 +1,59 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class ArrayShapeTests
+  {
+      public ShouldBeAbleToReadArrayShapeBytes() : void
+      {
+          def rank : byte = 1;
+          def numSizes : byte = 2;
+          def numLowBounds = 2;
+       
+          def sizes = array[1 : byte, 2];
+          def loBounds = array[0 : byte, 1];
+          
+          // Create the sample input stream
+          def stream = MemoryStream();
+          def integerWriter = CompressedIntegerWriter();
+          
+          integerWriter.WriteInteger(rank, stream);
+          integerWriter.WriteInteger(numSizes, stream);
+          foreach(size in sizes)
+          {
+              integerWriter.WriteInteger(size, stream);
+          }
+                    
+          integerWriter.WriteInteger(numLowBounds :> uint, stream);
+          foreach(loBound in loBounds)
+          {
+              integerWriter.WriteInteger(loBound, stream);
+          }
+          
+          stream.Seek(0);
+          def reader = ArrayShapeReader();
+          def shape = reader.ReadFrom(stream);
+          
+          def currentSizes = List.[uint](shape.Sizes);
+          def currentLoBounds = List.[uint](shape.LoBounds);
+          
+          shape.Rank.ShouldBeEqualTo(rank, "Invalid rank");
+          currentSizes.Count.ShouldBeEqualTo(2, "Invalid SizeCount");
+          currentSizes[0].ShouldBeEqualTo(sizes[0], "Invalid Sizes");
+          currentSizes[1].ShouldBeEqualTo(sizes[1], "Invalid Sizes");
+          
+          numLowBounds.ShouldBeEqualTo(currentLoBounds.Count, "Invalid LoBoundCount");
+          currentLoBounds[0].ShouldBeEqualTo(loBounds[0], "Invalid LoBound");
+          currentLoBounds[1].ShouldBeEqualTo(loBounds[1], "Invalid LoBound");
+      }      
+  }
+}

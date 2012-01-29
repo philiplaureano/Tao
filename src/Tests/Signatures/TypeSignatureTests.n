@@ -164,18 +164,18 @@ namespace Tests
             def signature = TypeSignature();
             signature.ElementType = elementType;
             
-            def writer = TypeSignatureWriter();
             def expectedBytes = array[elementType :> byte];
             def outputStream = MemoryStream();
-            writer.Write(signature, outputStream);
+            signature.Write(outputStream);
             
             outputStream.ShouldMatch(expectedBytes);
         }
         private TestElementTypeRead(elementType : ElementType) : void
         {            
             def stream = MemoryStream(array[elementType :> byte]);            
-            def reader = TypeSignatureReader();
-            def result = reader.ReadFrom(stream);            
+            def result = TypeSignature();
+            
+            result.ReadFrom(stream);            
             result.ElementType.ShouldBeEqualTo(elementType, "Wrong element type");
         }
     }

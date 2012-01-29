@@ -1,0 +1,27 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+  public class ArrayShape
+  {
+      public Sizes : IEnumerable[uint]
+      {
+          get;set;
+      }
+      public LoBounds : IEnumerable[uint]
+      {
+          get;set;
+      }
+      public Rank : uint
+      {
+          get;set;
+      }
+  }
+}

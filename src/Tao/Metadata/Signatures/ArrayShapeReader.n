@@ -1,0 +1,44 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class ArrayShapeReader
+  {
+      public ReadFrom([NotNull] stream : Stream) : ArrayShape
+      {
+          def reader = CompressedIntegerReader();          
+          def shape = ArrayShape();
+          shape.Rank = reader.ReadInteger(stream);
+          
+          def numSizes = reader.ReadInteger(stream);
+          
+          def sizes = List.[uint]();
+          for(mutable i : uint = 0; i < numSizes; i++)
+          {
+              def currentSize = reader.ReadInteger(stream);
+              sizes.Add(currentSize);
+          }
+          
+          def loBounds = List.[uint]();
+          def numLoBounds = reader.ReadInteger(stream);
+          for(mutable i : uint = 0; i < numLoBounds; i++)
+          {
+              def loBound = reader.ReadInteger(stream);
+              loBounds.Add(loBound);
+          }          
+          
+          shape.Sizes = sizes;
+          shape.LoBounds = loBounds;          
+          shape;
+      }
+  }
+}
