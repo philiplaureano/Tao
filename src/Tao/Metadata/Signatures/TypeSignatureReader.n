@@ -16,11 +16,11 @@ namespace Tao
         public ReadFrom([NotNull] stream : Stream) : TypeSignature
         {
 
-            def primitiveElements = HashSet.[ElementType]();
+            def supportedElements = HashSet.[ElementType]();
 
             def addElement : Action.[ElementType] =  e => 
             {
-                _ = primitiveElements.Add(e);
+                _ = supportedElements.Add(e);
             }
 
             addElement(ElementType.Boolean);
@@ -43,7 +43,7 @@ namespace Tao
             addElement(ElementType.UIntPtr);
 
             def elementType = stream.ReadByte() :> ElementType;
-            when(!primitiveElements.Contains(elementType))
+            when(!supportedElements.Contains(elementType))
             {
                 throw NotSupportedException(string.Format("The element type '{0}' is not supported", elementType));    
             }            

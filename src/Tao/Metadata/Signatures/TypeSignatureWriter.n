@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class TypeSignatureWriter
+  {
+      public Write([NotNull] signature : TypeSignature, [NotNull] stream : Stream) : void
+      {
+          def elementType = signature.ElementType;
+          stream.WriteByte(elementType :> byte);
+      }
+  }
+}

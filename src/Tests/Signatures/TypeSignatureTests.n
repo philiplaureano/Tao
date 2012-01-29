@@ -5,7 +5,7 @@ using Nemerle.Text;
 using Nemerle.Utility;
 
 using Tao;
-
+using Tests.Macros;
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -85,6 +85,91 @@ namespace Tests
         {
             def elementType = ElementType.R8;
             TestElementTypeRead(elementType);
+        }
+        
+        public ShouldWriteBooleanType() : void
+        {
+            def elementType = ElementType.Boolean;
+            TestElementTypeWrite(elementType);
+        }
+
+        public ShouldWriteCharType() : void
+        {
+            def elementType = ElementType.Char;
+            TestElementTypeWrite(elementType);
+        }
+
+        public ShouldWriteI1Type() : void
+        {
+            def elementType = ElementType.I1;
+            TestElementTypeWrite(elementType);
+        }
+
+        public ShouldWriteI2Type() : void
+        {
+            def elementType = ElementType.I2;
+            TestElementTypeWrite(elementType);
+        }
+
+        public ShouldWriteI4Type() : void
+        {
+            def elementType = ElementType.I4;
+            TestElementTypeWrite(elementType);
+        }
+
+        public ShouldWriteI8Type() : void
+        {
+            def elementType = ElementType.I8;
+            TestElementTypeWrite(elementType);
+        }
+
+        public ShouldWriteU1Type() : void
+        {
+            def elementType = ElementType.U1;
+            TestElementTypeWrite(elementType);
+        }
+
+        public ShouldWriteU2Type() : void
+        {
+            def elementType = ElementType.U2;
+            TestElementTypeWrite(elementType);
+        }
+
+        public ShouldWriteU4Type() : void
+        {
+            def elementType = ElementType.U4;
+            TestElementTypeWrite(elementType);
+        }
+
+        public ShouldWriteU8Type() : void
+        {
+            def elementType = ElementType.U8;
+            TestElementTypeWrite(elementType);
+        }
+
+        public ShouldWriteR4Type() : void
+        {
+            def elementType = ElementType.R4;
+            TestElementTypeWrite(elementType);
+        }
+
+        public ShouldWriteR8Type() : void
+        {
+            def elementType = ElementType.R8;
+            TestElementTypeWrite(elementType);
+        }
+        
+        private TestElementTypeWrite(elementType : ElementType) : void
+        {
+            def signature = TypeSignature();
+            signature.ElementType = elementType;
+            
+            def writer = TypeSignatureWriter();
+            def expectedBytes = array[elementType :> byte];
+            def outputStream = MemoryStream();
+            writer.Write(signature, outputStream);
+            
+            outputStream.ShouldMatch(expectedBytes);
         }
         private TestElementTypeRead(elementType : ElementType) : void
         {            
