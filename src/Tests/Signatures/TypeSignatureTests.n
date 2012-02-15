@@ -173,9 +173,8 @@ namespace Tests
         private TestElementTypeRead(elementType : ElementType) : void
         {            
             def stream = MemoryStream(array[elementType :> byte]);            
-            def result = TypeSignature();
+            def result = TypeSignature.ReadFrom(stream);
             
-            result.ReadFrom(stream);            
             result.ElementType.ShouldBeEqualTo(elementType, "Wrong element type");
         }
     }

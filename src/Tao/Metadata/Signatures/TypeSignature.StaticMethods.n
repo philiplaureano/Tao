@@ -1,0 +1,82 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public partial class TypeSignature
+    {
+        private static _factories : Dictionary.[Func[ElementType, bool], Func[TypeSignature]] = Dictionary();
+
+        static this()
+        {
+            _factories.Add(IsPrimitiveElement, () => TypeSignature());
+        }
+
+        public static ReadFrom([NotNull] stream : Stream) : TypeSignature
+        {       
+            // Peak at the element type
+            def elementType = stream.ReadByte() :> ElementType;
+            _ = stream.Seek(-1, SeekOrigin.Current);
+
+            // Search for the factory that can create the type signature
+            mutable matchingCondition : Func[ElementType, bool] = null;
+            foreach(condition in _factories.Keys)
+            {
+                when(matchingCondition == null && condition(elementType))
+                {
+                    matchingCondition = condition;
+                }
+            }
+
+            when(matchingCondition == null)
+            {
+                throw NotSupportedException(string.Format("The element type '{0}' is not supported", elementType));    
+            } 
+
+
+            def createSignature = _factories[matchingCondition];
+            def signature = createSignature();
+            signature.Read(stream);
+
+            signature;
+        }
+
+        private static IsPrimitiveElement(elementType : ElementType) : bool
+        {
+            def primitiveElements : List.[ElementType] = List();
+            def addElement : Action.[ElementType] =  e => 
+            {
+                _ = primitiveElements.Add(e);
+            }
+
+            addElement(ElementType.Boolean);
+            addElement(ElementType.Char);
+            addElement(ElementType.I1);
+            addElement(ElementType.U1);
+            addElement(ElementType.I2);
+            addElement(ElementType.U2);
+
+            addElement(ElementType.I4);
+            addElement(ElementType.U4);
+
+            addElement(ElementType.I8);
+            addElement(ElementType.U8);
+
+            addElement(ElementType.R4);
+            addElement(ElementType.R8);
+
+            addElement(ElementType.IntPtr);
+            addElement(ElementType.UIntPtr);
+
+            primitiveElements.Contains(elementType);
+        }
+    }
+}

@@ -237,6 +237,10 @@
     <Compile Include="Metadata\Signatures\TypeSignature.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\TypeSignature.StaticMethods.n">
+      <SubType>Code</SubType>
+      <DependentUpon>Metadata\Signatures\TypeSignature.n</DependentUpon>
+    </Compile>
     <Compile Include="Metadata\SimpleTokenDecoder.n">
       <SubType>Code</SubType>
     </Compile>
