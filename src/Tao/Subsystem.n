@@ -1,0 +1,21 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public enum Subsystem : ushort
+  {
+    |Unknown = 0
+    |Native = 1
+    |WindowsGui = 2
+    |WindowsConsole = 3
+    |PosixConsoleUI = 7
+    |WindowsCeGui = 9
+    |EFIApplication = 10
+  }
+}

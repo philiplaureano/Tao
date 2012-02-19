@@ -1,0 +1,15 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Interfaces
+{
+  public interface ICoffHeaderReader : IReader[ICoffHeader]
+  {
+  }
+}

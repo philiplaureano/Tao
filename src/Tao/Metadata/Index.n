@@ -1,0 +1,32 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class Index
+    {
+        public class Narrow : Index
+        {
+            public this(value : ushort)
+            {
+                Value = value;
+            }
+            public Value : ushort { get; set; }
+        }
+
+        public class Wide : Index
+        {
+            public this(value : uint)
+            {
+                Value = value;
+            }
+            public Value : uint { get; set; }
+        }
+    }  
+}

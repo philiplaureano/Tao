@@ -1,0 +1,21 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Interfaces
+{
+  public interface IReader[THeader]
+  {
+      Read(stream : Stream) : THeader
+  }
+  
+  public interface IReader[T1, THeader]
+  {
+      Read(arg1 : T1, stream : Stream) : THeader
+  }
+}

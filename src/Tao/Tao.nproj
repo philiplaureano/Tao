@@ -1,24 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <NemerleVersion>Net-4.0</NemerleVersion>
-    <NemerleBinPathRoot Condition=" '$(NemerleBinPathRoot)' == '' ">$(ProgramFiles)\Nemerle</NemerleBinPathRoot>
-    <NoStdLib>true</NoStdLib>
-    <Nemerle Condition=" '$(Nemerle)' == '' ">$(NemerleBinPathRoot)\$(NemerleVersion)</Nemerle>
-    <Name>Tao</Name>
-  </PropertyGroup>
-  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{d911e1dc-aaf7-426a-b3ec-a9e336ac83ce}</ProjectGuid>
+    <ProjectGuid>{398830df-3446-4428-861d-acc48cdfce62}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tao</RootNamespace>
     <AssemblyName>Tao</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NoStdLib>true</NoStdLib>
+    <NemerleVersion>Net-4.0</NemerleVersion>
+    <NemerleBinPathRoot Condition=" '$(NemerleBinPathRoot)' == '' ">$(ProgramFiles)\Nemerle</NemerleBinPathRoot>
+    <Nemerle Condition=" '$(Nemerle)' == '' ">$(NemerleBinPathRoot)\$(NemerleVersion)</Nemerle>
+    <Name>Tao</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,7 +37,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="$(Nemerle)\Nemerle.dll" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -52,6 +49,11 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Nemerle">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(Nemerle)\Nemerle.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <MacroReference Include="Nemerle.Linq">
       <HintPath>$(Nemerle)\Nemerle.Linq.dll</HintPath>
     </MacroReference>
@@ -63,28 +65,10 @@
     <Compile Include="AlignmentExtensions.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Characteristics.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CLRImage.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataDirectoryAddressWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataDirectoryLocationMap.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ImageAddressReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ImageAddressResolverMap.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ImageAddressWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="API\Image.ReaderExtensions.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="API\ImageExtensions.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CoffHeader.n">
@@ -99,10 +83,22 @@
     <Compile Include="DataDirectory.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataDirectoryAddressResolver.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataDirectoryAddressWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataDirectoryLocationMap.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DataDirectoryReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataDirectoryWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DLLCharacteristics.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DosHeader.n">
@@ -117,7 +113,23 @@
     <Compile Include="Image.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Image.ReaderExtensions.n">
+      <SubType>Code</SubType>
+      <DependentUpon>Image.n</DependentUpon>
+    </Compile>
+    <Compile Include="ImageAddressReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageAddressResolverMap.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageAddressWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ImageAddressWriterMap.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageExtensions.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ImageReader.n">
@@ -126,7 +138,142 @@
     <Compile Include="ImageWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataDirectoryAddressResolver.n">
+    <Compile Include="Interfaces\IAddress.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IAddressResolver.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IAddressWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\ICLIHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\ICoffHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\ICoffHeaderReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\ICoffHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IDataDirectory.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IDataDirectoryReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IDataDirectoryWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IDosHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IDosHeaderReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IDosHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IExtractor.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IImage.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IImageAddressReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IImageAddressWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IImageBlockReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\ImageType.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IMetadataRoot.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IMetadataRootReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IMetadataRootWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IMetadataStreamReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\INTHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\INTHeaderReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\INTHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IOptionalHeaderStandardFields.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IOptionalHeaderStandardFieldsReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IOptionalHeaderStandardFieldsWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\ISection.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\ISectionDataReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\ISectionHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\ISectionHeaderReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\ISectionHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\ISectionResolver.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IStreamHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IStreamHeaderReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IStreamHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IStringHeapReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IStringHeapWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IStringReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IStringWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Location.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Machine.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\BlobReader.n">
@@ -159,6 +306,9 @@
     <Compile Include="Metadata\CodedTokenEncoder.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\CodedTokenType.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\CompressedIntegerReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -181,6 +331,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\IIndex.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Index.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\MetadataBlockReader.n">
@@ -262,10 +415,10 @@
     <Compile Include="Metadata\StringHeapWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\TablesHeap.n">
+    <Compile Include="Metadata\TableReferenceDecoder.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\TableReferenceDecoder.n">
+    <Compile Include="Metadata\TablesHeap.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\AggregateTable.n">
@@ -808,7 +961,13 @@
     <Compile Include="NullTerminatedStringWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="OptionalHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="OptionalHeaderStandardFields.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OptionalHeaderStandardFieldsReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OptionalHeaderStandardFieldsWriter.n">
@@ -820,8 +979,10 @@
     <Compile Include="PaddedNullTerminatedStringWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.n" />
-    <Compile Include="OptionalHeaderStandardFieldsReader.n">
+    <Compile Include="Properties\AssemblyInfo.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RuntimeFlags.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Section.n">
@@ -831,6 +992,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionDataWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionFlags.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionHeader.n">
@@ -843,6 +1007,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionResolver.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Subsystem.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Visitors\ActionExtensions.n">
@@ -862,27 +1029,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Interfaces" />
     <Folder Include="Metadata" />
-    <Folder Include="API" />
-    <Folder Include="Metadata\Signatures" />
     <Folder Include="Metadata\Tables" />
+    <Folder Include="Metadata\Signatures" />
     <Folder Include="Metadata\Tables\Schemas" />
     <Folder Include="Metadata\Tables\Rows" />
-    <Folder Include="Metadata\Tables\Schemas\Readers" />
     <Folder Include="Metadata\Tables\Schemas\Writers" />
+    <Folder Include="Metadata\Tables\Schemas\Readers" />
     <Folder Include="Visitors" />
     <Folder Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Tao.Interfaces\Tao.Interfaces.nproj">
-      <Name>Tao.Interfaces</Name>
-      <Project>{453795b0-1351-452c-8c7a-8e1b9d3be97c}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(Nemerle)\Nemerle.MSBuild.targets" />
   <!--
-		To modify your build process, add your task inside one of the targets below and uncomment it.
+		To modify your build process, add your task inside one of the targets below and uncomment it. 
 		Other similar extension points exist, see Microsoft.Common.targets.
 
 	<Target Name="BeforeBuild">

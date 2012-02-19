@@ -1,0 +1,27 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  [Flags]
+  public enum Characteristics : uint
+  {
+    |RelocsStripped = 0x0001
+    |ExecutableImage = 0x0002
+    |LineNumbersStripped = 0x0004
+    |LocalSymbolsStripped = 0x0008
+    |LargeAddressAware = 0x0020
+    |Is32BitMachine = 0x0100
+    |DebugInfoStripped = 0x0200
+    |RemovableRunFromSwap = 0x0400
+    |NetRunFromSwap = 0x0800
+    |FileSystem = 0x1000
+    |DLL = 0x2000
+    |UPSystemOnly = 0x4000    
+  }
+}
