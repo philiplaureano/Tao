@@ -17,9 +17,31 @@ namespace Tao
 
         public Read([NotNull] stream : Stream) : void
         {
-            def supportedElements = HashSet.[ElementType]();
+            def elementType = stream.ReadByte() :> ElementType;            
+            def isSupported = SupportsElement(elementType);
+            
+            when(isSupported == false)
+            {
+                throw NotSupportedException(string.Format("The element type '{0}' is not supported", elementType));    
+            }            
 
-            def addElement : Action.[ElementType] =  e => 
+            ElementType = elementType;            
+
+            Read(elementType, stream);
+        }
+
+        public Write([NotNull] stream : Stream) : void
+        {
+            def elementType = this.ElementType;
+            stream.WriteByte(elementType :> byte);
+
+            Write(elementType, stream);
+        }
+        
+        protected virtual SupportsElement(elementType : ElementType) : bool
+        {
+            def supportedElements = HashSet.[ElementType]();
+            def addElement : Action.[ElementType] = e => 
             {
                 _ = supportedElements.Add(e);
             }
@@ -43,25 +65,8 @@ namespace Tao
             addElement(ElementType.IntPtr);
             addElement(ElementType.UIntPtr);
 
-            def elementType = stream.ReadByte() :> ElementType;
-            when(!supportedElements.Contains(elementType))
-            {
-                throw NotSupportedException(string.Format("The element type '{0}' is not supported", elementType));    
-            }            
-
-            ElementType = elementType;            
-
-            Read(elementType, stream);
+            supportedElements.Contains(elementType);            
         }
-
-        public Write([NotNull] stream : Stream) : void
-        {
-            def elementType = this.ElementType;
-            stream.WriteByte(elementType :> byte);
-
-            Write(elementType, stream);
-        }
-
         protected virtual Read(elementType : ElementType, [NotNull] stream : Stream) : void
         {
         }

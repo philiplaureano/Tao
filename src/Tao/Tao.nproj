@@ -377,6 +377,9 @@
     <Compile Include="Metadata\Signatures\ArrayShapeWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\ArraySignature.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\CustomMod.n">
       <SubType>Code</SubType>
     </Compile>

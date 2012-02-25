@@ -3,6 +3,7 @@ using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tests.Macros;
 using Tao;
 using System;
 using System.IO;
@@ -11,85 +12,139 @@ using System.Linq;
 
 namespace Tests
 {
-  public class ArrayShapeTests
-  {
-      public ShouldBeAbleToWriteArrayShapeBytes() : void
-      {
-          def shape = ArrayShape();
-          shape.Rank = 1;
-          
-          def sizes = List.[uint]();
-          sizes.Add(1);
-          sizes.Add(2);
-          
-          shape.Sizes = sizes;
-                    
-          def loBounds = List.[uint]();
-          loBounds.Add(0);
-          loBounds.Add(1);
-          
-          shape.LoBounds = loBounds;
-                    
-          def stream = MemoryStream();
-          def writer = ArrayShapeWriter();
-          writer.Write(shape, stream);
-          
-          stream.ShouldMatch(GetExpectedStream());
-      }
-      public ShouldBeAbleToReadArrayShapeBytes() : void
-      {
-          def rank : byte = 1;
-          def numSizes : byte = 2;
-          def numLowBounds = 2;
-       
-          def sizes = array[1 : byte, 2];
-          def loBounds = array[0 : byte, 1];
-          
-          // Create the sample input stream
-          def stream = GetExpectedStream();
-          
-          stream.Seek(0);
-          def reader = ArrayShapeReader();
-          def shape = reader.ReadFrom(stream);
-          
-          def currentSizes = List.[uint](shape.Sizes);
-          def currentLoBounds = List.[uint](shape.LoBounds);
-          
-          shape.Rank.ShouldBeEqualTo(rank, "Invalid rank");
-          currentSizes.Count.ShouldBeEqualTo(2, "Invalid SizeCount");
-          currentSizes[0].ShouldBeEqualTo(sizes[0], "Invalid Sizes");
-          currentSizes[1].ShouldBeEqualTo(sizes[1], "Invalid Sizes");
-          
-          numLowBounds.ShouldBeEqualTo(currentLoBounds.Count, "Invalid LoBoundCount");
-          currentLoBounds[0].ShouldBeEqualTo(loBounds[0], "Invalid LoBound");
-          currentLoBounds[1].ShouldBeEqualTo(loBounds[1], "Invalid LoBound");
-      } 
-      private GetExpectedStream() : Stream
-      {
-          def rank : byte = 1;
-          def numSizes : byte = 2;
-          def numLowBounds = 2;
-       
-          def sizes = array[1 : byte, 2];
-          def loBounds = array[0 : byte, 1];
-          
-          // Create the sample input stream
-          def stream = MemoryStream();
-          def integerWriter = CompressedIntegerWriter();
-          
-          integerWriter.WriteInteger(rank, stream);
-          integerWriter.WriteInteger(numSizes, stream);
-          foreach(size in sizes)
-          {
-              integerWriter.WriteInteger(size, stream);
-          }
-                    
-          integerWriter.WriteInteger(numLowBounds :> uint, stream);
-          foreach(loBound in loBounds)
-          {
-              integerWriter.WriteInteger(loBound, stream);
-          }
-          stream;
-      }
-  }
+    public class ArrayShapeTests
+    {
+        public ShouldBeAbleToWriteArrayShapeBytes() : void
+        {
+            def shape = ArrayShape();
+            shape.Rank = 1;
+
+            def sizes = List.[uint]();
+            sizes.Add(1);
+            sizes.Add(2);
+
+            shape.Sizes = sizes;
+
+            def loBounds = List.[uint]();
+            loBounds.Add(0);
+            loBounds.Add(1);
+
+            shape.LoBounds = loBounds;
+
+            def stream = MemoryStream();
+            def writer = ArrayShapeWriter();
+            writer.Write(shape, stream);
+
+            stream.ShouldMatch(GetExpectedStream());
+        }
+        public ShouldBeAbleToReadArrayShapeBytes() : void
+        {
+            def rank : byte = 1;
+            def numSizes : byte = 2;
+            def numLowBounds = 2;
+
+            def sizes = array[1 : byte, 2];
+            def loBounds = array[0 : byte, 1];
+
+            // Create the sample input stream
+            def stream = GetExpectedStream();
+
+            stream.Seek(0);
+            def reader = ArrayShapeReader();
+            def shape = reader.ReadFrom(stream);
+
+            def currentSizes = List.[uint](shape.Sizes);
+            def currentLoBounds = List.[uint](shape.LoBounds);
+
+            shape.Rank.ShouldBeEqualTo(rank, "Invalid rank");
+            currentSizes.Count.ShouldBeEqualTo(2, "Invalid SizeCount");
+            currentSizes[0].ShouldBeEqualTo(sizes[0], "Invalid Sizes");
+            currentSizes[1].ShouldBeEqualTo(sizes[1], "Invalid Sizes");
+
+            numLowBounds.ShouldBeEqualTo(currentLoBounds.Count, "Invalid LoBoundCount");
+            currentLoBounds[0].ShouldBeEqualTo(loBounds[0], "Invalid LoBound");
+            currentLoBounds[1].ShouldBeEqualTo(loBounds[1], "Invalid LoBound");
+        } 
+        public ShouldBeAbleToReadArraySignature() : void
+        {
+            def stream = MemoryStream();
+
+            // Forge the sample signature 
+            def writer = BinaryWriter(stream);          
+            writer.Write(ElementType.Array :> byte);
+            writer.Write(ElementType.I4 :> byte);
+
+            // Create the sample array shape
+            def shape = ArrayShape();
+            shape.Rank = 1;
+
+            def sizes = List.[uint]();
+            sizes.Add(1);
+            sizes.Add(2);
+
+            shape.Sizes = sizes;
+
+            def loBounds = List.[uint]();
+            loBounds.Add(0);
+            loBounds.Add(1);
+
+            shape.LoBounds = loBounds;
+
+            def writer = ArrayShapeWriter();
+            writer.Write(shape, stream);
+
+            stream.Seek(0);
+            def signature = TypeSignature.ReadFrom(stream) :> ArraySignature;
+            def resultShape = signature.Shape;
+
+            def arrayType = signature.ArrayType;
+            
+            signature.ElementType.ShouldBeEqualTo(ElementType.Array, "Expected: Array Element Type");
+            arrayType.ElementType.ShouldBeEqualTo(ElementType.I4, "Wrong array type");
+            
+            def currentSizes = List.[uint](resultShape.Sizes);
+            def currentLoBounds = List.[uint](resultShape.LoBounds);
+
+            def rank = 1 : uint;
+            resultShape.Rank.ShouldBeEqualTo(rank, "Invalid rank");
+            currentSizes.Count.ShouldBeEqualTo(2, "Invalid SizeCount");
+            currentSizes[0].ShouldBeEqualTo(sizes[0], "Invalid Sizes");
+            currentSizes[1].ShouldBeEqualTo(sizes[1], "Invalid Sizes");
+
+            def numLowBounds = resultShape.LoBounds.Count();
+            numLowBounds.ShouldBeEqualTo(currentLoBounds.Count, "Invalid LoBoundCount");
+            currentLoBounds[0].ShouldBeEqualTo(loBounds[0], "Invalid LoBound");
+            currentLoBounds[1].ShouldBeEqualTo(loBounds[1], "Invalid LoBound");
+        }
+        public stub ShouldBeAbleToWriteArraySignature() : void
+        {          
+        }
+        private GetExpectedStream() : Stream
+        {
+            def rank : byte = 1;
+            def numSizes : byte = 2;
+            def numLowBounds = 2;
+
+            def sizes = array[1 : byte, 2];
+            def loBounds = array[0 : byte, 1];
+
+        // Create the sample input stream
+            def stream = MemoryStream();
+            def integerWriter = CompressedIntegerWriter();
+
+            integerWriter.WriteInteger(rank, stream);
+            integerWriter.WriteInteger(numSizes, stream);
+            foreach(size in sizes)
+            {
+                integerWriter.WriteInteger(size, stream);
+            }
+
+            integerWriter.WriteInteger(numLowBounds :> uint, stream);
+            foreach(loBound in loBounds)
+            {
+                integerWriter.WriteInteger(loBound, stream);
+            }
+            stream;
+        }
+    }
 }
