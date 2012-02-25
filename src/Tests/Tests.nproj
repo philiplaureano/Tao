@@ -549,12 +549,7 @@
     </MacroProjectReference>
     <ProjectReference Include="..\Tao\Tao.nproj">
       <Name>Tao</Name>
-      <Project>{398830df-3446-4428-861d-acc48cdfce62}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="Tests.Macros\Tests.Macros.nproj">
-      <Name>Tests.Macros</Name>
-      <Project>{1e8a64c1-e4d6-4b2a-9a2f-df9536217cbd}</Project>
+      <Project>{dc175afb-382f-477e-aa0e-abac2d1e23a5}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

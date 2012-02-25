@@ -1,0 +1,40 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+  public class ArrayShapeWriter
+  {
+      public Write([NotNull] shape : ArrayShape, [NotNull] stream : Stream) : void
+      {
+          def integerWriter = CompressedIntegerWriter();
+          
+          def rank = shape.Rank;
+          def numSizes = shape.Sizes.Count() :> uint;
+          def sizes = shape.Sizes;
+          
+          integerWriter.WriteInteger(rank, stream);
+          integerWriter.WriteInteger(numSizes, stream);
+          foreach(size in sizes)
+          {
+              integerWriter.WriteInteger(size, stream);
+          }
+          
+          def loBounds = shape.LoBounds;
+          def numLowBounds = loBounds.Count() :>uint;
+          integerWriter.WriteInteger(numLowBounds, stream);
+          foreach(loBound in loBounds)
+          {
+              integerWriter.WriteInteger(loBound, stream);
+          }
+      }
+  }
+}

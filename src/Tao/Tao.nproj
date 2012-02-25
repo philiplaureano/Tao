@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{398830df-3446-4428-861d-acc48cdfce62}</ProjectGuid>
+    <ProjectGuid>{dc175afb-382f-477e-aa0e-abac2d1e23a5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tao</RootNamespace>
@@ -115,7 +115,6 @@
     </Compile>
     <Compile Include="Image.ReaderExtensions.n">
       <SubType>Code</SubType>
-      <DependentUpon>Image.n</DependentUpon>
     </Compile>
     <Compile Include="ImageAddressReader.n">
       <SubType>Code</SubType>
@@ -375,6 +374,9 @@
     <Compile Include="Metadata\Signatures\ArrayShapeReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\ArrayShapeWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\CustomMod.n">
       <SubType>Code</SubType>
     </Compile>
@@ -392,7 +394,6 @@
     </Compile>
     <Compile Include="Metadata\Signatures\TypeSignature.StaticMethods.n">
       <SubType>Code</SubType>
-      <DependentUpon>Metadata\Signatures\TypeSignature.n</DependentUpon>
     </Compile>
     <Compile Include="Metadata\SimpleTokenDecoder.n">
       <SubType>Code</SubType>
@@ -979,9 +980,7 @@
     <Compile Include="PaddedNullTerminatedStringWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.n">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Properties\AssemblyInfo.n" />
     <Compile Include="RuntimeFlags.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1029,16 +1028,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interfaces" />
-    <Folder Include="Metadata" />
-    <Folder Include="Metadata\Tables" />
-    <Folder Include="Metadata\Signatures" />
-    <Folder Include="Metadata\Tables\Schemas" />
-    <Folder Include="Metadata\Tables\Rows" />
-    <Folder Include="Metadata\Tables\Schemas\Writers" />
-    <Folder Include="Metadata\Tables\Schemas\Readers" />
-    <Folder Include="Visitors" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Metadata\" />
+    <Folder Include="Metadata\Signatures\" />
+    <Folder Include="Metadata\Tables\" />
+    <Folder Include="Metadata\Tables\Rows\" />
+    <Folder Include="Metadata\Tables\Schemas\" />
+    <Folder Include="Metadata\Tables\Schemas\Readers\" />
+    <Folder Include="Metadata\Tables\Schemas\Writers\" />
     <Folder Include="Properties\" />
+    <Folder Include="Visitors\" />
   </ItemGroup>
   <Import Project="$(Nemerle)\Nemerle.MSBuild.targets" />
   <!--
