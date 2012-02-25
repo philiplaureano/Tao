@@ -20,11 +20,21 @@ namespace Tao
       {
           // Read the array type
           ArrayType = TypeSignature.ReadFrom(stream);
-          
-          
+                    
           // Read the shape
           def reader = ArrayShapeReader();
           Shape = reader.ReadFrom(stream);          
+      }
+      
+      protected override Write(elementType : ElementType, [NotNull] stream : Stream) : void
+        requires ArrayType != null
+        requires ArrayShape != null
+      {
+          // Write the array type
+          ArrayType.Write(stream);
+          
+          def writer = ArrayShapeWriter();
+          writer.Write(Shape, stream);
       }
       
       protected override SupportsElement(elementType : ElementType) : bool

@@ -67,33 +67,8 @@ namespace Tests
         } 
         public ShouldBeAbleToReadArraySignature() : void
         {
-            def stream = MemoryStream();
-
-            // Forge the sample signature 
-            def writer = BinaryWriter(stream);          
-            writer.Write(ElementType.Array :> byte);
-            writer.Write(ElementType.I4 :> byte);
-
-            // Create the sample array shape
-            def shape = ArrayShape();
-            shape.Rank = 1;
-
-            def sizes = List.[uint]();
-            sizes.Add(1);
-            sizes.Add(2);
-
-            shape.Sizes = sizes;
-
-            def loBounds = List.[uint]();
-            loBounds.Add(0);
-            loBounds.Add(1);
-
-            shape.LoBounds = loBounds;
-
-            def writer = ArrayShapeWriter();
-            writer.Write(shape, stream);
-
-            stream.Seek(0);
+            def stream = CreateSampleSignatureStream();
+            
             def signature = TypeSignature.ReadFrom(stream) :> ArraySignature;
             def resultShape = signature.Shape;
 
@@ -108,16 +83,64 @@ namespace Tests
             def rank = 1 : uint;
             resultShape.Rank.ShouldBeEqualTo(rank, "Invalid rank");
             currentSizes.Count.ShouldBeEqualTo(2, "Invalid SizeCount");
-            currentSizes[0].ShouldBeEqualTo(sizes[0], "Invalid Sizes");
-            currentSizes[1].ShouldBeEqualTo(sizes[1], "Invalid Sizes");
+            currentSizes[0].ShouldBeEqualTo(1, "Invalid Sizes");
+            currentSizes[1].ShouldBeEqualTo(2, "Invalid Sizes");
 
             def numLowBounds = resultShape.LoBounds.Count();
             numLowBounds.ShouldBeEqualTo(currentLoBounds.Count, "Invalid LoBoundCount");
-            currentLoBounds[0].ShouldBeEqualTo(loBounds[0], "Invalid LoBound");
-            currentLoBounds[1].ShouldBeEqualTo(loBounds[1], "Invalid LoBound");
+            currentLoBounds[0].ShouldBeEqualTo(0, "Invalid LoBound");
+            currentLoBounds[1].ShouldBeEqualTo(1, "Invalid LoBound");
         }
-        public stub ShouldBeAbleToWriteArraySignature() : void
+        public ShouldBeAbleToWriteArraySignature() : void
         {          
+            def signature = ArraySignature();
+            signature.ElementType = ElementType.Array;
+            
+            def arrayType = TypeSignature();
+            arrayType.ElementType = ElementType.I4;
+            signature.ArrayType = arrayType;
+            
+            signature.Shape = CreateSampleShape();
+            
+            def stream = MemoryStream();
+            signature.Write(stream);
+            
+            stream.ShouldMatch(CreateSampleSignatureStream());
+        }
+        private CreateSampleSignatureStream() : Stream
+        {
+            def stream = MemoryStream();
+
+            // Forge the sample signature stream
+            def writer = BinaryWriter(stream);          
+            writer.Write(ElementType.Array :> byte);
+            writer.Write(ElementType.I4 :> byte);
+
+            // Create the sample array shape            
+            def shape = CreateSampleShape();
+            def writer = ArrayShapeWriter();
+            writer.Write(shape, stream);
+            
+            stream.Seek(0);
+            stream;
+        }
+        private CreateSampleShape() : ArrayShape
+        {
+            def shape = ArrayShape();
+            shape.Rank = 1;
+
+            def sizes = List.[uint]();
+            sizes.Add(1);
+            sizes.Add(2);
+
+            shape.Sizes = sizes;
+
+            def loBounds = List.[uint]();
+            loBounds.Add(0);
+            loBounds.Add(1);
+
+            shape.LoBounds = loBounds;
+            shape;
         }
         private GetExpectedStream() : Stream
         {
@@ -128,7 +151,7 @@ namespace Tests
             def sizes = array[1 : byte, 2];
             def loBounds = array[0 : byte, 1];
 
-        // Create the sample input stream
+            // Create the sample input stream
             def stream = MemoryStream();
             def integerWriter = CompressedIntegerWriter();
 
