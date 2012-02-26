@@ -1,0 +1,53 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class ParamSignatureTests
+  {
+      public stub ShouldBeAbleToReadType() : void
+      {
+      }
+      public stub ShouldBeAbleToReadTypeWithCustomMod() : void
+      {
+      }
+      public stub ShouldBeAbleToReadByRefType() : void
+      {
+      }
+      public stub ShouldBeAbleToReadByRefTypeWithCustomMod() : void
+      {          
+      }
+      public stub ShouldBeAbleToReadTypedByRef() : void
+      {
+      }
+      public stub ShouldBeAbleToReadTypedByRefWithCustomMod() : void
+      {
+      }      
+      public stub ShouldBeAbleToWriteType() : void
+      {
+      }
+      public stub ShouldBeAbleToWriteTypeWithCustomMod() : void
+      {
+      }
+      public stub ShouldBeAbleToWriteByRefType() : void
+      {
+      }
+      public stub ShouldBeAbleToWriteByRefTypeWithCustomMod() : void
+      {          
+      }
+      public stub ShouldBeAbleToWriteTypedByRef() : void
+      {
+      }
+      public stub ShouldBeAbleToWriteTypedByRefWithCustomMod() : void
+      {
+      }
+  }
+}
