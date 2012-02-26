@@ -1,0 +1,55 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class TypeDefOrRefEncodedSignature : TypeSignature 
+  {
+      public this()
+      {
+          ElementType = ElementType.Class;
+      }
+      public TableId : TableId { get; set; }
+      public Row : uint { get; set; }
+      
+      protected override Read(elementType : ElementType, [NotNull] stream : Stream) : void
+        requires elementType == ElementType.Class
+      {
+          def decoder = CodedTokenDecoder();
+          def reader = BinaryReader(stream);
+          def token = reader.ReadUInt32() :> int;
+          def result = decoder.Decode(CodedTokenType.TypeDefOrTypeRef, token);
+                    
+          Row = result[1] :> uint;
+          
+          // Decode the TableId using the given tag
+          def tag : byte = result[0];
+          def tableMap = CodedTokenTableMap();
+          def tables = tableMap[CodedTokenType.TypeDefOrTypeRef].ToArray();
+          
+          TableId = tables[tag :> int];
+      }
+      
+      protected override Write(elementType : ElementType, [NotNull] stream : Stream) : void
+        requires elementType == ElementType.Class
+      {
+          def encoder = CodedTokenEncoder();          
+          def token = encoder.Encode(CodedTokenType.TypeDefOrTypeRef, TableId, Row);
+          def writer = BinaryWriter(stream);
+          writer.Write(token);
+      }
+      
+      protected override SupportsElement(elementType : ElementType) : bool
+      {
+          elementType == ElementType.Class;
+      }
+  }
+}

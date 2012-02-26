@@ -1,0 +1,56 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tests.Macros;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class TypeDefOrRefEncodedSignatureTests
+  {
+      public ShouldBeAbleToReadClassEncodedSignature() : void
+      {
+          def stream = CreateSampleStream();
+          def signature = TypeSignature.ReadFrom(stream) :> TypeDefOrRefEncodedSignature;
+          signature.ElementType.ShouldBeEqualTo(ElementType.Class, "Wrong Element Type");
+          signature.TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong TableId");
+          signature.Row.ShouldBeEqualTo(1, "Invalid Row");
+      }
+      
+      public ShouldBeAbleToWriteClassEncodedSignature() : void      
+      {
+          def signature = TypeDefOrRefEncodedSignature();
+          signature.TableId = TableId.TypeDef;
+          signature.Row = 1;
+          
+          def stream = MemoryStream();
+          signature.Write(stream);
+          
+          stream.ShouldMatch(CreateSampleStream());
+      }
+            
+      private CreateSampleStream() : Stream
+      {
+          def stream = MemoryStream();
+          def writer = BinaryWriter(stream);
+          
+          // Create the sample stream
+          def encoder = CodedTokenEncoder();
+          def token = encoder.Encode(CodedTokenType.TypeDefOrTypeRef, TableId.TypeDef, 1);
+          
+          stream.WriteByte(ElementType.Class :> byte);
+          writer.Write(token);
+          stream.Seek(0);
+          
+          stream;
+      }
+  }
+}
