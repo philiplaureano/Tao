@@ -13,10 +13,15 @@ namespace Tao
 {
   public class ArraySignature : TypeSignature 
   {
+      public this()
+      {
+          ElementType = ElementType.Array;
+      }
       public ArrayType : TypeSignature { get; set; }
       public Shape : ArrayShape {get; set; }      
       
       protected override Read(elementType : ElementType, [NotNull] stream : Stream) : void
+        requires elementType == ElementType.Array
       {
           // Read the array type
           ArrayType = TypeSignature.ReadFrom(stream);
@@ -27,6 +32,7 @@ namespace Tao
       }
       
       protected override Write(elementType : ElementType, [NotNull] stream : Stream) : void
+        requires elementType == ElementType.Array
         requires ArrayType != null
         requires ArrayShape != null
       {

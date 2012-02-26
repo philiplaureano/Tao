@@ -392,6 +392,9 @@
     <Compile Include="Metadata\Signatures\ElementType.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\TypeDefOrRefEncodedSignature.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\TypeSignature.n">
       <SubType>Code</SubType>
     </Compile>
