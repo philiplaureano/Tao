@@ -16,15 +16,11 @@ namespace Tao
         public Read([NotNull] stream : Stream) : Param
         requires stream.Length > 0
         {
-            def startPosition = stream.Position;
             def reader = BinaryReader(stream);
-
             def param = Param();
 
             // Peek at the next byte
-            mutable nextByte = reader.ReadByte();
-            _ = stream.Seek(-1, SeekOrigin.Current);            
-
+            mutable nextByte = reader.PeekByte();            
             def isCustomMod(currentByte : byte) : bool
             {
                  currentByte == (ElementType.CMOD_OPT :> byte) || currentByte == (ElementType.CMOD_REQD :> byte);
@@ -47,12 +43,19 @@ namespace Tao
             
             // Check if the type is ByRef
             when(nextByte == (ElementType.ByRef :> byte))
-            {
+            {                                
                 param.IsByRef = true;
                 _ = stream.Seek(1, SeekOrigin.Current);
+                
+                // Make sure that the next byte is a valid type
+                def nextNextByte = reader.PeekByte();
+                when(nextNextByte == (ElementType.TypedByRef :> byte))
+                {
+                    throw BadImageFormatException("A ByRef TypedByRefParam signature is an invalid Param signature");
+                }
             }
 
-        // Read the actual type          
+            // Read the actual type          
             param.Type = TypeSignature.ReadFrom(stream);
             param;
         }

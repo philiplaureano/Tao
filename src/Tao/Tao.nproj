@@ -1020,6 +1020,9 @@
     <Compile Include="SectionResolver.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="StreamExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Subsystem.n">
       <SubType>Code</SubType>
     </Compile>
