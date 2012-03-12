@@ -1,0 +1,27 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+  public class Param
+  {
+      private _customMods : IList.[CustomMod] = List();
+      
+      public IsByRef : bool { get; set; }
+      public Type : TypeSignature { get; set; }
+      public IsTypedByRef : bool { get; set; }
+      public CustomMods : IList.[CustomMod] 
+      {
+          get
+          {
+              _customMods;
+          }
+      }
+  }
+}

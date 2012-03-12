@@ -1,0 +1,60 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class ParamReader
+    {
+        public Read([NotNull] stream : Stream) : Param
+        requires stream.Length > 0
+        {
+            def startPosition = stream.Position;
+            def reader = BinaryReader(stream);
+
+            def param = Param();
+
+            // Peek at the next byte
+            mutable nextByte = reader.ReadByte();
+            _ = stream.Seek(-1, SeekOrigin.Current);            
+
+            def isCustomMod(currentByte : byte) : bool
+            {
+                 currentByte == (ElementType.CMOD_OPT :> byte) || currentByte == (ElementType.CMOD_REQD :> byte);
+            };
+            
+            
+            def endPosition = stream.Length;
+            while(stream.Position < endPosition && isCustomMod(nextByte))
+            {
+                def modReader = CustomModReader();
+                def mod = modReader.Read(stream);
+                param.CustomMods.Add(mod);
+
+                when(stream.Position < endPosition)
+                {
+                    nextByte = reader.ReadByte();
+                    _ = stream.Seek(-1, SeekOrigin.Current);
+                }
+            }
+            
+            // Check if the type is ByRef
+            when(nextByte == (ElementType.ByRef :> byte))
+            {
+                param.IsByRef = true;
+                _ = stream.Seek(1, SeekOrigin.Current);
+            }
+
+        // Read the actual type          
+            param.Type = TypeSignature.ReadFrom(stream);
+            param;
+        }
+    }
+}

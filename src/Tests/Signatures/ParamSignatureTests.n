@@ -3,6 +3,7 @@ using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tao;
 using Tests.Macros;
 using System;
 using System.IO;
@@ -11,43 +12,140 @@ using System.Linq;
 
 namespace Tests
 {
-  public class ParamSignatureTests
-  {
-      public stub ShouldBeAbleToReadType() : void
-      {
-      }
-      public stub ShouldBeAbleToReadTypeWithCustomMod() : void
-      {
-      }
-      public stub ShouldBeAbleToReadByRefType() : void
-      {
-      }
-      public stub ShouldBeAbleToReadByRefTypeWithCustomMod() : void
-      {          
-      }
-      public stub ShouldBeAbleToReadTypedByRef() : void
-      {
-      }
-      public stub ShouldBeAbleToReadTypedByRefWithCustomMod() : void
-      {
-      }      
-      public stub ShouldBeAbleToWriteType() : void
-      {
-      }
-      public stub ShouldBeAbleToWriteTypeWithCustomMod() : void
-      {
-      }
-      public stub ShouldBeAbleToWriteByRefType() : void
-      {
-      }
-      public stub ShouldBeAbleToWriteByRefTypeWithCustomMod() : void
-      {          
-      }
-      public stub ShouldBeAbleToWriteTypedByRef() : void
-      {
-      }
-      public stub ShouldBeAbleToWriteTypedByRefWithCustomMod() : void
-      {
-      }
-  }
+    public class ParamSignatureTests
+    {
+        public stub ShouldBeAbleToReadType() : void
+        {
+            def isCustomMod = false;
+            def isByRef = false;
+            def elementType = ElementType.I4;
+
+            TestRead(isCustomMod, isByRef, elementType);
+        }
+
+        public ShouldBeAbleToReadTypeWithCustomMod() : void
+        {
+            def firstModBytes = array[ElementType.CMOD_REQD :> byte, 0x49 : byte];
+            def secondModBytes = array[ElementType.CMOD_OPT :> byte, 0x49 : byte];
+            
+            def inputStream = MemoryStream();
+            def writer = BinaryWriter(inputStream);
+            
+            // The sample stream will look like: CUSTOMMOD1 CUSTOMMOD2 ElementType.Boolean
+            def bytes = List.[byte]();
+            
+            bytes.AddRange(firstModBytes);
+            bytes.AddRange(secondModBytes);
+            bytes.Add(ElementType.Boolean :> byte);
+            
+            writer.Write(bytes.ToArray());
+            
+            inputStream.Seek(0);
+            def reader = ParamReader();
+            def param = reader.Read(inputStream);
+            
+            param.CustomMods.Count().ShouldBeEqualTo(2, "Wrong number of expected custom mods");
+            param.IsByRef.ShouldBeFalse("This parameter should not be ByRef");
+            
+            // Verify the parameter type
+            param.Type.ShouldBeNotNull("There should be a valid type here");
+            param.Type.ElementType.ShouldBeEqualTo(ElementType.Boolean, "Wrong parameter type");
+            
+            def mods = param.CustomMods.ToArray();
+            
+            def firstMod = mods[0];
+            firstMod.IsRequired.ShouldBeTrue("This should be an expected custom mod type");
+            firstMod.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong TableId");
+            
+            def secondMod = mods[0];
+            secondMod.IsRequired.ShouldBeTrue("This should be an expected custom mod type");
+            secondMod.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong TableId");
+        }
+
+        public ShouldBeAbleToReadByRefType() : void
+        {
+            def typeBytes = array[ElementType.ByRef :> byte, ElementType.Boolean :> byte];
+            def stream = MemoryStream(typeBytes);
+            def reader = ParamReader();
+            
+            def param = reader.Read(stream);
+            param.CustomMods.Count().ShouldBeEqualTo(0,"There should be no custom mods associated with this parameter");
+            param.IsByRef.ShouldBeTrue("This param should be ByRef");
+            param.Type.ShouldBeNotNull("There should be a valid parameter type here");
+            param.Type.ElementType.ShouldBeEqualTo(ElementType.Boolean, "Wrong element type");
+        }
+        public ignored stub ShouldBeAbleToReadByRefTypeWithCustomMod() : void
+        {
+        }      
+        public ignored stub ShouldBeAbleToReadMultipleCustomModsInAParamSignature() : void
+        {
+        }
+        public ignored stub ShouldBeAbleToReadTypedByRef() : void
+        {
+        }
+        public ignored stub ShouldBeAbleToReadTypedByRefWithCustomMod() : void
+        {
+        }      
+        public ignored stub ShouldBeAbleToWriteType() : void
+        {
+        }
+        public ignored stub ShouldBeAbleToWriteTypeWithCustomMod() : void
+        {
+        }
+        public ignored stub ShouldBeAbleToWriteByRefType() : void
+        {
+        }
+        public ignored stub ShouldBeAbleToWriteByRefTypeWithCustomMod() : void
+        {          
+        }
+        public ignored stub ShouldBeAbleToWriteTypedByRef() : void
+        {
+        }
+        public ignored stub ShouldBeAbleToWriteTypedByRefWithCustomMod() : void
+        {
+        }
+        
+        private TestRead(isCustomMod : bool, isByRef : bool, elementType : ElementType) : void
+        {
+            def sampleStream = CreateParamStream(isCustomMod, isByRef, elementType);
+
+            def reader = ParamReader();
+            def param = reader.Read(sampleStream);
+
+            when(isCustomMod)
+            {
+                param.CustomMods.Count().ShouldBeEqualTo(1, "Invalid CustomMod");
+            }
+            
+            param.IsByRef.ShouldBeEqualTo(isByRef, "Invalid IsByRef");
+            param.Type.ElementType.ShouldBeEqualTo(elementType, "Invalid ElementType");
+            param.IsTypedByRef.ShouldBeEqualTo(false, "This type should not be TypedByRef");
+        }
+
+        private CreateParamStream(isCustomMod : bool, isByRef : bool, elementType : ElementType) : Stream
+        {
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+
+            when(isCustomMod)
+            {
+                def mod = CustomMod();
+                mod.IsRequired = true;
+                mod.Row = 1;
+                mod.TableId = TableId.TypeDef;
+
+                def customModWriter = CustomModWriter();
+                customModWriter.Write(mod, stream);
+            }
+
+            when(isByRef)
+            {
+                writer.Write(ElementType.ByRef :> byte);
+            }
+
+            writer.Write(elementType :> byte);
+            stream.Seek(0);
+            stream;
+        }
+    }
 }

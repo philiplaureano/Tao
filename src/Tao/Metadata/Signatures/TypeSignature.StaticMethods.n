@@ -23,6 +23,7 @@ namespace Tao
         }
 
         public static ReadFrom([NotNull] stream : Stream) : TypeSignature
+            requires stream.Length > 0
         {       
             // Peak at the element type
             def elementType = stream.ReadByte() :> ElementType;
