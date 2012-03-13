@@ -181,22 +181,22 @@ namespace Tests
             secondMod.Row.ShouldBeEqualTo(0x12, "Wrong Row");
         }     
         
-        public ignored stub ShouldBeAbleToWriteType() : void
+        public stub ShouldBeAbleToWriteType() : void
         {
         }
-        public ignored stub ShouldBeAbleToWriteTypeWithCustomMod() : void
+        public stub ShouldBeAbleToWriteTypeWithCustomMod() : void
         {
         }
-        public ignored stub ShouldBeAbleToWriteByRefType() : void
+        public stub ShouldBeAbleToWriteByRefType() : void
         {
         }
-        public ignored stub ShouldBeAbleToWriteByRefTypeWithCustomMod() : void
+        public stub ShouldBeAbleToWriteByRefTypeWithCustomMod() : void
         {          
         }
-        public ignored stub ShouldBeAbleToWriteTypedByRef() : void
+        public stub ShouldBeAbleToWriteTypedByRef() : void
         {
         }
-        public ignored stub ShouldBeAbleToWriteTypedByRefWithCustomMod() : void
+        public stub ShouldBeAbleToWriteTypedByRefWithCustomMod() : void
         {
         }
         

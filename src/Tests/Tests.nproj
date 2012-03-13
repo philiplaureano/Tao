@@ -219,6 +219,9 @@
     <Compile Include="Signatures\ParamSignatureTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Signatures\RetTypeTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Signatures\TypeDefOrRefEncodedSignatureTests.n">
       <SubType>Code</SubType>
     </Compile>

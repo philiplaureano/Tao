@@ -1,0 +1,35 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+  public class RetTypeTests
+  {
+      public stub ShouldBeAbleToReadVoidReturnType() : void
+      {
+      }
+      public stub ShouldBeAbleToReadVoidReturnTypeWithCustomMods() : void
+      {
+      }
+      public stub ShouldBeAbleToWriteVoidReturnType() : void
+      {
+      }
+      public stub ShouldBeAbleToWriteVoidReturnTypeWithCustomMods() : void
+      {
+      }
+      public ShouldThrowExceptionWhenAttemptingToCreateVoidByRefReturnType() : void
+        expects BadImageFormatException
+      {
+          throw NotImplementedException();
+      }
+  }
+}

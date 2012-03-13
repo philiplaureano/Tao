@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao
 {  
-  public class Param : MethodSignatureElement
-  {      
+  public class RetTypeReader : MethodSignatureElementReader[RetType]
+  {
   }
 }
