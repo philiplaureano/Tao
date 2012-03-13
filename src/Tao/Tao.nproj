@@ -392,6 +392,12 @@
     <Compile Include="Metadata\Signatures\ElementType.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\IMethodSignatureElement.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\MethodSignatureElementReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\Param.n">
       <SubType>Code</SubType>
     </Compile>

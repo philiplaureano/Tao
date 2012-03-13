@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao
 {  
-  public class Param
+  public class Param : IMethodSignatureElement
   {
       private _customMods : IList.[CustomMod] = List();
       

@@ -11,53 +11,12 @@ using System.Linq;
 
 namespace Tao
 {
-    public class ParamReader
+    public class ParamReader : MethodSignatureElementReader[Param]
     {
-        public Read([NotNull] stream : Stream) : Param
-        requires stream.Length > 0
+        protected override SupportsReading([NotNull] type : TypeSignature) : bool
         {
-            def reader = BinaryReader(stream);
-            def param = Param();
-
-            // Peek at the next byte
-            mutable nextByte = reader.PeekByte();            
-            def isCustomMod(currentByte : byte) : bool
-            {
-                 currentByte == (ElementType.CMOD_OPT :> byte) || currentByte == (ElementType.CMOD_REQD :> byte);
-            };
-            
-            
-            def endPosition = stream.Length;
-            while(stream.Position < endPosition && isCustomMod(nextByte))
-            {
-                def modReader = CustomModReader();
-                def mod = modReader.Read(stream);
-                param.CustomMods.Add(mod);
-
-                when(stream.Position < endPosition)
-                {
-                    nextByte = reader.ReadByte();
-                    _ = stream.Seek(-1, SeekOrigin.Current);
-                }
-            }
-            
-            // Check if the type is ByRef
-            when(nextByte == (ElementType.ByRef :> byte))
-            {                                
-                param.IsByRef = true;
-                _ = stream.Seek(1, SeekOrigin.Current);
-                
-                // Make sure that the next byte is a valid type
-                def nextNextByte = reader.PeekByte();
-                when(nextNextByte == (ElementType.TypedByRef :> byte))
-                {
-                    throw BadImageFormatException("A ByRef TypedByRefParam signature is an invalid Param signature");
-                }
-            }
-
-            // Read the actual type          
-            param.Type = TypeSignature.ReadFrom(stream);
-            param;
+            // Void types are not supported in Param reads
+            type.ElementType != ElementType.Void;
         }
     }
 }
