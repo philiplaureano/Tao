@@ -29,7 +29,6 @@ namespace Tao
             // Write the element type
             def compressedIntegerWriter = CompressedIntegerWriter();
             compressedIntegerWriter.WriteInteger(elementType :> byte, stream);
-            
             // Write the compressed token
             compressedIntegerWriter.WriteInteger(codedToken, stream);
         }
