@@ -407,6 +407,9 @@
     <Compile Include="Metadata\Signatures\ParamReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\ParamWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\RetType.n">
       <SubType>Code</SubType>
     </Compile>

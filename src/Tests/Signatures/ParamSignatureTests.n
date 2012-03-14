@@ -181,20 +181,139 @@ namespace Tests
             secondMod.Row.ShouldBeEqualTo(0x12, "Wrong Row");
         }     
         
-        public stub ShouldBeAbleToWriteType() : void
+        public ShouldBeAbleToWriteType() : void
         {
+            def expectedBytes = array[ElementType.I4 :> byte];
+            
+            def writer = ParamWriter();
+            def param = Param();
+            
+            def paramType = TypeSignature();
+            paramType.ElementType = ElementType.I4;
+            
+            param.Type = paramType;
+            
+            def outputStream = MemoryStream();
+            writer.Write(param, outputStream);
+            
+            outputStream.ShouldMatch(expectedBytes);
         }
-        public stub ShouldBeAbleToWriteTypeWithCustomMod() : void
+        public ShouldBeAbleToWriteTypeWithCustomMod() : void
         {
+            def firstModBytes = array[ElementType.CMOD_REQD :> byte, 0x49 : byte];
+            def secondModBytes = array[ElementType.CMOD_OPT :> byte, 0x49 : byte];
+            
+            def expectedStream = MemoryStream();
+            def writer = BinaryWriter(expectedStream);
+            
+            // The expected stream will look like: CUSTOMMOD1 CUSTOMMOD2 ElementType.Boolean
+            def bytes = List.[byte]();
+            
+            bytes.AddRange(firstModBytes);
+            bytes.AddRange(secondModBytes);            
+            bytes.Add(ElementType.Boolean :> byte);            
+            writer.Write(bytes.ToArray());
+                        
+            def param = Param();
+            def paramType = TypeSignature();
+            paramType.ElementType = ElementType.Boolean;
+            
+            param.Type = paramType;
+            
+            def firstMod = CustomMod();
+            firstMod.TableId = TableId.TypeRef;
+            firstMod.Row = 0x12;
+            firstMod.IsRequired = true;
+            
+            def secondMod = CustomMod();
+            secondMod.TableId = TableId.TypeRef;
+            secondMod.Row = 0x12;
+            
+            param.CustomMods.Add(firstMod);
+            param.CustomMods.Add(secondMod);
+            
+            def paramWriter = ParamWriter();
+            def outputStream = MemoryStream();
+            paramWriter.Write(param, outputStream);
+            outputStream.ShouldMatch(expectedStream);
         }
-        public stub ShouldBeAbleToWriteByRefType() : void
+        
+        public ShouldBeAbleToWriteByRefType() : void
         {
+            def expectedBytes = array[ElementType.ByRef :> byte, ElementType.I4 :> byte];
+            
+            def writer = ParamWriter();
+            def param = Param();
+            
+            def paramType = TypeSignature();
+            paramType.ElementType = ElementType.I4;
+            
+            param.Type = paramType;
+            param.IsByRef = true;
+            
+            def outputStream = MemoryStream();
+            writer.Write(param, outputStream);
+            
+            outputStream.ShouldMatch(expectedBytes);
+            
         }
-        public stub ShouldBeAbleToWriteByRefTypeWithCustomMod() : void
+        public ShouldBeAbleToWriteByRefTypeWithCustomMod() : void
         {          
+            def firstModBytes = array[ElementType.CMOD_REQD :> byte, 0x49 : byte];
+            def secondModBytes = array[ElementType.CMOD_OPT :> byte, 0x49 : byte];
+            
+            def expectedStream = MemoryStream();
+            def writer = BinaryWriter(expectedStream);
+            
+            // The expected stream will look like: CUSTOMMOD1 CUSTOMMOD2 ElementType.Boolean
+            def bytes = List.[byte]();
+            
+            bytes.AddRange(firstModBytes);            
+            bytes.AddRange(secondModBytes);            
+            bytes.Add(ElementType.ByRef :> byte);
+            bytes.Add(ElementType.Boolean :> byte);    
+            writer.Write(bytes.ToArray());
+                        
+            def param = Param();
+            def paramType = TypeSignature();
+            paramType.ElementType = ElementType.Boolean;
+            
+            param.Type = paramType;
+            param.IsByRef = true;
+            
+            def firstMod = CustomMod();
+            firstMod.TableId = TableId.TypeRef;
+            firstMod.Row = 0x12;
+            firstMod.IsRequired = true;
+            
+            def secondMod = CustomMod();
+            secondMod.TableId = TableId.TypeRef;
+            secondMod.Row = 0x12;
+            
+            param.CustomMods.Add(firstMod);
+            param.CustomMods.Add(secondMod);
+            
+            def paramWriter = ParamWriter();
+            def outputStream = MemoryStream();
+            paramWriter.Write(param, outputStream);
+            outputStream.ShouldMatch(expectedStream);
         }
-        public stub ShouldBeAbleToWriteTypedByRef() : void
+        public ShouldBeAbleToWriteTypedByRef() : void
         {
+             def expectedBytes = array[ElementType.TypedByRef :> byte];
+            
+            def writer = ParamWriter();
+            def param = Param();
+            
+            def paramType = TypeSignature();
+            paramType.ElementType = ElementType.TypedByRef;
+            
+            param.Type = paramType;
+            
+            def outputStream = MemoryStream();
+            writer.Write(param, outputStream);
+            
+            outputStream.ShouldMatch(expectedBytes);
         }
         public stub ShouldBeAbleToWriteTypedByRefWithCustomMod() : void
         {
