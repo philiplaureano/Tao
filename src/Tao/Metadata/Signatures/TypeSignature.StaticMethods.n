@@ -20,7 +20,8 @@ namespace Tao
             _factories.Add(IsPrimitiveElement, () => TypeSignature());
             _factories.Add(IsElement(ElementType.Array), () => ArraySignature());
             _factories.Add(IsElement(ElementType.Class), () => TypeDefOrRefEncodedSignature());
-            _factories.Add(IsElement(ElementType.TypedByRef), () => TypedByRefSignature());
+            _factories.Add(IsElement(ElementType.TypedByRef), () => TypedByRefSignature.Instance);
+            _factories.Add(IsElement(ElementType.Void), ()=> VoidSignature.Instance);
         }
 
         public static ReadFrom([NotNull] stream : Stream) : TypeSignature

@@ -15,7 +15,7 @@ namespace Tao
   {
       IsByRef : bool { get; set;}
       Type : TypeSignature { get; set; }
-      IsTypedByRef : bool { get; set; }
+      IsTypedByRef : bool { get; }
       CustomMods : IList.[CustomMod] 
       {
           get;

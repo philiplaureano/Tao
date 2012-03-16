@@ -11,15 +11,13 @@ using System.Linq;
 
 namespace Tao
 {
-  public class ParamWriter
+  public class ParamWriter : MethodSignatureElementWriter[Param]
   {
-      public Write([NotNull] param : Param, [NotNull] stream : Stream) : void
-        requires !object.ReferenceEquals(param.Type, null)
+      protected override SupportsWriting([NotNull] type : TypeSignature) : bool
       {
-          def paramType = param.Type;
-          def elementType = paramType.ElementType;
-          def writer = BinaryWriter(stream);
-          writer.Write(elementType :> byte);
+          // Void parameters are not supported
+          def elementType = type.ElementType;
+          elementType != ElementType.Void;
       }
   }
 }

@@ -315,10 +315,57 @@ namespace Tests
             
             outputStream.ShouldMatch(expectedBytes);
         }
-        public stub ShouldBeAbleToWriteTypedByRefWithCustomMod() : void
+        public ShouldBeAbleToWriteTypedByRefWithCustomMod() : void
         {
+            def firstModBytes = array[ElementType.CMOD_REQD :> byte, 0x49 : byte];
+            def secondModBytes = array[ElementType.CMOD_OPT :> byte, 0x49 : byte];
+            
+            def expectedStream = MemoryStream();
+            def writer = BinaryWriter(expectedStream);
+            
+            // The expected stream will look like: CUSTOMMOD1 CUSTOMMOD2 ElementType.TypedByRef
+            def bytes = List.[byte]();
+            
+            bytes.AddRange(firstModBytes);            
+            bytes.AddRange(secondModBytes);            
+            bytes.Add(ElementType.ByRef :> byte);
+            bytes.Add(ElementType.TypedByRef :> byte);    
+            writer.Write(bytes.ToArray());
+                        
+            def param = Param();
+            def paramType = TypeSignature();
+            paramType.ElementType = ElementType.TypedByRef;
+            
+            param.Type = paramType;
+            param.IsByRef = true;
+            
+            def firstMod = CustomMod();
+            firstMod.TableId = TableId.TypeRef;
+            firstMod.Row = 0x12;
+            firstMod.IsRequired = true;
+            
+            def secondMod = CustomMod();
+            secondMod.TableId = TableId.TypeRef;
+            secondMod.Row = 0x12;
+            
+            param.CustomMods.Add(firstMod);
+            param.CustomMods.Add(secondMod);
+            
+            def paramWriter = ParamWriter();
+            def outputStream = MemoryStream();
+            paramWriter.Write(param, outputStream);
+            outputStream.ShouldMatch(expectedStream)
         }
-        
+        public ShouldThrowExceptionWhenWritingByRefTypedByRefParamSignature() : void
+        {
+            def param = Param();
+            param.IsByRef = true;
+
+            param.Type = TypedByRefSignature.Instance;            
+            
+            def writer = ParamWriter();
+            writer.Write(param, MemoryStream());
+        }
         private TestRead(isCustomMod : bool, isByRef : bool, elementType : ElementType) : void
         {
             def sampleStream = CreateParamStream(isCustomMod, isByRef, elementType);

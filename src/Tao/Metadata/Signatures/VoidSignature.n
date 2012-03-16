@@ -9,14 +9,14 @@ using System.Linq;
 
 namespace Tao
 {
-  public sealed class TypedByRefSignature : TypeSignature
+  public sealed class VoidSignature : TypeSignature
   {
       private this()
       {
       }      
       
-      // Make the TypedByRefSignature a singleton since it's a special type of signature
-      public static Instance : TypedByRefSignature
+      // Make the VoidSignature a singleton since it's a special type of signature
+      public static Instance : VoidSignature
       {
           get
           {
@@ -25,7 +25,7 @@ namespace Tao
       }      
       protected override SupportsElement(elementType : ElementType) : bool
       {
-          elementType == ElementType.TypedByRef;
+          elementType == ElementType.Void;
       }
       
       private class Nested
@@ -34,7 +34,7 @@ namespace Tao
           {              
           }
           
-          internal static Instance :  TypedByRefSignature = TypedByRefSignature();
+          internal static Instance :  VoidSignature = VoidSignature();
       }
   }
 }

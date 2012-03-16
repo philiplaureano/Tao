@@ -5,6 +5,7 @@ using Nemerle.Utility;
 
 using Tests.Macros;
 
+using Tao;
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -12,24 +13,71 @@ using System.Linq;
 
 namespace Tests
 {
-  public class RetTypeTests
-  {
-      public stub ShouldBeAbleToReadVoidReturnType() : void
-      {
-      }
-      public stub ShouldBeAbleToReadVoidReturnTypeWithCustomMods() : void
-      {
-      }
-      public stub ShouldBeAbleToWriteVoidReturnType() : void
-      {
-      }
-      public stub ShouldBeAbleToWriteVoidReturnTypeWithCustomMods() : void
-      {
-      }
-      public ShouldThrowExceptionWhenAttemptingToCreateVoidByRefReturnType() : void
-        expects BadImageFormatException
-      {
-          throw NotImplementedException();
-      }
-  }
+    public class RetTypeTests
+    {
+        public ShouldBeAbleToReadVoidReturnType() : void
+        {
+            def bytes = array[ElementType.Void :> byte];
+            def inputStream = MemoryStream(bytes);
+
+            def reader = RetTypeReader();
+            def result = reader.Read(inputStream);
+            result.Type.ShouldBeNotNull("The return type should be void");
+            result.Type.ShouldBeEqualTo(VoidSignature.Instance, "Wrong return type");
+        }
+        public ShouldBeAbleToReadVoidReturnTypeWithCustomMods() : void
+        {
+            def firstModBytes = array[ElementType.CMOD_REQD :> byte, 0x49 : byte];
+            def secondModBytes = array[ElementType.CMOD_OPT :> byte, 0x49 : byte];
+
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+
+            // The input stream will look like: CUSTOMMOD1 CUSTOMMOD2 ElementType.Void
+            def bytes = List.[byte]();
+
+            bytes.AddRange(firstModBytes);            
+            bytes.AddRange(secondModBytes);            
+            bytes.Add(ElementType.ByRef :> byte);
+            bytes.Add(ElementType.Void :> byte);    
+            writer.Write(bytes.ToArray());
+            
+            stream.Seek(0);
+            def reader = RetTypeReader();            
+            def result = reader.Read(stream);
+            result.Type.ShouldBeEqualTo(VoidSignature.Instance, "Expected void return type");
+            
+            def mods = result.CustomMods;
+            
+            def firstMod = mods[0];
+            firstMod.IsRequired.ShouldBeTrue("IsRequired should be true");
+            firstMod.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong TableId");
+            firstMod.Row.ShouldBeEqualTo(0x12, "Wrong Row");
+            
+            def secondMod = mods[1];
+            secondMod.IsRequired.ShouldBeFalse("IsRequired should be false");
+            secondMod.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong TableId");
+            secondMod.Row.ShouldBeEqualTo(0x12, "Wrong Row");
+        }
+        public ShouldBeAbleToWriteVoidReturnType() : void
+        {
+            def retType = RetType();
+            retType.Type = VoidSignature.Instance;
+            
+            def outputStream = MemoryStream();
+            def writer = RetTypeWriter();
+            writer.Write(retType, outputStream);
+            
+            def expectedBytes = array[ElementType.Void :> byte];
+            outputStream.ShouldMatch(expectedBytes);
+        }
+        public stub ShouldBeAbleToWriteVoidReturnTypeWithCustomMods() : void
+        {
+        }
+        public ShouldThrowExceptionWhenAttemptingToCreateVoidByRefReturnType() : void
+            expects BadImageFormatException
+        {
+            throw NotImplementedException();
+        }
+    }
 }
