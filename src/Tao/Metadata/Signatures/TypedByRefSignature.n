@@ -13,6 +13,7 @@ namespace Tao
   {
       private this()
       {
+          ElementType = ElementType.TypedByRef;
       }      
       
       // Make the TypedByRefSignature a singleton since it's a special type of signature

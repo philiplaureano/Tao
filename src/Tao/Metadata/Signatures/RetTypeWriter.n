@@ -1,15 +1,28 @@
 ﻿using Nemerle;
+using Nemerle.Assertions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Tao
 {
-  public class RetTypeWriter : MethodSignatureElementWriter[RetType] 
-  {      
-  }
+    public class RetTypeWriter : MethodSignatureElementWriter[RetType] 
+    {      
+        public override Write([NotNull] element : RetType, [NotNull] stream : Stream) : void                    
+            requires element.Type != null
+        {
+            def elementType = element.Type.ElementType;
+            when(element.IsByRef && elementType == ElementType.Void)
+            {
+                throw InvalidOperationException("You can't write a ByRef Void return type");
+            }
+            
+            base.Write(element, stream);
+        }
+    }
 }

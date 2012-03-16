@@ -13,6 +13,7 @@ namespace Tao
   {
       private this()
       {
+          ElementType = ElementType.Void;
       }      
       
       // Make the VoidSignature a singleton since it's a special type of signature

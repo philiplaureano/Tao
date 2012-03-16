@@ -71,13 +71,59 @@ namespace Tests
             def expectedBytes = array[ElementType.Void :> byte];
             outputStream.ShouldMatch(expectedBytes);
         }
-        public stub ShouldBeAbleToWriteVoidReturnTypeWithCustomMods() : void
+        public ShouldBeAbleToWriteVoidReturnTypeWithCustomMods() : void
         {
+            def expectedStream = MemoryStream(GetCustomModBytes());
+            
+            def retType = RetType();
+            retType.Type = VoidSignature.Instance;
+            
+            def firstMod = CustomMod();
+            firstMod.IsRequired = true;
+            firstMod.TableId = TableId.TypeRef;
+            firstMod.Row = 0x12;
+            
+            def secondMod = CustomMod();
+            secondMod.TableId = TableId.TypeRef;
+            secondMod.Row = 0x12;
+            
+            def mods = retType.CustomMods;
+            mods.Add(firstMod);
+            mods.Add(secondMod);
+            
+            def outputStream = MemoryStream();
+            def writer = RetTypeWriter();
+            writer.Write(retType, outputStream);            
+            expectedStream.ShouldMatch(outputStream);
         }
         public ShouldThrowExceptionWhenAttemptingToCreateVoidByRefReturnType() : void
-            expects BadImageFormatException
+            expects InvalidOperationException
         {
-            throw NotImplementedException();
+            def retType = RetType();
+            retType.Type = VoidSignature.Instance;
+            retType.IsByRef = true;
+            
+            def outputStream = MemoryStream();
+            def writer = RetTypeWriter();
+            writer.Write(retType, outputStream);            
+        }
+        private GetCustomModBytes() : array[byte]
+        {
+            def firstModBytes = array[ElementType.CMOD_REQD :> byte, 0x49 : byte];
+            def secondModBytes = array[ElementType.CMOD_OPT :> byte, 0x49 : byte];
+
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+
+            // The sample stream will look like: CUSTOMMOD1 CUSTOMMOD2 ElementType.Void
+            def bytes = List.[byte]();
+
+            bytes.AddRange(firstModBytes);            
+            bytes.AddRange(secondModBytes);            
+            bytes.Add(ElementType.Void :> byte);    
+            writer.Write(bytes.ToArray());
+            
+            stream.ToArray();
         }
     }
 }

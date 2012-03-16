@@ -14,33 +14,32 @@ namespace Tao
   public abstract class MethodSignatureElementWriter[TElement] 
     where TElement : IMethodSignatureElement, class
   {
-      public Write([NotNull] param : TElement, [NotNull] stream : Stream) : void
-        requires !object.ReferenceEquals(param.Type, null)
+      public virtual Write([NotNull] element : TElement, [NotNull] stream : Stream) : void
+        requires !object.ReferenceEquals(element.Type, null)
         requires stream.CanWrite
-        requires param.Type != null
+        requires element.Type != null
       {          
-          def paramType = param.Type;
-          when(!SupportsWriting(param.Type))
+          def elementType = element.Type;
+          when(!SupportsWriting(elementType))
           {
-              throw NotSupportedException(string.Format("The signature type '{0}' is not supported for write operations", paramType.ElementType));
+              throw NotSupportedException(string.Format("The signature type '{0}' is not supported for write operations", elementType.ElementType));
           }
           
-          def elementType = paramType.ElementType;
           def writer = BinaryWriter(stream);
           
           // Write the custom mods
           def modWriter = CustomModWriter();
-          foreach(mod in param.CustomMods)
+          foreach(mod in element.CustomMods)
           {
               modWriter.Write(mod, stream);
           }
           
-          when(param.IsByRef)
+          when(element.IsByRef)
           {
               writer.Write(ElementType.ByRef :> byte);
           }
           
-          writer.Write(elementType :> byte);
+          writer.Write(elementType.ElementType :> byte);
       }
       
       protected virtual SupportsWriting([NotNull] type : TypeSignature) : bool
