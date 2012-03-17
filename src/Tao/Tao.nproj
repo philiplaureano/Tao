@@ -65,6 +65,9 @@
     <Compile Include="AlignmentExtensions.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CallingConvention.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Characteristics.n">
       <SubType>Code</SubType>
     </Compile>

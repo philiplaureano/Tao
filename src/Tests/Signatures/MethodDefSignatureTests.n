@@ -1,0 +1,65 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{  
+    public class MethodDefSignatureTests
+    {
+        public stub ShouldReadHasThis() : void
+        {            
+        }
+        public stub ShouldReadHasThisAndExplicitThis() : void
+        {
+        }
+        public stub ShouldReadDefault() : void
+        {
+        }
+        public stub ShouldReadVarArg() : void
+        {
+        }
+        public stub StubShouldReadGenericAndGenParamCount() : void
+        {
+        }
+        public stub ShouldReadParamCount() : void
+        {
+        }
+        public stub ShouldReadRetType() : void
+        {
+        }
+        public stub ShouldReadMultipleParameters() : void
+        {
+        }        
+        public stub ShouldWriteHasThis() : void
+        {
+        }
+        public stub ShouldWriteHasThisAndExplicitThis() : void
+        {
+        }
+        public stub ShouldWriteDefault() : void
+        {
+        }
+        public stub ShouldWriteVarArg() : void
+        {
+        }
+        public stub StubShouldWriteGenericAndGenParamCount() : void
+        {
+        }
+        public stub ShouldWriteParamCount() : void
+        {
+        }
+        public stub ShouldWriteRetType() : void
+        {
+        }
+        public stub ShouldWriteMultipleParameters() : void
+        {
+        }
+    }
+}
