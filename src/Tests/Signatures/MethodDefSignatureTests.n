@@ -9,57 +9,223 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao;
+using Tao.CallingConvention;
 namespace Tests
 {  
     public class MethodDefSignatureTests
     {
-        public stub ShouldReadHasThis() : void
+        public ShouldReadDefaultWithoutHasThisOrExplicitThis() : void
         {            
+            def signatureBytes = CreateSignatureBytes(array[Default], 0, ElementType.Void);
+
+            def stream = MemoryStream(signatureBytes);
+            def reader = MethodDefSignatureReader();
+
+            def signature = reader.Read(stream);
+            signature.UsesDefaultCallingConvention.ShouldBeTrue("UsesDefaultCallingConvention should be true");
+            signature.HasThis.ShouldBeFalse("HasThis should be false");
+            signature.HasExplicitThis.ShouldBeFalse("HasExplicitThis should be false");
         }
-        public stub ShouldReadHasThisAndExplicitThis() : void
-        {
+
+        public ShouldReadHasThis() : void
+        {            
+            def signatureBytes = CreateSignatureBytes(array[HasThis, Default], 0, ElementType.Void);
+            def stream = MemoryStream(signatureBytes);
+            def reader = MethodDefSignatureReader();
+
+            def signature = reader.Read(stream);
+            signature.UsesDefaultCallingConvention.ShouldBeTrue("UsesDefaultCallingConvention should be true");
+            signature.HasThis.ShouldBeTrue("HasThis should be true");
+            signature.HasExplicitThis.ShouldBeFalse("HasExplicitThis should be false");
         }
-        public stub ShouldReadDefault() : void
+
+        public ShouldReadHasThisAndExplicitThis() : void
         {
-        }
-        public stub ShouldReadVarArg() : void
-        {
-        }
-        public stub StubShouldReadGenericAndGenParamCount() : void
-        {
-        }
-        public stub ShouldReadParamCount() : void
-        {
-        }
-        public stub ShouldReadRetType() : void
-        {
-        }
-        public stub ShouldReadMultipleParameters() : void
-        {
+            def signatureBytes = CreateSignatureBytes(array[HasThis, ExplicitThis, Default], 0, ElementType.Void);            
+            def stream = MemoryStream(signatureBytes);
+            def reader = MethodDefSignatureReader();
+
+            def signature = reader.Read(stream);
+            signature.UsesDefaultCallingConvention.ShouldBeTrue("UsesDefaultCallingConvention should be true");
+            signature.HasThis.ShouldBeTrue("HasThis should be true");
+            signature.HasExplicitThis.ShouldBeTrue("HasExplicitThis should be true");
         }        
-        public stub ShouldWriteHasThis() : void
+        public ShouldReadVarArg() : void
+        {
+            def signatureBytes = CreateSignatureBytes(array[VarArg], 0, ElementType.Void);
+            def stream = MemoryStream(signatureBytes);
+            def reader = MethodDefSignatureReader();
+
+            def signature = reader.Read(stream);
+            signature.UsesDefaultCallingConvention.ShouldBeFalse("UsesDefaultCallingConvention should be false");
+            signature.UsesVariableArguments.ShouldBeTrue("UsesVariableArguments should be true");
+            signature.HasThis.ShouldBeFalse("HasThis should be false");
+            signature.HasExplicitThis.ShouldBeFalse("HasExplicitThis should be false");
+        }
+
+        public ShouldReadGenericAndGenParamCount() : void
+        {            
+            def signatureBytes = CreateGenericSignatureBytes(array[], 1, 0, ElementType.Void);
+            def stream = MemoryStream(signatureBytes);
+            def reader = MethodDefSignatureReader();
+
+            def signature = reader.Read(stream);
+            signature.UsesDefaultCallingConvention.ShouldBeFalse("UsesDefaultCallingConvention should be false");
+            signature.UsesVariableArguments.ShouldBeFalse("UsesVariableArguments should be false");
+
+            signature.IsGeneric.ShouldBeTrue("IsGeneric should be true");
+            signature.GenericParameterCount.ShouldBeEqualTo(1, "Wrong generic parameter count");
+
+            signature.HasThis.ShouldBeFalse("HasThis should be false");
+            signature.HasExplicitThis.ShouldBeFalse("HasExplicitThis should be false");
+        }
+        public ShouldReadParamCount() : void
+        {
+            def signatureBytes = CreateSignatureBytes(array[Default], 2, ElementType.Void, ElementType.I4, ElementType.I2);
+            def stream = MemoryStream(signatureBytes);
+            def reader = MethodDefSignatureReader();
+
+            def signature = reader.Read(stream);
+            signature.UsesDefaultCallingConvention.ShouldBeTrue("UsesDefaultCallingConvention should be true");
+            signature.IsGeneric.ShouldBeFalse("This method should not be generic");
+            signature.HasThis.ShouldBeFalse("HasThis should be false");
+            signature.HasExplicitThis.ShouldBeFalse("HasExplicitThis should be false");
+            signature.ParameterCount.ShouldBeEqualTo(2, "Wrong Parameter Count");
+        }
+        public ShouldReadRetType() : void
+        {
+            def signatureBytes = CreateSignatureBytes(array[Default], 2, ElementType.Void, ElementType.I8, ElementType.R4);
+            def stream = MemoryStream(signatureBytes);
+            def reader = MethodDefSignatureReader();
+
+            def signature = reader.Read(stream);
+            signature.UsesDefaultCallingConvention.ShouldBeTrue("UsesDefaultCallingConvention should be true");
+            signature.IsGeneric.ShouldBeFalse("This method should not be generic");
+            signature.HasThis.ShouldBeFalse("HasThis should be false");
+            signature.HasExplicitThis.ShouldBeFalse("HasExplicitThis should be false");
+            signature.ParameterCount.ShouldBeEqualTo(2, "Wrong Parameter Count");
+
+            def retType = signature.ReturnType;
+            retType.Type.ShouldBeEqualTo(VoidSignature.Instance, "Expected void return type");
+        }              
+
+        public ShouldThrowExceptionWhenEncounteringExplicitThisWithoutHasThis() : void
+            expects BadImageFormatException
+        {
+            def signatureBytes = CreateSignatureBytes(array[ExplicitThis, Default], 2, ElementType.Void);
+            def stream = MemoryStream(signatureBytes);
+            def reader = MethodDefSignatureReader();
+
+            def signature = reader.Read(stream);
+        }
+        public ShouldReadMultipleParameters() : void
+        {
+            def signatureBytes = CreateSignatureBytes(array[Default], 2, ElementType.Void, ElementType.I4, ElementType.I2);
+            def stream = MemoryStream(signatureBytes);
+
+            def reader = MethodDefSignatureReader();
+            def signature = reader.Read(stream);
+
+            signature.ParameterCount.ShouldBeEqualTo(2, "Wrong parameter count");
+
+            def parameters = signature.Parameters;
+            parameters.Count.ShouldBeEqualTo(2, "The number of parameters read should be 2");
+
+            parameters[0].Type.ElementType.ShouldBeEqualTo(ElementType.I4, "Expected an signed integer type");
+            parameters[1].Type.ElementType.ShouldBeEqualTo(ElementType.I2, "Expected an signed word type");
+        }        
+        public ignored stub ShouldWriteDefaultWithoutHasThisOrExplicitThis() : void
         {
         }
-        public stub ShouldWriteHasThisAndExplicitThis() : void
+        public ignored stub ShouldWriteHasThis() : void
         {
         }
-        public stub ShouldWriteDefault() : void
+        public ignored stub ShouldWriteHasThisAndExplicitThis() : void
         {
         }
-        public stub ShouldWriteVarArg() : void
+        public ignored stub ShouldWriteDefault() : void
         {
         }
-        public stub StubShouldWriteGenericAndGenParamCount() : void
+        public ignored stub ShouldWriteVarArg() : void
         {
         }
-        public stub ShouldWriteParamCount() : void
+        public ignored stub StubShouldWriteGenericAndGenParamCount() : void
         {
         }
-        public stub ShouldWriteRetType() : void
+        public ignored stub ShouldWriteParamCount() : void
         {
         }
-        public stub ShouldWriteMultipleParameters() : void
+        public ignored stub ShouldWriteRetType() : void
         {
+        }
+        public ignored stub ShouldWriteMultipleParameters() : void
+        {
+        }
+        private CreateGenericSignatureBytes(conventions: IEnumerable.[CallingConvention], genericParameterCount : uint, parameterCount : uint, returnType : ElementType) : array[byte]
+        {
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+
+            mutable firstByte = 0 : byte;
+            foreach(convention in conventions)
+            {
+                firstByte |= (convention :> byte);
+            }
+
+            when(conventions.Any())
+            {
+                writer.Write(firstByte);
+            }
+
+            writer.Write(CallingConvention.Generic :> byte);
+
+            def integerWriter = CompressedIntegerWriter();
+            integerWriter.WriteInteger(genericParameterCount, stream);
+            integerWriter.WriteInteger(parameterCount, stream);
+            
+            writer.Write(returnType :> byte);
+
+            stream.ToArray();
+        }
+
+        private CreateSignatureBytes(conventions: IEnumerable.[CallingConvention], parameterCount : uint, returnType : ElementType, params parameterTypes : array[ElementType]) : array[byte]
+        {
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+
+            mutable firstByte = 0 : byte;
+            foreach(convention in conventions)
+            {
+                firstByte |= (convention :> byte);
+            }
+
+            writer.Write(firstByte);
+
+            def integerWriter = CompressedIntegerWriter();
+            integerWriter.WriteInteger(parameterCount, stream);
+
+            def retWriter = RetTypeWriter();
+            def retType = RetType();
+
+            def returnTypeSignature = TypeSignature();
+            returnTypeSignature.ElementType = returnType;
+
+            retType.Type =  returnTypeSignature;
+            retWriter.Write(retType, stream);
+
+            def paramTypeWriter = ParamWriter();
+            foreach(type in parameterTypes)
+            {
+                def paramType = Param();
+                def typeSignature = TypeSignature();
+                typeSignature.ElementType = type;
+                paramType.Type = typeSignature;
+
+                paramTypeWriter.Write(paramType, stream);
+            }
+
+            stream.ToArray();
         }
     }
 }

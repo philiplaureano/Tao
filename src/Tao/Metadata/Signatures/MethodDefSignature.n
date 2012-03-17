@@ -1,0 +1,33 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MethodDefSignature
+  {      
+      private _params : IList.[Param] = List();
+      
+      public UsesDefaultCallingConvention : bool { get; set; }
+      public UsesVariableArguments : bool { get; set; }
+      public HasThis : bool { get;set; }
+      public HasExplicitThis : bool { get; set; }
+      public IsGeneric : bool { get;set; }
+      public GenericParameterCount : uint { get; set;  }
+      public ParameterCount : uint { get; set; }
+      public ReturnType : RetType { get; set; }
+      
+      public Parameters : IList.[Param]
+      {
+          get 
+          {
+              _params;
+          }
+      }
+  }
+}
