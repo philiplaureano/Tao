@@ -1,0 +1,52 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class StandAloneMethodSigWriter : MethodSignatureWriter[StandAloneMethodSignature]
+    {
+        protected override HasAlternateCallingConvention(signature : StandAloneMethodSignature) : bool
+        {
+            signature.UsesCCallingConvention || 
+            signature.UsesFastCallCallingConvention ||
+            signature.UsesStdCallingConvention ||
+            signature.UsesThisCallCallingConvention;
+        }
+        
+        protected override WriteAlternateCallingConvention(firstByte : byte, signature : StandAloneMethodSignature, stream : Stream) : void
+        {
+            mutable resultByte = firstByte;
+            mutable conventionAlreadyAssigned = false;
+                        
+            when(signature.UsesCCallingConvention && !conventionAlreadyAssigned)
+            {
+                resultByte |= (CallingConvention.C :> byte);
+                conventionAlreadyAssigned = true;
+            }
+            when(signature.UsesFastCallCallingConvention && !conventionAlreadyAssigned)
+            {
+                resultByte |= (CallingConvention.FastCall :> byte);
+                conventionAlreadyAssigned = true;
+            }
+            when(signature.UsesThisCallCallingConvention && !conventionAlreadyAssigned)
+            {
+                resultByte |= (CallingConvention.ThisCall :> byte);
+                conventionAlreadyAssigned = true;
+            }
+            when(signature.UsesStdCallingConvention && !conventionAlreadyAssigned)
+            {
+                resultByte |= (CallingConvention.StdCall :> byte);
+                conventionAlreadyAssigned = true;
+            }
+            stream.WriteByte(resultByte);
+        }
+    }
+}

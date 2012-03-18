@@ -34,7 +34,6 @@ namespace Tao
                     firstByte |= (explicitThisFlag);
                 }
             }
-
             
             mutable hasValidCallingConvention = false;
             if(signature.UsesDefaultCallingConvention)

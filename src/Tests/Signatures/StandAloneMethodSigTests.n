@@ -17,30 +17,89 @@ namespace Tests
 {
   public class StandAloneMethodSigTests
   {
-      public stub ShouldBeAbleToReadSignatureWithCCallingConvention() : void
+      public ShouldBeAbleToReadSignatureWithCCallingConvention() : void
       {
-          
+          def inputStream = MemoryStream(GetSampleBytes(CallingConvention.C));
+          def reader = StandAloneMethodSigReader();
+          def signature = reader.Read(inputStream);
+          signature.UsesCCallingConvention.ShouldBeTrue("This signature should be using the C calling convention");
       }
-      public stub ShouldBeAbleToReadSignatureWIthThisCallCallingConvention() : void
+      public ShouldBeAbleToReadSignatureWithThisCallCallingConvention() : void
       {
+          def inputStream = MemoryStream(GetSampleBytes(CallingConvention.ThisCall));
+          def reader = StandAloneMethodSigReader();
+          def signature = reader.Read(inputStream);
+          signature.UsesThisCallCallingConvention.ShouldBeTrue("This signature should be using the ThisCall calling convention");
       }
-      public stub ShouldBeAbleToReadSignatureWithFastCallCallingConvention() : void
+      public ShouldBeAbleToReadSignatureWithFastCallCallingConvention() : void
       {
+          def inputStream = MemoryStream(GetSampleBytes(CallingConvention.FastCall));
+          def reader = StandAloneMethodSigReader();
+          def signature = reader.Read(inputStream);
+          signature.UsesFastCallCallingConvention.ShouldBeTrue("This signature should be using the FastCall calling convention");
       }
-      public stub ShouldBeAbleToReadSignatureWithStdCallingConvention() : void
+      public ShouldBeAbleToReadSignatureWithStdCallingConvention() : void
       {
+          def inputStream = MemoryStream(GetSampleBytes(CallingConvention.StdCall));
+          def reader = StandAloneMethodSigReader();
+          def signature = reader.Read(inputStream);
+          signature.UsesStdCallingConvention.ShouldBeTrue("This signature should be using the StdCall calling convention");
       }      
-      public stub ShouldBeAbleToWriteSignatureWithCCallingConvention() : void
+      public ShouldBeAbleToWriteSignatureWithCCallingConvention() : void
       {
+          def expectedStream = MemoryStream(GetSampleBytes(CallingConvention.C));
+          
+          def signature = StandAloneMethodSignature();
+          signature.ReturnType = RetType(VoidSignature.Instance);
+          signature.UsesCCallingConvention = true;
+          
+          def outputStream = MemoryStream();
+          def writer = StandAloneMethodSigWriter();
+          writer.Write(signature, outputStream);
+          
+          outputStream.ShouldMatch(expectedStream);
       }
-      public stub ShouldBeAbleToWriteSignatureWIthThisCallCallingConvention() : void
+      public ShouldBeAbleToWriteSignatureWithThisCallCallingConvention() : void
       {
+          def expectedStream = MemoryStream(GetSampleBytes(CallingConvention.ThisCall));
+          
+          def signature = StandAloneMethodSignature();
+          signature.ReturnType = RetType(VoidSignature.Instance);
+          signature.UsesThisCallCallingConvention = true;
+          
+          def outputStream = MemoryStream();
+          def writer = StandAloneMethodSigWriter();
+          writer.Write(signature, outputStream);
+          
+          outputStream.ShouldMatch(expectedStream);
       }
-      public stub ShouldBeAbleToWriteSignatureWithFastCallCallingConvention() : void
+      public ShouldBeAbleToWriteSignatureWithFastCallCallingConvention() : void
       {
+          def expectedStream = MemoryStream(GetSampleBytes(CallingConvention.FastCall));
+          
+          def signature = StandAloneMethodSignature();
+          signature.ReturnType = RetType(VoidSignature.Instance);
+          signature.UsesFastCallCallingConvention = true;
+          
+          def outputStream = MemoryStream();
+          def writer = StandAloneMethodSigWriter();
+          writer.Write(signature, outputStream);
+          
+          outputStream.ShouldMatch(expectedStream);
       }
-      public stub ShouldBeAbleToWriteSignatureWithStdCallingConvention() : void
+      public ShouldBeAbleToWriteSignatureWithStdCallingConvention() : void
       {
+          def expectedStream = MemoryStream(GetSampleBytes(CallingConvention.StdCall));
+          
+          def signature = StandAloneMethodSignature();
+          signature.ReturnType = RetType(VoidSignature.Instance);
+          signature.UsesStdCallingConvention = true;
+          
+          def outputStream = MemoryStream();
+          def writer = StandAloneMethodSigWriter();
+          writer.Write(signature, outputStream);
+          
+          outputStream.ShouldMatch(expectedStream);
       }
       
       private GetSampleBytes(convention : CallingConvention) : array[byte]

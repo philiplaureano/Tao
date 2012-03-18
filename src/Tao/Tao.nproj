@@ -473,6 +473,9 @@
     <Compile Include="Metadata\Signatures\StandAloneMethodSigReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\StandAloneMethodSigWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\TypedByRefSignature.n">
       <SubType>Code</SubType>
     </Compile>

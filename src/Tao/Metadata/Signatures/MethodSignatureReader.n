@@ -60,16 +60,18 @@ namespace Tao
                 }                
             }
 
-            if(hasFlag(nextByte, CallingConvention.VarArg))
+            if(HasAlternateCallingConvention(nextByte))
             {
-                signature.UsesVariableArguments = true;
+                ReadAlternateCallingConvention(nextByte, signature, stream);
             }
             else 
             {
-                if(HasAlternateCallingConvention(nextByte))
+                // Isolate the calling convention bits
+                def conventionByte = (nextByte << 4) >> 4;
+                if(conventionByte == (CallingConvention.VarArg :> byte))
                 {
-                    ReadAlternateCallingConvention(nextByte, signature, stream);
-                }
+                    signature.UsesVariableArguments = true;
+                }    
                 else
                 {
                     signature.UsesDefaultCallingConvention = true;    
@@ -79,7 +81,7 @@ namespace Tao
 
         protected abstract HasAlternateCallingConvention(nextByte : byte) : bool;       
         protected abstract ReadAlternateCallingConvention(nextByte : byte, signature : TSignature,  stream : Stream) : void;
-        
+
         protected virtual ReadParameters(parameterCount : uint, [NotNull] stream : Stream, signature : TSignature) : void
             requires parameterCount == 0 || (parameterCount > 0 && stream.Position < stream.Length) otherwise throw InvalidOperationException("Unable to read past the end of the stream")
         {

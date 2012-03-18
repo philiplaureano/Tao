@@ -16,18 +16,16 @@ namespace Tao
     {
         protected override HasAlternateCallingConvention(nextByte : byte) : bool
         {
-            def hasFlag(currentByte : byte, convention : CallingConvention) : bool
-            {
-                (currentByte & (convention :> byte)) != 0;
-            }
-
-            hasFlag(nextByte, CallingConvention.Generic);
+            // Isolate the calling convention bits
+            def conventionByte = (nextByte << 4) >> 4;
+            
+            conventionByte == (CallingConvention.Generic :> byte);
         }
 
         protected override ReadAlternateCallingConvention(nextByte : byte, signature : TSignature,  stream : Stream) : void
         {
-            def integerReader = CompressedIntegerReader();
             // Read the number of generic parameters as a compressed unsigned int                
+            def integerReader = CompressedIntegerReader();            
             def genericParamCount = integerReader.ReadInteger(stream);
 
             signature.IsGeneric = true;

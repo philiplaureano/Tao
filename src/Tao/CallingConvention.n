@@ -17,7 +17,7 @@ namespace Tao
       |VarArg = 0x05
       |StdCall = 0x02
       |C = 0x1
-      |ThisCall = 0x2
+      |ThisCall = 0x3
       |FastCall = 0x4
       |Generic = 0x10
   }

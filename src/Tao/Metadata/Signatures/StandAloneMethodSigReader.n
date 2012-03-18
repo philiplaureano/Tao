@@ -1,15 +1,62 @@
 ﻿using Nemerle;
+using Nemerle.Assertions;
 using Nemerle.Collections;
+using Nemerle.Extensions;
 using Nemerle.Text;
 using Nemerle.Utility;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Tao
 {
-  public class StandAloneMethodSigReader
-  {
-  }
+    public class StandAloneMethodSigReader : MethodSignatureReader[StandAloneMethodSignature]
+    {
+        protected override HasAlternateCallingConvention(nextByte : byte) : bool
+        {
+            def alternateConventions = array
+            [
+                CallingConvention.C, 
+                CallingConvention.StdCall, 
+                CallingConvention.ThisCall, 
+                CallingConvention.FastCall
+            ];
+            
+            // Isolate the calling convention bits
+            def conventionByte = (nextByte << 4) >> 4;
+            
+            mutable result = false;
+            foreach(convention in alternateConventions)
+            {
+                def hasFlag = conventionByte == (convention :> byte);
+                result |= hasFlag;
+            }
+            
+            result;
+        }
+        protected override ReadAlternateCallingConvention(nextByte : byte, [NotNull] signature : StandAloneMethodSignature, [NotNull] stream : Stream) : void
+        {
+            def actions = System.Collections.Generic.Dictionary.[CallingConvention, StandAloneMethodSignature-> void]();
+            
+            actions[CallingConvention.C] = s => s.UsesCCallingConvention = true;
+            actions[CallingConvention.StdCall] = s => s.UsesStdCallingConvention = true;
+            actions[CallingConvention.ThisCall] = s => s.UsesThisCallCallingConvention = true;
+            actions[CallingConvention.FastCall] = s => s.UsesFastCallCallingConvention = true;
+            
+            def conventionByte = (nextByte << 4) >> 4;
+            
+            mutable flagAlreadyFound = false;
+            foreach(convention in actions.Keys)
+            {
+                def hasFlag = conventionByte == (convention :> byte);
+                when(hasFlag && !flagAlreadyFound)
+                {
+                    actions[convention](signature);
+                    flagAlreadyFound = true;
+                }
+            }
+        }
+    }
 }

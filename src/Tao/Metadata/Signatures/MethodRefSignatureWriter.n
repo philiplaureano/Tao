@@ -17,7 +17,6 @@ namespace Tao
             requires Equals(signature.ParameterCount, ((signature.AdditionalParameters.Count + signature.Parameters.Count) :> uint))
                 otherwise throw ArgumentException("Invalid MethodRefSignature; the total ParameterCount doesn't match the actual number of parameters in the signature")
         {
-            def parameterCount = signature.ParameterCount;
             def paramWriter = ParamWriter();
             foreach(currentParam in signature.Parameters)
             {

@@ -9,7 +9,11 @@ using System.Linq;
 
 namespace Tao
 {
-  public class StandAloneMethodSignature
+  public class StandAloneMethodSignature : MethodSignature
   {
+      public UsesCCallingConvention : bool { get;set; }
+      public UsesStdCallingConvention : bool { get; set; }
+      public UsesThisCallCallingConvention : bool { get; set; }
+      public UsesFastCallCallingConvention : bool { get; set; }
   }
 }
