@@ -11,5 +11,12 @@ namespace Tao
 {
   public class RetType : MethodSignatureElement
   {
+      public this() 
+      {
+      }
+      public this(returnType : TypeSignature)
+      {
+          Type = returnType;
+      }
   }
 }

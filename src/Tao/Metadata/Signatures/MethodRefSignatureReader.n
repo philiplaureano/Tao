@@ -1,0 +1,42 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class MethodRefSignatureReader : MethodSignatureReader[MethodRefSignature]
+    {
+        protected override ReadParameters(parameterCount : uint, [NotNull] stream : Stream, signature : MethodRefSignature) : void
+        {
+            mutable sentinelReached = false;
+            mutable parameters = signature.Parameters;
+            for(mutable i : uint = 0; i < parameterCount; i++)
+            {
+                def nextByte = stream.PeekByte();
+                when(!sentinelReached && nextByte == MethodSignature.Sentinel)
+                {
+                    // Once the sentinel is reached, moved to the next position
+                    sentinelReached = true;
+                    _ = stream.Seek(1, SeekOrigin.Current);
+                }
+                
+                def paramReader = ParamReader();
+                def currentParam = paramReader.Read(stream);
+                
+                when(sentinelReached)
+                {
+                    parameters = signature.AdditionalParameters;
+                }
+                
+                parameters.Add(currentParam);
+            }
+        }
+    }
+}

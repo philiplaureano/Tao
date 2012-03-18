@@ -1,0 +1,37 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class MethodRefSignatureWriter : MethodSignatureWriter[MethodRefSignature]
+    {
+        protected override WriteParameters([NotNull] signature : MethodRefSignature, [NotNull] stream : Stream) : void
+            requires Equals(signature.ParameterCount, ((signature.AdditionalParameters.Count + signature.Parameters.Count) :> uint))
+                otherwise throw ArgumentException("Invalid MethodRefSignature; the total ParameterCount doesn't match the actual number of parameters in the signature")
+        {
+            def parameterCount = signature.ParameterCount;
+            def paramWriter = ParamWriter();
+            foreach(currentParam in signature.Parameters)
+            {
+                paramWriter.Write(currentParam, stream);
+            }
+            
+            // Write the sentinel mark
+            stream.WriteByte(MethodSignature.Sentinel);            
+            
+            // Write the additional parameters
+            foreach(currentParam in signature.AdditionalParameters)
+            {
+                paramWriter.Write(currentParam, stream);
+            }
+        }
+    }
+}

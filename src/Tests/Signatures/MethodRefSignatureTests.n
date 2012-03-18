@@ -1,0 +1,81 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+
+namespace Tests
+{
+    public class MethodRefSignatureTests
+    {
+        public ShouldBeAbleToUseSentinelElementToReadAdditionalParameters() : void
+        {
+            def inputStream = MemoryStream(GetSampleSignatureBytes());
+            def reader = MethodRefSignatureReader();
+            
+            def signature = reader.Read(inputStream);
+            signature.ShouldBeNotNull("There should be a valid signature here");
+            signature.Parameters.Count.ShouldBeEqualTo(1, "Wrong Parameter Count");
+            signature.Parameters[0].Type.ElementType.ShouldBeEqualTo(ElementType.I4, "Wrong Element Type");
+            
+            signature.AdditionalParameters.Count.ShouldBeEqualTo(1, "Wrong Parameter Count");
+            signature.AdditionalParameters[0].Type.ElementType.ShouldBeEqualTo(ElementType.I8, "Wrong Element Type");
+        }
+        public ShouldBeAbleToUseSentinelElementToWriteAdditionalParameters() : void
+        {
+            def expectedBytes = GetSampleSignatureBytes();
+            
+            def signature = MethodRefSignature();
+            signature.UsesVariableArguments = true;
+            
+            signature.Parameters.Add(Param(TypeSignature(ElementType.I4)));
+            signature.AdditionalParameters.Add(Param(TypeSignature(ElementType.I8)));
+            signature.ParameterCount = 2;
+            
+            signature.ReturnType = RetType(VoidSignature.Instance);
+            
+            def outputStream = MemoryStream();
+            def writer = MethodRefSignatureWriter();
+            writer.Write(signature, outputStream);
+            
+            outputStream.ShouldMatch(expectedBytes);
+        }                
+
+        private GetSampleSignatureBytes() : array[byte]
+        {
+            def firstByte : byte  = (CallingConvention.VarArg :> byte);
+
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+            writer.Write(firstByte);
+
+            // Use two parameters; One will be past the SENTINEL mark
+            def integerWriter = CompressedIntegerWriter();
+            integerWriter.WriteInteger(2 : uint, stream);
+
+            // Write the return type
+            def retWriter = RetTypeWriter();
+            retWriter.Write(RetType(VoidSignature.Instance), stream);
+
+            // Write the first parameter
+            def paramWriter = ParamWriter();
+            paramWriter.Write(Param(TypeSignature(ElementType.I4)), stream);
+
+            // Write the Sentinel mark
+            writer.Write(MethodSignature.Sentinel);
+
+            // Write the post-sentinel parameter
+            paramWriter.Write(Param(TypeSignature(ElementType.I8)), stream);
+            
+            stream.ToArray();
+        }
+    }
+}

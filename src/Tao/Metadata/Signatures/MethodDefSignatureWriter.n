@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class MethodDefSignatureWriter : MethodSignatureWriter[MethodDefSignature]
+    {        
+        public override Write(signature : MethodDefSignature, [NotNull] stream : Stream) : void
+            requires object.Equals(signature.Parameters.Count, signature.ParameterCount :> int) 
+                otherwise throw ArgumentException("The signature's parameter count does not match the number of parameters in its parameter collection")
+        {
+            base.Write(signature, stream);
+        }
+    }
+}

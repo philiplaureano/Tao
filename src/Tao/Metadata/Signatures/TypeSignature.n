@@ -13,6 +13,15 @@ namespace Tao
 {
     public partial class TypeSignature
     {
+        public this() 
+        {
+        }
+        
+        public this(elementType : ElementType) 
+        {
+            ElementType = elementType;
+        }
+        
         public ElementType : ElementType { get; set; }
 
         public Read([NotNull] stream : Stream) : void

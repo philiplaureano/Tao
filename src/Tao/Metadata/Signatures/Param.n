@@ -11,5 +11,12 @@ namespace Tao
 {  
   public class Param : MethodSignatureElement
   {      
+    public this()
+    {
+    }
+    public this(parameterType : TypeSignature)
+    {
+        Type = parameterType;
+    }
   }
 }

@@ -1,0 +1,94 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public abstract class MethodSignatureWriter[TSignature] 
+    where TSignature : IMethodSignature, new()
+    {
+        public virtual Write(signature : TSignature, [NotNull] stream : Stream) : void
+            requires !ReferenceEquals(signature.ReturnType, null) otherwise throw ArgumentException("The signature must have a valid return type")            
+        {           
+            when(signature.HasExplicitThis && !signature.HasThis)
+            {
+                throw InvalidOperationException("You can't have a MethodSignature marked as ExplicitThis without first setting the HasThis flag");
+            }
+
+            def writer = BinaryWriter(stream);
+            mutable firstByte : byte = 0;
+            when(signature.HasThis)
+            {
+                firstByte |= (CallingConvention.HasThis :> byte);
+                when(signature.HasExplicitThis)
+                {
+                    // ExplicitThis = 0x40
+                    def explicitThisFlag = 0x40 :> byte;
+                    firstByte |= (explicitThisFlag);
+                }
+            }
+
+            def integerWriter = CompressedIntegerWriter();
+            mutable hasValidCallingConvention = false;
+            if(signature.UsesDefaultCallingConvention)
+            {
+                hasValidCallingConvention = true;
+                writer.Write(firstByte);
+            }
+            else
+            {
+                if(signature.UsesVariableArguments)
+                {                    
+                    hasValidCallingConvention = true;
+                    firstByte |= (CallingConvention.VarArg :> byte);
+                    writer.Write(firstByte);
+                }
+                else
+                {
+                    when(signature.IsGeneric)
+                    {
+                        hasValidCallingConvention = true;
+                        firstByte |= (CallingConvention.Generic :> byte);
+                        writer.Write(firstByte);
+
+                        // Write the number of generic parameters
+                        integerWriter.WriteInteger(signature.GenericParameterCount, stream);
+                    }
+                }
+            }
+
+            when (!hasValidCallingConvention)
+            {
+                throw InvalidOperationException("You can't write a signature without specifying a calling convention. The calling convention must be Default, Generic, or VarArg.");
+            }  
+
+            // Write the number of parameters
+            def parameterCount = signature.ParameterCount;
+            integerWriter.WriteInteger(parameterCount, stream);
+
+            // Write the return type
+            def retTypeWriter = RetTypeWriter();
+            retTypeWriter.Write(signature.ReturnType, stream);
+
+            // Write the parameters            
+            WriteParameters(signature, stream);
+        }
+        protected virtual WriteParameters(signature : TSignature, stream : Stream) : void
+        {
+            def parameterCount = signature.ParameterCount;
+            def paramWriter = ParamWriter();
+            for(mutable i : uint = 0; i < parameterCount; i++)
+            {
+                def currentParam = signature.Parameters[i :> int];
+                paramWriter.Write(currentParam, stream);
+            }
+        }
+    }
+}
