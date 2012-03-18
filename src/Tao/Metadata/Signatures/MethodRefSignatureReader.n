@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-    public class MethodRefSignatureReader : MethodSignatureReader[MethodRefSignature]
+    public class MethodRefSignatureReader : ManagedMethodSignatureReader[MethodRefSignature]
     {
         protected override ReadParameters(parameterCount : uint, [NotNull] stream : Stream, signature : MethodRefSignature) : void
         {

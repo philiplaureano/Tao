@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-    public class MethodRefSignatureWriter : MethodSignatureWriter[MethodRefSignature]
+    public class MethodRefSignatureWriter : ManagedMethodSignatureWriter[MethodRefSignature]
     {
         protected override WriteParameters([NotNull] signature : MethodRefSignature, [NotNull] stream : Stream) : void
             requires Equals(signature.ParameterCount, ((signature.AdditionalParameters.Count + signature.Parameters.Count) :> uint))

@@ -1,0 +1,31 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public abstract class ManagedMethodSignatureWriter[TSignature] : MethodSignatureWriter[TSignature]
+    where TSignature : IManagedMethodSignature, new()
+    {
+        protected override HasAlternateCallingConvention(signature : TSignature) : bool
+        {
+            signature.IsGeneric;
+        }
+
+        protected override WriteAlternateCallingConvention(firstByte : byte, signature : TSignature, stream : Stream) : void
+        {
+            def integerWriter = CompressedIntegerWriter();
+            def conventionByte : byte = firstByte | (CallingConvention.Generic :> byte);
+            stream.WriteByte(conventionByte);
+
+            // Write the number of generic parameters
+            integerWriter.WriteInteger(signature.GenericParameterCount, stream);
+        }
+    }
+}

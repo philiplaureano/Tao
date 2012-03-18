@@ -1,0 +1,17 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public abstract class ManagedMethodSignature : MethodSignature, IManagedMethodSignature
+  {
+      public IsGeneric : bool { get;set; }
+      public GenericParameterCount : uint { get; set;  }
+  }
+}

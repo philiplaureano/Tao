@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class MethodRefSignature : MethodSignature
+  public class MethodRefSignature : ManagedMethodSignature
   {
       private _additionalParams : IList.[Param] = List();
       public AdditionalParameters : IList.[Param]

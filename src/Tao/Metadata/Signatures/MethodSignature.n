@@ -9,27 +9,26 @@ using System.Linq;
 
 namespace Tao
 {
-  public abstract class MethodSignature : IMethodSignature
-  {
-      public static Sentinel : byte = 0x41;
-      
-      private _params : IList.[Param] = List();
-      
-      public UsesDefaultCallingConvention : bool { get; set; }
-      public UsesVariableArguments : bool { get; set; }
-      public HasThis : bool { get;set; }
-      public HasExplicitThis : bool { get; set; }
-      public IsGeneric : bool { get;set; }
-      public GenericParameterCount : uint { get; set;  }
-      public ParameterCount : uint { get; set; }
-      public ReturnType : RetType { get; set; }
-      
-      public Parameters : IList.[Param]
-      {
-          get 
-          {
-              _params;
-          }
-      }
-  }
+    public abstract class MethodSignature : IMethodSignature
+    {
+        public static Sentinel : byte = 0x41;
+
+        private _params : IList.[Param] = List();
+
+        public HasThis : bool { get;set; }
+        public HasExplicitThis : bool { get; set; }
+        public UsesDefaultCallingConvention : bool { get; set; }
+        public UsesVariableArguments : bool { get; set; }
+
+        public ParameterCount : uint { get; set; }
+        public ReturnType : RetType { get; set; }
+
+        public Parameters : IList.[Param]
+        {
+            get 
+            {
+                _params;
+            }
+        }
+    }
 }

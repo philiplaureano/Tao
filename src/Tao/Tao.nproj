@@ -395,10 +395,22 @@
     <Compile Include="Metadata\Signatures\ElementType.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\IManagedMethodSignature.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\IMethodSignature.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\IMethodSignatureElement.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\ManagedMethodSignature.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\ManagedMethodSignatureReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\ManagedMethodSignatureWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\MethodDefSignature.n">
@@ -453,6 +465,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\RetTypeWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\StandAloneMethodSignature.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\StandAloneMethodSigReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\TypedByRefSignature.n">

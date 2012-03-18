@@ -20,7 +20,25 @@ namespace Tao
             ensures !ReferenceEquals(value, null)
         {
             def signature = TSignature();
+
+            ReadCallingConvention(signature, stream);
+
+            // Read the parameter count
+            def integerReader = CompressedIntegerReader();
+            def parameterCount = integerReader.ReadInteger(stream);
+            signature.ParameterCount = parameterCount;
+
+            def retTypeReader = RetTypeReader();
+            signature.ReturnType = retTypeReader.Read(stream);            
+
+            ReadParameters(parameterCount, stream, signature);
+
+            signature;
+        }
+        protected virtual ReadCallingConvention(signature : TSignature, stream : Stream) : void
+        {
             def reader = BinaryReader(stream);
+
             mutable nextByte = reader.ReadByte();                      
             def hasFlag(currentByte : byte, convention : CallingConvention) : bool
             {
@@ -42,38 +60,26 @@ namespace Tao
                 }                
             }
 
-            def integerReader = CompressedIntegerReader();
             if(hasFlag(nextByte, CallingConvention.VarArg))
             {
                 signature.UsesVariableArguments = true;
             }
             else 
             {
-                if(hasFlag(nextByte, CallingConvention.Generic))
+                if(HasAlternateCallingConvention(nextByte))
                 {
-                // Read the number of generic parameters as a compressed unsigned int                
-                    def genericParamCount = integerReader.ReadInteger(stream);
-
-                    signature.IsGeneric = true;
-                    signature.GenericParameterCount = genericParamCount;
+                    ReadAlternateCallingConvention(nextByte, signature, stream);
                 }
                 else
                 {
                     signature.UsesDefaultCallingConvention = true;    
                 }
             }
-            // Read the parameter count
-            def parameterCount = integerReader.ReadInteger(stream);
-            signature.ParameterCount = parameterCount;
-
-            def retTypeReader = RetTypeReader();
-            signature.ReturnType = retTypeReader.Read(stream);            
-
-            ReadParameters(parameterCount, stream, signature);
-
-            signature;
         }
 
+        protected abstract HasAlternateCallingConvention(nextByte : byte) : bool;       
+        protected abstract ReadAlternateCallingConvention(nextByte : byte, signature : TSignature,  stream : Stream) : void;
+        
         protected virtual ReadParameters(parameterCount : uint, [NotNull] stream : Stream, signature : TSignature) : void
             requires parameterCount == 0 || (parameterCount > 0 && stream.Position < stream.Length) otherwise throw InvalidOperationException("Unable to read past the end of the stream")
         {

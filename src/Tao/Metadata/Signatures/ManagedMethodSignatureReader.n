@@ -1,0 +1,37 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public abstract class ManagedMethodSignatureReader[TSignature] : MethodSignatureReader[TSignature]
+        where TSignature : IManagedMethodSignature, new()
+    {
+        protected override HasAlternateCallingConvention(nextByte : byte) : bool
+        {
+            def hasFlag(currentByte : byte, convention : CallingConvention) : bool
+            {
+                (currentByte & (convention :> byte)) != 0;
+            }
+
+            hasFlag(nextByte, CallingConvention.Generic);
+        }
+
+        protected override ReadAlternateCallingConvention(nextByte : byte, signature : TSignature,  stream : Stream) : void
+        {
+            def integerReader = CompressedIntegerReader();
+            // Read the number of generic parameters as a compressed unsigned int                
+            def genericParamCount = integerReader.ReadInteger(stream);
+
+            signature.IsGeneric = true;
+            signature.GenericParameterCount = genericParamCount;
+        }
+    }
+}

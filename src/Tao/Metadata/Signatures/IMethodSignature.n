@@ -11,15 +11,12 @@ namespace Tao
 {
     public interface IMethodSignature
     {
-        UsesDefaultCallingConvention : bool { get; set; }
-        UsesVariableArguments : bool { get; set; }
         HasThis : bool { get;set; }
         HasExplicitThis : bool { get; set; }
-        IsGeneric : bool { get;set; }
-        GenericParameterCount : uint { get; set;  }
-        ParameterCount : uint { get; set; }
+        UsesDefaultCallingConvention : bool { get; set; }
+        UsesVariableArguments : bool { get; set; }        
         ReturnType : RetType { get; set; }
-
+        ParameterCount : uint { get; set; }
         Parameters : IList.[Param]
         {
             get;

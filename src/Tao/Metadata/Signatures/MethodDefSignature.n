@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class MethodDefSignature : MethodSignature
+  public class MethodDefSignature : ManagedMethodSignature
   {            
   }
 }

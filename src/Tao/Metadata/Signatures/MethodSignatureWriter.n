@@ -12,7 +12,7 @@ using System.Linq;
 namespace Tao
 {
     public abstract class MethodSignatureWriter[TSignature] 
-    where TSignature : IMethodSignature, new()
+        where TSignature : IMethodSignature, new()
     {
         public virtual Write(signature : TSignature, [NotNull] stream : Stream) : void
             requires !ReferenceEquals(signature.ReturnType, null) otherwise throw ArgumentException("The signature must have a valid return type")            
@@ -35,7 +35,7 @@ namespace Tao
                 }
             }
 
-            def integerWriter = CompressedIntegerWriter();
+            
             mutable hasValidCallingConvention = false;
             if(signature.UsesDefaultCallingConvention)
             {
@@ -52,14 +52,10 @@ namespace Tao
                 }
                 else
                 {
-                    when(signature.IsGeneric)
-                    {
-                        hasValidCallingConvention = true;
-                        firstByte |= (CallingConvention.Generic :> byte);
-                        writer.Write(firstByte);
-
-                        // Write the number of generic parameters
-                        integerWriter.WriteInteger(signature.GenericParameterCount, stream);
+                    hasValidCallingConvention = HasAlternateCallingConvention(signature);
+                    when(hasValidCallingConvention)
+                    {                        
+                        WriteAlternateCallingConvention(firstByte, signature, stream);
                     }
                 }
             }
@@ -70,6 +66,7 @@ namespace Tao
             }  
 
             // Write the number of parameters
+            def integerWriter = CompressedIntegerWriter();
             def parameterCount = signature.ParameterCount;
             integerWriter.WriteInteger(parameterCount, stream);
 
@@ -80,6 +77,10 @@ namespace Tao
             // Write the parameters            
             WriteParameters(signature, stream);
         }
+
+        protected abstract HasAlternateCallingConvention(signature : TSignature) : bool;        
+        protected abstract WriteAlternateCallingConvention(firstByte : byte, signature : TSignature, stream : Stream) : void;
+        
         protected virtual WriteParameters(signature : TSignature, stream : Stream) : void
         {
             def parameterCount = signature.ParameterCount;
