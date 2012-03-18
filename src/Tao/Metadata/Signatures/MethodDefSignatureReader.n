@@ -25,7 +25,7 @@ namespace Tao
             {
                 (currentByte & (convention :> byte)) != 0;
             }
-            
+
             when(hasFlag(nextByte, CallingConvention.ExplicitThis) && !hasFlag(nextByte, CallingConvention.HasThis))
             {
                 throw BadImageFormatException("You can't declare a method as ExplicitThis without first setting the HasThis flag");
@@ -40,12 +40,13 @@ namespace Tao
                     signature.HasExplicitThis = true;                    
                 }                
             }
-                        
+
             def integerReader = CompressedIntegerReader();
             if(hasFlag(nextByte, CallingConvention.VarArg))
             {
                 signature.UsesVariableArguments = true;
             }
+            
             else if(hasFlag(nextByte, CallingConvention.Generic))
             {
                 // Read the number of generic parameters as a compressed unsigned int                
@@ -64,17 +65,27 @@ namespace Tao
             signature.ParameterCount = parameterCount;
 
             def retTypeReader = RetTypeReader();
-            signature.ReturnType = retTypeReader.Read(stream);
+            signature.ReturnType = retTypeReader.Read(stream);            
 
-            // TODO: If the Signature is VarArgs and is a MethodRefSig, watch out for the Sentinel byte
-            def paramReader = ParamReader();
-            for(mutable i : uint = 0; i < parameterCount; i++)
-            {
-                def currentParam = paramReader.Read(stream);
-                signature.Parameters.Add(currentParam);
-            }
-            
+            ReadParameters(parameterCount, stream, signature);
+
             signature;
+        }
+        private ReadParameters(parameterCount : uint, [NotNull] stream : Stream, signature : MethodDefSignature) : void
+            requires parameterCount == 0 || (parameterCount > 0 && stream.Position < stream.Length) otherwise throw InvalidOperationException("Unable to read past the end of the stream")
+        {
+            // TODO: If the Signature is VarArgs and is a MethodRefSig, watch out for the Sentinel byte
+            for(mutable i : uint = 0; i < parameterCount; i++)
+            {                
+                ReadParameter(i, signature, stream);
+            }
+        }
+        protected virtual ReadParameter(index : uint, signature: MethodDefSignature, stream : Stream) : void
+        {
+            def paramReader = ParamReader();
+
+            def currentParam = paramReader.Read(stream);
+            signature.Parameters.Add(currentParam);
         }
     }
 }
