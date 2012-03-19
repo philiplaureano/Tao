@@ -283,8 +283,29 @@ namespace Tests
             methodSignature.HasThis.ShouldBeFalse("HasThis should be false");
             methodSignature.HasExplicitThis.ShouldBeFalse("HasExplicitThis should be false");
         }
-        public stub ShouldBeAbleToWriteFunctionPointerSignatureAsTypeSignature() : void
+        public ShouldBeAbleToWriteFunctionPointerSignatureAsTypeSignature() : void
         {
+            def signatureBytes = CreateSignatureBytes(array[Default], 0, ElementType.Void);
+            
+            // The expected type signature should look like: FNPTR DEFAULT (zero parameters) VOID
+            def expectedStream = MemoryStream();
+            def writer = BinaryWriter(expectedStream);
+            writer.Write(ElementType.FnPtr :> byte);
+            writer.Write(signatureBytes);
+            
+            expectedStream.Seek(0);
+            
+            def methodSignature = MethodDefSignature();
+            methodSignature.ReturnType = RetType(VoidSignature.Instance);
+            methodSignature.UsesDefaultCallingConvention = true;
+            
+            def typeSignature = MethodDefFunctionPointerSignature();
+            typeSignature.MethodSignature = methodSignature;
+            
+            def outputStream = MemoryStream();
+            typeSignature.Write(outputStream);
+            
+            outputStream.ShouldMatch(expectedStream);
         }
         private CreateGenericSignatureBytes(conventions: IEnumerable.[CallingConvention], genericParameterCount : uint, parameterCount : uint, returnType : ElementType) : array[byte]
         {

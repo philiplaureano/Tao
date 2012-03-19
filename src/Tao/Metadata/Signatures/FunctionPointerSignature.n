@@ -21,6 +21,8 @@ namespace Tao
         {
             _reader = reader;
             _writer = writer;
+            
+            ElementType = ElementType.FnPtr;
         }
         
         public MethodSignature : TSignature { get; set; }
