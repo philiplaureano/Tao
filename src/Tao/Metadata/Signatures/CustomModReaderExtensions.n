@@ -1,0 +1,43 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public static class CustomModReaderExtensions
+    {
+        public static ReadCustomMods([NotNull] this modReader : CustomModReader, [NotNull] stream : Stream) : IList.[CustomMod]
+        {
+            def reader = BinaryReader(stream);
+            def customMods : IList.[CustomMod] = List();
+            
+            // Peek at the next byte
+            mutable nextByte = reader.PeekByte();            
+            def isCustomMod(currentByte : byte) : bool
+            {
+                currentByte == (ElementType.CMOD_OPT :> byte) || currentByte == (ElementType.CMOD_REQD :> byte);
+            };
+
+            def endPosition = stream.Length;
+            while(stream.Position < endPosition && isCustomMod(nextByte))
+            {
+                def mod = modReader.Read(stream);
+                customMods.Add(mod);
+
+                when(stream.Position < endPosition)
+                {
+                    nextByte = reader.PeekByte();
+                }
+            }
+            
+            customMods;
+        }
+    }
+}

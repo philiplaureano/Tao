@@ -27,7 +27,6 @@ namespace Tao
                 currentByte == (ElementType.CMOD_OPT :> byte) || currentByte == (ElementType.CMOD_REQD :> byte);
             };
 
-
             def endPosition = stream.Length;
             while(stream.Position < endPosition && isCustomMod(nextByte))
             {

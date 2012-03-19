@@ -389,6 +389,9 @@
     <Compile Include="Metadata\Signatures\CustomModReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\CustomModReaderExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\CustomModWriter.n">
       <SubType>Code</SubType>
     </Compile>
