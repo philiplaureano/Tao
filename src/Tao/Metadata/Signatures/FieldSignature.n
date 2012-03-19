@@ -20,6 +20,6 @@ namespace Tao
           }
       }
       
-      public FieldType : TypeSignature { get; set; }
+      public FieldType : ITypeSignature { get; set; }
   }
 }

@@ -15,7 +15,7 @@ namespace Tao
       private _customMods : IList.[CustomMod] = List();
       
       public IsByRef : bool { get; set; }
-      public Type : TypeSignature { get; set; }
+      public Type : ITypeSignature { get; set; }
       
       public IsTypedByRef : bool 
       { 

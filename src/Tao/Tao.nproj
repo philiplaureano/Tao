@@ -407,6 +407,9 @@
     <Compile Include="Metadata\Signatures\FieldSignatureWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\FunctionPointerSignature.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\IManagedMethodSignature.n">
       <SubType>Code</SubType>
     </Compile>
@@ -414,6 +417,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\IMethodSignatureElement.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\IMethodSignatureReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\IMethodSignatureWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\ITypeSignature.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\ManagedMethodSignature.n">
@@ -425,6 +437,9 @@
     <Compile Include="Metadata\Signatures\ManagedMethodSignatureWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\MethodDefFunctionPointerSignature.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\MethodDefSignature.n">
       <SubType>Code</SubType>
     </Compile>
@@ -432,6 +447,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\MethodDefSignatureWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\MethodRefFunctionPointerSignature.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\MethodRefSignature.n">

@@ -13,7 +13,7 @@ namespace Tao
 {
   public class ParamWriter : MethodSignatureElementWriter[Param]
   {
-      protected override SupportsWriting([NotNull] type : TypeSignature) : bool
+      protected override SupportsWriting([NotNull] type : ITypeSignature) : bool
       {
           // Void parameters are not supported
           def elementType = type.ElementType;

@@ -22,9 +22,13 @@ namespace Tao
             _factories.Add(IsElement(ElementType.Class), () => TypeDefOrRefEncodedSignature());
             _factories.Add(IsElement(ElementType.TypedByRef), () => TypedByRefSignature.Instance);
             _factories.Add(IsElement(ElementType.Void), ()=> VoidSignature.Instance);
+            
+            // There's currently no way to discern MethodDef function pointers from MethodRef function pointers, 
+            // so assume MethodDef usage by default
+            _factories.Add(IsElement(ElementType.FnPtr), () => MethodDefFunctionPointerSignature());
         }
 
-        public static ReadFrom([NotNull] stream : Stream) : TypeSignature
+        public static ReadFrom([NotNull] stream : Stream) : ITypeSignature
             requires stream.Length > 0
         {       
             // Peak at the element type

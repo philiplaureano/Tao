@@ -9,14 +9,11 @@ using System.Linq;
 
 namespace Tao
 {
-  public class RetType : MethodSignatureElement
+  public class MethodDefFunctionPointerSignature : FunctionPointerSignature[MethodDefSignature]
   {
       public this() 
       {
-      }
-      public this(returnType : ITypeSignature)
-      {
-          Type = returnType;
+          base(MethodDefSignatureReader(), MethodDefSignatureWriter());
       }
   }
 }

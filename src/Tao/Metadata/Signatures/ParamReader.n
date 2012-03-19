@@ -13,7 +13,7 @@ namespace Tao
 {
     public class ParamReader : MethodSignatureElementReader[Param]
     {
-        protected override SupportsReading([NotNull] type : TypeSignature) : bool
+        protected override SupportsReading([NotNull] type : ITypeSignature) : bool
         {
             // Void types are not supported in Param reads
             type.ElementType != ElementType.Void;

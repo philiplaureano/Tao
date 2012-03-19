@@ -1,0 +1,48 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public abstract class FunctionPointerSignature[TSignature] : TypeSignature
+        where TSignature : IManagedMethodSignature, class
+    {
+        private _reader : IMethodSignatureReader.[TSignature];
+        private _writer : IMethodSignatureWriter.[TSignature];
+        
+        public this(reader : IMethodSignatureReader.[TSignature], writer : IMethodSignatureWriter.[TSignature])
+        {
+            _reader = reader;
+            _writer = writer;
+        }
+        
+        public MethodSignature : TSignature { get; set; }
+        
+        protected override SupportsElement(elementType : ElementType) : bool
+        {
+            elementType == ElementType.FnPtr;
+        }
+
+        protected override Read(elementType : ElementType, [NotNull] stream : Stream) : void
+            requires stream.CanRead
+            requires elementType == ElementType.FnPtr
+        {            
+            MethodSignature = _reader.Read(stream);            
+        }
+        
+        protected override Write(elementType : ElementType, [NotNull] stream : Stream) : void
+            requires MethodSignature != null
+            requires stream.CanWrite 
+            requires elementType == ElementType.FnPtr
+        {
+            _writer.Write(MethodSignature, stream);
+        }
+    }
+}

@@ -4,19 +4,15 @@ using Nemerle.Text;
 using Nemerle.Utility;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Tao
-{  
-  public class Param : MethodSignatureElement
-  {      
-    public this()
+{
+    public interface IMethodSignatureReader[TSignature]
+        where TSignature : IMethodSignature
     {
+        Read(stream : Stream) : TSignature;
     }
-    public this(parameterType : ITypeSignature)
-    {
-        Type = parameterType;
-    }
-  }
 }

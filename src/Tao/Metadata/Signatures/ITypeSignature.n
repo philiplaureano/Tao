@@ -4,19 +4,16 @@ using Nemerle.Text;
 using Nemerle.Utility;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Tao
 {
-  public class RetType : MethodSignatureElement
+  public interface ITypeSignature
   {
-      public this() 
-      {
-      }
-      public this(returnType : ITypeSignature)
-      {
-          Type = returnType;
-      }
+      ElementType : ElementType { get; set; }
+      Read(stream : Stream) : void;
+      Write(stream : Stream) : void;
   }
 }

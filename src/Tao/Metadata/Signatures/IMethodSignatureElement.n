@@ -14,7 +14,7 @@ namespace Tao
   public interface IMethodSignatureElement
   {
       IsByRef : bool { get; set;}
-      Type : TypeSignature { get; set; }
+      Type : ITypeSignature { get; set; }
       IsTypedByRef : bool { get; }
       CustomMods : IList.[CustomMod] 
       {

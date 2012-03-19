@@ -262,6 +262,30 @@ namespace Tests
             writtenSignature.ParameterCount.ShouldBeEqualTo(2, "Wrong Parameter Count");
         }
                
+        public ShouldBeAbleToReadFunctionPointerSignatureAsTypeSignature() : void
+        {
+            def signatureBytes = CreateSignatureBytes(array[Default], 0, ElementType.Void);
+            
+            // The sample type signature will look like: FNPTR DEFAULT (zero parameters) VOID
+            def inputStream = MemoryStream();
+            def writer = BinaryWriter(inputStream);
+            writer.Write(ElementType.FnPtr :> byte);
+            writer.Write(signatureBytes);
+            
+            inputStream.Seek(0);
+            
+            def typeSignature = TypeSignature.ReadFrom(inputStream).As.[MethodDefFunctionPointerSignature]();
+            typeSignature.ShouldBeNotNull("Invalid Type Signature");
+            
+            def methodSignature = typeSignature.MethodSignature;
+            
+            methodSignature.UsesDefaultCallingConvention.ShouldBeTrue("UsesDefaultCallingConvention should be true");
+            methodSignature.HasThis.ShouldBeFalse("HasThis should be false");
+            methodSignature.HasExplicitThis.ShouldBeFalse("HasExplicitThis should be false");
+        }
+        public stub ShouldBeAbleToWriteFunctionPointerSignatureAsTypeSignature() : void
+        {
+        }
         private CreateGenericSignatureBytes(conventions: IEnumerable.[CallingConvention], genericParameterCount : uint, parameterCount : uint, returnType : ElementType) : array[byte]
         {
             def stream = MemoryStream();

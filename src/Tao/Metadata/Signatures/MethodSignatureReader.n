@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-    public abstract class MethodSignatureReader[TSignature]
+    public abstract class MethodSignatureReader[TSignature] : IMethodSignatureReader[TSignature]
         where TSignature : IMethodSignature, new()
     {
         public Read([NotNull] stream : Stream) : TSignature

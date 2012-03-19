@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-    public partial class TypeSignature
+    public partial class TypeSignature : ITypeSignature
     {
         public this() 
         {

@@ -42,7 +42,7 @@ namespace Tao
           writer.Write(elementType.ElementType :> byte);
       }
       
-      protected virtual SupportsWriting([NotNull] type : TypeSignature) : bool
+      protected virtual SupportsWriting([NotNull] type : ITypeSignature) : bool
       {
           true;
       }

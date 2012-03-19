@@ -65,7 +65,7 @@ namespace Tao
             param;
         }        
 
-        protected virtual SupportsReading([NotNull] type : TypeSignature) : bool
+        protected virtual SupportsReading([NotNull] type : ITypeSignature) : bool
         {
             true;
         }

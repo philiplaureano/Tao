@@ -17,7 +17,7 @@ namespace Tao
       {
           ElementType = ElementType.Array;
       }
-      public ArrayType : TypeSignature { get; set; }
+      public ArrayType : ITypeSignature { get; set; }
       public Shape : ArrayShape {get; set; }      
       
       protected override Read(elementType : ElementType, [NotNull] stream : Stream) : void

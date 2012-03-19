@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-    public abstract class MethodSignatureWriter[TSignature] 
+    public abstract class MethodSignatureWriter[TSignature] : IMethodSignatureWriter[TSignature]
         where TSignature : IMethodSignature, new()
     {
         public virtual Write(signature : TSignature, [NotNull] stream : Stream) : void
