@@ -398,6 +398,15 @@
     <Compile Include="Metadata\Signatures\ElementType.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\FieldSignature.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\FieldSignatureReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\FieldSignatureWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\IManagedMethodSignature.n">
       <SubType>Code</SubType>
     </Compile>

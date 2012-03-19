@@ -1,0 +1,42 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class FieldSignatureReader
+  {      
+      public Read([NotNull] stream : Stream) : FieldSignature
+        requires stream.Length > 0
+        ensures value != null
+      {
+          // Search for the field marker
+          def FIELD = 0x6 : byte;          
+          def firstByte = stream.ReadByte();
+          when(firstByte != FIELD)
+          {
+              throw BadImageFormatException("Invalid Field Signature");
+          }
+          
+          // Read the custom mods
+          def modReader = CustomModReader();
+          def signature = FieldSignature();
+          def mods = modReader.ReadCustomMods(stream);          
+          foreach(mod in mods)
+          {
+              signature.CustomMods.Add(mod);
+          }
+          
+          // Determine the field type
+          signature.FieldType = TypeSignature.ReadFrom(stream);          
+          signature;
+      }
+  }
+}

@@ -1,0 +1,38 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class FieldSignatureWriter
+  {
+      public Write([NotNull] field : FieldSignature, [NotNull] stream : Stream) : void
+        requires stream.CanWrite
+        requires field.FieldType != null
+      {
+          // Write the field marker
+          def FIELD = 0x6 : byte;  
+       
+          def writer = BinaryWriter(stream);
+          writer.Write(FIELD : byte);
+          
+          // Write the custom mods
+          def modWriter = CustomModWriter();
+          foreach(mod in field.CustomMods)
+          {
+              modWriter.Write(mod, stream);
+          }
+          
+          // Write the target type
+          def fieldType = field.FieldType;
+          fieldType.Write(stream);
+      }
+  }
+}

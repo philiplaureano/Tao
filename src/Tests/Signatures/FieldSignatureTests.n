@@ -1,0 +1,92 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+
+namespace Tests
+{
+    public class FieldSignatureTests
+    {
+        public ShouldBeAbleToReadFieldSignatureWithCustomMods() : void
+        {
+            def inputStream = MemoryStream(GetSampleBytes());
+            def reader = FieldSignatureReader();
+            def field = reader.Read(inputStream);
+
+            def mods = field.CustomMods;
+            mods.Count.ShouldBeEqualTo(2, "Wrong number of custom mods");
+
+            def firstMod = mods[0];
+            firstMod.IsRequired.ShouldBeTrue("IsRequired should be true");
+            firstMod.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong TableId");
+            firstMod.Row.ShouldBeEqualTo(0x12, "Wrong Row");
+
+            def secondMod = mods[1];
+            secondMod.IsRequired.ShouldBeFalse("IsRequired should be false");
+            secondMod.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong TableId");
+            secondMod.Row.ShouldBeEqualTo(0x12, "Wrong Row");
+
+            field.FieldType.ElementType.ShouldBeEqualTo(ElementType.I8, "Wrong Element Type");
+        }
+        public ShouldBeAbleToWriteFieldSignatureWithCustomMods() : void
+        {
+            def expectedBytes = GetSampleBytes();
+            def outputStream = MemoryStream();
+
+            def field = FieldSignature();
+
+            def firstMod = CustomMod();
+            firstMod.TableId = TableId.TypeRef;
+            firstMod.Row = 0x12;
+            firstMod.IsRequired = true;
+
+            def secondMod = CustomMod();
+            secondMod.TableId = TableId.TypeRef;
+            secondMod.Row = 0x12;
+
+            field.CustomMods.Add(firstMod);
+            field.CustomMods.Add(secondMod);
+
+            field.FieldType = TypeSignature(ElementType.I8);
+
+            def writer = FieldSignatureWriter();
+            writer.Write(field, outputStream);
+
+            outputStream.ShouldMatch(expectedBytes);
+        }
+        public ShouldThrowExceptionIfFieldByteIsNotFound() : void
+            expects BadImageFormatException
+        {
+            def bytes = array[1 : byte, 2, 3, 4, 5];
+
+            def inputStream = MemoryStream(bytes);
+            def reader = FieldSignatureReader();
+            def field = reader.Read(inputStream);
+        }
+
+        private GetSampleBytes() : array[byte]
+        {
+            def fieldConstant = 0x6 : byte;
+            def firstModBytes = array[ElementType.CMOD_REQD :> byte, 0x49 : byte];
+            def secondModBytes = array[ElementType.CMOD_OPT :> byte, 0x49 : byte];                                    
+
+            // The sample stream will look like: FIELD CUSTOMMOD1 CUSTOMMOD2 I8
+            def bytes = List.[byte]();
+
+            bytes.Add(fieldConstant);
+            bytes.AddRange(firstModBytes);
+            bytes.AddRange(secondModBytes);
+            bytes.Add(ElementType.I8 :> byte);
+
+            bytes.ToArray();
+        }
+    }
+}
