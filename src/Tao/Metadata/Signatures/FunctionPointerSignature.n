@@ -34,7 +34,7 @@ namespace Tao
 
         protected override Read(elementType : ElementType, [NotNull] stream : Stream) : void
             requires stream.CanRead
-            requires elementType == ElementType.FnPtr
+            requires elementType == ElementType.FnPtr otherwise throw ArgumentException("elementType", "ElementType.FnPtr expected")
         {            
             MethodSignature = _reader.Read(stream);            
         }
@@ -42,7 +42,7 @@ namespace Tao
         protected override Write(elementType : ElementType, [NotNull] stream : Stream) : void
             requires MethodSignature != null
             requires stream.CanWrite 
-            requires elementType == ElementType.FnPtr
+            requires elementType == ElementType.FnPtr otherwise throw ArgumentException("elementType", "ElementType.FnPtr expected")
         {
             _writer.Write(MethodSignature, stream);
         }
