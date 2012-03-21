@@ -219,6 +219,9 @@
     <Compile Include="Signatures\FieldSignatureTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Signatures\GenericInstanceTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Signatures\MethodDefSignatureTests.n">
       <SubType>Code</SubType>
     </Compile>

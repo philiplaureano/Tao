@@ -1,0 +1,96 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class GenericTypeInstance : TypeSignature
+    {
+        private _genericArguments : IList.[ITypeSignature] = List();
+        private mutable _tableId : TableId;        
+        
+        public IsClass : bool { get; set; }
+        public IsValueType : bool { get; set; }
+        public TableId : TableId
+        {
+            get
+            {
+                _tableId;
+            }
+            set
+                requires (value == TableId.TypeRef || value == TableId.TypeDef)
+                    otherwise throw ArgumentException("Generic type signatures can only reference the TypeRef or TypeDef tables")
+            {
+                _tableId = value;
+            }
+        }
+        
+        public Row : uint
+        {
+            get;set;
+        }
+        
+        public TypeArguments : IList.[ITypeSignature]
+        {
+            get
+            {
+                _genericArguments;
+            }
+        }
+        protected override SupportsElement(elementType : ElementType) : bool
+        {
+            elementType == ElementType.GenericInst;
+        }
+        protected override Read(elementType : ElementType, [NotNull] stream : Stream) : void
+        {
+            def genericType = stream.ReadByte() :> ElementType;
+            when(genericType != ElementType.Class && genericType != ElementType.ValueType)
+            {
+                throw BadImageFormatException("Invalid Generic Type Signature. Expected: ElementType.Class or ElementType.ValueType");
+            }
+            
+            when(genericType == ElementType.Class)
+            {
+                IsClass = true;
+            }
+            
+            when(genericType == ElementType.ValueType)
+            {
+                IsValueType = true;
+            }
+            
+            def reader = BinaryReader(stream);
+            def codedToken = reader.ReadInt32();
+            
+            // Read the table reference
+            def tableDecoder = TableReferenceDecoder();
+            def tableReference = tableDecoder.GetTableReference(CodedTokenType.TypeDefOrTypeRef, codedToken);
+            
+            TableId = tableReference[0];
+            Row = tableReference[1] :> uint;
+            
+            // Read the number of generic type parameters
+            def integerReader = CompressedIntegerReader();
+            def argumentCount = integerReader.ReadInteger(stream);
+            
+            // Read the type arguments
+            for(mutable i : uint = 0; i < argumentCount; i++)
+            {
+                def currentType = TypeSignature.ReadFrom(stream);
+                TypeArguments.Add(currentType);
+            }
+        }
+        protected override Write(elementType : ElementType, [NotNull] stream : Stream) : void
+            requires elementType == ElementType.GenericInst
+        {
+            throw NotImplementedException();
+        }
+    }
+}

@@ -9,21 +9,52 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao;
+
 namespace Tests
 {
     public class GenericInstanceTests
     {
-        public stub ShouldReadGenericClassInstanceType() : void
+        public ShouldReadGenericClassInstanceType() : void
         {
+            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
+            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
+
+            signature.IsClass.ShouldBeTrue("This type should be a class");
+            signature.IsValueType.ShouldBeFalse("This type should not be a value type");                                    
         }
-        public stub ShouldReadGenericValueType() : void
+        public ShouldReadGenericValueType() : void
         {
+            def inputStream = MemoryStream(CreateSampleBytes(ElementType.ValueType));
+            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
+
+            signature.IsClass.ShouldBeFalse("This type should not be a class type");
+            signature.IsValueType.ShouldBeTrue("This type should be a value type");            
         }
-        public stub ShouldReadGenericArgCount() : void
+        public ShouldReadGenericArgCount() : void
         {
+            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
+            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
+            signature.TypeArguments.Count.ShouldBeEqualTo(1, "Wrong Argument Count");
         }
-        public stub ShouldReadGenericArguments() : void
+        public ShouldReadGenericArguments() : void
         {
+            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
+            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
+            signature.TypeArguments.Count.ShouldBeEqualTo(1, "Wrong Argument Count");
+            signature.TypeArguments[0].ElementType.ShouldBeEqualTo(ElementType.I4, "Wrong Element Type");
+        }
+        public ShouldReadTableId() : void
+        {
+            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
+            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
+            signature.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong TableId");
+        }
+        public ShouldReadRow() : void
+        {
+            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
+            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
+            signature.Row.ShouldBeEqualTo(12, "Wrong Row"); 
         }
         public stub ShouldWriteGenericClassInstanceType() : void
         {
@@ -36,6 +67,64 @@ namespace Tests
         }
         public stub ShouldWriteGenericArguments() : void
         {
+        }
+        public stub ShouldWriteRow() : void
+        {
+        }
+        public stub ShouldWriteTableId() : void
+        {
+        }
+        private CreateSampleBytes(type : ElementType) : array[byte]
+        {
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+
+            // Write the GENERICINST marker
+            writer.Write(ElementType.GenericInst :> byte);
+
+            // Write the CLASS marker
+            writer.Write(type :> byte);
+
+            def encoder = CodedTokenEncoder();
+            def codedToken = encoder.Encode(CodedTokenType.TypeDefOrTypeRef, TableId.TypeRef, 12);
+
+            // Write the token
+            writer.Write(codedToken : uint);
+
+            // Write the generic argument count 
+            def integerWriter = CompressedIntegerWriter();
+            integerWriter.WriteInteger(1, stream);
+
+            // Write the generic argument(s)
+            writer.Write(ElementType.I4 :> byte);
+
+            stream.ToArray();
+        }
+        private CreateSampleBytesForGenericClassType() : array[byte]
+        {
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+
+            // Write the GENERICINST marker
+            writer.Write(ElementType.GenericInst :> byte);
+
+            // Write the CLASS marker
+            writer.Write(ElementType.Class :> byte);
+
+            def encoder = CodedTokenEncoder();
+            def codedToken = encoder.Encode(CodedTokenType.TypeDefOrTypeRef, TableId.TypeRef, 12);
+
+            // Write the token
+            writer.Write(codedToken : uint);
+
+            // Write the generic argument count 
+            def integerWriter = CompressedIntegerWriter();
+            integerWriter.WriteInteger(1, stream);
+
+            // Write the generic argument(s)
+            writer.Write(ElementType.I4 :> byte);
+
+            stream.ToArray();
         }
     }
 }

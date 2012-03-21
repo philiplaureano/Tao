@@ -410,6 +410,9 @@
     <Compile Include="Metadata\Signatures\FunctionPointerSignature.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\GenericTypeInstance.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\IManagedMethodSignature.n">
       <SubType>Code</SubType>
     </Compile>

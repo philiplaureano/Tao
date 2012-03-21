@@ -26,6 +26,7 @@ namespace Tao
             // There's currently no way to discern MethodDef function pointers from MethodRef function pointers, 
             // so assume MethodDef usage by default
             _factories.Add(IsElement(ElementType.FnPtr), () => MethodDefFunctionPointerSignature());
+            _factories.Add(IsElement(ElementType.GenericInst), () => GenericTypeInstance());
         }
 
         public static ReadFrom([NotNull] stream : Stream) : ITypeSignature
