@@ -15,6 +15,14 @@ namespace Tests
 {
     public class GenericInstanceTests
     {
+        public ShouldOnlyAllowGenericTypeInstanceClassToBeAReferenceTypeOrValueType() : void
+            expects InvalidOperationException
+        {
+            def signature = GenericTypeInstance();
+            signature.IsValueType = true;
+            signature.IsClass = true;
+        }
+
         public ShouldReadGenericClassInstanceType() : void
         {
             def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
@@ -56,23 +64,90 @@ namespace Tests
             def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
             signature.Row.ShouldBeEqualTo(12, "Wrong Row"); 
         }
-        public stub ShouldWriteGenericClassInstanceType() : void
+        public ShouldWriteGenericClassInstanceType() : void
         {
+            def expectedBytes = CreateSampleBytesForGenericClassType();
+
+            def signature = GenericTypeInstance();
+            signature.TableId = TableId.TypeRef;
+            signature.Row = 12;
+
+            signature.TypeArguments.Add(TypeSignature(ElementType.I4));
+            signature.IsClass = true;
+
+            def outputStream = MemoryStream();
+            signature.Write(outputStream);
+            outputStream.ShouldMatch(expectedBytes);
         }
-        public stub ShouldWriteGenericValueType() : void
+
+        public ShouldWriteGenericValueType() : void
         {
+            def doTest(actualSignature : GenericTypeInstance) : void
+            {
+                actualSignature.IsClass.ShouldBeFalse("This type should not be a class type");
+                actualSignature.IsValueType.ShouldBeTrue("This type should be a value type"); 
+            }
+
+            TestWrite(doTest);
         }
-        public stub ShouldWriteGenericArgCount() : void
+        public ShouldWriteGenericArgCount() : void
         {
+            def doTest(actualSignature : GenericTypeInstance) : void
+            {
+                actualSignature.TypeArguments.Count.ShouldBeEqualTo(1, "Wrong number of type arguments");
+            }
+
+            TestWrite(doTest);
         }
-        public stub ShouldWriteGenericArguments() : void
+        public ShouldWriteGenericArguments() : void
         {
+            def doTest(actualSignature : GenericTypeInstance) : void
+            {
+                actualSignature.TypeArguments[0].ElementType.ShouldBeEqualTo(ElementType.I4, "Wrong Argument Type");
+            }
+
+            TestWrite(doTest);
         }
-        public stub ShouldWriteRow() : void
-        {
+        public ShouldWriteRow() : void
+        {            
+            def doTest(actualSignature : GenericTypeInstance) : void
+            {
+                actualSignature.Row.ShouldBeEqualTo(12, "Wrong Row");
+            }
+
+            TestWrite(doTest);
         }
-        public stub ShouldWriteTableId() : void
+        public ShouldWriteTableId() : void
         {
+            def doTest(actualSignature : GenericTypeInstance) : void
+            {
+                actualSignature.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong TableId");
+            }
+
+            TestWrite(doTest);
+        }
+
+        private TestWrite(doTest : GenericTypeInstance -> void) : void
+        {
+            def expectedStream = MemoryStream(CreateSampleBytes(ElementType.ValueType));
+            def outputStream = MemoryStream();
+
+            def sampleSignature = GenericTypeInstance();
+            sampleSignature.TableId = TableId.TypeRef;
+            sampleSignature.Row = 12;
+            sampleSignature.IsValueType = true;
+            sampleSignature.TypeArguments.Add(TypeSignature(ElementType.I4));
+            
+            sampleSignature.Write(outputStream);
+            
+            outputStream.Seek(0);
+
+            def actualSignature = TypeSignature.ReadFrom(outputStream).As.[GenericTypeInstance]();
+            
+            
+            doTest(actualSignature);
+
+            expectedStream.ShouldMatch(outputStream);
         }
         private CreateSampleBytes(type : ElementType) : array[byte]
         {

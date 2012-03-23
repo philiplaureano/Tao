@@ -15,28 +15,61 @@ namespace Tao
     {
         private _genericArguments : IList.[ITypeSignature] = List();
         private mutable _tableId : TableId;        
-        
-        public IsClass : bool { get; set; }
-        public IsValueType : bool { get; set; }
+        private mutable _isClass : bool;
+        private mutable _isValueType : bool;
+
+        public this()
+        {
+            ElementType = ElementType.GenericInst;
+        }
+
+        public IsClass : bool 
+        { 
+            get
+            {
+                _isClass;
+            }
+            set
+            requires value == false || (IsValueType == false) otherwise throw
+                    InvalidOperationException("This generic type is already set as a ValueType and cannot be set as a value type unless you set IsValueType = false")
+            {
+                _isClass = value;
+            }
+        }
+
+        public IsValueType : bool 
+        { 
+            get
+            {
+                _isValueType;
+            }
+            set
+                requires value == false || (IsClass == false) otherwise throw
+                    InvalidOperationException("This generic type is already set as a class and cannot be set as a value type unless you set IsClass = false")
+            {
+                _isValueType = value;
+            }
+        }
+
         public TableId : TableId
         {
             get
             {
                 _tableId;
             }
-            set
+            set            
                 requires (value == TableId.TypeRef || value == TableId.TypeDef)
                     otherwise throw ArgumentException("Generic type signatures can only reference the TypeRef or TypeDef tables")
             {
                 _tableId = value;
             }
         }
-        
+
         public Row : uint
         {
             get;set;
         }
-        
+
         public TypeArguments : IList.[ITypeSignature]
         {
             get
@@ -49,37 +82,38 @@ namespace Tao
             elementType == ElementType.GenericInst;
         }
         protected override Read(elementType : ElementType, [NotNull] stream : Stream) : void
+            requires elementType == ElementType.GenericInst
         {
             def genericType = stream.ReadByte() :> ElementType;
             when(genericType != ElementType.Class && genericType != ElementType.ValueType)
             {
                 throw BadImageFormatException("Invalid Generic Type Signature. Expected: ElementType.Class or ElementType.ValueType");
             }
-            
+
             when(genericType == ElementType.Class)
             {
                 IsClass = true;
             }
-            
+
             when(genericType == ElementType.ValueType)
             {
                 IsValueType = true;
             }
-            
+            // Read the row and tableId
             def reader = BinaryReader(stream);
             def codedToken = reader.ReadInt32();
-            
+
             // Read the table reference
             def tableDecoder = TableReferenceDecoder();
             def tableReference = tableDecoder.GetTableReference(CodedTokenType.TypeDefOrTypeRef, codedToken);
-            
+
             TableId = tableReference[0];
             Row = tableReference[1] :> uint;
-            
+
             // Read the number of generic type parameters
             def integerReader = CompressedIntegerReader();
             def argumentCount = integerReader.ReadInteger(stream);
-            
+
             // Read the type arguments
             for(mutable i : uint = 0; i < argumentCount; i++)
             {
@@ -89,8 +123,36 @@ namespace Tao
         }
         protected override Write(elementType : ElementType, [NotNull] stream : Stream) : void
             requires elementType == ElementType.GenericInst
+            requires IsClass || IsValueType otherwise throw InvalidOperationException("The generic signature must be marked as either as a class or as a value type")
+            requires (IsClass ^ IsValueType) otherwise throw InvalidOperationException("The generic signature must be marked exclusively as either as a class or as a value type")
+            requires TableId == TableId.TypeRef || TableId == TableId.TypeDef otherwise throw InvalidOperationException("The table this type must be pointing to should be either the TypeDef or TypeRef table")
+            requires Row > 0 otherwise throw InvalidOperationException("You can't write a generic type signature that points to row 0")
         {
-            throw NotImplementedException();
+            def writer = BinaryWriter(stream);
+            when(IsClass)
+            {
+                writer.Write(ElementType.Class :> byte);
+            }
+
+            when(IsValueType)
+            {
+                writer.Write(ElementType.ValueType :> byte);
+            }
+
+            // Write the row and tableId
+            def encoder = CodedTokenEncoder();
+            def codedToken = encoder.Encode(CodedTokenType.TypeDefOrTypeRef, TableId, Row);
+            writer.Write(codedToken);
+            
+            // Write the number of generic arguments
+            def integerWriter = CompressedIntegerWriter();
+            integerWriter.WriteInteger(TypeArguments.Count :> uint, stream);
+
+            // Write the type argument
+            foreach(type in TypeArguments)
+            {
+                type.Write(stream);
+            }                        
         }
     }
 }
