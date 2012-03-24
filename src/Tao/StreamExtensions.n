@@ -30,5 +30,9 @@ namespace Tao
             def reader = BinaryReader(stream);
             reader.PeekByte();
         }
+        public static AtEnd([NotNull] this stream : Stream) : bool
+        {
+            !(stream.Position < stream.Length);
+        }
     }
 }

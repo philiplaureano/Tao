@@ -482,6 +482,9 @@
     <Compile Include="Metadata\Signatures\MethodSignatureWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\MVarSignature.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\Param.n">
       <SubType>Code</SubType>
     </Compile>

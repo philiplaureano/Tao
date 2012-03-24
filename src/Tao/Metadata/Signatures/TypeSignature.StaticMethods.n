@@ -27,6 +27,7 @@ namespace Tao
             // so assume MethodDef usage by default
             _factories.Add(IsElement(ElementType.FnPtr), () => MethodDefFunctionPointerSignature());
             _factories.Add(IsElement(ElementType.GenericInst), () => GenericTypeInstance());
+            _factories.Add(IsElement(ElementType.Mvar), () => MVarSignature());
         }
 
         public static ReadFrom([NotNull] stream : Stream) : ITypeSignature
