@@ -1,0 +1,70 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{  
+    public class PointerSignature : TypeSignature
+    {
+        private _customMods : List.[CustomMod] = List();
+        public this()
+        {
+            ElementType = ElementType.Ptr;
+        }
+
+        public PointerType : ITypeSignature
+        {
+            get;set;
+        }
+
+        public CustomMods : IList.[CustomMod]
+        {
+            get
+            {
+                _customMods;
+            }
+        }
+
+        protected override SupportsElement(elementType : ElementType) : bool
+        {
+            elementType == ElementType.Ptr;
+        }
+        protected override Read(elementType : ElementType, [NotNull] stream : Stream) : void
+            requires !stream.AtEnd() otherwise throw ArgumentException("stream", "You can't read an PointerSignature if the stream position is already at the end of the stream")
+            requires elementType == ElementType.Ptr otherwise throw InvalidOperationException("You can't read an Pointer signature unless the element type is explicity ElementType.Ptr")
+        {  
+            // Read the custom mods
+            def customModReader = CustomModReader();
+            def mods = customModReader.ReadCustomMods(stream);
+
+            when(mods.Count > 0)
+            {
+                _customMods.AddRange(mods);
+            }
+            
+            // Read the pointer type
+            PointerType = TypeSignature.ReadFrom(stream);
+        }
+        protected override Write(elementType : ElementType, [NotNull] stream : Stream) : void
+            requires elementType == ElementType.Ptr otherwise throw InvalidOperationException("You can't write an Pointer signature unless the element type is explicity ElementType.Ptr")
+            requires PointerType != null otherwise throw InvalidOperationException("You can't write a null pointer type signature without assigning it a PointerType")
+        {     
+            // Write the custom mods
+            def modWriter = CustomModWriter();
+            foreach(mod in CustomMods)
+            {
+                modWriter.Write(mod, stream);
+            }
+            
+            // Write the pointer type
+            PointerType.Write(stream);
+        }
+    }
+}

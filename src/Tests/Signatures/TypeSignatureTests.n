@@ -14,7 +14,40 @@ using System.Linq;
 namespace Tests
 {
     public class TypeSignatureTests
-    {      
+    {   
+        public ShouldReadObjectType() : void
+        {
+            def bytes = array[ElementType.Object :> byte];
+            def signature = TypeSignature.ReadFrom(bytes.ToStream());
+            signature.ElementType.ShouldBeEqualTo(ElementType.Object, "Expected ElementType.Object");
+            object.ReferenceEquals(signature, ObjectSignature.Instance).ShouldBeTrue("The signature should be pointing to a single ObjectSignature instance");
+        }
+        public ShouldWriteObjectType() : void
+        {
+            def expectedBytes = array[ElementType.Object :> byte];
+            def signature = ObjectSignature.Instance;
+            
+            def outputStream = MemoryStream();
+            signature.Write(outputStream);
+            outputStream.ShouldMatch(expectedBytes);            
+        }
+        
+        public ShouldReadStringType() : void
+        {
+            def bytes = array[ElementType.String :> byte];
+            def signature = TypeSignature.ReadFrom(bytes.ToStream());
+            signature.ElementType.ShouldBeEqualTo(ElementType.String, "Expected ElementType.String");
+            Object.ReferenceEquals(signature, StringSignature.Instance).ShouldBeTrue("The signature should be pointing to a single StringSignature instance");
+        }
+        public ShouldWriteStringType() : void
+        {
+            def expectedBytes = array[ElementType.String :> byte];
+            def signature = StringSignature.Instance;
+            
+            def outputStream = MemoryStream();
+            signature.Write(outputStream);
+            outputStream.ShouldMatch(expectedBytes);            
+        }
         public ShouldReadBooleanType() : void
         {
             def elementType = ElementType.Boolean;

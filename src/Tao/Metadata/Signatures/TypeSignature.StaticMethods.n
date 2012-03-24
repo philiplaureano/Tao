@@ -28,10 +28,16 @@ namespace Tao
             _factories.Add(IsElement(ElementType.FnPtr), () => MethodDefFunctionPointerSignature());
             _factories.Add(IsElement(ElementType.GenericInst), () => GenericTypeInstance());
             _factories.Add(IsElement(ElementType.Mvar), () => MVarSignature());
+            _factories.Add(IsElement(ElementType.Object), () => ObjectSignature.Instance);            
+            _factories.Add(IsElement(ElementType.Ptr), () => PointerSignature());            
+            _factories.Add(IsElement(ElementType.String), () => StringSignature.Instance);
+            
+            _factories.Add(IsElement(ElementType.Var), () => VarSignature());
         }
 
         public static ReadFrom([NotNull] stream : Stream) : ITypeSignature
             requires stream.Length > 0
+            requires !stream.AtEnd()
         {       
             // Peak at the element type
             def elementType = stream.ReadByte() :> ElementType;

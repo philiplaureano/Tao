@@ -1,0 +1,53 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class ObjectSignature : TypeSignature
+  {
+      private this()
+      {
+          ElementType = ElementType.Object;
+      }
+      protected override SupportsElement(elementType : ElementType) : bool
+      {
+          elementType == ElementType.Object;
+      }
+      
+      protected override Read(elementType : ElementType, [NotNull] stream : Stream) : void
+        requires elementType == ElementType.Object otherwise throw InvalidOperationException("Invalid element type encountered while trying to read an Object signature")
+      {
+      }
+      
+      protected override Write(elementType : ElementType, [NotNull] stream : Stream) : void
+        requires elementType == ElementType.Object otherwise throw InvalidOperationException("Invalid element type encountered while trying to write an Object signature")
+      {
+      }
+      
+      // Make the ObjectSignature a singleton since it's a special type of signature
+      public static Instance : ObjectSignature
+      {
+          get
+          {
+              Nested.Instance;
+          }
+      }      
+      
+      private class Nested
+      {
+          static this()
+          {              
+          }
+          
+          internal static Instance :  ObjectSignature = ObjectSignature();
+      }
+  }
+}

@@ -1,0 +1,76 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao;
+using Tests.Macros;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class PointerSignatureTests
+    {
+        public ShouldBeAbleToReadPointerType() : void
+        {
+            def stream = MemoryStream(GetSampleBytes(ElementType.I8));
+            def signature = TypeSignature.ReadFrom(stream).As.[PointerSignature]();
+            signature.PointerType.ElementType.ShouldBeEqualTo(ElementType.I8, "Wrong Element Type");            
+            signature.CustomMods.Count.ShouldBeEqualTo(1, "Wrong number of custom mods");
+        }
+        public ShouldBeAbleToReadVoidPointerType() : void 
+        {
+            def stream = MemoryStream(GetSampleBytes(ElementType.Void));
+            def signature = TypeSignature.ReadFrom(stream).As.[PointerSignature]();
+            signature.PointerType.ElementType.ShouldBeEqualTo(ElementType.Void, "Wrong Element Type");
+            signature.CustomMods.Count.ShouldBeEqualTo(1, "Wrong number of custom mods");
+        }      
+        public ShouldBeAbleToWritePointerType() : void
+        {
+            def expectedBytes = GetSampleBytes(ElementType.I8);
+            def signature = PointerSignature();
+            signature.PointerType = TypeSignature(ElementType.I8);
+            
+            def mod = CustomMod();
+            mod.IsRequired = true;
+            mod.Row = 0x12;
+            mod.TableId = TableId.TypeRef;
+            signature.CustomMods.Add(mod);
+            
+            def outputStream = MemoryStream();
+            signature.Write(outputStream);
+            expectedBytes.ShouldMatch(outputStream.ToArray());
+        }
+        public ShouldBeAbleToWriteVoidPointerType() : void 
+        {
+            def expectedBytes = GetSampleBytes(ElementType.Void);
+            def signature = PointerSignature();
+            signature.PointerType = TypeSignature(ElementType.Void);
+            
+            def mod = CustomMod();
+            mod.IsRequired = true;
+            mod.Row = 0x12;
+            mod.TableId = TableId.TypeRef;
+            signature.CustomMods.Add(mod);
+            
+            def outputStream = MemoryStream();
+            signature.Write(outputStream);
+            expectedBytes.ShouldMatch(outputStream.ToArray());
+        }
+        private GetSampleBytes(elementType : ElementType) : array[byte]
+        {
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+            
+            def customModBytes = array[ElementType.CMOD_REQD :> byte, 0x49 : byte];
+            
+            writer.Write(ElementType.Ptr :> byte);
+            writer.Write(customModBytes);
+            writer.Write(elementType :> byte);
+            
+            stream.ToArray();
+        }        
+    }
+}

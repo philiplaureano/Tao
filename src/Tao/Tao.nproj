@@ -485,6 +485,9 @@
     <Compile Include="Metadata\Signatures\MVarSignature.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\ObjectSignature.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\Param.n">
       <SubType>Code</SubType>
     </Compile>
@@ -492,6 +495,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\ParamWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\PointerSignature.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\RetType.n">
@@ -512,6 +518,9 @@
     <Compile Include="Metadata\Signatures\StandAloneMethodSigWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\StringSignature.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\TypedByRefSignature.n">
       <SubType>Code</SubType>
     </Compile>
@@ -522,6 +531,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\TypeSignature.StaticMethods.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\VarSignature.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\VoidSignature.n">

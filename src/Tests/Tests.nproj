@@ -234,6 +234,9 @@
     <Compile Include="Signatures\ParamSignatureTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Signatures\PointerSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Signatures\RetTypeTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -244,6 +247,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Signatures\TypeSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\VarSignatureTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SortedTableTests.n">

@@ -1,0 +1,52 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+using Tao;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{
+    public class MVarSignatureTests
+    {
+        public ShouldBeAbleToReadMVarSignature() : void 
+        {          
+            def inputStream = MemoryStream(GetSampleBytes());
+            def signature = TypeSignature.ReadFrom(inputStream).As.[MVarSignature]();
+            
+            signature.VariableNumber.Value.ShouldBeEqualTo(42, "Wrong Variable Number");
+        }
+        
+        public ShouldBeAbleToWriteMVarSignature() : void
+        {
+            def outputStream = MemoryStream();
+            def signature = MVarSignature();
+            signature.VariableNumber = 42 : uint;
+            
+            def expectedBytes = GetSampleBytes();
+            signature.Write(outputStream);
+            outputStream.ShouldMatch(expectedBytes);
+        }
+        private GetSampleBytes() : array[byte]
+        {
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+
+            // Write the MVAR constant
+            writer.Write(ElementType.Mvar :> byte);   
+
+            // Write the number
+            def integerWriter = CompressedIntegerWriter();
+            integerWriter.WriteInteger(42, stream);
+
+            stream.ToArray();
+        }      
+    }
+}
