@@ -25,45 +25,58 @@ namespace Tests
 
         public ShouldReadGenericClassInstanceType() : void
         {
-            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
-            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
-
-            signature.IsClass.ShouldBeTrue("This type should be a class");
-            signature.IsValueType.ShouldBeFalse("This type should not be a value type");                                    
+            TestTypeSignatureRead(ShouldReadGenericClassInstanceType);
+        }
+        
+        public ShouldReadGenericClassInstanceTypeAsTypeSpec() : void
+        {
+            TestTypeSpecRead(ShouldReadGenericClassInstanceType);
         }
         public ShouldReadGenericValueType() : void
         {
-            def inputStream = MemoryStream(CreateSampleBytes(ElementType.ValueType));
-            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
-
-            signature.IsClass.ShouldBeFalse("This type should not be a class type");
-            signature.IsValueType.ShouldBeTrue("This type should be a value type");            
+            TestTypeSignatureRead(ShouldReadGenericValueType);
         }
+        public ShouldReadGenericValueTypeAsTypeSpec() : void
+        {
+            TestTypeSpecRead(ShouldReadGenericValueType);
+        }
+               
         public ShouldReadGenericArgCount() : void
         {
-            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
-            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
-            signature.TypeArguments.Count.ShouldBeEqualTo(1, "Wrong Argument Count");
+            TestTypeSignatureRead(ShouldReadGenericArgCount);
         }
+        
+        public ShouldReadGenericArgCountAsTypeSpec() : void
+        {
+            TestTypeSpecRead(ShouldReadGenericArgCount);
+        }
+               
         public ShouldReadGenericArguments() : void
         {
-            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
-            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
-            signature.TypeArguments.Count.ShouldBeEqualTo(1, "Wrong Argument Count");
-            signature.TypeArguments[0].ElementType.ShouldBeEqualTo(ElementType.I4, "Wrong Element Type");
+            TestTypeSignatureRead(ShouldReadGenericArguments);
         }
+        public ShouldReadGenericArgumentsAsTypeSpec() : void
+        {
+           TestTypeSpecRead(ShouldReadGenericArguments); 
+        }                
+        
         public ShouldReadTableId() : void
         {
-            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
-            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
-            signature.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong TableId");
+            TestTypeSignatureRead(ShouldReadTableId);
         }
+        public ShouldReadTableIdAsTypeSpec() : void
+        {
+            TestTypeSpecRead(ShouldReadTableId);
+        }        
         public ShouldReadRow() : void
         {
-            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
-            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
-            signature.Row.ShouldBeEqualTo(12, "Wrong Row"); 
+            TestTypeSignatureRead(ShouldReadRow);   
         }
+        public ShouldReadRowAsTypeSpec() : void
+        {
+            TestTypeSpecRead(ShouldReadRow);
+        }
+                
         public ShouldWriteGenericClassInstanceType() : void
         {
             def expectedBytes = CreateSampleBytesForGenericClassType();
@@ -127,6 +140,61 @@ namespace Tests
             TestWrite(doTest);
         }
 
+        private ShouldReadTableId(readSignature : Stream -> GenericTypeInstance) : void
+        {
+            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
+            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
+            signature.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong TableId");
+        }
+        private ShouldReadRow(readSignature : Stream -> GenericTypeInstance) : void
+        {
+            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
+            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
+            signature.Row.ShouldBeEqualTo(12, "Wrong Row"); 
+        }
+        
+        private TestTypeSpecRead(doTest : (Stream -> GenericTypeInstance) -> void) : void
+        {
+            doTest(inputStream => TypeSpec.ReadFrom(inputStream).As.[GenericTypeInstance]());
+        }
+        
+        private TestTypeSignatureRead(doTest : (Stream -> GenericTypeInstance) -> void) : void
+        {
+            doTest(inputStream => TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]());
+        }
+        
+        private ShouldReadGenericArguments(readSignature : Stream -> GenericTypeInstance) : void
+        {
+            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
+            def signature = readSignature(inputStream);
+            signature.TypeArguments.Count.ShouldBeEqualTo(1, "Wrong Argument Count");
+            signature.TypeArguments[0].ElementType.ShouldBeEqualTo(ElementType.I4, "Wrong Element Type");
+        }
+        
+        private ShouldReadGenericArgCount(readSignature : Stream -> GenericTypeInstance) : void
+        {
+            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
+            def signature = TypeSignature.ReadFrom(inputStream).As.[GenericTypeInstance]();
+            signature.TypeArguments.Count.ShouldBeEqualTo(1, "Wrong Argument Count");
+        }
+        
+        private ShouldReadGenericClassInstanceType(readSignature : Stream -> GenericTypeInstance) : void
+        {
+            def inputStream = MemoryStream(CreateSampleBytesForGenericClassType());
+            def signature = readSignature(inputStream);
+
+            signature.IsClass.ShouldBeTrue("This type should be a class");
+            signature.IsValueType.ShouldBeFalse("This type should not be a value type");                                    
+        }
+        private ShouldReadGenericValueType(readSignature : Stream -> GenericTypeInstance) : void
+        {
+            def inputStream = MemoryStream(CreateSampleBytes(ElementType.ValueType));
+            def signature = readSignature(inputStream);
+
+            signature.IsClass.ShouldBeFalse("This type should not be a class type");
+            signature.IsValueType.ShouldBeTrue("This type should be a value type");            
+        }
+        
         private TestWrite(doTest : GenericTypeInstance -> void) : void
         {
             def expectedStream = MemoryStream(CreateSampleBytes(ElementType.ValueType));

@@ -66,10 +66,34 @@ namespace Tests
             currentLoBounds[1].ShouldBeEqualTo(loBounds[1], "Invalid LoBound");
         } 
         public ShouldBeAbleToReadArraySignature() : void
-        {
-            def stream = CreateSampleSignatureStream();
+        {            
+            ShouldBeAbleToReadArraySignature(stream => TypeSignature.ReadFrom(stream) :> ArraySignature);
+        }
+        public ShouldBeAbleToReadArraySignatureAsTypeSpec() : void
+        {            
+            ShouldBeAbleToReadArraySignature(stream => TypeSpec.ReadFrom(stream) :> ArraySignature);
+        }
+                
+        public ShouldBeAbleToWriteArraySignature() : void
+        {          
+            def signature = ArraySignature();
+            signature.ElementType = ElementType.Array;
             
-            def signature = TypeSignature.ReadFrom(stream) :> ArraySignature;
+            def arrayType = TypeSignature();
+            arrayType.ElementType = ElementType.I4;
+            signature.ArrayType = arrayType;
+            
+            signature.Shape = CreateSampleShape();
+            
+            def stream = MemoryStream();
+            signature.Write(stream);
+            
+            stream.ShouldMatch(CreateSampleSignatureStream());
+        }
+        private ShouldBeAbleToReadArraySignature(readSignature : Stream -> ArraySignature) : void
+        {
+            def stream = CreateSampleSignatureStream();            
+            def signature = readSignature(stream);
             def resultShape = signature.Shape;
 
             def arrayType = signature.ArrayType;
@@ -90,22 +114,6 @@ namespace Tests
             numLowBounds.ShouldBeEqualTo(currentLoBounds.Count, "Invalid LoBoundCount");
             currentLoBounds[0].ShouldBeEqualTo(0, "Invalid LoBound");
             currentLoBounds[1].ShouldBeEqualTo(1, "Invalid LoBound");
-        }
-        public ShouldBeAbleToWriteArraySignature() : void
-        {          
-            def signature = ArraySignature();
-            signature.ElementType = ElementType.Array;
-            
-            def arrayType = TypeSignature();
-            arrayType.ElementType = ElementType.I4;
-            signature.ArrayType = arrayType;
-            
-            signature.Shape = CreateSampleShape();
-            
-            def stream = MemoryStream();
-            signature.Write(stream);
-            
-            stream.ShouldMatch(CreateSampleSignatureStream());
         }
         private CreateSampleSignatureStream() : Stream
         {

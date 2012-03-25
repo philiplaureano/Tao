@@ -25,6 +25,14 @@ namespace Tests
             signature.ArrayType.ElementType.ShouldBeEqualTo(ElementType.I4, "Wrong element type");
         }
 
+        public ShouldBeAbleToReadArraySignatureAsTypeSpec() : void
+        {
+            def inputStream = MemoryStream(GetSampleBytes());
+            def signature = TypeSpec.ReadFrom(inputStream).As.[SzArraySignature]();
+            signature.CustomMods.Count.ShouldBeEqualTo(1, "Wrong number of custom mods");
+            signature.ArrayType.ElementType.ShouldBeEqualTo(ElementType.I4, "Wrong element type");
+        }
+        
         public ShouldBeAbleToWriteArraySignature() : void
         {
             def outputStream = MemoryStream();

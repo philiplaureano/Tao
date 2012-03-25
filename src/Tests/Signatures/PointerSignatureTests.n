@@ -26,7 +26,21 @@ namespace Tests
             def signature = TypeSignature.ReadFrom(stream).As.[PointerSignature]();
             signature.PointerType.ElementType.ShouldBeEqualTo(ElementType.Void, "Wrong Element Type");
             signature.CustomMods.Count.ShouldBeEqualTo(1, "Wrong number of custom mods");
-        }      
+        }
+         public ShouldBeAbleToReadPointerTypeAsTypeSpec() : void
+        {
+            def stream = MemoryStream(GetSampleBytes(ElementType.I8));
+            def signature = TypeSpec.ReadFrom(stream) :> PointerSignature;
+            signature.PointerType.ElementType.ShouldBeEqualTo(ElementType.I8, "Wrong Element Type");            
+            signature.CustomMods.Count.ShouldBeEqualTo(1, "Wrong number of custom mods");
+        }
+        public ShouldBeAbleToReadVoidPointerTypeAsTypeSpec() : void 
+        {
+            def stream = MemoryStream(GetSampleBytes(ElementType.Void));
+            def signature = TypeSpec.ReadFrom(stream).As.[PointerSignature]();
+            signature.PointerType.ElementType.ShouldBeEqualTo(ElementType.Void, "Wrong Element Type");
+            signature.CustomMods.Count.ShouldBeEqualTo(1, "Wrong number of custom mods");
+        }
         public ShouldBeAbleToWritePointerType() : void
         {
             def expectedBytes = GetSampleBytes(ElementType.I8);

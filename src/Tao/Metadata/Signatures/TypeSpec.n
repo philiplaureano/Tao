@@ -1,0 +1,70 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public abstract class TypeSpec : TypeSpecBase, ITypeSpec
+    {        
+        private static _factories : Dictionary.[Func[ElementType, bool], void -> TypeSpec] = Dictionary();
+        
+        static this()
+        {
+            AddFactory(ElementType.Ptr, PointerSignature);
+            
+            // Note: Tao currently has no way to distinguish between MethodDef/MethodRefSig signatures
+            // so it assumes MethodDef signatures by default; This might cause problems
+            // for compilers that emit VARARG method calls
+            AddFactory(ElementType.FnPtr, MethodDefFunctionPointerSignature);
+            AddFactory(ElementType.Array, ArraySignature);
+            AddFactory(ElementType.SzArray, SzArraySignature);
+            AddFactory(ElementType.GenericInst, GenericTypeInstance);
+        }
+        
+        public static ReadFrom(stream : Stream) : TypeSpec
+             requires stream.Length > 0
+             requires !stream.AtEnd()
+        {       
+            // Peak at the element type
+            def elementType = stream.ReadByte() :> ElementType;
+            _ = stream.Seek(-1, SeekOrigin.Current);
+
+            // Search for the factory that can create the type signature
+            mutable matchingCondition : Func[ElementType, bool] = null;
+            foreach(condition in _factories.Keys)
+            {
+                when(matchingCondition == null && condition(elementType))
+                {
+                    matchingCondition = condition;
+                }
+            }
+
+            when(matchingCondition == null)
+            {
+                throw NotSupportedException(string.Format("The element type '{0}' is not supported", elementType));    
+            } 
+
+            def createSpec = _factories[matchingCondition];
+            def spec = createSpec();
+            spec.Read(stream);
+
+            spec;
+        }
+                
+        private static AddFactory(elementType : ElementType, createSignature : void -> TypeSpec) : void
+        {
+            _factories.Add(IsElement(elementType), createSignature);
+        }
+        private static IsElement(elementType : ElementType) : ElementType -> bool
+        {
+            e => e == elementType;
+        }
+    }
+}
