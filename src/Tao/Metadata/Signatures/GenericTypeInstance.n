@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-    public class GenericTypeInstance : TypeSignature
+    public class GenericTypeInstance : TypeSpec, ITypeSignature
     {
         private _genericArguments : IList.[ITypeSignature] = List();
         private mutable _tableId : TableId;        

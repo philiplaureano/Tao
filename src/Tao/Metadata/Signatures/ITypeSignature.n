@@ -10,10 +10,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public interface ITypeSignature
+  public interface ITypeSignature : ITypeSpec
   {
-      ElementType : ElementType { get; set; }
-      Read(stream : Stream) : void;
-      Write(stream : Stream) : void;
   }
 }

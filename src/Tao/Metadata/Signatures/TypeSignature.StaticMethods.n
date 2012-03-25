@@ -13,7 +13,7 @@ namespace Tao
 {
     public partial class TypeSignature
     {
-        private static _factories : Dictionary.[Func[ElementType, bool], Func[TypeSignature]] = Dictionary();
+        private static _factories : Dictionary.[Func[ElementType, bool], Func[ITypeSignature]] = Dictionary();
 
         static this()
         {

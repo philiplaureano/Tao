@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-    public abstract class FunctionPointerSignature[TSignature] : TypeSignature
+    public abstract class FunctionPointerSignature[TSignature] : TypeSpec, ITypeSignature
         where TSignature : IManagedMethodSignature, class
     {
         private _reader : IMethodSignatureReader.[TSignature];

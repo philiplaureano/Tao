@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-    public class SzArraySignature : TypeSignature
+    public class SzArraySignature : TypeSpec, ITypeSignature
     {
         private _customMods : List[CustomMod] = List();
 

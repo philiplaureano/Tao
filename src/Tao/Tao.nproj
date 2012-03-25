@@ -431,6 +431,9 @@
     <Compile Include="Metadata\Signatures\ITypeSignature.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\ITypeSpec.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\ManagedMethodSignature.n">
       <SubType>Code</SubType>
     </Compile>
@@ -543,6 +546,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\TypeSignature.StaticMethods.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\TypeSpec.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\TypeSpecBase.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\ValueTypeSignature.n">

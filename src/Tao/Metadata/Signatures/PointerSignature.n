@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {  
-    public class PointerSignature : TypeSignature
+    public class PointerSignature : TypeSpec, ITypeSignature
     {
         private _customMods : List.[CustomMod] = List();
         public this()

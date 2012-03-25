@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-  public class ArraySignature : TypeSignature 
+  public class ArraySignature : TypeSpec, ITypeSignature
   {
       public this()
       {
