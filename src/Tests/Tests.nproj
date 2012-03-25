@@ -213,6 +213,9 @@
     <Compile Include="Signatures\ArrayShapeTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Signatures\SzArraySignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Signatures\CustomModTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -247,6 +250,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Signatures\TypeSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\ValueTypeSignatureTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Signatures\VarSignatureTests.n">

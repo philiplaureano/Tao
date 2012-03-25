@@ -37,7 +37,7 @@ namespace Tao
             elementType == ElementType.Ptr;
         }
         protected override Read(elementType : ElementType, [NotNull] stream : Stream) : void
-            requires !stream.AtEnd() otherwise throw ArgumentException("stream", "You can't read an PointerSignature if the stream position is already at the end of the stream")
+            requires !stream.AtEnd() otherwise throw ArgumentException("stream", "You can't read a PointerSignature if the stream position is already at the end of the stream")
             requires elementType == ElementType.Ptr otherwise throw InvalidOperationException("You can't read an Pointer signature unless the element type is explicity ElementType.Ptr")
         {  
             // Read the custom mods

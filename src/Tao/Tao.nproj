@@ -521,6 +521,9 @@
     <Compile Include="Metadata\Signatures\StringSignature.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\SzArraySignature.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\TypedByRefSignature.n">
       <SubType>Code</SubType>
     </Compile>
@@ -531,6 +534,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\TypeSignature.StaticMethods.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\ValueTypeSignature.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\VarSignature.n">

@@ -23,6 +23,7 @@ namespace Tao
             _factories.Add(IsElement(ElementType.TypedByRef), () => TypedByRefSignature.Instance);
             _factories.Add(IsElement(ElementType.Void), ()=> VoidSignature.Instance);
             
+            
             // There's currently no way to discern MethodDef function pointers from MethodRef function pointers, 
             // so assume MethodDef usage by default
             _factories.Add(IsElement(ElementType.FnPtr), () => MethodDefFunctionPointerSignature());
@@ -32,6 +33,8 @@ namespace Tao
             _factories.Add(IsElement(ElementType.Ptr), () => PointerSignature());            
             _factories.Add(IsElement(ElementType.String), () => StringSignature.Instance);
             
+            _factories.Add(IsElement(ElementType.SzArray), () => SzArraySignature());            
+            _factories.Add(IsElement(ElementType.ValueType), () => ValueTypeSignature());
             _factories.Add(IsElement(ElementType.Var), () => VarSignature());
         }
 
@@ -57,7 +60,6 @@ namespace Tao
             {
                 throw NotSupportedException(string.Format("The element type '{0}' is not supported", elementType));    
             } 
-
 
             def createSignature = _factories[matchingCondition];
             def signature = createSignature();

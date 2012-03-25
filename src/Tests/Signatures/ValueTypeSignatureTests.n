@@ -1,0 +1,58 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+
+namespace Tests
+{
+    public class ValueTypeSignatureTests
+    {
+        public ShouldReadValueTypeSignature() : void
+        {
+            def inputStream = MemoryStream(GetSampleBytes());
+            def signature = TypeSignature.ReadFrom(inputStream).As.[ValueTypeSignature]();
+            
+            signature.Row.ShouldBeEqualTo(12, "Wrong row");
+            signature.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong TableId");
+        }
+        
+        public ShouldWriteValueTypeSignature() : void
+        {
+            def signature = ValueTypeSignature();
+            signature.Row = 12;
+            signature.TableId = TableId.TypeRef;
+            
+            def outputStream = MemoryStream();
+            signature.Write(outputStream);
+            
+            def expectedBytes = GetSampleBytes();
+            outputStream.ShouldMatch(expectedBytes);
+        }
+        
+        private GetSampleBytes() : array[byte]
+        {
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+            
+            writer.Write(ElementType.ValueType :> byte);
+            
+            def encoder = CodedTokenEncoder();
+            def codedToken = encoder.Encode(CodedTokenType.TypeDefOrTypeRef, TableId.TypeRef, 12);
+
+            // Write the token
+            writer.Write(codedToken : uint);
+            
+            stream.ToArray();
+        }
+    }
+}

@@ -1,0 +1,64 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+
+namespace Tests
+{
+    public class SzArraySignatureTests  
+    {
+        public ShouldBeAbleToReadArraySignature() : void
+        {
+            def inputStream = MemoryStream(GetSampleBytes());
+            def signature = TypeSignature.ReadFrom(inputStream).As.[SzArraySignature]();
+            signature.CustomMods.Count.ShouldBeEqualTo(1, "Wrong number of custom mods");
+            signature.ArrayType.ElementType.ShouldBeEqualTo(ElementType.I4, "Wrong element type");
+        }
+
+        public ShouldBeAbleToWriteArraySignature() : void
+        {
+            def outputStream = MemoryStream();
+            def expectedBytes = GetSampleBytes();
+
+            def mod = CustomMod();
+            mod.IsRequired = true;
+            mod.Row = 0x12;
+            mod.TableId = TableId.TypeRef;
+            
+            def signature = SzArraySignature();
+            signature.ArrayType = TypeSignature(ElementType.I4);
+            signature.CustomMods.Add(mod);
+
+            signature.Write(outputStream);
+            outputStream.ShouldMatch(expectedBytes);
+        }
+        
+        private GetSampleBytes() : array[byte]
+        {
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+
+            // Write the SZARRAY marker
+            writer.Write(ElementType.SzArray :> byte);
+
+            // Write the custom mod bytes
+            def customModBytes =  array[ElementType.CMOD_REQD :> byte, 0x49 : byte];
+            writer.Write(customModBytes);
+
+            // Write the Type itself
+            writer.Write(ElementType.I4 :> byte);
+
+            stream.ToArray();
+        }
+    }
+}

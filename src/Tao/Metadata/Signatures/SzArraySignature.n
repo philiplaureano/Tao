@@ -1,0 +1,71 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class SzArraySignature : TypeSignature
+    {
+        private _customMods : List[CustomMod] = List();
+
+        public this()
+        {
+            ElementType = ElementType.SzArray;
+        }
+
+        public CustomMods : IList[CustomMod]
+        {
+            get
+            {
+                _customMods;
+            }
+        }
+
+        public ArrayType : ITypeSignature
+        {
+            get;set;            
+        }
+
+        protected override SupportsElement(elementType : ElementType) : bool        
+        {
+            elementType == ElementType.SzArray;
+        }
+
+        protected override Read(elementType : ElementType, [NotNull] stream : Stream) : void
+            requires !stream.AtEnd() otherwise throw ArgumentException("stream", "You can't read a SzArraySignature if the stream position is already at the end of the stream")
+            requires elementType == ElementType.SzArray otherwise throw BadImageFormatException("You can't read a single-dimensional array signature unless the element type is explicity ElementType.SzArray")
+        {            
+            // Read the custom mods
+            def modReader = CustomModReader();            
+            def mods = modReader.ReadCustomMods(stream);
+            when(mods.Count() > 0)
+            {
+                _customMods.AddRange(mods);
+            }
+
+            // Read the array type
+            ArrayType = TypeSignature.ReadFrom(stream);
+        }
+        protected override Write(elementType : ElementType, [NotNull] stream : Stream) : void
+            requires elementType == ElementType.SzArray
+            requires ArrayType != null otherwise throw BadImageFormatException("You can't write a single-dimensional array signature unless it has a valid (non-null) array type")
+        {
+            // Write the custom mods
+            def modWriter = CustomModWriter();
+            foreach(mod in CustomMods)
+            {
+                modWriter.Write(mod, stream);
+            }
+            
+            // Write the array type
+            ArrayType.Write(stream);
+        }
+    }
+}
