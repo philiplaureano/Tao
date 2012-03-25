@@ -1,0 +1,36 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MethodSpecWriter
+  {
+      public Write([NotNull] spec : MethodSpec, [NotNull] stream : Stream) : void
+        requires spec.TypeArguments.Count > 0 otherwise throw ArgumentException("spec", "A method spec must have at least one argument before you can write it to a stream.")
+      {
+          // Write the GENERICINST marker
+          def writer = BinaryWriter(stream);
+          writer.Write(ElementType.GenericInst :> byte);
+          
+          // Write the argument count
+          def arguments = spec.TypeArguments;
+          def argCount = arguments.Count :> uint;
+          
+          def integerWriter = CompressedIntegerWriter();
+          integerWriter.WriteInteger(argCount, stream);
+          
+          foreach(argument in spec.TypeArguments)
+          {
+              argument.Write(stream);
+          }          
+      }
+  }
+}

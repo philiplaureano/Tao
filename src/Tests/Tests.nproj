@@ -213,6 +213,9 @@
     <Compile Include="Signatures\ArrayShapeTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Signatures\MethodSpecSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Signatures\SzArraySignatureTests.n">
       <SubType>Code</SubType>
     </Compile>

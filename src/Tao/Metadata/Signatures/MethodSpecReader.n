@@ -1,0 +1,43 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class MethodSpecReader
+  {
+      public Read([NotNull] stream : Stream) : MethodSpec
+        requires !stream.AtEnd()
+        requires stream.CanRead 
+        ensures value != null
+      {
+          def reader = BinaryReader(stream);
+          def elementType = reader.ReadByte() :> ElementType;
+          when(elementType != ElementType.GenericInst)
+          {
+              throw BadImageFormatException("Invalid MethodSpec signature; Expected element type 'ElementType.GenericInst'");
+          }
+          
+          // Read the argument count
+          def integerReader = CompressedIntegerReader();
+          def argCount = integerReader.ReadInteger(stream);
+          
+          // Read the argument types
+          def spec = MethodSpec();
+          for(mutable i : uint = 0; i < argCount; i++)
+          {
+              def argumentType = TypeSignature.ReadFrom(stream);
+              spec.TypeArguments.Add(argumentType);
+          }
+          
+          spec;
+      }
+  }
+}

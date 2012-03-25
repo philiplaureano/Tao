@@ -1,0 +1,61 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+namespace Tests
+{
+  public class MethodSpecSignatureTests
+  {
+      public ShouldReadMethodSpecSignature() : void
+      {
+          def inputStream = MemoryStream(GetSampleBytes());
+          def reader = MethodSpecReader();
+          
+          def spec = reader.Read(inputStream);
+          def arguments = spec.TypeArguments;
+          
+          arguments.Count.ShouldBeEqualTo(1, "Wrong Argument Count");
+          arguments[0].ElementType.ShouldBeEqualTo(ElementType.I8, "Wrong Element Type");
+      }
+      public ShouldWriteMethodSpecSignature() : void
+      {
+          def expectedBytes = GetSampleBytes();
+          def writer = MethodSpecWriter();
+          
+          def spec = MethodSpec();
+          spec.TypeArguments.Add(TypeSignature(ElementType.I8));
+          
+          def outputStream = MemoryStream();
+          writer.Write(spec, outputStream);
+          
+          outputStream.ShouldMatch(expectedBytes);
+      }
+      private GetSampleBytes() : array[byte]
+      {
+          def argCount : uint = 1;
+          
+          def stream = MemoryStream();
+          def writer = BinaryWriter(stream);
+          
+          // Write the GENERICINST marker
+          writer.Write(ElementType.GenericInst :> byte);
+          
+          // Write the number of arguments
+          def integerWriter = CompressedIntegerWriter();
+          integerWriter.WriteInteger(argCount, stream);
+          
+          // Write the type
+          writer.Write(ElementType.I8 :> byte);
+          
+          stream.ToArray();
+      }
+  }
+}
