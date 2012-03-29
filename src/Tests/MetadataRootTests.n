@@ -3,6 +3,8 @@ using Nemerle.Text;
 using Nemerle.Utility;
 using Tao;
 using Tao.Interfaces;
+using Tao.Metadata;
+using Tao.Metadata.Tables;
 using Tests.Macros;
 using System;
 using System.IO;

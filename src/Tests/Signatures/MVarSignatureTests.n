@@ -6,6 +6,10 @@ using Nemerle.Utility;
 
 using Tests.Macros;
 using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+using Tao.Metadata.Signatures;
 
 using System;
 using System.IO;

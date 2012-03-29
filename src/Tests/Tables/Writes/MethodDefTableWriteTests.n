@@ -6,6 +6,7 @@ using Nemerle.Utility;
 
 using Tao;
 using Tao.Interfaces;
+using Tao.Metadata;
 using Tao.Metadata.Tables;
 using Tao.Metadata.Tables.Rows;
 using System;

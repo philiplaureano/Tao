@@ -12,6 +12,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+using Tao.Metadata.Signatures;
 
 namespace Tests
 {

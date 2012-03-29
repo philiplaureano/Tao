@@ -5,6 +5,7 @@ using Nemerle.Utility;
 
 using Tao;
 using Tao.Interfaces;
+using Tao.Metadata;
 using Tests.Macros;
 
 using System;
