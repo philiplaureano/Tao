@@ -10,15 +10,42 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao;
 namespace Tests
 {
-  public class CustomAttributeSignatureTests
-  {
-      public stub ShouldBeAbleToExtractParametersFromMethodDefIndex() : void
-      {
-      }
-      public stub ShouldBeAbleToExtractParametersFromMethodRefIndex() : void
-      {
-      }
-  }
+    public class CustomAttributeSignatureTests : FileBasedTableTest
+    {
+        public stub ShouldBeAbleToExtractParametersFromMethodDefIndex() : void
+        {
+        }
+        public stub ShouldBeAbleToExtractParametersFromMethodRefIndex() : void
+        {
+        }
+        public stub ShouldBeAbleToExtractMethodDefSignatureForCustomAttributeRow() : void
+        {            
+        }
+        public stub ShouldBeAbleToExtractMethodRefSignatureForCustomAttributeRow() : void
+        {
+        }
+
+        public ShouldBeAbleToExtractCustomAttributeRows() : void
+        {
+            def heap = TablesHeap();
+            def tableData = MemoryStream(base.GetTableStreamData());
+            heap.ReadFrom(tableData);
+          
+            def customAttributeRows = heap.GetRows.[CustomAttributeRow, CustomAttributeTable]().ToArray();
+            (customAttributeRows.Length > 0).ShouldBeTrue("There should be at least one CustomAttribute row here");
+        }
+        public stub ShouldBeAbleToGetCustomAttributeRowForSpecificParent() : void
+        {
+        }
+        protected override TargetAssemblyFileName : string 
+        { 
+            get
+            {
+                "SampleCustomAttributeUsage.dll";
+            }
+        }
+    }
 }

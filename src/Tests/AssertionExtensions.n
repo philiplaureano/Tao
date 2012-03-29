@@ -20,6 +20,16 @@ namespace Tests
             isSameType.ShouldBeTrue("Expected type: {0}, Actual Type: {1}", typeof(T).FullName, targetType.FullName);            
         }
         
+        public ShouldBeTrue[T](this target : T, condition : T -> bool, message : string, params args : array[object]) : void
+        {
+            condition(target).ShouldBeTrue(message, args);
+        }
+        
+        public ShouldBeFalse[T](this target : T, condition : T -> bool, message : string, params args : array[object]) : void
+        {
+            condition(target).ShouldBeFalse(message, args);
+        }
+        
         public ShouldBeTrue(this condition : bool, message : string, params args : array[object]) : void
         requires !string.IsNullOrEmpty(message) otherwise ThrowPutADamnAssertionMessageThereYouLazyBastard()
         {

@@ -15,6 +15,12 @@ namespace Tests
 {
     public class TableHeapTests : FileBasedTableTest
     {
+        public stub ShouldReturnNullWhenExtractingRowZeroFromAnyGivenTable() : void
+        {
+        }
+        public stub ShouldBeAbleToReturnSingleRowFromTargetTable() : void
+        {
+        }
         public ShouldHaveCorrectMajorVersion() : void
         {
             def heap = TablesHeap();

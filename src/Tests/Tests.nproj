@@ -213,6 +213,9 @@
     <Compile Include="Signatures\ArrayShapeTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Signatures\CustomAttributeSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Signatures\MethodSpecSignatureTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -592,6 +595,11 @@
     <ProjectReference Include="..\Tao\Tao.nproj">
       <Name>Tao</Name>
       <Project>{dc175afb-382f-477e-aa0e-abac2d1e23a5}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="SampleAssemblies\SampleCustomAttributeUsage\SampleCustomAttributeUsage.csproj">
+      <Name>SampleCustomAttributeUsage</Name>
+      <Project>{9b1f1549-8055-4002-9849-6a4a3114c134}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
