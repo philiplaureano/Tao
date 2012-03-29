@@ -9,8 +9,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-
-namespace Tao
+using Tao.Metadata.Tables.Schemas;
+namespace Tao.Metadata.Tables
 {
     public class MetadataTable[TRow] : IMetadataTable, IMetadataTable[TRow], IMetadataTableInfo
     where TRow : new(), class

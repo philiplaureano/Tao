@@ -7,8 +7,8 @@ using Nemerle.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-namespace Tao
+using Tao.Metadata.Tables;
+namespace Tao.Metadata
 {
   public class TagValueMap : Dictionary[CodedTokenType, IDictionary[TableId, byte]]
   {

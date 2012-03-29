@@ -6,8 +6,11 @@ using Nemerle.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tao.Metadata.Tables.Rows;
+using Tao.Metadata.Tables.Schemas.Readers;
+using Tao.Metadata.Tables.Schemas.Writers;
 
-namespace Tao
+namespace Tao.Metadata.Tables
 {  
     public class EventTable : MetadataTable[EventRow]
     {

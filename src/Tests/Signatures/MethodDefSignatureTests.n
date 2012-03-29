@@ -11,6 +11,11 @@ using System.Linq;
 
 using Tao;
 using Tao.CallingConvention;
+using Tao.Metadata;
+using Tao.Metadata.Signatures;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+
 namespace Tests
 {  
     public class MethodDefSignatureTests

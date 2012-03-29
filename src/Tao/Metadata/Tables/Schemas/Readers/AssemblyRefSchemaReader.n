@@ -8,7 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tao
+using Tao.Metadata.Tables.Rows;
+
+namespace Tao.Metadata.Tables.Schemas.Readers
 {
     public class AssemblyRefSchemaReader : ISchemaReader[AssemblyRefRow]
     {

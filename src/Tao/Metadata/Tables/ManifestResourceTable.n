@@ -7,7 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tao
+using Tao.Metadata.Tables.Rows;
+using Tao.Metadata.Tables.Schemas.Readers;
+using Tao.Metadata.Tables.Schemas.Writers;
+
+namespace Tao.Metadata.Tables
 {  
     public class ManifestResourceTable : MetadataTable[ManifestResourceRow]
     {

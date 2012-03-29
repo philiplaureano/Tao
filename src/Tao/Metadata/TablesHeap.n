@@ -9,7 +9,11 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tao
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata.Tables;
+
+namespace Tao.Metadata
 {
     public class TablesHeap : ITablesHeap
     {

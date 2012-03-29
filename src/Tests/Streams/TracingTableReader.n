@@ -5,6 +5,10 @@ using Nemerle.Text;
 using Nemerle.Utility;
 
 using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Signatures;
+using Tao.Metadata.Tables;
+
 using System;
 using System.IO;
 using System.Collections.Generic;

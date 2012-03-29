@@ -5,6 +5,10 @@ using Nemerle.Utility;
 
 using Tao;
 using Tao.Interfaces;
+using Tao.Metadata;
+using Tao.Metadata.Signatures;
+using Tao.Metadata.Tables;
+
 using Tests.Macros;
 using System;
 using System.Collections.Generic;
@@ -20,8 +24,7 @@ namespace Tests
             base(tableId);
         }
         protected TestWrite(rowIndex : int, value : Index, getValue : TRow -> Index, failureMessage : string, params args : array[object]) : void
-        {
-            
+        {            
             base.TestWrite(rowIndex, value, getValue, (actual, expected) => actual.IsEqualTo(expected), failureMessage, args);
         }
         protected TestWrite[T](rowIndex : int, value : T, getValue : TRow -> T, failureMessage : string, params args : array[object]) : void

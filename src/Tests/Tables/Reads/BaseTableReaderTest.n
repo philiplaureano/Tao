@@ -5,12 +5,14 @@ using Nemerle.Utility;
 
 using Tao;
 using Tao.Interfaces;
+using Tao.Metadata.Tables;
 using Tests.Macros;
 
 using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+
 
 namespace Tests
 {

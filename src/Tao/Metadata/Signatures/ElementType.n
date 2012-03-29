@@ -1,4 +1,4 @@
-﻿namespace Tao
+﻿namespace Tao.Metadata.Signatures
 {
     public enum ElementType : byte
     {

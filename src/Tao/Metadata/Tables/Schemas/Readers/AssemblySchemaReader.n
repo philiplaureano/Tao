@@ -7,8 +7,9 @@ using Nemerle.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tao.Metadata.Tables.Rows;
 
-namespace Tao
+namespace Tao.Metadata.Tables.Schemas.Readers
 {
   public class AssemblySchemaReader : ISchemaReader.[AssemblyRow]
   {

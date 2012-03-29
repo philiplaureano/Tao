@@ -14,7 +14,7 @@ using System.Linq;
 
 using SCG = System.Collections.Generic;
 
-namespace Tao
+namespace Tao.Metadata
 {
   public class StringHeapReader : IStringHeapReader
   {

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Math;
 
-namespace Tao
+namespace Tao.Metadata
 {
   public class CompressedIntegerWriter
   {
