@@ -1,18 +1,38 @@
 ﻿using Nemerle;
+using Nemerle.Assertions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class CustomAttributeRow
-  {
-      public Parent : Index { get; set; }
-      public Type : Index { get; set; }
-      public Value : Index { get; set; }
-  }
+    public class CustomAttributeRow
+    {
+        public Parent : Index { get; set; }
+        public Type : Index { get; set; }
+        public Value : Index { get; set; }
+
+        public GetTypeRowReference() : RowReference
+            requires Type != null otherwise throw InvalidOperationException("You can't get a pointer to a Type row if the Type index property is null")
+        {
+            Type.ToRowRef(CodedTokenType.CustomAttributeType);
+        }
+        
+        public GetParentRowReference() : RowReference
+            requires Parent != null otherwise throw InvalidOperationException("You can't get a pointer to a parent row if the Parent index property is null")
+        {
+            Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
+        }
+        
+        public GetCustomAttributeBlobFrom(blobStream : Stream) : array[byte]
+            requires Value != null otherwise throw InvalidOperationException("You can't a custom attribute blob if the Value index property is null")
+        {
+            Value.ReadBlobFrom(blobStream);
+        }
+    }
 }

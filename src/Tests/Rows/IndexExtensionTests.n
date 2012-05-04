@@ -1,0 +1,45 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+
+using Tests.Macros;
+namespace Tests
+{
+    public class IndexExtensionTests
+    {
+        public ShouldBeAbleToDecodeCodedIndex() : void
+        {
+            def encoder = CodedTokenEncoder();
+            def parentToken : uint = encoder.Encode(CodedTokenType.HasCustomAttribute, TableId.MethodDef, 0x42);
+            def index = Index.Wide(parentToken);
+
+            def rowRef : RowReference = index.ToRowRef(CodedTokenType.HasCustomAttribute);
+
+            rowRef.Row.ShouldBeEqualTo(0x42, "Wrong Row");
+            rowRef.TableId.ShouldBeEqualTo(TableId.MethodDef, "Wrong TableId");
+        }
+        public ShouldBeAbleToReadBlobFromGivenHeapOffset() : void
+        {      
+            def blobBytes = array[0x00 : byte, 0x03, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00];
+            def expectedBytes = array[0x00 : byte, 0x00, 0x01];
+            def index = Index.Narrow(1);
+
+            def blobStream = MemoryStream(blobBytes);            
+            def blob = index.ReadBlobFrom(blobStream);
+                        
+            def expectedData = MemoryStream(expectedBytes);
+            expectedData.ShouldMatch(blob);
+        }
+    }
+}

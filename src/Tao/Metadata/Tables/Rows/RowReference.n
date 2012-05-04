@@ -1,0 +1,24 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Metadata;
+using Tao.Metadata.Tables;
+namespace Tao
+{
+  public struct RowReference
+  {
+      public this(tableId : TableId, row : uint)
+      {
+          TableId = tableId;
+          Row = row;
+      }
+      public TableId : TableId { get; private set; }
+      public Row : uint { get; private set; }
+  }
+}

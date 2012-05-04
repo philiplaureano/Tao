@@ -8,38 +8,64 @@ using Nemerle.Utility;
 using Tao;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Tao.Metadata.Tables
 {
-  public static class IndexExtensions
-  {
-    public ToUInt32(this index : Index) : uint
-        requires index != null
-    {         
-      match (index)
-      {
-        | index is Index.Narrow => (index : Index.Narrow).Value;
-        | index is Index.Wide => (index : Index.Wide).Value;
-        | _ => throw NotSupportedException();
-      }          
-    }
-    public ToUInt16(this index : Index) : ushort
-        requires index != null && (index is Index.Wide|| index is Index.Narrow)
+    public static class IndexExtensions
     {
-      match(index)
-      {
-        |index is Index.Narrow =>
-         {
+        public ReadBlobFrom(this index : Index, blobStream : Stream) : array[byte]
+        {
+            def reader = BlobReader();
+            def targetOffset = index.ToUInt32();
+            def blob : Stream = reader.Read(targetOffset, blobStream);
+            
+            def length = blob.Length;
+            _ = blob.Seek(0, SeekOrigin.Begin);
+            
+            def streamReader = BinaryReader(blob);
+            streamReader.ReadBytes(length :> int);
+        }
+        
+        public ToRowRef(this index : Index, tokenType : CodedTokenType) : RowReference
+        {
+            def decoder = TableReferenceDecoder();
+
+            def indexValue = index.ToUInt32() :> int;
+            def reference = decoder.GetTableReference(tokenType, indexValue);
+
+            def tableId = reference[0];
+            def row = reference[1];
+
+            RowReference(tableId, row :> uint);
+        }
+        public ToUInt32(this index : Index) : uint
+        requires index != null
+        {         
+            match (index)
+            {
+                | index is Index.Narrow => (index : Index.Narrow).Value;
+                | index is Index.Wide => (index : Index.Wide).Value;
+                | _ => throw NotSupportedException();
+            }          
+        }
+        public ToUInt16(this index : Index) : ushort
+        requires index != null && (index is Index.Wide|| index is Index.Narrow)
+        {
+            match(index)
+            {
+                |index is Index.Narrow =>
+        {
             (index : Index.Narrow).Value;
-         }
-        |index is Index.Wide =>
-         {
+        }
+                |index is Index.Wide =>
+        {
             (index : Index.Wide).Value :> ushort;
-         }
-         | _ => throw NotSupportedException();
-      }            
-    }    
-  }
+        }
+                | _ => throw NotSupportedException();
+            }            
+        }    
+    }
 }

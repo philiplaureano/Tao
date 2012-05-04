@@ -189,6 +189,12 @@
     <Compile Include="RowReaderTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Rows\CustomAttributeRowTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\IndexExtensionTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RowWriterTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -545,6 +551,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Rows" />
     <Folder Include="Signatures" />
     <Folder Include="Streams" />
     <Folder Include="Tables" />

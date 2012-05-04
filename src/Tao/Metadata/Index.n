@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao.Metadata.Tables;
+
 namespace Tao.Metadata
 {
     public class Index
@@ -17,6 +19,7 @@ namespace Tao.Metadata
             {
                 Value = value;
             }
+            
             public Value : ushort { get; set; }
         }
 
@@ -25,7 +28,7 @@ namespace Tao.Metadata
             public this(value : uint)
             {
                 Value = value;
-            }
+            }           
             public Value : uint { get; set; }
         }
     }  

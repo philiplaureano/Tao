@@ -1,0 +1,75 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+using Tests.Macros;
+
+namespace Tests
+{
+    public class CustomAttributeRowTests
+    {
+        public ShouldBeAbleToIdentifyParentTableAndRow() : void
+        {
+            def encoder = CodedTokenEncoder();
+            def parentToken : uint = encoder.Encode(CodedTokenType.HasCustomAttribute, TableId.MethodDef, 0x42);
+            def index = Index.Wide(parentToken);
+
+            def row = CustomAttributeRow();            
+            row.Parent = index;
+
+            def parentRow = row.GetParentRowReference();
+
+            parentRow.TableId.ShouldBeEqualTo(TableId.MethodDef, "Wrong TableId");
+            parentRow.Row.ShouldBeEqualTo(0x42, "Wrong Row");
+        }
+        public ShouldBeAbleToIdentifyTypeRowReference() : void
+        {          
+            def encoder = CodedTokenEncoder();
+            def parentToken : uint = encoder.Encode(CodedTokenType.CustomAttributeType, TableId.MethodDef, 0x42);
+
+            def index = Index.Wide(parentToken);
+            def row = CustomAttributeRow();
+            row.Type = index;
+
+            def typeRow = row.GetTypeRowReference();
+
+            typeRow.TableId.ShouldBeEqualTo(TableId.MethodDef, "Wrong TableId");
+            typeRow.Row.ShouldBeEqualTo(0x42, "Wrong Row");
+        }
+
+        public ShouldBeAbleToExtractBlobBytes() : void
+        {            
+            def blobBytes = array[0x00 : byte, 0x03, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00];
+            def expectedBytes = array[0x00 : byte, 0x00, 0x01];
+            def index = Index.Narrow(1);
+
+            def row = CustomAttributeRow();
+            row.Value = index;
+            
+            def blobStream = MemoryStream(blobBytes);            
+            def blob = row.GetCustomAttributeBlobFrom(blobStream);
+                        
+            def expectedData = MemoryStream(expectedBytes);
+            expectedData.ShouldMatch(blob);
+        }
+        public stub ShouldBeAbleToExtractMemberRefRowForCustomAttributeRow() : void
+        {
+        }
+        public stub ShouldBeAbleToExtractMethodDefForCustomAttributeRow() : void
+        {
+        }
+        public stub ShouldBeAbleToExtractParentTableRow() : void
+        {
+        }
+    }
+}
