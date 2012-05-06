@@ -41,5 +41,13 @@ namespace Tests
             def expectedData = MemoryStream(expectedBytes);
             expectedData.ShouldMatch(blob);
         }
+        public ShouldBeAbleToCreateCodedTokenIndex() : void
+        {
+            def encoder = CodedTokenEncoder();
+            def typeToken : uint = encoder.Encode(CodedTokenType.CustomAttributeType, TableId.MethodDef, 0x42);
+
+            def index = Index.FromCodedToken(CodedTokenType.CustomAttributeType, TableId.MethodDef, 0x42);
+            index.ToUInt32().ShouldBeEqualTo(typeToken, "Wrong Token Value");
+        }
     }
 }

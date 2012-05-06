@@ -668,6 +668,9 @@
     <Compile Include="Metadata\Tables\InterfaceImplTable.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\InvalidTableException.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\IRowReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -792,6 +795,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\GenericParamRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\ICustomAttributeTypeRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\IHasCustomAttributeRow.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\ImplMapRow.n">

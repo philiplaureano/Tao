@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class MethodDefRow
+  public class MethodDefRow : ICustomAttributeTypeRow, IHasCustomAttributeRow
   {
       public Rva : uint { get; set; }
       public ImplFlags : ushort {get; set; }

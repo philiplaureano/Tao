@@ -35,9 +35,9 @@ namespace Tests
         public ShouldBeAbleToIdentifyTypeRowReference() : void
         {          
             def encoder = CodedTokenEncoder();
-            def parentToken : uint = encoder.Encode(CodedTokenType.CustomAttributeType, TableId.MethodDef, 0x42);
+            def typeToken : uint = encoder.Encode(CodedTokenType.CustomAttributeType, TableId.MethodDef, 0x42);
 
-            def index = Index.Wide(parentToken);
+            def index = Index.Wide(typeToken);
             def row = CustomAttributeRow();
             row.Type = index;
 
@@ -62,12 +62,38 @@ namespace Tests
             def expectedData = MemoryStream(expectedBytes);
             expectedData.ShouldMatch(blob);
         }
-        public stub ShouldBeAbleToExtractMemberRefRowForCustomAttributeRow() : void
+        public ShouldBeAbleToExtractMemberRefRowForCustomAttributeRow() : void
         {
+            def index = Index.FromCodedToken(CodedTokenType.CustomAttributeType, TableId.MemberRef, 1);
+                        
+            def row = CustomAttributeRow();
+            row.Type = index;
+            
+            def table = MemberRefTable();
+            def expectedRow = MemberRefRow();
+            table.Rows.Add(expectedRow);
+            
+            def actualRow = row.GetTypeRowFrom(table);
+            actualRow.ShouldBeTheSameReferenceAs(expectedRow, "Wrong Row");
         }
-        public stub ShouldBeAbleToExtractMethodDefForCustomAttributeRow() : void
+        
+        public ShouldBeAbleToExtractMethodDefForCustomAttributeRow() : void
         {
+            def index = Index.FromCodedToken(CodedTokenType.CustomAttributeType, TableId.MethodDef, 1);
+                        
+            def row = CustomAttributeRow();
+            row.Type = index;
+            
+            def table = MethodDefTable();
+            def expectedRow = MethodDefRow();
+            def otherRow = MethodDefRow();
+            table.Rows.Add(expectedRow);
+            table.Rows.Add(otherRow);
+            
+            def actualRow = row.GetTypeRowFrom(table);
+            actualRow.ShouldBeTheSameReferenceAs(expectedRow, "Wrong Row");
         }
+        
         public stub ShouldBeAbleToExtractParentTableRow() : void
         {
         }

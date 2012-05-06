@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {  
-  public class TypeRefRow
+  public class TypeRefRow : IHasCustomAttributeRow
   {
       public ResolutionScope : Index { get; set; }
       public TypeName : Index { get; set; }

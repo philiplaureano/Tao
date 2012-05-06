@@ -22,17 +22,49 @@ namespace Tao.Metadata.Tables.Rows
         {
             Type.ToRowRef(CodedTokenType.CustomAttributeType);
         }
-        
+
         public GetParentRowReference() : RowReference
             requires Parent != null otherwise throw InvalidOperationException("You can't get a pointer to a parent row if the Parent index property is null")
         {
             Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
         }
-        
+
         public GetCustomAttributeBlobFrom(blobStream : Stream) : array[byte]
             requires Value != null otherwise throw InvalidOperationException("You can't a custom attribute blob if the Value index property is null")
         {
             Value.ReadBlobFrom(blobStream);
+        }
+        public GetTypeRowFrom[TRow]([NotNull] table : IMetadataTable[TRow]) : ICustomAttributeTypeRow
+            where TRow : ICustomAttributeTypeRow
+            requires Type != null otherwise throw InvalidOperationException("You can't get a Type row if the Type index property is null")
+        {            
+            def rowRef = Type.ToRowRef(CodedTokenType.CustomAttributeType);
+            def targetRow = rowRef.Row;
+
+            def info = table :> IMetadataTableInfo;
+            def targetTableId = info.TableId;
+            def actualTableId = rowRef.TableId;
+
+            // Ensure that the target table is either the MethodDef or MemberRef table
+            when(actualTableId != TableId.MethodDef && actualTableId != TableId.MemberRef)
+            {
+                throw InvalidTableException("The CustomAttributeRow.Type property must point to either the MemberRef table or MethodDef table");
+            }
+
+            // Ensure that the actual table matches the target table
+            when(actualTableId != targetTableId)
+            {
+                throw InvalidTableException(string.Format("The given table should be from the '{0}' table, not the '{1} table", 
+                    targetTableId.ToString(), actualTableId.ToString()));
+            }
+
+            mutable result : ICustomAttributeTypeRow = null;
+            when(targetRow > 0)
+            {
+                def actualRow = targetRow - 1;
+                result = table.Rows[actualRow :> int];
+            }
+            result;
         }
     }
 }

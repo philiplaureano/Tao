@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class PropertyRow
+  public class PropertyRow : IHasCustomAttributeRow
   {
       public Flags : ushort { get; set; }
       public Name : Index { get; set; }

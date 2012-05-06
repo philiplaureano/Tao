@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class ManifestResourceRow
+  public class ManifestResourceRow : IHasCustomAttributeRow
   {
       public Offset : uint { get; set; }
       public Flags : uint { get; set; }

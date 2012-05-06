@@ -35,7 +35,7 @@ namespace Tests
         {
             def stream = MemoryStream(GetTableStreamData());
 
-    // Skip past the header stream
+            // Skip past the header stream
             def headerReader = MetadataTablesHeaderReader();
             def header = headerReader.Read(stream);            
 

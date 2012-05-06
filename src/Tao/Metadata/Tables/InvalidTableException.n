@@ -7,10 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tao.Metadata.Tables.Rows
+namespace Tao.Metadata.Tables
 {
-  public class StandAloneSigRow : IHasCustomAttributeRow
+  public class InvalidTableException : Exception
   {
-      public Signature : Index { get; set; }
+      public this(message : string)
+      {
+          base(message);
+      }
   }
 }

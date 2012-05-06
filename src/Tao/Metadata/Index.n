@@ -31,5 +31,13 @@ namespace Tao.Metadata
             }           
             public Value : uint { get; set; }
         }
+        
+        public static FromCodedToken(tokenType : CodedTokenType, tableId : TableId, row : uint) : Index
+        {
+            def encoder = CodedTokenEncoder();
+            def token = encoder.Encode(tokenType, tableId, row);
+            
+            Index.Wide(token);
+        }
     }  
 }

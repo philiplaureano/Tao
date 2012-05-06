@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {  
-  public class ExportedTypeRow
+  public class ExportedTypeRow : IHasCustomAttributeRow
   {
       public Flags : uint { get; set; }
       public TypeDefId : uint { get; set; }
