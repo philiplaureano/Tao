@@ -54,6 +54,9 @@ namespace Tao.Metadata
       this[CodedTokenType.HasCustomAttribute][16] = TableId.File;
       this[CodedTokenType.HasCustomAttribute][17] = TableId.ExportedType;
       this[CodedTokenType.HasCustomAttribute][18] = TableId.ManifestResource;
+      this[CodedTokenType.HasCustomAttribute][19] = TableId.GenericParam;
+      this[CodedTokenType.HasCustomAttribute][20] = TableId.GenericParamConstraint;
+      this[CodedTokenType.HasCustomAttribute][21] = TableId.MethodSpec;
 
       this[CodedTokenType.HasDeclSecurity][0] = TableId.TypeDef;
       this[CodedTokenType.HasDeclSecurity][1] = TableId.MethodDef;

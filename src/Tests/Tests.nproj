@@ -192,6 +192,10 @@
     <Compile Include="Rows\CustomAttributeRowTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Rows\CustomAttributeRowTests.ParentRowExtractionTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>Rows\CustomAttributeRowTests.n</DependentUpon>
+    </Compile>
     <Compile Include="Rows\IndexExtensionTests.n">
       <SubType>Code</SubType>
     </Compile>

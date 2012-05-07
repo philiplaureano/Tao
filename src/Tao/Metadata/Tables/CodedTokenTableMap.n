@@ -37,7 +37,10 @@ namespace Tao.Metadata.Tables
                         TableId.AssemblyRef,
                         TableId.File,
                         TableId.ExportedType,
-                        TableId.ManifestResource
+                        TableId.ManifestResource,
+                        TableId.GenericParam,
+                        TableId.GenericParamConstraint,
+                        TableId.MethodSpec
                         ]),
                      (CodedTokenType.HasFieldMarshal, array[TableId.Field, TableId.Param]),
                      (CodedTokenType.HasDeclSecurity, array[TableId.TypeDef, TableId.MethodDef, TableId.Assembly]),

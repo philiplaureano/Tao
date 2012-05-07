@@ -16,7 +16,7 @@ using Tests.Macros;
 
 namespace Tests
 {
-    public class CustomAttributeRowTests
+    public partial class CustomAttributeRowTests
     {
         public ShouldBeAbleToIdentifyParentTableAndRow() : void
         {
@@ -55,47 +55,58 @@ namespace Tests
 
             def row = CustomAttributeRow();
             row.Value = index;
-            
+
             def blobStream = MemoryStream(blobBytes);            
             def blob = row.GetCustomAttributeBlobFrom(blobStream);
-                        
+
             def expectedData = MemoryStream(expectedBytes);
             expectedData.ShouldMatch(blob);
         }
         public ShouldBeAbleToExtractMemberRefRowForCustomAttributeRow() : void
         {
             def index = Index.FromCodedToken(CodedTokenType.CustomAttributeType, TableId.MemberRef, 1);
-                        
+
             def row = CustomAttributeRow();
             row.Type = index;
-            
+
             def table = MemberRefTable();
             def expectedRow = MemberRefRow();
             table.Rows.Add(expectedRow);
-            
+
             def actualRow = row.GetTypeRowFrom(table);
             actualRow.ShouldBeTheSameReferenceAs(expectedRow, "Wrong Row");
         }
-        
+
         public ShouldBeAbleToExtractMethodDefForCustomAttributeRow() : void
         {
             def index = Index.FromCodedToken(CodedTokenType.CustomAttributeType, TableId.MethodDef, 1);
-                        
+
             def row = CustomAttributeRow();
             row.Type = index;
-            
+
             def table = MethodDefTable();
             def expectedRow = MethodDefRow();
             def otherRow = MethodDefRow();
             table.Rows.Add(expectedRow);
             table.Rows.Add(otherRow);
-            
+
             def actualRow = row.GetTypeRowFrom(table);
             actualRow.ShouldBeTheSameReferenceAs(expectedRow, "Wrong Row");
         }
         
-        public stub ShouldBeAbleToExtractParentTableRow() : void
-        {
-        }
+        public ShouldReturnNullWhenExtractingCustomAttributeRowAndIndexIsZero() : void
+        {            
+            def index = Index.FromCodedToken(CodedTokenType.CustomAttributeType, TableId.MethodDef, 0);
+
+            def row = CustomAttributeRow();
+            row.Type = index;
+
+            def table = MethodDefTable();
+            def otherRow = MethodDefRow();
+            table.Rows.Add(otherRow);
+
+            def actualRow = row.GetTypeRowFrom(table);
+            actualRow.ShouldBeNull("The row returned should be null here because the token is pointing to a null row");
+        }               
     }
 }
