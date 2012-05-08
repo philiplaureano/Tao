@@ -22,29 +22,36 @@ namespace Tests
         {
             def getData() : array[byte]
             {
-                def fileStream = FileStream(filename, FileMode.Open, FileAccess.Read);
-                def imageReader = ImageReader();
-                def image = imageReader.Read(fileStream);
-
-                def root = image.GetMetadataRoot();
+                def root = GetMetadataRoot(filename);
                 root.ShouldBeNotNull("The file '{0}' is not a valid .NET assembly", TargetAssemblyFileName);
 
                 def tableStream = root.Heaps["#~"];
                 def resultStream = MemoryStream();
                 tableStream.CopyTo(resultStream);
 
-                fileStream.Close();
-                fileStream.Dispose();
                 resultStream.ToArray();
             }
-            
+
             when(!_fileCache.ContainsKey(TargetAssemblyFileName))
             {
                 def result = getData();
                 _fileCache[TargetAssemblyFileName] = result;
             }
-            
+
             _fileCache[TargetAssemblyFileName];
+        }
+        protected GetMetadataRoot() : IMetadataRoot
+        {
+            GetMetadataRoot(TargetAssemblyFileName);
+        }
+        protected GetMetadataRoot(filename : string) : IMetadataRoot
+        {
+            def bytes = File.ReadAllBytes(filename);
+            def fileStream = MemoryStream(bytes);
+            def imageReader = ImageReader();
+            def image = imageReader.Read(fileStream);
+
+            image.GetMetadataRoot();
         }
         protected virtual GetTableStreamData() : array[byte]
         {

@@ -22,7 +22,7 @@ namespace Tests
         public ignored stub ShouldBeAbleToConvertCollectionOfStringsIntoAStream() : void
         {
         }
-        
+
         public ShouldBeAbleToReadStringFromStringHeapUsingGivenIndex() : void
         {
             def stringData = array[

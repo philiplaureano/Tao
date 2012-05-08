@@ -1,0 +1,56 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+using Tao.Metadata.Signatures;
+using Tests.Macros;
+
+namespace Tests
+{
+    public class MethodDefRowTests : FileBasedTableTest
+    {
+        public ShouldBeAbleToExtractMethodDefSignature() : void
+        {
+            // Read the heap data
+            def heap = TablesHeap();
+            def tableData = MemoryStream(base.GetTableStreamData());
+            heap.ReadFrom(tableData);
+
+            // Search for the get_Value method (should be in MethodDef, row 2)
+            def table = heap.Tables.Where(t => t is MethodDefTable).First() :> MethodDefTable;
+            def targetRow = table.Rows[1];
+
+            // Verify that the row is pointing to the correct blob index
+            def methodSignatureBlobIndex : uint = 0x0012;
+            targetRow.Signature.ToUInt32().ShouldBeEqualTo(methodSignatureBlobIndex, "Wrong Signature");
+
+            def root = GetMetadataRoot();
+            def blobStream = root.Heaps["#Blob"];
+
+            // The expected and actual blob signatures must match                        
+            def actualSignature = targetRow.GetMethodSignature(blobStream) :> MethodDefSignature;
+            actualSignature.ParameterCount.ShouldBeEqualTo(0, "Wrong Parameter Count");
+
+            // Match the method name
+            def stringHeap = root.Heaps["#Strings"];
+            targetRow.Name.ToString(stringHeap).ShouldBeEqualTo("get_Value", "Wrong Method Name");
+        }
+        protected override TargetAssemblyFileName : string 
+        { 
+            get
+            {
+                "SampleCustomAttributeUsage.dll";
+            }
+        }
+    }
+}

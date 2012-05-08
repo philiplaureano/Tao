@@ -7,10 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tao.Metadata.Tables.Rows
+namespace Tao
 {
-  public class ModuleRefRow : IHasCustomAttributeRow, IMemberRefParentRow
+  public interface IMemberRefParentRow
   {
-      public Name : Index { get; set; }
   }
 }

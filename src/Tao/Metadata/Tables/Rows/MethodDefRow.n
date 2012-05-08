@@ -1,15 +1,19 @@
 ﻿using Nemerle;
+using Nemerle.Assertions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao.Metadata.Signatures;
+
 namespace Tao.Metadata.Tables.Rows
 {
-  public class MethodDefRow : ICustomAttributeTypeRow, IHasCustomAttributeRow
+  public class MethodDefRow : ICustomAttributeTypeRow, IHasCustomAttributeRow, IMemberRefParentRow
   {
       public Rva : uint { get; set; }
       public ImplFlags : ushort {get; set; }
@@ -17,5 +21,15 @@ namespace Tao.Metadata.Tables.Rows
       public Name : Index { get; set; }
       public Signature : Index { get; set; }
       public ParamList : Index { get; set; }
+      
+      public GetMethodSignature([NotNull] blobStream : Stream) : IMethodSignature
+        requires Signature != null otherwise throw InvalidOperationException("You can't retrieve a method signature if the Signature property itself is null")
+      {
+          def blobIndex = Signature.ToUInt32();
+          def reader = BlobReader();
+          def blob = reader.Read(blobIndex, blobStream);
+          def signatureReader = MethodDefSignatureReader();
+          signatureReader.Read(blob);
+      }
   }
 }

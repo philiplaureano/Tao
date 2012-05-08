@@ -199,6 +199,12 @@
     <Compile Include="Rows\IndexExtensionTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Rows\MemberRefRowTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\MethodDefRowTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RowWriterTests.n">
       <SubType>Code</SubType>
     </Compile>

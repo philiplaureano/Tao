@@ -18,6 +18,17 @@ namespace Tests
 {
     public class IndexExtensionTests
     {
+        public ShouldBeAbleToDecodeStringIndex() : void
+        {
+            def stringHeap = MemoryStream();
+            def stringHeapWriter = StringHeapWriter();
+            def offset = stringHeapWriter.Write("Foo", stringHeap);
+            
+            def index = Index.Wide(offset);
+            def text = index.ToString(stringHeap);
+            
+            text.ShouldBeEqualTo("Foo", "Wrong Text");            
+        }
         public ShouldBeAbleToDecodeCodedIndex() : void
         {
             def encoder = CodedTokenEncoder();
