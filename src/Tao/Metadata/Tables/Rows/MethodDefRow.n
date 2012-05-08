@@ -13,7 +13,7 @@ using Tao.Metadata.Signatures;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class MethodDefRow : ICustomAttributeTypeRow, IHasCustomAttributeRow, IMemberRefParentRow, IMethodSignatureRow
+  public class MethodDefRow : ICustomAttributeTypeRow, IHasCustomAttributeRow, IMemberRefParentRow
   {
       public Rva : uint { get; set; }
       public ImplFlags : ushort {get; set; }

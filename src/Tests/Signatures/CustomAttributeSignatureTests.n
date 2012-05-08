@@ -21,6 +21,10 @@ namespace Tests
     {
         public stub ShouldBeAbleToExtractParametersFromMethodDefIndex() : void
         {
+            // Steps for extracting the method parameters:
+            // 1) def typeRow = CustomAttributeRow.GetTypeRowFrom(heap)
+            // 2) def signature = typeRow.GetMethodSignature(blobStream)
+            // 3) def parameters = signature.Parameters
         }
         public stub ShouldBeAbleToExtractParametersFromMethodRefIndex() : void
         {
@@ -31,7 +35,6 @@ namespace Tests
         public stub ShouldBeAbleToExtractMethodRefSignatureForCustomAttributeRow() : void
         {
         }
-
         public ShouldBeAbleToExtractCustomAttributeRows() : void
         {
             def heap = TablesHeap();

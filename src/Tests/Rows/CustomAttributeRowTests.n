@@ -108,5 +108,9 @@ namespace Tests
             def actualRow = row.GetTypeRowFrom(table);
             actualRow.ShouldBeNull("The row returned should be null here because the token is pointing to a null row");
         }               
+        public stub ShouldGetCorrectTypeTableFromGivenTablesHeap() : void
+        {
+            // TODO: Let the CustomAttributeRow automatically determine which table it should use to retrieve the target row
+        }
     }
 }
