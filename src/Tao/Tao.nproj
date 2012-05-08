@@ -806,6 +806,9 @@
     <Compile Include="Metadata\Tables\Rows\IMemberRefParentRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\IMethodSignatureRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\ImplMapRow.n">
       <SubType>Code</SubType>
     </Compile>

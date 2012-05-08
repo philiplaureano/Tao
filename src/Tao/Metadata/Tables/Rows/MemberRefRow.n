@@ -12,7 +12,7 @@ using System.Linq;
 using Tao.Metadata.Signatures;
 namespace Tao.Metadata.Tables.Rows
 {
-  public class MemberRefRow : ICustomAttributeTypeRow, IHasCustomAttributeRow
+  public class MemberRefRow : ICustomAttributeTypeRow, IHasCustomAttributeRow, IMethodSignatureRow
   {
       public Class : Index { get; set; }
       public Name : Index { get; set; }
