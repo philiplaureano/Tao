@@ -16,7 +16,7 @@ using Tests.Macros;
 
 namespace Tests
 {
-    public partial class CustomAttributeRowTests
+    public partial class CustomAttributeRowTests : FileBasedTableTest
     {
         public ShouldBeAbleToIdentifyParentTableAndRow() : void
         {
@@ -108,9 +108,26 @@ namespace Tests
             def actualRow = row.GetTypeRowFrom(table);
             actualRow.ShouldBeNull("The row returned should be null here because the token is pointing to a null row");
         }               
-        public stub ShouldGetCorrectTypeTableFromGivenTablesHeap() : void
-        {
-            // TODO: Let the CustomAttributeRow automatically determine which table it should use to retrieve the target row
+        public ShouldGetCorrectTypeTableFromGivenTablesHeap() : void
+        {      
+            def root = base.GetMetadataRoot();
+            def tableStream = root.Heaps["#~"];
+            
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+            
+            def customAttributeTable = heap.Tables.Where(t=>t is CustomAttributeTable).First() :> CustomAttributeTable;
+            def row = customAttributeTable.Rows[0];
+            
+            def actualRow = row.GetTypeRowFrom(heap);
+            actualRow.GetType().ShouldBeEqualTo(typeof(MemberRefRow), "Wrong Table Type");
+        }
+        protected override TargetAssemblyFileName : string 
+        { 
+            get
+            {
+                "SampleCustomAttributeUsage.dll";
+            }
         }
     }
 }

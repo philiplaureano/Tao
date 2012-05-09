@@ -21,6 +21,13 @@ namespace Tests
     {
         public stub ShouldBeAbleToExtractParametersFromMethodDefIndex() : void
         {
+            def root = base.GetMetadataRoot();
+            def tableStream = root.Heaps["#~"];
+            def blobStream = root.Heaps["#Blob"];
+            
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+            
             // Steps for extracting the method parameters:
             // 1) def typeRow = CustomAttributeRow.GetTypeRowFrom(heap)
             // 2) def signature = typeRow.GetMethodSignature(blobStream)

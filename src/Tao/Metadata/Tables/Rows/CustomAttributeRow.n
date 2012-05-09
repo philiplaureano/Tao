@@ -34,6 +34,35 @@ namespace Tao.Metadata.Tables.Rows
         {
             Value.ReadBlobFrom(blobStream);
         }
+        public GetTypeRowFrom([NotNull] heap : ITablesHeap) : ICustomAttributeTypeRow
+            requires Type != null otherwise throw InvalidOperationException("You can't get a Type row if the Type index property is null")
+        {                    
+            def codedTokenType = CodedTokenType.CustomAttributeType;
+            def rowRef = Type.ToRowRef(codedTokenType);
+            
+            mutable result : ICustomAttributeTypeRow = null;
+            when(rowRef.TableId != TableId.MemberRef && rowRef.TableId != TableId.MethodDef)
+            {
+                throw BadImageFormatException("You can't retrieve a Type row unless the index is pointing to either the MemberRef or MethodDef table");
+            }
+            
+            // Automatically determine the correct table to use based on the current
+            // type index
+            when(rowRef.TableId == TableId.MemberRef)
+            {
+                def table = heap.Tables.Where(t => t is MemberRefTable).First() :> MemberRefTable;                
+                result = GetRowFrom.[MemberRefRow, ICustomAttributeTypeRow](codedTokenType, get_Type, table);
+            }
+            
+            when(rowRef.TableId == TableId.MethodDef)
+            {
+                def table = heap.Tables.Where(t => t is MethodDefTable).First() :> MethodDefTable;                
+                result = GetRowFrom.[MethodDefRow, ICustomAttributeTypeRow](codedTokenType, get_Type, table);
+            }
+            
+            result;
+        }
+        
         public GetTypeRowFrom[TRow]([NotNull] table : IMetadataTable[TRow]) : ICustomAttributeTypeRow
             where TRow : ICustomAttributeTypeRow
             requires Type != null otherwise throw InvalidOperationException("You can't get a Type row if the Type index property is null")

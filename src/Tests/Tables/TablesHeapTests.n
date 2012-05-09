@@ -25,6 +25,16 @@ namespace Tests
         public stub ShouldBeAbleToReturnSingleRowFromTargetTable() : void
         {
         }
+        public ShouldBeAbleToReturnTypedTable() : void
+        {
+            def heap = TablesHeap();
+            def tableData = MemoryStream(base.GetTableStreamData());
+            heap.ReadFrom(tableData);
+            
+            def table = heap.GetTable.[CustomAttributeTable]();
+            table.ShouldBeNotNull("Wrong Table");
+            table.GetType().ShouldBeEqualTo(typeof(CustomAttributeTable), "Wrong Table Type")            
+        }
         public ShouldHaveCorrectMajorVersion() : void
         {
             def heap = TablesHeap();
