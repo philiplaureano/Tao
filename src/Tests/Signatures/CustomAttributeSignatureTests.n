@@ -42,7 +42,7 @@ namespace Tests
             def tableData = MemoryStream(base.GetTableStreamData());
             heap.ReadFrom(tableData);
           
-            def customAttributeRows = heap.GetRows.[CustomAttributeRow, CustomAttributeTable]().ToArray();
+            def customAttributeRows = heap.GetRows.[CustomAttributeRow]().ToArray();
             (customAttributeRows.Length > 0).ShouldBeTrue("There should be at least one CustomAttribute row here");
         }
        

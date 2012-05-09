@@ -740,9 +740,6 @@
     <Compile Include="Metadata\Tables\RowCountExtensions.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Tables\RowExtractor.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Metadata\Tables\RowReader.n">
       <SubType>Code</SubType>
     </Compile>
