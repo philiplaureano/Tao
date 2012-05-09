@@ -12,6 +12,7 @@ using System.Linq;
 
 using Tao;
 using Tao.Metadata;
+using Tao.Metadata.Signatures;
 using Tao.Metadata.Tables;
 using Tao.Metadata.Tables.Rows;
 
@@ -19,7 +20,7 @@ namespace Tests
 {
     public class CustomAttributeSignatureTests : FileBasedTableTest
     {
-        public stub ShouldBeAbleToExtractParametersFromMethodDefIndex() : void
+        public ShouldBeAbleToExtractParameters() : void
         {
             def root = base.GetMetadataRoot();
             def tableStream = root.Heaps["#~"];
@@ -28,20 +29,13 @@ namespace Tests
             def heap = TablesHeap();
             heap.ReadFrom(tableStream);
             
-            // Steps for extracting the method parameters:
-            // 1) def typeRow = CustomAttributeRow.GetTypeRowFrom(heap)
-            // 2) def signature = typeRow.GetMethodSignature(blobStream)
-            // 3) def parameters = signature.Parameters
+            def row = heap.GetRow.[CustomAttributeRow](7);
+            
+            def parameters : array[Param] = row.GetParameters(heap, blobStream).ToArray();
+            parameters.Length.ShouldBeEqualTo(1, "Wrong Parameter Count");
+            parameters[0].Type.ShouldBeEqualTo(StringSignature.Instance, "Wrong Parameter Type");            
         }
-        public stub ShouldBeAbleToExtractParametersFromMethodRefIndex() : void
-        {
-        }
-        public stub ShouldBeAbleToExtractMethodDefSignatureForCustomAttributeRow() : void
-        {            
-        }
-        public stub ShouldBeAbleToExtractMethodRefSignatureForCustomAttributeRow() : void
-        {
-        }
+       
         public ShouldBeAbleToExtractCustomAttributeRows() : void
         {
             def heap = TablesHeap();
@@ -51,8 +45,23 @@ namespace Tests
             def customAttributeRows = heap.GetRows.[CustomAttributeRow, CustomAttributeTable]().ToArray();
             (customAttributeRows.Length > 0).ShouldBeTrue("There should be at least one CustomAttribute row here");
         }
-        public stub ShouldBeAbleToGetCustomAttributeRowForSpecificParent() : void
+       
+        public ShouldBeAbleToGetCustomAttributeRowsForSpecificParent() : void
         {
+            def root = base.GetMetadataRoot();
+            def tableStream = root.Heaps["#~"];
+            
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+            
+            def assemblyRowIndex : uint = 1;
+            def typeDefRowIndex : uint = 2;            
+                        
+            def assemblyAttributeRows = heap.GetCustomAttributeRows(TableId.Assembly, assemblyRowIndex);
+            assemblyAttributeRows.Count().ShouldBeEqualTo(14, "Wrong Assembly Attribute Rows");
+            
+            def typeDefAttributeRows = heap.GetCustomAttributeRows(TableId.TypeDef, typeDefRowIndex);
+            typeDefAttributeRows.Count().ShouldBeEqualTo(1, "Wrong TypeDef Attribute Rows");
         }
         protected override TargetAssemblyFileName : string 
         { 

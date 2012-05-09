@@ -19,11 +19,25 @@ namespace Tests
 {
     public class TableHeapTests : FileBasedTableTest
     {
-        public stub ShouldReturnNullWhenExtractingRowZeroFromAnyGivenTable() : void
+        public ShouldReturnNullWhenExtractingRowZeroFromAnyGivenTable() : void
         {
+            def heap = TablesHeap();
+            def tableData = MemoryStream(base.GetTableStreamData());
+            heap.ReadFrom(tableData);
+            
+            def row = heap.GetRow.[CustomAttributeRow](0);
+            row.ShouldBeNull("The returned row should be null when passing zero as the given row index");
         }
-        public stub ShouldBeAbleToReturnSingleRowFromTargetTable() : void
+        public ShouldBeAbleToReturnSingleRowFromTargetTable() : void
         {
+            def heap = TablesHeap();
+            def tableData = MemoryStream(base.GetTableStreamData());
+            heap.ReadFrom(tableData);
+            
+            def row = heap.GetRow.[CustomAttributeRow](1);
+            def rowRef = row.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
+            rowRef.TableId.ShouldBeEqualTo(TableId.Module, "Wrong TableId");
+            rowRef.Row.ShouldBeEqualTo(1, "Wrong Row Index");
         }
         public ShouldBeAbleToReturnTypedTable() : void
         {
@@ -76,7 +90,6 @@ namespace Tests
             def writer = MetadataTablesHeaderWriter();
             writer.Write(header, outputStream);
 
-            def actualHash = outputStream.GetHash();
             expectedHeaderData.ShouldMatch(outputStream);
         }
 

@@ -9,6 +9,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao.Metadata.Signatures;
+
 namespace Tao.Metadata.Tables.Rows
 {
     public class CustomAttributeRow
@@ -17,6 +19,15 @@ namespace Tao.Metadata.Tables.Rows
         public Type : Index { get; set; }
         public Value : Index { get; set; }
 
+        public GetParameters([NotNull] tablesHeap : ITablesHeap, [NotNull] blobStream : Stream) : IEnumerable[Param]
+        {
+            def typeRow = GetTypeRowFrom(tablesHeap);
+            def methodSignature = typeRow.GetMethodSignature(blobStream);
+            
+            def parameters = methodSignature.Parameters;
+            parameters;
+        }
+        
         public GetTypeRowReference() : RowReference
             requires Type != null otherwise throw InvalidOperationException("You can't get a pointer to a Type row if the Type index property is null")
         {

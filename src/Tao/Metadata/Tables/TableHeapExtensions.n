@@ -1,4 +1,5 @@
 ﻿using Nemerle;
+using Nemerle.Assertions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
@@ -17,6 +18,40 @@ namespace Tao.Metadata.Tables
 {
     public static class TableHeapExtensions
     {
+        public GetCustomAttributeRows(this heap : ITablesHeap, tableId : TableId, rowIndex : uint) : IEnumerable[CustomAttributeRow]
+        {
+            def customAttributeTable = heap.GetTable.[CustomAttributeTable]();
+            foreach(row in customAttributeTable.Rows)
+            {
+                def parentRef = row.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
+                when(parentRef.TableId == tableId && parentRef.Row == rowIndex)
+                {
+                    yield row;
+                }
+            }
+        }
+        
+        public GetRow[TRow](this heap : ITablesHeap, rowIndex : uint) : TRow
+            where TRow : class
+        {            
+            mutable result : TRow = null;
+            when(rowIndex > 0)
+            {
+                def tables = heap.Tables.ToArray();
+                def rowCount = tables.Length;
+                for(mutable i = 0; i < rowCount && result == null; i++)
+                {
+                    def table = tables[i];
+                    when(table is IMetadataTable[TRow])
+                    {
+                        def targetTable = table :> IMetadataTable[TRow];
+                        def actualIndex = rowIndex - 1;
+                        result = targetTable.Rows[actualIndex :> int];
+                    }
+                }
+            }
+            result;
+        }
         public GetRows[TRow, TTable](this heap : ITablesHeap) : IEnumerable[TRow]
             where TTable : IMetadataTable[TRow], IMetadataTable
         {
@@ -24,12 +59,12 @@ namespace Tao.Metadata.Tables
             def rows = extractor.ExtractFrom(heap).ToArray();
             rows;
         }
-        
+
         public GetTable[TTable](this heap : ITablesHeap) : TTable
             where TTable : IMetadataTable, class
         {
             mutable result : TTable = null;
-            
+
             def tableCount = heap.Tables.Count();
             def tables = heap.Tables.ToArray();
             for(mutable i = 0; i < tableCount; i++)
