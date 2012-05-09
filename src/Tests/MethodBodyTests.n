@@ -50,7 +50,7 @@ namespace Tests
             tableHeap.ReadFrom(tableStream);
             
             // Find the target method
-            def rows = tableHeap.GetRows.[MethodDefRow, MethodDefTable]().ToArray();            
+            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();            
             def fatMethodRow = rows[1];
             
             def rva = fatMethodRow.Rva;
@@ -82,7 +82,7 @@ namespace Tests
             def tableHeap = TablesHeap();
             tableHeap.ReadFrom(tableStream);
             
-            def rows = tableHeap.GetRows.[MethodDefRow, MethodDefTable]().ToArray();
+            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();
             rows.Length.ShouldBeEqualTo(4, "Invalid row count");
                                     
             rows[0].Rva.ShouldBeEqualTo(0x00002050, "Invalid Rva");

@@ -52,11 +52,27 @@ namespace Tao.Metadata.Tables
             }
             result;
         }
-        public GetRows[TRow, TTable](this heap : ITablesHeap) : IEnumerable[TRow]
-            where TTable : IMetadataTable[TRow], IMetadataTable
+        public GetRows[TRow](this heap : ITablesHeap) : IEnumerable[TRow]
         {
-            def extractor = RowExtractor.[TRow, TTable]();
-            def rows = extractor.ExtractFrom(heap).ToArray();
+            mutable targetTable : IMetadataTable[TRow] = null;
+            
+            def tableCount = heap.Tables.Count();
+            def tables = heap.Tables.ToArray();
+            for(mutable i = 0; i < tableCount; i++)
+            {
+                def table = tables[i];
+                when(table is IMetadataTable[TRow])
+                {
+                    targetTable = table :> IMetadataTable[TRow];
+                }
+            }
+                        
+            def rows = List.[TRow]();
+            when(targetTable != null)
+            {
+                rows.AddRange(targetTable.Rows);
+            }
+            
             rows;
         }
 
