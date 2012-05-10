@@ -1,0 +1,59 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tests.Macros;
+
+namespace Tests
+{
+    public partial class CustomAttributeSignatureTests
+    {
+        public stub ShouldReadBoolean() : void
+        {
+        }
+        public stub ShouldReadByte() : void
+        {
+        }
+        public stub ShouldReadChar() : void
+        {
+        }
+        public stub ShouldReadUInt16() : void
+        {
+        }
+        public stub ShouldReadInt16() : void
+        {
+        }
+        public stub ShouldReadInt32() : void
+        {
+        }
+        public stub ShouldReadUInt32() : void
+        {
+        }
+        public stub ShouldReadInt64() : void
+        {
+        }
+        public stub ShouldReadUInt64() : void
+        {          
+        }
+        public stub ShouldReadSingle() : void
+        {
+        }
+        public stub ShouldReadDouble() : void
+        {
+        }
+        public stub ShouldReadSerString() : void
+        {
+        }
+        public stub ShouldReadTypeSerString() : void
+        {
+        }
+        public stub ShouldReadFieldOrPropType() : void
+        {
+        }
+    }
+}

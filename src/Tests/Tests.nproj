@@ -229,6 +229,10 @@
     <Compile Include="Signatures\ArrayShapeTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Signatures\CustomAttributeSignatureTests.ElemTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>Signatures\CustomAttributeSignatureTests.n</DependentUpon>
+    </Compile>
     <Compile Include="Signatures\CustomAttributeSignatureTests.n">
       <SubType>Code</SubType>
     </Compile>
