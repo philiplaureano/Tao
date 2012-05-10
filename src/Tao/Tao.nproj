@@ -383,6 +383,15 @@
     <Compile Include="Metadata\Signatures\ArraySignature.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\CustomAttributeArgument.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\CustomAttributeSignature.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\CustomAttributeSignatureReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\CustomMod.n">
       <SubType>Code</SubType>
     </Compile>

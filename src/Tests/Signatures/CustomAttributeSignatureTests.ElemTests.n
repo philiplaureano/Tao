@@ -3,11 +3,17 @@ using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tests.Macros;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
-using Tests.Macros;
+using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Signatures;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
 
 namespace Tests
 {
@@ -30,6 +36,32 @@ namespace Tests
         }
         public stub ShouldReadInt32() : void
         {
+            def root = base.GetMetadataRoot();            
+            def tableStream = root.Heaps["#~"];
+            
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+            
+            // Get the CustomAttributeRow associated with 
+            // the SampleClass
+            def targetRow = heap.GetRow.[CustomAttributeRow](16);
+            
+            // Read the CustomAttribute blob
+            def blobStream = root.Heaps["#Blob"];
+            def blobReader = BlobReader();
+            
+            def blobIndex = targetRow.Value.ToUInt32();
+            def customAttributeBlob = blobReader.Read(blobIndex, blobStream);
+            
+            def parameters = targetRow.GetParameters(heap, blobStream);
+            
+            def customAttributeReader = CustomAttributeReader();
+            def customAttributeSignature = customAttributeReader.Read(parameters, customAttributeBlob);
+            
+            customAttributeSignature.FixedArguments.Count().ShouldBeEqualTo(1, "Wrong Number of FixedArgs");
+            
+            def arguments = customAttributeSignature.FixedArguments;
+            arguments[0].Value.ShouldBeEqualTo(42, "Wrong FixedArg value");            
         }
         public stub ShouldReadUInt32() : void
         {

@@ -1,0 +1,27 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Signatures
+{
+  public class CustomAttributeSignature
+  {
+      private _fixedArguments : IList.[CustomAttributeArgument] = List();
+      public this()
+      {
+      }
+      
+      public FixedArguments : IList.[CustomAttributeArgument]
+      {
+          get
+          {
+              _fixedArguments;
+          }          
+      }
+  }
+}

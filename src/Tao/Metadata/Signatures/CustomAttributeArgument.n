@@ -1,0 +1,28 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public class CustomAttributeArgument
+  {
+      private _value : object;
+      public this(value : object)
+      {
+          _value;
+      }
+      
+      public Value : object
+      {
+          get
+          {
+              _value;
+          }
+      }
+  }
+}
