@@ -13,9 +13,40 @@ namespace Tao.Metadata.Signatures
 {
   public class CustomAttributeSignatureReader
   {
-      public Read([NotNull] parameters : IEnumerable.[Param], blobStream : Stream) : CustomAttributeSignature
+      public Read([NotNull] parameters : IEnumerable.[Param],[NotNull] blobStream : Stream) : CustomAttributeSignature
       {
-          throw NotImplementedException();
+          def reader = BinaryReader(blobStream);          
+          def prolog = reader.ReadUInt16();
+          when(prolog != 0x0001)
+          {
+              throw BadImageFormatException("Invalid custom attribute signature--the custom attribute signature is missing the prolog bytes!");
+          }
+          
+          def signature = CustomAttributeSignature();
+          def currentParameters = parameters.ToArray();
+          foreach(param in currentParameters)
+          {
+              def value = ReadParameterValue(param, reader);
+              def fixedArgument = CustomAttributeArgument(value);
+              
+              signature.FixedArguments.Add(fixedArgument);              
+          }
+          
+          signature;
+      }
+      private ReadParameterValue([NotNull] param : Param, [NotNull] reader : BinaryReader) : object
+        requires param.Type != null
+      {
+          def paramType = param.Type;
+          def elementType = paramType.ElementType;
+          
+          mutable result : object = null;
+          when(elementType == ElementType.I4)
+          {
+              result = reader.ReadInt32();
+          }          
+          
+          result;
       }
   }
 }

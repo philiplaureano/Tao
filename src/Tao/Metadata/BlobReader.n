@@ -16,6 +16,7 @@ namespace Tao.Metadata
   {
     public Read(index : uint, [NotNull] blobStream : Stream) : Stream
         requires index <= blobStream.Length
+        ensures value.Position == 0
     {          
       // Move to the target index
       _ = blobStream.Seek(index :> int, SeekOrigin.Begin);

@@ -11,10 +11,10 @@ namespace Tao
 {
   public class CustomAttributeArgument
   {
-      private _value : object;
+      private mutable _value : object;
       public this(value : object)
       {
-          _value;
+          _value = value;
       }
       
       public Value : object

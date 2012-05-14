@@ -43,7 +43,7 @@ namespace Tao.Metadata.Tables.Rows
         public GetCustomAttributeBlobFrom(blobStream : Stream) : array[byte]
             requires Value != null otherwise throw InvalidOperationException("You can't a custom attribute blob if the Value index property is null")
         {
-            Value.ReadBlobFrom(blobStream);
+            Value.ToBlob(blobStream);
         }
         public GetTypeRowFrom([NotNull] heap : ITablesHeap) : ICustomAttributeTypeRow
             requires Type != null otherwise throw InvalidOperationException("You can't get a Type row if the Type index property is null")

@@ -23,12 +23,17 @@ namespace Tao.Metadata.Tables.Rows
       public ParamList : Index { get; set; }
       
       public GetMethodSignature([NotNull] blobStream : Stream) : IMethodSignature
-        requires Signature != null otherwise throw InvalidOperationException("You can't retrieve a method signature if the Signature property itself is null")
+        requires Signature != null otherwise throw InvalidOperationException("You can't retrieve a method signature if the Signature property itself is null")        
       {
+          _ = blobStream.Seek(0, SeekOrigin.Begin);
           def blobIndex = Signature.ToUInt32();
           def reader = BlobReader();
+          
           def blob = reader.Read(blobIndex, blobStream);
+          _ = blob.Seek(0, SeekOrigin.Begin);
+          
           def signatureReader = MethodDefSignatureReader();
+          
           signatureReader.Read(blob);
       }
   }

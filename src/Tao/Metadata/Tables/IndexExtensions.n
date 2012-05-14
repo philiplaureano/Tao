@@ -16,7 +16,7 @@ namespace Tao.Metadata.Tables
 {
     public static class IndexExtensions
     {
-        public ReadBlobFrom(this index : Index, blobStream : Stream) : array[byte]
+        public ToBlob(this index : Index, blobStream : Stream) : array[byte]
         {
             def reader = BlobReader();
             def targetOffset = index.ToUInt32();

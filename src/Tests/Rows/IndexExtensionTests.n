@@ -47,7 +47,7 @@ namespace Tests
             def index = Index.Narrow(1);
 
             def blobStream = MemoryStream(blobBytes);            
-            def blob = index.ReadBlobFrom(blobStream);
+            def blob = index.ToBlob(blobStream);
                         
             def expectedData = MemoryStream(expectedBytes);
             expectedData.ShouldMatch(blob);
@@ -59,10 +59,6 @@ namespace Tests
 
             def index = Index.FromCodedToken(CodedTokenType.CustomAttributeType, TableId.MethodDef, 0x42);
             index.ToUInt32().ShouldBeEqualTo(typeToken, "Wrong Token Value");
-        }
-        public stub ShouldBeAbleToExtractBlobFromCurrentIndex() : void
-        {
-            
-        }
+        }        
     }
 }

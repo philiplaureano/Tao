@@ -16,7 +16,7 @@ namespace Tao.Metadata.Signatures
     {
         public Read([NotNull] stream : Stream) : TSignature
             requires stream.CanRead
-            requires stream.Position < stream.Length otherwise throw InvalidOperationException("Unable to read past the end of the stream.")
+            requires stream.Position < stream.Length otherwise throw InvalidOperationException("Unable to read past the end of the stream. (Did you forget to reset the stream pointer?)")
             ensures !ReferenceEquals(value, null)
         {
             def signature = TSignature();

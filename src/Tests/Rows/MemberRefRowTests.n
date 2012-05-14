@@ -31,13 +31,13 @@ namespace Tests
             def targetRow = table.Rows[6];
             
             // Verify that the row is pointing to the correct blob index
-            def methodSignatureBlobIndex : uint = 0x001A;
+            def methodSignatureBlobIndex : uint = 0x001E;
             targetRow.Signature.ToUInt32().ShouldBeEqualTo(methodSignatureBlobIndex, "Wrong Signature");
             
             // Make sure that the row is pointing to the correct parent type
             def classRow = targetRow.Class.ToRowRef(CodedTokenType.MemberRefParent);
             classRow.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong TableId");
-            classRow.Row.ShouldBeEqualTo(8, "Wrong Class Row");
+            classRow.Row.ShouldBeEqualTo(9, "Wrong Class Row");
             
             def root = GetMetadataRoot();
             def blobStream = root.Heaps["#Blob"];

@@ -34,7 +34,7 @@ namespace Tests
         public stub ShouldReadInt16() : void
         {
         }
-        public stub ShouldReadInt32() : void
+        public ShouldReadInt32() : void
         {
             def root = base.GetMetadataRoot();            
             def tableStream = root.Heaps["#~"];
@@ -44,7 +44,7 @@ namespace Tests
             
             // Get the CustomAttributeRow associated with 
             // the SampleClass
-            def targetRow = heap.GetRow.[CustomAttributeRow](16);
+            def targetRow = heap.GetRow.[CustomAttributeRow](15);
             
             // Read the CustomAttribute blob
             def blobStream = root.Heaps["#Blob"];
@@ -53,9 +53,10 @@ namespace Tests
             def blobIndex = targetRow.Value.ToUInt32();
             def customAttributeBlob = blobReader.Read(blobIndex, blobStream);
             
+            blobStream.Seek(0);
             def parameters = targetRow.GetParameters(heap, blobStream);
             
-            def customAttributeReader = CustomAttributeReader();
+            def customAttributeReader = CustomAttributeSignatureReader();
             def customAttributeSignature = customAttributeReader.Read(parameters, customAttributeBlob);
             
             customAttributeSignature.FixedArguments.Count().ShouldBeEqualTo(1, "Wrong Number of FixedArgs");
@@ -85,6 +86,9 @@ namespace Tests
         {
         }
         public stub ShouldReadFieldOrPropType() : void
+        {
+        }
+        public stub ShouldFailIfPrologNotEncountered() : void
         {
         }
     }
