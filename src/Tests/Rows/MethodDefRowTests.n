@@ -26,12 +26,12 @@ namespace Tests
             def tableData = MemoryStream(base.GetTableStreamData());
             heap.ReadFrom(tableData);
 
-            // Search for the get_Value method (should be in MethodDef, row 2)
+            // Search for the get_Value method (should be in MethodDef, row 3)
             def table = heap.Tables.Where(t => t is MethodDefTable).First() :> MethodDefTable;
-            def targetRow = table.Rows[1];
+            def targetRow = table.Rows[2];
 
             // Verify that the row is pointing to the correct blob index
-            def methodSignatureBlobIndex : uint = 0x0012;
+            def methodSignatureBlobIndex : uint = 0x16;
             targetRow.Signature.ToUInt32().ShouldBeEqualTo(methodSignatureBlobIndex, "Wrong Signature");
 
             def root = GetMetadataRoot();

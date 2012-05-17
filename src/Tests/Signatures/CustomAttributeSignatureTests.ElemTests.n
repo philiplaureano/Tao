@@ -19,6 +19,9 @@ namespace Tests
 {
     public partial class CustomAttributeSignatureTests
     {
+        public stub ShouldReadValueTypeOrCustomEnum() : void
+        {
+        }
         public stub ShouldReadBoolean() : void
         {
         }
