@@ -45,9 +45,16 @@ namespace Tests
             def heap = TablesHeap();
             heap.ReadFrom(tableStream);
             
+            def stringHeap = root.Heaps["#Strings"];
+            
             // Get the CustomAttributeRow associated with 
             // the SampleClass
             def targetRow = heap.GetRow.[CustomAttributeRow](15);
+            
+            // Ensure that we have the correct type owner
+            def parentRowRef = targetRow.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
+            def parentRow = heap.GetRow.[TypeDefRow](parentRowRef.Row);            
+            parentRow.TypeName.ToString(stringHeap).ShouldBeEqualTo("SampleClass", "Wrong Parent Type");
             
             // Read the CustomAttribute blob
             def blobStream = root.Heaps["#Blob"];

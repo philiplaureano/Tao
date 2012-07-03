@@ -26,24 +26,26 @@ namespace Tests
             def tableData = MemoryStream(base.GetTableStreamData());
             heap.ReadFrom(tableData);
 
+            def root = GetMetadataRoot();
+            
             // Search for the get_Value method (should be in MethodDef, row 3)
             def table = heap.Tables.Where(t => t is MethodDefTable).First() :> MethodDefTable;
             def targetRow = table.Rows[2];
-
+            
+            // Match the method name
+            def stringHeap = root.Heaps["#Strings"];
+            targetRow.Name.ToString(stringHeap).ShouldBeEqualTo("get_Value", "Wrong Method Name");
+            
             // Verify that the row is pointing to the correct blob index
             def methodSignatureBlobIndex : uint = 0x16;
             targetRow.Signature.ToUInt32().ShouldBeEqualTo(methodSignatureBlobIndex, "Wrong Signature");
 
-            def root = GetMetadataRoot();
+            
             def blobStream = root.Heaps["#Blob"];
 
             // The expected and actual blob signatures must match                        
             def actualSignature = targetRow.GetMethodSignature(blobStream) :> MethodDefSignature;
-            actualSignature.ParameterCount.ShouldBeEqualTo(0, "Wrong Parameter Count");
-
-            // Match the method name
-            def stringHeap = root.Heaps["#Strings"];
-            targetRow.Name.ToString(stringHeap).ShouldBeEqualTo("get_Value", "Wrong Method Name");
+            actualSignature.ParameterCount.ShouldBeEqualTo(0, "Wrong Parameter Count");            
         }
         protected override TargetAssemblyFileName : string 
         { 
