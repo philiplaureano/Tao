@@ -20,6 +20,7 @@ namespace Tao.Metadata.Signatures
         public ElementType : ElementType { get; set; }
 
         public Read([NotNull] stream : Stream) : void
+            requires !stream.AtEnd() otherwise throw ArgumentException("stream", "You can't read a TypeSpec if the stream position is already at the end of the stream")
         {
             def elementType = stream.ReadByte() :> ElementType;            
             def isSupported = SupportsElement(elementType);

@@ -32,7 +32,7 @@ namespace Tao.Metadata.Signatures
         {
             // Read the row and tableId
             def reader = BinaryReader(stream);
-            def codedToken = reader.ReadInt32();
+            def codedToken = reader.ReadByte() :> int;
 
             // Read the table reference
             def tableDecoder = TableReferenceDecoder();
