@@ -40,9 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomAttributeWithBooleanArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithFixedArguments.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleClass.cs" />
+    <Compile Include="SampleClassWithBooleanAttributeUsage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

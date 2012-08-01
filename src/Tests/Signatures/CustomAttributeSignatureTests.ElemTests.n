@@ -1,4 +1,5 @@
 ﻿using Nemerle;
+using Nemerle.Assertions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
@@ -22,9 +23,11 @@ namespace Tests
         public stub ShouldReadValueTypeOrCustomEnum() : void
         {
         }
-        public stub ShouldReadBoolean() : void
+        public ShouldReadBoolean() : void
         {
+            TestCustomAttributeRead("SampleClassWithBooleanAttributeUsage", true);
         }
+        
         public stub ShouldReadByte() : void
         {
         }
@@ -39,41 +42,12 @@ namespace Tests
         }
         public ShouldReadInt32() : void
         {
-            def root = base.GetMetadataRoot();            
-            def tableStream = root.Heaps["#~"];
+            def expectedValue = 42;
+            def targetClassName = "SampleClass";
             
-            def heap = TablesHeap();
-            heap.ReadFrom(tableStream);
-            
-            def stringHeap = root.Heaps["#Strings"];
-            
-            // Get the CustomAttributeRow associated with 
-            // the SampleClass
-            def targetRow = heap.GetRow.[CustomAttributeRow](15);
-            
-            // Ensure that we have the correct type owner
-            def parentRowRef = targetRow.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
-            def parentRow = heap.GetRow.[TypeDefRow](parentRowRef.Row);            
-            parentRow.TypeName.ToString(stringHeap).ShouldBeEqualTo("SampleClass", "Wrong Parent Type");
-            
-            // Read the CustomAttribute blob
-            def blobStream = root.Heaps["#Blob"];
-            def blobReader = BlobReader();
-            
-            def blobIndex = targetRow.Value.ToUInt32();
-            def customAttributeBlob = blobReader.Read(blobIndex, blobStream);
-            
-            blobStream.Seek(0);
-            def parameters = targetRow.GetParameters(heap, blobStream);
-            
-            def customAttributeReader = CustomAttributeSignatureReader();
-            def customAttributeSignature = customAttributeReader.Read(parameters, customAttributeBlob);
-            
-            customAttributeSignature.FixedArguments.Count().ShouldBeEqualTo(1, "Wrong Number of FixedArgs");
-            
-            def arguments = customAttributeSignature.FixedArguments;
-            arguments[0].Value.ShouldBeEqualTo(42, "Wrong FixedArg value");            
+            TestCustomAttributeRead(targetClassName, expectedValue);                      
         }
+                
         public stub ShouldReadUInt32() : void
         {
         }
@@ -100,6 +74,63 @@ namespace Tests
         }
         public stub ShouldFailIfPrologNotEncountered() : void
         {
+        }
+        private TestCustomAttributeRead(targetClassName : string, expectedValue : object) : void
+        {
+            def root = base.GetMetadataRoot();            
+            def tableStream = root.Heaps["#~"];
+            
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+            
+            def stringHeap = root.Heaps["#Strings"];
+                                   
+            // Get the CustomAttributeRow associated with 
+            // the SampleClass
+            def targetRow = GetTargetRow(targetClassName, heap, stringHeap);
+            
+            // Ensure that we have the correct type owner
+            def parentRowRef = targetRow.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
+            def parentRow = heap.GetRow.[TypeDefRow](parentRowRef.Row);            
+            parentRow.TypeName.ToString(stringHeap).ShouldBeEqualTo(targetClassName, "Wrong Parent Type");
+            
+            // Read the CustomAttribute blob
+            def blobStream = root.Heaps["#Blob"];
+            def blobReader = BlobReader();
+            
+            def blobIndex = targetRow.Value.ToUInt32();
+            def customAttributeBlob = blobReader.Read(blobIndex, blobStream);
+            
+            blobStream.Seek(0);
+            def parameters = targetRow.GetParameters(heap, blobStream);
+            
+            def customAttributeReader = CustomAttributeSignatureReader();
+            def customAttributeSignature = customAttributeReader.Read(parameters, customAttributeBlob);
+            
+            customAttributeSignature.FixedArguments.Count().ShouldBeEqualTo(1, "Wrong Number of FixedArgs");
+            
+            def arguments = customAttributeSignature.FixedArguments;
+            arguments[0].Value.ShouldBeEqualTo(expectedValue, "Wrong FixedArg value");  
+        }
+        private GetTargetRow(targetClassName : string, heap : TablesHeap, stringHeap : Stream) : CustomAttributeRow
+            ensures value != null
+        {
+            mutable result : CustomAttributeRow = null;
+            def customAttributeRows = heap.GetRows.[CustomAttributeRow]();
+            foreach(row in customAttributeRows)
+            {
+                def parentRowRef = row.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
+                def parentRow = heap.GetRow.[TypeDefRow](parentRowRef.Row);            
+                def parentName = parentRow.TypeName.ToString(stringHeap);
+                
+                when(parentName == targetClassName)
+                {
+                    result = row;
+                }
+            }
+            
+            result;
+            
         }
     }
 }

@@ -39,7 +39,6 @@ namespace Tests
             // Verify that the row is pointing to the correct blob index
             def methodSignatureBlobIndex : uint = 0x16;
             targetRow.Signature.ToUInt32().ShouldBeEqualTo(methodSignatureBlobIndex, "Wrong Signature");
-
             
             def blobStream = root.Heaps["#Blob"];
 
