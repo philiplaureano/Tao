@@ -21,6 +21,9 @@ namespace Tests
     {
         public ShouldBeAbleToExtractMethodDefSignature() : void
         {
+            //def methodSignatureBlobIndex : uint = 0x001E;
+            def memberRefRowIndex = 6;
+            
             // Read the heap data
             def heap = TablesHeap();
             def tableData = MemoryStream(base.GetTableStreamData());
@@ -28,18 +31,28 @@ namespace Tests
             
             // Search for the AssemblyTrademark attribute constructor (should be in MemberRef, row 7)
             def table = heap.Tables.Where(t => t is MemberRefTable).First() :> MemberRefTable;
-            def targetRow = table.Rows[6];
-            
-            // Verify that the row is pointing to the correct blob index
-            def methodSignatureBlobIndex : uint = 0x001E;
-            targetRow.Signature.ToUInt32().ShouldBeEqualTo(methodSignatureBlobIndex, "Wrong Signature");
-            
-            // Make sure that the row is pointing to the correct parent type
-            def classRow = targetRow.Class.ToRowRef(CodedTokenType.MemberRefParent);
-            classRow.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong TableId");
-            classRow.Row.ShouldBeEqualTo(9, "Wrong Class Row");
-            
+                        
+            // Find the MemberRefRow that corresponds with the AssemblyTrademark constructor
             def root = GetMetadataRoot();
+            def stringHeap = root.Heaps["#Strings"];            
+            
+            mutable targetRow : MemberRefRow = null;
+            foreach(row in table.Rows)
+            {
+                def classRowRef = row.Class.ToRowRef(CodedTokenType.MemberRefParent);
+                when(classRowRef.TableId == TableId.TypeRef)
+                {
+                    def typeRefRow = heap.GetRow.[TypeRefRow](classRowRef.Row);
+                    def typeName = typeRefRow.TypeName.ToString(stringHeap);
+                    when(typeName == "AssemblyTrademarkAttribute")
+                    {
+                        targetRow = row;
+                    }
+                }
+            }
+            
+            targetRow.ShouldBeNotNull("Unable to find the AssemblyTrademark row in the MemberRef table");                        
+                        
             def blobStream = root.Heaps["#Blob"];
             
             // The expected and actual blob signatures must match                        
@@ -49,8 +62,7 @@ namespace Tests
             def parameters = actualSignature.Parameters;
             parameters[0].Type.ShouldBeEqualTo(StringSignature.Instance, "Wrong Parameter Type");
             
-            // Match the method name
-            def stringHeap = root.Heaps["#Strings"];
+            // Match the method name            
             targetRow.Name.ToString(stringHeap).ShouldBeEqualTo(".ctor", "Wrong Method Name");
         }        
         protected override TargetAssemblyFileName : string 

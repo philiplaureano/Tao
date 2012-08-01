@@ -27,8 +27,12 @@ namespace Tests
         {
             TestCustomAttributeRead("SampleClassWithBooleanAttributeUsage", true, typeof(bool));
         }
-        
-        public stub ShouldReadByte() : void
+
+        public ShouldReadByte() : void
+        {
+            TestCustomAttributeRead("SampleClassWithByteAttributeUsage", 32, typeof(byte));
+        }
+        public stub ShouldReadSignedByte() : void
         {
         }
         public stub ShouldReadChar() : void
@@ -44,22 +48,26 @@ namespace Tests
         {
             def expectedValue = 42;
             def targetClassName = "SampleClass";
-            
+
             TestCustomAttributeRead(targetClassName, expectedValue, typeof(Int32));                      
         }
-                
+
         public ShouldReadUInt32() : void
         {
             def expectedValue = 101;
             def targetClassName = "SampleClassWithUInt32AttributeUsage";
-            
+
             TestCustomAttributeRead(targetClassName, expectedValue, typeof(UInt32));                      
         }
         public stub ShouldReadInt64() : void
         {
         }
-        public stub ShouldReadUInt64() : void
+        public ShouldReadUInt64() : void
         {          
+            def expectedValue = 4242;
+            def targetClassName = "SampleClassWithUInt64AttributeUsage";
+
+            TestCustomAttributeRead(targetClassName, expectedValue, typeof(UInt64));
         }
         public stub ShouldReadSingle() : void
         {
@@ -83,36 +91,36 @@ namespace Tests
         {
             def root = base.GetMetadataRoot();            
             def tableStream = root.Heaps["#~"];
-            
+
             def heap = TablesHeap();
             heap.ReadFrom(tableStream);
-            
+
             def stringHeap = root.Heaps["#Strings"];
-                                   
+
             // Get the CustomAttributeRow associated with 
             // the SampleClass
             def targetRow = GetTargetRow(targetClassName, heap, stringHeap);
-            
+
             // Ensure that we have the correct type owner
             def parentRowRef = targetRow.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
             def parentRow = heap.GetRow.[TypeDefRow](parentRowRef.Row);            
             parentRow.TypeName.ToString(stringHeap).ShouldBeEqualTo(targetClassName, "Wrong Parent Type");
-            
+
             // Read the CustomAttribute blob
             def blobStream = root.Heaps["#Blob"];
             def blobReader = BlobReader();
-            
+
             def blobIndex = targetRow.Value.ToUInt32();
             def customAttributeBlob = blobReader.Read(blobIndex, blobStream);
-            
+
             blobStream.Seek(0);
             def parameters = targetRow.GetParameters(heap, blobStream);
-            
+
             def customAttributeReader = CustomAttributeSignatureReader();
             def customAttributeSignature = customAttributeReader.Read(parameters, customAttributeBlob);
-            
+
             customAttributeSignature.FixedArguments.Count().ShouldBeEqualTo(1, "Wrong Number of FixedArgs");
-            
+
             def arguments = customAttributeSignature.FixedArguments;
             arguments[0].Value.ShouldBeEqualTo(expectedValue, "Wrong FixedArg value");              
             arguments[0].Value.GetType().ShouldBeEqualTo(expectedType, "The actual type and the expected types don't match");
@@ -127,15 +135,15 @@ namespace Tests
                 def parentRowRef = row.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
                 def parentRow = heap.GetRow.[TypeDefRow](parentRowRef.Row);            
                 def parentName = parentRow.TypeName.ToString(stringHeap);
-                
+
                 when(parentName == targetClassName)
                 {
                     result = row;
                 }
             }
-            
+
             result;
-            
+
         }
     }
 }
