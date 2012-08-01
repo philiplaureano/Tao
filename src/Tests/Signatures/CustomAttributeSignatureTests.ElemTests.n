@@ -25,7 +25,7 @@ namespace Tests
         }
         public ShouldReadBoolean() : void
         {
-            TestCustomAttributeRead("SampleClassWithBooleanAttributeUsage", true);
+            TestCustomAttributeRead("SampleClassWithBooleanAttributeUsage", true, typeof(bool));
         }
         
         public stub ShouldReadByte() : void
@@ -45,11 +45,15 @@ namespace Tests
             def expectedValue = 42;
             def targetClassName = "SampleClass";
             
-            TestCustomAttributeRead(targetClassName, expectedValue);                      
+            TestCustomAttributeRead(targetClassName, expectedValue, typeof(Int32));                      
         }
                 
-        public stub ShouldReadUInt32() : void
+        public ShouldReadUInt32() : void
         {
+            def expectedValue = 101;
+            def targetClassName = "SampleClassWithUInt32AttributeUsage";
+            
+            TestCustomAttributeRead(targetClassName, expectedValue, typeof(UInt32));                      
         }
         public stub ShouldReadInt64() : void
         {
@@ -75,7 +79,7 @@ namespace Tests
         public stub ShouldFailIfPrologNotEncountered() : void
         {
         }
-        private TestCustomAttributeRead(targetClassName : string, expectedValue : object) : void
+        private TestCustomAttributeRead(targetClassName : string, expectedValue : object, expectedType : Type) : void
         {
             def root = base.GetMetadataRoot();            
             def tableStream = root.Heaps["#~"];
@@ -110,7 +114,8 @@ namespace Tests
             customAttributeSignature.FixedArguments.Count().ShouldBeEqualTo(1, "Wrong Number of FixedArgs");
             
             def arguments = customAttributeSignature.FixedArguments;
-            arguments[0].Value.ShouldBeEqualTo(expectedValue, "Wrong FixedArg value");  
+            arguments[0].Value.ShouldBeEqualTo(expectedValue, "Wrong FixedArg value");              
+            arguments[0].Value.GetType().ShouldBeEqualTo(expectedType, "The actual type and the expected types don't match");
         }
         private GetTargetRow(targetClassName : string, heap : TablesHeap, stringHeap : Stream) : CustomAttributeRow
             ensures value != null

@@ -44,6 +44,7 @@ namespace Tao.Metadata.Signatures
             match(elementType)
             {
                 |ElementType.I4 => result = reader.ReadInt32(); 
+                |ElementType.U4 => result = reader.ReadUInt32();
                 |ElementType.Boolean => result = reader.ReadBoolean();
                 | _=> throw NotSupportedException("Element Type Not Supported: " + elementType.ToString());
             }          
