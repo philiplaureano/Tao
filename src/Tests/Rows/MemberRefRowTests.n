@@ -20,10 +20,7 @@ namespace Tests
     public class MemberRefRowTests : FileBasedTableTest
     {
         public ShouldBeAbleToExtractMethodDefSignature() : void
-        {
-            //def methodSignatureBlobIndex : uint = 0x001E;
-            def memberRefRowIndex = 6;
-            
+        {            
             // Read the heap data
             def heap = TablesHeap();
             def tableData = MemoryStream(base.GetTableStreamData());

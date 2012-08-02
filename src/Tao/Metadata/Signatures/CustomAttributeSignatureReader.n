@@ -32,6 +32,9 @@ namespace Tao.Metadata.Signatures
                 signature.FixedArguments.Add(fixedArgument);              
             }
 
+            // TODO: Read the NumNamed value
+            // TODO: Read the NamedArgs
+            
             signature;
         }
         private ReadParameterValue([NotNull] param : Param, [NotNull] reader : BinaryReader) : object
