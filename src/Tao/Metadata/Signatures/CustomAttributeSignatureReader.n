@@ -47,6 +47,7 @@ namespace Tao.Metadata.Signatures
             match(elementType)
             {
                 |ElementType.I4 => result = reader.ReadInt32(); 
+                |ElementType.I8 => result = reader.ReadInt64();
                 |ElementType.U1 => result = reader.ReadByte();
                 |ElementType.U4 => result = reader.ReadUInt32();
                 |ElementType.Boolean => result = reader.ReadBoolean();

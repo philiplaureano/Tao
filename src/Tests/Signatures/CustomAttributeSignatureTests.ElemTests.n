@@ -59,8 +59,9 @@ namespace Tests
 
             TestCustomAttributeRead(targetClassName, expectedValue, typeof(UInt32));                      
         }
-        public stub ShouldReadInt64() : void
+        public ShouldReadInt64() : void
         {
+            TestCustomAttributeRead("SampleClassWithhInt64AttributeUsage", -12345, typeof(Int64));
         }
         public ShouldReadUInt64() : void
         {          
