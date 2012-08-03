@@ -34,7 +34,7 @@ namespace Tao.Metadata.Signatures
 
             // TODO: Read the NumNamed value
             // TODO: Read the NamedArgs
-            
+
             signature;
         }
         private ReadParameterValue([NotNull] param : Param, [NotNull] reader : BinaryReader) : object
@@ -42,20 +42,23 @@ namespace Tao.Metadata.Signatures
         {
             def paramType = param.Type;
             def elementType = paramType.ElementType;
+            
+            def readerMap : Dictionary.[ElementType, void -> object] = Dictionary();
+            readerMap[ElementType.I2] = reader.ReadInt16;
+            readerMap[ElementType.I4] = reader.ReadInt32;
+            readerMap[ElementType.I8] = reader.ReadInt64;
+            readerMap[ElementType.U1] = reader.ReadByte;
+            readerMap[ElementType.U2] = reader.ReadUInt16;
+            readerMap[ElementType.U4] = reader.ReadUInt32;
+            readerMap[ElementType.U8] = reader.ReadUInt64;
+            readerMap[ElementType.Boolean] = reader.ReadBoolean;
 
-            mutable result : object = null;
-            match(elementType)
+            when(!readerMap.ContainsKey(elementType))
             {
-                |ElementType.I4 => result = reader.ReadInt32(); 
-                |ElementType.I8 => result = reader.ReadInt64();
-                |ElementType.U1 => result = reader.ReadByte();
-                |ElementType.U4 => result = reader.ReadUInt32();
-                |ElementType.Boolean => result = reader.ReadBoolean();
-                |ElementType.U8 => result = reader.ReadUInt64();
-                | _=> throw NotSupportedException("Element Type Not Supported: " + elementType.ToString());
+                throw NotSupportedException("Element Type Not Supported: " + elementType.ToString());
             }          
 
-            result;
+            readerMap[elementType]();
         }
     }
 }

@@ -38,11 +38,13 @@ namespace Tests
         public stub ShouldReadChar() : void
         {
         }
-        public stub ShouldReadUInt16() : void
+        public ShouldReadUInt16() : void
         {
+            TestCustomAttributeRead("SampleClassWithUInt16AttributeUsage", 512, typeof(UInt16));
         }
-        public stub ShouldReadInt16() : void
+        public ShouldReadInt16() : void
         {
+            TestCustomAttributeRead("SampleClassWithInt16AttributeUsage", -255, typeof(Int16));
         }
         public ShouldReadInt32() : void
         {
@@ -61,7 +63,7 @@ namespace Tests
         }
         public ShouldReadInt64() : void
         {
-            TestCustomAttributeRead("SampleClassWithhInt64AttributeUsage", -12345, typeof(Int64));
+            TestCustomAttributeRead("SampleClassWithInt64AttributeUsage", -12345, typeof(Int64));
         }
         public ShouldReadUInt64() : void
         {          

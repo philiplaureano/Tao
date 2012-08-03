@@ -6,7 +6,7 @@ using System.Text;
 namespace SampleCustomAttributeUsage
 {
     [CustomAttributeWithInt64Arguments(-12345)]
-    public class SampleClassWithhInt64AttributeUsage
+    public class SampleClassWithInt64AttributeUsage
     {
     }
 }
