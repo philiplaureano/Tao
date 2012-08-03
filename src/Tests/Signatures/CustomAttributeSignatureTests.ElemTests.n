@@ -82,8 +82,22 @@ namespace Tests
         {
             TestCustomAttributeRead("SampleClassWithDoubleAttributeUsage", 3.14d, typeof(double));
         }
-        public stub ShouldReadSerString() : void
+        public ShouldReadSerString() : void
         {
+            TestCustomAttributeRead("SampleClassWithSerStringAttributeUsage", "abcd", typeof(string));
+        }
+        public ShouldReadNullSerString() : void
+        {
+             def testNullString(value : object, expectedValue : object, expectedType : Type) : void
+             {
+                 value.ShouldBeNull("The string should be null");
+             }
+             
+            TestCustomAttributeRead("SampleClassWithNullSerStringAttributeUsage", null, typeof(string), testNullString);
+        }
+        public ShouldReadEmptySerString() : void
+        {
+            TestCustomAttributeRead("SampleClassWithEmptySerStringAttributeUsage", string.Empty, typeof(string));
         }
         public stub ShouldReadTypeSerString() : void
         {
@@ -95,6 +109,10 @@ namespace Tests
         {
         }
         private TestCustomAttributeRead(targetClassName : string, expectedValue : object, expectedType : Type) : void
+        {
+            TestCustomAttributeRead(targetClassName, expectedValue, expectedType, TestExpectedValue);
+        }
+        private TestCustomAttributeRead(targetClassName : string, expectedValue : object, expectedType : Type, testExpectedValue : object * object * Type -> void) : void
         {
             def root = base.GetMetadataRoot();            
             def tableStream = root.Heaps["#~"];
@@ -129,8 +147,14 @@ namespace Tests
             customAttributeSignature.FixedArguments.Count().ShouldBeEqualTo(1, "Wrong Number of FixedArgs");
 
             def arguments = customAttributeSignature.FixedArguments;
-            arguments[0].Value.ShouldBeEqualTo(expectedValue, "Wrong FixedArg value");              
-            arguments[0].Value.GetType().ShouldBeEqualTo(expectedType, "The actual type and the expected types don't match");
+            def value = arguments[0].Value;
+            
+            testExpectedValue(value, expectedValue, expectedType);
+        }
+        private TestExpectedValue(value : object, expectedValue : object, expectedType : Type) : void
+        {
+            value.ShouldBeEqualTo(expectedValue, "Wrong FixedArg value");              
+            value.GetType().ShouldBeEqualTo(expectedType, "The actual type and the expected types don't match");
         }
         private GetTargetRow(targetClassName : string, heap : TablesHeap, stringHeap : Stream) : CustomAttributeRow
             ensures value != null otherwise throw ArgumentException(string.Format("Unable to find class '{0}'", targetClassName))
@@ -150,7 +174,6 @@ namespace Tests
             }
 
             result;
-
         }
     }
 }

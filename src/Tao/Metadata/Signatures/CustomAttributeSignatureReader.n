@@ -7,6 +7,7 @@ using Nemerle.Utility;
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Text;
 using System.Linq;
 
 namespace Tao.Metadata.Signatures
@@ -38,11 +39,11 @@ namespace Tao.Metadata.Signatures
             signature;
         }
         private ReadParameterValue([NotNull] param : Param, [NotNull] reader : BinaryReader) : object
-        requires param.Type != null
+            requires param.Type != null
         {
             def paramType = param.Type;
             def elementType = paramType.ElementType;
-            
+
             def readerMap : Dictionary.[ElementType, void -> object] = Dictionary();
             readerMap[ElementType.I1] = reader.ReadSByte;
             readerMap[ElementType.I2] = reader.ReadInt16;
@@ -56,6 +57,8 @@ namespace Tao.Metadata.Signatures
             readerMap[ElementType.Char] = reader.ReadChar;
             readerMap[ElementType.R4] = reader.ReadSingle;    
             readerMap[ElementType.R8] = reader.ReadDouble;
+            readerMap[ElementType.String] = () => ReadSerString(reader);
+
 
             when(!readerMap.ContainsKey(elementType))
             {
@@ -63,6 +66,28 @@ namespace Tao.Metadata.Signatures
             }          
 
             readerMap[elementType]();
+        }
+        private ReadSerString([NotNull] reader : BinaryReader) : string
+        {
+            def underlyingStream = reader.BaseStream;
+            def lengthByteValue = underlyingStream.PeekByte();
+
+            mutable result : string = null;
+            match(lengthByteValue)
+            {
+                | 0x00 => result = string.Empty;
+                | 0xFF => result = null;
+                |_ => 
+                    {
+                        def integerReader = CompressedIntegerReader();
+                        def length = integerReader.ReadInteger(underlyingStream);
+
+                        def bytes = reader.ReadBytes(length :> int);
+                        result = Encoding.UTF8.GetString(bytes);
+                    }
+            }
+
+            result;
         }
     }
 }

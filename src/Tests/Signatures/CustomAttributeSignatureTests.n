@@ -19,23 +19,7 @@ using Tao.Metadata.Tables.Rows;
 namespace Tests
 {
     public partial class CustomAttributeSignatureTests : FileBasedTableTest
-    {
-        public ShouldBeAbleToExtractParameters() : void
-        {
-            def root = base.GetMetadataRoot();
-            def tableStream = root.Heaps["#~"];
-            def blobStream = root.Heaps["#Blob"];
-            
-            def heap = TablesHeap();
-            heap.ReadFrom(tableStream);
-            
-            def row = heap.GetRow.[CustomAttributeRow](7);
-            
-            def parameters : array[Param] = row.GetParameters(heap, blobStream).ToArray();
-            parameters.Length.ShouldBeEqualTo(1, "Wrong Parameter Count");
-            parameters[0].Type.ShouldBeEqualTo(StringSignature.Instance, "Wrong Parameter Type");            
-        }
-       
+    {               
         public ShouldBeAbleToExtractCustomAttributeRows() : void
         {
             def heap = TablesHeap();
@@ -63,6 +47,7 @@ namespace Tests
             def typeDefAttributeRows = heap.GetCustomAttributeRows(TableId.TypeDef, typeDefRowIndex);
             typeDefAttributeRows.Count().ShouldBeEqualTo(1, "Wrong TypeDef Attribute Rows");
         }
+        
         protected override TargetAssemblyFileName : string 
         { 
             get
