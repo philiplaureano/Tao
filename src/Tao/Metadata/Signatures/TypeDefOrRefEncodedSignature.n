@@ -27,7 +27,9 @@ namespace Tao.Metadata.Signatures
       {
           def decoder = CodedTokenDecoder();
           def reader = BinaryReader(stream);
-          def token = reader.ReadUInt32() :> int;
+          
+          def compressedIntegerReader = CompressedIntegerReader();
+          def token = compressedIntegerReader.ReadInteger(stream) :> int;
           def result = decoder.Decode(CodedTokenType.TypeDefOrTypeRef, token);
                     
           Row = result[1] :> uint;

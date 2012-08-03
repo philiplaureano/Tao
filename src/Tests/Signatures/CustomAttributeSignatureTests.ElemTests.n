@@ -99,9 +99,13 @@ namespace Tests
         {
             TestCustomAttributeRead("SampleClassWithEmptySerStringAttributeUsage", string.Empty, typeof(string));
         }
-        public stub ShouldReadTypeSerString() : void
+        
+        public ShouldReadTypeSerString() : void
         {
+            // TODO: This needs to return a simple TypeReference object with the canonical name of the type
+            TestCustomAttributeRead("SampleClassWithTypeAttributeUsage", typeof(int), typeof(Type));
         }
+        
         public stub ShouldReadFieldOrPropType() : void
         {
         }
@@ -142,7 +146,7 @@ namespace Tests
             def parameters = targetRow.GetParameters(heap, blobStream);
 
             def customAttributeReader = CustomAttributeSignatureReader();
-            def customAttributeSignature = customAttributeReader.Read(parameters, customAttributeBlob);
+            def customAttributeSignature = customAttributeReader.Read(parameters, customAttributeBlob, stringHeap, heap);
 
             customAttributeSignature.FixedArguments.Count().ShouldBeEqualTo(1, "Wrong Number of FixedArgs");
 

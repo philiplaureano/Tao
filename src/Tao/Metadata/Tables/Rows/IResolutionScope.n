@@ -8,9 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
-{
-  public class ModuleRefRow : IHasCustomAttributeRow, IMemberRefParentRow, IResolutionScope
+{  
+  public interface IResolutionScope
   {
-      public Name : Index { get; set; }
+      Name : Index { get; set; }
   }
 }

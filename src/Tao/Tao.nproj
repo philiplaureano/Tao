@@ -818,6 +818,9 @@
     <Compile Include="Metadata\Tables\Rows\InterfaceImplRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\IResolutionScope.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\ManifestResourceRow.n">
       <SubType>Code</SubType>
     </Compile>

@@ -10,11 +10,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+
 namespace Tao.Metadata.Signatures
 {
     public class CustomAttributeSignatureReader
     {
-        public Read([NotNull] parameters : IEnumerable.[Param],[NotNull] blobStream : Stream) : CustomAttributeSignature
+        public Read([NotNull] parameters : IEnumerable.[Param],[NotNull] blobStream : Stream, [NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap) : CustomAttributeSignature
         {
             def reader = BinaryReader(blobStream);          
             def prolog = reader.ReadUInt16();
@@ -27,7 +30,7 @@ namespace Tao.Metadata.Signatures
             def currentParameters = parameters.ToArray();
             foreach(param in currentParameters)
             {
-                def value = ReadParameterValue(param, reader);
+                def value = ReadParameterValue(param, reader, stringHeap, tablesHeap);
                 def fixedArgument = CustomAttributeArgument(value);
 
                 signature.FixedArguments.Add(fixedArgument);              
@@ -38,7 +41,7 @@ namespace Tao.Metadata.Signatures
 
             signature;
         }
-        private ReadParameterValue([NotNull] param : Param, [NotNull] reader : BinaryReader) : object
+        private ReadParameterValue([NotNull] param : Param, [NotNull] reader : BinaryReader, [NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap) : object
             requires param.Type != null
         {
             def paramType = param.Type;
@@ -58,15 +61,15 @@ namespace Tao.Metadata.Signatures
             readerMap[ElementType.R4] = reader.ReadSingle;    
             readerMap[ElementType.R8] = reader.ReadDouble;
             readerMap[ElementType.String] = () => ReadSerString(reader);
-
-
+            
             when(!readerMap.ContainsKey(elementType))
             {
                 throw NotSupportedException("Element Type Not Supported: " + elementType.ToString());
             }          
 
             readerMap[elementType]();
-        }
+        }        
+
         private ReadSerString([NotNull] reader : BinaryReader) : string
         {
             def underlyingStream = reader.BaseStream;
