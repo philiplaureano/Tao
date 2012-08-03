@@ -44,6 +44,7 @@ namespace Tao.Metadata.Signatures
             def elementType = paramType.ElementType;
             
             def readerMap : Dictionary.[ElementType, void -> object] = Dictionary();
+            readerMap[ElementType.I1] = reader.ReadSByte;
             readerMap[ElementType.I2] = reader.ReadInt16;
             readerMap[ElementType.I4] = reader.ReadInt32;
             readerMap[ElementType.I8] = reader.ReadInt64;
@@ -52,6 +53,9 @@ namespace Tao.Metadata.Signatures
             readerMap[ElementType.U4] = reader.ReadUInt32;
             readerMap[ElementType.U8] = reader.ReadUInt64;
             readerMap[ElementType.Boolean] = reader.ReadBoolean;
+            readerMap[ElementType.Char] = reader.ReadChar;
+            readerMap[ElementType.R4] = reader.ReadSingle;    
+            readerMap[ElementType.R8] = reader.ReadDouble;
 
             when(!readerMap.ContainsKey(elementType))
             {

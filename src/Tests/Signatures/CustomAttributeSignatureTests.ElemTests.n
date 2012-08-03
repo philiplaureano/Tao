@@ -32,11 +32,13 @@ namespace Tests
         {
             TestCustomAttributeRead("SampleClassWithByteAttributeUsage", 32, typeof(byte));
         }
-        public stub ShouldReadSignedByte() : void
+        public ShouldReadSignedByte() : void
         {
+            TestCustomAttributeRead("SampleClassWithSignedByteAttributeUsage", -42, typeof(sbyte));
         }
-        public stub ShouldReadChar() : void
+        public ShouldReadChar() : void
         {
+            TestCustomAttributeRead("SampleClassWithCharAttributeUsage", 'x', typeof(char));
         }
         public ShouldReadUInt16() : void
         {
@@ -72,11 +74,13 @@ namespace Tests
 
             TestCustomAttributeRead(targetClassName, expectedValue, typeof(UInt64));
         }
-        public stub ShouldReadSingle() : void
+        public ShouldReadSingle() : void
         {
+            TestCustomAttributeRead("SampleClassWithFloatAttributeUsage", 3.14f, typeof(float));
         }
-        public stub ShouldReadDouble() : void
+        public ShouldReadDouble() : void
         {
+            TestCustomAttributeRead("SampleClassWithDoubleAttributeUsage", 3.14d, typeof(double));
         }
         public stub ShouldReadSerString() : void
         {
@@ -129,7 +133,7 @@ namespace Tests
             arguments[0].Value.GetType().ShouldBeEqualTo(expectedType, "The actual type and the expected types don't match");
         }
         private GetTargetRow(targetClassName : string, heap : TablesHeap, stringHeap : Stream) : CustomAttributeRow
-            ensures value != null
+            ensures value != null otherwise throw ArgumentException(string.Format("Unable to find class '{0}'", targetClassName))
         {
             mutable result : CustomAttributeRow = null;
             def customAttributeRows = heap.GetRows.[CustomAttributeRow]();

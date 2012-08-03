@@ -42,9 +42,13 @@
   <ItemGroup>
     <Compile Include="CustomAttributeWithBooleanArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithByteArgumentsAttribute.cs" />
+    <Compile Include="CustomAttributeWithCharArgumentsAttribute.cs" />
+    <Compile Include="CustomAttributeWithDoubleArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithFixedArguments.cs" />
     <Compile Include="CustomAttributeWithInt16ArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithInt64ArgumentsAttribute.cs" />
+    <Compile Include="CustomAttributeWithFloatArgumentsAttribute.cs" />
+    <Compile Include="CustomAttributeWithSignedByteArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithUInt16ArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithUInt32ArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithUInt64ArgumentsAttribute.cs" />
@@ -52,6 +56,10 @@
     <Compile Include="SampleClass.cs" />
     <Compile Include="SampleClassWithBooleanAttributeUsage.cs" />
     <Compile Include="SampleClassWithByteAttributeUsage.cs" />
+    <Compile Include="SampleClassWithCharAttributeUsage.cs" />
+    <Compile Include="SampleClassWithDoubleAttributeUsage.cs" />
+    <Compile Include="SampleClassWithFloatAttributeUsage.cs" />
+    <Compile Include="SampleClassWithSignedByteAttributeUsage.cs" />
     <Compile Include="SampleClassWithUInt16AttributeUsage.cs" />
     <Compile Include="SampleClassWithInt16AttributeUsage.cs" />
     <Compile Include="SampleClassWithInt64AttributeUsage.cs" />
