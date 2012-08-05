@@ -61,14 +61,50 @@ namespace Tao.Metadata.Signatures
             readerMap[ElementType.R4] = reader.ReadSingle;    
             readerMap[ElementType.R8] = reader.ReadDouble;
             readerMap[ElementType.String] = () => ReadSerString(reader);
-            
-            when(!readerMap.ContainsKey(elementType))
+
+            when(!IsSystemType(param, stringHeap, tablesHeap) && !readerMap.ContainsKey(elementType))
             {
                 throw NotSupportedException("Element Type Not Supported: " + elementType.ToString());
             }          
 
-            readerMap[elementType]();
+            if(elementType == ElementType.Class)
+            {
+                def typeRef = TypeReference();
+                typeRef.QualifiedName = ReadSerString(reader);
+                
+                typeRef;
+            }
+            else
+            {
+                readerMap[elementType]();
+            }
         }        
+
+        private IsSystemType([NotNull] param : Param,[NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap) : bool      
+            requires param.Type != null
+        {
+            mutable result : bool = false;
+            def type = param.Type;
+            when(type.GetType() == typeof(TypeDefOrRefEncodedSignature))
+            {
+                def signature = type :> TypeDefOrRefEncodedSignature;
+
+                def typeRow = signature.GetTypeRow(tablesHeap);                                
+                def assemblyRow = typeRow.GetAssemblyRow(tablesHeap);
+
+                def typeName = typeRow.TypeName.ToString(stringHeap);
+                def typeNamespace = typeRow.TypeNamespace.ToString(stringHeap);
+                def assemblyName = assemblyRow.Name.ToString(stringHeap);                                
+
+                match((typeName, typeNamespace, assemblyName))
+                {
+                    | ("Type", "System", "mscorlib") => result = true;
+                    |_=> {};
+                }
+            }
+
+            result;
+        }
 
         private ReadSerString([NotNull] reader : BinaryReader) : string
         {

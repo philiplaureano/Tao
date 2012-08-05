@@ -11,6 +11,7 @@ namespace Tao.Metadata.Tables.Rows
 {  
   public interface ITypeRow
   {
+      GetAssemblyRow(heap : ITablesHeap) : IAssemblyRow;
       TypeName : Index { get; set; }
       TypeNamespace : Index { get; set; }
   }

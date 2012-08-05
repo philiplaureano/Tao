@@ -1,4 +1,5 @@
 ﻿using Nemerle;
+using Nemerle.Assertions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
@@ -17,7 +18,37 @@ namespace Tao.Metadata.Tables.Rows
         { 
             get; set; 
         }
-        
+
         public TypeNamespace : Index { get; set; }
+
+        public GetAssemblyRow([NotNull] heap : ITablesHeap) : IAssemblyRow
+            requires this.ResolutionScope != null otherwise throw InvalidOperationException("You can only resolve the assembly row if you have a valid (non-null) ResolutionScope")
+            ensures value != null
+        {
+            def scopeRowRef = ResolutionScope.ToRowRef(CodedTokenType.ResolutionScope);
+            def tableId = scopeRowRef.TableId;
+
+            mutable result : IAssemblyRow = null;
+
+            // Module and ModuleRef ResolutionScopes refer to the same parent assembly
+            when(tableId == TableId.Module || tableId == TableId.ModuleRef)
+            {
+                result = heap.GetRow.[AssemblyRow](1);    
+            }
+            
+            // Trace the TypeRefRow all the way back to its parent assembly
+            when(tableId == TableId.TypeRef)
+            {
+                def typeRefRow = heap.GetRow.[TypeRefRow](scopeRowRef.Row);
+                result = typeRefRow.GetAssemblyRow(heap);
+            }
+            
+            when(tableId == TableId.AssemblyRef)
+            {
+                result = heap.GetRow.[AssemblyRefRow](scopeRowRef.Row);
+            }
+            
+            result;
+        }
     }
 }

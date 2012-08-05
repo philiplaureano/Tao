@@ -77,9 +77,7 @@ namespace Tests
             row.GetType().ShouldBeEqualTo(typeof(TypeDefRow), "Wrong Row Type");
             row.TypeName.ToString(stringHeap).ShouldBeEqualTo("<Module>", "Wrong Type Row Name");
         }
-        public stub ShouldBeAbleToGetAssociatedAssemblyRow() : void
-        {            
-        }
+        
         private CreateSampleStream() : Stream
         {
             def stream = MemoryStream();

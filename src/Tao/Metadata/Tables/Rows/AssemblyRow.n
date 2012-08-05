@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {  
-  public class AssemblyRow : IHasCustomAttributeRow, IResolutionScope
+  public class AssemblyRow : IAssemblyRow
   {
       public HashAlgId : uint { get; set; }
       public MajorVersion : ushort { get; set; }

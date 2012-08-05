@@ -19,27 +19,23 @@ using Tao.Metadata.Tables.Rows;
 namespace Tests
 {
     public class TypeRefRowTests : FileBasedTableTest
-    {        
-        public stub ShouldBeAbleToGetNamespaceAndTypeNameFromTypeRefRow() : void
-        {
+    {                
+        public ShouldBeAbleToGetAssociatedAssemblyRow() : void
+        {     
             def root = base.GetMetadataRoot();            
             def tableStream = root.Heaps["#~"];
 
             def heap = TablesHeap();
             heap.ReadFrom(tableStream);
 
+            // Look for the "DebuggingModes" TypeRefRow
+            def row = heap.GetRow.[TypeRefRow](18);
+            def assemblyRow = row.GetAssemblyRow(heap);
+
             def stringHeap = root.Heaps["#Strings"];
 
-        }
-        
-        public stub ShouldBeAbleToGetAssemblyNameFromTypeRefRow() : void
-        {
-        }
-        public stub ShouldBeAbleToRetrieveTypeRefRowUsingTypeNameAndNamespace() : void
-        {
-        }
-        public stub ShouldBeAbleToRetrieveTypeRefRowUsingTypeName() : void
-        {
+            row.TypeName.ToString(stringHeap).ShouldBeEqualTo("DebuggingModes", "wrong target row");
+            assemblyRow.Name.ToString(stringHeap).ShouldBeEqualTo("mscorlib", "wrong assembly");
         }
         
         protected override TargetAssemblyFileName : string 

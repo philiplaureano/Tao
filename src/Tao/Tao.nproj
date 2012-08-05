@@ -803,6 +803,9 @@
     <Compile Include="Metadata\Tables\Rows\GenericParamRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\IAssemblyRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\ICustomAttributeTypeRow.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1122,6 +1125,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\TinyMethodBody.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\TypeReference.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\UserStringHeapReader.n">

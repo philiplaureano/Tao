@@ -88,24 +88,35 @@ namespace Tests
         }
         public ShouldReadNullSerString() : void
         {
-             def testNullString(value : object, expectedValue : object, expectedType : Type) : void
-             {
-                 value.ShouldBeNull("The string should be null");
-             }
-             
+            def testNullString(value : object, expectedValue : object, expectedType : Type) : void
+            {
+                value.ShouldBeNull("The string should be null");
+            }
+
             TestCustomAttributeRead("SampleClassWithNullSerStringAttributeUsage", null, typeof(string), testNullString);
         }
         public ShouldReadEmptySerString() : void
         {
             TestCustomAttributeRead("SampleClassWithEmptySerStringAttributeUsage", string.Empty, typeof(string));
         }
-        
+
         public ShouldReadTypeSerString() : void
-        {
-            // TODO: This needs to return a simple TypeReference object with the canonical name of the type
-            TestCustomAttributeRead("SampleClassWithTypeAttributeUsage", typeof(int), typeof(Type));
+        {            
+            def testResult(value : object, expectedValue : object, expectedType : Type) : void
+            {                                
+                value.GetType().ShouldBeEqualTo(expectedType, "The actual type and the expected types don't match");
+
+                def typeRef = value :> TypeReference;
+                def qualifiedName = typeRef.QualifiedName;
+
+                expectedValue.ShouldBeEqualTo(qualifiedName, "Wrong custom attribute argument value");
+                qualifiedName.ShouldBeEqualTo(expectedValue, "Wrong FixedArg value");              
+            }
+
+            def expectedTypeName = "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+            TestCustomAttributeRead("SampleClassWithTypeAttributeUsage", expectedTypeName, typeof(TypeReference), testResult);
         }
-        
+
         public stub ShouldReadFieldOrPropType() : void
         {
         }
@@ -152,7 +163,7 @@ namespace Tests
 
             def arguments = customAttributeSignature.FixedArguments;
             def value = arguments[0].Value;
-            
+
             testExpectedValue(value, expectedValue, expectedType);
         }
         private TestExpectedValue(value : object, expectedValue : object, expectedType : Type) : void
