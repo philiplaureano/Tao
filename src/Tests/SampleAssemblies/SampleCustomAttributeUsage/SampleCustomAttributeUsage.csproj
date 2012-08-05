@@ -50,6 +50,7 @@
     <Compile Include="CustomAttributeWithInt64ArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithFloatArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithNullSerStringArgumentsAttribute.cs" />
+    <Compile Include="CustomAttributeWithObjectArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithSerStringArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithSignedByteArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithTypeArgumentsAttribute.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="SampleClassWithEmptySerStringAttributeUsage.cs" />
     <Compile Include="SampleClassWithFloatAttributeUsage.cs" />
     <Compile Include="SampleClassWithNullSerStringAttributeUsage.cs" />
+    <Compile Include="SampleClassWithObjectAttributeUsage.cs" />
     <Compile Include="SampleClassWithSerStringAttributeUsage.cs" />
     <Compile Include="SampleClassWithSignedByteAttributeUsage.cs" />
     <Compile Include="SampleClassWithTypeAttributeUsage.cs" />

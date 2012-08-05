@@ -61,6 +61,7 @@ namespace Tao.Metadata.Signatures
             readerMap[ElementType.R4] = reader.ReadSingle;    
             readerMap[ElementType.R8] = reader.ReadDouble;
             readerMap[ElementType.String] = () => ReadSerString(reader);
+            readerMap[ElementType.Object] = () => ReadBoxedObject(reader, stringHeap, tablesHeap, readerMap);
 
             when(!IsSystemType(param, stringHeap, tablesHeap) && !readerMap.ContainsKey(elementType))
             {
@@ -71,7 +72,7 @@ namespace Tao.Metadata.Signatures
             {
                 def typeRef = TypeReference();
                 typeRef.QualifiedName = ReadSerString(reader);
-                
+
                 typeRef;
             }
             else
@@ -94,6 +95,44 @@ namespace Tao.Metadata.Signatures
             result;
         }
 
+        private ReadBoxedObject([NotNull] reader : BinaryReader, [NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap, [NotNull] readerMap : Dictionary.[ElementType, void -> object]) : object
+        {
+            def validElements = array[
+                                    ElementType.Boolean,
+                                    ElementType.Char,
+                                    ElementType.I1,
+                                    ElementType.I2,
+                                    ElementType.I4,
+                                    ElementType.I8,
+                                    ElementType.U1,
+                                    ElementType.U2,
+                                    ElementType.U4,
+                                    ElementType.U8,
+                                    ElementType.R4,
+                                    ElementType.R8,
+                                    ElementType.String
+                                    ];
+
+            // Read the element type
+            def elementByte : byte = reader.ReadByte();
+            when(elementByte == 0x55)
+            {
+                // Handle custom enums here
+            }
+
+            when(elementByte == 0x1D)
+            {
+                // Handle single dimensional arrays here
+            }
+
+            def elementType = elementByte :> ElementType;
+            when(!validElements.Contains(elementType))
+            {
+                throw BadImageFormatException(string.Format("Element type '{0}' is not a supported boxed element value for custom attribute signatures", elementType));
+            }
+
+            readerMap[elementType]();
+        }
         private ReadSerString([NotNull] reader : BinaryReader) : string
         {
             def underlyingStream = reader.BaseStream;
