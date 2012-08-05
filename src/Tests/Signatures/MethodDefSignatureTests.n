@@ -18,7 +18,7 @@ using Tao.Metadata.Tables.Rows;
 
 namespace Tests
 {  
-    public class MethodDefSignatureTests
+    public class MethodDefSignatureTests : FileBasedTableTest
     {
         public ShouldReadDefaultWithoutHasThisOrExplicitThis() : void
         {            
@@ -334,6 +334,41 @@ namespace Tests
             
             outputStream.ShouldMatch(expectedStream);
         }
+        
+        public ShouldBeAbleToReadCorrectSignatureForValueType() : void
+        {
+            def root = base.GetMetadataRoot();            
+            def tableStream = root.Heaps["#~"];
+
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+
+            def stringHeap = root.Heaps["#Strings"];
+            def blobStream = root.Heaps["#Blob"];
+            
+            
+            
+            def attributeRow = heap.GetRow.[CustomAttributeRow](50);
+            def parentRef = attributeRow.GetParentRowReference();
+            
+            parentRef.TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong Parent TableId");
+            
+            def targetRow = heap.GetRow.[TypeDefRow](parentRef.Row);
+            targetRow.TypeName.ToString(stringHeap).ShouldBeEqualTo("SampleClassWithSampleEnumAttributeUsage", "Wrong target type");
+            
+            def typeRef = attributeRow.GetTypeRowReference();
+            typeRef.TableId.ShouldBeEqualTo(TableId.MethodDef, "Wrong Type TableId");
+            
+            def methodIndex = typeRef.Row;
+            def methodRow = heap.GetRow.[MethodDefRow](methodIndex);
+            
+            def signature = methodRow.GetMethodSignature(blobStream);
+            signature.ParameterCount.ShouldBeEqualTo(1, "Wrong Parameter Count");
+            
+            // TODO: Check the signature parameters and make sure that the value type points to the correct row and table
+            throw NotImplementedException("TODO: Fix this bug");
+        }
+        
         private CreateGenericSignatureBytes(conventions: IEnumerable.[CallingConvention], genericParameterCount : uint, parameterCount : uint, returnType : ElementType) : array[byte]
         {
             def stream = MemoryStream();
@@ -398,6 +433,13 @@ namespace Tests
             }
 
             stream.ToArray();
+        }
+        protected override TargetAssemblyFileName : string 
+        { 
+            get
+            {
+                "SampleCustomAttributeUsage.dll";
+            }
         }
     }
 }

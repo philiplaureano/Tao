@@ -61,7 +61,8 @@ namespace Tao.Metadata.Signatures
             readerMap[ElementType.R4] = reader.ReadSingle;    
             readerMap[ElementType.R8] = reader.ReadDouble;
             readerMap[ElementType.String] = () => ReadSerString(reader);
-            readerMap[ElementType.Object] = () => ReadBoxedObject(reader, stringHeap, tablesHeap, readerMap);
+            readerMap[ElementType.Object] = () => ReadBoxedObject(reader, readerMap);
+            readerMap[ElementType.ValueType] = () => ReadValueType(reader, paramType, stringHeap, tablesHeap);
 
             when(!IsSystemType(param, stringHeap, tablesHeap) && !readerMap.ContainsKey(elementType))
             {
@@ -95,7 +96,20 @@ namespace Tao.Metadata.Signatures
             result;
         }
 
-        private ReadBoxedObject([NotNull] reader : BinaryReader, [NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap, [NotNull] readerMap : Dictionary.[ElementType, void -> object]) : object
+        private ReadValueType([NotNull] reader : BinaryReader, [NotNull] paramType : ITypeSignature, [NotNull] stringHeap : Stream,  [NotNull] tablesHeap : ITablesHeap) : object
+        {
+            def parameterType = paramType :> ValueTypeSignature;
+            def signature = TypeDefOrRefEncodedSignature();
+            
+            signature.Row = parameterType.Row;
+            signature.TableId = parameterType.TableId;
+            
+            def typeRow = signature.GetTypeRow(tablesHeap);
+            def typeName = typeRow.TypeName.ToString(stringHeap);
+            throw NotImplementedException();
+        }
+        
+        private ReadBoxedObject([NotNull] reader : BinaryReader, [NotNull] readerMap : Dictionary.[ElementType, void -> object]) : object
         {
             def validElements = array[
                                     ElementType.Boolean,

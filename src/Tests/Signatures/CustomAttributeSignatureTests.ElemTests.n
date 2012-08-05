@@ -15,13 +15,15 @@ using Tao.Metadata;
 using Tao.Metadata.Signatures;
 using Tao.Metadata.Tables;
 using Tao.Metadata.Tables.Rows;
+using SampleCustomAttributeUsage;
 
 namespace Tests
 {
     public partial class CustomAttributeSignatureTests
     {
-        public stub ShouldReadValueTypeOrCustomEnum() : void
+        public ShouldReadCustomEnum() : void
         {
+            TestCustomAttributeRead("SampleClassWithSampleEnumAttributeUsage", SampleEnum.Maybe, typeof(SampleEnum));
         }
         public ShouldReadBoolean() : void
         {
@@ -214,9 +216,11 @@ namespace Tests
             ensures value != null otherwise throw ArgumentException(string.Format("Unable to find class '{0}'", targetClassName))
         {
             mutable result : CustomAttributeRow = null;
-            def customAttributeRows = heap.GetRows.[CustomAttributeRow]();
-            foreach(row in customAttributeRows)
+            def customAttributeRows = heap.GetRows.[CustomAttributeRow]().ToArray();
+            def length = customAttributeRows.Length;
+            for(mutable i = 0; i < length && result == null; i++)
             {
+                def row = customAttributeRows[i];
                 def parentRowRef = row.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
                 def parentRow = heap.GetRow.[TypeDefRow](parentRowRef.Row);            
                 def parentName = parentRow.TypeName.ToString(stringHeap);

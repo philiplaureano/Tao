@@ -32,7 +32,7 @@ namespace Tests
             
             // This signature should point to the System.Type class
             def signature = TypeDefOrRefEncodedSignature();
-            signature.Row = 3;
+            signature.Row = 4;
             signature.TableId = TableId.TypeRef;
             
             // Test the positive case where it is a System.Type
@@ -56,7 +56,7 @@ namespace Tests
             signature.Row = 1;
             signature.TableId = TableId.TypeRef;
             
-            // Test the positive case where it is a System.Type
+            // Test the negative case where it is not a System.Type
             def typeRow = signature.GetTypeRow(heap);
             typeRow.TypeName.ToString(stringHeap).ShouldBeEqualTo("Object", "This should NOT be recognized a System.Type");            
             signature.IsSystemType(stringHeap, heap).ShouldBeFalse("This type should NOT be recognized as a System.Type");
