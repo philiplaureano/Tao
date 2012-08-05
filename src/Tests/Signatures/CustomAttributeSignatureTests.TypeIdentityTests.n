@@ -20,8 +20,46 @@ namespace Tests
 {  
     public partial class CustomAttributeSignatureTests
     {        
-        public stub ShouldBeAbleToRecognizeBuiltInSystemType() : void
+        public ShouldBeAbleToRecognizeBuiltInSystemType() : void
         {
+            def root = base.GetMetadataRoot();            
+            def tableStream = root.Heaps["#~"];
+
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+
+            def stringHeap = root.Heaps["#Strings"];
+            
+            // This signature should point to the System.Type class
+            def signature = TypeDefOrRefEncodedSignature();
+            signature.Row = 3;
+            signature.TableId = TableId.TypeRef;
+            
+            // Test the positive case where it is a System.Type
+            def typeRow = signature.GetTypeRow(heap);
+            typeRow.TypeName.ToString(stringHeap).ShouldBeEqualTo("Type", "This should be a System.Type");            
+            signature.IsSystemType(stringHeap, heap).ShouldBeTrue("This type should be recognized as a System.Type");
+        }
+        
+        public ShouldBeAbleToRecognizeWhenATypeIsNotTheBuildInSystemType() : void
+        {
+            def root = base.GetMetadataRoot();            
+            def tableStream = root.Heaps["#~"];
+
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+
+            def stringHeap = root.Heaps["#Strings"];
+            
+            // This signature should point to the System.Type class
+            def signature = TypeDefOrRefEncodedSignature();
+            signature.Row = 1;
+            signature.TableId = TableId.TypeRef;
+            
+            // Test the positive case where it is a System.Type
+            def typeRow = signature.GetTypeRow(heap);
+            typeRow.TypeName.ToString(stringHeap).ShouldBeEqualTo("Object", "This should NOT be recognized a System.Type");            
+            signature.IsSystemType(stringHeap, heap).ShouldBeFalse("This type should NOT be recognized as a System.Type");
         }
     }
 }

@@ -88,19 +88,7 @@ namespace Tao.Metadata.Signatures
             when(type.GetType() == typeof(TypeDefOrRefEncodedSignature))
             {
                 def signature = type :> TypeDefOrRefEncodedSignature;
-
-                def typeRow = signature.GetTypeRow(tablesHeap);                                
-                def assemblyRow = typeRow.GetAssemblyRow(tablesHeap);
-
-                def typeName = typeRow.TypeName.ToString(stringHeap);
-                def typeNamespace = typeRow.TypeNamespace.ToString(stringHeap);
-                def assemblyName = assemblyRow.Name.ToString(stringHeap);                                
-
-                match((typeName, typeNamespace, assemblyName))
-                {
-                    | ("Type", "System", "mscorlib") => result = true;
-                    |_=> {};
-                }
+                result = signature.IsSystemType(stringHeap, tablesHeap);
             }
 
             result;
