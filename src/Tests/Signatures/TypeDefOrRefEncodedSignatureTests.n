@@ -18,43 +18,89 @@ using System.Linq;
 
 namespace Tests
 {
-  public class TypeDefOrRefEncodedSignatureTests
-  {
-      public ShouldBeAbleToReadClassEncodedSignature() : void
-      {
-          def stream = CreateSampleStream();
-          def signature = TypeSignature.ReadFrom(stream) :> TypeDefOrRefEncodedSignature;
-          signature.ElementType.ShouldBeEqualTo(ElementType.Class, "Wrong Element Type");
-          signature.TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong TableId");
-          signature.Row.ShouldBeEqualTo(1, "Invalid Row");
-      }
-      
-      public ShouldBeAbleToWriteClassEncodedSignature() : void      
-      {
-          def signature = TypeDefOrRefEncodedSignature();
-          signature.TableId = TableId.TypeDef;
-          signature.Row = 1;
-          
-          def stream = MemoryStream();
-          signature.Write(stream);
-          
-          stream.ShouldMatch(CreateSampleStream());
-      }
+    public class TypeDefOrRefEncodedSignatureTests : FileBasedTableTest
+    {
+        public ShouldBeAbleToReadClassEncodedSignature() : void
+        {
+            def stream = CreateSampleStream();
+            def signature = TypeSignature.ReadFrom(stream) :> TypeDefOrRefEncodedSignature;
+            signature.ElementType.ShouldBeEqualTo(ElementType.Class, "Wrong Element Type");
+            signature.TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong TableId");
+            signature.Row.ShouldBeEqualTo(1, "Invalid Row");
+        }
+
+        public ShouldBeAbleToWriteClassEncodedSignature() : void      
+        {
+            def signature = TypeDefOrRefEncodedSignature();
+            signature.TableId = TableId.TypeDef;
+            signature.Row = 1;
+
+            def stream = MemoryStream();
+            signature.Write(stream);
+
+            stream.ShouldMatch(CreateSampleStream());
+        }
+        public ShouldBeAbleToGetTypeRefRowFromSignature() : void
+        {
+            def root = base.GetMetadataRoot();            
+            def tableStream = root.Heaps["#~"];
+
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+
+            def stringHeap = root.Heaps["#Strings"];
+                        
+            def signature = TypeDefOrRefEncodedSignature();
+            signature.TableId = TableId.TypeRef;
+            signature.Row = 1;
             
-      private CreateSampleStream() : Stream
-      {
-          def stream = MemoryStream();
-          def writer = BinaryWriter(stream);
-          
-          // Create the sample stream
-          def encoder = CodedTokenEncoder();
-          def token = encoder.Encode(CodedTokenType.TypeDefOrTypeRef, TableId.TypeDef, 1);
-          
-          stream.WriteByte(ElementType.Class :> byte);
-          writer.Write(token);
-          stream.Seek(0);
-          
-          stream;
-      }
-  }
+            def row : ITypeRow = signature.GetTypeRow(heap);
+            row.GetType().ShouldBeEqualTo(typeof(TypeRefRow), "Wrong Row Type");
+            row.TypeName.ToString(stringHeap).ShouldBeEqualTo("Object", "Wrong Type Row Name");
+        }
+        
+        public ShouldBeAbleToGetTypeDefRowFromSignature() : void
+        {
+            def root = base.GetMetadataRoot();            
+            def tableStream = root.Heaps["#~"];
+
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+
+            def stringHeap = root.Heaps["#Strings"];
+                        
+            def signature = TypeDefOrRefEncodedSignature();
+            signature.TableId = TableId.TypeDef;
+            signature.Row = 1;
+            
+            def row : ITypeRow = signature.GetTypeRow(heap);
+            row.GetType().ShouldBeEqualTo(typeof(TypeDefRow), "Wrong Row Type");
+            row.TypeName.ToString(stringHeap).ShouldBeEqualTo("<Module>", "Wrong Type Row Name");
+        }
+        public stub ShouldBeAbleToGetAssociatedAssemblyRow() : void
+        {            
+        }
+        private CreateSampleStream() : Stream
+        {
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+
+        // Create the sample stream
+            def encoder = CodedTokenEncoder();
+            def token = encoder.Encode(CodedTokenType.TypeDefOrTypeRef, TableId.TypeDef, 1);
+
+            stream.WriteByte(ElementType.Class :> byte);
+            writer.Write(token);
+            stream.Seek(0);
+
+            stream;
+        }
+        protected override TargetAssemblyFileName : string 
+        { 
+            get
+            {
+                "SampleCustomAttributeUsage.dll";
+            }
+        }
+    }
 }

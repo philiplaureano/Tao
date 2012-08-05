@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
 
 namespace Tao.Metadata.Signatures
 {
@@ -21,6 +22,31 @@ namespace Tao.Metadata.Signatures
       }
       public TableId : TableId { get; set; }
       public Row : uint { get; set; }
+      
+      public GetTypeRow([NotNull] heap : ITablesHeap) : ITypeRow
+        requires (this.TableId == TableId.TypeRef || this.TableId == TableId.TypeDef) 
+            otherwise throw ArgumentException("The TableId must be either a TypeDef or a TypeRef for TypeDefOrRefEncoded signatures")
+        requires Row > 0 otherwise throw ArgumentException("Invalid Row: $Row")
+        ensures value != null
+      {
+          def tableId = TableId;
+          def rowIndex = Row;
+          mutable result : ITypeRow = null;
+          match(tableId)
+          {
+              |TableId.TypeRef => 
+                {
+                    result = heap.GetRow.[TypeRefRow](rowIndex);
+                }
+              |TableId.TypeDef => 
+                {
+                    result = heap.GetRow.[TypeDefRow](rowIndex);
+                };
+              |_=> throw NotSupportedException(string.Format("TableId not supported: {0}", this.TableId));
+          }   
+          
+          result;          
+      }
       
       protected override Read(elementType : ElementType, [NotNull] stream : Stream) : void
         requires elementType == ElementType.Class

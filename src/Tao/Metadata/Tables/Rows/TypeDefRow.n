@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {  
-  public class TypeDefRow : IHasCustomAttributeRow, IMemberRefParentRow
+  public class TypeDefRow : IHasCustomAttributeRow, IMemberRefParentRow, ITypeRow
   {
       public Flags : uint { get; set; }
       public TypeName : Index { get; set; }

@@ -205,6 +205,12 @@
     <Compile Include="Rows\MethodDefRowTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Rows\TypeDefRowTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\TypeRefRowTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RowWriterTests.n">
       <SubType>Code</SubType>
     </Compile>

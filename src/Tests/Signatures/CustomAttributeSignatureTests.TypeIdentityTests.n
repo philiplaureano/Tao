@@ -18,22 +18,10 @@ using Tao.Metadata.Tables.Rows;
 
 namespace Tests
 {  
-  public partial class CustomAttributeSignatureTests
-  {
-      public stub ShouldBeAbleToGetNamespaceAndTypeNameFromTypeDefRow() : void
-      {      
-      }
-      public stub ShouldBeAbleToGetNamespaceAndTypeNameFromTypeRefRow() : void
-      {
-      }
-      public stub ShouldBeAbleToGetAssemblyNameFromTypeRefRow() : void
-      {
-      }
-      public stub ShouldBeABleToGetAssemblyNameFromTypeDefRow() : void
-      {
-      }
-      public stub ShouldBeAbleToRecognizeBuiltInSystemType() : void
-      {
-      }
-  }
+    public partial class CustomAttributeSignatureTests
+    {        
+        public stub ShouldBeAbleToRecognizeBuiltInSystemType() : void
+        {
+        }
+    }
 }

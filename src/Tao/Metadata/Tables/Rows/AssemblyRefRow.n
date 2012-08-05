@@ -9,14 +9,16 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class AssemblyRefRow : IHasCustomAttributeRow, IResolutionScope
+  public class AssemblyRefRow : IAssemblyRow
   {
       public MajorVersion : ushort { get; set; }
       public MinorVersion : ushort { get; set; }
       public BuildNumber : ushort { get; set; }
       public RevisionNumber : ushort { get; set; }      
       public Flags : uint { get; set; }
-      public PublicKeyOrToken : Index { get; set; }
+      public PublicKeyOrToken : Index 
+        implements IAssemblyRow.PublicKey { get; set; }
+        
       public Name : Index { get; set; }
       public Culture : Index { get; set; }
       public HashValue : Index { get; set; }

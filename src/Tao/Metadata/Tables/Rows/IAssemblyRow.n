@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Tables.Rows
+{
+  public interface IAssemblyRow : IHasCustomAttributeRow, IResolutionScope
+  {
+      MajorVersion : ushort { get; set; }
+      MinorVersion : ushort { get; set; }
+      BuildNumber : ushort { get; set; }
+      RevisionNumber : ushort { get; set; }
+      PublicKey : Index { get; set; }
+      Flags : uint { get; set; }
+      new Name : Index { get; set; }
+      Culture : Index { get; set; }
+  }
+}

@@ -1,0 +1,53 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Signatures;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+
+namespace Tests
+{
+    public class TypeDefRowTests : FileBasedTableTest
+    {         
+        public stub ShouldBeAbleToGetNamespaceAndTypeNameFromTypeDefRow() : void
+        {
+            def root = base.GetMetadataRoot();            
+            def tableStream = root.Heaps["#~"];
+
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+
+            def stringHeap = root.Heaps["#Strings"];
+
+        }
+        
+        public stub ShouldBeAbleToGetAssemblyNameFromTypeDefRow() : void
+        {
+        }
+        public stub ShouldBeAbleToRetrieveTypeDefRowUsingTypeNameAndNamespace() : void
+        {
+        }
+        public stub ShouldBeAbleToRetrieveTypeDefRowUsingTypeName() : void
+        {
+        }
+        
+        protected override TargetAssemblyFileName : string 
+        { 
+            get
+            {
+                "SampleCustomAttributeUsage.dll";
+            }
+        }
+    }
+}
