@@ -30,7 +30,7 @@ namespace Tao.Metadata.Signatures
             def currentParameters = parameters.ToArray();
             foreach(param in currentParameters)
             {
-                def value = ReadParameterValue(param, reader, stringHeap, tablesHeap);
+                def value = ReadParameterValue(param, reader, stringHeap, blobStream, tablesHeap);
                 def fixedArgument = CustomAttributeArgument(value);
 
                 signature.FixedArguments.Add(fixedArgument);              
@@ -41,7 +41,7 @@ namespace Tao.Metadata.Signatures
 
             signature;
         }
-        private ReadParameterValue([NotNull] param : Param, [NotNull] reader : BinaryReader, [NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap) : object
+        private ReadParameterValue([NotNull] param : Param, [NotNull] reader : BinaryReader, [NotNull] stringHeap : Stream, [NotNull] blobStream : Stream, [NotNull] tablesHeap : ITablesHeap) : object
             requires param.Type != null
         {
             def paramType = param.Type;
@@ -62,7 +62,7 @@ namespace Tao.Metadata.Signatures
             readerMap[ElementType.R8] = reader.ReadDouble;
             readerMap[ElementType.String] = () => ReadSerString(reader);
             readerMap[ElementType.Object] = () => ReadBoxedObject(reader, readerMap);
-            readerMap[ElementType.ValueType] = () => ReadValueType(reader, paramType, stringHeap, tablesHeap);
+            readerMap[ElementType.ValueType] = () => ReadValueType(reader, paramType, stringHeap, blobStream, tablesHeap);
 
             when(!IsSystemType(param, stringHeap, tablesHeap) && !readerMap.ContainsKey(elementType))
             {
@@ -96,7 +96,7 @@ namespace Tao.Metadata.Signatures
             result;
         }
 
-        private ReadValueType([NotNull] reader : BinaryReader, [NotNull] paramType : ITypeSignature, [NotNull] stringHeap : Stream,  [NotNull] tablesHeap : ITablesHeap) : object
+        private ReadValueType([NotNull] reader : BinaryReader, [NotNull] paramType : ITypeSignature, [NotNull] stringHeap : Stream, [NotNull] blobHeap : Stream, [NotNull] tablesHeap : ITablesHeap) : object
         {
             def parameterType = paramType :> ValueTypeSignature;
             def signature = TypeDefOrRefEncodedSignature();
@@ -106,7 +106,31 @@ namespace Tao.Metadata.Signatures
             
             def typeRow = signature.GetTypeRow(tablesHeap);
             def typeName = typeRow.TypeName.ToString(stringHeap);
-            throw NotImplementedException();
+            def nameSpace = typeRow.TypeNamespace.ToString(stringHeap);
+            
+            def assemblyRow = typeRow.GetAssemblyRow(tablesHeap);            
+            def assemblyName = assemblyRow.Name.ToString(stringHeap);                                                 
+            
+            def format = "{0}.{1}, {2}";
+            def fullyQualifiedName = string.Format(format, nameSpace, typeName, assemblyName);
+            
+            def enumType = Type.GetType(fullyQualifiedName, true);
+            def underlyingType = Enum.GetUnderlyingType(enumType);
+            
+            def readerMap = Dictionary.[Type, void -> object]();
+            
+            readerMap[typeof(byte)] = reader.ReadByte;
+            readerMap[typeof(ushort)] = reader.ReadUInt16;
+            readerMap[typeof(uint)] = reader.ReadUInt32;
+            readerMap[typeof(ulong)] = reader.ReadUInt64;
+            
+            when(!readerMap.ContainsKey(underlyingType))
+            {
+                 throw NotSupportedException(string.Format("Underlying type '{0}' not supported when reading enums in custom attribute signatures", underlyingType.Name));
+            }
+            
+            def enumValue = readerMap[underlyingType]();
+            Enum.ToObject(enumType, enumValue);
         }
         
         private ReadBoxedObject([NotNull] reader : BinaryReader, [NotNull] readerMap : Dictionary.[ElementType, void -> object]) : object

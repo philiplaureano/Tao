@@ -50,9 +50,12 @@ namespace Tests
 
             def stringHeap = root.Heaps["#Strings"];
                         
+            def targetIndex = heap.GetTypeRowIndex.[TypeRefRow]("Object", stringHeap);
+            targetIndex.ShouldBeNotNull("Object row index not found in the TypeRef table (WTF?)");
+            
             def signature = TypeDefOrRefEncodedSignature();
             signature.TableId = TableId.TypeRef;
-            signature.Row = 1;
+            signature.Row = targetIndex.Value;
             
             def row : ITypeRow = signature.GetTypeRow(heap);
             row.GetType().ShouldBeEqualTo(typeof(TypeRefRow), "Wrong Row Type");

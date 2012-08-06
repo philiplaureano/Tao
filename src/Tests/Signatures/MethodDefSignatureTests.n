@@ -337,6 +337,8 @@ namespace Tests
         
         public ShouldBeAbleToReadCorrectSignatureForValueType() : void
         {
+            def targetClassName = "SampleClassWithSampleEnumAttributeUsage";
+            
             def root = base.GetMetadataRoot();            
             def tableStream = root.Heaps["#~"];
 
@@ -345,16 +347,30 @@ namespace Tests
 
             def stringHeap = root.Heaps["#Strings"];
             def blobStream = root.Heaps["#Blob"];
+                        
+            // Find the target class by name                                   
+            def targetIndex = heap.GetTypeRowIndex.[TypeDefRow](targetClassName, stringHeap);            
+            targetIndex.ShouldBeNotNull("There should be a valid index at this point");
+                        
+            // Find the attribute that points back to the target type            
+            def isTargetAttribute(row : CustomAttributeRow) : bool                
+            {
+                def rowRef = row.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
+                
+                def isTargetTable = rowRef.TableId == TableId.TypeDef;
+                def targetIndexValue = targetIndex.Value;
+                def hasMatchingIndex = rowRef.Row == targetIndexValue;
+                
+                isTargetTable && hasMatchingIndex;
+            }
             
-            
-            
-            def attributeRow = heap.GetRow.[CustomAttributeRow](50);
-            def parentRef = attributeRow.GetParentRowReference();
+            def attributeRow = heap.GetRows.[CustomAttributeRow](isTargetAttribute).First();
+            def parentRef : RowReference = attributeRow.GetParentRowReference();
             
             parentRef.TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong Parent TableId");
             
             def targetRow = heap.GetRow.[TypeDefRow](parentRef.Row);
-            targetRow.TypeName.ToString(stringHeap).ShouldBeEqualTo("SampleClassWithSampleEnumAttributeUsage", "Wrong target type");
+            targetRow.TypeName.ToString(stringHeap).ShouldBeEqualTo(targetClassName, "Wrong target type");
             
             def typeRef = attributeRow.GetTypeRowReference();
             typeRef.TableId.ShouldBeEqualTo(TableId.MethodDef, "Wrong Type TableId");
@@ -365,8 +381,15 @@ namespace Tests
             def signature = methodRow.GetMethodSignature(blobStream);
             signature.ParameterCount.ShouldBeEqualTo(1, "Wrong Parameter Count");
             
-            // TODO: Check the signature parameters and make sure that the value type points to the correct row and table
-            throw NotImplementedException("TODO: Fix this bug");
+            //  Check the signature parameters and make sure that the value type points to the correct row and table
+            def parameterType = signature.Parameters[0].Type :> ValueTypeSignature;
+            parameterType.TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong TableId for the parameter type");
+            
+            def expectedRow = heap.GetTypeRowIndex.[TypeDefRow]("SampleEnum", stringHeap);
+            expectedRow.ShouldBeNotNull("There should be a typedef row that corresponds to the SampleEnum type.");
+            
+            def expectedRowValue = expectedRow.Value;
+            parameterType.Row.ShouldBeEqualTo(expectedRowValue, "Wrong Row Value");
         }
         
         private CreateGenericSignatureBytes(conventions: IEnumerable.[CallingConvention], genericParameterCount : uint, parameterCount : uint, returnType : ElementType) : array[byte]

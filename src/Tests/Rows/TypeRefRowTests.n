@@ -28,11 +28,13 @@ namespace Tests
             def heap = TablesHeap();
             heap.ReadFrom(tableStream);
 
-            // Look for the "DebuggingModes" TypeRefRow
-            def row = heap.GetRow.[TypeRefRow](18);
-            def assemblyRow = row.GetAssemblyRow(heap);
-
             def stringHeap = root.Heaps["#Strings"];
+            
+            // Look for the "DebuggingModes" TypeRefRow            
+            def row = heap.GetTypeRow.[TypeRefRow]("DebuggingModes", stringHeap);
+            row.ShouldBeNotNull("Unable to find the target row");
+            
+            def assemblyRow = row.GetAssemblyRow(heap);            
 
             row.TypeName.ToString(stringHeap).ShouldBeEqualTo("DebuggingModes", "wrong target row");
             assemblyRow.Name.ToString(stringHeap).ShouldBeEqualTo("mscorlib", "wrong assembly");

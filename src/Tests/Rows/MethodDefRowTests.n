@@ -28,12 +28,12 @@ namespace Tests
 
             def root = GetMetadataRoot();
             
-            // Search for the get_Value method (should be in MethodDef, row 3)
-            def table = heap.Tables.Where(t => t is MethodDefTable).First() :> MethodDefTable;
-            def targetRow = table.Rows[2];
-            
-            // Match the method name
+            // Search for the get_Value method
             def stringHeap = root.Heaps["#Strings"];
+            def rows = heap.GetRows.[MethodDefRow]();
+            def targetRow = rows.Where(r=> r.Name.ToString(stringHeap) == "get_Value").First();
+            
+            // Match the method name            
             targetRow.Name.ToString(stringHeap).ShouldBeEqualTo("get_Value", "Wrong Method Name");
             
             // Verify that the row is pointing to the correct blob index

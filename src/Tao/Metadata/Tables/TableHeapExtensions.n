@@ -30,7 +30,7 @@ namespace Tao.Metadata.Tables
                 }
             }
         }
-        
+
         public GetRow[TRow](this heap : ITablesHeap, rowIndex : uint) : TRow
             where TRow : class
         {            
@@ -52,10 +52,69 @@ namespace Tao.Metadata.Tables
             }
             result;
         }
+        public GetTypeRow[TRow](this heap : ITablesHeap, typeName : string, [NotNull] stringHeap : Stream) : TRow
+            where TRow : ITypeRow, class
+        {
+            def isTargetType(row : TRow) : bool
+            {
+                row.TypeName.ToString(stringHeap) == typeName;
+            }
+            
+            heap.GetTypeRow.[TRow](isTargetType);
+        }
+        
+        public GetTypeRow[TRow](this heap : ITablesHeap, isTargetRow : TRow -> bool ) : TRow
+            where TRow : ITypeRow, class
+        {
+            def index = heap.GetRowIndex(isTargetRow);
+
+            mutable result : TRow = null;
+            when(index != null && index.HasValue)
+            {
+                result = heap.GetRow.[TRow](index.Value);
+            }
+                        
+            result;        
+        }
+        public GetTypeRowIndex[TRow](this heap : ITablesHeap, [NotNull] typeName : string, stringHeap : Stream) : uint?
+            where TRow : ITypeRow, class
+        {
+            def isTargetType(row : TRow) : bool
+            {
+                row.TypeName.ToString(stringHeap) == typeName;
+            }
+            heap.GetTypeRowIndex(isTargetType);
+        }
+        
+        public GetTypeRowIndex[TRow](this heap : ITablesHeap, [NotNull] isTargetRow : TRow -> bool) : uint?
+            where TRow : ITypeRow, class
+        {
+            heap.GetRowIndex.[TRow](isTargetRow);
+        }
+        public GetRowIndex[TRow](this heap : ITablesHeap, [NotNull] isTargetRow : TRow -> bool) : uint?
+        {
+            mutable targetIndex : uint? = null;
+            def rows = heap.GetRows.[TRow]().ToArray();
+            def length = rows.Length :> uint;
+            for(mutable i : uint = 0; i < length && targetIndex == null; i++)
+            {
+                def row = rows[i :> int];                
+                when(isTargetRow(row))
+                {
+                    targetIndex = i + 1;
+                }
+            }
+
+            targetIndex;
+        }
+        public GetRows[TRow](this heap : ITablesHeap, [NotNull] filter : TRow -> bool) : IEnumerable[TRow]
+        {
+            heap.GetRows.[TRow]().Where(filter);            
+        }
         public GetRows[TRow](this heap : ITablesHeap) : IEnumerable[TRow]
         {
             mutable targetTable : IMetadataTable[TRow] = null;
-            
+
             def tableCount = heap.Tables.Count();
             def tables = heap.Tables.ToArray();
             for(mutable i = 0; i < tableCount; i++)
@@ -66,13 +125,13 @@ namespace Tao.Metadata.Tables
                     targetTable = table :> IMetadataTable[TRow];
                 }
             }
-                        
+
             def rows = List.[TRow]();
             when(targetTable != null)
             {
                 rows.AddRange(targetTable.Rows);
             }
-            
+
             rows;
         }
 

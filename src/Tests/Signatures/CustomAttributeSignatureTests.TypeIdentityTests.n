@@ -51,9 +51,11 @@ namespace Tests
 
             def stringHeap = root.Heaps["#Strings"];
             
+            def row = heap.GetTypeRowIndex.[TypeRefRow]("Object", stringHeap).Value;
+            
             // This signature should point to the System.Type class
             def signature = TypeDefOrRefEncodedSignature();
-            signature.Row = 1;
+            signature.Row = row;
             signature.TableId = TableId.TypeRef;
             
             // Test the negative case where it is not a System.Type

@@ -122,6 +122,7 @@ namespace Tests
             def actualRow = row.GetTypeRowFrom(heap);
             actualRow.GetType().ShouldBeEqualTo(typeof(MemberRefRow), "Wrong Table Type");
         }
+                
         protected override TargetAssemblyFileName : string 
         { 
             get
