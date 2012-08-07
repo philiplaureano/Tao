@@ -34,11 +34,7 @@ namespace Tests
             def targetRow = rows.Where(r=> r.Name.ToString(stringHeap) == "get_Value").First();
             
             // Match the method name            
-            targetRow.Name.ToString(stringHeap).ShouldBeEqualTo("get_Value", "Wrong Method Name");
-            
-            // Verify that the row is pointing to the correct blob index
-            def methodSignatureBlobIndex : uint = 0x16;
-            targetRow.Signature.ToUInt32().ShouldBeEqualTo(methodSignatureBlobIndex, "Wrong Signature");
+            targetRow.Name.ToString(stringHeap).ShouldBeEqualTo("get_Value", "Wrong Method Name");          
             
             def blobStream = root.Heaps["#Blob"];
 

@@ -25,7 +25,23 @@ namespace Tests
         {
             def testValue(value : object, expectedValue : object, expectedType : Type) : void
             {
-                throw NotImplementedException();
+                value.ShouldBeNotNull("The actual value cannot be null");
+                
+                def actualType = value.GetType();
+                actualType.ShouldBeEqualTo(expectedType, "Wrong array type");
+                
+                def actualArray = value :> Array;
+                def expectedArray = value :> Array;
+                
+                def length = actualArray.Length;                
+                expectedArray.Length.ShouldBeEqualTo(length, "The two arrays should have the same length");
+                for(mutable i = 0; i < length; i++)
+                {
+                    def actual = actualArray.GetValue(i);
+                    def expected = expectedArray.GetValue(i);
+                    
+                    actual.ShouldBeEqualTo(expected, "Wrong element value at index {0}", i);
+                }                
             }
             
             TestCustomAttributeRead("SampleClassWithArrayAttributeUsage", array[1 : object,2,3], typeof(array[object]), testValue);

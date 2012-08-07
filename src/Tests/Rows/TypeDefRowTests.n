@@ -36,6 +36,20 @@ namespace Tests
             row.TypeName.ToString(stringHeap).ShouldBeEqualTo("<Module>", "wrong target row");
             assemblyRow.Name.ToString(stringHeap).ShouldBeEqualTo("SampleCustomAttributeUsage", "wrong assembly");
         }
+        public ShouldBeAbleToResolvePartiallyQualifiedName() : void
+        {
+            def root = base.GetMetadataRoot();            
+            def tableStream = root.Heaps["#~"];
+
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+
+            def stringHeap = root.Heaps["#Strings"];
+            
+            def row : ITypeRow = heap.GetTypeRow.[TypeDefRow]("SampleEnum", stringHeap);
+            
+            row.GetPartialQualifiedName(stringHeap, heap).ShouldBeEqualTo("SampleCustomAttributeUsage.SampleEnum, SampleCustomAttributeUsage", "Wrong partial qualified name");
+        }
         protected override TargetAssemblyFileName : string 
         { 
             get

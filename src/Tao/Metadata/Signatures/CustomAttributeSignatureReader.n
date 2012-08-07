@@ -92,21 +92,43 @@ namespace Tao.Metadata.Signatures
             def elementCount = reader.ReadInt32();
             def arrayType = arraySignature.ArrayType;
             
-            def elementType = arrayType.ElementType;            
+            def elementType = arrayType.ElementType;                                    
             
-            def readElement  = () => readerMap[elementType]();
-            def arguments = List();
+            def typeMap = Dictionary();
+            typeMap[ElementType.Boolean] = typeof(bool);
+            typeMap[ElementType.Char] = typeof(char);
+            typeMap[ElementType.I1] = typeof(sbyte);
+            typeMap[ElementType.I2] = typeof(short);
+            typeMap[ElementType.I4] = typeof(int);
+            typeMap[ElementType.I8] = typeof(long);
+            typeMap[ElementType.U1] = typeof(byte);
+            typeMap[ElementType.U2] = typeof(ushort);
+            typeMap[ElementType.U4] = typeof(uint);
+            typeMap[ElementType.U8] = typeof(ulong);
+            typeMap[ElementType.R4] = typeof(float);
+            typeMap[ElementType.R8] = typeof(double);
+            typeMap[ElementType.String] = typeof(string);
+            typeMap[ElementType.Object] = typeof(object);
+            
+            when(!typeMap.ContainsKey(elementType))
+            {
+                throw NotSupportedException(string.Format("The element type '{0}' is not supported when reading custom attribute array signatures", elementType));
+            }
+            
+            // Get the type name for the array type
+            def actualType = typeMap[elementType];
+            
+            // Create an instance of that array type and populate it with the arguments
+            def items = Array.CreateInstance(actualType, elementCount);
+            
+            def readElement  = () => readerMap[elementType]();            
             for(mutable i = 0; i < elementCount; i++)
             {
                 def value = readElement();
-                arguments.Add(value);
+                items.SetValue(value, i);
             }
             
-            // TODO: Get the type name for the array type
-            // TODO: Resolve the type name
-            // TODO: Create an instance of that array type and populate it with the arguments
-            
-            throw NotImplementedException("TODO: Implement a type GetFullyQualifiedName property that resolves to a System.Type");
+            items;
         }
         private IsSystemType([NotNull] param : Param,[NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap) : bool      
             requires param.Type != null
@@ -131,16 +153,9 @@ namespace Tao.Metadata.Signatures
             signature.TableId = parameterType.TableId;
             
             def typeRow = signature.GetTypeRow(tablesHeap);
-            def typeName = typeRow.TypeName.ToString(stringHeap);
-            def nameSpace = typeRow.TypeNamespace.ToString(stringHeap);
+            def qualifiedName = typeRow.GetPartialQualifiedName(stringHeap, tablesHeap);
             
-            def assemblyRow = typeRow.GetAssemblyRow(tablesHeap);            
-            def assemblyName = assemblyRow.Name.ToString(stringHeap);                                                 
-            
-            def format = "{0}.{1}, {2}";
-            def fullyQualifiedName = string.Format(format, nameSpace, typeName, assemblyName);
-            
-            def enumType = Type.GetType(fullyQualifiedName, true);
+            def enumType = Type.GetType(qualifiedName, true);
             def underlyingType = Enum.GetUnderlyingType(enumType);
             
             def readerMap = Dictionary.[Type, void -> object]();

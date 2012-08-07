@@ -5,6 +5,7 @@ using Nemerle.Text;
 using Nemerle.Utility;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -49,6 +50,19 @@ namespace Tao.Metadata.Tables.Rows
             }
             
             result;
+        }
+        
+        public GetPartialQualifiedName([NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap) : string
+        {
+            def typeName = TypeName.ToString(stringHeap);
+            def nameSpace = TypeNamespace.ToString(stringHeap);
+            
+            def assemblyRow = GetAssemblyRow(tablesHeap);            
+            def assemblyName = assemblyRow.Name.ToString(stringHeap);                                                 
+            
+            def format = "{0}.{1}, {2}";
+            def qualifiedName = string.Format(format, nameSpace, typeName, assemblyName);
+            qualifiedName;
         }
     }
 }

@@ -39,6 +39,20 @@ namespace Tests
             row.TypeName.ToString(stringHeap).ShouldBeEqualTo("DebuggingModes", "wrong target row");
             assemblyRow.Name.ToString(stringHeap).ShouldBeEqualTo("mscorlib", "wrong assembly");
         }
+        public ShouldBeAbleToResolvePartiallyQualifiedName() : void
+        {
+            def root = base.GetMetadataRoot();            
+            def tableStream = root.Heaps["#~"];
+
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+
+            def stringHeap = root.Heaps["#Strings"];
+            
+            def row : ITypeRow = heap.GetTypeRow.[TypeRefRow]("Object", stringHeap);
+            
+            row.GetPartialQualifiedName(stringHeap, heap).ShouldBeEqualTo("System.Object, mscorlib", "Wrong partial qualified name");
+        }
         
         protected override TargetAssemblyFileName : string 
         { 
