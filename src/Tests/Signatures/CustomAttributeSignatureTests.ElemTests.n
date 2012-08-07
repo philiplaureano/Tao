@@ -21,6 +21,15 @@ namespace Tests
 {
     public partial class CustomAttributeSignatureTests
     {
+        public ShouldReadArray() : void
+        {
+            def testValue(value : object, expectedValue : object, expectedType : Type) : void
+            {
+                throw NotImplementedException();
+            }
+            
+            TestCustomAttributeRead("SampleClassWithArrayAttributeUsage", array[1 : object,2,3], typeof(array[object]), testValue);
+        }
         public ShouldReadCustomEnum() : void
         {
             TestCustomAttributeRead("SampleClassWithSampleEnumAttributeUsage", SampleEnum.Maybe, typeof(SampleEnum));

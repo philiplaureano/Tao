@@ -63,6 +63,7 @@ namespace Tao.Metadata.Signatures
             readerMap[ElementType.String] = () => ReadSerString(reader);
             readerMap[ElementType.Object] = () => ReadBoxedObject(reader, readerMap);
             readerMap[ElementType.ValueType] = () => ReadValueType(reader, paramType, stringHeap, blobStream, tablesHeap);
+            readerMap[ElementType.SzArray] = () => ReadArray(reader, param, stringHeap, tablesHeap, readerMap);
 
             when(!IsSystemType(param, stringHeap, tablesHeap) && !readerMap.ContainsKey(elementType))
             {
@@ -82,6 +83,31 @@ namespace Tao.Metadata.Signatures
             }
         }        
 
+        private ReadArray([NotNull] reader : BinaryReader, [NotNull] param : Param, [NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap, 
+            [NotNull] readerMap : Dictionary.[ElementType, void -> object]) : object
+                requires param.Type != null && param.Type.GetType() == typeof(SzArraySignature)
+        {
+            // Read the number of elements in the array
+            def arraySignature = param.Type :> SzArraySignature;
+            def elementCount = reader.ReadInt32();
+            def arrayType = arraySignature.ArrayType;
+            
+            def elementType = arrayType.ElementType;            
+            
+            def readElement  = () => readerMap[elementType]();
+            def arguments = List();
+            for(mutable i = 0; i < elementCount; i++)
+            {
+                def value = readElement();
+                arguments.Add(value);
+            }
+            
+            // TODO: Get the type name for the array type
+            // TODO: Resolve the type name
+            // TODO: Create an instance of that array type and populate it with the arguments
+            
+            throw NotImplementedException("TODO: Implement a type GetFullyQualifiedName property that resolves to a System.Type");
+        }
         private IsSystemType([NotNull] param : Param,[NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap) : bool      
             requires param.Type != null
         {
