@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="CustomAttributeWithArrayArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithBooleanArgumentsAttribute.cs" />
+    <Compile Include="CustomAttributeWithBoxedEnumArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithByteArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithCharArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithDoubleArgumentsAttribute.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="SampleClass.cs" />
     <Compile Include="SampleClassWithArrayAttributeUsage.cs" />
     <Compile Include="SampleClassWithBooleanAttributeUsage.cs" />
+    <Compile Include="SampleClassWithBoxedEnumAttributeUsage.cs" />
     <Compile Include="SampleClassWithByteAttributeUsage.cs" />
     <Compile Include="SampleClassWithCharAttributeUsage.cs" />
     <Compile Include="SampleClassWithDoubleAttributeUsage.cs" />

@@ -61,7 +61,7 @@ namespace Tao.Metadata.Signatures
             readerMap[ElementType.R4] = reader.ReadSingle;    
             readerMap[ElementType.R8] = reader.ReadDouble;
             readerMap[ElementType.String] = () => ReadSerString(reader);
-            readerMap[ElementType.Object] = () => ReadBoxedObject(reader, readerMap);
+            readerMap[ElementType.Object] = () => ReadBoxedObject(reader, stringHeap, tablesHeap, readerMap);
             readerMap[ElementType.ValueType] = () => ReadValueType(reader, paramType, stringHeap, blobStream, tablesHeap);
             readerMap[ElementType.SzArray] = () => ReadArray(reader, param, stringHeap, tablesHeap, readerMap);
 
@@ -91,9 +91,9 @@ namespace Tao.Metadata.Signatures
             def arraySignature = param.Type :> SzArraySignature;
             def elementCount = reader.ReadInt32();
             def arrayType = arraySignature.ArrayType;
-            
+
             def elementType = arrayType.ElementType;                                    
-            
+
             def typeMap = Dictionary();
             typeMap[ElementType.Boolean] = typeof(bool);
             typeMap[ElementType.Char] = typeof(char);
@@ -109,25 +109,25 @@ namespace Tao.Metadata.Signatures
             typeMap[ElementType.R8] = typeof(double);
             typeMap[ElementType.String] = typeof(string);
             typeMap[ElementType.Object] = typeof(object);
-            
+
             when(!typeMap.ContainsKey(elementType))
             {
                 throw NotSupportedException(string.Format("The element type '{0}' is not supported when reading custom attribute array signatures", elementType));
             }
-            
+
             // Get the type name for the array type
             def actualType = typeMap[elementType];
-            
+
             // Create an instance of that array type and populate it with the arguments
             def items = Array.CreateInstance(actualType, elementCount);
-            
+
             def readElement  = () => readerMap[elementType]();            
             for(mutable i = 0; i < elementCount; i++)
             {
                 def value = readElement();
                 items.SetValue(value, i);
             }
-            
+
             items;
         }
         private IsSystemType([NotNull] param : Param,[NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap) : bool      
@@ -148,34 +148,35 @@ namespace Tao.Metadata.Signatures
         {
             def parameterType = paramType :> ValueTypeSignature;
             def signature = TypeDefOrRefEncodedSignature();
-            
+
             signature.Row = parameterType.Row;
             signature.TableId = parameterType.TableId;
-            
+
             def typeRow = signature.GetTypeRow(tablesHeap);
             def qualifiedName = typeRow.GetPartialQualifiedName(stringHeap, tablesHeap);
-            
+
             def enumType = Type.GetType(qualifiedName, true);
             def underlyingType = Enum.GetUnderlyingType(enumType);
-            
+
             def readerMap = Dictionary.[Type, void -> object]();
-            
+
             readerMap[typeof(byte)] = reader.ReadByte;
             readerMap[typeof(ushort)] = reader.ReadUInt16;
             readerMap[typeof(uint)] = reader.ReadUInt32;
             readerMap[typeof(ulong)] = reader.ReadUInt64;
-            
+
             when(!readerMap.ContainsKey(underlyingType))
             {
-                 throw NotSupportedException(string.Format("Underlying type '{0}' not supported when reading enums in custom attribute signatures", underlyingType.Name));
+                throw NotSupportedException(string.Format("Underlying type '{0}' not supported when reading enums in custom attribute signatures", underlyingType.Name));
             }
-            
+
             def enumValue = readerMap[underlyingType]();
             Enum.ToObject(enumType, enumValue);
         }
-        
-        private ReadBoxedObject([NotNull] reader : BinaryReader, [NotNull] readerMap : Dictionary.[ElementType, void -> object]) : object
+
+        private ReadBoxedObject([NotNull] reader : BinaryReader,  [NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap, [NotNull] readerMap : Dictionary.[ElementType, void -> object]) : object
         {
+            mutable result : object = null;
             def validElements = array[
                                     ElementType.Boolean,
                                     ElementType.Char,
@@ -197,20 +198,62 @@ namespace Tao.Metadata.Signatures
             when(elementByte == 0x55)
             {
                 // Handle custom enums here
+                def enumName = ReadSerString(reader);
+                mutable enumType = Type.GetType(enumName, false);
+
+                // If the type load fails, scan the current assembly and
+                // its referenced assemblies for a possible match                
+                when (enumType == null)
+                {
+
+                    def typeDefRows = tablesHeap.GetRows.[TypeDefRow]().Cast.[ITypeRow]();
+                    def typeRefRows = tablesHeap.GetRows.[TypeRefRow]().Cast.[ITypeRow]();
+                    def typeRows = List();
+
+                    def isTargetType(row : ITypeRow) : bool
+                    {
+                        row.GetPartialQualifiedName(stringHeap, tablesHeap).StartsWith(enumName);                        
+                    }
+
+                    typeRows.AddRange(typeDefRows);
+                    typeRows.AddRange(typeRefRows);
+
+                    def targetRow = typeRows.First(isTargetType);
+                    def qualifiedName = targetRow.GetPartialQualifiedName(stringHeap, tablesHeap);
+
+                    enumType = Type.GetType(qualifiedName, true);
+                }
+
+                def underlyingType = Enum.GetUnderlyingType(enumType);
+                def readers = Dictionary.[Type, void -> object]();
+
+                readers[typeof(byte)] = reader.ReadByte;
+                readers[typeof(ushort)] = reader.ReadUInt16;
+                readers[typeof(uint)] = reader.ReadUInt32;
+                readers[typeof(ulong)] = reader.ReadUInt64;
+
+                def enumValue = readers[underlyingType]();
+                result = Enum.ToObject(enumType, enumValue);
             }
 
             when(elementByte == 0x1D)
             {
                 // Handle single dimensional arrays here
+                throw NotImplementedException("TODO: Implement boxed single dimensional array support");
             }
 
             def elementType = elementByte :> ElementType;
-            when(!validElements.Contains(elementType))
+            if(validElements.Contains(elementType))
             {
-                throw BadImageFormatException(string.Format("Element type '{0}' is not a supported boxed element value for custom attribute signatures", elementType));
+                result = readerMap[elementType]();                
             }
-
-            readerMap[elementType]();
+            else
+            {
+                when(elementByte != 0x55)
+                    throw BadImageFormatException(string.Format("Element type '{0}' is not a supported boxed element value for custom attribute signatures", elementType));
+            }
+            
+            result;
         }
         private ReadSerString([NotNull] reader : BinaryReader) : string
         {

@@ -21,6 +21,20 @@ namespace Tests
 {
     public partial class CustomAttributeSignatureTests
     {
+        public ShouldReadBoxedEnum() : void
+        {            
+            TestCustomAttributeRead("SampleClassWithBoxedEnumAttributeUsage", SampleEnum.Maybe, typeof(SampleEnum));
+        }
+        
+        public stub ShouldReadBoxedArray() : void
+        {
+        }
+        public stub ShouldReadNamedField() : void
+        {
+        }
+        public stub ShouldReadNamedProperty() : void
+        {
+        }
         public ShouldReadArray() : void
         {
             def testValue(value : object, expectedValue : object, expectedType : Type) : void
