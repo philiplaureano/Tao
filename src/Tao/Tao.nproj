@@ -509,6 +509,15 @@
     <Compile Include="Metadata\Signatures\MVarSignature.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\NamedCustomAttributeArgument.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\NamedCustomAttributeFieldArgument.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\NamedCustomAttributePropertyArgument.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\ObjectSignature.n">
       <SubType>Code</SubType>
     </Compile>

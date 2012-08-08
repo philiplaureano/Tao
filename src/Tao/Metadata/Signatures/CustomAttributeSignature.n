@@ -9,19 +9,28 @@ using System.Linq;
 
 namespace Tao.Metadata.Signatures
 {
-  public class CustomAttributeSignature
-  {
-      private _fixedArguments : IList.[CustomAttributeArgument] = List();
-      public this()
-      {
-      }
-      
-      public FixedArguments : IList.[CustomAttributeArgument]
-      {
-          get
-          {
-              _fixedArguments;
-          }          
-      }
-  }
+    public class CustomAttributeSignature
+    {
+        private _fixedArguments : IList.[CustomAttributeArgument] = List();
+        private _namedArguments : IList.[NamedCustomAttributeArgument] = List();
+        public this()
+        {
+        }
+
+        public FixedArguments : IList.[CustomAttributeArgument]
+        {
+            get
+            {
+                _fixedArguments;
+            }          
+        }
+
+        public NamedArguments : IList.[NamedCustomAttributeArgument]
+        {
+            get
+            {
+                _namedArguments;
+            }
+        }
+    }
 }
