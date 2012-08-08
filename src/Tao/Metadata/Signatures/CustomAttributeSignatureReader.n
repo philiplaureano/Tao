@@ -89,11 +89,16 @@ namespace Tao.Metadata.Signatures
         {
             // Read the number of elements in the array
             def arraySignature = param.Type :> SzArraySignature;
-            def elementCount = reader.ReadInt32();
+            def elementCount = reader.ReadUInt32();
             def arrayType = arraySignature.ArrayType;
 
             def elementType = arrayType.ElementType;                                    
 
+            ReadArray(reader, elementCount, elementType, stringHeap, tablesHeap, readerMap);
+        }
+        private ReadArray([NotNull] reader : BinaryReader, elementCount : uint, elementType : ElementType, [NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap, 
+            [NotNull] readerMap : Dictionary.[ElementType, void -> object]) : object
+        {
             def typeMap = Dictionary();
             typeMap[ElementType.Boolean] = typeof(bool);
             typeMap[ElementType.Char] = typeof(char);
@@ -122,7 +127,8 @@ namespace Tao.Metadata.Signatures
             def items = Array.CreateInstance(actualType, elementCount);
 
             def readElement  = () => readerMap[elementType]();            
-            for(mutable i = 0; i < elementCount; i++)
+            def count = elementCount :> int;
+            for(mutable i = 0; i < count; i++)
             {
                 def value = readElement();
                 items.SetValue(value, i);
@@ -238,8 +244,11 @@ namespace Tao.Metadata.Signatures
 
             when(elementByte == 0x1D)
             {
-                // Handle single dimensional arrays here
-                throw NotImplementedException("TODO: Implement boxed single dimensional array support");
+                // Handle single dimensional arrays
+                def arrayElementType = reader.ReadByte() :> ElementType;
+                def elementCount = reader.ReadUInt32();
+                
+                result = ReadArray(reader, elementCount, arrayElementType, stringHeap, tablesHeap, readerMap);          
             }
 
             def elementType = elementByte :> ElementType;
@@ -249,10 +258,10 @@ namespace Tao.Metadata.Signatures
             }
             else
             {
-                when(elementByte != 0x55)
+                when(elementByte != 0x55 && elementByte != 0x1D)
                     throw BadImageFormatException(string.Format("Element type '{0}' is not a supported boxed element value for custom attribute signatures", elementType));
             }
-            
+
             result;
         }
         private ReadSerString([NotNull] reader : BinaryReader) : string

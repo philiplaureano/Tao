@@ -64,6 +64,7 @@
     <Compile Include="SampleClass.cs" />
     <Compile Include="SampleClassWithArrayAttributeUsage.cs" />
     <Compile Include="SampleClassWithBooleanAttributeUsage.cs" />
+    <Compile Include="SampleClassWithBoxedArrayArgumentAttributeUsage.cs" />
     <Compile Include="SampleClassWithBoxedEnumAttributeUsage.cs" />
     <Compile Include="SampleClassWithByteAttributeUsage.cs" />
     <Compile Include="SampleClassWithCharAttributeUsage.cs" />

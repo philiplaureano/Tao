@@ -25,9 +25,10 @@ namespace Tests
         {            
             TestCustomAttributeRead("SampleClassWithBoxedEnumAttributeUsage", SampleEnum.Maybe, typeof(SampleEnum));
         }
-        
-        public stub ShouldReadBoxedArray() : void
+
+        public ShouldReadBoxedArray() : void
         {
+            TestCustomAttributeRead("SampleClassWithBoxedArrayArgumentAttributeUsage", array[1 : object, 2, 3, 4, 5, 6], typeof(array[int]), TestArray);
         }
         public stub ShouldReadNamedField() : void
         {
@@ -36,29 +37,28 @@ namespace Tests
         {
         }
         public ShouldReadArray() : void
+        {            
+            TestCustomAttributeRead("SampleClassWithArrayAttributeUsage", array[1 : object,2,3], typeof(array[object]), TestArray);
+        }
+        private TestArray(value : object, expectedValue : object, expectedType : Type) : void
         {
-            def testValue(value : object, expectedValue : object, expectedType : Type) : void
+            value.ShouldBeNotNull("The actual value cannot be null");
+
+            def actualType = value.GetType();
+            actualType.ShouldBeEqualTo(expectedType, "Wrong array type");
+
+            def actualArray = value :> Array;
+            def expectedArray = expectedValue :> Array;
+
+            def length = actualArray.Length;                
+            expectedArray.Length.ShouldBeEqualTo(length, "The two arrays should have the same length");
+            for(mutable i = 0; i < length; i++)
             {
-                value.ShouldBeNotNull("The actual value cannot be null");
-                
-                def actualType = value.GetType();
-                actualType.ShouldBeEqualTo(expectedType, "Wrong array type");
-                
-                def actualArray = value :> Array;
-                def expectedArray = value :> Array;
-                
-                def length = actualArray.Length;                
-                expectedArray.Length.ShouldBeEqualTo(length, "The two arrays should have the same length");
-                for(mutable i = 0; i < length; i++)
-                {
-                    def actual = actualArray.GetValue(i);
-                    def expected = expectedArray.GetValue(i);
-                    
-                    actual.ShouldBeEqualTo(expected, "Wrong element value at index {0}", i);
-                }                
-            }
-            
-            TestCustomAttributeRead("SampleClassWithArrayAttributeUsage", array[1 : object,2,3], typeof(array[object]), testValue);
+                def actual = actualArray.GetValue(i);
+                def expected = expectedArray.GetValue(i);
+
+                actual.ShouldBeEqualTo(expected, "Wrong element value at index {0}", i);
+            }                
         }
         public ShouldReadCustomEnum() : void
         {
@@ -162,12 +162,12 @@ namespace Tests
         {
             TestCustomAttributeRead("SampleClassWithObjectAttributeUsage", 42, typeof(Int32));
         }
-        
+
         public ShouldFailIfPrologNotEncountered() : void
             expects CustomAttributeSignaturePrologNotFoundException
         {
             def targetClassName = "SampleClass";
-            
+
             def root = base.GetMetadataRoot();            
             def tableStream = root.Heaps["#~"];
 
@@ -188,18 +188,18 @@ namespace Tests
             // Read the CustomAttribute blob
             def blobStream = root.Heaps["#Blob"];
             def blobReader = BlobReader();            
-            
+
             def blobIndex = targetRow.Value.ToUInt32();
             def customAttributeBlob = blobReader.Read(blobIndex, blobStream);
-                        
+
             def defectiveBlobBytes : array[byte] = array(customAttributeBlob.Length :> int);
             def defectiveBlob = MemoryStream(defectiveBlobBytes);
             blobStream.Seek(0);
-                                   
+
             def parameters = targetRow.GetParameters(heap, blobStream);
 
             def customAttributeReader = CustomAttributeSignatureReader();
-            
+
             // This call should fail
             def customAttributeSignature = customAttributeReader.Read(parameters, defectiveBlob, stringHeap, heap);                        
         }
