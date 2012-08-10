@@ -294,6 +294,10 @@ namespace Tests
 
             // Ensure that we have the correct type owner
             def parentRowRef = targetRow.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
+            
+            def isTypeDef = parentRowRef.TableId == TableId.TypeDef;
+            isTypeDef.ShouldBeTrue("The parent table must be the TypeDef table");
+            
             def parentRow = heap.GetRow.[TypeDefRow](parentRowRef.Row);            
             parentRow.TypeName.ToString(stringHeap).ShouldBeEqualTo(targetClassName, "Wrong Parent Type");
 
@@ -335,7 +339,7 @@ namespace Tests
                 def parentRow = heap.GetRow.[TypeDefRow](parentRowRef.Row);            
                 def parentName = parentRow.TypeName.ToString(stringHeap);
 
-                when(parentName == targetClassName && parentRowRef.TableId != TableId.Field)
+                when(parentName == targetClassName && parentRowRef.TableId != TableId.Field && parentRowRef.TableId != TableId.MethodDef)
                 {
                     result = row;
                 }
