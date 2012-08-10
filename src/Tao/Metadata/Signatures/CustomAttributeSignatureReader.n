@@ -26,27 +26,89 @@ namespace Tao.Metadata.Signatures
                 throw CustomAttributeSignaturePrologNotFoundException("Invalid custom attribute signature--the custom attribute signature is missing the prolog bytes!");
             }
 
+            def createMap = CreateReaderMap(reader, _, stringHeap, blobStream, tablesHeap);
             def signature = CustomAttributeSignature();
             def currentParameters = parameters.ToArray();
             foreach(param in currentParameters)
             {
-                def value = ReadParameterValue(param, reader, stringHeap, blobStream, tablesHeap);
+                def paramType = param.Type;
+                def elementType = paramType.ElementType;
+                
+                def readerMap = createMap(paramType);
+                when(!IsSystemType(param, stringHeap, tablesHeap) && !readerMap.ContainsKey(elementType))
+                {
+                    throw NotSupportedException("Element Type Not Supported: " + elementType.ToString());
+                }          
+
+                def value = ReadParameterValue(elementType, reader, readerMap);
+
                 def fixedArgument = CustomAttributeArgument(value);
 
                 signature.FixedArguments.Add(fixedArgument);              
             }
 
-            // TODO: Read the NumNamed value
-            // TODO: Read the NamedArgs
+            // Read the NumNamed value
+            def numNamed : ushort = reader.ReadUInt16();
+
+            def FIELD : byte = 0x53;
+            def PROPERTY : byte = 0x54;
+
+            def validTypes = array[
+                ElementType.I1,
+                ElementType.I2,
+                ElementType.I4,
+                ElementType.I8,
+                ElementType.U1,
+                ElementType.U2,
+                ElementType.U4,
+                ElementType.U8,
+                ElementType.R4,
+                ElementType.R8,
+                ElementType.String
+            ];
+            
+            // Read the NamedArgs            
+            for(mutable i = 0; i < numNamed; i++)
+            {
+                def fieldOrPropByte = reader.ReadByte();
+                when(fieldOrPropByte != FIELD && fieldOrPropByte != PROPERTY)
+                {
+                    throw BadImageFormatException("Invalid named argument in custom attribute signature. Expected either a FIELD(0x53) or a PROPERTY byte (0x54)");
+                }
+
+                // Read the field or prop type
+                def elementType = reader.ReadByte() :> ElementType;
+                when(!validTypes.Contains(elementType))
+                {
+                    throw BadImageFormatException(string.Format("Unsupported field or property type when reading a custom attribute signature: {0}", elementType));
+                }
+
+                def argumentName = ReadSerString(reader);
+                def paramType = TypeSignature(elementType);
+                
+                def map = createMap(paramType);
+                def value = ReadParameterValue(elementType, reader, map);
+                
+                mutable namedArgument : NamedCustomAttributeArgument = null;                
+                when(fieldOrPropByte == FIELD)
+                {
+                    namedArgument = NamedCustomAttributeFieldArgument(argumentName, value);
+                }
+                when(fieldOrPropByte == PROPERTY)
+                {
+                    namedArgument = NamedCustomAttributePropertyArgument(argumentName, value);
+                }
+                
+                when(namedArgument != null)
+                {
+                    signature.NamedArguments.Add(namedArgument);
+                }
+            }
 
             signature;
         }
-        private ReadParameterValue([NotNull] param : Param, [NotNull] reader : BinaryReader, [NotNull] stringHeap : Stream, [NotNull] blobStream : Stream, [NotNull] tablesHeap : ITablesHeap) : object
-            requires param.Type != null
+        private CreateReaderMap([NotNull] reader : BinaryReader, [NotNull] paramType : ITypeSignature, [NotNull] stringHeap : Stream, [NotNull] blobStream : Stream, [NotNull] tablesHeap : ITablesHeap) : Dictionary.[ElementType, void -> object]
         {
-            def paramType = param.Type;
-            def elementType = paramType.ElementType;
-
             def readerMap : Dictionary.[ElementType, void -> object] = Dictionary();
             readerMap[ElementType.I1] = reader.ReadSByte;
             readerMap[ElementType.I2] = reader.ReadInt16;
@@ -63,13 +125,12 @@ namespace Tao.Metadata.Signatures
             readerMap[ElementType.String] = () => ReadSerString(reader);
             readerMap[ElementType.Object] = () => ReadBoxedObject(reader, stringHeap, tablesHeap, readerMap);
             readerMap[ElementType.ValueType] = () => ReadValueType(reader, paramType, stringHeap, blobStream, tablesHeap);
-            readerMap[ElementType.SzArray] = () => ReadArray(reader, param, stringHeap, tablesHeap, readerMap);
+            readerMap[ElementType.SzArray] = () => ReadArray(reader, paramType, stringHeap, tablesHeap, readerMap);
 
-            when(!IsSystemType(param, stringHeap, tablesHeap) && !readerMap.ContainsKey(elementType))
-            {
-                throw NotSupportedException("Element Type Not Supported: " + elementType.ToString());
-            }          
-
+            readerMap;
+        }
+        private ReadParameterValue(elementType : ElementType, [NotNull] reader : BinaryReader, [NotNull] readerMap : IDictionary.[ElementType, void -> object]) : object
+        {
             if(elementType == ElementType.Class)
             {
                 def typeRef = TypeReference();
@@ -81,14 +142,13 @@ namespace Tao.Metadata.Signatures
             {
                 readerMap[elementType]();
             }
-        }        
+        }                     
 
-        private ReadArray([NotNull] reader : BinaryReader, [NotNull] param : Param, [NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap, 
-            [NotNull] readerMap : Dictionary.[ElementType, void -> object]) : object
-                requires param.Type != null && param.Type.GetType() == typeof(SzArraySignature)
+        private ReadArray([NotNull] reader : BinaryReader, [NotNull] paramType : ITypeSignature, [NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap, 
+            [NotNull] readerMap : Dictionary.[ElementType, void -> object]) : object                
         {
             // Read the number of elements in the array
-            def arraySignature = param.Type :> SzArraySignature;
+            def arraySignature = paramType :> SzArraySignature;
             def elementCount = reader.ReadUInt32();
             def arrayType = arraySignature.ArrayType;
 
@@ -247,7 +307,7 @@ namespace Tao.Metadata.Signatures
                 // Handle single dimensional arrays
                 def arrayElementType = reader.ReadByte() :> ElementType;
                 def elementCount = reader.ReadUInt32();
-                
+
                 result = ReadArray(reader, elementCount, arrayElementType, stringHeap, tablesHeap, readerMap);          
             }
 
@@ -284,6 +344,12 @@ namespace Tao.Metadata.Signatures
                     }
             }
 
+            // Move the byte position to the next offset if the string value is null or empty
+            when(lengthByteValue == 0xFF || lengthByteValue == 0x00)
+            {
+                _ = underlyingStream.Seek(1, SeekOrigin.Current);
+            }
+            
             result;
         }
     }

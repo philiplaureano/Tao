@@ -52,6 +52,7 @@
     <Compile Include="CustomAttributeWithInt64ArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithFloatArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithNamedFieldAttribute.cs" />
+    <Compile Include="CustomAttributeWithNamedPropertyAttribute.cs" />
     <Compile Include="CustomAttributeWithNullSerStringArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithObjectArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithSampleEnumArgumentsAttribute.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="SampleClassWithEmptySerStringAttributeUsage.cs" />
     <Compile Include="SampleClassWithFloatAttributeUsage.cs" />
     <Compile Include="SampleClassWithNamedFieldAttributeUsage.cs" />
+    <Compile Include="SampleClassWithNamedPropertyAttributeUsage.cs" />
     <Compile Include="SampleClassWithNullSerStringAttributeUsage.cs" />
     <Compile Include="SampleClassWithObjectAttributeUsage.cs" />
     <Compile Include="SampleClassWithSampleEnumAttributeUsage.cs" />
