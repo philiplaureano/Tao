@@ -1,4 +1,5 @@
 ﻿using Nemerle;
+using Nemerle.Assertions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
@@ -11,7 +12,7 @@ using Tao.Metadata.Tables;
 
 namespace Tao.Metadata
 {
-    public class Index
+    public abstract class Index : IIndex
     {
         public class Narrow : Index
         {
@@ -21,6 +22,16 @@ namespace Tao.Metadata
             }
             
             public Value : ushort { get; set; }
+            
+            public override ToUInt16() : ushort
+            {
+                Value;
+            }
+            
+            public override ToUInt32() : uint
+            {
+                Value;
+            }
         }
 
         public class Wide : Index
@@ -30,7 +41,20 @@ namespace Tao.Metadata
                 Value = value;
             }           
             public Value : uint { get; set; }
+            
+            public override ToUInt16() : ushort                
+            {
+                Value :> ushort;
+            }
+            
+            public override ToUInt32() : uint
+            {
+                Value;
+            }
         }
+        
+        public abstract ToUInt16() : ushort;
+        public abstract ToUInt32() : uint;
         
         public static FromCodedToken(tokenType : CodedTokenType, tableId : TableId, row : uint) : Index
         {

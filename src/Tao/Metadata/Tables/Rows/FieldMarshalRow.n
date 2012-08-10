@@ -11,7 +11,7 @@ namespace Tao.Metadata.Tables.Rows
 {
   public class FieldMarshalRow
   {
-      public Parent : Index { get; set; }
-      public NativeType : Index { get; set; }
+      public Parent : IIndex { get; set; }
+      public NativeType : IIndex { get; set; }
   }
 }

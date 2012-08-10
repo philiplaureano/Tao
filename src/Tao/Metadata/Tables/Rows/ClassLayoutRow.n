@@ -13,6 +13,6 @@ namespace Tao.Metadata.Tables.Rows
   {
       public PackingSize : ushort { get; set; }
       public ClassSize : uint { get; set; }
-      public Parent : Index { get; set; }
+      public Parent : IIndex { get; set; }
   }
 }

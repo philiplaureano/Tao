@@ -24,7 +24,7 @@ namespace Tests
             _tableId = targetTableId;
         }
 
-        protected TestWrite[TRow, TTable](rowIndex : int, value : Index, getValue : TRow -> Index, failureMessage : string, params args : array[object]) : void
+        protected TestWrite[TRow, TTable](rowIndex : int, value : IIndex, getValue : TRow -> IIndex, failureMessage : string, params args : array[object]) : void
         {
             TestWrite(rowIndex, value, getValue, (actual, expected) => actual.IsEqualTo(expected), failureMessage, args);
         }

@@ -11,14 +11,14 @@ namespace Tao.Metadata.Tables
 {
   public interface IRowWriter[TRow]
   {
-    WriteStringIndex(value : void -> Index) : void;  
-    WriteGuidIndex(value : void -> Index) : void;  
-    WriteBlobIndex(value : void -> Index) : void;  
+    WriteStringIndex(value : void -> IIndex) : void;  
+    WriteGuidIndex(value : void -> IIndex) : void;  
+    WriteBlobIndex(value : void -> IIndex) : void;  
     WriteDword(value : uint) : void;  
     WriteWord(value : ushort) : void;  
     WriteByte(value : byte) : void;
     
-    WriteIndex(tableId : TableId, value : void -> Index) : void;
-    WriteIndex(tokenType : CodedTokenType, value : void -> Index) : void;
+    WriteIndex(tableId : TableId, value : void -> IIndex) : void;
+    WriteIndex(tokenType : CodedTokenType, value : void -> IIndex) : void;
   }
 }

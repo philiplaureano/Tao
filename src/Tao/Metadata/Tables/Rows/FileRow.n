@@ -12,7 +12,7 @@ namespace Tao.Metadata.Tables.Rows
   public class FileRow : IHasCustomAttributeRow
   {
       public Flags : uint { get; set; }
-      public Name : Index { get; set; }
-      public HashValue : Index { get; set; }
+      public Name : IIndex { get; set; }
+      public HashValue : IIndex { get; set; }
   }
 }

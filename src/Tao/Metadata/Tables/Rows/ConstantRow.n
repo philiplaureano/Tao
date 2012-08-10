@@ -12,7 +12,7 @@ namespace Tao.Metadata.Tables.Rows
   public class ConstantRow
   {
       public Type : byte { get; set; }
-      public Parent : Index { get; set; }
-      public Value : Index { get; set; }
+      public Parent : IIndex { get; set; }
+      public Value : IIndex { get; set; }
   }
 }

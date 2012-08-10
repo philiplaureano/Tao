@@ -13,7 +13,7 @@ namespace Tao.Metadata.Tables.Rows
   {
       public Number : ushort { get; set; }
       public Flags : ushort { get; set; }
-      public Owner : Index { get; set; }
-      public Name : Index { get; set; }
+      public Owner : IIndex { get; set; }
+      public Name : IIndex { get; set; }
   }
 }

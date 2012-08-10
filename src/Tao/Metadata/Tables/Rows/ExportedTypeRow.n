@@ -13,8 +13,8 @@ namespace Tao.Metadata.Tables.Rows
   {
       public Flags : uint { get; set; }
       public TypeDefId : uint { get; set; }
-      public TypeName : Index { get; set; }
-      public TypeNamespace : Index { get; set; }
-      public Implementation : Index { get; set; }
+      public TypeName : IIndex { get; set; }
+      public TypeNamespace : IIndex { get; set; }
+      public Implementation : IIndex { get; set; }
   }
 }

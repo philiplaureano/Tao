@@ -11,103 +11,103 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables
 {
-  public class RowWriter[TRow] : IRowWriter[TRow]
-  {
-    private _heapSizeFlags : ISet[HeapSizeFlags];
-    private _rowCounts : IDictionary[TableId, uint];
-    private _writer : BinaryWriter;
-  
-    public this(heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint],
-    writer : BinaryWriter)
+    public class RowWriter[TRow] : IRowWriter[TRow]
     {
-      _heapSizeFlags = HashSet(heapSizeFlags);
-      _rowCounts     = rowCounts;
-      _writer        = writer;
-    }
-  
-    public WriteStringIndex(value : void -> Index) : void
+        private _heapSizeFlags : ISet[HeapSizeFlags];
+        private _rowCounts : IDictionary[TableId, uint];
+        private _writer : BinaryWriter;
+
+        public this(heapSizeFlags : IEnumerable[HeapSizeFlags], rowCounts : IDictionary.[TableId, uint],
+            writer : BinaryWriter)
+        {
+            _heapSizeFlags = HashSet(heapSizeFlags);
+            _rowCounts     = rowCounts;
+            _writer        = writer;
+        }
+
+        public WriteStringIndex(value : void -> IIndex) : void
         requires (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideStringIndex) && value() is Index.Wide) ||
             (!_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideStringIndex) && value() is Index.Narrow)
-    {
-      def index = value();
-      if (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideStringIndex))
-      {
-        _writer.Write(index.ToUInt32());
-      }
-      else
-      {
-        _writer.Write(index.ToUInt16());
-      }
-    }
-    public WriteGuidIndex(value : void -> Index) : void
+        {
+            def index = value();
+            if (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideStringIndex))
+            {
+                _writer.Write(index.ToUInt32());
+            }
+            else
+            {
+                _writer.Write(index.ToUInt16());
+            }
+        }
+        public WriteGuidIndex(value : void -> IIndex) : void
         requires (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideGuidIndex) && value() is Index.Wide) ||
                 (!_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideGuidIndex) && value() is Index.Narrow)
-    {
-      def index = value();
-      if (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideGuidIndex))
-      {
-        _writer.Write(index.ToUInt32());
-      }
-      else
-      {
-        _writer.Write(index.ToUInt16());
-      }
-    }
-    public WriteBlobIndex(value : void -> Index) : void
+        {
+            def index = value();
+            if (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideGuidIndex))
+            {
+                _writer.Write(index.ToUInt32());
+            }
+            else
+            {
+                _writer.Write(index.ToUInt16());
+            }
+        }
+        public WriteBlobIndex(value : void -> IIndex) : void
         requires (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideBlobIndex) && value() is Index.Wide) ||
                 (!_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideBlobIndex) && value() is Index.Narrow)
-    {
-      def index = value();
-      if (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideBlobIndex))
-      {
-        _writer.Write(index.ToUInt32());
-      }
-      else
-      {
-        _writer.Write(index.ToUInt16());
-      }
-    }
-    public WriteDword(value : uint) : void
-    {
-      _writer.Write(value : uint);
-    }
-    public WriteWord(value : ushort) : void
-    {
-      _writer.Write(value : ushort);
-    }
-    public WriteByte(value : byte) : void
-    {
-      _writer.Write(value : byte);
-    }    
-    public WriteIndex(tableId : TableId, value : void -> Index) : void
+        {
+            def index = value();
+            if (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideBlobIndex))
+            {
+                _writer.Write(index.ToUInt32());
+            }
+            else
+            {
+                _writer.Write(index.ToUInt16());
+            }
+        }
+        public WriteDword(value : uint) : void
+        {
+            _writer.Write(value : uint);
+        }
+        public WriteWord(value : ushort) : void
+        {
+            _writer.Write(value : ushort);
+        }
+        public WriteByte(value : byte) : void
+        {
+            _writer.Write(value : byte);
+        }    
+        public WriteIndex(tableId : TableId, value : void -> IIndex) : void
         requires (_rowCounts.RequiresWideIndices(tableId) && value() is Index.Wide) ||
             (!_rowCounts.RequiresWideIndices(tableId) && value() is Index.Narrow)
-    {
-      def useWideIndex = _rowCounts.RequiresWideIndices(tableId);
-      def index = value();
-      if (useWideIndex)
-      {
-        _writer.Write(index.ToUInt32());
-      }
-      else
-      {
-        _writer.Write(index.ToUInt16());
-      }
-    }
-    public WriteIndex(tokenType : CodedTokenType, value : void -> Index) : void
+        {
+            def useWideIndex = _rowCounts.RequiresWideIndices(tableId);
+            def index = value();
+            if (useWideIndex)
+            {
+                _writer.Write(index.ToUInt32());
+            }
+            else
+            {
+                _writer.Write(index.ToUInt16());
+            }
+        }
+        public WriteIndex(tokenType : CodedTokenType, value : void -> IIndex) : void
         requires (_rowCounts.RequiresWideIndices(tokenType) && value() is Index.Wide) ||
             (!_rowCounts.RequiresWideIndices(tokenType) && value() is Index.Narrow)
-    {
-      def useWideIndex = _rowCounts.RequiresWideIndices(tokenType);
-      def index = value();
-      if (useWideIndex)
-      {
-        _writer.Write(index.ToUInt32());
-      }
-      else
-      {
-        _writer.Write(index.ToUInt16());
-      }
+        {
+            def useWideIndex = _rowCounts.RequiresWideIndices(tokenType);
+            def index = value();
+            if (useWideIndex)
+            {
+                _writer.Write(index.ToUInt32());
+            }
+            else
+            {
+                _writer.Write(index.ToUInt16());
+            }
+        }
     }
-  }
 }

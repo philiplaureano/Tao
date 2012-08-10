@@ -12,7 +12,7 @@ namespace Tao.Metadata.Tables.Rows
   public class MethodSemanticsRow
   {
       public Semantics : ushort { get; set; }
-      public Method : Index { get; set; }
-      public Association : Index { get; set; }
+      public Method : IIndex { get; set; }
+      public Association : IIndex { get; set; }
   }
 }

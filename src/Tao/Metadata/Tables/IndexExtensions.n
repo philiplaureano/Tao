@@ -16,7 +16,7 @@ namespace Tao.Metadata.Tables
 {
     public static class IndexExtensions
     {
-        public ToBlob(this index : Index, blobStream : Stream) : array[byte]
+        public ToBlob(this index : IIndex, blobStream : Stream) : array[byte]
         {
             def reader = BlobReader();
             def targetOffset = index.ToUInt32();
@@ -29,7 +29,7 @@ namespace Tao.Metadata.Tables
             streamReader.ReadBytes(length :> int);
         }
         
-        public ToRowRef(this index : Index, tokenType : CodedTokenType) : RowReference
+        public ToRowRef(this index : IIndex, tokenType : CodedTokenType) : RowReference
         {
             def decoder = TableReferenceDecoder();
 
@@ -41,38 +41,11 @@ namespace Tao.Metadata.Tables
 
             RowReference(tableId, row :> uint);
         }
-        public ToString(this index : Index, [NotNull] stringHeap : Stream) : string
+        public ToString(this index : IIndex, [NotNull] stringHeap : Stream) : string
         {
             def offset = index.ToUInt32();
             def reader = StringHeapReader();
             reader.Read(offset, stringHeap);
-        }
-        
-        public ToUInt32(this index : Index) : uint
-        requires index != null
-        {         
-            match (index)
-            {
-                | index is Index.Narrow => (index : Index.Narrow).Value;
-                | index is Index.Wide => (index : Index.Wide).Value;
-                | _ => throw NotSupportedException();
-            }          
-        }
-        public ToUInt16(this index : Index) : ushort
-        requires index != null && (index is Index.Wide|| index is Index.Narrow)
-        {
-            match(index)
-            {
-                |index is Index.Narrow =>
-        {
-            (index : Index.Narrow).Value;
-        }
-                |index is Index.Wide =>
-        {
-            (index : Index.Wide).Value :> ushort;
-        }
-                | _ => throw NotSupportedException();
-            }            
-        }    
+        }                
     }
 }

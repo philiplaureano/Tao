@@ -29,15 +29,15 @@ namespace Tao.Metadata.Tables
       _rowCounts = rowCounts;
       _indexes = indexes;
     }    
-    public ReadStringIndex([NotNull] setValue : TRow * Index -> void) : void
+    public ReadStringIndex([NotNull] setValue : TRow * IIndex -> void) : void
     {
       ReadIndex(HeapSizeFlags.RequiresWideStringIndex, _heapSizes, setValue);
     }  
-    public ReadGuidIndex([NotNull] setValue : TRow * Index -> void) : void
+    public ReadGuidIndex([NotNull] setValue : TRow * IIndex -> void) : void
     {
       ReadIndex(HeapSizeFlags.RequiresWideGuidIndex, _heapSizes, setValue);
     }
-    public ReadBlobIndex([NotNull] setValue : TRow * Index -> void) : void
+    public ReadBlobIndex([NotNull] setValue : TRow * IIndex -> void) : void
     {
       ReadIndex(HeapSizeFlags.RequiresWideBlobIndex, _heapSizes, setValue);
     }
@@ -56,15 +56,15 @@ namespace Tao.Metadata.Tables
       def readByte = CreateReader(_row, r => r.ReadByte(), _);
       readByte(setValue);
     }
-    public ReadIndex(tableId : TableId, [NotNull] setValue : TRow * Index -> void) : void
+    public ReadIndex(tableId : TableId, [NotNull] setValue : TRow * IIndex -> void) : void
     {
         ReadIndex(() => _rowCounts.RequiresWideIndices(tableId), setValue);
     }
-    public ReadIndex(tokenType : CodedTokenType, [NotNull] setValue : TRow * Index -> void) : void
+    public ReadIndex(tokenType : CodedTokenType, [NotNull] setValue : TRow * IIndex -> void) : void
     {
         ReadIndex(() => _rowCounts.RequiresWideIndices(tokenType), setValue);
     }
-    private ReadIndex(shouldUseWideIndex : void -> bool, [NotNull] setValue : TRow * Index -> void) : void
+    private ReadIndex(shouldUseWideIndex : void -> bool, [NotNull] setValue : TRow * IIndex -> void) : void
     {
         def setWord(row : TRow, value : ushort) : void
         {
@@ -90,12 +90,12 @@ namespace Tao.Metadata.Tables
       def value = getValue(_reader);
       setValue(row, value);
     };
-    private ReadIndex(targetFlag : HeapSizeFlags, heapSizes : byte, [NotNull] setValue : TRow * Index -> void) : void
+    private ReadIndex(targetFlag : HeapSizeFlags, heapSizes : byte, [NotNull] setValue : TRow * IIndex -> void) : void
     {
       def flag = targetFlag :> byte;
       def shouldReadDword = (heapSizes & flag) != 0;
       
-      def captureIndexValue(row : TRow, value : Index) : void
+      def captureIndexValue(row : TRow, value : IIndex) : void
       {
           when(!_indexes.ContainsKey(targetFlag))
           {

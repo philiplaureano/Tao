@@ -11,7 +11,7 @@ namespace Tao.Metadata.Tables.Rows
 {
   public class InterfaceImplRow : IHasCustomAttributeRow
   {
-      public Class : Index { get; set; }
-      public Interface : Index { get; set; }
+      public Class : IIndex { get; set; }
+      public Interface : IIndex { get; set; }
   }
 }

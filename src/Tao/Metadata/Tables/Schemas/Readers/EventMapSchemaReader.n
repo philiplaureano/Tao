@@ -15,8 +15,8 @@ namespace Tao.Metadata.Tables.Schemas.Readers
         public ReadRowInto([NotNull] _ : IDictionary[TableId, uint], 
         _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[EventMapRow]) : void
         {
-            rowReader.ReadIndex(TableId.TypeDef, r => r.set_Parent : (Index -> void));
-            rowReader.ReadIndex(TableId.Event, r => r.set_EventList : (Index -> void));
+            rowReader.ReadIndex(TableId.TypeDef, r => r.set_Parent : (IIndex -> void));
+            rowReader.ReadIndex(TableId.Event, r => r.set_EventList : (IIndex -> void));
         }
     }
 }

@@ -15,8 +15,8 @@ namespace Tao.Metadata.Tables.Schemas.Readers
         public ReadRowInto([NotNull] _rowCounts : IDictionary[TableId, uint], 
         _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[CustomAttributeRow]) : void
         {
-            rowReader.ReadIndex(CodedTokenType.HasCustomAttribute, r => r.set_Parent : (Index -> void));
-            rowReader.ReadIndex(CodedTokenType.CustomAttributeType, r => r.set_Type : (Index -> void));
+            rowReader.ReadIndex(CodedTokenType.HasCustomAttribute, r => r.set_Parent : (IIndex -> void));
+            rowReader.ReadIndex(CodedTokenType.CustomAttributeType, r => r.set_Type : (IIndex -> void));
             rowReader.ReadBlobIndex(r => r.set_Value);
         }
     }

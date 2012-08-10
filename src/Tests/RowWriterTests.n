@@ -182,7 +182,7 @@ namespace Tests
       def expectedData = array[42 : byte, 0, 0, 0]; 
       outputStream.ShouldMatch(expectedData); 
     }    
-    private ShouldWriteWideHeapIndex(heapSizeFlag : HeapSizeFlags, getWriteIndex : RowWriter.[object] -> (void -> Index) -> void) : void
+    private ShouldWriteWideHeapIndex(heapSizeFlag : HeapSizeFlags, getWriteIndex : RowWriter.[object] -> (void -> IIndex) -> void) : void
     {
       def rowCounts = Dictionary.[TableId, uint]();
       def heapSizeFlags = List(array[HeapSizeFlags.RequiresWideBlobIndex, HeapSizeFlags.RequiresWideGuidIndex, HeapSizeFlags.RequiresWideStringIndex]);
@@ -201,13 +201,13 @@ namespace Tests
       
       def expectedData = array[42 : byte, 0, 0, 0]; 
             
-      def writeIndex : (void -> Index) -> void = getWriteIndex(writer);     
-      def doWriteIndex : Index -> void = idx => writeIndex(()=> idx);
+      def writeIndex : (void -> IIndex) -> void = getWriteIndex(writer);     
+      def doWriteIndex : IIndex -> void = idx => writeIndex(()=> idx);
       doWriteIndex(index);
       
       outputStream.ShouldMatch(expectedData);  
     }
-    private ShouldWriteNarrowHeapIndex(heapSizeFlag : HeapSizeFlags, getWriteIndex : RowWriter.[object] -> (void -> Index) -> void) : void
+    private ShouldWriteNarrowHeapIndex(heapSizeFlag : HeapSizeFlags, getWriteIndex : RowWriter.[object] -> (void -> IIndex) -> void) : void
     {
       def rowCounts = Dictionary.[TableId, uint]();
       def heapSizeFlags = List(array[HeapSizeFlags.RequiresWideBlobIndex, HeapSizeFlags.RequiresWideGuidIndex, HeapSizeFlags.RequiresWideStringIndex]);
@@ -219,8 +219,8 @@ namespace Tests
       def writer = RowWriter.[object](heapSizeFlags, rowCounts, binaryWriter);
       
       def expectedData = array[42 : byte, 0]; 
-      def writeIndex : (void -> Index) -> void = getWriteIndex(writer);     
-      def doWriteIndex : Index -> void = idx => writeIndex(()=> idx);
+      def writeIndex : (void -> IIndex) -> void = getWriteIndex(writer);     
+      def doWriteIndex : IIndex -> void = idx => writeIndex(()=> idx);
       doWriteIndex(index);
       
       outputStream.ShouldMatch(expectedData);

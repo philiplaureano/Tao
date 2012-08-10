@@ -18,7 +18,7 @@ namespace Tao.Metadata.Tables.Schemas.Readers
     public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], 
       _sortedTables : IEnumerable[TableId], [NotNull] rowReader : IRowReader[TypeRefRow]) : void
     {
-        rowReader.ReadIndex(CodedTokenType.ResolutionScope, r => r.set_ResolutionScope : (Index -> void));
+        rowReader.ReadIndex(CodedTokenType.ResolutionScope, r => r.set_ResolutionScope : (IIndex -> void));
         rowReader.ReadStringIndex(r => r.set_TypeName);
         rowReader.ReadStringIndex(r => r.set_TypeNamespace);
     }

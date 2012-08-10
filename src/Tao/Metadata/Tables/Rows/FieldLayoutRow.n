@@ -12,6 +12,6 @@ namespace Tao.Metadata.Tables.Rows
   public class FieldLayoutRow
   {
       public Offset : uint { get; set; }
-      public Field : Index { get; set; }
+      public Field : IIndex { get; set; }
   }
 }

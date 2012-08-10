@@ -11,6 +11,6 @@ namespace Tao.Metadata.Tables.Rows
 {
   public class StandAloneSigRow : IHasCustomAttributeRow
   {
-      public Signature : Index { get; set; }
+      public Signature : IIndex { get; set; }
   }
 }

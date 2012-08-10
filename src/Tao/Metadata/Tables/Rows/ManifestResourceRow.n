@@ -13,7 +13,7 @@ namespace Tao.Metadata.Tables.Rows
   {
       public Offset : uint { get; set; }
       public Flags : uint { get; set; }
-      public Name : Index { get; set; }
-      public Implementation : Index { get; set; }
+      public Name : IIndex { get; set; }
+      public Implementation : IIndex { get; set; }
   }
 }

@@ -95,7 +95,7 @@ namespace Tests
       ShouldReadWideIndex(heapSizes, expectedValue, data, r => r.ReadGuidIndex);  
     }
     
-    private ShouldReadNarrowIndex(heapSizes : byte, expectedValue : ushort, data : array[byte], getReadIndex : IRowReader.[object] -> (object * Index -> void) -> void) : void
+    private ShouldReadNarrowIndex(heapSizes : byte, expectedValue : ushort, data : array[byte], getReadIndex : IRowReader.[object] -> (object * IIndex -> void) -> void) : void
     {
       def results = List.[ushort]();
      
@@ -104,7 +104,7 @@ namespace Tests
       
       mutable index : Index.Narrow = null;
       
-      def setValue(_row : object, value : Index) : void
+      def setValue(_row : object, value : IIndex) : void
       {
           def valueType = value.GetType();
           valueType.ShouldBeEqualTo(typeof(Index.Narrow), "Invalid index type");
@@ -123,12 +123,12 @@ namespace Tests
       results[0].ShouldBeEqualTo(expectedValue, "The values don't match");
       results[0].GetType().ShouldBeEqualTo(typeof(ushort), "Wrong result type");
     }    
-    private ShouldReadWideIndex(heapSizes : byte, expectedValue : uint, data : array[byte], getReadIndex : IRowReader.[object] -> (object * Index -> void) -> void) : void
+    private ShouldReadWideIndex(heapSizes : byte, expectedValue : uint, data : array[byte], getReadIndex : IRowReader.[object] -> (object * IIndex -> void) -> void) : void
     {
       def results = List.[uint]();
       mutable index : Index.Wide = null;
       
-      def setValue(_row : object, value : Index) : void
+      def setValue(_row : object, value : IIndex) : void
       {
           def valueType = value.GetType();
           valueType.ShouldBeEqualTo(typeof(Index.Wide), "Invalid index type");

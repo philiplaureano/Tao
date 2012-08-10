@@ -11,8 +11,8 @@ namespace Tao.Metadata.Tables.Rows
 {  
   public class MethodImplRow
   {
-      public Class : Index { get; set; }
-      public MethodBody : Index { get; set; }
-      public MethodDeclaration : Index { get; set; }
+      public Class : IIndex { get; set; }
+      public MethodBody : IIndex { get; set; }
+      public MethodDeclaration : IIndex { get; set; }
   }
 }

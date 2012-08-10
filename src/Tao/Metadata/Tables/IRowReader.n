@@ -11,14 +11,14 @@ namespace Tao.Metadata.Tables
 {
   public interface IRowReader[TRow]
   {
-    ReadStringIndex(setValue : TRow * Index -> void) : void;  
-    ReadGuidIndex(setValue : TRow * Index -> void) : void;  
-    ReadBlobIndex(setValue : TRow * Index -> void) : void;  
+    ReadStringIndex(setValue : TRow * IIndex -> void) : void;  
+    ReadGuidIndex(setValue : TRow * IIndex -> void) : void;  
+    ReadBlobIndex(setValue : TRow * IIndex -> void) : void;  
     ReadDword(setValue : TRow * uint -> void) : void;  
     ReadWord(setValue : TRow * ushort -> void) : void;  
     ReadByte(setValue : TRow * byte -> void) : void;
     
-    ReadIndex(tableId : TableId, setValue : TRow * Index -> void) : void;
-    ReadIndex(tokenType : CodedTokenType, setValue : TRow * Index -> void) : void;
+    ReadIndex(tableId : TableId, setValue : TRow * IIndex -> void) : void;
+    ReadIndex(tokenType : CodedTokenType, setValue : TRow * IIndex -> void) : void;
   }
 }

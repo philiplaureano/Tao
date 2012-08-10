@@ -11,7 +11,7 @@ namespace Tao.Metadata.Tables.Rows
 {
   public class EventMapRow
   {
-      public Parent : Index { get; set; }
-      public EventList : Index { get; set; }
+      public Parent : IIndex { get; set; }
+      public EventList : IIndex { get; set; }
   }
 }

@@ -12,6 +12,6 @@ namespace Tao.Metadata
   public interface IIndex
   {
       ToUInt32() : uint;
-      ToUint16() : ushort;
+      ToUInt16() : ushort;
   }
 }

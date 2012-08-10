@@ -12,12 +12,12 @@ namespace Tao.Metadata.Tables
 {
   public static class RowReaderExtensions
   {
-    public ReadIndex[TRow]([NotNull] this rowReader : IRowReader[TRow], tokenType : CodedTokenType, [NotNull] getSetter : TRow -> (Index -> void)) : void
+    public ReadIndex[TRow]([NotNull] this rowReader : IRowReader[TRow], tokenType : CodedTokenType, [NotNull] getSetter : TRow -> (IIndex -> void)) : void
     {
       rowReader.ReadIndex(tokenType, (row, value) => getSetter(row)(value));
     }
     public ReadIndex[TRow]([NotNull] this rowReader : IRowReader[TRow], 
-        tableId : TableId, [NotNull] getSetter : TRow -> (Index -> void)) : void
+        tableId : TableId, [NotNull] getSetter : TRow -> (IIndex -> void)) : void
     {
       rowReader.ReadIndex(tableId, (row, value) => getSetter(row)(value));
     }
@@ -34,17 +34,17 @@ namespace Tao.Metadata.Tables
       rowReader.ReadByte((row, value) => getSetter(row)(value));
     }
     public ReadStringIndex[TRow]([NotNull] this rowReader : IRowReader[TRow], 
-        [NotNull] getSetter : TRow -> (Index -> void)) : void
+        [NotNull] getSetter : TRow -> (IIndex -> void)) : void
     {
       rowReader.ReadStringIndex((row, value) => getSetter(row)(value));
     }
     public ReadGuidIndex[TRow]([NotNull] this rowReader : IRowReader[TRow],
-        [NotNull] getSetter : TRow -> (Index -> void)) : void
+        [NotNull] getSetter : TRow -> (IIndex -> void)) : void
     {
       rowReader.ReadGuidIndex((row, value) => getSetter(row)(value));
     }
     public ReadBlobIndex[TRow]([NotNull] this rowReader : IRowReader[TRow],
-        [NotNull] getSetter : TRow -> (Index -> void)) : void
+        [NotNull] getSetter : TRow -> (IIndex -> void)) : void
     {
       rowReader.ReadBlobIndex((row, value) => getSetter(row)(value));
     }

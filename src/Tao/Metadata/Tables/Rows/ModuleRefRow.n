@@ -11,6 +11,6 @@ namespace Tao.Metadata.Tables.Rows
 {
   public class ModuleRefRow : IHasCustomAttributeRow, IMemberRefParentRow, IResolutionScope
   {
-      public Name : Index { get; set; }
+      public Name : IIndex { get; set; }
   }
 }

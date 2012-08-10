@@ -11,7 +11,7 @@ namespace Tao.Metadata.Tables.Rows
 {
   public class MethodSpecRow : IHasCustomAttributeRow
   {
-      public Method : Index { get; set; }
-      public Instantiation : Index { get; set; }
+      public Method : IIndex { get; set; }
+      public Instantiation : IIndex { get; set; }
   }
 }

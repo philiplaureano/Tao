@@ -16,8 +16,8 @@ namespace Tao.Metadata.Tables.Schemas.Readers
         _ : IEnumerable[TableId], [NotNull] rowReader : IRowReader[MethodSemanticsRow]) : void
         {
             rowReader.ReadWord(r => r.set_Semantics);
-            rowReader.ReadIndex(TableId.MethodDef, r => r.set_Method : (Index -> void));
-            rowReader.ReadIndex(CodedTokenType.HasSemantics, r => r.set_Association : (Index -> void));
+            rowReader.ReadIndex(TableId.MethodDef, r => r.set_Method : (IIndex -> void));
+            rowReader.ReadIndex(CodedTokenType.HasSemantics, r => r.set_Association : (IIndex -> void));
         }
     }
 }

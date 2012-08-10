@@ -246,6 +246,9 @@
       <SubType>Code</SubType>
       <DependentUpon>Signatures\CustomAttributeSignatureTests.n</DependentUpon>
     </Compile>
+    <Compile Include="Signatures\CustomAttributeSignatureWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Signatures\MethodSpecSignatureTests.n">
       <SubType>Code</SubType>
     </Compile>

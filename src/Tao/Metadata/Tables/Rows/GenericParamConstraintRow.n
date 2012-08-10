@@ -11,7 +11,7 @@ namespace Tao.Metadata.Tables.Rows
 {
   public class GenericParamConstraintRow : IHasCustomAttributeRow
   {
-      public Owner : Index { get; set; }
-      public Constraint : Index { get; set; }
+      public Owner : IIndex { get; set; }
+      public Constraint : IIndex { get; set; }
   }
 }

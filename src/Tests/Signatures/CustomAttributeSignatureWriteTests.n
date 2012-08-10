@@ -1,0 +1,38 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Signatures;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+using SampleCustomAttributeUsage;
+
+namespace Tests
+{
+    public class CustomAttributeSignatureWriteTests
+    {
+        public stub ShouldWriteCustomAttributeParent() : void
+        {
+        }
+        public stub ShouldWriteCustomAttributeTypeIndex() : void
+        {
+        }
+        public stub ShouldWriteCustomAttributeBlobIndex() : void
+        {
+        }
+        public stub ShouldWriteCustomAttributeBlob() : void
+        {
+        }
+        
+    }
+}

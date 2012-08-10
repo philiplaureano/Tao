@@ -11,7 +11,7 @@ namespace Tao.Metadata.Tables.Rows
 {
   public class PropertyMapRow
   {
-      public Parent : Index { get; set; }
-      public PropertyList : Index { get; set; }
+      public Parent : IIndex { get; set; }
+      public PropertyList : IIndex { get; set; }
   }
 }

@@ -21,7 +21,7 @@ namespace Tao.Metadata.Tables.Schemas.Readers
             rowReader.ReadWord(r => r.set_Flags);
             rowReader.ReadStringIndex(r => r.set_Name);
             rowReader.ReadBlobIndex(r => r.set_Signature);
-            rowReader.ReadIndex(TableId.Param, r => r.set_ParamList : (Index -> void));
+            rowReader.ReadIndex(TableId.Param, r => r.set_ParamList : (IIndex -> void));
         }
     }
 }

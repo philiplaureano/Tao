@@ -14,7 +14,7 @@ namespace Tao.Metadata.Tables.Rows
   {
       GetAssemblyRow(heap : ITablesHeap) : IAssemblyRow;
       GetPartialQualifiedName(stringHeap : Stream, tablesHeap : ITablesHeap) : string;
-      TypeName : Index { get; set; }
-      TypeNamespace : Index { get; set; }      
+      TypeName : IIndex { get; set; }
+      TypeNamespace : IIndex { get; set; }      
   }
 }

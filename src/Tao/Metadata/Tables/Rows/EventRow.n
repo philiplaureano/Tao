@@ -12,7 +12,7 @@ namespace Tao.Metadata.Tables.Rows
   public class EventRow : IHasCustomAttributeRow
   {
       public EventFlags : ushort { get; set; }
-      public Name : Index { get; set; }
-      public EventType : Index { get; set; }
+      public Name : IIndex { get; set; }
+      public EventType : IIndex { get; set; }
   }
 }

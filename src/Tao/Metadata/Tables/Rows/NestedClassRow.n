@@ -11,7 +11,7 @@ namespace Tao.Metadata.Tables.Rows
 {
   public class NestedClassRow
   {
-      public NestedClass : Index { get; set; }
-      public EnclosingClass : Index { get; set; }
+      public NestedClass : IIndex { get; set; }
+      public EnclosingClass : IIndex { get; set; }
   }
 }

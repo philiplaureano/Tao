@@ -17,38 +17,38 @@ namespace Tests
 {
   public static class IndexTestExtensions
   {
-    public ShouldBeUsingNarrowIndices(this index : Index) : void
+    public ShouldBeUsingNarrowIndices(this index : IIndex) : void
     {
       def isNarrow = (index is Index.Narrow);
       isNarrow.ShouldBeTrue("The current index should be a narrow (16-bit) index");
     }
-    public ShouldBeUsingWideIndices(this index : Index) : void
+    public ShouldBeUsingWideIndices(this index : IIndex) : void
     {
       def isWide = (index is Index.Wide);
       isWide.ShouldBeTrue("The current index should be a wide (32-bit) index");
     }
-    public ShouldBeEqualTo(this index : Index, value : uint, message : string, params args : array[object]) : void
+    public ShouldBeEqualTo(this index : IIndex, value : uint, message : string, params args : array[object]) : void
     {
       index.ShouldBeUsingWideIndices();
       
       def targetIndex : Index.Wide = index :> Index.Wide;
       targetIndex.Value.ShouldBeEqualTo(value, message, args);
     }
-    public ShouldBeEqualTo(this index : Index, value : ushort, message : string, params args : array[object]) : void
+    public ShouldBeEqualTo(this index : IIndex, value : ushort, message : string, params args : array[object]) : void
     {
       index.ShouldBeUsingNarrowIndices();
       
       def targetIndex : Index.Narrow = index :> Index.Narrow;
       targetIndex.Value.ShouldBeEqualTo(value, message, args);
     }
-    public IsEqualTo(this index : Index, otherIndex : Index) : bool
+    public IsEqualTo(this index : IIndex, otherIndex : IIndex) : bool
     {
       def indexTypesMatch = (index.GetType() == otherIndex.GetType());
       
       index.ToUInt32() == otherIndex.ToUInt32() && indexTypesMatch;
     }
     
-    public ShouldBeEqualTo(this index : Index, otherIndex : Index) : void
+    public ShouldBeEqualTo(this index : IIndex, otherIndex : Index) : void
     {
       def indexTypesMatch = (index.GetType() == otherIndex.GetType());
       indexTypesMatch.ShouldBeTrue("The index types don't match");    

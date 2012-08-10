@@ -11,6 +11,6 @@ namespace Tao.Metadata.Tables.Rows
 {  
   public interface IResolutionScope
   {
-      Name : Index { get; set; }
+      Name : IIndex { get; set; }
   }
 }

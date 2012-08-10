@@ -18,9 +18,9 @@ namespace Tao.Metadata.Tables.Rows
       public Rva : uint { get; set; }
       public ImplFlags : ushort {get; set; }
       public Flags : ushort { get; set; }
-      public Name : Index { get; set; }
-      public Signature : Index { get; set; }
-      public ParamList : Index { get; set; }
+      public Name : IIndex { get; set; }
+      public Signature : IIndex { get; set; }
+      public ParamList : IIndex { get; set; }
       
       public GetMethodSignature([NotNull] blobStream : Stream) : IMethodSignature
         requires Signature != null otherwise throw InvalidOperationException("You can't retrieve a method signature if the Signature property itself is null")        

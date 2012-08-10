@@ -30,13 +30,13 @@ namespace Tao.Metadata.Tables.Schemas.Readers
             rowReader.ReadStringIndex(r => r.set_TypeNamespace);
 
             // Read the Extends column
-            rowReader.ReadIndex(CodedTokenType.TypeDefOrTypeRef, r => r.set_Extends : (Index -> void));
+            rowReader.ReadIndex(CodedTokenType.TypeDefOrTypeRef, r => r.set_Extends : (IIndex -> void));
 
             // Read the FieldList column
-            rowReader.ReadIndex(TableId.Field, r => r.set_FieldList : (Index -> void));
+            rowReader.ReadIndex(TableId.Field, r => r.set_FieldList : (IIndex -> void));
 
             // Read the MethodList column      
-            rowReader.ReadIndex(TableId.MethodDef, r => r.set_MethodList : (Index -> void));
+            rowReader.ReadIndex(TableId.MethodDef, r => r.set_MethodList : (IIndex -> void));
         }
     }
 }

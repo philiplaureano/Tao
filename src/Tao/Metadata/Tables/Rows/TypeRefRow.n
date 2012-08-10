@@ -13,14 +13,14 @@ namespace Tao.Metadata.Tables.Rows
 {  
     public class TypeRefRow : IHasCustomAttributeRow, IMemberRefParentRow, IResolutionScope, ITypeRow
     {
-        public ResolutionScope : Index { get; set; }
-        public TypeName : Index  
+        public ResolutionScope : IIndex { get; set; }
+        public TypeName : IIndex  
             implements IResolutionScope.Name
         { 
             get; set; 
         }
 
-        public TypeNamespace : Index { get; set; }
+        public TypeNamespace : IIndex { get; set; }
 
         public GetAssemblyRow([NotNull] heap : ITablesHeap) : IAssemblyRow
             requires this.ResolutionScope != null otherwise throw InvalidOperationException("You can only resolve the assembly row if you have a valid (non-null) ResolutionScope")

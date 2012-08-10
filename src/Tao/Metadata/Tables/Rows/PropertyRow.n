@@ -12,7 +12,7 @@ namespace Tao.Metadata.Tables.Rows
   public class PropertyRow : IHasCustomAttributeRow
   {
       public Flags : ushort { get; set; }
-      public Name : Index { get; set; }
-      public Type : Index { get; set; }
+      public Name : IIndex { get; set; }
+      public Type : IIndex { get; set; }
   }
 }

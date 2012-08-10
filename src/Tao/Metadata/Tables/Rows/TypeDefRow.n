@@ -17,15 +17,15 @@ namespace Tao.Metadata.Tables.Rows
     public class TypeDefRow : IHasCustomAttributeRow, IMemberRefParentRow, ITypeRow
     {
         public Flags : uint { get; set; }
-        public TypeName : Index { get; set; }
-        public TypeNamespace : Index { get; set; }
-        public Extends : Index { get; set; }
-        public FieldList : Index { get; set; }
-        public MethodList : Index { get; set; }
+        public TypeName : IIndex { get; set; }
+        public TypeNamespace : IIndex { get; set; }
+        public Extends : IIndex { get; set; }
+        public FieldList : IIndex { get; set; }
+        public MethodList : IIndex { get; set; }
         public GetAssemblyRow([NotNull] heap : ITablesHeap) : IAssemblyRow
-        ensures value != null
+            ensures value != null
         {
-        // NOTE: This method assumes that the given heap is the same heap that contains the current TypeDefRow
+            // NOTE: This method assumes that the given heap is the same heap that contains the current TypeDefRow
             def assemblyRow = heap.GetRow.[AssemblyRow](1);          
             assemblyRow;
         }

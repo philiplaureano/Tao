@@ -15,9 +15,9 @@ namespace Tao.Metadata.Tables.Rows
       MinorVersion : ushort { get; set; }
       BuildNumber : ushort { get; set; }
       RevisionNumber : ushort { get; set; }
-      PublicKey : Index { get; set; }
+      PublicKey : IIndex { get; set; }
       Flags : uint { get; set; }
-      new Name : Index { get; set; }
-      Culture : Index { get; set; }
+      new Name : IIndex { get; set; }
+      Culture : IIndex { get; set; }
   }
 }

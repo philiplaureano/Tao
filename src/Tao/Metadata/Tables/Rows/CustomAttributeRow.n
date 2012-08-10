@@ -15,9 +15,9 @@ namespace Tao.Metadata.Tables.Rows
 {
     public class CustomAttributeRow
     {
-        public Parent : Index { get; set; }
-        public Type : Index { get; set; }
-        public Value : Index { get; set; }
+        public Parent : IIndex { get; set; }
+        public Type : IIndex { get; set; }
+        public Value : IIndex { get; set; }
 
         public GetParameters([NotNull] tablesHeap : ITablesHeap, [NotNull] blobStream : Stream) : IEnumerable[Param]
         {
@@ -89,7 +89,7 @@ namespace Tao.Metadata.Tables.Rows
             GetRowFrom.[TRow, IHasCustomAttributeRow](codedTokenType, get_Parent, table);
         }
         
-        private GetRowFrom[TRow, TRowBase](codedTokenType : CodedTokenType, [NotNull] getIndex : void -> Index, [NotNull] table : IMetadataTable[TRow]) : TRowBase            
+        private GetRowFrom[TRow, TRowBase](codedTokenType : CodedTokenType, [NotNull] getIndex : void -> IIndex, [NotNull] table : IMetadataTable[TRow]) : TRowBase            
             where TRow : TRowBase    
             where TRowBase : class
         {

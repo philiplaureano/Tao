@@ -17,7 +17,7 @@ namespace Tao.Metadata.Tables.Schemas.Readers
         {
             rowReader.ReadWord(r => r.set_PackingSize);
             rowReader.ReadDword(r => r.set_ClassSize);
-            rowReader.ReadIndex(TableId.TypeDef, r => r.set_Parent : (Index -> void));
+            rowReader.ReadIndex(TableId.TypeDef, r => r.set_Parent : (IIndex -> void));
         }
     }
 }
