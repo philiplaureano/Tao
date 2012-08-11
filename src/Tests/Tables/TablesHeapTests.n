@@ -93,6 +93,9 @@ namespace Tests
             expectedHeaderData.ShouldMatch(outputStream);
         }
 
+        public stub ShouldBeAbleToProduceRowCounts() : void
+        {
+        }
         protected override TargetAssemblyFileName : string
         {
             get

@@ -1,0 +1,58 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tests.Macros;
+
+namespace Tests
+{
+    public class LocalVarSignatureTests
+    {
+        public stub ShouldFailIfLocalSigByteNotEncountered() : void
+        {
+        }
+        public stub ShouldReadCount() : void
+        {
+        }
+        public stub ShouldReadCustomMods() : void
+        {
+        }
+        public stub ShouldReadConstraint() : void
+        {
+        }
+        public stub ShouldReadByRef() : void
+        {
+        }
+        public stub ShouldReadSignatureType() : void
+        {
+        }
+        public stub ShouldReadTypedByRef() : void
+        {
+        }
+        public stub ShouldWriteCount() : void
+        {
+        }
+        public stub ShouldWriteCustomMods() : void
+        {
+        }
+        public stub ShouldWriteConstraint() : void
+        {
+        }
+        public stub ShouldWriteByRef() : void
+        {
+        }
+        public stub ShouldWriteSignatureType() : void
+        {
+        }
+        public stub ShouldWriteTypedByRef() : void
+        {
+        }
+    }
+}
