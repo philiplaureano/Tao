@@ -1,0 +1,36 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Signatures
+{
+  public class LocalVarSignatureReader
+  {
+      public ReadFrom([NotNull] stream : Stream) : LocalVarSignature
+        requires !stream.AtEnd()
+      {
+          def reader = BinaryReader(stream);
+          def LOCAL_SIG : byte = 0x7;
+          def localSigByte = reader.ReadByte();
+          when(localSigByte != LOCAL_SIG)
+          {
+              throw BadImageFormatException("Invalid LocalVarSignature; expected the LOCAL_SIG byte value '0x7'");
+          }
+          
+          def signature = LocalVarSignature();
+          
+          def integerReader = CompressedIntegerReader();
+          def count = integerReader.ReadInteger(stream);
+          
+          signature.Count = count;
+          signature;
+      }
+  }
+}

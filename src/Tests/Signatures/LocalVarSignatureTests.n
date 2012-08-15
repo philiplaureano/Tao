@@ -4,22 +4,50 @@ using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
+using Tests.Macros;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
 using Tao;
-using Tests.Macros;
+using Tao.Metadata;
+using Tao.Metadata.Signatures;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+using SampleCustomAttributeUsage;
 
 namespace Tests
 {
-    public class LocalVarSignatureTests
+    public class LocalVarSignatureTests : FileBasedTableTest
     {
+        public ShouldBeAbleToGetStandAloneSigBlob() : void
+        {
+            def root = base.GetMetadataRoot();            
+            def tableStream = root.Heaps["#~"];
+
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+
+            def blobStream = root.Heaps["#Blob"];
+            
+            def standAloneSigRow = heap.GetRow.[StandAloneSigRow](1);
+            standAloneSigRow.ShouldBeNotNull("The assembly should have at least one StandAloneSig row");
+            
+            def signatureBlob = standAloneSigRow.Signature.ToBlob(blobStream);
+            (signatureBlob.Length > 0).ShouldBeTrue("Invalid standalone signature blob");            
+        }
         public stub ShouldFailIfLocalSigByteNotEncountered() : void
         {
         }
-        public stub ShouldReadCount() : void
+        public ShouldReadCount() : void
         {
+            def shouldHaveCorrectCount(signature : LocalVarSignature, expectedCount : uint)
+            {
+                signature.Count.ShouldBeEqualTo(expectedCount, "Wrong LocalVarSig count");
+            }
+            
+            TestRead(shouldHaveCorrectCount(_, 1 : uint));
         }
         public stub ShouldReadCustomMods() : void
         {
@@ -53,6 +81,34 @@ namespace Tests
         }
         public stub ShouldWriteTypedByRef() : void
         {
+        }
+        
+        private TestRead(doTest : LocalVarSignature -> void) : void
+        {
+            def root = base.GetMetadataRoot();            
+            def tableStream = root.Heaps["#~"];
+
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+
+            def stringHeap = root.Heaps["#Strings"];           
+            def blobStream = root.Heaps["#Blob"];
+            
+            def standAloneSigRow = heap.GetRow.[StandAloneSigRow](1);
+            standAloneSigRow.ShouldBeNotNull("The assembly should have at least one StandAloneSig row");
+            
+            def signatureBlob = standAloneSigRow.Signature.ToBlob(blobStream);
+            def reader = LocalVarSignatureReader();
+            
+            def result = reader.ReadFrom(MemoryStream(signatureBlob));
+            doTest(result);
+        }
+        protected override TargetAssemblyFileName : string 
+        { 
+            get
+            {
+                "LocalVarSig1.dll";
+            }
         }
     }
 }
