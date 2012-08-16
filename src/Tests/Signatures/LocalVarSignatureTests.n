@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Tao;
+using Tao.Interfaces;
 using Tao.Metadata;
 using Tao.Metadata.Signatures;
 using Tao.Metadata.Tables;
@@ -37,23 +38,91 @@ namespace Tests
             def signatureBlob = standAloneSigRow.Signature.ToBlob(blobStream);
             (signatureBlob.Length > 0).ShouldBeTrue("Invalid standalone signature blob");            
         }
-        public stub ShouldFailIfLocalSigByteNotEncountered() : void
+        public ShouldFailIfLocalSigByteNotEncountered() : void
+            expects BadImageFormatException
         {
+            def root = base.GetMetadataRoot();            
+            def tableStream = root.Heaps["#~"];
+
+            def heap = TablesHeap();
+            heap.ReadFrom(tableStream);
+         
+            def blobStream = root.Heaps["#Blob"];
+                        
+            def standAloneSigRow = heap.GetRow.[StandAloneSigRow](1);
+            standAloneSigRow.ShouldBeNotNull("The assembly should have at least one StandAloneSig row");
+            
+            def signatureBlob = standAloneSigRow.Signature.ToBlob(blobStream);
+            
+            // Remove the LOCAL_SIG signature byte from the stream
+            signatureBlob[0] = 0;
+            
+            def reader = LocalVarSignatureReader();            
+            def result = reader.ReadFrom(MemoryStream(signatureBlob));
         }
+        
         public ShouldReadCount() : void
         {
             def shouldHaveCorrectCount(signature : LocalVarSignature, expectedCount : uint)
             {
-                (signature.Locals.Count == 1).ShouldBeTrue("Wrong LocalVarSig count");
+                (signature.Locals.Count :> uint == expectedCount).ShouldBeTrue("Wrong LocalVarSig count");
             }
             
             TestRead(shouldHaveCorrectCount(_, 1 : uint));
         }
-        public stub ShouldReadCustomMods() : void
+        public ShouldReadCustomMods() : void
         {
+            def sampleStream = MemoryStream();
+            
+            def writer = BinaryWriter(sampleStream);
+            
+            // Write the LOCAL_SIG byte
+            writer.Write(0x7 : byte);
+            
+            // Write the number of variables
+            def integerWriter = CompressedIntegerWriter();
+            integerWriter.WriteInteger(1, sampleStream);
+            
+            // Write the custom mod
+            def mod = CustomMod();
+            mod.IsRequired = true;
+            
+            mod.TableId = TableId.TypeRef;
+            mod.Row = 1;
+            
+            def modWriter = CustomModWriter();
+            modWriter.Write(mod, sampleStream);
+
+            // Make the local variable a string type
+            def stringSignature = StringSignature.Instance;
+            stringSignature.Write(sampleStream);
+            
+            sampleStream.Seek(0);
+            def localVarSigReader = LocalVarSignatureReader();            
+            def signature = localVarSigReader.ReadFrom(sampleStream);
+            
+            // Check the variable count            
+            signature.Locals.Count().ShouldBeEqualTo(1, "Wrong local variable count");
+            
+            // Check the local count
+            def local = signature.Locals[0];
+            local.CustomMods.Count().ShouldBeEqualTo(1, "Wrong number of custom mods");
+            
+            // Check the custom mod iteslf
+            def actualMod = local.CustomMods[0];
+            actualMod.IsRequired.ShouldBeTrue("This custom mod should be required");
+            actualMod.Row.ShouldBeEqualTo(1, "Wrong row");
+            actualMod.TableId.ShouldBeEqualTo(TableId.TypeRef, "Wrong tableID");
         }
-        public stub ShouldReadConstraint() : void
+        public ShouldReadConstraint() : void
         {
+            def shouldBeConstrained(local : LocalVariable) : void
+            {
+                local.IsByRef.ShouldBeFalse("The signature should not be ByRef");
+                local.IsPinned.ShouldBeTrue("This LocalVarSignature should be pinned");
+            }
+            
+            TestRead(shouldBeConstrained, 2, "LocalVarSig3.dll");
         }
         public ShouldReadByRef() : void
         {
@@ -61,7 +130,7 @@ namespace Tests
             {
                 def local = signature.Locals[0];
                 local.IsByRef.ShouldBeTrue("The signature should be ByRef");
-                local.HasConstraint.ShouldBeFalse("This LocalVarSignature should not have any constraints");
+                local.IsPinned.ShouldBeFalse("This LocalVarSignature should not have any constraints");
             }
             
             TestRead(shouldBeByRef);
@@ -73,11 +142,17 @@ namespace Tests
             {
                 local.VariableType.ElementType.ShouldBeEqualTo(ElementType.I4, "Wrong local variable element type");
             }
-            TestRead(Transform(shouldHaveCorrectType, 0));
+            TestRead(shouldHaveCorrectType, 0);
         }
         
-        public stub ShouldReadTypedByRef() : void
+        public ShouldReadTypedByRef() : void
         {
+            def shouldHaveTypedByRefLocal(local : LocalVariable)
+            {
+                local.VariableType.ElementType.ShouldBeEqualTo(ElementType.TypedByRef, "This local variable should be TypedByRef");
+            }
+            
+            TestRead(shouldHaveTypedByRefLocal, 1, "LocalVarSig2.dll");
         }
         public stub ShouldWriteCount() : void
         {
@@ -108,15 +183,24 @@ namespace Tests
             doTest;
         }
         
-        private TestRead(doTest : LocalVarSignature -> void) : void
+        private TestRead(doTest : LocalVariable -> void, index : int, filename : string) : void
         {
-            def root = base.GetMetadataRoot();            
+            TestRead(Transform(doTest, index), filename);
+        }
+        
+        private TestRead(doTest : LocalVariable -> void, index : int) : void
+        {
+            TestRead(Transform(doTest, index));
+        }
+        
+        private TestRead(doTest : LocalVarSignature -> void, getRoot : void -> IMetadataRoot) : void
+        {
+            def root = getRoot();            
             def tableStream = root.Heaps["#~"];
 
             def heap = TablesHeap();
             heap.ReadFrom(tableStream);
-
-            def stringHeap = root.Heaps["#Strings"];           
+         
             def blobStream = root.Heaps["#Blob"];
             
             def standAloneSigRow = heap.GetRow.[StandAloneSigRow](1);
@@ -127,6 +211,14 @@ namespace Tests
             
             def result = reader.ReadFrom(MemoryStream(signatureBlob));
             doTest(result);
+        }
+        private TestRead(doTest : LocalVarSignature -> void, filename : string) : void
+        {            
+            TestRead(doTest, () => base.GetMetadataRoot(filename));
+        }
+        private TestRead(doTest : LocalVarSignature -> void) : void
+        {            
+            TestRead(doTest, () => base.GetMetadataRoot());
         }
         protected override TargetAssemblyFileName : string 
         { 

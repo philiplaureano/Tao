@@ -16,7 +16,7 @@ namespace Tao.Metadata.Signatures
     {
         [Accessor] private _customMods : List.[CustomMod] = List();
         public IsByRef : bool { get; set; }
-        public HasConstraint : bool { get; set; }
+        public IsPinned : bool { get; set; }
         public VariableType : ITypeSignature { get; set; }
     }
 }

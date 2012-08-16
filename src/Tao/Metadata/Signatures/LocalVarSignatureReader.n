@@ -31,34 +31,43 @@ namespace Tao.Metadata.Signatures
 
             def BYREF : byte = ElementType.ByRef :> byte;
             def CONSTRAINT = ElementType.Pinned :> byte;
+            def TYPEDBYREF = ElementType.TypedByRef :> byte;
+
             def modReader = CustomModReader();
             for(mutable i : uint = 0; i < count; i++)
             {              
                 def local = LocalVariable();
 
-                // Read the custom mods
-                def mods = modReader.ReadCustomMods(stream);
-                local.CustomMods.AddRange(mods);
-                
-                // Check the constraint byte
-                def constraintByte = reader.PeekByte();
-                when (constraintByte == CONSTRAINT)
+                def typedByRefByte = reader.PeekByte();
+                if(typedByRefByte == TYPEDBYREF)
                 {
-                    _ = stream.Seek(1, SeekOrigin.Current);
-                    local.HasConstraint = true;
+                    local.VariableType = TypedByRefSignature.Instance;
                 }
+                else
+                {
+                    // Read the custom mods
+                    def mods = modReader.ReadCustomMods(stream);
+                    local.CustomMods.AddRange(mods);
 
-                // Check the ByRef byte
-                def byRefByte = reader.PeekByte();
-                when(byRefByte == BYREF)
-                {   
-                    _ = stream.Seek(1, SeekOrigin.Current);
-                    local.IsByRef = true;
-                }
-                
+                    // Check the constraint byte
+                    def constraintByte = reader.PeekByte();
+                    when (constraintByte == CONSTRAINT)
+                    {
+                        _ = stream.Seek(1, SeekOrigin.Current);
+                        local.IsPinned = true;
+                    }
+
+                    // Check the ByRef byte
+                    def byRefByte = reader.PeekByte();
+                    when(byRefByte == BYREF)
+                    {   
+                        _ = stream.Seek(1, SeekOrigin.Current);
+                        local.IsByRef = true;
+                    }
+
                 // Read the Local type
-                local.VariableType = TypeSignature.ReadFrom(stream);
-                
+                    local.VariableType = TypeSignature.ReadFrom(stream);
+                }
                 signature.Locals.Add(local);
             }
             signature;
