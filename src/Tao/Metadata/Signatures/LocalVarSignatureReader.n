@@ -11,26 +11,57 @@ using System.Linq;
 
 namespace Tao.Metadata.Signatures
 {
-  public class LocalVarSignatureReader
-  {
-      public ReadFrom([NotNull] stream : Stream) : LocalVarSignature
+    public class LocalVarSignatureReader
+    {
+        public ReadFrom([NotNull] stream : Stream) : LocalVarSignature
         requires !stream.AtEnd()
-      {
-          def reader = BinaryReader(stream);
-          def LOCAL_SIG : byte = 0x7;
-          def localSigByte = reader.ReadByte();
-          when(localSigByte != LOCAL_SIG)
-          {
-              throw BadImageFormatException("Invalid LocalVarSignature; expected the LOCAL_SIG byte value '0x7'");
-          }
-          
-          def signature = LocalVarSignature();
-          
-          def integerReader = CompressedIntegerReader();
-          def count = integerReader.ReadInteger(stream);
-          
-          signature.Count = count;
-          signature;
-      }
-  }
+        {
+            def reader = BinaryReader(stream);
+            def LOCAL_SIG : byte = 0x7;
+            def localSigByte = reader.ReadByte();
+            when(localSigByte != LOCAL_SIG)
+            {
+                throw BadImageFormatException("Invalid LocalVarSignature; expected the LOCAL_SIG byte value '0x7'");
+            }
+
+            def signature = LocalVarSignature();
+
+            def integerReader = CompressedIntegerReader();
+            def count = integerReader.ReadInteger(stream);
+
+            def BYREF : byte = ElementType.ByRef :> byte;
+            def CONSTRAINT = ElementType.Pinned :> byte;
+            def modReader = CustomModReader();
+            for(mutable i : uint = 0; i < count; i++)
+            {              
+                def local = LocalVariable();
+
+                // Read the custom mods
+                def mods = modReader.ReadCustomMods(stream);
+                local.CustomMods.AddRange(mods);
+                
+                // Check the constraint byte
+                def constraintByte = reader.PeekByte();
+                when (constraintByte == CONSTRAINT)
+                {
+                    _ = stream.Seek(1, SeekOrigin.Current);
+                    local.HasConstraint = true;
+                }
+
+                // Check the ByRef byte
+                def byRefByte = reader.PeekByte();
+                when(byRefByte == BYREF)
+                {   
+                    _ = stream.Seek(1, SeekOrigin.Current);
+                    local.IsByRef = true;
+                }
+                
+                // Read the Local type
+                local.VariableType = TypeSignature.ReadFrom(stream);
+                
+                signature.Locals.Add(local);
+            }
+            signature;
+        }
+    }
 }

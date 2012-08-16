@@ -44,7 +44,7 @@ namespace Tests
         {
             def shouldHaveCorrectCount(signature : LocalVarSignature, expectedCount : uint)
             {
-                signature.Count.ShouldBeEqualTo(expectedCount, "Wrong LocalVarSig count");
+                (signature.Locals.Count == 1).ShouldBeTrue("Wrong LocalVarSig count");
             }
             
             TestRead(shouldHaveCorrectCount(_, 1 : uint));
@@ -55,12 +55,27 @@ namespace Tests
         public stub ShouldReadConstraint() : void
         {
         }
-        public stub ShouldReadByRef() : void
+        public ShouldReadByRef() : void
         {
+            def shouldBeByRef(signature : LocalVarSignature) : void
+            {
+                def local = signature.Locals[0];
+                local.IsByRef.ShouldBeTrue("The signature should be ByRef");
+                local.HasConstraint.ShouldBeFalse("This LocalVarSignature should not have any constraints");
+            }
+            
+            TestRead(shouldBeByRef);
         }
-        public stub ShouldReadSignatureType() : void
+        
+        public ShouldReadLocalType() : void
         {
+            def shouldHaveCorrectType(local : LocalVariable) : void
+            {
+                local.VariableType.ElementType.ShouldBeEqualTo(ElementType.I4, "Wrong local variable element type");
+            }
+            TestRead(Transform(shouldHaveCorrectType, 0));
         }
+        
         public stub ShouldReadTypedByRef() : void
         {
         }
@@ -76,11 +91,21 @@ namespace Tests
         public stub ShouldWriteByRef() : void
         {
         }
-        public stub ShouldWriteSignatureType() : void
+        public stub ShouldWriteLocalType() : void
         {
         }
         public stub ShouldWriteTypedByRef() : void
         {
+        }
+        
+        private Transform(test : LocalVariable -> void, index : int) : LocalVarSignature -> void
+        {            
+            def doTest(signature : LocalVarSignature) : void
+            {
+                def local = signature.Locals[index];
+                test(local);
+            }
+            doTest;
         }
         
         private TestRead(doTest : LocalVarSignature -> void) : void

@@ -446,6 +446,9 @@
     <Compile Include="Metadata\Signatures\ITypeSpec.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\LocalVariable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\LocalVarSignature.n">
       <SubType>Code</SubType>
     </Compile>
