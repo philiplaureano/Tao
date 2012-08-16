@@ -33,6 +33,80 @@ namespace Tests
         public stub ShouldWriteCustomAttributeBlob() : void
         {
         }
-        
+        public stub ShouldWriteBoxedEnum() : void
+        {
+        }
+        public stub ShouldWriteBoxedArray() : void
+        {
+        }
+        public stub ShouldWriteNamedField() : void
+        {
+        }
+        public stub ShouldWriteNamedProperty() : void
+        {
+        }
+        public stub ShouldWriteArray() : void
+        {
+        }
+        public stub ShouldWriteCustomEnum() : void
+        {
+        }
+        public stub ShouldWriteBoolean() : void
+        {
+        }
+        public stub ShouldWriteByte() : void
+        {
+        }
+        public stub ShouldWriteSignedByte() : void
+        {
+        }
+        public stub ShouldWriteChar() : void
+        {
+        }
+        public stub ShouldWriteUInt16() : void
+        {
+        }
+        public stub ShouldWriteInt16() : void
+        {
+        }
+        public stub ShouldWriteUInt32() : void
+        {
+        }
+        public stub ShouldWriteInt32() : void
+        {
+        }
+        public stub ShouldWriteUInt64() : void
+        {
+        }
+        public stub ShouldWriteInt64() : void
+        {
+        }
+        public stub ShouldWriteSingle() : void
+        {
+        }
+        public stub ShouldWriteDouble() : void
+        {
+        }
+        public stub ShouldWriteSerString() : void
+        {
+        }
+        public stub ShouldWriteNullString() : void
+        {
+        }
+        public stub ShouldWriteEmptySerString() : void
+        {
+        }
+        public stub ShouldWriteTypeSerString() : void
+        {
+        }
+        public stub ShouldWriteFieldOrPropType() : void
+        {
+        }
+        public stub ShouldWriteProlog() : void
+        {
+        }
+        public stub ShouldBeAbleToWriteCustomAttributeRows() : void
+        {
+        }
     }
 }
