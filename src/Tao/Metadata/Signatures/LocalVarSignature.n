@@ -15,8 +15,14 @@ namespace Tao.Metadata.Signatures
 {
     public class LocalVarSignature
     {        
-        [Accessor] private _locals : List.[LocalVariable] = List();
+        [Accessor] private _locals : List.[LocalVariable] = List();        
         
-        public HasConstraint : bool { get; set; }
+        public Count : int
+        {
+            get
+            {
+                _locals.Count;
+            }
+        }
     }
 }

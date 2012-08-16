@@ -1,0 +1,60 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Signatures
+{
+    public class LocalVarSignatureWriter
+    {
+        public Write([NotNull] signature : LocalVarSignature, [NotNull] stream : Stream) : void
+            requires stream.CanWrite 
+        {
+            // Write the LOCAL_SIG byte
+            def writer = BinaryWriter(stream);
+            writer.Write(0x7 : byte);
+
+            // Write the variable count
+            def count = signature.Count :> uint;
+            def integerWriter = CompressedIntegerWriter();
+            integerWriter.WriteInteger(count, stream);
+
+            def modWriter = CustomModWriter();
+
+            foreach(local in signature.Locals)
+            {                
+                def localType = local.VariableType;
+
+                when(localType.ElementType != ElementType.TypedByRef)
+                {
+                    // Write the custom mods
+                    foreach(mod in local.CustomMods)
+                    {
+                        modWriter.Write(mod, stream);
+                    }
+
+                    // Write the constraint byte
+                    when(local.IsPinned)
+                    {
+                        writer.Write(ElementType.Pinned :> byte);
+                    }
+
+                    // Write the ByRef byte
+                    when(local.IsByRef)
+                    {
+                        writer.Write(ElementType.ByRef :> byte);
+                    }
+                }
+                
+                // Write the type itself
+                localType.Write(stream);
+            }            
+        }
+    }
+}

@@ -455,6 +455,9 @@
     <Compile Include="Metadata\Signatures\LocalVarSignatureReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\LocalVarSignatureWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\ManagedMethodSignature.n">
       <SubType>Code</SubType>
     </Compile>
