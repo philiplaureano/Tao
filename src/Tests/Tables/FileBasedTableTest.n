@@ -14,44 +14,11 @@ using System.Linq;
 
 namespace Tests
 {
-    public abstract class FileBasedTableTest
+    public abstract class FileBasedTableTest : FileBasedTest
     {
-        private static _fileCache : Dictionary.[string, array[byte]] = Dictionary();
-
-        protected GetTableStreamData(filename : string) : array[byte]
-        {
-            def getData() : array[byte]
-            {
-                def root = GetMetadataRoot(filename);
-                root.ShouldBeNotNull("The file '{0}' is not a valid .NET assembly", TargetAssemblyFileName);
-
-                def tableStream = root.Heaps["#~"];
-                def resultStream = MemoryStream();
-                tableStream.CopyTo(resultStream);
-
-                resultStream.ToArray();
-            }
-
-            when(!_fileCache.ContainsKey(TargetAssemblyFileName))
-            {
-                def result = getData();
-                _fileCache[TargetAssemblyFileName] = result;
-            }
-
-            _fileCache[TargetAssemblyFileName];
-        }
         protected GetMetadataRoot() : IMetadataRoot
         {
             GetMetadataRoot(TargetAssemblyFileName);
-        }
-        protected GetMetadataRoot(filename : string) : IMetadataRoot
-        {
-            def bytes = File.ReadAllBytes(filename);
-            def fileStream = MemoryStream(bytes);
-            def imageReader = ImageReader();
-            def image = imageReader.Read(fileStream);
-
-            image.GetMetadataRoot();
         }
         protected virtual GetTableStreamData() : array[byte]
         {

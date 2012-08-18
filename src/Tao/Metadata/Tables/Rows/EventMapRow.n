@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class EventMapRow
+  public class EventMapRow : IRow
   {
       public Parent : IIndex { get; set; }
       public EventList : IIndex { get; set; }

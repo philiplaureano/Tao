@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {  
-  public interface ITypeRow
+  public interface ITypeRow : IRow
   {
       GetAssemblyRow(heap : ITablesHeap) : IAssemblyRow;
       GetPartialQualifiedName(stringHeap : Stream, tablesHeap : ITablesHeap) : string;

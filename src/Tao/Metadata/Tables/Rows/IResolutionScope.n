@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {  
-  public interface IResolutionScope
+  public interface IResolutionScope : IRow
   {
       Name : IIndex { get; set; }
   }

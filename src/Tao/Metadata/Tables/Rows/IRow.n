@@ -9,9 +9,8 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class PropertyMapRow : IRow
-  {
-      public Parent : IIndex { get; set; }
-      public PropertyList : IIndex { get; set; }
-  }
+    // A marker interface for metadata table rows.
+    public interface IRow
+    {
+    }
 }

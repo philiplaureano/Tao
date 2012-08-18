@@ -1,0 +1,25 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tests.Macros;
+
+namespace Tests
+{
+    public class RowReferenceTests
+    {
+        public stub ShouldResolveRowInstanceFromRowReference() : void
+        {
+        }
+        public stub ShouldBeAbleToResolveRowFromTablesHeap() : void
+        {
+        }
+    }
+}

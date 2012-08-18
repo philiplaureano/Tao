@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class ImplMapRow
+  public class ImplMapRow : IRow
   {
       public MappingFlags : ushort { get; set; }
       public MemberForwarded : IIndex { get; set; }

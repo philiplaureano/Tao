@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public interface IAssemblyRow : IHasCustomAttributeRow, IResolutionScope
+  public interface IAssemblyRow : IHasCustomAttributeRow, IResolutionScope, IRow
   {
       MajorVersion : ushort { get; set; }
       MinorVersion : ushort { get; set; }

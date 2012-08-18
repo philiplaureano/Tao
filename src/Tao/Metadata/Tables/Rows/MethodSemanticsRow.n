@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class MethodSemanticsRow
+  public class MethodSemanticsRow : IRow
   {
       public Semantics : ushort { get; set; }
       public Method : IIndex { get; set; }

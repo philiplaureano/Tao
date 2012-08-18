@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public interface IHasCustomAttributeRow
+  public interface IHasCustomAttributeRow : IRow
   {
   }
 }

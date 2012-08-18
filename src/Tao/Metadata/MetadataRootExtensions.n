@@ -1,0 +1,44 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+
+namespace Tao.Metadata
+{
+    public static class MetadataRootExtensions
+    {
+        public GetStringHeap([NotNull] this root : IMetadataRoot) : Stream
+            requires root.Heaps.ContainsKey("#Strings")
+            ensures value != null
+        {
+            root.Heaps["#Strings"];
+        }
+        public GetBlobHeap([NotNull] this root : IMetadataRoot) : Stream
+            requires root.Heaps.ContainsKey("#Blob")
+            ensures value != null
+        {
+            root.Heaps["#Blob"];
+        }
+        public GetGuidHeap([NotNull] this root : IMetadataRoot) : Stream
+            requires root.Heaps.ContainsKey("#GUID")
+            ensures value != null
+        {
+            root.Heaps["#GUID"];
+        }
+        
+        public GetTablesHeap([NotNull] this root : IMetadataRoot) : Stream
+            requires root.Heaps.ContainsKey("#~")
+            ensures value != null
+        {
+            root.Heaps["#~"];
+        }
+    }
+}

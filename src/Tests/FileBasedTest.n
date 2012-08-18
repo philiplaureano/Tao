@@ -1,0 +1,54 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata;
+using Tests.Macros;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tests
+{  
+    public abstract class FileBasedTest
+    {
+        private static _fileCache : Dictionary.[string, array[byte]] = Dictionary();
+
+        protected GetTableStreamData(filename : string) : array[byte]
+        {
+            def getData() : array[byte]
+            {
+                def root : IMetadataRoot = GetMetadataRoot(filename);
+                root.ShouldBeNotNull("The file '{0}' is not a valid .NET assembly", filename);
+
+                def tableStream = root.GetTablesHeap();
+                def resultStream = MemoryStream();
+                tableStream.CopyTo(resultStream);
+
+                resultStream.ToArray();
+            }
+
+            when(!_fileCache.ContainsKey(filename))
+            {
+                def result = getData();
+                _fileCache[filename] = result;
+            }
+
+            _fileCache[filename];
+        }        
+        protected GetMetadataRoot(filename : string) : IMetadataRoot
+        {
+            def bytes = File.ReadAllBytes(filename);
+            def fileStream = MemoryStream(bytes);
+            def imageReader = ImageReader();
+            def image = imageReader.Read(fileStream);
+
+            image.GetMetadataRoot();
+        }
+    }
+}

@@ -13,7 +13,7 @@ using Tao.Metadata.Signatures;
 
 namespace Tao.Metadata.Tables.Rows
 {  
-  public interface ICustomAttributeTypeRow
+  public interface ICustomAttributeTypeRow : IRow
   {
       GetMethodSignature(blobStream : Stream) : IMethodSignature;
   }

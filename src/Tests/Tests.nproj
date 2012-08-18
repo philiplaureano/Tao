@@ -130,6 +130,9 @@
     <Compile Include="DataDirectoryTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FileBasedTest.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GUIDHeapTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -203,6 +206,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Rows\MethodDefRowTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\RowReferenceTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Rows\TypeDefRowTests.n">

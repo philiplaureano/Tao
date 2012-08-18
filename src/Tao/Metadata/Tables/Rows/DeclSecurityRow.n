@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class DeclSecurityRow
+  public class DeclSecurityRow : IRow
   {
       public Action : ushort { get; set; }
       public Parent : IIndex { get; set; }

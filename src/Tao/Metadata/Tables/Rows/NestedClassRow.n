@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class NestedClassRow
+  public class NestedClassRow : IRow
   {
       public NestedClass : IIndex { get; set; }
       public EnclosingClass : IIndex { get; set; }

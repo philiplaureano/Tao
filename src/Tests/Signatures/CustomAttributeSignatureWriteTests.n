@@ -19,7 +19,7 @@ using SampleCustomAttributeUsage;
 
 namespace Tests
 {
-    public class CustomAttributeSignatureWriteTests
+    public class CustomAttributeSignatureWriteTests : FileBasedTest
     {
         public stub ShouldWriteCustomAttributeParent() : void
         {

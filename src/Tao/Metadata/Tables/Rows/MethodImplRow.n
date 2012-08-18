@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {  
-  public class MethodImplRow
+  public class MethodImplRow : IRow
   {
       public Class : IIndex { get; set; }
       public MethodBody : IIndex { get; set; }
