@@ -199,6 +199,9 @@
       <SubType>Code</SubType>
       <DependentUpon>Rows\CustomAttributeRowTests.n</DependentUpon>
     </Compile>
+    <Compile Include="Rows\DummyRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Rows\IndexExtensionTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -206,6 +209,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Rows\MethodDefRowTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\MockRowReference.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Rows\RowReferenceTests.n">

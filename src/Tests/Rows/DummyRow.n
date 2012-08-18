@@ -6,12 +6,10 @@ using Nemerle.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-namespace Tao.Metadata.Tables.Rows
+using Tao.Metadata.Tables.Rows;
+namespace Tests
 {
-  public class FieldMarshalRow : IRow
+  public class DummyRow : IRow
   {
-      public Parent : IIndex { get; set; }
-      public NativeType : IIndex { get; set; }
   }
 }

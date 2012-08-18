@@ -1,0 +1,30 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+namespace Tests
+{
+    public struct MockRowReference
+    {
+        public this(tableId : TableId, row : uint)
+        {
+            TableId = tableId;
+            Row = row;
+        }
+        public TableId : TableId { get; private set; }
+        public Row : uint { get; private set; }
+        public GetRowFrom(heap : ITablesHeap) : IRow
+        {          
+            DummyRow();
+        }
+    }
+}

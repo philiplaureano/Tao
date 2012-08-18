@@ -1,4 +1,5 @@
 ﻿using Nemerle;
+using Nemerle.Assertions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
@@ -9,16 +10,63 @@ using System.Linq;
 
 using Tao.Metadata;
 using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+
 namespace Tao
 {
-  public struct RowReference
-  {
-      public this(tableId : TableId, row : uint)
-      {
-          TableId = tableId;
-          Row = row;
-      }
-      public TableId : TableId { get; private set; }
-      public Row : uint { get; private set; }
-  }
+    public struct RowReference : IRowReference
+    {
+        public this(tableId : TableId, row : uint)
+        {
+            TableId = tableId;
+            Row = row;
+        }
+        public TableId : TableId { get; private set; }
+        public Row : uint { get; private set; }
+        public GetRowFrom(heap : ITablesHeap) : IRow
+        {          
+            def rowMap = Dictionary.[TableId, void -> IRow]();
+            rowMap[TableId.Assembly] = () => heap.GetRow.[AssemblyRow](Row);
+            rowMap[TableId.AssemblyRef] = () => heap.GetRow.[AssemblyRefRow](Row);
+            rowMap[TableId.ClassLayout] = () => heap.GetRow.[ClassLayoutRow](Row);
+            rowMap[TableId.Constant] = () => heap.GetRow.[ConstantRow](Row);
+            rowMap[TableId.CustomAttribute] = () => heap.GetRow.[CustomAttributeRow](Row);
+            rowMap[TableId.DeclSecurity] = () => heap.GetRow.[DeclSecurityRow](Row);
+            rowMap[TableId.Event] = () => heap.GetRow.[EventRow](Row);
+            rowMap[TableId.EventMap] = () => heap.GetRow.[EventMapRow](Row);
+            rowMap[TableId.ExportedType] = () => heap.GetRow.[ExportedTypeRow](Row);
+            rowMap[TableId.Field] = () => heap.GetRow.[FieldRow](Row);
+            rowMap[TableId.FieldLayout] = () => heap.GetRow.[FieldLayoutRow](Row);
+            rowMap[TableId.FieldMarshal] = () => heap.GetRow.[FieldMarshalRow](Row);
+            rowMap[TableId.FieldRVA] = () => heap.GetRow.[FieldRvaRow](Row);
+            rowMap[TableId.File] = () => heap.GetRow.[FileRow](Row);
+            rowMap[TableId.GenericParam] = () => heap.GetRow.[GenericParamRow](Row);
+            rowMap[TableId.GenericParamConstraint] = () => heap.GetRow.[GenericParamConstraintRow](Row);
+            rowMap[TableId.ImplMap] = () => heap.GetRow.[ImplMapRow](Row);
+            rowMap[TableId.InterfaceImpl] = () => heap.GetRow.[InterfaceImplRow](Row);
+            rowMap[TableId.ManifestResource] = () => heap.GetRow.[ManifestResourceRow](Row);
+            rowMap[TableId.MemberRef] = () => heap.GetRow.[MemberRefRow](Row);
+            rowMap[TableId.MethodDef] = () => heap.GetRow.[MethodDefRow](Row);
+            rowMap[TableId.MethodImpl] = () => heap.GetRow.[MethodImplRow](Row);
+            rowMap[TableId.MethodSemantics] = () => heap.GetRow.[MethodSemanticsRow](Row);
+            rowMap[TableId.MethodSpec] = () => heap.GetRow.[MethodSpecRow](Row);
+            rowMap[TableId.Module] = () => heap.GetRow.[ModuleRow](Row);
+            rowMap[TableId.ModuleRef] = () => heap.GetRow.[ModuleRefRow](Row);
+            rowMap[TableId.NestedClass] = () => heap.GetRow.[NestedClassRow](Row);
+            rowMap[TableId.Param] = () => heap.GetRow.[ParamRow](Row);
+            rowMap[TableId.Property] = () => heap.GetRow.[PropertyRow](Row);
+            rowMap[TableId.PropertyMap] = () => heap.GetRow.[PropertyMapRow](Row);
+            rowMap[TableId.StandAloneSig] = () => heap.GetRow.[StandAloneSigRow](Row);
+            rowMap[TableId.TypeDef] = () => heap.GetRow.[TypeDefRow](Row);
+            rowMap[TableId.TypeRef] = () => heap.GetRow.[TypeRefRow](Row);
+            rowMap[TableId.TypeSpec] = () => heap.GetRow.[TypeSpecRow](Row);                
+            
+            when(!rowMap.ContainsKey(TableId))
+            {
+                throw NotSupportedException("TableId '$TableId' not supported when resolving row references");
+            }
+            
+            rowMap[TableId]();
+        }
+    }
 }

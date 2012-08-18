@@ -30,9 +30,14 @@ namespace Tao.Metadata.Tables
                 }
             }
         }
-
+        
+        public GetRow(this heap : ITablesHeap, rowReference : IRowReference) : IRow
+        {
+            rowReference.GetRowFrom(heap);
+        }
+        
         public GetRow[TRow](this heap : ITablesHeap, rowIndex : uint) : TRow
-            where TRow : class
+            where TRow : class, IRow
         {            
             mutable result : TRow = null;
             when(rowIndex > 0)

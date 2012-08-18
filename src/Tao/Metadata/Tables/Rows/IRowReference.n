@@ -9,9 +9,10 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class FieldMarshalRow : IRow
-  {
-      public Parent : IIndex { get; set; }
-      public NativeType : IIndex { get; set; }
-  }
+    public interface IRowReference
+    {
+        TableId : TableId { get; }
+        Row : uint { get; }
+        GetRowFrom(heap : ITablesHeap) : IRow;
+    }
 }

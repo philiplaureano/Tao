@@ -11,15 +11,97 @@ using System.Linq;
 
 using Tests.Macros;
 
+using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+
 namespace Tests
 {
-    public class RowReferenceTests
+    public class RowReferenceTests : FileBasedTest
     {
-        public stub ShouldResolveRowInstanceFromRowReference() : void
+        public ShouldResolveRowInstanceFromRowReferenceForModuleRow() : void
         {
+            TestRowRef.[ModuleRow](TableId.Module);
         }
-        public stub ShouldBeAbleToResolveRowFromTablesHeap() : void
+        public ShouldResolveRowInstanceFromRowReferenceForTypeRefRow() : void
         {
+            TestRowRef.[TypeRefRow](TableId.TypeRef);
+        }
+        public ShouldResolveRowInstanceFromRowReferenceForTypeDefRow() : void
+        {
+            TestRowRef.[TypeDefRow](TableId.TypeDef);
+        }
+        public ShouldResolveRowInstanceFromRowReferenceForFieldRow() : void
+        {
+            TestRowRef.[FieldRow](TableId.Field);
+        }
+        public ShouldResolveRowInstanceFromRowReferenceForMethodDefRow() : void
+        {
+            TestRowRef.[MethodDefRow](TableId.MethodDef);
+        }
+        public ShouldResolveRowInstanceFromRowReferenceForParamRow() : void
+        {
+            TestRowRef.[ParamRow](TableId.Param);
+        }
+        public ShouldResolveRowInstanceFromRowReferenceForMemberRefRow() : void
+        {
+            TestRowRef.[MemberRefRow](TableId.MemberRef);
+        }
+        public ShouldResolveRowInstanceFromRowReferenceForConstantRow() : void
+        {
+            TestRowRef.[ConstantRow](TableId.Constant);
+        }
+        public ShouldResolveRowInstanceFromRowReferenceForCustomAttributeRow() : void
+        {
+            TestRowRef.[CustomAttributeRow](TableId.CustomAttribute);
+        }
+        public ShouldResolveRowInstanceFromRowReferenceForStandAloneSigRow() : void
+        {
+            TestRowRef.[StandAloneSigRow](TableId.StandAloneSig);
+        }
+        public ShouldResolveRowInstanceFromRowReferenceForPropertyMapRow() : void
+        {
+            TestRowRef.[PropertyMapRow](TableId.PropertyMap);
+        }
+        public ShouldResolveRowInstanceFromRowReferenceForPropertyRow() : void
+        {
+            TestRowRef.[PropertyRow](TableId.Property);
+        }
+        public ShouldResolveRowInstanceFromRowReferenceForMethodSemanticsRow() : void
+        {
+            TestRowRef.[MethodSemanticsRow](TableId.MethodSemantics);
+        }
+        public ShouldResolveRowInstanceFromRowReferenceForAssemblyRow() : void
+        {
+            TestRowRef.[AssemblyRow](TableId.Assembly);
+        }
+        public ShouldResolveRowInstanceFromRowReferenceForAssemblyRefRow() : void
+        {
+            TestRowRef.[AssemblyRefRow](TableId.AssemblyRef);
+        }
+
+        public ShouldBeAbleToResolveRowFromTablesHeap() : void
+        {
+            def root = base.GetMetadataRoot("SampleCustomAttributeUsage.dll");
+            def tables = root.GetTablesHeap();
+            def tablesHeap = TablesHeap();
+            tablesHeap.ReadFrom(tables);
+            
+            def rowRef = MockRowReference(TableId.Assembly, 1);
+            rowRef.GetRowFrom(tablesHeap).ShouldBeOfType.[DummyRow]();            
+        }
+        private TestRowRef[TRow](tableId : TableId) : void
+        {
+            def root = base.GetMetadataRoot("SampleCustomAttributeUsage.dll");
+            def tables = root.GetTablesHeap();
+            def tablesHeap = TablesHeap();
+            tablesHeap.ReadFrom(tables);
+
+            def rowRef = RowReference(tableId, 1);
+
+            def row = rowRef.GetRowFrom(tablesHeap);
+            row.GetType().ShouldBeEqualTo(typeof(TRow), "Wrong Row Type");
         }
     }
 }
