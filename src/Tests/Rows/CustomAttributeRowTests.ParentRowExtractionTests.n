@@ -97,6 +97,7 @@ namespace Tests
         public stub ShouldBeAbleToGroupAndIndexCustomAttributeRowsByParentRowReference() : void
         {
             // Note: The output should be a Dictionary.[RowReference, KeyValuePair.[CustomAttributeRow, int]]
+            
         }
         private ShouldBeAbleToExtractParentTableRow[TTable, TRow]() : void
             where TTable : new(), IMetadataTable[TRow]

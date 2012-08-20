@@ -13,7 +13,7 @@ using Tao.Metadata.Tables;
 using Tao.Metadata.Tables.Rows;
 namespace Tests
 {
-    public struct MockRowReference
+    public struct MockRowReference : IRowReference
     {
         public this(tableId : TableId, row : uint)
         {
