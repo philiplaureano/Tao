@@ -24,15 +24,15 @@ namespace Tests
         public ShouldReadZeroNamedArgumentsWhenNoneAreAvailable() : void
         {
             def targetClassName = "SampleClassWithInt16AttributeUsage";
-            
+
             def testArguments(args : IList.[NamedCustomAttributeArgument]) : void
             {
                 args.Count.ShouldBeEqualTo(0, "There should be zero named arguments read");
             }
-            
+
             TestNamedArguments(targetClassName, testArguments);
         }
-        
+
         public ShouldReadBoxedEnum() : void
         {            
             TestCustomAttributeRead("SampleClassWithBoxedEnumAttributeUsage", SampleEnum.Maybe, typeof(SampleEnum));
@@ -45,7 +45,7 @@ namespace Tests
         public ShouldReadNamedField() : void
         {
             def targetClassName = "SampleClassWithNamedFieldAttributeUsage";
-            
+
             def testArguments(args : IList.[NamedCustomAttributeArgument]) : void
             {
                 args.Count().ShouldBeEqualTo(1, "Wrong Number of NamedArgs");
@@ -53,10 +53,10 @@ namespace Tests
                 argument.ArgumentName.ShouldBeEqualTo("SomeField", "Wrong Argument Name");
                 argument.Value.ShouldBeEqualTo(12345, "Wrong argument value");
             }
-            
+
             TestNamedArguments(targetClassName, testArguments);
         }
-        
+
         private TestNamedArguments(targetClassName : string, testArguments : IList.[NamedCustomAttributeArgument]->void) : void
         {
             def root = base.GetMetadataRoot();            
@@ -69,7 +69,7 @@ namespace Tests
 
             // Get the CustomAttributeRow associated with 
             // the SampleClass
-            def targetRow = GetTargetRow(targetClassName, heap, stringHeap);
+            def targetRow = GetTargetRow(targetClassName, heap, stringHeap, root.GetBlobHeap());
 
             // Ensure that we have the correct type owner
             def parentRowRef = targetRow.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
@@ -91,20 +91,20 @@ namespace Tests
 
             testArguments(customAttributeSignature.NamedArguments);
         }
-        
+
         public ShouldReadNamedProperty() : void
         {
             def targetClassName = "SampleClassWithNamedPropertyAttributeUsage";
-            
+
             def testArguments(args : IList.[NamedCustomAttributeArgument]) : void
             {
                 args.Count().ShouldBeEqualTo(1, "Wrong Number of NamedArgs");
-                
+
                 def argument = args.First();
                 argument.ArgumentName.ShouldBeEqualTo("SomeProperty", "Wrong Argument Name");
                 argument.Value.ShouldBeEqualTo(54321, "Wrong argument value");
             }
-            
+
             TestNamedArguments(targetClassName, testArguments);
         }
         public ShouldReadArray() : void
@@ -165,7 +165,7 @@ namespace Tests
             def expectedValue = 42;
             def targetClassName = "SampleClass";
 
-            TestCustomAttributeRead(targetClassName, expectedValue, typeof(Int32));                      
+            TestCustomAttributeRead(targetClassName, expectedValue, typeof(Int32), 1);                      
         }
 
         public ShouldReadUInt32() : void
@@ -249,7 +249,7 @@ namespace Tests
 
             // Get the CustomAttributeRow associated with 
             // the SampleClass
-            def targetRow = GetTargetRow(targetClassName, heap, stringHeap);
+            def targetRow = GetTargetRow(targetClassName, heap, stringHeap, root.GetBlobHeap());
 
             // Ensure that we have the correct type owner
             def parentRowRef = targetRow.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
@@ -274,11 +274,11 @@ namespace Tests
             // This call should fail
             def customAttributeSignature = customAttributeReader.Read(parameters, defectiveBlob, stringHeap, heap);                        
         }
-        private TestCustomAttributeRead(targetClassName : string, expectedValue : object, expectedType : Type) : void
+        private TestCustomAttributeRead(targetClassName : string, expectedValue : object, expectedType : Type, numberOfParameters : uint = 0) : void
         {
-            TestCustomAttributeRead(targetClassName, expectedValue, expectedType, TestExpectedValue);
+            TestCustomAttributeRead(targetClassName, expectedValue, expectedType, TestExpectedValue, numberOfParameters);
         }
-        private TestCustomAttributeRead(targetClassName : string, expectedValue : object, expectedType : Type, testExpectedValue : object * object * Type -> void) : void
+        private TestCustomAttributeRead(targetClassName : string, expectedValue : object, expectedType : Type, testExpectedValue : object * object * Type -> void, numberOfParameters : uint = 0) : void
         {
             def root = base.GetMetadataRoot();            
             def tableStream = root.Heaps["#~"];
@@ -290,14 +290,14 @@ namespace Tests
 
             // Get the CustomAttributeRow associated with 
             // the SampleClass
-            def targetRow = GetTargetRow(targetClassName, heap, stringHeap);
+            def targetRow = GetTargetRow(targetClassName, heap, stringHeap, root.GetBlobHeap(), numberOfParameters);
 
             // Ensure that we have the correct type owner
             def parentRowRef = targetRow.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
-            
+
             def isTypeDef = parentRowRef.TableId == TableId.TypeDef;
             isTypeDef.ShouldBeTrue("The parent table must be the TypeDef table");
-            
+
             def parentRow = heap.GetRow.[TypeDefRow](parentRowRef.Row);            
             parentRow.TypeName.ToString(stringHeap).ShouldBeEqualTo(targetClassName, "Wrong Parent Type");
 
@@ -326,7 +326,7 @@ namespace Tests
             value.ShouldBeEqualTo(expectedValue, "Wrong FixedArg value");              
             value.GetType().ShouldBeEqualTo(expectedType, "The actual type and the expected types don't match");
         }
-        private GetTargetRow(targetClassName : string, heap : TablesHeap, stringHeap : Stream) : CustomAttributeRow
+        private GetTargetRow(targetClassName : string, heap : TablesHeap, stringHeap : Stream, blobStream : Stream, numberOfParameters : uint = 0) : CustomAttributeRow
             ensures value != null otherwise throw ArgumentException(string.Format("Unable to find class '{0}'", targetClassName))
         {
             mutable result : CustomAttributeRow = null;
@@ -341,7 +341,16 @@ namespace Tests
 
                 when(parentName == targetClassName && parentRowRef.TableId != TableId.Field && parentRowRef.TableId != TableId.MethodDef)
                 {
-                    result = row;
+                    def methodRef = row.Type.ToRowRef(CodedTokenType.CustomAttributeType);
+                    def methodRow = methodRef.GetRowFrom(heap) :> ICustomAttributeTypeRow;
+
+                    def signature = methodRow.GetMethodSignature(blobStream);
+                    def parameterCount = signature.ParameterCount;
+
+                    when(parameterCount >= numberOfParameters)
+                    {
+                        result = row;
+                    }
                 }
             }
 
