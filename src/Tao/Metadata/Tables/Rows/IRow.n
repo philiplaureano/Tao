@@ -12,5 +12,7 @@ namespace Tao.Metadata.Tables.Rows
     // A marker interface for metadata table rows.
     public interface IRow
     {
+        RowIndex : uint { get; set; }
+        TableId : TableId { get; }
     }
 }

@@ -9,9 +9,17 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class FieldMarshalRow : IRow
-  {
-      public Parent : IIndex { get; set; }
-      public NativeType : IIndex { get; set; }
-  }
+    public class FieldMarshalRow : IRow
+    {
+        public Parent : IIndex { get; set; }
+        public NativeType : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.FieldMarshal;
+            }
+        }
+    }
 }

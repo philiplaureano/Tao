@@ -9,10 +9,18 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class MethodSemanticsRow : IRow
-  {
-      public Semantics : ushort { get; set; }
-      public Method : IIndex { get; set; }
-      public Association : IIndex { get; set; }
-  }
+    public class MethodSemanticsRow : IRow
+    {
+        public Semantics : ushort { get; set; }
+        public Method : IIndex { get; set; }
+        public Association : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.MethodSemantics;
+            }
+        }
+    }
 }

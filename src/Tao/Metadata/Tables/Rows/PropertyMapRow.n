@@ -9,9 +9,17 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class PropertyMapRow : IRow
-  {
-      public Parent : IIndex { get; set; }
-      public PropertyList : IIndex { get; set; }
-  }
+    public class PropertyMapRow : IRow
+    {
+        public Parent : IIndex { get; set; }
+        public PropertyList : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.PropertyMap;
+            }
+        }
+    }
 }

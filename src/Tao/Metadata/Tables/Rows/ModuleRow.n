@@ -9,12 +9,20 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class ModuleRow : IHasCustomAttributeRow, IResolutionScope
-  {
-    public Generation : ushort { get; set; }
-    public Name : IIndex { get; set; }
-    public Mvid : IIndex { get; set; }
-    public EncId : IIndex { get; set; }
-    public EncBaseId : IIndex { get; set; }
-  }
+    public class ModuleRow : IHasCustomAttributeRow, IResolutionScope
+    {
+        public Generation : ushort { get; set; }
+        public Name : IIndex { get; set; }
+        public Mvid : IIndex { get; set; }
+        public EncId : IIndex { get; set; }
+        public EncBaseId : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.Module;
+            }
+        }
+    }
 }

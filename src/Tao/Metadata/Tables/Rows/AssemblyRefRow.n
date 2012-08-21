@@ -9,18 +9,26 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class AssemblyRefRow : IAssemblyRow, IHasCustomAttributeRow
-  {
-      public MajorVersion : ushort { get; set; }
-      public MinorVersion : ushort { get; set; }
-      public BuildNumber : ushort { get; set; }
-      public RevisionNumber : ushort { get; set; }      
-      public Flags : uint { get; set; }
-      public PublicKeyOrToken : IIndex 
+    public class AssemblyRefRow : IAssemblyRow, IHasCustomAttributeRow
+    {
+        public MajorVersion : ushort { get; set; }
+        public MinorVersion : ushort { get; set; }
+        public BuildNumber : ushort { get; set; }
+        public RevisionNumber : ushort { get; set; }      
+        public Flags : uint { get; set; }
+        public PublicKeyOrToken : IIndex 
         implements IAssemblyRow.PublicKey { get; set; }
-        
-      public Name : IIndex { get; set; }
-      public Culture : IIndex { get; set; }
-      public HashValue : IIndex { get; set; }
-  }
+
+        public Name : IIndex { get; set; }
+        public Culture : IIndex { get; set; }
+        public HashValue : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.AssemblyRef;
+            }
+        }
+    }
 }

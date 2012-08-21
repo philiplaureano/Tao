@@ -9,11 +9,20 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class ManifestResourceRow : IHasCustomAttributeRow
-  {
-      public Offset : uint { get; set; }
-      public Flags : uint { get; set; }
-      public Name : IIndex { get; set; }
-      public Implementation : IIndex { get; set; }
-  }
+    public class ManifestResourceRow : IHasCustomAttributeRow
+    {
+        public Offset : uint { get; set; }
+        public Flags : uint { get; set; }
+        public Name : IIndex { get; set; }
+        public Implementation : IIndex { get; set; }
+
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.ManifestResource;
+            }
+        }
+    }
 }

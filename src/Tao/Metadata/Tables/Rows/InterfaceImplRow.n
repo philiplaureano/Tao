@@ -9,9 +9,17 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class InterfaceImplRow : IHasCustomAttributeRow
-  {
-      public Class : IIndex { get; set; }
-      public Interface : IIndex { get; set; }
-  }
+    public class InterfaceImplRow : IHasCustomAttributeRow
+    {
+        public Class : IIndex { get; set; }
+        public Interface : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.InterfaceImpl;
+            }
+        }
+    }
 }

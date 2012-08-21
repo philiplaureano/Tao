@@ -94,10 +94,23 @@ namespace Tests
         {
             ShouldBeAbleToExtractParentTableRow.[MethodSpecTable, MethodSpecRow]();
         }
-        public stub ShouldBeAbleToGroupAndIndexCustomAttributeRowsByParentRowReference() : void
-        {
-            // Note: The output should be a Dictionary.[RowReference, KeyValuePair.[CustomAttributeRow, int]]
+        public ShouldBeAbleToExtractCustomAttributeRowsFromParentRow() : void
+        {            
+            // This feature will help determine the list of custom attributes associated with a given type
+            def root = base.GetMetadataRoot("SampleCustomAttributeUsage.dll");
+            def tablesStream = root.GetTablesHeap();
+            def tablesHeap = TablesHeap();
+            tablesHeap.ReadFrom(tablesStream);
             
+            def stringHeap = root.GetStringHeap();
+            def parentRow = tablesHeap.GetTypeRow.[TypeDefRow]("SampleClass", stringHeap);
+            
+            def rows = parentRow.GetCustomAttributeRows(tablesHeap);
+            rows.Count().ShouldBeEqualTo(2, "Wrong number of custom attribute rows");
+        }
+        public stub ShouldBeAbleToGroupCustomAttributeRowsByTypeColumn() : void
+        {
+            // Note: This feature will help determine which list of types have a particular custom attribute            
         }
         private ShouldBeAbleToExtractParentTableRow[TTable, TRow]() : void
             where TTable : new(), IMetadataTable[TRow]

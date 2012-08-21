@@ -19,9 +19,16 @@ namespace Tao.Metadata.Tables.Rows
         { 
             get; set; 
         }
-
         public TypeNamespace : IIndex { get; set; }
-
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.TypeRef;
+            }
+        }
+        
         public GetAssemblyRow([NotNull] heap : ITablesHeap) : IAssemblyRow
             requires this.ResolutionScope != null otherwise throw InvalidOperationException("You can only resolve the assembly row if you have a valid (non-null) ResolutionScope")
             ensures value != null
@@ -36,30 +43,30 @@ namespace Tao.Metadata.Tables.Rows
             {
                 result = heap.GetRow.[AssemblyRow](1);    
             }
-            
+
             // Trace the TypeRefRow all the way back to its parent assembly
             when(tableId == TableId.TypeRef)
             {
                 def typeRefRow = heap.GetRow.[TypeRefRow](scopeRowRef.Row);
                 result = typeRefRow.GetAssemblyRow(heap);
             }
-            
+
             when(tableId == TableId.AssemblyRef)
             {
                 result = heap.GetRow.[AssemblyRefRow](scopeRowRef.Row);
             }
-            
+
             result;
         }
-        
+
         public GetPartialQualifiedName([NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap) : string
         {
             def typeName = TypeName.ToString(stringHeap);
             def nameSpace = TypeNamespace.ToString(stringHeap);
-            
+
             def assemblyRow = GetAssemblyRow(tablesHeap);            
             def assemblyName = assemblyRow.Name.ToString(stringHeap);                                                 
-            
+
             def format = "{0}.{1}, {2}";
             def qualifiedName = string.Format(format, nameSpace, typeName, assemblyName);
             qualifiedName;

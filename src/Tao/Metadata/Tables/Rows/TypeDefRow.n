@@ -22,6 +22,14 @@ namespace Tao.Metadata.Tables.Rows
         public Extends : IIndex { get; set; }
         public FieldList : IIndex { get; set; }
         public MethodList : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.TypeDef;
+            }
+        }
         public GetAssemblyRow([NotNull] heap : ITablesHeap) : IAssemblyRow
             ensures value != null
         {

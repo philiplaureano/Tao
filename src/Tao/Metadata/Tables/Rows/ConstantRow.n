@@ -9,10 +9,18 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class ConstantRow : IRow
-  {
-      public Type : byte { get; set; }
-      public Parent : IIndex { get; set; }
-      public Value : IIndex { get; set; }
-  }
+    public class ConstantRow : IRow
+    {
+        public Type : byte { get; set; }
+        public Parent : IIndex { get; set; }
+        public Value : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.Constant;
+            }
+        }
+    }
 }

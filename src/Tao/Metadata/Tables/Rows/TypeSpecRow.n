@@ -9,8 +9,16 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class TypeSpecRow : IHasCustomAttributeRow, IMemberRefParentRow
-  {
-      public Signature : IIndex { get; set; }
-  }
+    public class TypeSpecRow : IHasCustomAttributeRow, IMemberRefParentRow
+    {
+        public Signature : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.TypeSpec;
+            }
+        }
+    }
 }

@@ -9,12 +9,20 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {  
-  public class ExportedTypeRow : IHasCustomAttributeRow
-  {
-      public Flags : uint { get; set; }
-      public TypeDefId : uint { get; set; }
-      public TypeName : IIndex { get; set; }
-      public TypeNamespace : IIndex { get; set; }
-      public Implementation : IIndex { get; set; }
-  }
+    public class ExportedTypeRow : IHasCustomAttributeRow
+    {
+        public Flags : uint { get; set; }
+        public TypeDefId : uint { get; set; }
+        public TypeName : IIndex { get; set; }
+        public TypeNamespace : IIndex { get; set; }
+        public Implementation : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.ExportedType;
+            }
+        }
+    }
 }

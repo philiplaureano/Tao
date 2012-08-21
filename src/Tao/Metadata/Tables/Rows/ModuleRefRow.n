@@ -9,8 +9,16 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class ModuleRefRow : IHasCustomAttributeRow, IMemberRefParentRow, IResolutionScope
-  {
-      public Name : IIndex { get; set; }
-  }
+    public class ModuleRefRow : IHasCustomAttributeRow, IMemberRefParentRow, IResolutionScope
+    {
+        public Name : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.ModuleRef;
+            }
+        }
+    }
 }

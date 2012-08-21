@@ -6,12 +6,21 @@ using Nemerle.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tao.Metadata.Tables;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class FieldRvaRow : IRow
-  {
-      public Rva : uint { get; set; }
-      public Field : IIndex { get; set; }
-  }
+    public class FieldRvaRow : IRow
+    {
+        public Rva : uint { get; set; }
+        public Field : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.FieldRVA;
+            }
+        }
+    }
 }
