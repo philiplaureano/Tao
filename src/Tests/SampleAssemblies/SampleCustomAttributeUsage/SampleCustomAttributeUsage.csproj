@@ -88,7 +88,10 @@
     <Compile Include="SampleClassWithUInt32AttributeUsage.cs" />
     <Compile Include="SampleClassWithUInt64AttributeUsage.cs" />
     <Compile Include="SampleEnum.cs" />
+    <Compile Include="SharedCustomAttributeUsage\SharedClass1.cs" />
+    <Compile Include="SharedCustomAttributeUsage\SharedClass2.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

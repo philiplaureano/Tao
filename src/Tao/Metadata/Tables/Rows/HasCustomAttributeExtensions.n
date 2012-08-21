@@ -13,20 +13,23 @@ namespace Tao.Metadata.Tables.Rows
 {
   public static class HasCustomAttributeExtensions
   {
-      public GetCustomAttributeRows(this parent: IHasCustomAttributeRow, tablesHeap : ITablesHeap) : IEnumerable.[CustomAttributeRow]
+      public GetCustomAttributeRows([NotNull] this parent: IHasCustomAttributeRow, [NotNull] tablesHeap : ITablesHeap) : IEnumerable.[CustomAttributeRow]
+        ensures value != null
       {
           def parentTable = parent.TableId;
           def parentRow = parent.RowIndex;
           
           def attributeRows = tablesHeap.GetRows.[CustomAttributeRow]();
+          def results = List.[CustomAttributeRow]();
           foreach(row in attributeRows)
           {
               def parentRef = row.GetParentRowReference();
               when(parentRef.TableId == parentTable && parentRef.Row == parentRow)
               {
-                  yield row;
+                  results.Add(row);
               }
           }
+          results;
       }
   }
 }

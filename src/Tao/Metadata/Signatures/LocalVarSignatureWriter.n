@@ -24,37 +24,40 @@ namespace Tao.Metadata.Signatures
             def count = signature.Count :> uint;
             def integerWriter = CompressedIntegerWriter();
             integerWriter.WriteInteger(count, stream);
-
-            def modWriter = CustomModWriter();
-
+            
             foreach(local in signature.Locals)
             {                
-                def localType = local.VariableType;
-
-                when(localType.ElementType != ElementType.TypedByRef)
-                {
+                WriteLocal(local, stream, writer);
+            }            
+        }
+        
+        private WriteLocal([NotNull] local : LocalVariable, [NotNull] stream : Stream, [NotNull] writer : BinaryWriter) : void
+        {
+            def modWriter = CustomModWriter();
+            def localType = local.VariableType;
+            when(localType.ElementType != ElementType.TypedByRef)
+            {
                     // Write the custom mods
-                    foreach(mod in local.CustomMods)
-                    {
-                        modWriter.Write(mod, stream);
-                    }
+                foreach(mod in local.CustomMods)
+                {
+                    modWriter.Write(mod, stream);
+                }
 
                     // Write the constraint byte
-                    when(local.IsPinned)
-                    {
-                        writer.Write(ElementType.Pinned :> byte);
-                    }
+                when(local.IsPinned)
+                {
+                    writer.Write(ElementType.Pinned :> byte);
+                }
 
                     // Write the ByRef byte
-                    when(local.IsByRef)
-                    {
-                        writer.Write(ElementType.ByRef :> byte);
-                    }
+                when(local.IsByRef)
+                {
+                    writer.Write(ElementType.ByRef :> byte);
                 }
-                
+            }
+
                 // Write the type itself
-                localType.Write(stream);
-            }            
+            localType.Write(stream);
         }
     }
 }

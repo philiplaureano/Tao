@@ -108,9 +108,33 @@ namespace Tests
             def rows = parentRow.GetCustomAttributeRows(tablesHeap);
             rows.Count().ShouldBeEqualTo(2, "Wrong number of custom attribute rows");
         }
-        public stub ShouldBeAbleToGroupCustomAttributeRowsByTypeColumn() : void
+        public ShouldBeAbleToGroupCustomAttributeRowsByTypeColumn() : void
         {
+            def root = base.GetMetadataRoot("SampleCustomAttributeUsage.dll");
+            def tablesStream = root.GetTablesHeap();
+            def tablesHeap = TablesHeap();
+            tablesHeap.ReadFrom(tablesStream);
+            
+            def stringHeap = root.GetStringHeap();            
+            def setTypeRow(items : array[ITypeRow], index : int) : void
+            {
+                def parent = tablesHeap.GetTypeRow.[TypeDefRow](string.Format("SharedClass{0}", index + 1), stringHeap);
+                items[index] = parent;
+            }
+                        
             // Note: This feature will help determine which list of types have a particular custom attribute            
+            def typeRows = array(3) : array[ITypeRow];            
+            def addItem = setTypeRow(typeRows, _);
+            
+            addItem(0);
+            addItem(1);
+            
+            def parentRow = typeRows[0] :> TypeDefRow;
+            def customAttributeRow = parentRow.GetCustomAttributeRows(tablesHeap).First();
+            def actualParents = customAttributeRow.GetParents(tablesHeap);
+            
+            actualParents.Contains(typeRows[0]).ShouldBeTrue("Missing parent type row");
+            actualParents.Contains(typeRows[1]).ShouldBeTrue("Missing parent type row");
         }
         private ShouldBeAbleToExtractParentTableRow[TTable, TRow]() : void
             where TTable : new(), IMetadataTable[TRow]

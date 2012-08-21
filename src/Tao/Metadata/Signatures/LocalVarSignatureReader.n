@@ -65,7 +65,7 @@ namespace Tao.Metadata.Signatures
                         local.IsByRef = true;
                     }
 
-                // Read the Local type
+                    // Read the Local type
                     local.VariableType = TypeSignature.ReadFrom(stream);
                 }
                 signature.Locals.Add(local);

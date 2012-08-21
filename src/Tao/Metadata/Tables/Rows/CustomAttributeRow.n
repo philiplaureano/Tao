@@ -98,6 +98,28 @@ namespace Tao.Metadata.Tables.Rows
             GetRowFrom.[TRow, IHasCustomAttributeRow](codedTokenType, get_Parent, table);
         }
 
+        public GetParents([NotNull] heap : ITablesHeap) : IEnumerable.[IHasCustomAttributeRow]
+        {
+            def customAttributeRows = heap.GetRows.[CustomAttributeRow]();            
+            def currentTypeRef = Type.ToRowRef(CodedTokenType.CustomAttributeType);
+            
+            def results = List.[IHasCustomAttributeRow]();
+            foreach(row in customAttributeRows)
+            {
+                def rowType = row.Type;
+                def typeRef = rowType.ToRowRef(CodedTokenType.CustomAttributeType);
+                when(typeRef.TableId == currentTypeRef.TableId && typeRef.Row == currentTypeRef.Row)
+                {
+                    def parentToken = row.Parent;
+                    def parentRef = parentToken.ToRowRef(CodedTokenType.HasCustomAttribute);
+                    def parentRow = parentRef.GetRowFrom(heap) :> IHasCustomAttributeRow;
+                    
+                    results.Add(parentRow);
+                }
+            }
+            
+            results;
+        }
         private GetRowFrom[TRow, TRowBase](codedTokenType : CodedTokenType, [NotNull] getIndex : void -> IIndex, [NotNull] table : IMetadataTable[TRow]) : TRowBase            
             where TRow : TRowBase    
             where TRowBase : class
