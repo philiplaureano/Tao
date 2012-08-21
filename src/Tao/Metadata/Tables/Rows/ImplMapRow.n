@@ -9,11 +9,19 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class ImplMapRow : IRow
-  {
-      public MappingFlags : ushort { get; set; }
-      public MemberForwarded : IIndex { get; set; }
-      public ImportName : IIndex { get; set; }
-      public ImportScope : IIndex { get; set; }
-  }
+    public class ImplMapRow : IRow
+    {
+        public MappingFlags : ushort { get; set; }
+        public MemberForwarded : IIndex { get; set; }
+        public ImportName : IIndex { get; set; }
+        public ImportScope : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.ImplMap;
+            }
+        }
+    }
 }

@@ -14,5 +14,13 @@ namespace Tao.Metadata.Tables.Rows
       public Action : ushort { get; set; }
       public Parent : IIndex { get; set; }
       public PermissionSet : IIndex { get; set; }
+      	public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.DeclSecurity;
+            }
+        }
   }
 }

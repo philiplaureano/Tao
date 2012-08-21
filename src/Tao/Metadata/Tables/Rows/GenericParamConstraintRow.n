@@ -9,9 +9,17 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class GenericParamConstraintRow : IHasCustomAttributeRow
-  {
-      public Owner : IIndex { get; set; }
-      public Constraint : IIndex { get; set; }
-  }
+    public class GenericParamConstraintRow : IHasCustomAttributeRow
+    {
+        public Owner : IIndex { get; set; }
+        public Constraint : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.GenericParamConstraint;
+            }
+        }
+    }
 }

@@ -9,11 +9,13 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using Tao.Metadata.Tables.Rows;
 using Tao.Metadata.Tables.Schemas;
+
 namespace Tao.Metadata.Tables
 {
     public class MetadataTable[TRow] : IMetadataTable, IMetadataTable[TRow], IMetadataTableInfo
-    where TRow : new(), class
+    where TRow : IRow, new(), class
     {
         private _rows : List[TRow] = List.[TRow]();
         private _schemaReader : ISchemaReader[TRow];

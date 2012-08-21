@@ -9,10 +9,18 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class ClassLayoutRow : IRow
-  {
-      public PackingSize : ushort { get; set; }
-      public ClassSize : uint { get; set; }
-      public Parent : IIndex { get; set; }
-  }
+    public class ClassLayoutRow : IRow
+    {
+        public PackingSize : ushort { get; set; }
+        public ClassSize : uint { get; set; }
+        public Parent : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.ClassLayout;
+            }
+        }
+    }
 }

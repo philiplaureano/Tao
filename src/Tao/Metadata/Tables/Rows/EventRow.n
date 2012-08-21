@@ -9,10 +9,18 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class EventRow : IHasCustomAttributeRow
-  {
-      public EventFlags : ushort { get; set; }
-      public Name : IIndex { get; set; }
-      public EventType : IIndex { get; set; }
-  }
+    public class EventRow : IHasCustomAttributeRow
+    {
+        public EventFlags : ushort { get; set; }
+        public Name : IIndex { get; set; }
+        public EventType : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.Event;
+            }
+        }
+    }
 }

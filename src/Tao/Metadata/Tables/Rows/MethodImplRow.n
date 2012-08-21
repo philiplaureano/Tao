@@ -9,10 +9,18 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {  
-  public class MethodImplRow : IRow
-  {
-      public Class : IIndex { get; set; }
-      public MethodBody : IIndex { get; set; }
-      public MethodDeclaration : IIndex { get; set; }
-  }
+    public class MethodImplRow : IRow
+    {
+        public Class : IIndex { get; set; }
+        public MethodBody : IIndex { get; set; }
+        public MethodDeclaration : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.MethodImpl;
+            }
+        }        
+    }
 }

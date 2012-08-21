@@ -12,24 +12,31 @@ using System.Linq;
 using Tao.Metadata.Signatures;
 namespace Tao.Metadata.Tables.Rows
 {
-  public class MemberRefRow : ICustomAttributeTypeRow, IHasCustomAttributeRow
-  {
-      public Class : IIndex { get; set; }
-      public Name : IIndex { get; set; }
-      public Signature : IIndex { get; set; }
-      
-      public GetMethodSignature([NotNull] blobStream : Stream) : IMethodSignature
+    public class MemberRefRow : ICustomAttributeTypeRow, IHasCustomAttributeRow
+    {
+        public Class : IIndex { get; set; }
+        public Name : IIndex { get; set; }
+        public Signature : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.MemberRef;
+            }
+        }
+        public GetMethodSignature([NotNull] blobStream : Stream) : IMethodSignature
         requires Signature != null otherwise throw InvalidOperationException("You can't retrieve a method signature if the Signature property itself is null")        
-      {
-          _ = blobStream.Seek(0, SeekOrigin.Begin);
-          def blobIndex = Signature.ToUInt32();
-          def reader = BlobReader();
-          
-          def blob = reader.Read(blobIndex, blobStream);
-          _ = blob.Seek(0, SeekOrigin.Begin);
-          
-          def signatureReader = MethodRefSignatureReader();
-          signatureReader.Read(blob);          
-      }
-  }
+        {
+            _ = blobStream.Seek(0, SeekOrigin.Begin);
+            def blobIndex = Signature.ToUInt32();
+            def reader = BlobReader();
+
+            def blob = reader.Read(blobIndex, blobStream);
+            _ = blob.Seek(0, SeekOrigin.Begin);
+
+            def signatureReader = MethodRefSignatureReader();
+            signatureReader.Read(blob);          
+        }
+    }
 }

@@ -6,10 +6,21 @@ using Nemerle.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tao.Metadata;
+using Tao.Metadata.Tables;
 using Tao.Metadata.Tables.Rows;
+
 namespace Tests
 {
-  public class DummyRow : IRow
-  {
-  }
+    public class DummyRow : IRow
+    {
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.Assembly;
+            }
+        }
+    }
 }

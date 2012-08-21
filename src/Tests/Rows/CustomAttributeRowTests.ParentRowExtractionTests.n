@@ -97,6 +97,11 @@ namespace Tests
         public stub ShouldBeAbleToGroupAndIndexCustomAttributeRowsByParentRowReference() : void
         {
             // Note: The output should be a Dictionary.[RowReference, KeyValuePair.[CustomAttributeRow, int]]
+            // This feature will help determine the list of custom attributes associated with a given type
+        }
+        public stub ShouldBeAbleToGroupCustomAttributeRowsByTypeColumn() : void
+        {
+            // Note: This feature will help determine which list of types have a particular custom attribute            
         }
         private ShouldBeAbleToExtractParentTableRow[TTable, TRow]() : void
             where TTable : new(), IMetadataTable[TRow]

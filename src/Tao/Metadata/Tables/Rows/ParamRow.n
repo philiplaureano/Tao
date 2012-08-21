@@ -9,10 +9,18 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class ParamRow : IHasCustomAttributeRow
-  {
-      public Flags : ushort { get; set; }
-      public Sequence : ushort { get; set; }
-      public Name : IIndex { get; set; }
-  }
+    public class ParamRow : IHasCustomAttributeRow
+    {
+        public Flags : ushort { get; set; }
+        public Sequence : ushort { get; set; }
+        public Name : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.Param;
+            }
+        }
+    }
 }

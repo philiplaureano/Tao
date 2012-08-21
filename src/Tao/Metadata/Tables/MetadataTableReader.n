@@ -8,31 +8,35 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using Tao.Metadata.Tables.Rows;
 using Tao.Metadata.Tables.Schemas;
+
 namespace Tao.Metadata.Tables
 {
-  public class MetadataTableReader[TRow] : IMetadataTableReader[TRow]
-    where TRow : new(), class
-  {
-    private _schema : ISchemaReader[TRow];
-    
-    public this([NotNull] schema : ISchemaReader[TRow])
+    public class MetadataTableReader[TRow] : IMetadataTableReader[TRow]
+    where TRow : IRow, new(), class
     {
-      _schema = schema;
+        private _schema : ISchemaReader[TRow];
+
+        public this([NotNull] schema : ISchemaReader[TRow])
+        {
+            _schema = schema;
+        }
+
+        public ReadRows(numberOfRowsToRead : uint, heapSizes : byte, [NotNull] rowCounts : IDictionary[TableId, uint], sortedTables : IEnumerable.[TableId], indexes: IDictionary.[HeapSizeFlags, ISet.[uint]], [NotNull] inputStream : Stream) : IEnumerable[TRow]
+        {
+            def reader = BinaryReader(inputStream);          
+
+            for(mutable i : uint = 0; i < numberOfRowsToRead; i++)
+            {
+                def row = TRow();
+
+                // Tag the row with its row index
+                row.RowIndex = i + 1;
+                def rowReader = RowReader(heapSizes, rowCounts, reader, row, indexes);
+                _schema.ReadRowInto(rowCounts, sortedTables, rowReader);
+                yield row;
+            }    
+        }
     }
-  
-    public ReadRows(numberOfRowsToRead : uint, heapSizes : byte, [NotNull] rowCounts : IDictionary[TableId, uint], sortedTables : IEnumerable.[TableId], indexes: IDictionary.[HeapSizeFlags, ISet.[uint]], [NotNull] inputStream : Stream) : IEnumerable[TRow]
-    {
-      def reader = BinaryReader(inputStream);    
-      def rowsToRead = numberOfRowsToRead :> int;      
-      
-      for(mutable i = 0; i < rowsToRead; i++)
-      {
-        def row = TRow();
-        def rowReader = RowReader(heapSizes, rowCounts, reader, row, indexes);
-        _schema.ReadRowInto(rowCounts, sortedTables, rowReader);
-        yield row;
-      }    
-    }
-  }
 }

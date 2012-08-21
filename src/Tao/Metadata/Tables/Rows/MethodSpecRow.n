@@ -9,9 +9,17 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-  public class MethodSpecRow : IHasCustomAttributeRow
-  {
-      public Method : IIndex { get; set; }
-      public Instantiation : IIndex { get; set; }
-  }
+    public class MethodSpecRow : IHasCustomAttributeRow
+    {
+        public Method : IIndex { get; set; }
+        public Instantiation : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
+        { 
+            get
+            {
+                TableId.MethodSpec;
+            }
+        }
+    }
 }
