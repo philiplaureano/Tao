@@ -1,0 +1,32 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Metadata.Tables;
+namespace Tao.Metadata.Tables.Rows
+{
+  public static class HasCustomAttributeExtensions
+  {
+      public GetCustomAttributeRows(this parent: IHasCustomAttributeRow, tablesHeap : ITablesHeap) : IEnumerable.[CustomAttributeRow]
+      {
+          def parentTable = parent.TableId;
+          def parentRow = parent.RowIndex;
+          
+          def attributeRows = tablesHeap.GetRows.[CustomAttributeRow]();
+          foreach(row in attributeRows)
+          {
+              def parentRef = row.GetParentRowReference();
+              when(parentRef.TableId == parentTable && parentRef.Row == parentRow)
+              {
+                  yield row;
+              }
+          }
+      }
+  }
+}

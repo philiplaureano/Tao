@@ -830,6 +830,9 @@
     <Compile Include="Metadata\Tables\Rows\GenericParamRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\HasCustomAttributeExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\IAssemblyRow.n">
       <SubType>Code</SubType>
     </Compile>
