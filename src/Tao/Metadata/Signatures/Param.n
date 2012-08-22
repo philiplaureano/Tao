@@ -1,22 +1,43 @@
 ﻿using Nemerle;
+using Nemerle.Assertions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+
 namespace Tao.Metadata.Signatures
 {  
-  public class Param : MethodSignatureElement
-  {      
-    public this()
-    {
+    public class Param : MethodSignatureElement
+    {      
+        public this()
+        {
+        }
+        public this(parameterType : ITypeSignature)
+        {
+            Type = parameterType;
+        }
+        
+        public IsSystemType([NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap) : bool      
+            requires Type != null
+        {
+            mutable result : bool = false;
+            def type = Type;
+            when(type.GetType() == typeof(TypeDefOrRefEncodedSignature))
+            {
+                def signature = type :> TypeDefOrRefEncodedSignature;
+                result = signature.IsSystemType(stringHeap, tablesHeap);
+            }
+
+            result;
+        }
     }
-    public this(parameterType : ITypeSignature)
-    {
-        Type = parameterType;
-    }
-  }
 }

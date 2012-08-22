@@ -35,7 +35,7 @@ namespace Tao.Metadata.Signatures
                 def elementType = paramType.ElementType;
                 
                 def readerMap = createMap(paramType);
-                when(!IsSystemType(param, stringHeap, tablesHeap) && !readerMap.ContainsKey(elementType))
+                when(!param.IsSystemType(stringHeap, tablesHeap) && !readerMap.ContainsKey(elementType))
                 {
                     throw NotSupportedException("Element Type Not Supported: " + elementType.ToString());
                 }          
@@ -195,20 +195,7 @@ namespace Tao.Metadata.Signatures
             }
 
             items;
-        }
-        private IsSystemType([NotNull] param : Param,[NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap) : bool      
-            requires param.Type != null
-        {
-            mutable result : bool = false;
-            def type = param.Type;
-            when(type.GetType() == typeof(TypeDefOrRefEncodedSignature))
-            {
-                def signature = type :> TypeDefOrRefEncodedSignature;
-                result = signature.IsSystemType(stringHeap, tablesHeap);
-            }
-
-            result;
-        }
+        }        
 
         private ReadValueType([NotNull] reader : BinaryReader, [NotNull] paramType : ITypeSignature, [NotNull] stringHeap : Stream, [NotNull] blobHeap : Stream, [NotNull] tablesHeap : ITablesHeap) : object
         {

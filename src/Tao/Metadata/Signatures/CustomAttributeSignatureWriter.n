@@ -16,9 +16,42 @@ namespace Tao.Metadata.Tables.Rows
     public class CustomAttributeSignatureWriter
     {
         public Write([NotNull] signature : CustomAttributeSignature, [NotNull] parameters : IEnumerable.[Param], [NotNull] outputStream : Stream,
-        [NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap ) : void
+            [NotNull] stringHeap : Stream, [NotNull] tablesHeap : ITablesHeap ) : void
         {
-            throw NotImplementedException("TODO: Implement this method");
+            def prolog : ushort = 0x0001;
+            def writer = BinaryWriter(outputStream);
+            writer.Write(prolog);
+            
+            def writerMap = Dictionary.[ElementType, object-> void]();
+            writerMap[ElementType.U1] = value =>writer.Write(value :> byte);
+            
+            def write(elementType : ElementType, value : object)
+            {
+                writerMap[elementType](value);
+            };
+            
+            def parameterCount = parameters.Count();
+            def currentParameters = parameters.ToArray();
+            def fixedArguments = signature.FixedArguments;
+            for(mutable i = 0; i < parameterCount; i++)
+            {
+                def param = currentParameters[i];
+                def paramType = param.Type;
+                def elementType = paramType.ElementType;
+                
+                when(!param.IsSystemType(stringHeap, tablesHeap) && !writerMap.ContainsKey(elementType))
+                {
+                    throw NotSupportedException("Element Type Not Supported: " + elementType.ToString());
+                }
+                
+                def argument = fixedArguments[i];
+                def value = argument.Value;
+                write(elementType, value);
+            }
+            
+            // Write the number of named arguments
+            def namedArgumentCount = signature.NamedArguments.Count();
+            writer.Write(namedArgumentCount :> ushort);                        
         }
     }
 }

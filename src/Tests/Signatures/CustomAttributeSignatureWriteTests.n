@@ -56,52 +56,9 @@ namespace Tests
         }
         public ShouldWriteByte() : void
         {
-            def targetClassName = "SampleClassWithByteAttributeUsage";
-            def attributeRowCount = 1;
-            
-            // Read the CLR Metadata
-            def root = base.GetMetadataRoot("SampleCustomAttributeUsage.dll");
-            def tableStream = root.GetTablesHeap();
-            
-            def tablesHeap = TablesHeap();
-            tablesHeap.ReadFrom(tableStream);
-            
-            def blobStream = root.GetBlobHeap();
-            
-            // Find the target class row
-            def stringHeap = root.GetStringHeap();                                    
-            def targetRow = tablesHeap.GetTypeRow.[TypeDefRow](targetClassName, stringHeap);
-            targetRow.ShouldBeNotNull("Missing type '{0}'", targetClassName);
-            
-            def attributeRows = targetRow.GetCustomAttributeRows(tablesHeap);
-            attributeRows.Count().ShouldBeEqualTo(attributeRowCount, "Wrong number of expected custom attribute rows for type '{0}'", targetClassName);
-            
-            def attributeRow = attributeRows.First();
-                     
-            // Get the method signature for the attribute constructor
-            def typeRow = attributeRow.GetTypeRowFrom(tablesHeap);
-            def ctorSignature = typeRow.GetMethodSignature(blobStream);
-            def parameters = ctorSignature.Parameters;
-            
-            ctorSignature.ParameterCount.ShouldBeEqualTo(1, "Wrong parameter count");
-            
-            // Read the actual custom attribute blob from the given assembly
-            def reader = CustomAttributeSignatureReader();
-            def valueBlob = attributeRow.Value.ToBlob(blobStream).ToStream();
-            def expectedSignature = reader.Read(parameters, valueBlob, stringHeap, tablesHeap);
-            
-            def expectedBlob = attributeRow.Value.ToBlob(blobStream);
-            
-            // Note: The writer should have the same parameters as the reader and have the following additional params:
-            // 1) CustomAttributeSignature
-            // 2) an Output Stream that will hold the custom attribute signature blob
-            
-            def outputStream = MemoryStream();
-            def writer = CustomAttributeSignatureWriter();
-            writer.Write(expectedSignature, parameters,  outputStream, stringHeap, tablesHeap);
-            
-            outputStream.ShouldMatch(expectedBlob);
+            TestWrite("SampleClassWithByteAttributeUsage");
         }
+
         public stub ShouldWriteSignedByte() : void
         {
         }
@@ -152,6 +109,49 @@ namespace Tests
         }
         public stub ShouldBeAbleToWriteCustomAttributeRows() : void
         {
+        }
+
+        private TestWrite(targetClassName : string, expectedAttributeCount : int = 1) : void
+        {
+            // Read the CLR Metadata
+            def root = base.GetMetadataRoot("SampleCustomAttributeUsage.dll");
+            def tableStream = root.GetTablesHeap();
+
+            def tablesHeap = TablesHeap();
+            tablesHeap.ReadFrom(tableStream);
+
+            def blobStream = root.GetBlobHeap();
+
+            // Find the target class row
+            def stringHeap = root.GetStringHeap();                                    
+            def targetRow = tablesHeap.GetTypeRow.[TypeDefRow](targetClassName, stringHeap);
+            targetRow.ShouldBeNotNull("Missing type '{0}'", targetClassName);
+
+            def attributeRows = targetRow.GetCustomAttributeRows(tablesHeap);
+            attributeRows.Count().ShouldBeEqualTo(attributeRowCount, "Wrong number of expected custom attribute rows for type '{0}'", targetClassName);
+
+            def attributeRow = attributeRows.First();
+
+            // Get the method signature for the attribute constructor
+            def typeRow = attributeRow.GetTypeRowFrom(tablesHeap);
+            def ctorSignature = typeRow.GetMethodSignature(blobStream);
+            def parameters = ctorSignature.Parameters;
+
+            ctorSignature.ParameterCount.ShouldBeEqualTo(1, "Wrong parameter count");
+
+            // Read the actual custom attribute blob from the given assembly
+            def reader = CustomAttributeSignatureReader();
+            def valueBlob = attributeRow.Value.ToBlob(blobStream).ToStream();
+            def expectedSignature = reader.Read(parameters, valueBlob, stringHeap, tablesHeap);
+
+            def expectedBlob = attributeRow.Value.ToBlob(blobStream);
+
+            // The output stream should match the given stream
+            def outputStream = MemoryStream();
+            def writer = CustomAttributeSignatureWriter();
+            writer.Write(expectedSignature, parameters,  outputStream, stringHeap, tablesHeap);
+
+            outputStream.ShouldMatch(expectedBlob);
         }
     }
 }
