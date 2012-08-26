@@ -51,17 +51,19 @@ namespace Tests
         public stub ShouldWriteCustomEnum() : void
         {
         }
-        public stub ShouldWriteBoolean() : void
+        public ShouldWriteBoolean() : void
         {
+            TestWrite("SampleClassWithBooleanAttributeUsage");
         }
         public ShouldWriteByte() : void
         {
             TestWrite("SampleClassWithByteAttributeUsage");
         }
-
-        public stub ShouldWriteSignedByte() : void
+        public ShouldWriteSignedByte() : void
         {
+            TestWrite("SampleClassWithSignedByteAttributeUsage");
         }
+        
         public stub ShouldWriteChar() : void
         {
         }
@@ -128,7 +130,7 @@ namespace Tests
             targetRow.ShouldBeNotNull("Missing type '{0}'", targetClassName);
 
             def attributeRows = targetRow.GetCustomAttributeRows(tablesHeap);
-            attributeRows.Count().ShouldBeEqualTo(attributeRowCount, "Wrong number of expected custom attribute rows for type '{0}'", targetClassName);
+            attributeRows.Count().ShouldBeEqualTo(expectedAttributeCount, "Wrong number of expected custom attribute rows for type '{0}'", targetClassName);
 
             def attributeRow = attributeRows.First();
 
