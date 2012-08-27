@@ -24,6 +24,7 @@ namespace Tao.Metadata.Tables.Rows
             
             def writerMap = Dictionary.[ElementType, object-> void]();
             writerMap[ElementType.Boolean] = value => writer.Write(value :> bool);
+            writerMap[ElementType.Char] = value => writer.Write(value :> char);
             writerMap[ElementType.U1] = value => writer.Write(value :> byte);
             writerMap[ElementType.U2] = value => writer.Write(value :> ushort);
             writerMap[ElementType.U4] = value => writer.Write(value :> uint);

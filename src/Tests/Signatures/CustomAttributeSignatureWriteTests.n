@@ -63,33 +63,41 @@ namespace Tests
         {
             TestWrite("SampleClassWithSignedByteAttributeUsage");
         }
-        
-        public stub ShouldWriteChar() : void
+
+        public ShouldWriteChar() : void
         {
         }
-        public stub ShouldWriteUInt16() : void
+        public ShouldWriteUInt16() : void
         {
+            TestWrite("SampleClassWithUInt16AttributeUsage");
         }
-        public stub ShouldWriteInt16() : void
+        public ShouldWriteInt16() : void
         {
+            TestWrite("SampleClassWithInt16AttributeUsage");
         }
-        public stub ShouldWriteUInt32() : void
+        public ShouldWriteUInt32() : void
         {
+            TestWrite("SampleClassWithUInt32AttributeUsage");
         }
-        public stub ShouldWriteInt32() : void
+        public ShouldWriteInt32() : void
         {
+            TestWrite("SampleClass", 2);
         }
-        public stub ShouldWriteUInt64() : void
+        public ShouldWriteUInt64() : void
         {
+            TestWrite("SampleClassWithUInt64AttributeUsage");
         }
-        public stub ShouldWriteInt64() : void
+        public ShouldWriteInt64() : void
         {
+            TestWrite("SampleClassWithInt64AttributeUsage");
         }
-        public stub ShouldWriteSingle() : void
+        public ShouldWriteSingle() : void
         {
+            TestWrite("SampleClassWithFloatAttributeUsage");
         }
-        public stub ShouldWriteDouble() : void
+        public ShouldWriteDouble() : void
         {
+            TestWrite("SampleClassWithDoubleAttributeUsage");
         }
         public stub ShouldWriteSerString() : void
         {
@@ -132,15 +140,31 @@ namespace Tests
             def attributeRows = targetRow.GetCustomAttributeRows(tablesHeap);
             attributeRows.Count().ShouldBeEqualTo(expectedAttributeCount, "Wrong number of expected custom attribute rows for type '{0}'", targetClassName);
 
-            def attributeRow = attributeRows.First();
-
-            // Get the method signature for the attribute constructor
-            def typeRow = attributeRow.GetTypeRowFrom(tablesHeap);
-            def ctorSignature = typeRow.GetMethodSignature(blobStream);
+            mutable ctorSignature : IMethodSignature = null;
+            mutable attributeRow : CustomAttributeRow = null;
+            
+            foreach(row : CustomAttributeRow in attributeRows)
+            {
+                when(ctorSignature == null)
+                {
+                    // Get the method signature for the attribute constructor
+                    def typeRow = row.GetTypeRowFrom(tablesHeap);
+                    def signature = typeRow.GetMethodSignature(blobStream);
+                    def parameterCount = signature.Parameters.Count();
+                    
+                    when(parameterCount == 1)
+                    {
+                        ctorSignature = signature;
+                        attributeRow = row;
+                    }
+                }
+            }
+            
+            ctorSignature.ShouldBeNotNull("Unable to find the correct custom attribute constructor signature with the correct number of arguments");
+            attributeRow.ShouldBeNotNull("There should be an attribute row at this point");
+            
             def parameters = ctorSignature.Parameters;
-
-            ctorSignature.ParameterCount.ShouldBeEqualTo(1, "Wrong parameter count");
-
+            
             // Read the actual custom attribute blob from the given assembly
             def reader = CustomAttributeSignatureReader();
             def valueBlob = attributeRow.Value.ToBlob(blobStream).ToStream();
