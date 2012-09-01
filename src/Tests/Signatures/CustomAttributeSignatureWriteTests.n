@@ -66,6 +66,7 @@ namespace Tests
 
         public ShouldWriteChar() : void
         {
+            TestWrite("SampleClassWithCharAttributeUsage");
         }
         public ShouldWriteUInt16() : void
         {
@@ -121,7 +122,7 @@ namespace Tests
         {
         }
 
-        private TestWrite(targetClassName : string, expectedAttributeCount : int = 1) : void
+        private TestWrite(targetClassName : string, expectedAttributeCount : int = 1, verifyOutput : array[byte] * array[byte] -> void) : void
         {
             // Read the CLR Metadata
             def root = base.GetMetadataRoot("SampleCustomAttributeUsage.dll");
@@ -176,8 +177,20 @@ namespace Tests
             def outputStream = MemoryStream();
             def writer = CustomAttributeSignatureWriter();
             writer.Write(expectedSignature, parameters,  outputStream, stringHeap, tablesHeap);
-
-            outputStream.ShouldMatch(expectedBlob);
+            
+            when(!outputStream.Matches(expectedBlob.ToStream(), 0, expectedBlob.Length :> uint))
+            {
+                def results = outputStream.ToArray();
+                verifyOutput(expectedBlob, results);
+            }
+        }
+        private TestWrite(targetClassName : string, expectedAttributeCount : int = 1) : void
+        {
+            TestWrite(targetClassName, expectedAttributeCount, VerifyOutput);
+        }
+        private VerifyOutput(expectedStream : array[byte], outputStream : array[byte]) : void
+        {                                                                          
+            expectedStream.ShouldMatch(outputStream)
         }
     }
 }

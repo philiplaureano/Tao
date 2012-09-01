@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Tao.Metadata;
 using Tao.Metadata.Signatures;
@@ -21,28 +22,29 @@ namespace Tao.Metadata.Tables.Rows
             def prolog : ushort = 0x0001;
             def writer = BinaryWriter(outputStream);
             writer.Write(prolog);
-            
+
             def writerMap = Dictionary.[ElementType, object-> void]();
             writerMap[ElementType.Boolean] = value => writer.Write(value :> bool);
-            writerMap[ElementType.Char] = value => writer.Write(value :> char);
+            writerMap[ElementType.Char] = value => WriteChar(writer, value :> char);            
+
             writerMap[ElementType.U1] = value => writer.Write(value :> byte);
             writerMap[ElementType.U2] = value => writer.Write(value :> ushort);
             writerMap[ElementType.U4] = value => writer.Write(value :> uint);
             writerMap[ElementType.U8] = value => writer.Write(value :> ulong);
-            
+
             writerMap[ElementType.I1] = value => writer.Write(value :> sbyte);
             writerMap[ElementType.I2] = value => writer.Write(value :> short);
             writerMap[ElementType.I4] = value => writer.Write(value :> int);
             writerMap[ElementType.I8] = value => writer.Write(value :> long);
-            
+
             writerMap[ElementType.R4] = value => writer.Write(value :> float);
             writerMap[ElementType.R8] = value => writer.Write(value :> double);
-            
+
             def write(elementType : ElementType, value : object)
             {
                 writerMap[elementType](value);
             };
-            
+
             def parameterCount = parameters.Count();
             def currentParameters = parameters.ToArray();
             def fixedArguments = signature.FixedArguments;
@@ -51,20 +53,25 @@ namespace Tao.Metadata.Tables.Rows
                 def param = currentParameters[i];
                 def paramType = param.Type;
                 def elementType = paramType.ElementType;
-                
+
                 when(!param.IsSystemType(stringHeap, tablesHeap) && !writerMap.ContainsKey(elementType))
                 {
                     throw NotSupportedException("Element Type Not Supported: " + elementType.ToString());
                 }
-                
+
                 def argument = fixedArguments[i];
                 def value = argument.Value;
                 write(elementType, value);
             }
-            
+
             // Write the number of named arguments
             def namedArgumentCount = signature.NamedArguments.Count();
             writer.Write(namedArgumentCount :> ushort);                        
+        }
+        private WriteChar(writer : BinaryWriter, value : char) : void
+        {
+            def bytes = Encoding.Unicode.GetBytes(array[value]);
+            writer.Write(bytes)                                
         }
     }
 }
