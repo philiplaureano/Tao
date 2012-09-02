@@ -119,8 +119,18 @@ namespace Tests
         public stub ShouldWriteFieldOrPropType() : void
         {
         }
-        public stub ShouldWriteProlog() : void
+        public ShouldWriteProlog() : void
         {
+            def verifyProlog(expectedBytes : array[byte], actualBytes : array[byte]) : void
+            {
+                def stream = MemoryStream(expectedBytes);
+                def reader = BinaryReader(stream);
+                def prolog = reader.ReadUInt16();
+                
+                prolog.ShouldBeEqualTo(1 : ushort, "There should be a prolog here");
+                expectedBytes.ShouldMatch(actualBytes);
+            }
+            TestWrite("SampleClass", 2, verifyProlog);
         }
         public stub ShouldBeAbleToWriteCustomAttributeRows() : void
         {
