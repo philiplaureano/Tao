@@ -100,15 +100,19 @@ namespace Tests
         {
             TestWrite("SampleClassWithDoubleAttributeUsage");
         }
-        public stub ShouldWriteSerString() : void
-        {
+        public ShouldWriteSerString() : void
+        {   
+            TestWrite("SampleClassWithSerStringAttributeUsage");
         }
-        public stub ShouldWriteNullString() : void
+        public ShouldWriteNullString() : void
         {
+            TestWrite("SampleClassWithNullSerStringAttributeUsage");
         }
-        public stub ShouldWriteEmptySerString() : void
+        public ShouldWriteEmptySerString() : void
         {
+            TestWrite("SampleClassWithEmptySerStringAttributeUsage");
         }
+        
         public stub ShouldWriteTypeSerString() : void
         {
         }
@@ -190,7 +194,7 @@ namespace Tests
         }
         private VerifyOutput(expectedStream : array[byte], outputStream : array[byte]) : void
         {                                                                          
-            expectedStream.ShouldMatch(outputStream)
+            expectedStream.ShouldMatch(outputStream);
         }
     }
 }

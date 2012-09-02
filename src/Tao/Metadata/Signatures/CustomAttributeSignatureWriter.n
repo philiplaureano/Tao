@@ -40,6 +40,8 @@ namespace Tao.Metadata.Tables.Rows
             writerMap[ElementType.R4] = value => writer.Write(value :> float);
             writerMap[ElementType.R8] = value => writer.Write(value :> double);
 
+            writerMap[ElementType.String] = value => WriteSerString(writer, value :> string);
+
             def write(elementType : ElementType, value : object)
             {
                 writerMap[elementType](value);
@@ -68,10 +70,45 @@ namespace Tao.Metadata.Tables.Rows
             def namedArgumentCount = signature.NamedArguments.Count();
             writer.Write(namedArgumentCount :> ushort);                        
         }
-        private WriteChar(writer : BinaryWriter, value : char) : void
+        private WriteChar([NotNull] writer : BinaryWriter, value : char) : void
         {
             def bytes = Encoding.Unicode.GetBytes(array[value]);
             writer.Write(bytes)                                
+        }
+        private WriteSerString([NotNull] writer : BinaryWriter, value : string) : void            
+            requires value == null || value.Length < 0xFE otherwise throw ArgumentException("value", "The string must be shorter than 255 characters")
+        {
+            if(string.IsNullOrEmpty(value))
+            {
+                WriteNullOrEmptySerString(writer, value);
+            }
+            else
+            {
+                WriteSerStringValue(writer, value);
+            }            
+        }
+        
+        private WriteSerStringValue([NotNull] writer : BinaryWriter, value : string) : void
+        {
+            // Write the length of the string
+            def stream = writer.BaseStream;
+            def integerWriter = CompressedIntegerWriter();
+            integerWriter.WriteInteger(value.Length :> uint, stream);
+
+            def bytes = Encoding.UTF8.GetBytes(value);
+            writer.Write(bytes);
+        }
+        
+        private WriteNullOrEmptySerString([NotNull] writer : BinaryWriter, value : string) : void
+        {            
+            if(value == null)
+            {
+                writer.Write(0xFF : byte);
+            }
+            else
+            {
+                writer.Write(0x00 : byte);
+            }
         }
     }
 }
