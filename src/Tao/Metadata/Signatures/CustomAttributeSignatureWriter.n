@@ -6,6 +6,7 @@ using Nemerle.Utility;
 
 using System;
 using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,24 +24,7 @@ namespace Tao.Metadata.Tables.Rows
             def writer = BinaryWriter(outputStream);
             writer.Write(prolog);
 
-            def writerMap = Dictionary.[ElementType, object-> void]();
-            writerMap[ElementType.Boolean] = value => writer.Write(value :> bool);
-            writerMap[ElementType.Char] = value => WriteChar(writer, value :> char);            
-
-            writerMap[ElementType.U1] = value => writer.Write(value :> byte);
-            writerMap[ElementType.U2] = value => writer.Write(value :> ushort);
-            writerMap[ElementType.U4] = value => writer.Write(value :> uint);
-            writerMap[ElementType.U8] = value => writer.Write(value :> ulong);
-
-            writerMap[ElementType.I1] = value => writer.Write(value :> sbyte);
-            writerMap[ElementType.I2] = value => writer.Write(value :> short);
-            writerMap[ElementType.I4] = value => writer.Write(value :> int);
-            writerMap[ElementType.I8] = value => writer.Write(value :> long);
-
-            writerMap[ElementType.R4] = value => writer.Write(value :> float);
-            writerMap[ElementType.R8] = value => writer.Write(value :> double);
-
-            writerMap[ElementType.String] = value => WriteSerString(writer, value :> string);
+            def writerMap = CreateWriterMap(writer);
 
             def write(elementType : ElementType, value : object)
             {
@@ -70,6 +54,54 @@ namespace Tao.Metadata.Tables.Rows
             def namedArgumentCount = signature.NamedArguments.Count();
             writer.Write(namedArgumentCount :> ushort);                        
         }
+        private WriteArray([NotNull] writer : BinaryWriter, [NotNull] value : IEnumerable) : void        
+        {            
+            def arrayType = value.GetType();
+            def arrayElementType = arrayType.GetElementType();
+
+            def typeMap = Dictionary();            
+
+            typeMap[typeof(bool)] = ElementType.Boolean;
+            typeMap[typeof(char)] = ElementType.Char;
+            typeMap[typeof(sbyte)] = ElementType.I1;
+            typeMap[typeof(short)] = ElementType.I2;
+            typeMap[typeof(int)] = ElementType.I4;
+            typeMap[typeof(long)] = ElementType.I8;
+            typeMap[typeof(byte)] = ElementType.U1;
+            typeMap[typeof(ushort)] = ElementType.U2;
+            typeMap[typeof(uint)] = ElementType.U4;
+            typeMap[typeof(ulong)] = ElementType.U8;
+            typeMap[typeof(float)] = ElementType.R4;
+            typeMap[typeof(double)] = ElementType.R8;
+            typeMap[typeof(string)] = ElementType.String;
+            typeMap[typeof(object)] = ElementType.Object;
+
+            when(!typeMap.ContainsKey(arrayElementType))
+            {
+                throw NotSupportedException(string.Format("The element type '{0}' is not supported when writing custom attribute array signatures", arrayElementType));
+            }
+
+            def items = List();
+            foreach(parameterValue : object in value)
+            {
+                // Count the array elements
+                items.Add(parameterValue);                
+            }
+
+            def writerMap = CreateWriterMap(writer);
+
+
+            // Write the item count
+            def itemCount : uint = items.Count :> uint;           
+            writer.Write(itemCount);
+
+            // Write the array elements
+            foreach(item in items)
+            {
+                def elementType = typeMap[arrayElementType];
+                writerMap[elementType](item);
+            }
+        }
         private WriteChar([NotNull] writer : BinaryWriter, value : char) : void
         {
             def bytes = Encoding.Unicode.GetBytes(array[value]);
@@ -87,7 +119,7 @@ namespace Tao.Metadata.Tables.Rows
                 WriteSerStringValue(writer, value);
             }            
         }
-        
+
         private WriteSerStringValue([NotNull] writer : BinaryWriter, value : string) : void
         {
             // Write the length of the string
@@ -98,7 +130,7 @@ namespace Tao.Metadata.Tables.Rows
             def bytes = Encoding.UTF8.GetBytes(value);
             writer.Write(bytes);
         }
-        
+
         private WriteNullOrEmptySerString([NotNull] writer : BinaryWriter, value : string) : void
         {            
             if(value == null)
@@ -109,6 +141,89 @@ namespace Tao.Metadata.Tables.Rows
             {
                 writer.Write(0x00 : byte);
             }
+        }
+
+        private WriteTypeReference([NotNull] writer : BinaryWriter, value : TypeReference) : void            
+        {
+            WriteSerString(writer, value.QualifiedName);
+        }
+        private WriteBoxedObject([NotNull] writer : BinaryWriter, value : object) : void
+        {
+            def typeMap = Dictionary();            
+
+            typeMap[typeof(bool)] = ElementType.Boolean;
+            typeMap[typeof(char)] = ElementType.Char;
+            typeMap[typeof(sbyte)] = ElementType.I1;
+            typeMap[typeof(short)] = ElementType.I2;
+            typeMap[typeof(int)] = ElementType.I4;
+            typeMap[typeof(long)] = ElementType.I8;
+            typeMap[typeof(byte)] = ElementType.U1;
+            typeMap[typeof(ushort)] = ElementType.U2;
+            typeMap[typeof(uint)] = ElementType.U4;
+            typeMap[typeof(ulong)] = ElementType.U8;
+            typeMap[typeof(float)] = ElementType.R4;
+            typeMap[typeof(double)] = ElementType.R8;
+            typeMap[typeof(string)] = ElementType.String;
+
+            def valueType = value.GetType();
+            def isArray = valueType.IsArray;
+            when(!typeMap.ContainsKey(valueType) && !isArray)
+            {
+                throw NotSupportedException(string.Format("The type '{0}' is not a supported type for writing boxed objects in custom attribute signatures", valueType));
+            }
+
+            when(isArray && !typeMap.ContainsKey(valueType.GetElementType()))
+            {
+                throw NotSupportedException(string.Format("The array type '{0}' is not a supported type for writing boxed objects in custom attribute signatures", valueType));
+            }
+
+            def writerMap = CreateWriterMap(writer);
+            if(isArray)
+            {
+                def elementType = valueType.GetElementType();
+                def arrayElementType = typeMap[elementType];
+                
+                // Write the magic number that signifies a boxed array type
+                writer.Write(0x1D : byte);
+                
+                // Write the element type
+                writer.Write(arrayElementType :> byte);                                
+                writerMap[ElementType.SzArray](value);
+            }
+            else
+            {
+                // Write the element type
+                def elementType = typeMap[valueType];            
+                writer.Write(elementType :> byte);
+                writerMap[elementType](value);            
+            }
+        }
+
+        private CreateWriterMap(writer : BinaryWriter) : Dictionary.[ElementType, object-> void]
+        {
+            def writerMap = Dictionary.[ElementType, object-> void]();
+            writerMap[ElementType.Boolean] = value => writer.Write(value :> bool);
+            writerMap[ElementType.Char] = value => WriteChar(writer, value :> char);            
+
+            writerMap[ElementType.U1] = value => writer.Write(value :> byte);
+            writerMap[ElementType.U2] = value => writer.Write(value :> ushort);
+            writerMap[ElementType.U4] = value => writer.Write(value :> uint);
+            writerMap[ElementType.U8] = value => writer.Write(value :> ulong);
+
+            writerMap[ElementType.I1] = value => writer.Write(value :> sbyte);
+            writerMap[ElementType.I2] = value => writer.Write(value :> short);
+            writerMap[ElementType.I4] = value => writer.Write(value :> int);
+            writerMap[ElementType.I8] = value => writer.Write(value :> long);
+
+            writerMap[ElementType.R4] = value => writer.Write(value :> float);
+            writerMap[ElementType.R8] = value => writer.Write(value :> double);
+
+            writerMap[ElementType.String] = value => WriteSerString(writer, value :> string);
+            writerMap[ElementType.Class] = value => WriteTypeReference(writer, value :> TypeReference);
+            writerMap[ElementType.SzArray] = value => WriteArray(writer, value :> IEnumerable);
+
+            writerMap[ElementType.Object] = value => WriteBoxedObject(writer, value);
+            writerMap;
         }
     }
 }

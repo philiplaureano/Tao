@@ -36,8 +36,9 @@ namespace Tests
         public stub ShouldWriteBoxedEnum() : void
         {
         }
-        public stub ShouldWriteBoxedArray() : void
+        public ShouldWriteBoxedArray() : void
         {
+            TestWrite("SampleClassWithBoxedArrayArgumentAttributeUsage");
         }
         public stub ShouldWriteNamedField() : void
         {
@@ -45,8 +46,15 @@ namespace Tests
         public stub ShouldWriteNamedProperty() : void
         {
         }
-        public stub ShouldWriteArray() : void
+        
+        public ShouldWriteBoxedObject() : void
         {
+            TestWrite("SampleClassWithObjectAttributeUsage");
+        }
+        
+        public ShouldWriteArray() : void
+        {
+            TestWrite("SampleClassWithArrayAttributeUsage");
         }
         public stub ShouldWriteCustomEnum() : void
         {
@@ -113,8 +121,9 @@ namespace Tests
             TestWrite("SampleClassWithEmptySerStringAttributeUsage");
         }
         
-        public stub ShouldWriteTypeSerString() : void
+        public ShouldWriteTypeSerString() : void
         {
+            TestWrite("SampleClassWithTypeAttributeUsage");
         }
         public stub ShouldWriteFieldOrPropType() : void
         {
