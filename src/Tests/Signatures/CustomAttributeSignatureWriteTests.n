@@ -20,31 +20,23 @@ using SampleCustomAttributeUsage;
 namespace Tests
 {
     public class CustomAttributeSignatureWriteTests : FileBasedTest
-    {
-        public stub ShouldWriteCustomAttributeParent() : void
+    {        
+        public ShouldWriteBoxedEnum() : void
         {
-        }
-        public stub ShouldWriteCustomAttributeTypeIndex() : void
-        {
-        }
-        public stub ShouldWriteCustomAttributeBlobIndex() : void
-        {
-        }
-        public stub ShouldWriteCustomAttributeBlob() : void
-        {
-        }
-        public stub ShouldWriteBoxedEnum() : void
-        {
+            TestWrite("SampleClassWithBoxedEnumAttributeUsage");
         }
         public ShouldWriteBoxedArray() : void
         {
             TestWrite("SampleClassWithBoxedArrayArgumentAttributeUsage");
         }
-        public stub ShouldWriteNamedField() : void
+        public ShouldWriteNamedField() : void
         {
+            TestWrite("SampleClassWithNamedFieldAttributeUsage", 1, 0);
         }
-        public stub ShouldWriteNamedProperty() : void
+        
+        public ShouldWriteNamedProperty() : void
         {
+            TestWrite("SampleClassWithNamedPropertyAttributeUsage", 1, 0);
         }
         
         public ShouldWriteBoxedObject() : void
@@ -56,9 +48,12 @@ namespace Tests
         {
             TestWrite("SampleClassWithArrayAttributeUsage");
         }
-        public stub ShouldWriteCustomEnum() : void
+        
+        public ShouldWriteCustomEnum() : void
         {
+            TestWrite("SampleClassWithSampleEnumAttributeUsage");
         }
+        
         public ShouldWriteBoolean() : void
         {
             TestWrite("SampleClassWithBooleanAttributeUsage");
@@ -125,9 +120,11 @@ namespace Tests
         {
             TestWrite("SampleClassWithTypeAttributeUsage");
         }
-        public stub ShouldWriteFieldOrPropType() : void
+        public ShouldWriteFieldOrPropType() : void
         {
+            TestWrite("SampleClassWithObjectAttributeUsage");
         }
+        
         public ShouldWriteProlog() : void
         {
             def verifyProlog(expectedBytes : array[byte], actualBytes : array[byte]) : void
@@ -139,13 +136,10 @@ namespace Tests
                 prolog.ShouldBeEqualTo(1 : ushort, "There should be a prolog here");
                 expectedBytes.ShouldMatch(actualBytes);
             }
-            TestWrite("SampleClass", 2, verifyProlog);
-        }
-        public stub ShouldBeAbleToWriteCustomAttributeRows() : void
-        {
+            TestWrite("SampleClass", 2, 1, verifyProlog);
         }
 
-        private TestWrite(targetClassName : string, expectedAttributeCount : int = 1, verifyOutput : array[byte] * array[byte] -> void) : void
+        private TestWrite(targetClassName : string, expectedAttributeCount : int = 1, expectedParameterCount : int = 1, verifyOutput : array[byte] * array[byte] -> void) : void
         {
             // Read the CLR Metadata
             def root = base.GetMetadataRoot("SampleCustomAttributeUsage.dll");
@@ -176,7 +170,7 @@ namespace Tests
                     def signature = typeRow.GetMethodSignature(blobStream);
                     def parameterCount = signature.Parameters.Count();
                     
-                    when(parameterCount == 1)
+                    when(parameterCount == expectedParameterCount)
                     {
                         ctorSignature = signature;
                         attributeRow = row;
@@ -207,10 +201,11 @@ namespace Tests
                 verifyOutput(expectedBlob, results);
             }
         }
-        private TestWrite(targetClassName : string, expectedAttributeCount : int = 1) : void
+        private TestWrite(targetClassName : string, expectedAttributeCount : int = 1, expectedParameterCount : int = 1) : void
         {
-            TestWrite(targetClassName, expectedAttributeCount, VerifyOutput);
+            TestWrite(targetClassName, expectedAttributeCount, expectedParameterCount, VerifyOutput);
         }
+        
         private VerifyOutput(expectedStream : array[byte], outputStream : array[byte]) : void
         {                                                                          
             expectedStream.ShouldMatch(outputStream);
