@@ -206,9 +206,6 @@ namespace Tao.Metadata.Tables.Rows
                 }
                 else
                 {
-                    // Write the FieldOrPropType prefix value (0x51)
-                    writer.Write(0x51 : byte);
-                    
                     // Write the element type
                     def elementType = typeMap[valueType];            
                     writer.Write(elementType :> byte);
