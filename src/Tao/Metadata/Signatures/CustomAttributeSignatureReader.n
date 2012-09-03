@@ -83,7 +83,8 @@ namespace Tao.Metadata.Signatures
                     throw BadImageFormatException(string.Format("Unsupported field or property type when reading a custom attribute signature: {0}", elementType));
                 }
 
-                def argumentName = ReadSerString(reader);
+                def serStringReader = SerStringReader();
+                def argumentName = serStringReader.ReadSerString(reader);
                 def paramType = TypeSignature(elementType);
                 
                 def map = createMap(paramType);
@@ -109,6 +110,7 @@ namespace Tao.Metadata.Signatures
         }
         private CreateReaderMap([NotNull] reader : BinaryReader, [NotNull] paramType : ITypeSignature, [NotNull] stringHeap : Stream, [NotNull] blobStream : Stream, [NotNull] tablesHeap : ITablesHeap) : Dictionary.[ElementType, void -> object]
         {
+            def serStringReader = SerStringReader();
             def readerMap : Dictionary.[ElementType, void -> object] = Dictionary();
             readerMap[ElementType.I1] = reader.ReadSByte;
             readerMap[ElementType.I2] = reader.ReadInt16;
@@ -122,7 +124,7 @@ namespace Tao.Metadata.Signatures
             readerMap[ElementType.Char] = reader.ReadChar;
             readerMap[ElementType.R4] = reader.ReadSingle;    
             readerMap[ElementType.R8] = reader.ReadDouble;
-            readerMap[ElementType.String] = () => ReadSerString(reader);
+            readerMap[ElementType.String] = () => serStringReader.ReadSerString(reader);
             readerMap[ElementType.Object] = () => ReadBoxedObject(reader, stringHeap, tablesHeap, readerMap);
             readerMap[ElementType.ValueType] = () => ReadValueType(reader, paramType, stringHeap, blobStream, tablesHeap);
             readerMap[ElementType.SzArray] = () => ReadArray(reader, paramType, stringHeap, tablesHeap, readerMap);
@@ -133,8 +135,9 @@ namespace Tao.Metadata.Signatures
         {
             if(elementType == ElementType.Class)
             {
+                def serStringReader = SerStringReader();
                 def typeRef = TypeReference();
-                typeRef.QualifiedName = ReadSerString(reader);
+                typeRef.QualifiedName = serStringReader.ReadSerString(reader);
 
                 typeRef;
             }
@@ -250,8 +253,10 @@ namespace Tao.Metadata.Signatures
             def elementByte : byte = reader.ReadByte();
             when(elementByte == 0x55)
             {
+                def serStringReader = SerStringReader();
+                
                 // Handle custom enums here
-                def enumName = ReadSerString(reader);
+                def enumName = serStringReader.ReadSerString(reader);
                 mutable enumType = Type.GetType(enumName, false);
 
                 // If the type load fails, scan the current assembly and
@@ -310,34 +315,6 @@ namespace Tao.Metadata.Signatures
             }
 
             result;
-        }
-        private ReadSerString([NotNull] reader : BinaryReader) : string
-        {
-            def underlyingStream = reader.BaseStream;
-            def lengthByteValue = underlyingStream.PeekByte();
-
-            mutable result : string = null;
-            match(lengthByteValue)
-            {
-                | 0x00 => result = string.Empty;
-                | 0xFF => result = null;
-                |_ => 
-                    {
-                        def integerReader = CompressedIntegerReader();
-                        def length = integerReader.ReadInteger(underlyingStream);
-
-                        def bytes = reader.ReadBytes(length :> int);
-                        result = Encoding.UTF8.GetString(bytes);
-                    }
-            }
-
-            // Move the byte position to the next offset if the string value is null or empty
-            when(lengthByteValue == 0xFF || lengthByteValue == 0x00)
-            {
-                _ = underlyingStream.Seek(1, SeekOrigin.Current);
-            }
-            
-            result;
-        }
+        }        
     }
 }

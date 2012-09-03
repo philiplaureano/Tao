@@ -23,7 +23,31 @@ namespace Tests
     {        
         public ShouldWriteBoxedEnum() : void
         {
-            TestWrite("SampleClassWithBoxedEnumAttributeUsage");
+            def verifyBoxedEnum(expectedStream : array[byte], outputStream : array[byte]) : void
+            {
+                // Match the prefix (this includes the prolog, and the magic enum byte - 0x55)
+                def prefix = expectedStream.Take(3).ToArray();
+                def actualPrefix = outputStream.Take(3).ToArray();
+                prefix.ShouldMatch(actualPrefix);
+                
+                // Match the qualified name of the enum
+                def expectedTypeName = typeof(SampleEnum).AssemblyQualifiedName;
+                def actualStream = MemoryStream(outputStream);
+                _ = actualStream.Seek(3, SeekOrigin.Begin);
+                
+                def reader = BinaryReader(actualStream);
+                def stringReader = SerStringReader();
+                def qualifiedName = stringReader.ReadSerString(reader);
+                expectedTypeName.ShouldBeEqualTo(qualifiedName, "Wrong Qualified Name");
+                
+                // Match the enum value
+                def expectedValue = SampleEnum.Maybe;
+                def actualValue = reader.ReadByte() :> SampleEnum;
+                
+                expectedValue.ShouldBeEqualTo(actualValue, "Wrong Enum Value");
+            }
+            
+            TestWrite("SampleClassWithBoxedEnumAttributeUsage", 1, 1, verifyBoxedEnum);
         }
         public ShouldWriteBoxedArray() : void
         {

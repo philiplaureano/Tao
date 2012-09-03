@@ -560,6 +560,9 @@
     <Compile Include="Metadata\Signatures\RetTypeWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Signatures\SerStringReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Signatures\StandAloneMethodSignature.n">
       <SubType>Code</SubType>
     </Compile>

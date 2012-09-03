@@ -167,12 +167,14 @@ namespace Tao.Metadata.Tables.Rows
 
             def valueType = value.GetType();
             def isArray = valueType.IsArray;
-            when(!typeMap.ContainsKey(valueType) && !isArray)
+            def isEnum = valueType.IsEnum;
+
+            when(!typeMap.ContainsKey(valueType) && !isArray && !isEnum)
             {
                 throw NotSupportedException(string.Format("The type '{0}' is not a supported type for writing boxed objects in custom attribute signatures", valueType));
             }
 
-            when(isArray && !typeMap.ContainsKey(valueType.GetElementType()))
+            when(isArray && !typeMap.ContainsKey(valueType.GetElementType()) && !isEnum)
             {
                 throw NotSupportedException(string.Format("The array type '{0}' is not a supported type for writing boxed objects in custom attribute signatures", valueType));
             }
@@ -182,24 +184,53 @@ namespace Tao.Metadata.Tables.Rows
             {
                 def elementType = valueType.GetElementType();
                 def arrayElementType = typeMap[elementType];
-                
+
                 // Write the magic number that signifies a boxed array type
                 writer.Write(0x1D : byte);
-                
+
                 // Write the element type
                 writer.Write(arrayElementType :> byte);                                
                 writerMap[ElementType.SzArray](value);
             }
             else
             {
-                // Write the element type
-                def elementType = typeMap[valueType];            
-                writer.Write(elementType :> byte);
-                writerMap[elementType](value);            
+                if(isEnum)
+                {
+                    // Write the Enum byte
+                    writer.Write(0x55 : byte);
+
+                    // Write the Enum name
+                    def enumName = valueType.AssemblyQualifiedName;
+                    WriteSerString(writer, enumName);                    
+                    WriteValueType(writer, value);
+                }
+                else
+                {
+                    // Write the FieldOrPropType prefix value (0x51)
+                    writer.Write(0x51 : byte);
+                    
+                    // Write the element type
+                    def elementType = typeMap[valueType];            
+                    writer.Write(elementType :> byte);
+                    writerMap[elementType](value);            
+                }
             }
         }
+        private WriteValueType([NotNull] writer : BinaryWriter, [NotNull] value : object) : void
+        {
+            def valueType = value.GetType();
+            def underlyingType = Enum.GetUnderlyingType(valueType);
 
-        private CreateWriterMap(writer : BinaryWriter) : Dictionary.[ElementType, object-> void]
+            def writers = System.Collections.Generic.Dictionary.[Type, object -> void]();
+            writers[typeof(byte)] = value => writer.Write(value :> byte);
+            writers[typeof(ushort)] = value => writer.Write(value :> ushort);
+            writers[typeof(uint)] = value => writer.Write(value :> uint);
+            writers[typeof(ulong)] = value => writer.Write(value :> ulong);
+
+            // Write the enum value
+            writers[underlyingType](value);            
+        }
+        private CreateWriterMap([NotNull] writer : BinaryWriter) : Dictionary.[ElementType, object-> void]
         {
             def writerMap = Dictionary.[ElementType, object-> void]();
             writerMap[ElementType.Boolean] = value => writer.Write(value :> bool);
@@ -223,6 +254,7 @@ namespace Tao.Metadata.Tables.Rows
             writerMap[ElementType.SzArray] = value => WriteArray(writer, value :> IEnumerable);
 
             writerMap[ElementType.Object] = value => WriteBoxedObject(writer, value);
+            writerMap[ElementType.ValueType] = value => WriteValueType(writer, value);
             writerMap;
         }
     }

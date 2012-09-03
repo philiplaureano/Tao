@@ -1,0 +1,46 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+namespace Tao.Metadata.Signatures
+{
+    public class SerStringReader
+    {
+        public ReadSerString([NotNull] reader : BinaryReader) : string
+        {
+            def underlyingStream = reader.BaseStream;
+            def lengthByteValue = underlyingStream.PeekByte();
+
+            mutable result : string = null;
+            match(lengthByteValue)
+            {
+                | 0x00 => result = string.Empty;
+                | 0xFF => result = null;
+                |_ => 
+                    {
+                        def integerReader = CompressedIntegerReader();
+                        def length = integerReader.ReadInteger(underlyingStream);
+
+                        def bytes = reader.ReadBytes(length :> int);
+                        result = Encoding.UTF8.GetString(bytes);
+                    }
+            }
+
+            // Move the byte position to the next offset if the string value is null or empty
+            when(lengthByteValue == 0xFF || lengthByteValue == 0x00)
+            {
+                _ = underlyingStream.Seek(1, SeekOrigin.Current);
+            }
+
+            result;
+        }
+    }
+}
