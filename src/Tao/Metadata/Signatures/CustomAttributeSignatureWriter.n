@@ -52,13 +52,57 @@ namespace Tao.Metadata.Tables.Rows
 
             // Write the number of named arguments
             def namedArgumentCount = signature.NamedArguments.Count();
-            writer.Write(namedArgumentCount :> ushort);                        
-        }
-        private WriteArray([NotNull] writer : BinaryWriter, [NotNull] value : IEnumerable) : void        
-        {            
-            def arrayType = value.GetType();
-            def arrayElementType = arrayType.GetElementType();
+            writer.Write(namedArgumentCount :> ushort);                 
+            
+            def FIELD : byte = 0x53;
+            def PROPERTY : byte = 0x54;
 
+            def validTypes = array[
+                ElementType.I1,
+                ElementType.I2,
+                ElementType.I4,
+                ElementType.I8,
+                ElementType.U1,
+                ElementType.U2,
+                ElementType.U4,
+                ElementType.U8,
+                ElementType.R4,
+                ElementType.R8,
+                ElementType.String
+            ];
+            
+            def typeMap = GetTypeMap();
+            foreach(namedArgument in signature.NamedArguments)
+            {
+                // Write the prefix byte
+                writer.Write(namedArgument.BytePrefix);
+                
+                def value = namedArgument.Value;
+                when(value == null)
+                {
+                    throw NotSupportedException(string.Format("Unable to write custom attribute field or property named '{0}'. Null named argument values are currently not supported.", namedArgument.ArgumentName));
+                }
+                
+                def valueType = value.GetType();
+                def elementType = typeMap[valueType];
+                when(!validTypes.Contains(elementType))
+                {
+                    throw BadImageFormatException(string.Format("Unsupported field or property type when reading a custom attribute signature: {0}", elementType));
+                }
+                
+                // Write the element type
+                writer.Write(elementType :> byte);
+                
+                // Write the field/property name
+                WriteSerString(writer, namedArgument.ArgumentName);
+                
+                // Write the named argument value
+                def writerMap = CreateWriterMap(writer);
+                writerMap[elementType](value);
+            }
+        }
+        private GetTypeMap() : Dictionary.[Type, ElementType]
+        {
             def typeMap = Dictionary();            
 
             typeMap[typeof(bool)] = ElementType.Boolean;
@@ -75,6 +119,16 @@ namespace Tao.Metadata.Tables.Rows
             typeMap[typeof(double)] = ElementType.R8;
             typeMap[typeof(string)] = ElementType.String;
             typeMap[typeof(object)] = ElementType.Object;
+            
+            typeMap;
+        }
+        
+        private WriteArray([NotNull] writer : BinaryWriter, [NotNull] value : IEnumerable) : void        
+        {            
+            def arrayType = value.GetType();
+            def arrayElementType = arrayType.GetElementType();
+
+            def typeMap = GetTypeMap();            
 
             when(!typeMap.ContainsKey(arrayElementType))
             {

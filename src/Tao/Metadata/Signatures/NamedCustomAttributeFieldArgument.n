@@ -15,5 +15,13 @@ namespace Tao.Metadata.Signatures
         {
             base(argumentName, value);
         }
+        public override BytePrefix : byte 
+        {
+            get
+            {
+                def FIELD : byte = 0x53;
+                FIELD;
+            }
+        }
     }
 }

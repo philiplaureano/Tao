@@ -21,5 +21,7 @@ namespace Tao.Metadata.Signatures
       {
           get;set;
       }
+      
+      public abstract BytePrefix : byte { get; }
   }
 }
