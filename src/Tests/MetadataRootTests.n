@@ -383,9 +383,30 @@ namespace Tests
       
       Tester.TestWrite.[ushort, IMetadataRoot, MetadataRootWriter]("NumberOfStreamHeaders", expectedNumberOfHeaders :> ushort, createHeader, getCount);
     }
+    public ShouldWriteCorrectStreamSizeForAttachedStreamHeaders() : void
+    { 
+      // Give the root stream headers invalid sizes;
+      // the writer should automatically correct the invalid values
+      TestStreamHeaderPatching(header : IStreamHeader => header.Size = 54321);
+    }
+    
     public ShouldWriteCorrectStreamOffsetForAttachedStreamHeaders() : void
+    {            
+      // Give the root stream headers invalid offsets;
+      // the writer should automatically correct the invalid values
+      TestStreamHeaderPatching(header : IStreamHeader => header.Offset = 0xFEED);
+    }
+    public ShouldThrowBadImageFormatExceptionIfSignatureNotFound() : void
+        expects BadImageFormatException
     {
-      def expectedData = array[
+      def dummyData = array[0 : byte, 0, 0, 0];
+      def reader = MetadataRootReader();
+      _ = reader.Read(MemoryStream(dummyData));      
+    }
+    
+    private TestStreamHeaderPatching(modifyHeader : IStreamHeader -> void) : void
+    {
+        def expectedData = array[
 	    0x42 : byte, 0x53, 0x4A, 0x42, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00,
 	    0x76, 0x32, 0x2E, 0x30, 0x2E, 0x35, 0x30, 0x37, 0x32, 0x37, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00,
 	    0x6C, 0x00, 0x00, 0x00, 0x68, 0x00, 0x00, 0x00, 0x23, 0x7E, 0x00, 0x00, 0xD4, 0x00, 0x00, 0x00,
@@ -412,11 +433,10 @@ namespace Tests
       def reader = MetadataRootExtractor();
       def root = reader.ExtractFrom(image);
       
-      // Give the root stream headers invalid offsets;
-      // the writer should automatically correct the invalid values
+      
       foreach(header in root.StreamHeaders)
       {
-        header.Offset = 0xFEED;
+        modifyHeader(header);
       }
       
       def outputStream = MemoryStream();
@@ -426,13 +446,6 @@ namespace Tests
       // Once the values have been corrected,
       // the output stream should look like the expected data
       outputStream.ShouldMatch(expectedData);        
-    }
-    public ShouldThrowBadImageFormatExceptionIfSignatureNotFound() : void
-        expects BadImageFormatException
-    {
-      def dummyData = array[0 : byte, 0, 0, 0];
-      def reader = MetadataRootReader();
-      _ = reader.Read(MemoryStream(dummyData));      
     }
     private TestWrite[TValue](propertyName : string, value : TValue) : void
     {

@@ -119,7 +119,9 @@ namespace Tests
             def slackSpace = tableDataLength - tableData.Position;
             when(slackSpace > 0)
             {
-                Console.WriteLine("Note: There's a slack space of {0} bytes", slackSpace);
+                def slackData = tableData.ReadBytes(slackSpace :> int, tableData.Position);
+                
+                Console.WriteLine("Note: There's a slack space of {0} bytes", slackData.Length);
             }
 
             def outputStream = TracerStream(tableData, MemoryStream());
