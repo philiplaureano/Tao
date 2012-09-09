@@ -50,6 +50,15 @@ namespace Tests
             
             row.GetPartialQualifiedName(stringHeap, heap).ShouldBeEqualTo("SampleCustomAttributeUsage.SampleEnum, SampleCustomAttributeUsage", "Wrong partial qualified name");
         }
+        public stub ShouldGetInterfaceImplRowsAsRowReferences() : void
+        {
+        }
+        public stub ShouldGetListOfMethodRowsAsRowReferences() : void
+        {
+        }
+        public stub ShouldGetListOfFieldRowsAsRowReferences() : void
+        {
+        }
         protected override TargetAssemblyFileName : string 
         { 
             get
