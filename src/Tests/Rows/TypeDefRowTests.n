@@ -50,13 +50,34 @@ namespace Tests
             
             row.GetPartialQualifiedName(stringHeap, heap).ShouldBeEqualTo("SampleCustomAttributeUsage.SampleEnum, SampleCustomAttributeUsage", "Wrong partial qualified name");
         }
-        public stub ShouldGetInterfaceImplRowsAsRowReferences() : void
+        public ShouldGetInterfaceImplRows() : void
+        {
+            def root = base.GetMetadataRoot("SampleTypeDefRowUsage.dll");
+            def tableStream = root.GetTablesHeap();
+
+            def tablesHeap = TablesHeap();
+            tablesHeap.ReadFrom(tableStream);
+            
+            def stringHeap = root.GetStringHeap();                                    
+            
+            def targetRow = tablesHeap.GetTypeRow.[TypeDefRow]("SampleClassWithMultipleInterfaces", stringHeap);
+            def results = targetRow.GetInterfaceImplRows(tablesHeap);
+            def rows = results.ToArray();
+            rows.Length.ShouldBeEqualTo(2, "Wrong number of expected interfaces");
+            
+            rows[0].Class.ToUInt32().ShouldBeEqualTo(4, "Wrong TypeDef index value");
+            rows[0].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).Row.ShouldBeEqualTo(2, "Wrong target row");
+            rows[0].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong target row");
+            
+            rows[1].Class.ToUInt32().ShouldBeEqualTo(4, "Wrong TypeDef index value");
+            rows[1].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).Row.ShouldBeEqualTo(3S, "Wrong target row");
+            rows[1].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong target row");
+        }
+        
+        public stub ShouldGetListOfMethodRows() : void
         {
         }
-        public stub ShouldGetListOfMethodRowsAsRowReferences() : void
-        {
-        }
-        public stub ShouldGetListOfFieldRowsAsRowReferences() : void
+        public stub ShouldGetListOfFieldRows() : void
         {
         }
         protected override TargetAssemblyFileName : string 

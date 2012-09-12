@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace SampleTypeDefRowUsage
+{
+    public class SampleClassWithMultipleInterfaces : IFoo, IBar
+    {
+        public void DoFoo()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DoBar()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

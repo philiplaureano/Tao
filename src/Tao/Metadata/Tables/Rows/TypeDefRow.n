@@ -49,5 +49,20 @@ namespace Tao.Metadata.Tables.Rows
             def qualifiedName = string.Format(format, nameSpace, typeName, assemblyName);
             qualifiedName;
         }
+        public GetInterfaceImplRows([NotNull] tablesHeap : ITablesHeap) : IEnumerable.[InterfaceImplRow]
+        {
+            def interfaceRows = tablesHeap.GetRows.[InterfaceImplRow]();
+            foreach(row in interfaceRows)
+            {
+                when(row.Class != null)
+                {
+                    def typeRowIndex = row.Class.ToUInt32();
+                    when(typeRowIndex == RowIndex)
+                    {
+                        yield row;
+                    }
+                }
+            }
+        }
     }
 }
