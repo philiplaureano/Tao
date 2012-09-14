@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="IBar.cs" />
     <Compile Include="IFoo.cs" />
+    <Compile Include="IMarkerInterface.cs" />
     <Compile Include="SampleClassWithMultipleInterfaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

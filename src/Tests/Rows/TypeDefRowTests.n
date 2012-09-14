@@ -27,12 +27,12 @@ namespace Tests
 
             def heap = TablesHeap();
             heap.ReadFrom(tableStream);
-            
+
             def row = heap.GetRow.[TypeDefRow](1);
             def assemblyRow = row.GetAssemblyRow(heap);
-            
+
             def stringHeap = root.Heaps["#Strings"];
-            
+
             row.TypeName.ToString(stringHeap).ShouldBeEqualTo("<Module>", "wrong target row");
             assemblyRow.Name.ToString(stringHeap).ShouldBeEqualTo("SampleCustomAttributeUsage", "wrong assembly");
         }
@@ -45,40 +45,80 @@ namespace Tests
             heap.ReadFrom(tableStream);
 
             def stringHeap = root.Heaps["#Strings"];
-            
+
             def row : ITypeRow = heap.GetTypeRow.[TypeDefRow]("SampleEnum", stringHeap);
-            
+
             row.GetPartialQualifiedName(stringHeap, heap).ShouldBeEqualTo("SampleCustomAttributeUsage.SampleEnum, SampleCustomAttributeUsage", "Wrong partial qualified name");
         }
         public ShouldGetInterfaceImplRows() : void
+        {
+            def testResults(rows : array[InterfaceImplRow]) : void
+            {
+                rows.Length.ShouldBeEqualTo(2, "Wrong number of expected interfaces");
+
+                rows[0].Class.ToUInt32().ShouldBeEqualTo(4, "Wrong TypeDef index value");
+                rows[0].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).Row.ShouldBeEqualTo(2, "Wrong target row");
+                rows[0].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong target row");
+
+                rows[1].Class.ToUInt32().ShouldBeEqualTo(4, "Wrong TypeDef index value");
+                rows[1].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).Row.ShouldBeEqualTo(3S, "Wrong target row");
+                rows[1].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong target row");
+            }
+            
+            TestRelatedRowExtraction("SampleClassWithMultipleInterfaces", (row, tablesHeap) => row.GetInterfaceImplRows(tablesHeap), testResults);
+        }
+
+        public ShouldGetListOfMethodRows() : void
+        {
+            def matchMethodName(rows : array[MethodDefRow],  index : int, expectedMethodName : string, stringHeap : Stream)
+            {
+                rows[index].Name.ToString(stringHeap).ShouldBeEqualTo(expectedMethodName, "Wrong method name");
+            }
+            
+            def testResults(rows : array[MethodDefRow], stringHeap : Stream) : void
+            {
+                rows.Length.ShouldBeEqualTo(3, "Wrong number of expected methods");
+                
+                def testMethodName = matchMethodName(rows, _, _, stringHeap);
+                testMethodName(0, "DoFoo");
+                testMethodName(1, "DoBar");
+                testMethodName(2, ".ctor");
+            }
+            
+            def getRows(row : TypeDefRow, tablesHeap : ITablesHeap) : IEnumerable.[MethodDefRow]
+            {
+                row.GetMethodDefRows(tablesHeap);
+            }
+            
+            TestRelatedRowExtraction("SampleClassWithMultipleInterfaces", getRows, testResults);
+        }
+        public stub ShouldGetListOfFieldRows() : void
+        {
+        }
+        
+        private TestRelatedRowExtraction[TRow](className : string, getRows : TypeDefRow * ITablesHeap -> IEnumerable.[TRow], testRows : array[TRow]-> void) : void
+        {
+            def adapterFunctor(rows : array[TRow], /*stringHeap - unused*/ _ : Stream) : void
+            {
+                testRows(rows);
+            }
+            
+            TestRelatedRowExtraction.[TRow](className, getRows, adapterFunctor);
+        }
+        
+        private TestRelatedRowExtraction[TRow](className : string, getRows : TypeDefRow * ITablesHeap -> IEnumerable.[TRow], testRows : array[TRow] * Stream -> void) : void
         {
             def root = base.GetMetadataRoot("SampleTypeDefRowUsage.dll");
             def tableStream = root.GetTablesHeap();
 
             def tablesHeap = TablesHeap();
             tablesHeap.ReadFrom(tableStream);
-            
-            def stringHeap = root.GetStringHeap();                                    
-            
-            def targetRow = tablesHeap.GetTypeRow.[TypeDefRow]("SampleClassWithMultipleInterfaces", stringHeap);
-            def results = targetRow.GetInterfaceImplRows(tablesHeap);
-            def rows = results.ToArray();
-            rows.Length.ShouldBeEqualTo(2, "Wrong number of expected interfaces");
-            
-            rows[0].Class.ToUInt32().ShouldBeEqualTo(4, "Wrong TypeDef index value");
-            rows[0].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).Row.ShouldBeEqualTo(2, "Wrong target row");
-            rows[0].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong target row");
-            
-            rows[1].Class.ToUInt32().ShouldBeEqualTo(4, "Wrong TypeDef index value");
-            rows[1].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).Row.ShouldBeEqualTo(3S, "Wrong target row");
-            rows[1].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong target row");
-        }
-        
-        public stub ShouldGetListOfMethodRows() : void
-        {
-        }
-        public stub ShouldGetListOfFieldRows() : void
-        {
+
+            def stringHeap = root.GetStringHeap();                                                
+            def targetRow = tablesHeap.GetTypeRow.[TypeDefRow](className, stringHeap);
+
+            def results = getRows(targetRow, tablesHeap);
+            testRows(results.ToArray(), stringHeap);            
         }
         protected override TargetAssemblyFileName : string 
         { 

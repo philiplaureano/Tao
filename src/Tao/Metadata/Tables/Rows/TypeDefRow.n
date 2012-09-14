@@ -64,5 +64,42 @@ namespace Tao.Metadata.Tables.Rows
                 }
             }
         }
+        public GetMethodDefRows([NotNull] tablesHeap : ITablesHeap) : IEnumerable.[MethodDefRow]
+            requires RowIndex > 0 otherwise throw InvalidOperationException("The row index for any given type row should never be zero")
+        {
+            def typeDefRows = tablesHeap.GetRows.[TypeDefRow]();
+            def methodDefRows = tablesHeap.GetRows.[MethodDefRow]();
+
+            def typeRows = typeDefRows.ToArray();
+            def methodRows = methodDefRows.ToArray();
+
+            def typeRowCount = typeRows.Length;
+            def currentIndex = (RowIndex - 1) :> int;
+            def lastIndex = typeRowCount - 1;
+
+            def startingMethodRowIndex = MethodList.ToUInt32();            
+            mutable lastMethodRowIndex = startingMethodRowIndex;
+            when(currentIndex < lastIndex)
+            {
+                mutable nextTypeRow : TypeDefRow = typeRows[currentIndex + 1];
+                lastMethodRowIndex = nextTypeRow.MethodList.ToUInt32();
+            }
+
+            def results = List.[MethodDefRow]();
+            def rowsToExtract = lastMethodRowIndex - startingMethodRowIndex;
+            def methodRowCount = methodRows.Length :> uint;
+            when(startingMethodRowIndex <= methodRowCount && rowsToExtract > 0)
+            {
+                for(mutable i = startingMethodRowIndex; i < lastMethodRowIndex; i++)
+                {
+                    // Shift the index by one since table pointers start at index 1
+                    def actualIndex = (i -1) :> int;
+                    def currentRow = methodRows[actualIndex];
+                    results.Add(currentRow);
+                }
+            }
+
+            results;
+        }
     }
 }
