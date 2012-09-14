@@ -67,34 +67,40 @@ namespace Tao.Metadata.Tables.Rows
         public GetMethodDefRows([NotNull] tablesHeap : ITablesHeap) : IEnumerable.[MethodDefRow]
             requires RowIndex > 0 otherwise throw InvalidOperationException("The row index for any given type row should never be zero")
         {
-            def typeDefRows = tablesHeap.GetRows.[TypeDefRow]();
-            def methodDefRows = tablesHeap.GetRows.[MethodDefRow]();
+            GetRelatedRows(this, tablesHeap, row => row.MethodList.ToUInt32());
+        }
+        public GetFieldRows([NotNull] tablesHeap : ITablesHeap) : IEnumerable.[FieldRow]
+            requires RowIndex > 0 otherwise throw InvalidOperationException("The row index for any given type row should never be zero")
+        {
+            GetRelatedRows(this, tablesHeap, row => row.FieldList.ToUInt32());
+        }        
+        private GetRelatedRows[TSourceRow, TTargetRow](source : TSourceRow, [NotNull] tablesHeap : ITablesHeap, getRowIndex : TSourceRow -> uint) : IEnumerable[TTargetRow]
+        {
+            def sourceRows = tablesHeap.GetRows.[TSourceRow]().ToArray();
+            def targetRows = tablesHeap.GetRows.[TTargetRow]().ToArray();
 
-            def typeRows = typeDefRows.ToArray();
-            def methodRows = methodDefRows.ToArray();
-
-            def typeRowCount = typeRows.Length;
+            def sourceRowCount = sourceRows.Length;
             def currentIndex = (RowIndex - 1) :> int;
-            def lastIndex = typeRowCount - 1;
+            def lastIndex = sourceRowCount - 1;
 
-            def startingMethodRowIndex = MethodList.ToUInt32();            
-            mutable lastMethodRowIndex = startingMethodRowIndex;
+            def startingTargetRowIndex = getRowIndex(source);            
+            mutable lastTargetRowIndex = startingTargetRowIndex;
             when(currentIndex < lastIndex)
             {
-                mutable nextTypeRow : TypeDefRow = typeRows[currentIndex + 1];
-                lastMethodRowIndex = nextTypeRow.MethodList.ToUInt32();
+                mutable nextTypeRow : TSourceRow = sourceRows[currentIndex + 1];
+                lastTargetRowIndex = getRowIndex(nextTypeRow);
             }
 
-            def results = List.[MethodDefRow]();
-            def rowsToExtract = lastMethodRowIndex - startingMethodRowIndex;
-            def methodRowCount = methodRows.Length :> uint;
-            when(startingMethodRowIndex <= methodRowCount && rowsToExtract > 0)
+            def results = List.[TTargetRow]();
+            def rowsToExtract = lastTargetRowIndex - startingTargetRowIndex;
+            def targetRowCount = targetRows.Length :> uint;
+            when(startingTargetRowIndex <= targetRowCount && rowsToExtract > 0)
             {
-                for(mutable i = startingMethodRowIndex; i < lastMethodRowIndex; i++)
+                for(mutable i = startingTargetRowIndex; i < lastTargetRowIndex; i++)
                 {
                     // Shift the index by one since table pointers start at index 1
                     def actualIndex = (i -1) :> int;
-                    def currentRow = methodRows[actualIndex];
+                    def currentRow = targetRows[actualIndex];
                     results.Add(currentRow);
                 }
             }

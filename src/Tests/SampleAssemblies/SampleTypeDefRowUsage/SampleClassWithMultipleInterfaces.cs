@@ -7,6 +7,9 @@ namespace SampleTypeDefRowUsage
 {
     public class SampleClassWithMultipleInterfaces : IFoo, IBar
     {
+        private int _field1;
+        private string _field2;
+
         public void DoFoo()
         {
             throw new NotImplementedException();

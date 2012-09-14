@@ -70,7 +70,7 @@ namespace Tests
 
         public ShouldGetListOfMethodRows() : void
         {
-            def matchMethodName(rows : array[MethodDefRow],  index : int, expectedMethodName : string, stringHeap : Stream)
+            def matchMethodName(rows : array[MethodDefRow],  index : int, expectedMethodName : string, stringHeap : Stream) : void
             {
                 rows[index].Name.ToString(stringHeap).ShouldBeEqualTo(expectedMethodName, "Wrong method name");
             }
@@ -92,8 +92,22 @@ namespace Tests
             
             TestRelatedRowExtraction("SampleClassWithMultipleInterfaces", getRows, testResults);
         }
-        public stub ShouldGetListOfFieldRows() : void
+        public ShouldGetListOfFieldRows() : void
         {
+            def matchField(rows : array[FieldRow], index, expectedName : string, stringHeap : Stream) : void
+            {
+                rows[index].Name.ToString(stringHeap).ShouldBeEqualTo(expectedName, "Wrong field name");
+            }
+            
+            def testResults(rows : array[FieldRow], stringHeap : Stream) : void
+            {
+                rows.Length.ShouldBeEqualTo(2, "Wrong number of expected fields");
+                def testField = matchField(rows, _, _, stringHeap);
+                testField(0, "_field1");
+                testField(1, "_field2");
+            }
+            
+            TestRelatedRowExtraction("SampleClassWithMultipleInterfaces", (row, heap) => row.GetFieldRows(heap), testResults);
         }
         
         private TestRelatedRowExtraction[TRow](className : string, getRows : TypeDefRow * ITablesHeap -> IEnumerable.[TRow], testRows : array[TRow]-> void) : void
