@@ -91,9 +91,15 @@ namespace Tao.Metadata.Tables.Rows
                 lastTargetRowIndex = getRowIndex(nextTypeRow);
             }
 
+            def targetRowCount = targetRows.Length :> uint;
+            when(currentIndex == lastIndex)
+            {
+                lastTargetRowIndex = targetRowCount + 1;    
+            }
+            
             def results = List.[TTargetRow]();
             def rowsToExtract = lastTargetRowIndex - startingTargetRowIndex;
-            def targetRowCount = targetRows.Length :> uint;
+            
             when(startingTargetRowIndex <= targetRowCount && rowsToExtract > 0)
             {
                 for(mutable i = startingTargetRowIndex; i < lastTargetRowIndex; i++)

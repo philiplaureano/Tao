@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Tables.Rows
 {
-    public class TypeSpecRow : IHasCustomAttributeRow, IMemberRefParentRow
+    public class TypeSpecRow : IHasCustomAttributeRow, IMemberRefParentRow, ITypeDefOrRefRow
     {
         public Signature : IIndex { get; set; }
         public RowIndex : uint { get; set; }

@@ -52,17 +52,25 @@ namespace Tests
         }
         public ShouldGetInterfaceImplRows() : void
         {
+            def testRow(rows : array[InterfaceImplRow], rowIndex : int, expectedRowValue : uint, classIndex : uint) : void
+            {
+                def targetRow = rows[rowIndex];                
+                targetRow.Class.ToUInt32().ShouldBeEqualTo(classIndex, "Wrong TypeDef index value");
+                
+                def interfaceRow = targetRow.Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef);
+                interfaceRow.Row.ShouldBeEqualTo(expectedRowValue, "Wrong target row");
+                interfaceRow.TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong target row");
+            }
+            
             def testResults(rows : array[InterfaceImplRow]) : void
             {
-                rows.Length.ShouldBeEqualTo(2, "Wrong number of expected interfaces");
-
-                rows[0].Class.ToUInt32().ShouldBeEqualTo(4, "Wrong TypeDef index value");
-                rows[0].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).Row.ShouldBeEqualTo(2, "Wrong target row");
-                rows[0].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong target row");
-
-                rows[1].Class.ToUInt32().ShouldBeEqualTo(4, "Wrong TypeDef index value");
-                rows[1].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).Row.ShouldBeEqualTo(3S, "Wrong target row");
-                rows[1].Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef).TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong target row");
+                rows.Length.ShouldBeEqualTo(3, "Wrong number of expected interfaces");
+            
+                def testTargetRow = testRow(rows, _, _, 5);
+                
+                testTargetRow(0, 3);
+                testTargetRow(1, 4);
+                testTargetRow(2, 2);
             }
             
             TestRelatedRowExtraction("SampleClassWithMultipleInterfaces", (row, tablesHeap) => row.GetInterfaceImplRows(tablesHeap), testResults);
@@ -131,6 +139,7 @@ namespace Tests
             def stringHeap = root.GetStringHeap();                                                
             def targetRow = tablesHeap.GetTypeRow.[TypeDefRow](className, stringHeap);
 
+            targetRow.TypeName.ToString(stringHeap).ShouldBeEqualTo(className, "Wrong Type Found");
             def results = getRows(targetRow, tablesHeap);
             testRows(results.ToArray(), stringHeap);            
         }

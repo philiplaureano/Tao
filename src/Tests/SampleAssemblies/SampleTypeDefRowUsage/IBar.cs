@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SampleTypeDefRowUsage
 {
-    public interface IBar
+    public interface IBar : IMarkerInterface
     {
         void DoBar();
     }
