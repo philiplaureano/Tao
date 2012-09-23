@@ -11,7 +11,7 @@ namespace Tests
 {
   public class StartupStubTests
   {
-    public ignored stub ShouldWriteStartupStubForI386Machine() : void
+    public stub ShouldWriteStartupStubForI386Machine() : void
     {
     }
     public ignored stub ShouldWriteStartupStubForAmd64Machine() : void
