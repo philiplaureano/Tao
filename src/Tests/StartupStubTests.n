@@ -4,15 +4,39 @@ using Nemerle.Utility;
 
 using Tests.Macros;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+
+using Tao;
 
 namespace Tests
 {
   public class StartupStubTests
   {
-    public stub ShouldWriteStartupStubForI386Machine() : void
+    public ShouldWriteStartupStubForI386Machine() : void
     {
+        def imageBase : uint = 0x400000;
+        def importAddressTableRva = 0x2000;
+        
+        def createExpectedStream() : Stream
+        {
+            def jumpInstruction : ushort = 0x25ff;
+            def resultStream = MemoryStream();
+            def writer = BinaryWriter(resultStream);
+            writer.Write(jumpInstruction);
+            
+            def value = imageBase + (importAddressTableRva :> uint);
+            writer.Write(value);
+            
+            resultStream;
+        }
+        
+        def outputStream = MemoryStream();
+        def stubWriter = StartupStubWriter();
+        stubWriter.Write(imageBase, importAddressTableRva :> uint, outputStream);
+        
+        outputStream.ShouldMatch(createExpectedStream());
     }
     public ignored stub ShouldWriteStartupStubForAmd64Machine() : void
     {

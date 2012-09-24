@@ -1,0 +1,26 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class StartupStubWriter
+    {
+        public Write(imageBase : uint, importAddressTableRva : uint, [NotNull] outputStream : Stream) : void
+        {
+            def jumpInstruction : ushort = 0x25ff;
+            def writer = BinaryWriter(outputStream);
+            writer.Write(jumpInstruction);
+
+            def value = imageBase + importAddressTableRva;
+            writer.Write(value);
+        }
+    }
+}

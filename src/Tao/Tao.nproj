@@ -1254,6 +1254,9 @@
     <Compile Include="SectionResolver.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="StartupStubWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="StreamExtensions.n">
       <SubType>Code</SubType>
     </Compile>
