@@ -1,0 +1,86 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata;
+using Tao.Metadata.Instructions;
+
+using Tests.Macros;
+namespace Tests
+{
+    public class OpCodeDecodingTests
+    {
+        public ShouldDecodeNopInstruction() : void
+        {
+            TestOpCodeRead(OpCodes.Nop, "Nop", array[0 : byte]);            
+        }
+        public ShouldDecodeBreakInstruction() : void
+        {
+            TestOpCodeRead(OpCodes.Break, "Break", array[1 : byte]);            
+        }        
+        public ShouldDecodeLdarg_0Instruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldarg_0, "Ldarg_0", array[2 : byte]);            
+        }
+        public ShouldDecodeLdarg_1Instruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldarg_1, "Ldarg_1", array[3 : byte]);            
+        }
+        public ShouldDecodeLdarg_2Instruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldarg_2, "Ldarg_2", array[4 : byte]);            
+        }
+        public ShouldDecodeLdarg_3Instruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldarg_3, "Ldarg_3", array[5 : byte]);            
+        }
+        public ShouldDecodeLdloc_0Instruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldloc_0, "Ldloc_0", array[6 : byte]);            
+        }
+        public ShouldDecodeLdloc_1Instruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldloc_1, "Ldloc_1", array[7 : byte]);            
+        }
+        public ShouldDecodeLdloc_2Instruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldloc_2, "Ldloc_2", array[8 : byte]);            
+        }        
+        public ShouldDecodeLdloc_3Instruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldloc_3, "Ldloc_3", array[9 : byte]);            
+        }
+        public ShouldDecodeStloc_0Instruction() : void
+        {
+            TestOpCodeRead(OpCodes.Stloc_0, "Stloc_0", array[0xA : byte]);            
+        }
+        public ShouldDecodeStloc_1Instruction() : void
+        {
+            TestOpCodeRead(OpCodes.Stloc_1, "Stloc_1", array[0xB : byte]);            
+        }
+        public ShouldDecodeStloc_2Instruction() : void
+        {
+            TestOpCodeRead(OpCodes.Stloc_2, "Stloc_2", array[0xC : byte]);            
+        }
+        public ShouldDecodeStloc_3Instruction() : void
+        {
+            TestOpCodeRead(OpCodes.Stloc_3, "Stloc_3", array[0xD : byte]);            
+        }
+        private TestOpCodeRead(expectedOpCode : OpCode, opCodeName : string, bytes : array[byte]) : void
+        {
+            def inputStream = MemoryStream(bytes);            
+            def decoder = OpCodeDecoder();
+            def opCode = decoder.Decode(inputStream);
+            opCode.ShouldBeEqualTo(expectedOpCode, "Wrong OpCode");
+            opCode.Name.ShouldBeEqualTo(opCodeName, "Wrong OpCode Name");
+        }
+    }
+}

@@ -338,6 +338,15 @@
     <Compile Include="Metadata\Index.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\OpCode.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\OpCodeDecoder.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\OpCodes.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\MetadataBlockReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1282,6 +1291,7 @@
   <ItemGroup>
     <Folder Include="Interfaces\" />
     <Folder Include="Metadata\" />
+    <Folder Include="Metadata\Instructions" />
     <Folder Include="Metadata\Signatures\" />
     <Folder Include="Metadata\Tables\" />
     <Folder Include="Metadata\Tables\Rows\" />

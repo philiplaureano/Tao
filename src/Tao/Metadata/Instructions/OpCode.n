@@ -1,0 +1,49 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions
+{
+    public struct OpCode
+    {
+        public this(name : string, value : ushort)
+        {
+            Name = name;
+            Value = value;
+        }
+        
+        public Name : string { get; set; }
+        public Value : ushort { get; set; }
+        
+        public override GetHashCode() : int
+        {
+            Value;
+        }
+        
+        public override Equals(other : object) : bool
+        {
+            mutable result = false;
+            when(other is OpCode && (other :> OpCode).Value == this.Value)
+            {
+                result = true;
+            }
+            
+            result;
+        }
+        
+        public static @==(left : OpCode, right : OpCode) : bool
+        {
+            left.Equals(right);
+        }
+        
+        public static @!=(left : OpCode, right : OpCode) : bool
+        {
+            !left.Equals(right);
+        }
+    }
+}

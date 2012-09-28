@@ -1,0 +1,29 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions
+{
+    public class OpCodes
+    {
+        public static Nop : OpCode = OpCode("Nop", 0);
+        public static Break : OpCode = OpCode("Break", 1);
+        public static Ldarg_0 : OpCode = OpCode("Ldarg_0", 2);
+        public static Ldarg_1 : OpCode = OpCode("Ldarg_1", 3);
+        public static Ldarg_2 : OpCode = OpCode("Ldarg_2", 4);
+        public static Ldarg_3 : OpCode = OpCode("Ldarg_3", 5);
+        public static Ldloc_0 : OpCode = OpCode("Ldloc_0", 6);
+        public static Ldloc_1 : OpCode = OpCode("Ldloc_1", 7);
+        public static Ldloc_2 : OpCode = OpCode("Ldloc_2", 8);
+        public static Ldloc_3 : OpCode = OpCode("Ldloc_3", 9);
+        public static Stloc_0 : OpCode = OpCode("Stloc_0", 0xA);
+        public static Stloc_1 : OpCode = OpCode("Stloc_1", 0xB);
+        public static Stloc_2 : OpCode = OpCode("Stloc_2", 0xC);
+        public static Stloc_3 : OpCode = OpCode("Stloc_3", 0xD);
+    }
+}
