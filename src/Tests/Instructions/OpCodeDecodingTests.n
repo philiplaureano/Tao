@@ -74,6 +74,38 @@ namespace Tests
         {
             TestOpCodeRead(OpCodes.Stloc_3, "Stloc_3", array[0xD : byte]);            
         }
+        public ShouldDecodeLdarg_SInstruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldarg_S, "Ldarg_S", array[0xE : byte]);            
+        }
+        public ShouldDecodeLdarga_SInstruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldarga_S, "Ldarga_S", array[0xF : byte]);            
+        }
+        public ShouldDecodeStarg_SInstruction() : void
+        {
+            TestOpCodeRead(OpCodes.Starg_S, "Starg_S", array[0x10 : byte]);            
+        }
+        public ShouldDecodeLdloc_SInstruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldloc_S, "Ldloc_S", array[0x11 : byte]);            
+        }
+        public ShouldDecodeLdloca_SInstruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldloca_S, "Ldloca_S", array[0x12 : byte]);            
+        }
+        public ShouldDecodeStloc_SInstruction() : void
+        {
+            TestOpCodeRead(OpCodes.Stloc_S, "Stloc_S", array[0x13 : byte]);            
+        }
+        public ShouldDecodeLdnullInstruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldnull, "Ldnull", array[0x14 : byte]);            
+        }
+        public ShouldDecodeLdc_I4_M1Instruction() : void
+        {
+            TestOpCodeRead(OpCodes.Ldc_I4_M1, "Ldc_I4_M1", array[0x15 : byte]);            
+        }
         private TestOpCodeRead(expectedOpCode : OpCode, opCodeName : string, bytes : array[byte]) : void
         {
             def inputStream = MemoryStream(bytes);            

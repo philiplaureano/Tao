@@ -25,5 +25,13 @@ namespace Tao.Metadata.Instructions
         public static Stloc_1 : OpCode = OpCode("Stloc_1", 0xB);
         public static Stloc_2 : OpCode = OpCode("Stloc_2", 0xC);
         public static Stloc_3 : OpCode = OpCode("Stloc_3", 0xD);
+        public static Ldarg_S : OpCode = OpCode("Ldarg_S", 0xE);
+        public static Ldarga_S : OpCode = OpCode("Ldarga_S", 0xF);
+        public static Starg_S : OpCode = OpCode("Starg_S", 0x10);
+        public static Ldloc_S : OpCode = OpCode("Ldloc_S", 0x11);
+        public static Ldloca_S : OpCode = OpCode("Ldloca_S", 0x12);
+        public static Stloc_S : OpCode = OpCode("Stloc_S", 0x13);
+        public static Ldnull : OpCode = OpCode("Ldnull", 0x14);
+        public static Ldc_I4_M1 : OpCode = OpCode("Ldc_I4_M1", 0x15);
     }
 }
