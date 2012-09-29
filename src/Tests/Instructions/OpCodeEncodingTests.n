@@ -1,0 +1,910 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata;
+using Tao.Metadata.Instructions;
+
+namespace Tests
+{
+    public class OpCodeEncodingTests
+    {
+        public ShouldEncodeNopInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Nop, "Nop", array[0x0 : byte]);
+        }
+        public ShouldEncodeBreakInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Break, "Break", array[0x1 : byte]);
+        }
+        public ShouldEncodeLdarg_0Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldarg_0, "Ldarg_0", array[0x2 : byte]);
+        }
+        public ShouldEncodeLdarg_1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldarg_1, "Ldarg_1", array[0x3 : byte]);
+        }
+        public ShouldEncodeLdarg_2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldarg_2, "Ldarg_2", array[0x4 : byte]);
+        }
+        public ShouldEncodeLdarg_3Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldarg_3, "Ldarg_3", array[0x5 : byte]);
+        }
+        public ShouldEncodeLdloc_0Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldloc_0, "Ldloc_0", array[0x6 : byte]);
+        }
+        public ShouldEncodeLdloc_1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldloc_1, "Ldloc_1", array[0x7 : byte]);
+        }
+        public ShouldEncodeLdloc_2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldloc_2, "Ldloc_2", array[0x8 : byte]);
+        }
+        public ShouldEncodeLdloc_3Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldloc_3, "Ldloc_3", array[0x9 : byte]);
+        }
+        public ShouldEncodeStloc_0Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stloc_0, "Stloc_0", array[0xa : byte]);
+        }
+        public ShouldEncodeStloc_1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stloc_1, "Stloc_1", array[0xb : byte]);
+        }
+        public ShouldEncodeStloc_2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stloc_2, "Stloc_2", array[0xc : byte]);
+        }
+        public ShouldEncodeStloc_3Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stloc_3, "Stloc_3", array[0xd : byte]);
+        }
+        public ShouldEncodeLdarg_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldarg_S, "Ldarg_S", array[0xe : byte]);
+        }
+        public ShouldEncodeLdarga_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldarga_S, "Ldarga_S", array[0xf : byte]);
+        }
+        public ShouldEncodeStarg_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Starg_S, "Starg_S", array[0x10 : byte]);
+        }
+        public ShouldEncodeLdloc_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldloc_S, "Ldloc_S", array[0x11 : byte]);
+        }
+        public ShouldEncodeLdloca_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldloca_S, "Ldloca_S", array[0x12 : byte]);
+        }
+        public ShouldEncodeStloc_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stloc_S, "Stloc_S", array[0x13 : byte]);
+        }
+        public ShouldEncodeLdnullInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldnull, "Ldnull", array[0x14 : byte]);
+        }
+        public ShouldEncodeLdc_I4_M1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_I4_M1, "Ldc_I4_M1", array[0x15 : byte]);
+        }
+        public ShouldEncodeLdc_I4_0Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_I4_0, "Ldc_I4_0", array[0x16 : byte]);
+        }
+        public ShouldEncodeLdc_I4_1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_I4_1, "Ldc_I4_1", array[0x17 : byte]);
+        }
+        public ShouldEncodeLdc_I4_2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_I4_2, "Ldc_I4_2", array[0x18 : byte]);
+        }
+        public ShouldEncodeLdc_I4_3Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_I4_3, "Ldc_I4_3", array[0x19 : byte]);
+        }
+        public ShouldEncodeLdc_I4_4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_I4_4, "Ldc_I4_4", array[0x1a : byte]);
+        }
+        public ShouldEncodeLdc_I4_5Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_I4_5, "Ldc_I4_5", array[0x1b : byte]);
+        }
+        public ShouldEncodeLdc_I4_6Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_I4_6, "Ldc_I4_6", array[0x1c : byte]);
+        }
+        public ShouldEncodeLdc_I4_7Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_I4_7, "Ldc_I4_7", array[0x1d : byte]);
+        }
+        public ShouldEncodeLdc_I4_8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_I4_8, "Ldc_I4_8", array[0x1e : byte]);
+        }
+        public ShouldEncodeLdc_I4_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_I4_S, "Ldc_I4_S", array[0x1f : byte]);
+        }
+        public ShouldEncodeLdc_I4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_I4, "Ldc_I4", array[0x20 : byte]);
+        }
+        public ShouldEncodeLdc_I8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_I8, "Ldc_I8", array[0x21 : byte]);
+        }
+        public ShouldEncodeLdc_R4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_R4, "Ldc_R4", array[0x22 : byte]);
+        }
+        public ShouldEncodeLdc_R8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldc_R8, "Ldc_R8", array[0x23 : byte]);
+        }
+        public ShouldEncodeDupInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Dup, "Dup", array[0x25 : byte]);
+        }
+        public ShouldEncodePopInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Pop, "Pop", array[0x26 : byte]);
+        }
+        public ShouldEncodeJmpInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Jmp, "Jmp", array[0x27 : byte]);
+        }
+        public ShouldEncodeCallInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Call, "Call", array[0x28 : byte]);
+        }
+        public ShouldEncodeCalliInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Calli, "Calli", array[0x29 : byte]);
+        }
+        public ShouldEncodeRetInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ret, "Ret", array[0x2a : byte]);
+        }
+        public ShouldEncodeBr_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Br_S, "Br_S", array[0x2b : byte]);
+        }
+        public ShouldEncodeBrfalse_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Brfalse_S, "Brfalse_S", array[0x2c : byte]);
+        }
+        public ShouldEncodeBrtrue_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Brtrue_S, "Brtrue_S", array[0x2d : byte]);
+        }
+        public ShouldEncodeBeq_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Beq_S, "Beq_S", array[0x2e : byte]);
+        }
+        public ShouldEncodeBge_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Bge_S, "Bge_S", array[0x2f : byte]);
+        }
+        public ShouldEncodeBgt_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Bgt_S, "Bgt_S", array[0x30 : byte]);
+        }
+        public ShouldEncodeBle_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ble_S, "Ble_S", array[0x31 : byte]);
+        }
+        public ShouldEncodeBlt_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Blt_S, "Blt_S", array[0x32 : byte]);
+        }
+        public ShouldEncodeBne_Un_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Bne_Un_S, "Bne_Un_S", array[0x33 : byte]);
+        }
+        public ShouldEncodeBge_Un_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Bge_Un_S, "Bge_Un_S", array[0x34 : byte]);
+        }
+        public ShouldEncodeBgt_Un_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Bgt_Un_S, "Bgt_Un_S", array[0x35 : byte]);
+        }
+        public ShouldEncodeBle_Un_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ble_Un_S, "Ble_Un_S", array[0x36 : byte]);
+        }
+        public ShouldEncodeBlt_Un_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Blt_Un_S, "Blt_Un_S", array[0x37 : byte]);
+        }
+        public ShouldEncodeBrInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Br, "Br", array[0x38 : byte]);
+        }
+        public ShouldEncodeBrfalseInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Brfalse, "Brfalse", array[0x39 : byte]);
+        }
+        public ShouldEncodeBrtrueInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Brtrue, "Brtrue", array[0x3a : byte]);
+        }
+        public ShouldEncodeBeqInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Beq, "Beq", array[0x3b : byte]);
+        }
+        public ShouldEncodeBgeInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Bge, "Bge", array[0x3c : byte]);
+        }
+        public ShouldEncodeBgtInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Bgt, "Bgt", array[0x3d : byte]);
+        }
+        public ShouldEncodeBleInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ble, "Ble", array[0x3e : byte]);
+        }
+        public ShouldEncodeBltInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Blt, "Blt", array[0x3f : byte]);
+        }
+        public ShouldEncodeBne_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Bne_Un, "Bne_Un", array[0x40 : byte]);
+        }
+        public ShouldEncodeBge_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Bge_Un, "Bge_Un", array[0x41 : byte]);
+        }
+        public ShouldEncodeBgt_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Bgt_Un, "Bgt_Un", array[0x42 : byte]);
+        }
+        public ShouldEncodeBle_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ble_Un, "Ble_Un", array[0x43 : byte]);
+        }
+        public ShouldEncodeBlt_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Blt_Un, "Blt_Un", array[0x44 : byte]);
+        }
+        public ShouldEncodeSwitchInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Switch, "Switch", array[0x45 : byte]);
+        }
+        public ShouldEncodeLdind_I1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldind_I1, "Ldind_I1", array[0x46 : byte]);
+        }
+        public ShouldEncodeLdind_U1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldind_U1, "Ldind_U1", array[0x47 : byte]);
+        }
+        public ShouldEncodeLdind_I2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldind_I2, "Ldind_I2", array[0x48 : byte]);
+        }
+        public ShouldEncodeLdind_U2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldind_U2, "Ldind_U2", array[0x49 : byte]);
+        }
+        public ShouldEncodeLdind_I4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldind_I4, "Ldind_I4", array[0x4a : byte]);
+        }
+        public ShouldEncodeLdind_U4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldind_U4, "Ldind_U4", array[0x4b : byte]);
+        }
+        public ShouldEncodeLdind_I8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldind_I8, "Ldind_I8", array[0x4c : byte]);
+        }
+        public ShouldEncodeLdind_IInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldind_I, "Ldind_I", array[0x4d : byte]);
+        }
+        public ShouldEncodeLdind_R4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldind_R4, "Ldind_R4", array[0x4e : byte]);
+        }
+        public ShouldEncodeLdind_R8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldind_R8, "Ldind_R8", array[0x4f : byte]);
+        }
+        public ShouldEncodeLdind_RefInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldind_Ref, "Ldind_Ref", array[0x50 : byte]);
+        }
+        public ShouldEncodeStind_RefInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stind_Ref, "Stind_Ref", array[0x51 : byte]);
+        }
+        public ShouldEncodeStind_I1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stind_I1, "Stind_I1", array[0x52 : byte]);
+        }
+        public ShouldEncodeStind_I2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stind_I2, "Stind_I2", array[0x53 : byte]);
+        }
+        public ShouldEncodeStind_I4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stind_I4, "Stind_I4", array[0x54 : byte]);
+        }
+        public ShouldEncodeStind_I8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stind_I8, "Stind_I8", array[0x55 : byte]);
+        }
+        public ShouldEncodeStind_R4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stind_R4, "Stind_R4", array[0x56 : byte]);
+        }
+        public ShouldEncodeStind_R8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stind_R8, "Stind_R8", array[0x57 : byte]);
+        }
+        public ShouldEncodeAddInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Add, "Add", array[0x58 : byte]);
+        }
+        public ShouldEncodeSubInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Sub, "Sub", array[0x59 : byte]);
+        }
+        public ShouldEncodeMulInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Mul, "Mul", array[0x5a : byte]);
+        }
+        public ShouldEncodeDivInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Div, "Div", array[0x5b : byte]);
+        }
+        public ShouldEncodeDiv_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Div_Un, "Div_Un", array[0x5c : byte]);
+        }
+        public ShouldEncodeRemInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Rem, "Rem", array[0x5d : byte]);
+        }
+        public ShouldEncodeRem_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Rem_Un, "Rem_Un", array[0x5e : byte]);
+        }
+        public ShouldEncodeAndInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.And, "And", array[0x5f : byte]);
+        }
+        public ShouldEncodeOrInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Or, "Or", array[0x60 : byte]);
+        }
+        public ShouldEncodeXorInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Xor, "Xor", array[0x61 : byte]);
+        }
+        public ShouldEncodeShlInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Shl, "Shl", array[0x62 : byte]);
+        }
+        public ShouldEncodeShrInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Shr, "Shr", array[0x63 : byte]);
+        }
+        public ShouldEncodeShr_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Shr_Un, "Shr_Un", array[0x64 : byte]);
+        }
+        public ShouldEncodeNegInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Neg, "Neg", array[0x65 : byte]);
+        }
+        public ShouldEncodeNotInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Not, "Not", array[0x66 : byte]);
+        }
+        public ShouldEncodeConv_I1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_I1, "Conv_I1", array[0x67 : byte]);
+        }
+        public ShouldEncodeConv_I2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_I2, "Conv_I2", array[0x68 : byte]);
+        }
+        public ShouldEncodeConv_I4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_I4, "Conv_I4", array[0x69 : byte]);
+        }
+        public ShouldEncodeConv_I8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_I8, "Conv_I8", array[0x6a : byte]);
+        }
+        public ShouldEncodeConv_R4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_R4, "Conv_R4", array[0x6b : byte]);
+        }
+        public ShouldEncodeConv_R8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_R8, "Conv_R8", array[0x6c : byte]);
+        }
+        public ShouldEncodeConv_U4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_U4, "Conv_U4", array[0x6d : byte]);
+        }
+        public ShouldEncodeConv_U8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_U8, "Conv_U8", array[0x6e : byte]);
+        }
+        public ShouldEncodeCallvirtInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Callvirt, "Callvirt", array[0x6f : byte]);
+        }
+        public ShouldEncodeCpobjInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Cpobj, "Cpobj", array[0x70 : byte]);
+        }
+        public ShouldEncodeLdobjInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldobj, "Ldobj", array[0x71 : byte]);
+        }
+        public ShouldEncodeLdstrInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldstr, "Ldstr", array[0x72 : byte]);
+        }
+        public ShouldEncodeNewobjInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Newobj, "Newobj", array[0x73 : byte]);
+        }
+        public ShouldEncodeCastclassInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Castclass, "Castclass", array[0x74 : byte]);
+        }
+        public ShouldEncodeIsinstInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Isinst, "Isinst", array[0x75 : byte]);
+        }
+        public ShouldEncodeConv_R_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_R_Un, "Conv_R_Un", array[0x76 : byte]);
+        }
+        public ShouldEncodeUnboxInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Unbox, "Unbox", array[0x79 : byte]);
+        }
+        public ShouldEncodeThrowInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Throw, "Throw", array[0x7a : byte]);
+        }
+        public ShouldEncodeLdfldInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldfld, "Ldfld", array[0x7b : byte]);
+        }
+        public ShouldEncodeLdfldaInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldflda, "Ldflda", array[0x7c : byte]);
+        }
+        public ShouldEncodeStfldInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stfld, "Stfld", array[0x7d : byte]);
+        }
+        public ShouldEncodeLdsfldInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldsfld, "Ldsfld", array[0x7e : byte]);
+        }
+        public ShouldEncodeLdsfldaInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldsflda, "Ldsflda", array[0x7f : byte]);
+        }
+        public ShouldEncodeStsfldInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stsfld, "Stsfld", array[0x80 : byte]);
+        }
+        public ShouldEncodeStobjInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stobj, "Stobj", array[0x81 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_I1_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_I1_Un, "Conv_Ovf_I1_Un", array[0x82 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_I2_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_I2_Un, "Conv_Ovf_I2_Un", array[0x83 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_I4_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_I4_Un, "Conv_Ovf_I4_Un", array[0x84 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_I8_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_I8_Un, "Conv_Ovf_I8_Un", array[0x85 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_U1_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_U1_Un, "Conv_Ovf_U1_Un", array[0x86 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_U2_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_U2_Un, "Conv_Ovf_U2_Un", array[0x87 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_U4_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_U4_Un, "Conv_Ovf_U4_Un", array[0x88 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_U8_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_U8_Un, "Conv_Ovf_U8_Un", array[0x89 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_I_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_I_Un, "Conv_Ovf_I_Un", array[0x8a : byte]);
+        }
+        public ShouldEncodeConv_Ovf_U_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_U_Un, "Conv_Ovf_U_Un", array[0x8b : byte]);
+        }
+        public ShouldEncodeBoxInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Box, "Box", array[0x8c : byte]);
+        }
+        public ShouldEncodeNewarrInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Newarr, "Newarr", array[0x8d : byte]);
+        }
+        public ShouldEncodeLdlenInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldlen, "Ldlen", array[0x8e : byte]);
+        }
+        public ShouldEncodeLdelemaInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldelema, "Ldelema", array[0x8f : byte]);
+        }
+        public ShouldEncodeLdelem_I1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldelem_I1, "Ldelem_I1", array[0x90 : byte]);
+        }
+        public ShouldEncodeLdelem_U1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldelem_U1, "Ldelem_U1", array[0x91 : byte]);
+        }
+        public ShouldEncodeLdelem_I2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldelem_I2, "Ldelem_I2", array[0x92 : byte]);
+        }
+        public ShouldEncodeLdelem_U2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldelem_U2, "Ldelem_U2", array[0x93 : byte]);
+        }
+        public ShouldEncodeLdelem_I4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldelem_I4, "Ldelem_I4", array[0x94 : byte]);
+        }
+        public ShouldEncodeLdelem_U4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldelem_U4, "Ldelem_U4", array[0x95 : byte]);
+        }
+        public ShouldEncodeLdelem_I8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldelem_I8, "Ldelem_I8", array[0x96 : byte]);
+        }
+        public ShouldEncodeLdelem_IInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldelem_I, "Ldelem_I", array[0x97 : byte]);
+        }
+        public ShouldEncodeLdelem_R4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldelem_R4, "Ldelem_R4", array[0x98 : byte]);
+        }
+        public ShouldEncodeLdelem_R8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldelem_R8, "Ldelem_R8", array[0x99 : byte]);
+        }
+        public ShouldEncodeLdelem_RefInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldelem_Ref, "Ldelem_Ref", array[0x9a : byte]);
+        }
+        public ShouldEncodeStelem_IInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stelem_I, "Stelem_I", array[0x9b : byte]);
+        }
+        public ShouldEncodeStelem_I1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stelem_I1, "Stelem_I1", array[0x9c : byte]);
+        }
+        public ShouldEncodeStelem_I2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stelem_I2, "Stelem_I2", array[0x9d : byte]);
+        }
+        public ShouldEncodeStelem_I4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stelem_I4, "Stelem_I4", array[0x9e : byte]);
+        }
+        public ShouldEncodeStelem_I8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stelem_I8, "Stelem_I8", array[0x9f : byte]);
+        }
+        public ShouldEncodeStelem_R4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stelem_R4, "Stelem_R4", array[0xa0 : byte]);
+        }
+        public ShouldEncodeStelem_R8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stelem_R8, "Stelem_R8", array[0xa1 : byte]);
+        }
+        public ShouldEncodeStelem_RefInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stelem_Ref, "Stelem_Ref", array[0xa2 : byte]);
+        }
+        public ShouldEncodeLdelemInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldelem, "Ldelem", array[0xa3 : byte]);
+        }
+        public ShouldEncodeStelemInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stelem, "Stelem", array[0xa4 : byte]);
+        }
+        public ShouldEncodeUnbox_AnyInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Unbox_Any, "Unbox_Any", array[0xa5 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_I1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_I1, "Conv_Ovf_I1", array[0xb3 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_U1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_U1, "Conv_Ovf_U1", array[0xb4 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_I2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_I2, "Conv_Ovf_I2", array[0xb5 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_U2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_U2, "Conv_Ovf_U2", array[0xb6 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_I4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_I4, "Conv_Ovf_I4", array[0xb7 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_U4Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_U4, "Conv_Ovf_U4", array[0xb8 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_I8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_I8, "Conv_Ovf_I8", array[0xb9 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_U8Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_U8, "Conv_Ovf_U8", array[0xba : byte]);
+        }
+        public ShouldEncodeRefanyvalInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Refanyval, "Refanyval", array[0xc2 : byte]);
+        }
+        public ShouldEncodeCkfiniteInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ckfinite, "Ckfinite", array[0xc3 : byte]);
+        }
+        public ShouldEncodeMkrefanyInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Mkrefany, "Mkrefany", array[0xc6 : byte]);
+        }
+        public ShouldEncodeLdtokenInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldtoken, "Ldtoken", array[0xd0 : byte]);
+        }
+        public ShouldEncodeConv_U2Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_U2, "Conv_U2", array[0xd1 : byte]);
+        }
+        public ShouldEncodeConv_U1Instruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_U1, "Conv_U1", array[0xd2 : byte]);
+        }
+        public ShouldEncodeConv_IInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_I, "Conv_I", array[0xd3 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_IInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_I, "Conv_Ovf_I", array[0xd4 : byte]);
+        }
+        public ShouldEncodeConv_Ovf_UInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_Ovf_U, "Conv_Ovf_U", array[0xd5 : byte]);
+        }
+        public ShouldEncodeAdd_OvfInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Add_Ovf, "Add_Ovf", array[0xd6 : byte]);
+        }
+        public ShouldEncodeAdd_Ovf_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Add_Ovf_Un, "Add_Ovf_Un", array[0xd7 : byte]);
+        }
+        public ShouldEncodeMul_OvfInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Mul_Ovf, "Mul_Ovf", array[0xd8 : byte]);
+        }
+        public ShouldEncodeMul_Ovf_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Mul_Ovf_Un, "Mul_Ovf_Un", array[0xd9 : byte]);
+        }
+        public ShouldEncodeSub_OvfInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Sub_Ovf, "Sub_Ovf", array[0xda : byte]);
+        }
+        public ShouldEncodeSub_Ovf_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Sub_Ovf_Un, "Sub_Ovf_Un", array[0xdb : byte]);
+        }
+        public ShouldEncodeEndfinallyInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Endfinally, "Endfinally", array[0xdc : byte]);
+        }
+        public ShouldEncodeLeaveInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Leave, "Leave", array[0xdd : byte]);
+        }
+        public ShouldEncodeLeave_SInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Leave_S, "Leave_S", array[0xde : byte]);
+        }
+        public ShouldEncodeStind_IInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stind_I, "Stind_I", array[0xdf : byte]);
+        }
+        public ShouldEncodeConv_UInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Conv_U, "Conv_U", array[0xe0 : byte]);
+        }
+        public ShouldEncodeArglistInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Arglist, "Arglist", array[0xFE : byte, 0x0]);
+        }
+        public ShouldEncodeCeqInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ceq, "Ceq", array[0xFE : byte, 0x1]);
+        }
+        public ShouldEncodeCgtInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Cgt, "Cgt", array[0xFE : byte, 0x2]);
+        }
+        public ShouldEncodeCgt_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Cgt_Un, "Cgt_Un", array[0xFE : byte, 0x3]);
+        }
+        public ShouldEncodeCltInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Clt, "Clt", array[0xFE : byte, 0x4]);
+        }
+        public ShouldEncodeClt_UnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Clt_Un, "Clt_Un", array[0xFE : byte, 0x5]);
+        }
+        public ShouldEncodeLdftnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldftn, "Ldftn", array[0xFE : byte, 0x6]);
+        }
+        public ShouldEncodeLdfvirtftnInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldfvirtftn, "Ldfvirtftn", array[0xFE : byte, 0x7]);
+        }
+        public ShouldEncodeLdargInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldarg, "Ldarg", array[0xFE : byte, 0x9]);
+        }
+        public ShouldEncodeLdargaInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldarga, "Ldarga", array[0xFE : byte, 0xa]);
+        }
+        public ShouldEncodeStargInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Starg, "Starg", array[0xFE : byte, 0xb]);
+        }
+        public ShouldEncodeLdlocInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldloc, "Ldloc", array[0xFE : byte, 0xc]);
+        }
+        public ShouldEncodeLdlocaInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Ldloca, "Ldloca", array[0xFE : byte, 0xd]);
+        }
+        public ShouldEncodeStlocInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Stloc, "Stloc", array[0xFE : byte, 0xe]);
+        }
+        public ShouldEncodeLocallocInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Localloc, "Localloc", array[0xFE : byte, 0xf]);
+        }
+        public ShouldEncodeEndfilterInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Endfilter, "Endfilter", array[0xFE : byte, 0x11]);
+        }
+        public ShouldEncodeUnalignedInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Unaligned, "Unaligned", array[0xFE : byte, 0x12]);
+        }
+        public ShouldEncodeVolatileInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Volatile, "Volatile", array[0xFE : byte, 0x13]);
+        }
+        public ShouldEncodeTailInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Tail, "Tail", array[0xFE : byte, 0x14]);
+        }
+        public ShouldEncodeInitobjInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Initobj, "Initobj", array[0xFE : byte, 0x15]);
+        }
+        public ShouldEncodeConstrainedInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Constrained, "Constrained", array[0xFE : byte, 0x16]);
+        }
+        public ShouldEncodeCpblkInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Cpblk, "Cpblk", array[0xFE : byte, 0x17]);
+        }
+        public ShouldEncodeInitblkInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Initblk, "Initblk", array[0xFE : byte, 0x18]);
+        }
+        public ShouldEncodeNoInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.No, "No", array[0xFE : byte, 0x19]);
+        }
+        public ShouldEncodeRethrowInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Rethrow, "Rethrow", array[0xFE : byte, 0x1a]);
+        }
+        public ShouldEncodeSizeofInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Sizeof, "Sizeof", array[0xFE : byte, 0x1c]);
+        }
+        public ShouldEncodeRefanytypeInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Refanytype, "Refanytype", array[0xFE : byte, 0x1d]);
+        }
+        public ShouldEncodeReadonlyInstruction() : void 
+        {
+            TestOpCodeWrite(OpCodes.Readonly, "Readonly", array[0xFE : byte, 0x1e]);
+        }
+        
+        private TestOpCodeWrite(opCode : OpCode, opCodeName : string, expectedBytes : array[byte]) : void
+        {
+            def outputStream = MemoryStream();
+            def encoder = OpCodeEncoder();
+            
+            def encodedBytes = encoder.Encode(opCode);
+            
+            def decoder = OpCodeDecoder();
+            def actualOpCode = decoder.Decode(MemoryStream(encodedBytes));
+            actualOpCode.ShouldBeEqualTo(opCode, "Incorrect OpCode Encoding for OpCode '{0}'", opCodeName);
+        }
+    }
+}

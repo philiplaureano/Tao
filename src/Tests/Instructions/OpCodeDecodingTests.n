@@ -894,8 +894,16 @@ namespace Tests
         {
             TestOpCodeRead(OpCodes.Readonly, "Readonly", array[0xFE : byte, 0x1e]);
         }
-
-
+        
+        public ShouldThrowBadImageFormatExceptionOnUnrecognizedOpCode() : void
+            expects BadImageFormatException
+        {
+            def bytes = array[0xff : byte, 0xff];
+            def inputStream = MemoryStream(bytes);            
+            def decoder = OpCodeDecoder();
+            _ = decoder.Decode(inputStream);
+        }
+        
         private TestOpCodeRead(expectedOpCode : OpCode, opCodeName : string, bytes : array[byte]) : void
         {
             def inputStream = MemoryStream(bytes);            

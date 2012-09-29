@@ -344,6 +344,9 @@
     <Compile Include="Metadata\Instructions\OpCodeDecoder.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\OpCodeEncoder.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\OpCodes.n">
       <SubType>Code</SubType>
     </Compile>

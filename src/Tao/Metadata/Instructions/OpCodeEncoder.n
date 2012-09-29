@@ -1,0 +1,30 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions
+{
+    public class OpCodeEncoder
+    {
+        public Encode(opCode : OpCode) : array[byte]
+        {
+            def value = opCode.Value;
+            if(value < 0xFE)
+            {
+                array[value :> byte];  
+            }
+            else
+            {
+                def higherByte = (value >> 8) :> byte;
+                array[0xFE : byte, higherByte];
+            }
+        }
+    }
+}
