@@ -1,0 +1,70 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata;
+using Tao.Metadata.Instructions;
+
+using Tests.Macros;
+namespace Tests
+{
+    public class OperandEncodingTests
+    {
+        public stub ShouldWriteShortInlineVarOperand() : void
+        {
+        }
+        public stub ShouldWriteShortInlineIOperand() : void 
+        {
+        }
+        public stub ShouldWriteInlineIOperand() : void
+        {
+        }
+        public stub ShouldWriteInline8Operand() : void
+        {
+        }
+        public stub ShouldWriteShortInlineROperand() : void 
+        {            
+        }
+        public stub ShouldWriteInlineROperand() : void
+        {
+        }
+        public stub ShouldWriteInlineMethodOperand() : void
+        {
+        }
+        public stub ShouldWriteInlineSigOperand() : void
+        {
+        }
+        public stub ShouldWriteShortInlineBrTargetOperand() : void
+        {
+        }
+        public stub ShouldWriteInlineBrTargetOperand() : void
+        {
+        }
+        public stub ShouldWriteInlineSwitchOperand() : void
+        {
+        }
+        public stub ShouldWriteInlineTypeOperand() : void
+        {
+        }
+        public stub ShouldWriteInlineStringOperand() : void
+        {
+        }
+        public stub ShouldWriteInlineFieldOperand() : void
+        {
+        }
+        public stub ShouldWriteInlineTokenOperand() : void
+        {
+        }
+        public stub ShouldWriteInlineVarOperand() : void 
+        {
+        }
+    }
+}

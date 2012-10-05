@@ -159,6 +159,12 @@
     <Compile Include="Instructions\OpCodeEncodingTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Instructions\OperandDecodingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\OperandEncodingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MetadataRootTests.n">
       <SubType>Code</SubType>
     </Compile>
