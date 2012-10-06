@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class ShortInlineVarOperandReader : IOperandReader
+    {
+        public ReadOperandFrom([NotNull] instructionStream : Stream) : byte 
+            implements IOperandReader.ReadOperandFrom
+            requires !instructionStream.AtEnd()
+        {
+            instructionStream.ReadByte() :> byte;
+        }
+    }
+}

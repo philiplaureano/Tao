@@ -350,6 +350,27 @@
     <Compile Include="Metadata\Instructions\OpCodes.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\Operands\InlineI8OperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\InlineIOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\InlineR8OperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\InlineROperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\IOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\ShortInlineIOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\ShortInlineVarOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\MetadataBlockReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1295,6 +1316,7 @@
     <Folder Include="Interfaces\" />
     <Folder Include="Metadata\" />
     <Folder Include="Metadata\Instructions" />
+    <Folder Include="Metadata\Instructions\Operands" />
     <Folder Include="Metadata\Signatures\" />
     <Folder Include="Metadata\Tables\" />
     <Folder Include="Metadata\Tables\Rows\" />
