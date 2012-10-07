@@ -11,6 +11,7 @@ using System.Linq;
 using Tao;
 using Tao.Interfaces;
 using Tao.Metadata;
+using Tao.Metadata.Tables;
 using Tao.Metadata.Instructions;
 using Tao.Metadata.Instructions.Operands;
 
@@ -43,42 +44,97 @@ namespace Tests
             TestRead.[InlineROperandReader, System.Single](3.14 :> float, (value, writer) => writer.Write(value));
         }
 
-        public stub ShouldReadInlineR8Operand() : void
+        public ShouldReadInlineR8Operand() : void
         {
             TestRead.[InlineR8OperandReader, System.Double](3.14, (value, writer) => writer.Write(value));
         }
         
-        public stub ShouldReadInlineMethodOperand() : void
+        public ShouldReadInlineMethodOperand() : void
         {
+            TestRead.[InlineMethodOperandReader](42, TableId.MethodDef, TableId.MemberRef, TableId.MethodSpec);
         }
-        public stub ShouldReadInlineSigOperand() : void
+        public ShouldReadInlineSigOperand() : void
         {
+            TestRead.[InlineSigOperandReader](42, TableId.StandAloneSig);
         }
-        public stub ShouldReadShortInlineBrTargetOperand() : void
+        public ShouldReadShortInlineBrTargetOperand() : void
         {
+            TestRead.[ShortInlineBrOperandReader, sbyte](42, (value, writer) => writer.Write(value));
         }
-        public stub ShouldReadInlineBrTargetOperand() : void
+        public ShouldReadInlineBrTargetOperand() : void
         {
+            TestRead.[InlineBrOperandReader, int](42, (value, writer) => writer.Write(value));
         }
-        public stub ShouldreadInlineSwitchOperand() : void
+        public ShouldReadInlineSwitchOperand() : void
         {
+            // Create the operand bytes
+            def inputStream = MemoryStream();            
+            def writer = BinaryWriter(inputStream);
+            
+            // Write the number of elements
+            writer.Write(3 : uint);
+            
+            // Write the three offsets
+            writer.Write(-3 : int);
+            writer.Write(-2 : int);
+            writer.Write(-1 : int);
+            
+            inputStream.Seek(0);
+            def reader = InlineSwitchOperandReader();
+            def results = reader.ReadOperandFrom(inputStream).ToArray();
+            
+            results[0].ShouldBeEqualTo(-3, "Wrong Element Value");
+            results[1].ShouldBeEqualTo(-2, "Wrong Element Value");
+            results[2].ShouldBeEqualTo(-1, "Wrong Element Value");
         }
-        public stub ShouldReadInlineTypeOperand() : void
+        public ShouldReadInlineTypeOperand() : void
         {
+            TestRead.[InlineTypeOperandReader](42, TableId.TypeDef, TableId.TypeRef, TableId.TypeSpec);
         }
-        public stub ShouldReadInlineStringOperand() : void
+        public ShouldReadInlineStringOperand() : void
         {
+            TestRead.[InlineStringOperandReader, uint](0x99 : uint, (value, writer) => writer.Write(0x70000099 : uint));
         }
-        public stub ShouldReadInlineFieldOperand() : void
+        public ShouldReadInlineFieldOperand() : void
         {
+            TestRead.[InlineFieldOperandReader](42, TableId.Field, TableId.MemberRef);
         }
-        public stub ShouldReadInlineTokenOperand() : void
+        public ShouldReadInlineTokenOperand() : void
         {
+            TestRead.[InlineTokenOperandReader](42, TableId.MethodDef, TableId.MemberRef, TableId.MethodSpec, TableId.Field, TableId.TypeDef, TableId.TypeRef, TableId.TypeSpec);
         }
-        public stub ShouldReadInlineVarOperand() : void 
+        public ShouldReadInlineVarOperand() : void 
         {
+            TestRead.[InlineVarOperandReader, ushort](ushort.MaxValue, (value, writer) => writer.Write(value));
         }
 
+        private TestRead[TReader](row : uint, params tableIds : array[TableId]) : void
+            where TReader : new(), class, IOperandReader
+        {
+            foreach(tableId in tableIds)
+            {
+                TestRead.[TReader](tableId, row);
+            }
+        }
+        
+        private TestRead[TReader](tableId : TableId, row : uint) : void
+            where TReader : new(), class, IOperandReader
+        {
+            TestRead.[TReader](RowReference(tableId, row));
+        }
+        private TestRead[TReader](rowRef : RowReference) : void
+            where TReader : new(), class, IOperandReader
+        {
+            TestRead.[TReader, RowReference](rowRef, WriteRowRef);
+        }
+        
+        private WriteRowRef(rowRef : RowReference, writer: BinaryWriter) : void
+        {
+            def encoder = SimpleTokenEncoder();     
+            def token = encoder.Encode(rowRef.TableId, rowRef.Row);
+            writer.Write(token);
+        }
+        
         private TestRead[TReader, TValue](value : TValue, writeValue : TValue * BinaryWriter -> void) : void
             where TReader : new(), class, IOperandReader
         {            

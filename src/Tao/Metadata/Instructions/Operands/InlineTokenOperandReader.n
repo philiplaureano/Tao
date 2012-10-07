@@ -1,0 +1,53 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Instructions.Operands;
+
+namespace Tao.Metadata.Instructions
+{
+    public class InlineTokenOperandReader : IOperandReader
+    {
+        public ReadOperandFrom([NotNull] instructionStream : Stream) : RowReference
+            implements IOperandReader.ReadOperandFrom
+            requires !instructionStream.AtEnd()
+            ensures IsValidRowReference(value)
+        {
+            def reader = BinaryReader(instructionStream);
+            def token = reader.ReadUInt32();
+
+            def decoder = SimpleTokenDecoder();
+            def (tableId, row) = decoder.Decode(token);
+
+            RowReference(tableId, row);
+        }
+        
+        private IsValidRowReference(rowRef : RowReference) : bool
+        {
+            def tableId = rowRef.TableId;
+            def validTables = GetValidTables().ToList();
+            validTables.Contains(tableId);
+        }
+        
+        protected virtual GetValidTables() : IEnumerable.[TableId]
+        {
+            yield TableId.MemberRef;
+            yield TableId.MethodDef;
+            yield TableId.MethodSpec;
+            yield TableId.TypeDef;
+            yield TableId.TypeRef;
+            yield TableId.TypeSpec;
+            yield TableId.Field;
+        }
+    }
+}

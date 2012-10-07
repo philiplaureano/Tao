@@ -350,10 +350,19 @@
     <Compile Include="Metadata\Instructions\OpCodes.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\Operands\InlineBrOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\InlineFieldOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\Operands\InlineI8OperandReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\InlineIOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\InlineMethodOperandReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\InlineR8OperandReader.n">
@@ -362,7 +371,28 @@
     <Compile Include="Metadata\Instructions\Operands\InlineROperandReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\Operands\InlineSigOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\InlineStringOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\InlineSwitchOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\InlineTokenOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\InlineTypeOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\InlineVarOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\Operands\IOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\ShortInlineBrOperandReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\ShortInlineIOperandReader.n">

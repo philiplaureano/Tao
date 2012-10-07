@@ -68,5 +68,22 @@ namespace Tao
             
             rowMap[TableId]();
         }
+        public override Equals(other : object) : bool
+        {
+            mutable result = false;
+            
+            when(other is RowReference)
+            {
+                def otherRow = other :> RowReference;
+                result = (otherRow.TableId == TableId && otherRow.Row == Row);
+            }
+            
+            result;
+        }
+        public override GetHashCode() : int
+        {
+            def tableId = this.TableId :> int;
+            tableId  ^ (Row :> int);
+        }
     }
 }

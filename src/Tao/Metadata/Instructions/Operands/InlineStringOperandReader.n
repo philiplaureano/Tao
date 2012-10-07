@@ -1,0 +1,35 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class InlineStringOperandReader : IOperandReader
+    {
+        public ReadOperandFrom([NotNull] instructionStream : Stream) : uint
+            implements IOperandReader.ReadOperandFrom
+            requires !instructionStream.AtEnd()
+        {
+            def reader = BinaryReader(instructionStream);
+            def token = reader.ReadUInt32();
+
+            // The tableId should be equal to the user string heap ID (0x70)
+            def tableId = (token >> 24);
+            when(tableId != 0x70)
+            {
+                throw BadImageFormatException(string.Format("Invalid string token value '{0}'", token.ToString("x")));
+            }
+            
+            def stringOffset : uint = token - (tableId << 24);
+            
+            stringOffset;
+        }
+    }
+}
