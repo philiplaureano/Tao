@@ -18,52 +18,52 @@ namespace Tests
 {
     public class OperandEncodingTests
     {
-        public stub ShouldWriteShortInlineVarOperand() : void
+        public ignored stub ShouldWriteShortInlineVarOperand() : void
         {
         }
-        public stub ShouldWriteShortInlineIOperand() : void 
+        public ignored stub ShouldWriteShortInlineIOperand() : void 
         {
         }
-        public stub ShouldWriteInlineIOperand() : void
+        public ignored stub ShouldWriteInlineIOperand() : void
         {
         }
-        public stub ShouldWriteInline8Operand() : void
+        public ignored stub ShouldWriteInline8Operand() : void
         {
         }
-        public stub ShouldWriteShortInlineROperand() : void 
+        public ignored stub ShouldWriteShortInlineROperand() : void 
         {            
         }
-        public stub ShouldWriteInlineROperand() : void
+        public ignored stub ShouldWriteInlineROperand() : void
         {
         }
-        public stub ShouldWriteInlineMethodOperand() : void
+        public ignored stub ShouldWriteInlineMethodOperand() : void
         {
         }
-        public stub ShouldWriteInlineSigOperand() : void
+        public ignored stub ShouldWriteInlineSigOperand() : void
         {
         }
-        public stub ShouldWriteShortInlineBrTargetOperand() : void
+        public ignored stub ShouldWriteShortInlineBrTargetOperand() : void
         {
         }
-        public stub ShouldWriteInlineBrTargetOperand() : void
+        public ignored stub ShouldWriteInlineBrTargetOperand() : void
         {
         }
-        public stub ShouldWriteInlineSwitchOperand() : void
+        public ignored stub ShouldWriteInlineSwitchOperand() : void
         {
         }
-        public stub ShouldWriteInlineTypeOperand() : void
+        public ignored stub ShouldWriteInlineTypeOperand() : void
         {
         }
-        public stub ShouldWriteInlineStringOperand() : void
+        public ignored stub ShouldWriteInlineStringOperand() : void
         {
         }
-        public stub ShouldWriteInlineFieldOperand() : void
+        public ignored stub ShouldWriteInlineFieldOperand() : void
         {
         }
-        public stub ShouldWriteInlineTokenOperand() : void
+        public ignored stub ShouldWriteInlineTokenOperand() : void
         {
         }
-        public stub ShouldWriteInlineVarOperand() : void 
+        public ignored stub ShouldWriteInlineVarOperand() : void 
         {
         }
     }
