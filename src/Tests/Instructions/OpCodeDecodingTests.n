@@ -810,9 +810,9 @@ namespace Tests
         {
             TestOpCodeRead(OpCodes.Ldftn, "Ldftn", array[0xFE : byte, 0x6]);
         }
-        public ShouldDecodeLdfvirtftnInstruction() : void 
+        public ShouldDecodeLdvirtftnInstruction() : void 
         {
-            TestOpCodeRead(OpCodes.Ldfvirtftn, "Ldfvirtftn", array[0xFE : byte, 0x7]);
+            TestOpCodeRead(OpCodes.Ldvirtftn, "Ldvirtftn", array[0xFE : byte, 0x7]);
         }
         public ShouldDecodeLdargInstruction() : void 
         {

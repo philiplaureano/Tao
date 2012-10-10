@@ -392,6 +392,9 @@
     <Compile Include="Metadata\Instructions\Operands\IOperandReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\Operands\OperandReaderMap.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\Operands\ShortInlineBrOperandReader.n">
       <SubType>Code</SubType>
     </Compile>

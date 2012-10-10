@@ -214,7 +214,7 @@ namespace Tao.Metadata.Instructions
                                 OpCodes.Clt,
                                 OpCodes.Clt_Un,
                                 OpCodes.Ldftn,
-                                OpCodes.Ldfvirtftn,
+                                OpCodes.Ldvirtftn,
                                 OpCodes.Ldarg,
                                 OpCodes.Ldarga,
                                 OpCodes.Starg,

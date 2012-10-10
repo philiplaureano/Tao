@@ -209,7 +209,7 @@ namespace Tao.Metadata.Instructions
         public static Clt : OpCode = OpCode("Clt", 0x04FE);
         public static Clt_Un : OpCode = OpCode("Clt_Un", 0x05FE);
         public static Ldftn : OpCode = OpCode("Ldftn", 0x06FE);
-        public static Ldfvirtftn : OpCode = OpCode("Ldfvirtftn", 0x07FE);
+        public static Ldvirtftn : OpCode = OpCode("Ldvirtftn", 0x07FE);
         public static Ldarg : OpCode = OpCode("Ldarg", 0x09FE);
         public static Ldarga : OpCode = OpCode("Ldarga", 0x0AFE);
         public static Starg : OpCode = OpCode("Starg", 0x0BFE);

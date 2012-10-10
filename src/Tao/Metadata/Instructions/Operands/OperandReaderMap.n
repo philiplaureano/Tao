@@ -1,0 +1,128 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class OperandReaderMap : Dictionary.[OpCode, IOperandReader]
+    {
+        public this()
+        {
+            // ShortInlineVar
+            Add(OpCodes.Ldarg_S, ShortInlineVarOperandReader());
+            Add(OpCodes.Ldarga_S, ShortInlineVarOperandReader());
+            Add(OpCodes.Starg_S, ShortInlineVarOperandReader());
+            Add(OpCodes.Ldloc_S, ShortInlineVarOperandReader());
+            Add(OpCodes.Ldloca_S, ShortInlineVarOperandReader());
+            Add(OpCodes.Stloc_S, ShortInlineVarOperandReader());
+
+            // ShortInlineI
+            Add(OpCodes.Ldc_I4_S, ShortInlineIOperandReader());
+            Add(OpCodes.Unaligned, ShortInlineIOperandReader());
+
+            // InlineI
+            Add(OpCodes.Ldc_I4, InlineIOperandReader());
+
+            // InlineI8
+            Add(OpCodes.Ldc_I8, InlineI8OperandReader());
+
+            // ShortInlineR
+            Add(OpCodes.Ldc_R4, InlineROperandReader());
+
+            // InlineR
+            Add(OpCodes.Ldc_R8, InlineROperandReader());
+
+            // InlineMethod
+            Add(OpCodes.Jmp, InlineMethodOperandReader());
+            Add(OpCodes.Call, InlineMethodOperandReader());
+            Add(OpCodes.Callvirt, InlineMethodOperandReader());
+            Add(OpCodes.Newobj, InlineMethodOperandReader());
+            Add(OpCodes.Ldftn, InlineMethodOperandReader());
+            Add(OpCodes.Ldvirtftn, InlineMethodOperandReader());
+
+            // InlineSig
+            Add(OpCodes.Calli, InlineSigOperandReader());
+
+            // ShortInlineBr
+            Add(OpCodes.Br_S, ShortInlineBrOperandReader());
+            Add(OpCodes.Brfalse_S, ShortInlineBrOperandReader());
+            Add(OpCodes.Brtrue_S, ShortInlineBrOperandReader());
+            Add(OpCodes.Beq_S, ShortInlineBrOperandReader());
+            Add(OpCodes.Bge_S, ShortInlineBrOperandReader());
+            Add(OpCodes.Bgt_S, ShortInlineBrOperandReader());
+            Add(OpCodes.Ble_S, ShortInlineBrOperandReader());
+            Add(OpCodes.Blt_S, ShortInlineBrOperandReader());
+            Add(OpCodes.Bne_Un_S, ShortInlineBrOperandReader());
+            Add(OpCodes.Bge_Un_S, ShortInlineBrOperandReader());
+            Add(OpCodes.Bgt_Un_S, ShortInlineBrOperandReader());
+            Add(OpCodes.Ble_Un_S, ShortInlineBrOperandReader());
+            Add(OpCodes.Blt_Un_S, ShortInlineBrOperandReader());
+            Add(OpCodes.Leave_S, ShortInlineBrOperandReader());
+
+            // InlineBr
+            Add(OpCodes.Br, InlineBrOperandReader());
+            Add(OpCodes.Brfalse, InlineBrOperandReader());
+            Add(OpCodes.Brtrue, InlineBrOperandReader());
+            Add(OpCodes.Beq, InlineBrOperandReader());
+            Add(OpCodes.Bge, InlineBrOperandReader());
+            Add(OpCodes.Bgt, InlineBrOperandReader());
+            Add(OpCodes.Ble, InlineBrOperandReader());
+            Add(OpCodes.Blt, InlineBrOperandReader());
+            Add(OpCodes.Bne_Un, InlineBrOperandReader());
+            Add(OpCodes.Bge_Un, InlineBrOperandReader());
+            Add(OpCodes.Bgt_Un, InlineBrOperandReader());
+            Add(OpCodes.Ble_Un, InlineBrOperandReader());
+            Add(OpCodes.Blt_Un, InlineBrOperandReader());
+            Add(OpCodes.Leave, InlineBrOperandReader());
+
+            // InlineSwitch
+            Add(OpCodes.Switch, InlineSwitchOperandReader());
+
+            // InlineType
+            Add(OpCodes.Cpobj, InlineTypeOperandReader());
+            Add(OpCodes.Ldobj, InlineTypeOperandReader());
+            Add(OpCodes.Castclass, InlineTypeOperandReader());
+            Add(OpCodes.Isinst, InlineTypeOperandReader());
+            Add(OpCodes.Unbox, InlineTypeOperandReader());
+            Add(OpCodes.Stobj, InlineTypeOperandReader());
+            Add(OpCodes.Box, InlineTypeOperandReader());
+            Add(OpCodes.Newarr, InlineTypeOperandReader());
+            Add(OpCodes.Ldelema, InlineTypeOperandReader());
+            Add(OpCodes.Ldelem, InlineTypeOperandReader());
+            Add(OpCodes.Stelem, InlineTypeOperandReader());
+            Add(OpCodes.Unbox_Any, InlineTypeOperandReader());
+            Add(OpCodes.Refanyval, InlineTypeOperandReader());
+            Add(OpCodes.Mkrefany, InlineTypeOperandReader());
+            Add(OpCodes.Initobj, InlineTypeOperandReader());
+            Add(OpCodes.Constrained, InlineTypeOperandReader());
+            Add(OpCodes.Sizeof, InlineTypeOperandReader());
+
+            // InlineString
+            Add(OpCodes.Ldstr, InlineStringOperandReader());
+
+            // InlineField
+            Add(OpCodes.Ldfld, InlineFieldOperandReader());
+            Add(OpCodes.Ldflda, InlineFieldOperandReader());
+            Add(OpCodes.Stfld, InlineFieldOperandReader());
+            Add(OpCodes.Ldsfld, InlineFieldOperandReader());
+            Add(OpCodes.Ldsflda, InlineFieldOperandReader());
+            Add(OpCodes.Stsfld, InlineFieldOperandReader());
+
+            // InlineTok
+            Add(OpCodes.Ldtoken, InlineTokenOperandReader());
+
+            // InlineVar
+            Add(OpCodes.Ldarg, InlineVarOperandReader());
+            Add(OpCodes.Ldarga, InlineVarOperandReader());
+            Add(OpCodes.Starg, InlineVarOperandReader());
+            Add(OpCodes.Ldloc, InlineVarOperandReader());
+            Add(OpCodes.Ldloca, InlineVarOperandReader());
+            Add(OpCodes.Stloc, InlineVarOperandReader());
+        }
+    }
+}

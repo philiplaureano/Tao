@@ -1,0 +1,927 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata;
+using Tao.Metadata.Instructions;
+using Tao.Metadata.Instructions.Operands;
+
+using Tests.Macros;
+
+namespace Tests
+{
+    public class OperandReaderMappingTests
+    {
+        public ShouldNotMap_Nop_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Nop);
+        }
+        public ShouldNotMap_Break_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Break);
+        }
+        public ShouldNotMap_Ldarg_0_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldarg_0);
+        }
+        public ShouldNotMap_Ldarg_1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldarg_1);
+        }
+        public ShouldNotMap_Ldarg_2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldarg_2);
+        }
+        public ShouldNotMap_Ldarg_3_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldarg_3);
+        }
+        public ShouldNotMap_Ldloc_0_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldloc_0);
+        }
+        public ShouldNotMap_Ldloc_1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldloc_1);
+        }
+        public ShouldNotMap_Ldloc_2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldloc_2);
+        }
+        public ShouldNotMap_Ldloc_3_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldloc_3);
+        }
+        public ShouldNotMap_Stloc_0_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stloc_0);
+        }
+        public ShouldNotMap_Stloc_1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stloc_1);
+        }
+        public ShouldNotMap_Stloc_2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stloc_2);
+        }
+        public ShouldNotMap_Stloc_3_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stloc_3);
+        }
+        public ShouldNotMap_Ldnull_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldnull);
+        }
+        public ShouldNotMap_Ldc_I4_M1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldc_I4_M1);
+        }
+        public ShouldNotMap_Ldc_I4_0_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldc_I4_0);
+        }
+        public ShouldNotMap_Ldc_I4_1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldc_I4_1);
+        }
+        public ShouldNotMap_Ldc_I4_2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldc_I4_2);
+        }
+        public ShouldNotMap_Ldc_I4_3_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldc_I4_3);
+        }
+        public ShouldNotMap_Ldc_I4_4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldc_I4_4);
+        }
+        public ShouldNotMap_Ldc_I4_5_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldc_I4_5);
+        }
+        public ShouldNotMap_Ldc_I4_6_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldc_I4_6);
+        }
+        public ShouldNotMap_Ldc_I4_7_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldc_I4_7);
+        }
+        public ShouldNotMap_Ldc_I4_8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldc_I4_8);
+        }
+        public ShouldNotMap_Dup_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Dup);
+        }
+        public ShouldNotMap_Pop_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Pop);
+        }
+        public ShouldNotMap_Ret_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ret);
+        }
+        public ShouldNotMap_Ldind_I1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldind_I1);
+        }
+        public ShouldNotMap_Ldind_U1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldind_U1);
+        }
+        public ShouldNotMap_Ldind_I2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldind_I2);
+        }
+        public ShouldNotMap_Ldind_U2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldind_U2);
+        }
+        public ShouldNotMap_Ldind_I4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldind_I4);
+        }
+        public ShouldNotMap_Ldind_U4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldind_U4);
+        }
+        public ShouldNotMap_Ldind_I8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldind_I8);
+        }
+        public ShouldNotMap_Ldind_I_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldind_I);
+        }
+        public ShouldNotMap_Ldind_R4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldind_R4);
+        }
+        public ShouldNotMap_Ldind_R8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldind_R8);
+        }
+        public ShouldNotMap_Ldind_Ref_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldind_Ref);
+        }
+        public ShouldNotMap_Stind_Ref_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stind_Ref);
+        }
+        public ShouldNotMap_Stind_I1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stind_I1);
+        }
+        public ShouldNotMap_Stind_I2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stind_I2);
+        }
+        public ShouldNotMap_Stind_I4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stind_I4);
+        }
+        public ShouldNotMap_Stind_I8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stind_I8);
+        }
+        public ShouldNotMap_Stind_R4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stind_R4);
+        }
+        public ShouldNotMap_Stind_R8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stind_R8);
+        }
+        public ShouldNotMap_Add_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Add);
+        }
+        public ShouldNotMap_Sub_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Sub);
+        }
+        public ShouldNotMap_Mul_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Mul);
+        }
+        public ShouldNotMap_Div_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Div);
+        }
+        public ShouldNotMap_Div_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Div_Un);
+        }
+        public ShouldNotMap_Rem_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Rem);
+        }
+        public ShouldNotMap_Rem_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Rem_Un);
+        }
+        public ShouldNotMap_And_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.And);
+        }
+        public ShouldNotMap_Or_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Or);
+        }
+        public ShouldNotMap_Xor_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Xor);
+        }
+        public ShouldNotMap_Shl_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Shl);
+        }
+        public ShouldNotMap_Shr_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Shr);
+        }
+        public ShouldNotMap_Shr_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Shr_Un);
+        }
+        public ShouldNotMap_Neg_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Neg);
+        }
+        public ShouldNotMap_Not_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Not);
+        }
+        public ShouldNotMap_Conv_I1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_I1);
+        }
+        public ShouldNotMap_Conv_I2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_I2);
+        }
+        public ShouldNotMap_Conv_I4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_I4);
+        }
+        public ShouldNotMap_Conv_I8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_I8);
+        }
+        public ShouldNotMap_Conv_R4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_R4);
+        }
+        public ShouldNotMap_Conv_R8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_R8);
+        }
+        public ShouldNotMap_Conv_U4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_U4);
+        }
+        public ShouldNotMap_Conv_U8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_U8);
+        }
+        public ShouldNotMap_Conv_R_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_R_Un);
+        }
+        public ShouldNotMap_Throw_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Throw);
+        }
+        public ShouldNotMap_Conv_Ovf_I1_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_I1_Un);
+        }
+        public ShouldNotMap_Conv_Ovf_I2_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_I2_Un);
+        }
+        public ShouldNotMap_Conv_Ovf_I4_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_I4_Un);
+        }
+        public ShouldNotMap_Conv_Ovf_I8_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_I8_Un);
+        }
+        public ShouldNotMap_Conv_Ovf_U1_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_U1_Un);
+        }
+        public ShouldNotMap_Conv_Ovf_U2_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_U2_Un);
+        }
+        public ShouldNotMap_Conv_Ovf_U4_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_U4_Un);
+        }
+        public ShouldNotMap_Conv_Ovf_U8_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_U8_Un);
+        }
+        public ShouldNotMap_Conv_Ovf_I_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_I_Un);
+        }
+        public ShouldNotMap_Conv_Ovf_U_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_U_Un);
+        }
+        public ShouldNotMap_Ldlen_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldlen);
+        }
+        public ShouldNotMap_Ldelem_I1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldelem_I1);
+        }
+        public ShouldNotMap_Ldelem_U1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldelem_U1);
+        }
+        public ShouldNotMap_Ldelem_I2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldelem_I2);
+        }
+        public ShouldNotMap_Ldelem_U2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldelem_U2);
+        }
+        public ShouldNotMap_Ldelem_I4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldelem_I4);
+        }
+        public ShouldNotMap_Ldelem_U4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldelem_U4);
+        }
+        public ShouldNotMap_Ldelem_I8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldelem_I8);
+        }
+        public ShouldNotMap_Ldelem_I_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldelem_I);
+        }
+        public ShouldNotMap_Ldelem_R4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldelem_R4);
+        }
+        public ShouldNotMap_Ldelem_R8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldelem_R8);
+        }
+        public ShouldNotMap_Ldelem_Ref_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ldelem_Ref);
+        }
+        public ShouldNotMap_Stelem_I_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stelem_I);
+        }
+        public ShouldNotMap_Stelem_I1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stelem_I1);
+        }
+        public ShouldNotMap_Stelem_I2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stelem_I2);
+        }
+        public ShouldNotMap_Stelem_I4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stelem_I4);
+        }
+        public ShouldNotMap_Stelem_I8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stelem_I8);
+        }
+        public ShouldNotMap_Stelem_R4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stelem_R4);
+        }
+        public ShouldNotMap_Stelem_R8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stelem_R8);
+        }
+        public ShouldNotMap_Stelem_Ref_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stelem_Ref);
+        }
+        public ShouldNotMap_Conv_Ovf_I1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_I1);
+        }
+        public ShouldNotMap_Conv_Ovf_U1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_U1);
+        }
+        public ShouldNotMap_Conv_Ovf_I2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_I2);
+        }
+        public ShouldNotMap_Conv_Ovf_U2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_U2);
+        }
+        public ShouldNotMap_Conv_Ovf_I4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_I4);
+        }
+        public ShouldNotMap_Conv_Ovf_U4_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_U4);
+        }
+        public ShouldNotMap_Conv_Ovf_I8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_I8);
+        }
+        public ShouldNotMap_Conv_Ovf_U8_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_U8);
+        }
+        public ShouldNotMap_Ckfinite_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ckfinite);
+        }
+        public ShouldNotMap_Conv_U2_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_U2);
+        }
+        public ShouldNotMap_Conv_U1_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_U1);
+        }
+        public ShouldNotMap_Conv_I_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_I);
+        }
+        public ShouldNotMap_Conv_Ovf_I_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_I);
+        }
+        public ShouldNotMap_Conv_Ovf_U_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_Ovf_U);
+        }
+        public ShouldNotMap_Add_Ovf_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Add_Ovf);
+        }
+        public ShouldNotMap_Add_Ovf_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Add_Ovf_Un);
+        }
+        public ShouldNotMap_Mul_Ovf_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Mul_Ovf);
+        }
+        public ShouldNotMap_Mul_Ovf_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Mul_Ovf_Un);
+        }
+        public ShouldNotMap_Sub_Ovf_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Sub_Ovf);
+        }
+        public ShouldNotMap_Sub_Ovf_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Sub_Ovf_Un);
+        }
+        public ShouldNotMap_Endfinally_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Endfinally);
+        }
+        public ShouldNotMap_Stind_I_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Stind_I);
+        }
+        public ShouldNotMap_Conv_U_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Conv_U);
+        }               
+        public ShouldNotMap_Arglist_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Arglist);
+        }
+        public ShouldNotMap_Ceq_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Ceq);
+        }
+        public ShouldNotMap_Cgt_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Cgt);
+        }
+        public ShouldNotMap_Cgt_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Cgt_Un);
+        }
+        public ShouldNotMap_Clt_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Clt);
+        }
+        public ShouldNotMap_Clt_Un_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Clt_Un);
+        }
+        public ShouldNotMap_Localloc_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Localloc);
+        }
+        public ShouldNotMap_Endfilter_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Endfilter);
+        }
+        public ShouldNotMap_Volatile__Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Volatile);
+        }
+        public ShouldNotMap_Tail__Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Tail);
+        }
+        public ShouldNotMap_Cpblk_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Cpblk);
+        }
+        public ShouldNotMap_Initblk_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Initblk);
+        }
+        public ShouldNotMap_Rethrow_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Rethrow);
+        }
+        public ShouldNotMap_Refanytype_Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Refanytype);
+        }
+        public ShouldNotMap_Readonly__Instruction() : void
+        {
+            TestNegativeMappingFor(OpCodes.Readonly);
+        }
+
+
+        public ShouldMap_Ldarg_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineVarOperandReader](OpCodes.Ldarg_S);
+        }
+        public ShouldMap_Ldarga_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineVarOperandReader](OpCodes.Ldarga_S);
+        }
+        public ShouldMap_Starg_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineVarOperandReader](OpCodes.Starg_S);
+        }
+        public ShouldMap_Ldloc_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineVarOperandReader](OpCodes.Ldloc_S);
+        }
+        public ShouldMap_Ldloca_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineVarOperandReader](OpCodes.Ldloca_S);
+        }
+        public ShouldMap_Stloc_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineVarOperandReader](OpCodes.Stloc_S);
+        }
+
+        public ShouldMap_Ldc_I4_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineIOperandReader](OpCodes.Ldc_I4_S);
+        }
+        public ShouldMap_Unaligned__Instruction() : void
+        {
+            TestMappingFor.[ShortInlineIOperandReader](OpCodes.Unaligned);
+        }
+
+        public ShouldMap_Ldc_I4_Instruction() : void
+        {
+            TestMappingFor.[InlineIOperandReader](OpCodes.Ldc_I4);
+        }
+
+        public ShouldMap_Ldc_I8_Instruction() : void
+        {
+            TestMappingFor.[InlineI8OperandReader](OpCodes.Ldc_I8);
+        }
+
+        public ShouldMap_Ldc_R4_Instruction() : void
+        {
+            TestMappingFor.[InlineROperandReader](OpCodes.Ldc_R4);
+        }
+
+        public ShouldMap_Ldc_R8_Instruction() : void
+        {
+            TestMappingFor.[InlineROperandReader](OpCodes.Ldc_R8);
+        }
+
+        public ShouldMap_Jmp_Instruction() : void
+        {
+            TestMappingFor.[InlineMethodOperandReader](OpCodes.Jmp);
+        }
+        public ShouldMap_Call_Instruction() : void
+        {
+            TestMappingFor.[InlineMethodOperandReader](OpCodes.Call);
+        }
+        public ShouldMap_Callvirt_Instruction() : void
+        {
+            TestMappingFor.[InlineMethodOperandReader](OpCodes.Callvirt);
+        }
+        public ShouldMap_Newobj_Instruction() : void
+        {
+            TestMappingFor.[InlineMethodOperandReader](OpCodes.Newobj);
+        }
+        public ShouldMap_Ldftn_Instruction() : void
+        {
+            TestMappingFor.[InlineMethodOperandReader](OpCodes.Ldftn);
+        }
+        public ShouldMap_Ldvirtftn_Instruction() : void
+        {
+            TestMappingFor.[InlineMethodOperandReader](OpCodes.Ldvirtftn);
+        }
+
+        public ShouldMap_Calli_Instruction() : void
+        {
+            TestMappingFor.[InlineSigOperandReader](OpCodes.Calli);
+        }
+
+        public ShouldMap_Br_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Br_S);
+        }
+        public ShouldMap_Brfalse_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Brfalse_S);
+        }
+        public ShouldMap_Brtrue_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Brtrue_S);
+        }
+        public ShouldMap_Beq_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Beq_S);
+        }
+        public ShouldMap_Bge_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Bge_S);
+        }
+        public ShouldMap_Bgt_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Bgt_S);
+        }
+        public ShouldMap_Ble_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Ble_S);
+        }
+        public ShouldMap_Blt_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Blt_S);
+        }
+        public ShouldMap_Bne_Un_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Bne_Un_S);
+        }
+        public ShouldMap_Bge_Un_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Bge_Un_S);
+        }
+        public ShouldMap_Bgt_Un_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Bgt_Un_S);
+        }
+        public ShouldMap_Ble_Un_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Ble_Un_S);
+        }
+        public ShouldMap_Blt_Un_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Blt_Un_S);
+        }
+        public ShouldMap_Leave_S_Instruction() : void
+        {
+            TestMappingFor.[ShortInlineBrOperandReader](OpCodes.Leave_S);
+        }
+
+        public ShouldMap_Br_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Br);
+        }
+        public ShouldMap_Brfalse_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Brfalse);
+        }
+        public ShouldMap_Brtrue_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Brtrue);
+        }
+        public ShouldMap_Beq_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Beq);
+        }
+        public ShouldMap_Bge_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Bge);
+        }
+        public ShouldMap_Bgt_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Bgt);
+        }
+        public ShouldMap_Ble_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Ble);
+        }
+        public ShouldMap_Blt_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Blt);
+        }
+        public ShouldMap_Bne_Un_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Bne_Un);
+        }
+        public ShouldMap_Bge_Un_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Bge_Un);
+        }
+        public ShouldMap_Bgt_Un_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Bgt_Un);
+        }
+        public ShouldMap_Ble_Un_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Ble_Un);
+        }
+        public ShouldMap_Blt_Un_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Blt_Un);
+        }
+        public ShouldMap_Leave_Instruction() : void
+        {
+            TestMappingFor.[InlineBrOperandReader](OpCodes.Leave);
+        }
+
+        public ShouldMap_Switch_Instruction() : void
+        {
+            TestMappingFor.[InlineSwitchOperandReader](OpCodes.Switch);
+        }
+
+        public ShouldMap_Cpobj_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Cpobj);
+        }
+        public ShouldMap_Ldobj_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Ldobj);
+        }
+        public ShouldMap_Castclass_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Castclass);
+        }
+        public ShouldMap_Isinst_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Isinst);
+        }
+        public ShouldMap_Unbox_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Unbox);
+        }
+        public ShouldMap_Stobj_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Stobj);
+        }
+        public ShouldMap_Box_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Box);
+        }
+        public ShouldMap_Newarr_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Newarr);
+        }
+        public ShouldMap_Ldelema_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Ldelema);
+        }
+        public ShouldMap_Ldelem_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Ldelem);
+        }
+        public ShouldMap_Stelem_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Stelem);
+        }
+        public ShouldMap_Unbox_Any_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Unbox_Any);
+        }
+        public ShouldMap_Refanyval_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Refanyval);
+        }
+        public ShouldMap_Mkrefany_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Mkrefany);
+        }
+        public ShouldMap_Initobj_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Initobj);
+        }
+        public ShouldMap_Constrained__Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Constrained);
+        }
+        public ShouldMap_Sizeof_Instruction() : void
+        {
+            TestMappingFor.[InlineTypeOperandReader](OpCodes.Sizeof);
+        }
+
+        public ShouldMap_Ldstr_Instruction() : void
+        {
+            TestMappingFor.[InlineStringOperandReader](OpCodes.Ldstr);
+        }
+
+        public ShouldMap_Ldfld_Instruction() : void
+        {
+            TestMappingFor.[InlineFieldOperandReader](OpCodes.Ldfld);
+        }
+        public ShouldMap_Ldflda_Instruction() : void
+        {
+            TestMappingFor.[InlineFieldOperandReader](OpCodes.Ldflda);
+        }
+        public ShouldMap_Stfld_Instruction() : void
+        {
+            TestMappingFor.[InlineFieldOperandReader](OpCodes.Stfld);
+        }
+        public ShouldMap_Ldsfld_Instruction() : void
+        {
+            TestMappingFor.[InlineFieldOperandReader](OpCodes.Ldsfld);
+        }
+        public ShouldMap_Ldsflda_Instruction() : void
+        {
+            TestMappingFor.[InlineFieldOperandReader](OpCodes.Ldsflda);
+        }
+        public ShouldMap_Stsfld_Instruction() : void
+        {
+            TestMappingFor.[InlineFieldOperandReader](OpCodes.Stsfld);
+        }
+
+        public ShouldMap_Ldtoken_Instruction() : void
+        {
+            TestMappingFor.[InlineTokenOperandReader](OpCodes.Ldtoken);
+        }
+        public ShouldMap_Ldarg_Instruction() : void
+        {
+            TestMappingFor.[InlineVarOperandReader](OpCodes.Ldarg);
+        }
+        public ShouldMap_Ldarga_Instruction() : void
+        {
+            TestMappingFor.[InlineVarOperandReader](OpCodes.Ldarga);
+        }
+        public ShouldMap_Starg_Instruction() : void
+        {
+            TestMappingFor.[InlineVarOperandReader](OpCodes.Starg);
+        }
+        public ShouldMap_Ldloc_Instruction() : void
+        {
+            TestMappingFor.[InlineVarOperandReader](OpCodes.Ldloc);
+        }
+        public ShouldMap_Ldloca_Instruction() : void
+        {
+            TestMappingFor.[InlineVarOperandReader](OpCodes.Ldloca);
+        }
+        public ShouldMap_Stloc_Instruction() : void
+        {
+            TestMappingFor.[InlineVarOperandReader](OpCodes.Stloc);
+        }
+
+        private TestNegativeMappingFor(opCode : OpCode) : void
+        {
+            def map = OperandReaderMap();
+            map.ContainsKey(opCode).ShouldBeFalse("The OpCode '{0}' should not have an Operand Reader mapping since it is an instruction that takes no operands", opCode.ToString());
+        }
+
+        private TestMappingFor[TReader](opCode : OpCode) : void
+            where TReader : IOperandReader, new()  
+        {
+            def map = OperandReaderMap();
+            map.ContainsKey(opCode).ShouldBeTrue("Missing opCode '{0}'", opCode.ToString());
+
+            (map[opCode] is TReader).ShouldBeTrue("Wrong reader type");            
+        }
+    }
+}
