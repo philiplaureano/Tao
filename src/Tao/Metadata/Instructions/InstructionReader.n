@@ -1,0 +1,61 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Metadata.Instructions.Operands;
+namespace Tao.Metadata.Instructions
+{
+    public class InstructionReader
+    {
+        public Read([NotNull] instructionStream : Stream, [NotNull] stringHeap : Stream) : array[Instruction]
+        {
+            def instructionMap = Dictionary.[uint, Instruction]();
+            def codeSize = instructionStream.Length;
+            mutable bytesRead : uint = 0;
+
+            while(bytesRead < codeSize)
+            {
+                def startPosition = instructionStream.Position :> uint;
+                ReadInstruction(instructionStream, stringHeap, instructionMap);
+
+                def currentPosition = (instructionStream.Position :> uint);
+                bytesRead += currentPosition - startPosition;                
+            }
+
+            instructionMap.Values.ToArray();
+        }
+        private ReadInstruction([NotNull] instructionStream : Stream, [NotNull] stringHeap : Stream, instructionMap : Dictionary.[uint, Instruction]) : void
+            // There should only be one instance of an instruction per offset 
+            requires !instructionMap.ContainsKey(instructionStream.Position :> uint)
+        {
+            def operandReaderMap = OperandReaderMap();
+
+            def decoder = OpCodeDecoder();
+
+            // Get the offset
+            def offset = instructionStream.Position :> uint;
+
+            // Read the OpCode
+            def opCode = decoder.Decode(instructionStream);
+
+            // Read the operand that corresponds with the currrent OpCode
+            mutable operand = null;
+
+            when(operandReaderMap.ContainsKey(opCode))
+            {
+                def operandReader = operandReaderMap[opCode];
+                operand = operandReader.ReadOperandFrom(instructionStream);
+            }
+
+            def instruction = Instruction(offset, opCode, operand);
+            instructionMap[offset] = instruction;
+        }
+    }
+}

@@ -12,6 +12,7 @@ using Tao;
 using Tao.Interfaces;
 using Tao.Metadata;
 using Tao.Metadata.Instructions;
+using Tao.Metadata.Instructions.Operands;
 
 using Tests.Macros;
 namespace Tests

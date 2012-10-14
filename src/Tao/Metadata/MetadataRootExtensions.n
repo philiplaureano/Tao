@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Tao.Interfaces;
+using Tao.Metadata;
+using Tao.Metadata.Tables;
 
 namespace Tao.Metadata
 {
@@ -39,6 +41,6 @@ namespace Tao.Metadata
             ensures value != null
         {
             root.Heaps["#~"];
-        }
+        }        
     }
 }

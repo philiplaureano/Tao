@@ -1,0 +1,110 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata;
+
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+using Tao.Metadata.Instructions;
+using Tao.Metadata.Instructions.Operands;
+
+using Tests.Macros;
+
+namespace Tests
+{
+    public class InstructionReadTests
+    {
+        public ShouldReadInstructionOffset() : void
+        {
+            TestRead(instruction => instruction.Offset.ShouldBeEqualTo(0x1 : uint, "Wrong Instruction Offset"), 1);
+        }        
+
+        public ShouldReadCorrectOpCode() : void 
+        {
+            TestRead(instruction => instruction.OpCode.ShouldBeEqualTo(OpCodes.Ldstr, "Wrong Instruction OpCode"), 1);
+        }
+        
+        public stub ShouldReadCorrectOperand() : void 
+        {
+        }
+        public stub ShouldReadInstructionsInCorrrectOrder() : void
+        {
+        }
+        public stub ShouldTranslateStringOffsetOperandsIntoStrings() : void
+        {
+        }
+        public stub ShouldResolveBranchInstructionTargets() : void
+        {
+        }
+        
+        private TestRead(testInstruction : Instruction -> void, index : int) : void        
+        {
+            def doTest(instruction : Instruction, stringHeap : Stream) : void
+            {
+                testInstruction(instruction);
+            }
+            
+            TestRead(doTest, instructions => instructions[index]);
+        }
+        private TestRead(testInstruction : Instruction * Stream -> void, selector : array[Instruction] -> Instruction, ) : void
+        {
+            def testInstructions(instructions : array[Instruction], stringHeap : Stream) : void
+            {
+                def firstInstruction = selector(instructions);
+                testInstruction(firstInstruction, stringHeap);
+            }
+            
+            TestRead(testInstructions);
+        }
+        private TestRead(testInstructions : array[Instruction] * Stream -> void) : void
+        {
+            def targetTypeName = "Program";
+            def targetMethodName = "Main";
+
+            def imageFile = @"..\..\SampleBinaries\HelloWorld.exe";
+
+            TestRead(targetTypeName, targetMethodName, imageFile, testInstructions);
+        }
+        
+        private TestRead(targetTypeName : string, targetMethodName : string, imageFile : string, testInstructions : array[Instruction] * Stream -> void) : void
+        {
+            def image = Image.ReadFrom(imageFile);
+            def root = image.GetMetadataRoot();
+
+            def tableStream = root.GetTablesHeap();
+            def tableHeap = TablesHeap();
+            tableHeap.ReadFrom(tableStream);
+
+            // Find the target type
+            def stringHeap = root.GetStringHeap();
+            def targetTypeRow = tableHeap.GetTypeRow(targetTypeName, stringHeap) : TypeDefRow;
+            targetTypeRow.ShouldBeNotNull("Unable to find the target type");
+
+            // Find the target method
+            def methodRows = targetTypeRow.GetMethodDefRows(tableHeap);
+            def targetRow = methodRows.Where(m => m.Name.ToString(stringHeap) == targetMethodName).First();
+
+            // Grab the raw bytes for the method body
+            def methodRva = targetRow.Rva;
+            def methodStream = image.GetDataAt(methodRva);
+
+            def bodyReader = MethodBodyReader();
+            def body = bodyReader.Read(methodStream);            
+
+            // Execute the reader and check the results
+            def instructionStream = MemoryStream(body.Bytes);
+            def reader = InstructionReader();
+            def instructions = reader.Read(instructionStream, stringHeap);
+            testInstructions(instructions, stringHeap);
+        }
+    }
+}

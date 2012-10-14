@@ -1,0 +1,37 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions
+{
+    public class Instruction
+    {
+        public this(offset : uint, opCode : OpCode, operand : object)
+        {
+            Offset = offset;
+            OpCode = opCode;
+            Operand = operand;
+        }
+        
+        public Offset : uint
+        {
+            get;set;
+        }
+        
+        public OpCode : OpCode
+        {
+            get;set;
+        }
+        
+        public Operand : object
+        {
+            get;set;
+        }
+    }
+}
