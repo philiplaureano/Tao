@@ -23,6 +23,10 @@ namespace Tao.Metadata
         {
             root.Heaps["#Strings"];
         }
+        public GetUserStringHeap([NotNull] this root : IMetadataRoot) : Stream
+        {
+            root.Heaps["#US"];
+        }
         public GetBlobHeap([NotNull] this root : IMetadataRoot) : Stream
             requires root.Heaps.ContainsKey("#Blob")
             ensures value != null

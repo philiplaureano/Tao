@@ -14,7 +14,9 @@ namespace Tao.Metadata.Instructions
 {
     public class InstructionReader
     {
-        public Read([NotNull] instructionStream : Stream, [NotNull] stringHeap : Stream) : array[Instruction]
+        private static operandReaderMap : OperandReaderMap = OperandReaderMap();
+        
+        public Read([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream) : array[Instruction]
         {
             def instructionMap = Dictionary.[uint, Instruction]();
             def codeSize = instructionStream.Length;
@@ -23,7 +25,7 @@ namespace Tao.Metadata.Instructions
             while(bytesRead < codeSize)
             {
                 def startPosition = instructionStream.Position :> uint;
-                ReadInstruction(instructionStream, stringHeap, instructionMap);
+                ReadInstruction(instructionStream, userStringHeap, instructionMap);
 
                 def currentPosition = (instructionStream.Position :> uint);
                 bytesRead += currentPosition - startPosition;                
@@ -31,11 +33,10 @@ namespace Tao.Metadata.Instructions
 
             instructionMap.Values.ToArray();
         }
-        private ReadInstruction([NotNull] instructionStream : Stream, [NotNull] stringHeap : Stream, instructionMap : Dictionary.[uint, Instruction]) : void
+        private ReadInstruction([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream, instructionMap : Dictionary.[uint, Instruction]) : void
             // There should only be one instance of an instruction per offset 
             requires !instructionMap.ContainsKey(instructionStream.Position :> uint)
-        {
-            def operandReaderMap = OperandReaderMap();
+        {            
 
             def decoder = OpCodeDecoder();
 
@@ -51,11 +52,28 @@ namespace Tao.Metadata.Instructions
             when(operandReaderMap.ContainsKey(opCode))
             {
                 def operandReader = operandReaderMap[opCode];
-                operand = operandReader.ReadOperandFrom(instructionStream);
+                def rawOperandValue = operandReader.ReadOperandFrom(instructionStream);
+                operand = Reinterpret(rawOperandValue, opCode, userStringHeap);
             }
 
             def instruction = Instruction(offset, opCode, operand);
             instructionMap[offset] = instruction;
+        }
+        
+        private Reinterpret([NotNull] operandValue : object, opCode : OpCode, [NotNull] userStringHeap : Stream) : object
+        {
+            // Leave the operand value untouched by default
+            mutable result = object;
+            
+            // Convert the user string offsets stored in the operand into an actual string            
+            when(opCode == OpCodes.Ldstr)
+            {
+                def offset = operandValue :> uint;
+                def reader = UserStringHeapReader();
+                result = reader.Read(offset, userStringHeap) : object;
+            }
+            
+            result;
         }
     }
 }

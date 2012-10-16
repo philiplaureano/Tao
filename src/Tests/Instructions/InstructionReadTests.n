@@ -33,13 +33,11 @@ namespace Tests
             TestRead(instruction => instruction.OpCode.ShouldBeEqualTo(OpCodes.Ldstr, "Wrong Instruction OpCode"), 1);
         }
         
-        public stub ShouldReadCorrectOperand() : void 
+        public ShouldReadCorrectOperand() : void 
         {
+            TestRead(instruction => instruction.Operand.ShouldBeEqualTo("Hello, World!", "Wrong Instruction Operand"), 1);
         }
         public stub ShouldReadInstructionsInCorrrectOrder() : void
-        {
-        }
-        public stub ShouldTranslateStringOffsetOperandsIntoStrings() : void
         {
         }
         public stub ShouldResolveBranchInstructionTargets() : void
@@ -48,24 +46,24 @@ namespace Tests
         
         private TestRead(testInstruction : Instruction -> void, index : int) : void        
         {
-            def doTest(instruction : Instruction, stringHeap : Stream) : void
+            def doTest(instruction : Instruction) : void
             {
                 testInstruction(instruction);
             }
             
             TestRead(doTest, instructions => instructions[index]);
         }
-        private TestRead(testInstruction : Instruction * Stream -> void, selector : array[Instruction] -> Instruction, ) : void
+        private TestRead(testInstruction : Instruction-> void, selector : array[Instruction] -> Instruction, ) : void
         {
-            def testInstructions(instructions : array[Instruction], stringHeap : Stream) : void
+            def testInstructions(instructions : array[Instruction]) : void
             {
                 def firstInstruction = selector(instructions);
-                testInstruction(firstInstruction, stringHeap);
+                testInstruction(firstInstruction);
             }
             
             TestRead(testInstructions);
         }
-        private TestRead(testInstructions : array[Instruction] * Stream -> void) : void
+        private TestRead(testInstructions : array[Instruction] -> void) : void
         {
             def targetTypeName = "Program";
             def targetMethodName = "Main";
@@ -75,7 +73,7 @@ namespace Tests
             TestRead(targetTypeName, targetMethodName, imageFile, testInstructions);
         }
         
-        private TestRead(targetTypeName : string, targetMethodName : string, imageFile : string, testInstructions : array[Instruction] * Stream -> void) : void
+        private TestRead(targetTypeName : string, targetMethodName : string, imageFile : string, testInstructions : array[Instruction] -> void) : void
         {
             def image = Image.ReadFrom(imageFile);
             def root = image.GetMetadataRoot();
@@ -86,6 +84,8 @@ namespace Tests
 
             // Find the target type
             def stringHeap = root.GetStringHeap();
+            def userStringHeap = root.Heaps["#US"];
+            
             def targetTypeRow = tableHeap.GetTypeRow(targetTypeName, stringHeap) : TypeDefRow;
             targetTypeRow.ShouldBeNotNull("Unable to find the target type");
 
@@ -103,8 +103,8 @@ namespace Tests
             // Execute the reader and check the results
             def instructionStream = MemoryStream(body.Bytes);
             def reader = InstructionReader();
-            def instructions = reader.Read(instructionStream, stringHeap);
-            testInstructions(instructions, stringHeap);
+            def instructions = reader.Read(instructionStream, userStringHeap);
+            testInstructions(instructions);
         }
     }
 }

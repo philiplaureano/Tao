@@ -35,7 +35,10 @@ namespace Tao.Metadata.Instructions
             
             result;
         }
-        
+        public override ToString() : string
+        {
+            Name;
+        }
         public static @==(left : OpCode, right : OpCode) : bool
         {
             left.Equals(right);
