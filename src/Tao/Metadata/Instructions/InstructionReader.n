@@ -63,7 +63,7 @@ namespace Tao.Metadata.Instructions
         private Reinterpret([NotNull] operandValue : object, opCode : OpCode, [NotNull] userStringHeap : Stream) : object
         {
             // Leave the operand value untouched by default
-            mutable result = object;
+            mutable result = operandValue;
             
             // Convert the user string offsets stored in the operand into an actual string            
             when(opCode == OpCodes.Ldstr)

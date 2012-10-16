@@ -40,6 +40,7 @@ namespace Tests
         public stub ShouldReadInstructionsInCorrrectOrder() : void
         {
         }
+        
         public stub ShouldResolveBranchInstructionTargets() : void
         {
         }
