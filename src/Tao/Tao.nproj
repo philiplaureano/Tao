@@ -338,10 +338,16 @@
     <Compile Include="Metadata\Index.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\IInstruction.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\Instruction.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\InstructionReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\LazyInstruction.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\OpCode.n">

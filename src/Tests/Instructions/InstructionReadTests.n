@@ -32,49 +32,56 @@ namespace Tests
         {
             TestRead(instruction => instruction.OpCode.ShouldBeEqualTo(OpCodes.Ldstr, "Wrong Instruction OpCode"), 1);
         }
-        
+
         public ShouldReadCorrectOperand() : void 
         {
             TestRead(instruction => instruction.Operand.ShouldBeEqualTo("Hello, World!", "Wrong Instruction Operand"), 1);
         }
-        public stub ShouldReadInstructionsInCorrrectOrder() : void
+
+        public ShouldResolveBranchInstructionTargets() : void
         {
-        }
-        
-        public stub ShouldResolveBranchInstructionTargets() : void
+            def testInstructions(instructions : array[IInstruction]) : void
+            {
+                def expectedOperand = instructions[13];
+
+                def targetIndex = 3;
+                def targetInstruction = instructions[targetIndex];
+                (targetInstruction.Operand is IInstruction).ShouldBeTrue("The target operand must be an instruction since the instruction itself is a branch instruction");
+                targetInstruction.Operand.ShouldBeEqualTo(expectedOperand, "Incorrect branch target operand");
+            }
+            TestInstructionRead("Program", "Main", @"..\..\SampleBinaries\SampleForLoop.exe", testInstructions);
+        }      
+
+        private TestRead(testInstruction : IInstruction -> void, index : int) : void        
         {
-        }
-        
-        private TestRead(testInstruction : Instruction -> void, index : int) : void        
-        {
-            def doTest(instruction : Instruction) : void
+            def doTest(instruction : IInstruction) : void
             {
                 testInstruction(instruction);
             }
-            
+
             TestRead(doTest, instructions => instructions[index]);
         }
-        private TestRead(testInstruction : Instruction-> void, selector : array[Instruction] -> Instruction, ) : void
+        private TestRead(testInstruction : IInstruction-> void, selector : array[IInstruction] -> IInstruction, ) : void
         {
-            def testInstructions(instructions : array[Instruction]) : void
+            def testInstructions(instructions : array[IInstruction]) : void
             {
                 def firstInstruction = selector(instructions);
                 testInstruction(firstInstruction);
             }
-            
+
             TestRead(testInstructions);
         }
-        private TestRead(testInstructions : array[Instruction] -> void) : void
+        private TestRead(testInstructions : array[IInstruction] -> void) : void
         {
             def targetTypeName = "Program";
             def targetMethodName = "Main";
 
             def imageFile = @"..\..\SampleBinaries\HelloWorld.exe";
 
-            TestRead(targetTypeName, targetMethodName, imageFile, testInstructions);
+            TestInstructionRead(targetTypeName, targetMethodName, imageFile, testInstructions);
         }
-        
-        private TestRead(targetTypeName : string, targetMethodName : string, imageFile : string, testInstructions : array[Instruction] -> void) : void
+
+        private TestInstructionRead(targetTypeName : string, targetMethodName : string, imageFile : string, testInstructions : array[IInstruction] -> void) : void
         {
             def image = Image.ReadFrom(imageFile);
             def root = image.GetMetadataRoot();
@@ -86,7 +93,7 @@ namespace Tests
             // Find the target type
             def stringHeap = root.GetStringHeap();
             def userStringHeap = root.Heaps["#US"];
-            
+
             def targetTypeRow = tableHeap.GetTypeRow(targetTypeName, stringHeap) : TypeDefRow;
             targetTypeRow.ShouldBeNotNull("Unable to find the target type");
 

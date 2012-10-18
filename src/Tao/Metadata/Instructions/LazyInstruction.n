@@ -1,0 +1,86 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions
+{
+    public class LazyInstruction : IInstruction
+    {
+        private _getInstruction : void -> IInstruction;
+        private mutable _instruction : IInstruction;
+        public this(getInstruction : void -> IInstruction)
+        {
+            _getInstruction = getInstruction;
+        }       
+        
+        public Resolve() : IInstruction
+            ensures value != null
+        {
+            when(_instruction == null)
+            {
+                _instruction = _getInstruction();
+            }
+            
+            _instruction;
+        }
+        
+        public Offset : uint
+        {
+            get
+            {
+                def instruction = Resolve(); 
+                instruction.Offset;
+            }
+            set
+            {
+                def instruction = Resolve(); 
+                instruction.Offset = value;
+            }
+        }
+
+        public OpCode : OpCode
+        {
+            get
+            {
+                def instruction = Resolve(); 
+                instruction.OpCode;
+            }
+            set
+            {
+                def instruction = Resolve(); 
+                instruction.OpCode = value;
+            }
+        }
+
+        public Operand : object
+        {
+            get
+            {
+                def instruction = Resolve(); 
+                instruction.Operand;
+            }
+            set
+            {
+                def instruction = Resolve(); 
+                instruction.Operand = value;
+            }
+        }
+        public override ToString() : string
+        {
+            def instruction = Resolve(); 
+            instruction.ToString();
+        }
+        
+        public override Equals(other : object) : bool
+        {
+            def instruction = Resolve(); 
+            instruction.Equals(other);
+        }
+    }
+}

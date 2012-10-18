@@ -15,10 +15,49 @@ namespace Tao.Metadata.Instructions
     public class InstructionReader
     {
         private static operandReaderMap : OperandReaderMap = OperandReaderMap();
+        private static shortBrOpCodes : HashSet.[OpCode] = HashSet();
+        private static longBrOpCodes : HashSet.[OpCode] = HashSet();
         
-        public Read([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream) : array[Instruction]
+        static this()
         {
-            def instructionMap = Dictionary.[uint, Instruction]();
+            // Keep track of the short and inline branch instructions
+            
+            // Short instructions
+            _ = shortBrOpCodes.Add(OpCodes.Br_S);
+            _ = shortBrOpCodes.Add(OpCodes.Brfalse_S);
+            _ = shortBrOpCodes.Add(OpCodes.Brtrue_S);
+            _ = shortBrOpCodes.Add(OpCodes.Beq_S);
+            _ = shortBrOpCodes.Add(OpCodes.Bge_S);
+            _ = shortBrOpCodes.Add(OpCodes.Bgt_S);
+            _ = shortBrOpCodes.Add(OpCodes.Ble_S);
+            _ = shortBrOpCodes.Add(OpCodes.Blt_S);
+            _ = shortBrOpCodes.Add(OpCodes.Bne_Un_S);
+            _ = shortBrOpCodes.Add(OpCodes.Bge_Un_S);
+            _ = shortBrOpCodes.Add(OpCodes.Bgt_Un_S);
+            _ = shortBrOpCodes.Add(OpCodes.Ble_Un_S);
+            _ = shortBrOpCodes.Add(OpCodes.Blt_Un_S);
+            _ = shortBrOpCodes.Add(OpCodes.Leave_S);
+
+            // Inline branch instructions
+            _ = longBrOpCodes.Add(OpCodes.Br);
+            _ = longBrOpCodes.Add(OpCodes.Brfalse);
+            _ = longBrOpCodes.Add(OpCodes.Brtrue);
+            _ = longBrOpCodes.Add(OpCodes.Beq);
+            _ = longBrOpCodes.Add(OpCodes.Bge);
+            _ = longBrOpCodes.Add(OpCodes.Bgt);
+            _ = longBrOpCodes.Add(OpCodes.Ble);
+            _ = longBrOpCodes.Add(OpCodes.Blt);
+            _ = longBrOpCodes.Add(OpCodes.Bne_Un);
+            _ = longBrOpCodes.Add(OpCodes.Bge_Un);
+            _ = longBrOpCodes.Add(OpCodes.Bgt_Un);
+            _ = longBrOpCodes.Add(OpCodes.Ble_Un);
+            _ = longBrOpCodes.Add(OpCodes.Blt_Un);
+            _ = longBrOpCodes.Add(OpCodes.Leave);
+        }
+        
+        public Read([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream) : array[IInstruction]
+        {
+            def instructionMap = Dictionary.[uint, IInstruction]();
             def codeSize = instructionStream.Length;
             mutable bytesRead : uint = 0;
 
@@ -33,38 +72,50 @@ namespace Tao.Metadata.Instructions
 
             instructionMap.Values.ToArray();
         }
-        private ReadInstruction([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream, instructionMap : Dictionary.[uint, Instruction]) : void
-            // There should only be one instance of an instruction per offset 
-            requires !instructionMap.ContainsKey(instructionStream.Position :> uint)
-        {            
+        
+        private ReadInstruction([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream, instructionMap : Dictionary.[uint, IInstruction]) : void
+        {         
+            // Ensure that all instructions are read once and only once
+            def currentPosition = instructionStream.Position :> uint;
+            ReadInstructionAt(currentPosition, instructionStream, userStringHeap, instructionMap);
+        }
 
-            def decoder = OpCodeDecoder();
-
-            // Get the offset
-            def offset = instructionStream.Position :> uint;
-
-            // Read the OpCode
-            def opCode = decoder.Decode(instructionStream);
-
-            // Read the operand that corresponds with the currrent OpCode
-            mutable operand = null;
-
-            when(operandReaderMap.ContainsKey(opCode))
+        private ReadInstructionAt(targetOffset : uint, [NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream, [NotNull] instructionMap : Dictionary.[uint, IInstruction]) : void
+            // A new instruction should be placed at the target offset 
+            ensures instructionMap.ContainsKey(targetOffset)
+        {
+            _ = instructionStream.Seek(targetOffset, SeekOrigin.Begin);
+            
+            when(!instructionMap.ContainsKey(targetOffset))
             {
-                def operandReader = operandReaderMap[opCode];
-                def rawOperandValue = operandReader.ReadOperandFrom(instructionStream);
-                operand = Reinterpret(rawOperandValue, opCode, userStringHeap);
-            }
+                def decoder = OpCodeDecoder();
 
-            def instruction = Instruction(offset, opCode, operand);
-            instructionMap[offset] = instruction;
+                // Get the offset
+                def offset = instructionStream.Position :> uint;
+
+                // Read the OpCode
+                def opCode = decoder.Decode(instructionStream);
+
+                // Read the operand that corresponds with the currrent OpCode
+                mutable operand = null;
+
+                when(operandReaderMap.ContainsKey(opCode))
+                {
+                    def operandReader = operandReaderMap[opCode];
+                    def rawOperandValue = operandReader.ReadOperandFrom(instructionStream);
+                    operand = Reinterpret(rawOperandValue, opCode, instructionMap, userStringHeap, instructionStream);
+                }
+
+                def instruction = Instruction(offset, opCode, operand);
+                instructionMap[offset] = instruction;
+            }
         }
         
-        private Reinterpret([NotNull] operandValue : object, opCode : OpCode, [NotNull] userStringHeap : Stream) : object
+        private Reinterpret([NotNull] operandValue : object, opCode : OpCode, [NotNull] instructionMap : Dictionary.[uint, IInstruction], [NotNull] userStringHeap : Stream, [NotNull] instructionStream : Stream) : object
         {
             // Leave the operand value untouched by default
             mutable result = operandValue;
-            
+
             // Convert the user string offsets stored in the operand into an actual string            
             when(opCode == OpCodes.Ldstr)
             {
@@ -73,7 +124,19 @@ namespace Tao.Metadata.Instructions
                 result = reader.Read(offset, userStringHeap) : object;
             }
             
+            // Convert the branch target offsets into actual instructions
+            when(longBrOpCodes.Contains(opCode) || shortBrOpCodes.Contains(opCode))
+            {                
+                def currentOffset = instructionStream.Position :> int;
+                def relativeOffset = Convert.ToInt32(operandValue);
+                def targetOffset = (currentOffset + relativeOffset) :> uint;
+             
+                // Read the branch targets later to avoid endless loops
+                result = LazyInstruction(() => instructionMap[targetOffset]);                                
+            }
+
             result;
         }
     }
+
 }

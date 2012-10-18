@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Instructions
 {
-    public class Instruction
+    public class Instruction : IInstruction
     {
         public this(offset : uint, opCode : OpCode, operand : object)
         {
@@ -32,6 +32,29 @@ namespace Tao.Metadata.Instructions
         public Operand : object
         {
             get;set;
+        }
+        
+        public override ToString() : string
+        {
+            mutable operand : object = "(null)";            
+            when(this.Operand != null)
+            {
+                operand = this.Operand;
+            }
+            
+            string.Format("OpCode: {0}, Operand: {1}", this.OpCode, operand);
+        }
+        
+        public override Equals(other : object) : bool
+        {
+            mutable result = false;
+            when(other is IInstruction)
+            {      
+                def instruction = other :> IInstruction;
+                result = this.OpCode == instruction.OpCode && this.Operand == instruction.Operand && this.Offset == instruction.Offset;                
+            }
+            
+            result;
         }
     }
 }
