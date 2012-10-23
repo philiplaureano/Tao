@@ -51,7 +51,9 @@ namespace Tests
             }
             TestInstructionRead("Program", "Main", @"..\..\SampleBinaries\SampleForLoop.exe", testInstructions);
         }      
-
+        public stub ShouldResolveTargetBranchInstructionsFromSwitchInstruction() : void
+        {
+        }
         private TestRead(testInstruction : IInstruction -> void, index : int) : void        
         {
             def doTest(instruction : IInstruction) : void
@@ -101,12 +103,7 @@ namespace Tests
             def methodRows = targetTypeRow.GetMethodDefRows(tableHeap);
             def targetRow = methodRows.Where(m => m.Name.ToString(stringHeap) == targetMethodName).First();
 
-            // Grab the raw bytes for the method body
-            def methodRva = targetRow.Rva;
-            def methodStream = image.GetDataAt(methodRva);
-
-            def bodyReader = MethodBodyReader();
-            def body = bodyReader.Read(methodStream);            
+            def body = targetRow.ReadMethodBodyFrom(image);            
 
             // Execute the reader and check the results
             def instructionStream = MemoryStream(body.Bytes);

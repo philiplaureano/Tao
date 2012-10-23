@@ -9,10 +9,13 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao;
+using Tao.Metadata.Instructions;
 namespace Tao.Metadata
 {
     public abstract class MethodBody
     {
+        private _instructions : IList.[IInstruction] = List();
         protected this() 
         {
         }     
@@ -27,6 +30,14 @@ namespace Tao.Metadata
         {
             get;
             set;
+        }
+        
+        public Instructions : IList.[IInstruction]
+        {
+            get 
+            {
+                _instructions;
+            }
         }
     }
 }

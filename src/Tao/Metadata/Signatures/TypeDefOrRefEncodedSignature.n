@@ -74,7 +74,6 @@ namespace Tao.Metadata.Signatures
         requires elementType == ElementType.Class
         {
             def decoder = CodedTokenDecoder();
-            def reader = BinaryReader(stream);
 
             def compressedIntegerReader = CompressedIntegerReader();
             def token = compressedIntegerReader.ReadInteger(stream) :> int;
@@ -82,7 +81,7 @@ namespace Tao.Metadata.Signatures
 
             Row = result[1] :> uint;
 
-        // Decode the TableId using the given tag
+            // Decode the TableId using the given tag
             def tag : byte = result[0];
             def tableMap = CodedTokenTableMap();
             def tables = tableMap[CodedTokenType.TypeDefOrTypeRef].ToArray();
