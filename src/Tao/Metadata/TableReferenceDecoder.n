@@ -15,10 +15,10 @@ namespace Tao.Metadata
       public GetTableReference(tokenType : CodedTokenType, token : int) : TableId * int
       {
           def codedTokenDecoder = CodedTokenDecoder();
-          def token = codedTokenDecoder.Decode(tokenType, token);
+          def decodedToken = codedTokenDecoder.Decode(tokenType, token);
           
-          def tag = token[0];
-          def row = token[1];
+          def tag = decodedToken[0];
+          def row = decodedToken[1];
           
           def tableDecoder = CodedTokenConverter();
           def tableId = tableDecoder.GetTableId(tokenType, tag);

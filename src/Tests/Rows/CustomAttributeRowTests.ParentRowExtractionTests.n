@@ -103,7 +103,7 @@ namespace Tests
             tablesHeap.ReadFrom(tablesStream);
             
             def stringHeap = root.GetStringHeap();
-            def parentRow = tablesHeap.GetTypeRow.[TypeDefRow]("SampleClass", stringHeap);
+            def parentRow = tablesHeap.GetTypeRow.[TypeDefRow]("SampleClassWithMultipleAttributes", stringHeap);
             
             def rows = parentRow.GetCustomAttributeRows(tablesHeap);
             rows.Count().ShouldBeEqualTo(2, "Wrong number of custom attribute rows");

@@ -237,7 +237,7 @@ namespace Tests
         public ShouldFailIfPrologNotEncountered() : void
             expects CustomAttributeSignaturePrologNotFoundException
         {
-            def targetClassName = "SampleClass";
+            def targetClassName = "SampleClassWithFooAttribute";
 
             def root = base.GetMetadataRoot();            
             def tableStream = root.Heaps["#~"];
@@ -332,28 +332,58 @@ namespace Tests
             mutable result : CustomAttributeRow = null;
             def customAttributeRows = heap.GetRows.[CustomAttributeRow]().ToArray();
             def length = customAttributeRows.Length;
+            def rowsByParent = Dictionary.[RowReference, IList.[CustomAttributeRow]]();
             for(mutable i = 0; i < length && result == null; i++)
             {
                 def row = customAttributeRows[i];
                 def parentRowRef = row.Parent.ToRowRef(CodedTokenType.HasCustomAttribute);
-                def parentRow = heap.GetRow.[TypeDefRow](parentRowRef.Row);            
-                def parentName = parentRow.TypeName.ToString(stringHeap);
+                //def parentRow = heap.GetRow.[TypeDefRow](parentRowRef.Row);            
+                //def parentName = parentRow.TypeName.ToString(stringHeap);
 
-                when(parentName == targetClassName && parentRowRef.TableId != TableId.Field && parentRowRef.TableId != TableId.MethodDef)
+                //when(parentName == targetClassName && parentRowRef.TableId != TableId.Field && parentRowRef.TableId != TableId.MethodDef)
+                //{
+                //    def methodRef = row.Type.ToRowRef(CodedTokenType.CustomAttributeType);
+                //    def methodRow = methodRef.GetRowFrom(heap) :> ICustomAttributeTypeRow;
+
+                //    def signature = methodRow.GetMethodSignature(blobStream);
+                //    def parameterCount = signature.ParameterCount;
+
+                //    when(parameterCount >= numberOfParameters)
+                //    {
+                //        result = row;
+                //    }
+                //}
+
+                when(!rowsByParent.ContainsKey(parentRowRef))
                 {
-                    def methodRef = row.Type.ToRowRef(CodedTokenType.CustomAttributeType);
-                    def methodRow = methodRef.GetRowFrom(heap) :> ICustomAttributeTypeRow;
-
-                    def signature = methodRow.GetMethodSignature(blobStream);
-                    def parameterCount = signature.ParameterCount;
-
-                    when(parameterCount >= numberOfParameters)
-                    {
-                        result = row;
-                    }
+                    rowsByParent[parentRowRef] = List();
                 }
+                
+                rowsByParent[parentRowRef].Add(row);  
             }
 
+            def isTargetParent(rowRef : RowReference) : bool
+            {
+                def parentRow = heap.GetRow.[TypeDefRow](rowRef.Row);            
+                def parentName = parentRow.TypeName.ToString(stringHeap);
+                parentName == targetClassName && rowRef.TableId != TableId.Field && rowRef.TableId != TableId.MethodDef;
+            }
+
+            def parentRowRef = rowsByParent.Keys.First(isTargetParent);
+            rowsByParent[parentRowRef].Count().ShouldBeEqualTo(1, "There should only be one custom attribute declaration per type in the test setup");
+
+            def row = rowsByParent[parentRowRef].First();
+            def methodRef = row.Type.ToRowRef(CodedTokenType.CustomAttributeType);
+            def methodRow = methodRef.GetRowFrom(heap) :> ICustomAttributeTypeRow;
+
+            def signature = methodRow.GetMethodSignature(blobStream);
+            def parameterCount = signature.ParameterCount;
+
+            when(parameterCount >= numberOfParameters)
+            {
+                result = row;
+            }
+            
             result;
         }
     }

@@ -74,6 +74,8 @@
     <Compile Include="SampleClassWithDoubleAttributeUsage.cs" />
     <Compile Include="SampleClassWithEmptySerStringAttributeUsage.cs" />
     <Compile Include="SampleClassWithFloatAttributeUsage.cs" />
+    <Compile Include="SampleClassWithFooAttribute.cs" />
+    <Compile Include="SampleClassWithMultipleAttributes.cs" />
     <Compile Include="SampleClassWithNamedFieldAttributeUsage.cs" />
     <Compile Include="SampleClassWithNamedPropertyAttributeUsage.cs" />
     <Compile Include="SampleClassWithNullSerStringAttributeUsage.cs" />

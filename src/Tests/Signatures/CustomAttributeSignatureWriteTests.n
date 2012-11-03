@@ -109,7 +109,7 @@ namespace Tests
         }
         public ShouldWriteInt32() : void
         {
-            TestWrite("SampleClass", 2);
+            TestWrite("SampleClass", 1);
         }
         public ShouldWriteUInt64() : void
         {
@@ -160,7 +160,7 @@ namespace Tests
                 prolog.ShouldBeEqualTo(1 : ushort, "There should be a prolog here");
                 expectedBytes.ShouldMatch(actualBytes);
             }
-            TestWrite("SampleClass", 2, 1, verifyProlog);
+            TestWrite("SampleClassWithMultipleAttributes", 2, 1, verifyProlog);
         }
 
         private TestWrite(targetClassName : string, expectedAttributeCount : int = 1, expectedParameterCount : int = 1, verifyOutput : array[byte] * array[byte] -> void) : void
