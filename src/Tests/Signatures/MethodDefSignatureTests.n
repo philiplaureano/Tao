@@ -339,7 +339,7 @@ namespace Tests
         {
             def targetClassName = "SampleClassWithSampleEnumAttributeUsage";
             
-            def root = base.GetMetadataRoot();            
+            def root = base.GetMetadataRoot("SampleEnumAttributeAssembly.dll");
             def tableStream = root.Heaps["#~"];
 
             def heap = TablesHeap();

@@ -12,6 +12,7 @@ using System.Linq;
 
 using Tao;
 using Tao.Metadata;
+using Tao.Interfaces;
 using Tao.Metadata.Signatures;
 using Tao.Metadata.Tables;
 using Tao.Metadata.Tables.Rows;
@@ -35,7 +36,7 @@ namespace Tests
 
         public ShouldReadBoxedEnum() : void
         {            
-            TestCustomAttributeRead("SampleClassWithBoxedEnumAttributeUsage", SampleEnum.Maybe, typeof(SampleEnum));
+            TestCustomAttributeRead("SampleClassWithSampleEnumAttributeUsage", SampleEnum.Maybe, typeof(SampleEnum), 0, @"SampleEnumAttributeAssembly.dll");
         }
 
         public ShouldReadBoxedArray() : void
@@ -133,7 +134,7 @@ namespace Tests
         }
         public ShouldReadCustomEnum() : void
         {
-            TestCustomAttributeRead("SampleClassWithSampleEnumAttributeUsage", SampleEnum.Maybe, typeof(SampleEnum));
+            TestCustomAttributeRead("SampleClassWithSampleEnumAttributeUsage", SampleEnum.Maybe, typeof(SampleEnum), 0, @"SampleEnumAttributeAssembly.dll");
         }
         public ShouldReadBoolean() : void
         {
@@ -274,13 +275,34 @@ namespace Tests
             // This call should fail
             def customAttributeSignature = customAttributeReader.Read(parameters, defectiveBlob, stringHeap, heap);                        
         }
-        private TestCustomAttributeRead(targetClassName : string, expectedValue : object, expectedType : Type, numberOfParameters : uint = 0) : void
+        private TestCustomAttributeRead(targetClassName : string, expectedValue : object, expectedType : Type, numberOfParameters : uint = 0, filename : string) : void
         {
-            TestCustomAttributeRead(targetClassName, expectedValue, expectedType, TestExpectedValue, numberOfParameters);
+            def getRoot() : IMetadataRoot
+            {
+                def image = Image.ReadFrom(filename);
+                image.GetMetadataRoot();
+            }
+            
+            TestCustomAttributeRead(targetClassName, expectedValue, expectedType, TestExpectedValue, numberOfParameters, getRoot);
         }
-        private TestCustomAttributeRead(targetClassName : string, expectedValue : object, expectedType : Type, testExpectedValue : object * object * Type -> void, numberOfParameters : uint = 0) : void
+        
+        private TestCustomAttributeRead(targetClassName : string, expectedValue : object, expectedType : Type, numberOfParameters : uint = 0, getRoot : void -> IMetadataRoot = null) : void
         {
-            def root = base.GetMetadataRoot();            
+            TestCustomAttributeRead(targetClassName, expectedValue, expectedType, TestExpectedValue, numberOfParameters, getRoot);
+        }
+        private TestCustomAttributeRead(targetClassName : string, expectedValue : object, expectedType : Type, testExpectedValue : object * object * Type -> void, numberOfParameters : uint = 0, getRoot : void -> IMetadataRoot = null) : void
+        {
+            mutable root : IMetadataRoot = null;
+            
+            if(getRoot == null)
+            {
+                root = base.GetMetadataRoot();            
+            }
+            else
+            {
+                root = getRoot();
+            }
+            
             def tableStream = root.Heaps["#~"];
 
             def heap = TablesHeap();
@@ -363,10 +385,13 @@ namespace Tests
             }
 
             def isTargetParent(rowRef : RowReference) : bool
-            {
+            {                
                 def parentRow = heap.GetRow.[TypeDefRow](rowRef.Row);            
                 def parentName = parentRow.TypeName.ToString(stringHeap);
-                parentName == targetClassName && rowRef.TableId != TableId.Field && rowRef.TableId != TableId.MethodDef;
+                
+                def className = targetClassName;
+                def matchesParentName = (parentName == className);
+                matchesParentName && rowRef.TableId != TableId.Field && rowRef.TableId != TableId.MethodDef;
             }
 
             def parentRowRef = rowsByParent.Keys.First(isTargetParent);

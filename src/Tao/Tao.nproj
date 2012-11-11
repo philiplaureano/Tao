@@ -37,6 +37,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
+    <Reference Include="Nemerle, Version=1.1.953.0, Culture=neutral, PublicKeyToken=e080a9c724e2bfcd">
+      <Name>Nemerle</Name>
+      <AssemblyName>Nemerle.dll</AssemblyName>
+      <HintPath>C:\Program Files (x86)\Nemerle\net-4.0\Nemerle.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -49,11 +54,6 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Nemerle">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(Nemerle)\Nemerle.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <MacroReference Include="Nemerle.Linq">
       <HintPath>$(Nemerle)\Nemerle.Linq.dll</HintPath>
     </MacroReference>

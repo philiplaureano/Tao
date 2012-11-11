@@ -47,7 +47,7 @@ namespace Tests
                 expectedValue.ShouldBeEqualTo(actualValue, "Wrong Enum Value");
             }
             
-            TestWrite("SampleClassWithBoxedEnumAttributeUsage", 1, 1, verifyBoxedEnum);
+            TestWrite("SampleClassWithSampleEnumAttributeUsage", 1, 1, verifyBoxedEnum, "SampleEnumAttributeAssembly.dll");
         }
         public ShouldWriteBoxedArray() : void
         {
@@ -75,7 +75,7 @@ namespace Tests
         
         public ShouldWriteCustomEnum() : void
         {
-            TestWrite("SampleClassWithSampleEnumAttributeUsage");
+            TestWrite("SampleClassWithSampleEnumAttributeUsage", "SampleEnumAttributeAssembly.dll");
         }
         
         public ShouldWriteBoolean() : void
@@ -165,8 +165,12 @@ namespace Tests
 
         private TestWrite(targetClassName : string, expectedAttributeCount : int = 1, expectedParameterCount : int = 1, verifyOutput : array[byte] * array[byte] -> void) : void
         {
+            TestWrite(targetClassName, expectedAttributeCount, expectedParameterCount, verifyOutput, "SampleCustomAttributeUsage.dll");
+        }
+        private TestWrite(targetClassName : string, expectedAttributeCount : int = 1, expectedParameterCount : int = 1, verifyOutput : array[byte] * array[byte] -> void, filename : string) : void
+        {
             // Read the CLR Metadata
-            def root = base.GetMetadataRoot("SampleCustomAttributeUsage.dll");
+            def root = base.GetMetadataRoot(filename);
             def tableStream = root.GetTablesHeap();
 
             def tablesHeap = TablesHeap();
@@ -225,6 +229,11 @@ namespace Tests
                 verifyOutput(expectedBlob, results);
             }
         }
+        private TestWrite(targetClassName : string, filename : string, expectedAttributeCount : int = 1, expectedParameterCount : int = 1) : void
+        {
+            TestWrite(targetClassName, expectedAttributeCount, expectedParameterCount, VerifyOutput, filename);
+        }
+        
         private TestWrite(targetClassName : string, expectedAttributeCount : int = 1, expectedParameterCount : int = 1) : void
         {
             TestWrite(targetClassName, expectedAttributeCount, expectedParameterCount, VerifyOutput);

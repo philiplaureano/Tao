@@ -55,7 +55,6 @@
     <Compile Include="CustomAttributeWithNamedPropertyAttribute.cs" />
     <Compile Include="CustomAttributeWithNullSerStringArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithObjectArgumentsAttribute.cs" />
-    <Compile Include="CustomAttributeWithSampleEnumArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithSerStringArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithSignedByteArgumentsAttribute.cs" />
     <Compile Include="CustomAttributeWithTypeArgumentsAttribute.cs" />
@@ -80,7 +79,6 @@
     <Compile Include="SampleClassWithNamedPropertyAttributeUsage.cs" />
     <Compile Include="SampleClassWithNullSerStringAttributeUsage.cs" />
     <Compile Include="SampleClassWithObjectAttributeUsage.cs" />
-    <Compile Include="SampleClassWithSampleEnumAttributeUsage.cs" />
     <Compile Include="SampleClassWithSerStringAttributeUsage.cs" />
     <Compile Include="SampleClassWithSignedByteAttributeUsage.cs" />
     <Compile Include="SampleClassWithTypeAttributeUsage.cs" />
