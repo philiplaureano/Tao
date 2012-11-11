@@ -17,11 +17,11 @@ namespace Tao.Metadata.Instructions
         private static operandReaderMap : OperandReaderMap = OperandReaderMap();
         private static shortBrOpCodes : HashSet.[OpCode] = HashSet();
         private static longBrOpCodes : HashSet.[OpCode] = HashSet();
-        
+
         static this()
         {
             // Keep track of the short and inline branch instructions
-            
+
             // Short instructions
             _ = shortBrOpCodes.Add(OpCodes.Br_S);
             _ = shortBrOpCodes.Add(OpCodes.Brfalse_S);
@@ -54,7 +54,7 @@ namespace Tao.Metadata.Instructions
             _ = longBrOpCodes.Add(OpCodes.Blt_Un);
             _ = longBrOpCodes.Add(OpCodes.Leave);
         }
-        
+
         public Read([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream) : array[IInstruction]
         {
             def instructionMap = Dictionary.[uint, IInstruction]();
@@ -70,9 +70,22 @@ namespace Tao.Metadata.Instructions
                 bytesRead += currentPosition - startPosition;                
             }
 
-            instructionMap.Values.ToArray();
+            def results = instructionMap.Values.ToArray();
+
+            // Resolve all the lazy instructions            
+            for(mutable i = 0; i < results.Length; i++)
+            {
+                def currentInstruction = results[i];
+                when(currentInstruction is LazyInstruction && currentInstruction != null)
+                {
+                    def lazyInstruction = currentInstruction :> LazyInstruction;
+                    results[i] = lazyInstruction.Resolve();
+                }
+            }
+
+            results;
         }
-        
+
         private ReadInstruction([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream, instructionMap : Dictionary.[uint, IInstruction]) : void
         {         
             // Ensure that all instructions are read once and only once
@@ -85,7 +98,7 @@ namespace Tao.Metadata.Instructions
             ensures instructionMap.ContainsKey(targetOffset)
         {
             _ = instructionStream.Seek(targetOffset, SeekOrigin.Begin);
-            
+
             when(!instructionMap.ContainsKey(targetOffset))
             {
                 def decoder = OpCodeDecoder();
@@ -110,7 +123,7 @@ namespace Tao.Metadata.Instructions
                 instructionMap[offset] = instruction;
             }
         }
-        
+
         private Reinterpret([NotNull] operandValue : object, opCode : OpCode, [NotNull] instructionMap : Dictionary.[uint, IInstruction], [NotNull] userStringHeap : Stream, [NotNull] instructionStream : Stream) : object
         {
             // Leave the operand value untouched by default
@@ -123,14 +136,32 @@ namespace Tao.Metadata.Instructions
                 def reader = UserStringHeapReader();
                 result = reader.Read(offset, userStringHeap) : object;
             }
-            
+
+            // Convert the switch jump offsets into actual instructions
+            when(opCode == OpCodes.Switch)
+            {
+                def offsets = (operandValue :> IEnumerable[int]).ToArray();
+                def jumpTable = List.[IInstruction]();
+
+                // The starting offset will be the next instruction immediately after the switch instruction
+                def startingOffset = (instructionStream.Position :> int);
+                foreach(offset in offsets)
+                {
+                    def relativeOffset = Convert.ToInt32(offset);
+                    def targetOffset = (startingOffset + relativeOffset) :> uint;    
+                    jumpTable.Add(LazyInstruction(() => instructionMap[targetOffset]));
+                }
+
+                result = jumpTable;
+            }
+
             // Convert the branch target offsets into actual instructions
             when(longBrOpCodes.Contains(opCode) || shortBrOpCodes.Contains(opCode))
             {                
                 def currentOffset = instructionStream.Position :> int;
                 def relativeOffset = Convert.ToInt32(operandValue);
                 def targetOffset = (currentOffset + relativeOffset) :> uint;
-             
+
                 // Read the branch targets later to avoid endless loops
                 result = LazyInstruction(() => instructionMap[targetOffset]);                                
             }

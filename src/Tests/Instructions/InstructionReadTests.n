@@ -51,8 +51,30 @@ namespace Tests
             }
             TestInstructionRead("Program", "Main", @"..\..\SampleBinaries\SampleForLoop.exe", testInstructions);
         }      
-        public stub ShouldResolveTargetBranchInstructionsFromSwitchInstruction() : void
+        public ShouldResolveTargetBranchInstructionsFromSwitchInstruction() : void
         {
+            def testInstructions(instructions : array[IInstruction]) : void
+            {
+                // Find the switch instruction
+                def switchInstruction = instructions[1];
+                switchInstruction.OpCode.ShouldBeEqualTo(OpCodes.Switch, "There should be a switch OpCode here");
+                (switchInstruction.Operand is IEnumerable[IInstruction]).ShouldBeTrue("Wrong Operand Type");
+                
+                def targets = switchInstruction.Operand :> IEnumerable[IInstruction];
+                def jumpTargets = targets.ToArray();
+                
+                // Match the jump targets
+                jumpTargets[0].Operand.ShouldBeEqualTo("are no bananas", "Wrong Operand Value");
+                jumpTargets[1].Operand.ShouldBeEqualTo("is one banana", "Wrong Operand Value");
+                jumpTargets[2].Operand.ShouldBeEqualTo("are two bananas", "Wrong Operand Value");
+                jumpTargets[3].Operand.ShouldBeEqualTo("are three bananas", "Wrong Operand Value");
+                jumpTargets[4].Operand.ShouldBeEqualTo("are four bananas", "Wrong Operand Value");
+            }
+            
+            def targetTypeName = "SampleClassWithSwitchInstruction";
+            def targetMethodName = "SwitchMethod";
+            def imageFile = @"..\..\SampleBinaries\SampleSwitchAssembly.dll";
+            TestInstructionRead(targetTypeName, targetMethodName, imageFile, testInstructions);
         }
         private TestRead(testInstruction : IInstruction -> void, index : int) : void        
         {

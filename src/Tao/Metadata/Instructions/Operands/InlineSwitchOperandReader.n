@@ -21,10 +21,14 @@ namespace Tao.Metadata.Instructions.Operands
 
             // Read the number of elements
             def elementCount = reader.ReadUInt32();
+            def results = List();
             for(mutable i : uint = 0; i < elementCount; i++)
             {
-                yield reader.ReadInt32();
+                def offset = reader.ReadInt32();
+                results.Add(offset);
             }
+            
+            results;
         }
     }
 }
