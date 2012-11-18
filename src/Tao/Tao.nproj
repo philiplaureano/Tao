@@ -362,7 +362,7 @@
     <Compile Include="Metadata\Instructions\OpCodes.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Instructions\Operands\Inline8OperandWriter.n">
+    <Compile Include="Metadata\Instructions\Operands\InlineI8OperandWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\InlineBrOperandReader.n">
@@ -435,6 +435,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\InlineVarOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\OperandWriterMap.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\ShortInlineBrOperandWriter.n">

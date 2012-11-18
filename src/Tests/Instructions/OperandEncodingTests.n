@@ -88,10 +88,10 @@ namespace Tests
             TestWrite.[int, InlineIOperandWriter](operand, writer => writer.Write(operand));
         }
 
-        public ShouldWriteInline8Operand() : void
+        public ShouldWriteInlineI8Operand() : void
         {
             def operand : long = long.MaxValue;
-            TestWrite.[long, Inline8OperandWriter](operand, writer => writer.Write(operand));
+            TestWrite.[long, InlineI8OperandWriter](operand, writer => writer.Write(operand));
         }
 
         public ShouldWriteShortInlineROperand() : void 

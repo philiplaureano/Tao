@@ -1,0 +1,128 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class OperandWriterMap : Dictionary.[OpCode, IOperandWriter]
+    {
+        public this()
+        {
+            // ShortInlineVar
+            Add(OpCodes.Ldarg_S, ShortInlineVarOperandWriter());
+            Add(OpCodes.Ldarga_S, ShortInlineVarOperandWriter());
+            Add(OpCodes.Starg_S, ShortInlineVarOperandWriter());
+            Add(OpCodes.Ldloc_S, ShortInlineVarOperandWriter());
+            Add(OpCodes.Ldloca_S, ShortInlineVarOperandWriter());
+            Add(OpCodes.Stloc_S, ShortInlineVarOperandWriter());
+
+            // ShortInlineI
+            Add(OpCodes.Ldc_I4_S, ShortInlineIOperandWriter());
+            Add(OpCodes.Unaligned, ShortInlineIOperandWriter());
+
+            // InlineI
+            Add(OpCodes.Ldc_I4, InlineIOperandWriter());
+
+            // InlineI8
+            Add(OpCodes.Ldc_I8, InlineI8OperandWriter());
+
+            // ShortInlineR
+            Add(OpCodes.Ldc_R4, InlineROperandWriter());
+
+            // InlineR
+            Add(OpCodes.Ldc_R8, InlineROperandWriter());
+
+            // InlineMethod
+            Add(OpCodes.Jmp, InlineMethodOperandWriter());
+            Add(OpCodes.Call, InlineMethodOperandWriter());
+            Add(OpCodes.Callvirt, InlineMethodOperandWriter());
+            Add(OpCodes.Newobj, InlineMethodOperandWriter());
+            Add(OpCodes.Ldftn, InlineMethodOperandWriter());
+            Add(OpCodes.Ldvirtftn, InlineMethodOperandWriter());
+
+            // InlineSig
+            Add(OpCodes.Calli, InlineSigOperandWriter());
+
+            // ShortInlineBr
+            Add(OpCodes.Br_S, ShortInlineBrOperandWriter());
+            Add(OpCodes.Brfalse_S, ShortInlineBrOperandWriter());
+            Add(OpCodes.Brtrue_S, ShortInlineBrOperandWriter());
+            Add(OpCodes.Beq_S, ShortInlineBrOperandWriter());
+            Add(OpCodes.Bge_S, ShortInlineBrOperandWriter());
+            Add(OpCodes.Bgt_S, ShortInlineBrOperandWriter());
+            Add(OpCodes.Ble_S, ShortInlineBrOperandWriter());
+            Add(OpCodes.Blt_S, ShortInlineBrOperandWriter());
+            Add(OpCodes.Bne_Un_S, ShortInlineBrOperandWriter());
+            Add(OpCodes.Bge_Un_S, ShortInlineBrOperandWriter());
+            Add(OpCodes.Bgt_Un_S, ShortInlineBrOperandWriter());
+            Add(OpCodes.Ble_Un_S, ShortInlineBrOperandWriter());
+            Add(OpCodes.Blt_Un_S, ShortInlineBrOperandWriter());
+            Add(OpCodes.Leave_S, ShortInlineBrOperandWriter());
+
+            // InlineBr
+            Add(OpCodes.Br, InlineBrOperandWriter());
+            Add(OpCodes.Brfalse, InlineBrOperandWriter());
+            Add(OpCodes.Brtrue, InlineBrOperandWriter());
+            Add(OpCodes.Beq, InlineBrOperandWriter());
+            Add(OpCodes.Bge, InlineBrOperandWriter());
+            Add(OpCodes.Bgt, InlineBrOperandWriter());
+            Add(OpCodes.Ble, InlineBrOperandWriter());
+            Add(OpCodes.Blt, InlineBrOperandWriter());
+            Add(OpCodes.Bne_Un, InlineBrOperandWriter());
+            Add(OpCodes.Bge_Un, InlineBrOperandWriter());
+            Add(OpCodes.Bgt_Un, InlineBrOperandWriter());
+            Add(OpCodes.Ble_Un, InlineBrOperandWriter());
+            Add(OpCodes.Blt_Un, InlineBrOperandWriter());
+            Add(OpCodes.Leave, InlineBrOperandWriter());
+
+            // InlineSwitch
+            Add(OpCodes.Switch, InlineSwitchOperandWriter());
+
+            // InlineType
+            Add(OpCodes.Cpobj, InlineTypeOperandWriter());
+            Add(OpCodes.Ldobj, InlineTypeOperandWriter());
+            Add(OpCodes.Castclass, InlineTypeOperandWriter());
+            Add(OpCodes.Isinst, InlineTypeOperandWriter());
+            Add(OpCodes.Unbox, InlineTypeOperandWriter());
+            Add(OpCodes.Stobj, InlineTypeOperandWriter());
+            Add(OpCodes.Box, InlineTypeOperandWriter());
+            Add(OpCodes.Newarr, InlineTypeOperandWriter());
+            Add(OpCodes.Ldelema, InlineTypeOperandWriter());
+            Add(OpCodes.Ldelem, InlineTypeOperandWriter());
+            Add(OpCodes.Stelem, InlineTypeOperandWriter());
+            Add(OpCodes.Unbox_Any, InlineTypeOperandWriter());
+            Add(OpCodes.Refanyval, InlineTypeOperandWriter());
+            Add(OpCodes.Mkrefany, InlineTypeOperandWriter());
+            Add(OpCodes.Initobj, InlineTypeOperandWriter());
+            Add(OpCodes.Constrained, InlineTypeOperandWriter());
+            Add(OpCodes.Sizeof, InlineTypeOperandWriter());
+
+            // InlineString
+            Add(OpCodes.Ldstr, InlineStringOperandWriter());
+
+            // InlineField
+            Add(OpCodes.Ldfld, InlineFieldOperandWriter());
+            Add(OpCodes.Ldflda, InlineFieldOperandWriter());
+            Add(OpCodes.Stfld, InlineFieldOperandWriter());
+            Add(OpCodes.Ldsfld, InlineFieldOperandWriter());
+            Add(OpCodes.Ldsflda, InlineFieldOperandWriter());
+            Add(OpCodes.Stsfld, InlineFieldOperandWriter());
+
+            // InlineTok
+            Add(OpCodes.Ldtoken, InlineTokenOperandWriter());
+
+            // InlineVar
+            Add(OpCodes.Ldarg, InlineVarOperandWriter());
+            Add(OpCodes.Ldarga, InlineVarOperandWriter());
+            Add(OpCodes.Starg, InlineVarOperandWriter());
+            Add(OpCodes.Ldloc, InlineVarOperandWriter());
+            Add(OpCodes.Ldloca, InlineVarOperandWriter());
+            Add(OpCodes.Stloc, InlineVarOperandWriter());
+        }
+    }
+}

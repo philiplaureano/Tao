@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Instructions.Operands
 {
-    public class Inline8OperandWriter : IOperandWriter
+    public class InlineI8OperandWriter : IOperandWriter
     {
         public WriteOperandTo([NotNull] instructionStream : Stream, [NotNull] operand : object) : void
             requires operand is long
