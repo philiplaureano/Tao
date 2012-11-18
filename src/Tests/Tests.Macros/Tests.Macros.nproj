@@ -39,20 +39,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="Nemerle, Version=1.1.953.0, Culture=neutral, PublicKeyToken=e080a9c724e2bfcd">
+    <Reference Include="Nemerle">
       <Name>Nemerle</Name>
       <AssemblyName>Nemerle.dll</AssemblyName>
       <HintPath>C:\Program Files (x86)\Nemerle\net-4.0\Nemerle.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Nemerle.Compiler, Version=1.1.953.0, Culture=neutral, PublicKeyToken=5291d186334f6101">
+    <Reference Include="Nemerle.Compiler">
       <Name>Nemerle.Compiler</Name>
       <AssemblyName>Nemerle.Compiler.dll</AssemblyName>
       <HintPath>C:\Program Files (x86)\Nemerle\net-4.0\Nemerle.Compiler.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Nemerle.Macros, Version=1.1.953.0, Culture=neutral, PublicKeyToken=5291d186334f6101">
+    <Reference Include="Nemerle.Macros">
       <Name>Nemerle.Macros</Name>
       <AssemblyName>Nemerle.Macros.dll</AssemblyName>
       <HintPath>C:\Program Files (x86)\Nemerle\net-4.0\Nemerle.Macros.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="nunit.core, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <Name>nunit.core</Name>

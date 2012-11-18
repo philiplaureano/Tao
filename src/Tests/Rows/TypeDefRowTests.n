@@ -52,28 +52,27 @@ namespace Tests
         }
         public ShouldGetInterfaceImplRows() : void
         {
-            def testRow(rows : array[InterfaceImplRow], rowIndex : int, expectedRowValue : uint, classIndex : uint) : void
-            {
-                def targetRow = rows[rowIndex];                
-                targetRow.Class.ToUInt32().ShouldBeEqualTo(classIndex, "Wrong TypeDef index value");
-                
-                def interfaceRow = targetRow.Interface.ToRowRef(CodedTokenType.TypeDefOrTypeRef);
-                interfaceRow.Row.ShouldBeEqualTo(expectedRowValue, "Wrong target row");
-                interfaceRow.TableId.ShouldBeEqualTo(TableId.TypeDef, "Wrong target row");
-            }
+            def className = "SampleClassWithMultipleInterfaces";
+            def root = base.GetMetadataRoot("SampleTypeDefRowUsage.dll");
+            def tableStream = root.GetTablesHeap();
+
+            def tablesHeap = TablesHeap();
+            tablesHeap.ReadFrom(tableStream);
+
+            def stringHeap = root.GetStringHeap();                                                
+            def targetRow = tablesHeap.GetTypeRow.[TypeDefRow](className, stringHeap);           
             
             def testResults(rows : array[InterfaceImplRow]) : void
             {
-                rows.Length.ShouldBeEqualTo(3, "Wrong number of expected interfaces");
-            
-                def testTargetRow = testRow(rows, _, _, 5);
+                rows.Length.ShouldBeEqualTo(3, "Wrong number of expected interfaces");            
                 
-                testTargetRow(0, 3);
-                testTargetRow(1, 4);
-                testTargetRow(2, 2);
+                foreach(row in rows)
+                {
+                    row.Class.ToUInt32().ShouldBeEqualTo(targetRow.RowIndex, "Wrong Row Index");
+                }
             }
             
-            TestRelatedRowExtraction("SampleClassWithMultipleInterfaces", (row, tablesHeap) => row.GetInterfaceImplRows(tablesHeap), testResults);
+            TestRelatedRowExtraction(className, (row, tablesHeap) => row.GetInterfaceImplRows(tablesHeap), testResults);
         }
 
         public ShouldGetListOfMethodRows() : void
