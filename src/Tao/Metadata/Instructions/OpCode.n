@@ -19,6 +19,21 @@ namespace Tao.Metadata.Instructions
         
         public Name : string { get; set; }
         public Value : ushort { get; set; }
+
+        public Size : uint
+        {
+            get
+            {
+                if(Value < 0xFE)
+                {
+                    1 : uint;
+                }
+                else
+                {
+                    2 : uint;
+                }
+            }
+        }
         
         public override GetHashCode() : int
         {

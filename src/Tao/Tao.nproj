@@ -362,88 +362,58 @@
     <Compile Include="Metadata\Instructions\OpCodes.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineI8OperandWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineBrOperandReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineBrOperandWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineFieldOperandReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineFieldOperandWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineI8OperandReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineIOperandReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineIOperandWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineMethodOperandReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineMethodOperandWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineR8OperandReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineROperandReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineROperandWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineSigOperandReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineSigOperandWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineStringOperandReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineStringOperandWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineSwitchOperandReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineSwitchOperandWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineTokenOperandReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineTokenOperandWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineTypeOperandReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineTypeOperandWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineVarOperandReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\InlineVarOperandWriter.n">
+    <Compile Include="Metadata\Instructions\Operands\IOperandSizer.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\OperandWriterMap.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Instructions\Operands\ShortInlineBrOperandWriter.n">
+    <Compile Include="Metadata\Instructions\Operands\Readers\InlineBrOperandReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Instructions\Operands\ShortInlineIOperandWriter.n">
+    <Compile Include="Metadata\Instructions\Operands\Readers\InlineFieldOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\InlineI8OperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\InlineIOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\InlineMethodOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\InlineR8OperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\InlineROperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\InlineSigOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\InlineStringOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\InlineSwitchOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\InlineTokenOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\InlineTypeOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\InlineVarOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\ShortInlineBrOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\ShortInlineIOperandReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Readers\ShortInlineVarOperandReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\IOperandReader.n">
@@ -455,19 +425,73 @@
     <Compile Include="Metadata\Instructions\Operands\OperandReaderMap.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Instructions\Operands\ShortInlineBrOperandReader.n">
+    <Compile Include="Metadata\Instructions\Operands\Sizers\Inline8OperandSizer.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Instructions\Operands\ShortInlineIOperandReader.n">
+    <Compile Include="Metadata\Instructions\Operands\Sizers\InlineIOperandSizer.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Instructions\Operands\ShortInlineROperandWriter.n">
+    <Compile Include="Metadata\Instructions\Operands\Sizers\InlineMethodOperandSizer.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Instructions\Operands\ShortInlineVarOperandReader.n">
+    <Compile Include="Metadata\Instructions\Operands\Sizers\InlineROperandSizer.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\Instructions\Operands\ShortInlineVarOperandWriter.n">
+    <Compile Include="Metadata\Instructions\Operands\Sizers\ShortInlineIOperandSizer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Sizers\ShortInlineROperandSizer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Sizers\ShortInlineVarOperandSizer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\InlineBrOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\InlineFieldOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\InlineI8OperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\InlineIOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\InlineMethodOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\InlineROperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\InlineSigOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\InlineStringOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\InlineSwitchOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\InlineTokenOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\InlineTypeOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\InlineVarOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\ShortInlineBrOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\ShortInlineIOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\ShortInlineROperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Writers\ShortInlineVarOperandWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\MetadataBlockReader.n">
@@ -1416,6 +1440,9 @@
     <Folder Include="Metadata\" />
     <Folder Include="Metadata\Instructions" />
     <Folder Include="Metadata\Instructions\Operands" />
+    <Folder Include="Metadata\Instructions\Operands\Sizers" />
+    <Folder Include="Metadata\Instructions\Operands\Writers" />
+    <Folder Include="Metadata\Instructions\Operands\Readers" />
     <Folder Include="Metadata\Signatures\" />
     <Folder Include="Metadata\Tables\" />
     <Folder Include="Metadata\Tables\Rows\" />

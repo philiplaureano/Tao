@@ -162,6 +162,9 @@
     <Compile Include="Instructions\OpCodeEncodingTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Instructions\OpCodeTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Instructions\OperandDecodingTests.n">
       <SubType>Code</SubType>
     </Compile>

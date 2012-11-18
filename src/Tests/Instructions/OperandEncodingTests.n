@@ -21,26 +21,35 @@ namespace Tests
 {
     public class OperandEncodingTests
     {
-        public stub ShouldReturnCorrectOperandSizeForShortInlineVarOperand() : void
+        public ShouldReturnCorrectOperandSizeForShortInlineVarOperand() : void
         {
+            TestOperandSize.[ShortInlineVarOperandSizer](0x42 : ushort, 2);
         }
-        public stub ShouldReturnCorrectOperandSizeForShortInlineIOperand() : void 
+        public ShouldReturnCorrectOperandSizeForShortInlineIOperand() : void 
         {
+            TestOperandSize.[ShortInlineIOperandSizer](-33 : sbyte, 1);
         }
-        public stub ShouldReturnCorrectOperandSizeForInlineIOperand() : void
+        
+        public ShouldReturnCorrectOperandSizeForInlineIOperand() : void
         {
+            TestOperandSize.[InlineIOperandSizer](-42 : int, 2);
         }
-        public stub ShouldReturnCorrectOperandSizeForInline8Operand() : void
+        
+        public ShouldReturnCorrectOperandSizeForInline8Operand() : void
         {
+            TestOperandSize.[Inline8OperandSizer](long.MaxValue : long, 8);
         }
-        public stub ShouldReturnCorrectOperandSizeForShortInlineROperand() : void 
-        {            
+        public ShouldReturnCorrectOperandSizeForShortInlineROperand() : void 
+        {      
+            TestOperandSize.[ShortInlineROperandSizer](float.MaxValue : float, 4);
         }
-        public stub ShouldReturnCorrectOperandSizeForInlineROperand() : void
+        public ShouldReturnCorrectOperandSizeForInlineROperand() : void
         {
+            TestOperandSize.[InlineROperandSizer](double.MaxValue : double, 8);
         }
-        public stub ShouldReturnCorrectOperandSizeForInlineMethodOperand() : void
+        public ShouldReturnCorrectOperandSizeForInlineMethodOperand() : void
         {
+            TestOperandSize.[InlineMethodOperandSizer](RowReference(TableId.MethodDef, 1), 4);
         }
         public stub ShouldReturnCorrectOperandSizeForInlineSigOperand() : void
         {
@@ -172,6 +181,13 @@ namespace Tests
             TestWrite.[short, InlineVarOperandWriter](operand, writer => writer.Write(operand));
         }
 
+        private TestOperandSize[TSizer](operand : object, expectedSize : uint) : void
+            where TSizer : IOperandSizer, new()
+        {
+            def sizer = TSizer();
+            sizer.GetOperandSize(operand).ShouldBeEqualTo(expectedSize, "Wrong Operand Size");
+        }
+        
         private TestWrite[TWriter](rowReference : RowReference) : void
             where TWriter : InlineTokenOperandWriter, new()
         {
