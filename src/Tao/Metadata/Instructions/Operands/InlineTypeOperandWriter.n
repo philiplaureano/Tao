@@ -1,0 +1,28 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Metadata;
+using Tao.Metadata.Tables;
+
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class InlineTypeOperandWriter : InlineTokenOperandWriter
+    {
+        protected override GetValidTables() : IEnumerable.[TableId]
+        {
+            yield TableId.TypeDef;
+            yield TableId.TypeRef;
+            yield TableId.TypeSpec;
+        }
+    }
+}
+
+

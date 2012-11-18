@@ -1,4 +1,5 @@
 ﻿using Nemerle;
+using Nemerle.Assertions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
@@ -12,59 +13,202 @@ using Tao;
 using Tao.Interfaces;
 using Tao.Metadata;
 using Tao.Metadata.Instructions;
-
+using Tao.Metadata.Instructions.Operands;
+using Tao.Metadata.Tables;
 using Tests.Macros;
+
 namespace Tests
 {
     public class OperandEncodingTests
     {
-        public ignored stub ShouldWriteShortInlineVarOperand() : void
+        public stub ShouldReturnCorrectOperandSizeForShortInlineVarOperand() : void
         {
         }
-        public ignored stub ShouldWriteShortInlineIOperand() : void 
+        public stub ShouldReturnCorrectOperandSizeForShortInlineIOperand() : void 
         {
         }
-        public ignored stub ShouldWriteInlineIOperand() : void
+        public stub ShouldReturnCorrectOperandSizeForInlineIOperand() : void
         {
         }
-        public ignored stub ShouldWriteInline8Operand() : void
+        public stub ShouldReturnCorrectOperandSizeForInline8Operand() : void
         {
         }
-        public ignored stub ShouldWriteShortInlineROperand() : void 
+        public stub ShouldReturnCorrectOperandSizeForShortInlineROperand() : void 
         {            
         }
-        public ignored stub ShouldWriteInlineROperand() : void
+        public stub ShouldReturnCorrectOperandSizeForInlineROperand() : void
         {
         }
-        public ignored stub ShouldWriteInlineMethodOperand() : void
+        public stub ShouldReturnCorrectOperandSizeForInlineMethodOperand() : void
         {
         }
-        public ignored stub ShouldWriteInlineSigOperand() : void
+        public stub ShouldReturnCorrectOperandSizeForInlineSigOperand() : void
         {
         }
-        public ignored stub ShouldWriteShortInlineBrTargetOperand() : void
+        public stub ShouldReturnCorrectOperandSizeForShortInlineBrTargetOperand() : void
         {
         }
-        public ignored stub ShouldWriteInlineBrTargetOperand() : void
+        public stub ShouldReturnCorrectOperandSizeForInlineBrTargetOperand() : void
         {
         }
-        public ignored stub ShouldWriteInlineSwitchOperand() : void
+        public stub ShouldReturnCorrectOperandSizeForInlineSwitchOperand() : void
         {
         }
-        public ignored stub ShouldWriteInlineTypeOperand() : void
+        public stub ShouldReturnCorrectOperandSizeForInlineTypeOperand() : void
         {
         }
-        public ignored stub ShouldWriteInlineStringOperand() : void
+        public stub ShouldReturnCorrectOperandSizeForInlineStringOperand() : void
         {
         }
-        public ignored stub ShouldWriteInlineFieldOperand() : void
+        public stub ShouldReturnCorrectOperandSizeForInlineFieldOperand() : void
         {
         }
-        public ignored stub ShouldWriteInlineTokenOperand() : void
+        public stub ShouldReturnCorrectOperandSizeForInlineTokenOperand() : void
         {
         }
-        public ignored stub ShouldWriteInlineVarOperand() : void 
+        public stub ShouldReturnCorrectOperandSizeForInlineVarOperand() : void 
         {
+        }
+
+        public ShouldWriteShortInlineVarOperand() : void
+        {
+            def operand : ushort = ushort.MaxValue;
+            TestWrite.[ushort, ShortInlineVarOperandWriter](operand, writer => writer.Write(operand));
+        }        
+
+        public ShouldWriteShortInlineIOperand() : void 
+        {
+            def operand : sbyte = sbyte.MaxValue;
+            TestWrite.[sbyte, ShortInlineIOperandWriter](operand, writer => writer.Write(operand : sbyte));
+        }
+
+        public ShouldWriteInlineIOperand() : void
+        {
+            def operand : int = int.MaxValue;
+            TestWrite.[int, InlineIOperandWriter](operand, writer => writer.Write(operand));
+        }
+
+        public ShouldWriteInline8Operand() : void
+        {
+            def operand : long = long.MaxValue;
+            TestWrite.[long, Inline8OperandWriter](operand, writer => writer.Write(operand));
+        }
+
+        public ShouldWriteShortInlineROperand() : void 
+        {     
+            def operand : float = float.MaxValue;
+            TestWrite.[float, ShortInlineROperandWriter](operand, writer => writer.Write(operand));
+        }
+
+        public ShouldWriteInlineROperand() : void
+        {
+            def operand : double = double.MaxValue;
+            TestWrite.[double, InlineROperandWriter](operand, writer => writer.Write(operand));
+        }
+
+        public ShouldWriteInlineMethodOperand() : void
+        {
+            TestWrite.[InlineMethodOperandWriter](RowReference(TableId.MemberRef, 1));
+            TestWrite.[InlineMethodOperandWriter](RowReference(TableId.MethodDef, 1));
+            TestWrite.[InlineMethodOperandWriter](RowReference(TableId.MethodSpec, 1));
+        }
+
+        public ShouldWriteInlineSigOperand() : void
+        {
+            TestWrite.[InlineSigOperandWriter](RowReference(TableId.StandAloneSig, 42));
+        }
+        public ShouldWriteShortInlineBrTargetOperand() : void
+        {
+            def operand : short = 0x42;
+            TestWrite.[short, ShortInlineBrOperandWriter](operand, writer => writer.Write(operand));
+        }
+        public ShouldWriteInlineBrTargetOperand() : void
+        {
+            def operand : int = 0x42;
+            TestWrite.[int, InlineBrOperandWriter](operand, writer => writer.Write(operand));
+        }
+        public ShouldWriteInlineSwitchOperand() : void
+        {
+            def jumpTargets = array[3 : int, 5, 7, 9];
+            def writeExpectedStream(writer : BinaryWriter) : void
+            {
+                writer.Write(4 : uint);
+                
+                foreach(target in jumpTargets)
+                {
+                    writer.Write(target);
+                }
+            }
+            
+            TestWrite.[array[int], InlineSwitchOperandWriter](jumpTargets, writeExpectedStream);
+        }
+        public ShouldWriteInlineTypeOperand() : void
+        {
+            TestWrite.[InlineTypeOperandWriter](RowReference(TableId.TypeDef, 1));
+            TestWrite.[InlineTypeOperandWriter](RowReference(TableId.TypeRef, 2));
+            TestWrite.[InlineTypeOperandWriter](RowReference(TableId.TypeSpec, 3));
+        }
+        
+        public ShouldWriteInlineStringOperand() : void
+        {
+            def stringIndex : uint = 0x42;
+            def tableId : uint  = 0x70;
+            def token : uint = stringIndex + (tableId << 24);
+            
+            TestWrite.[uint, InlineStringOperandWriter](token, writer => writer.Write(token));
+        }
+        public ShouldWriteInlineFieldOperand() : void
+        {
+            TestWrite.[InlineFieldOperandWriter](RowReference(TableId.MemberRef, 1));
+            TestWrite.[InlineFieldOperandWriter](RowReference(TableId.Field, 1));
+        }
+        public ShouldWriteInlineTokenOperand() : void
+        {
+            TestWrite.[InlineTokenOperandWriter](RowReference(TableId.MemberRef, 1));
+        }
+        public ShouldWriteInlineVarOperand() : void 
+        {            
+            def operand = short.MaxValue;
+            TestWrite.[short, InlineVarOperandWriter](operand, writer => writer.Write(operand));
+        }
+
+        private TestWrite[TWriter](rowReference : RowReference) : void
+            where TWriter : InlineTokenOperandWriter, new()
+        {
+            def operand = rowReference;
+            def writeTokenBytes(writer : BinaryWriter) : void
+            {
+                def encoder = SimpleTokenEncoder();
+                def token = encoder.Encode(operand.TableId, operand.Row);
+                writer.Write(token);
+            }
+
+            TestWrite.[RowReference, TWriter](operand, writeTokenBytes);
+        }
+
+        private TestWrite[TOperand, TWriter](operand : TOperand, writeExpectedStream : BinaryWriter -> void) : void
+            where TWriter : IOperandWriter, new()
+        {
+            TestWrite.[TWriter](operand, CreateSampleStream(writeExpectedStream));
+        }
+        private TestWrite[TWriter](operand : object, getExpectedStream : void -> Stream) : void
+            where TWriter : IOperandWriter, new()
+        {
+            def instructionStream = MemoryStream();
+            def expectedStream = getExpectedStream();
+            def writer = TWriter();
+            writer.WriteOperandTo(instructionStream, operand);
+
+            instructionStream.ShouldMatch(expectedStream);
+        }
+
+        private CreateSampleStream(writeExpectedStream : BinaryWriter-> void) : void -> Stream
+        {
+            def expectedStream = MemoryStream();
+            def writer = BinaryWriter(expectedStream);
+            writeExpectedStream(writer);            
+
+            () => expectedStream;
         }
     }
 }

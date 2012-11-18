@@ -1,0 +1,33 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class InlineSwitchOperandWriter : IOperandWriter
+    {
+        public WriteOperandTo([NotNull] instructionStream : Stream, [NotNull] operand : object) : void
+            requires operand is array[int]
+        {
+            def jumpTargets = operand :> array[int];
+            def elementCount = jumpTargets.Length;
+            
+            def writer = BinaryWriter(instructionStream);
+            
+            // Write the number of elements
+            writer.Write(elementCount :> uint);
+            
+            foreach(target in jumpTargets)
+            {
+                writer.Write(target : int);
+            }
+        }
+    }
+}

@@ -1,0 +1,47 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Metadata;
+using Tao.Metadata.Tables;
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class InlineTokenOperandWriter : IOperandWriter
+    {
+        public WriteOperandTo([NotNull] instructionStream : Stream, [NotNull] operand : object) : void
+            requires operand is RowReference
+            requires IsValidRowReference(operand :> RowReference)
+        {
+            def rowRef = operand :> RowReference;
+            def writer = BinaryWriter(instructionStream);
+            def encoder = SimpleTokenEncoder();
+            def token = encoder.Encode(rowRef.TableId, rowRef.Row);
+            writer.Write(token);
+        }
+
+        private IsValidRowReference(rowRef : RowReference) : bool
+        {
+            def tableId = rowRef.TableId;
+            def validTables = GetValidTables().ToList();
+            validTables.Contains(tableId);
+        }
+
+        protected virtual GetValidTables() : IEnumerable.[TableId]
+        {
+            yield TableId.MemberRef;
+            yield TableId.MethodDef;
+            yield TableId.MethodSpec;
+            yield TableId.TypeDef;
+            yield TableId.TypeRef;
+            yield TableId.TypeSpec;
+            yield TableId.Field;
+        }
+    }
+}

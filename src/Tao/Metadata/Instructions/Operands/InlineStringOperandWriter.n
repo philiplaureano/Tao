@@ -1,0 +1,31 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class InlineStringOperandWriter : IOperandWriter
+    {
+        public WriteOperandTo([NotNull] instructionStream : Stream, [NotNull] operand : object) : void
+            requires operand is uint
+        {
+            def token = operand :> uint;
+            // The tableId should be equal to the user string heap ID (0x70)
+            def tableId = (token >> 24);
+            when(tableId != 0x70)
+            {
+                throw BadImageFormatException(string.Format("Invalid string token value '{0}'", token.ToString("x")));
+            }
+            
+            def writer = BinaryWriter(instructionStream);
+            writer.Write(token);
+        }
+    }
+}
