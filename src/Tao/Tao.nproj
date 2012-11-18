@@ -428,6 +428,12 @@
     <Compile Include="Metadata\Instructions\Operands\Sizers\Inline8OperandSizer.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Sizers\InlineBrOperandSizer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Sizers\InlineFieldOperandSizer.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\Operands\Sizers\InlineIOperandSizer.n">
       <SubType>Code</SubType>
     </Compile>
@@ -435,6 +441,27 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\Sizers\InlineROperandSizer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Sizers\InlineSigOperandSizer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Sizers\InlineStringOperandSizer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Sizers\InlineSwitchOperandSizer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Sizers\InlineTokenOperandSizer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Sizers\InlineTypeOperandSizer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Sizers\InlineVarOperandSizer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Sizers\ShortInlineBrOperandSizer.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\Sizers\ShortInlineIOperandSizer.n">

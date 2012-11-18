@@ -12,8 +12,7 @@ namespace Tao.Metadata.Instructions.Operands
 {
     public class ShortInlineROperandSizer : IOperandSizer
     {
-        public GetOperandSize([NotNull] operand : object) : uint
-            requires operand is float
+        public GetOperandSize() : uint
         {
             4 : uint;
         }

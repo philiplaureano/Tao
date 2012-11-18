@@ -12,8 +12,7 @@ namespace Tao.Metadata.Instructions.Operands
 {
     public class InlineMethodOperandSizer : IOperandSizer
     {
-        public GetOperandSize([NotNull] operand : object) : uint
-            requires operand is RowReference
+        public GetOperandSize() : uint
         {
             4 : uint;
         }

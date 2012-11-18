@@ -23,60 +23,67 @@ namespace Tests
     {
         public ShouldReturnCorrectOperandSizeForShortInlineVarOperand() : void
         {
-            TestOperandSize.[ShortInlineVarOperandSizer](0x42 : ushort, 2);
+            TestOperandSize.[ShortInlineVarOperandSizer](2);
         }
         public ShouldReturnCorrectOperandSizeForShortInlineIOperand() : void 
         {
-            TestOperandSize.[ShortInlineIOperandSizer](-33 : sbyte, 1);
-        }
-        
+            TestOperandSize.[ShortInlineIOperandSizer](1);
+        }        
         public ShouldReturnCorrectOperandSizeForInlineIOperand() : void
         {
-            TestOperandSize.[InlineIOperandSizer](-42 : int, 2);
-        }
-        
+            TestOperandSize.[InlineIOperandSizer](2);
+        }        
         public ShouldReturnCorrectOperandSizeForInline8Operand() : void
         {
-            TestOperandSize.[Inline8OperandSizer](long.MaxValue : long, 8);
+            TestOperandSize.[Inline8OperandSizer](8);
         }
         public ShouldReturnCorrectOperandSizeForShortInlineROperand() : void 
         {      
-            TestOperandSize.[ShortInlineROperandSizer](float.MaxValue : float, 4);
+            TestOperandSize.[ShortInlineROperandSizer](4);
         }
         public ShouldReturnCorrectOperandSizeForInlineROperand() : void
         {
-            TestOperandSize.[InlineROperandSizer](double.MaxValue : double, 8);
+            TestOperandSize.[InlineROperandSizer](8);
         }
         public ShouldReturnCorrectOperandSizeForInlineMethodOperand() : void
         {
-            TestOperandSize.[InlineMethodOperandSizer](RowReference(TableId.MethodDef, 1), 4);
+            TestOperandSize.[InlineMethodOperandSizer](4);
         }
-        public stub ShouldReturnCorrectOperandSizeForInlineSigOperand() : void
+        public ShouldReturnCorrectOperandSizeForInlineSigOperand() : void
         {
+            TestOperandSize.[InlineSigOperandSizer](4);
         }
-        public stub ShouldReturnCorrectOperandSizeForShortInlineBrTargetOperand() : void
+        public ShouldReturnCorrectOperandSizeForShortInlineBrTargetOperand() : void
         {
+            TestOperandSize.[ShortInlineBrOperandSizer](2);
         }
-        public stub ShouldReturnCorrectOperandSizeForInlineBrTargetOperand() : void
+        public ShouldReturnCorrectOperandSizeForInlineBrTargetOperand() : void
         {
+            TestOperandSize.[InlineBrOperandSizer](4);
         }
-        public stub ShouldReturnCorrectOperandSizeForInlineSwitchOperand() : void
+        public ShouldReturnCorrectOperandSizeForInlineSwitchOperand() : void
         {
+            TestOperandSize(InlineSwitchOperandSizer(4), 20);
         }
-        public stub ShouldReturnCorrectOperandSizeForInlineTypeOperand() : void
+        public ShouldReturnCorrectOperandSizeForInlineTypeOperand() : void
         {
+            TestOperandSize.[InlineTypeOperandSizer](4);
         }
-        public stub ShouldReturnCorrectOperandSizeForInlineStringOperand() : void
+        public ShouldReturnCorrectOperandSizeForInlineStringOperand() : void
         {
+            TestOperandSize.[InlineStringOperandSizer](4);
         }
-        public stub ShouldReturnCorrectOperandSizeForInlineFieldOperand() : void
+        public ShouldReturnCorrectOperandSizeForInlineFieldOperand() : void
         {
+            TestOperandSize.[InlineFieldOperandSizer](4);
         }
-        public stub ShouldReturnCorrectOperandSizeForInlineTokenOperand() : void
+        public ShouldReturnCorrectOperandSizeForInlineTokenOperand() : void
         {
+            TestOperandSize.[InlineTokenOperandSizer](4);
         }
-        public stub ShouldReturnCorrectOperandSizeForInlineVarOperand() : void 
+        public ShouldReturnCorrectOperandSizeForInlineVarOperand() : void 
         {
+            TestOperandSize.[InlineVarOperandSizer](2);
         }
 
         public ShouldWriteShortInlineVarOperand() : void
@@ -181,11 +188,17 @@ namespace Tests
             TestWrite.[short, InlineVarOperandWriter](operand, writer => writer.Write(operand));
         }
 
-        private TestOperandSize[TSizer](operand : object, expectedSize : uint) : void
+        private TestOperandSize[TSizer](expectedSize : uint) : void
             where TSizer : IOperandSizer, new()
         {
             def sizer = TSizer();
-            sizer.GetOperandSize(operand).ShouldBeEqualTo(expectedSize, "Wrong Operand Size");
+            TestOperandSize(sizer, expectedSize);
+        }
+        
+         private TestOperandSize[TSizer](sizer : TSizer, expectedSize : uint) : void
+            where TSizer : IOperandSizer
+        {
+            sizer.GetOperandSize().ShouldBeEqualTo(expectedSize, "Wrong Operand Size");
         }
         
         private TestWrite[TWriter](rowReference : RowReference) : void

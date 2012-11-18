@@ -12,8 +12,7 @@ namespace Tao.Metadata.Instructions.Operands
 {
     public class ShortInlineIOperandSizer : IOperandSizer
     {
-        public GetOperandSize([NotNull] operand : object) : uint
-            requires operand is sbyte
+        public GetOperandSize() : uint
         {
             1 : uint;
         }

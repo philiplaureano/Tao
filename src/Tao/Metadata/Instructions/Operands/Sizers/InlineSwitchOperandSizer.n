@@ -1,0 +1,33 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class InlineSwitchOperandSizer : IOperandSizer
+    {
+        private _numberOfJumpTargets : uint;
+        public this(numberOfJumpTargets : uint)
+            requires numberOfJumpTargets > 0
+        {
+            _numberOfJumpTargets = numberOfJumpTargets;
+        }
+        
+        public GetOperandSize() : uint
+        {            
+            // Allocate space for describing the number of targets
+            mutable result : uint = 4;
+         
+            // Plus 4 bytes per jump target
+            result += (_numberOfJumpTargets * 4);
+            
+            result;
+        }
+    }
+}

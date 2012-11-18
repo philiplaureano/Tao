@@ -12,8 +12,7 @@ namespace Tao.Metadata.Instructions.Operands
 {
     public class Inline8OperandSizer : IOperandSizer
     {
-        public GetOperandSize([NotNull] operand : object) : uint
-            requires operand is long
+        public GetOperandSize() : uint
         {
             8 : uint;
         }

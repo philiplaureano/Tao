@@ -12,8 +12,7 @@ namespace Tao.Metadata.Instructions.Operands
 {
     public class ShortInlineVarOperandSizer : IOperandSizer
     {
-        public GetOperandSize([NotNull] operand : object) : uint
-            requires operand is ushort
+        public GetOperandSize() : uint
         {
             2 : uint;
         }
