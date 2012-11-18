@@ -33,9 +33,9 @@ namespace Tests
         {
             TestOperandSize.[InlineIOperandSizer](2);
         }        
-        public ShouldReturnCorrectOperandSizeForInline8Operand() : void
+        public ShouldReturnCorrectOperandSizeForInlineI8Operand() : void
         {
-            TestOperandSize.[Inline8OperandSizer](8);
+            TestOperandSize.[InlineI8OperandSizer](8);
         }
         public ShouldReturnCorrectOperandSizeForShortInlineROperand() : void 
         {      

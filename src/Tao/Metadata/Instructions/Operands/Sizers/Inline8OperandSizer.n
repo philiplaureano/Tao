@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Instructions.Operands
 {
-    public class Inline8OperandSizer : IOperandSizer
+    public class InlineI8OperandSizer : IOperandSizer
     {
         public GetOperandSize() : uint
         {

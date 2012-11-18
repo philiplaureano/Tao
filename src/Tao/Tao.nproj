@@ -365,6 +365,9 @@
     <Compile Include="Metadata\Instructions\Operands\IOperandSizer.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\Operands\OperandSizerMap.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\Operands\OperandWriterMap.n">
       <SubType>Code</SubType>
     </Compile>

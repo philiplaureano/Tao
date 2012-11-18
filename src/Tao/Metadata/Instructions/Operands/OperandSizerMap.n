@@ -1,0 +1,125 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class OperandSizerMap : Dictionary.[OpCode, IOperandSizer]
+    {
+        public this()
+        {
+            // ShortInlineVar
+            Add(OpCodes.Ldarg_S, ShortInlineVarOperandSizer());
+            Add(OpCodes.Ldarga_S, ShortInlineVarOperandSizer());
+            Add(OpCodes.Starg_S, ShortInlineVarOperandSizer());
+            Add(OpCodes.Ldloc_S, ShortInlineVarOperandSizer());
+            Add(OpCodes.Ldloca_S, ShortInlineVarOperandSizer());
+            Add(OpCodes.Stloc_S, ShortInlineVarOperandSizer());
+
+            // ShortInlineI
+            Add(OpCodes.Ldc_I4_S, ShortInlineIOperandSizer());
+            Add(OpCodes.Unaligned, ShortInlineIOperandSizer());
+
+            // InlineI
+            Add(OpCodes.Ldc_I4, InlineIOperandSizer());
+
+            // InlineI8
+            Add(OpCodes.Ldc_I8, InlineI8OperandSizer());
+
+            // ShortInlineR
+            Add(OpCodes.Ldc_R4, InlineROperandSizer());
+
+            // InlineR
+            Add(OpCodes.Ldc_R8, InlineROperandSizer());
+
+            // InlineMethod
+            Add(OpCodes.Jmp, InlineMethodOperandSizer());
+            Add(OpCodes.Call, InlineMethodOperandSizer());
+            Add(OpCodes.Callvirt, InlineMethodOperandSizer());
+            Add(OpCodes.Newobj, InlineMethodOperandSizer());
+            Add(OpCodes.Ldftn, InlineMethodOperandSizer());
+            Add(OpCodes.Ldvirtftn, InlineMethodOperandSizer());
+
+            // InlineSig
+            Add(OpCodes.Calli, InlineSigOperandSizer());
+
+            // ShortInlineBr
+            Add(OpCodes.Br_S, ShortInlineBrOperandSizer());
+            Add(OpCodes.Brfalse_S, ShortInlineBrOperandSizer());
+            Add(OpCodes.Brtrue_S, ShortInlineBrOperandSizer());
+            Add(OpCodes.Beq_S, ShortInlineBrOperandSizer());
+            Add(OpCodes.Bge_S, ShortInlineBrOperandSizer());
+            Add(OpCodes.Bgt_S, ShortInlineBrOperandSizer());
+            Add(OpCodes.Ble_S, ShortInlineBrOperandSizer());
+            Add(OpCodes.Blt_S, ShortInlineBrOperandSizer());
+            Add(OpCodes.Bne_Un_S, ShortInlineBrOperandSizer());
+            Add(OpCodes.Bge_Un_S, ShortInlineBrOperandSizer());
+            Add(OpCodes.Bgt_Un_S, ShortInlineBrOperandSizer());
+            Add(OpCodes.Ble_Un_S, ShortInlineBrOperandSizer());
+            Add(OpCodes.Blt_Un_S, ShortInlineBrOperandSizer());
+            Add(OpCodes.Leave_S, ShortInlineBrOperandSizer());
+
+            // InlineBr
+            Add(OpCodes.Br, InlineBrOperandSizer());
+            Add(OpCodes.Brfalse, InlineBrOperandSizer());
+            Add(OpCodes.Brtrue, InlineBrOperandSizer());
+            Add(OpCodes.Beq, InlineBrOperandSizer());
+            Add(OpCodes.Bge, InlineBrOperandSizer());
+            Add(OpCodes.Bgt, InlineBrOperandSizer());
+            Add(OpCodes.Ble, InlineBrOperandSizer());
+            Add(OpCodes.Blt, InlineBrOperandSizer());
+            Add(OpCodes.Bne_Un, InlineBrOperandSizer());
+            Add(OpCodes.Bge_Un, InlineBrOperandSizer());
+            Add(OpCodes.Bgt_Un, InlineBrOperandSizer());
+            Add(OpCodes.Ble_Un, InlineBrOperandSizer());
+            Add(OpCodes.Blt_Un, InlineBrOperandSizer());
+            Add(OpCodes.Leave, InlineBrOperandSizer());
+
+            // InlineType
+            Add(OpCodes.Cpobj, InlineTypeOperandSizer());
+            Add(OpCodes.Ldobj, InlineTypeOperandSizer());
+            Add(OpCodes.Castclass, InlineTypeOperandSizer());
+            Add(OpCodes.Isinst, InlineTypeOperandSizer());
+            Add(OpCodes.Unbox, InlineTypeOperandSizer());
+            Add(OpCodes.Stobj, InlineTypeOperandSizer());
+            Add(OpCodes.Box, InlineTypeOperandSizer());
+            Add(OpCodes.Newarr, InlineTypeOperandSizer());
+            Add(OpCodes.Ldelema, InlineTypeOperandSizer());
+            Add(OpCodes.Ldelem, InlineTypeOperandSizer());
+            Add(OpCodes.Stelem, InlineTypeOperandSizer());
+            Add(OpCodes.Unbox_Any, InlineTypeOperandSizer());
+            Add(OpCodes.Refanyval, InlineTypeOperandSizer());
+            Add(OpCodes.Mkrefany, InlineTypeOperandSizer());
+            Add(OpCodes.Initobj, InlineTypeOperandSizer());
+            Add(OpCodes.Constrained, InlineTypeOperandSizer());
+            Add(OpCodes.Sizeof, InlineTypeOperandSizer());
+
+            // InlineString
+            Add(OpCodes.Ldstr, InlineStringOperandSizer());
+
+            // InlineField
+            Add(OpCodes.Ldfld, InlineFieldOperandSizer());
+            Add(OpCodes.Ldflda, InlineFieldOperandSizer());
+            Add(OpCodes.Stfld, InlineFieldOperandSizer());
+            Add(OpCodes.Ldsfld, InlineFieldOperandSizer());
+            Add(OpCodes.Ldsflda, InlineFieldOperandSizer());
+            Add(OpCodes.Stsfld, InlineFieldOperandSizer());
+
+            // InlineTok
+            Add(OpCodes.Ldtoken, InlineTokenOperandSizer());
+
+            // InlineVar
+            Add(OpCodes.Ldarg, InlineVarOperandSizer());
+            Add(OpCodes.Ldarga, InlineVarOperandSizer());
+            Add(OpCodes.Starg, InlineVarOperandSizer());
+            Add(OpCodes.Ldloc, InlineVarOperandSizer());
+            Add(OpCodes.Ldloca, InlineVarOperandSizer());
+            Add(OpCodes.Stloc, InlineVarOperandSizer());
+        }
+    }
+}
