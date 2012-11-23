@@ -20,72 +20,7 @@ using Tests.Macros;
 namespace Tests
 {
     public class OperandEncodingTests
-    {
-        public ShouldReturnCorrectOperandSizeForShortInlineVarOperand() : void
-        {
-            TestOperandSize.[ShortInlineVarOperandSizer](2);
-        }
-        public ShouldReturnCorrectOperandSizeForShortInlineIOperand() : void 
-        {
-            TestOperandSize.[ShortInlineIOperandSizer](1);
-        }        
-        public ShouldReturnCorrectOperandSizeForInlineIOperand() : void
-        {
-            TestOperandSize.[InlineIOperandSizer](2);
-        }        
-        public ShouldReturnCorrectOperandSizeForInlineI8Operand() : void
-        {
-            TestOperandSize.[InlineI8OperandSizer](8);
-        }
-        public ShouldReturnCorrectOperandSizeForShortInlineROperand() : void 
-        {      
-            TestOperandSize.[ShortInlineROperandSizer](4);
-        }
-        public ShouldReturnCorrectOperandSizeForInlineROperand() : void
-        {
-            TestOperandSize.[InlineROperandSizer](8);
-        }
-        public ShouldReturnCorrectOperandSizeForInlineMethodOperand() : void
-        {
-            TestOperandSize.[InlineMethodOperandSizer](4);
-        }
-        public ShouldReturnCorrectOperandSizeForInlineSigOperand() : void
-        {
-            TestOperandSize.[InlineSigOperandSizer](4);
-        }
-        public ShouldReturnCorrectOperandSizeForShortInlineBrTargetOperand() : void
-        {
-            TestOperandSize.[ShortInlineBrOperandSizer](2);
-        }
-        public ShouldReturnCorrectOperandSizeForInlineBrTargetOperand() : void
-        {
-            TestOperandSize.[InlineBrOperandSizer](4);
-        }
-        public ShouldReturnCorrectOperandSizeForInlineSwitchOperand() : void
-        {
-            TestOperandSize(InlineSwitchOperandSizer(4), 20);
-        }
-        public ShouldReturnCorrectOperandSizeForInlineTypeOperand() : void
-        {
-            TestOperandSize.[InlineTypeOperandSizer](4);
-        }
-        public ShouldReturnCorrectOperandSizeForInlineStringOperand() : void
-        {
-            TestOperandSize.[InlineStringOperandSizer](4);
-        }
-        public ShouldReturnCorrectOperandSizeForInlineFieldOperand() : void
-        {
-            TestOperandSize.[InlineFieldOperandSizer](4);
-        }
-        public ShouldReturnCorrectOperandSizeForInlineTokenOperand() : void
-        {
-            TestOperandSize.[InlineTokenOperandSizer](4);
-        }
-        public ShouldReturnCorrectOperandSizeForInlineVarOperand() : void 
-        {
-            TestOperandSize.[InlineVarOperandSizer](2);
-        }
-
+    {       
         public ShouldWriteShortInlineVarOperand() : void
         {
             def operand : ushort = ushort.MaxValue;
@@ -186,19 +121,6 @@ namespace Tests
         {            
             def operand = short.MaxValue;
             TestWrite.[short, InlineVarOperandWriter](operand, writer => writer.Write(operand));
-        }
-
-        private TestOperandSize[TSizer](expectedSize : uint) : void
-            where TSizer : IOperandSizer, new()
-        {
-            def sizer = TSizer();
-            TestOperandSize(sizer, expectedSize);
-        }
-        
-         private TestOperandSize[TSizer](sizer : TSizer, expectedSize : uint) : void
-            where TSizer : IOperandSizer
-        {
-            sizer.GetOperandSize().ShouldBeEqualTo(expectedSize, "Wrong Operand Size");
         }
         
         private TestWrite[TWriter](rowReference : RowReference) : void

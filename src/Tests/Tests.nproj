@@ -156,6 +156,9 @@
     <Compile Include="Instructions\InstructionReadTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Instructions\InstructionSizingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Instructions\OpCodeDecodingTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -175,6 +178,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Instructions\OperandSizerMappingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\OperandSizingTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Instructions\OperandWriterMappingTests.n">
