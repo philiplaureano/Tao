@@ -1,0 +1,47 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class InstructionSizeCalculator
+    {
+        public GetInstructionSize(opCode : OpCode, operand : object) : uint 
+        {
+            mutable operandSizer : IOperandSizer = null;
+
+            def sizerMap = OperandSizerMap();
+            when(sizerMap.ContainsKey(opCode))
+            {
+                operandSizer = sizerMap[opCode];
+            }
+
+            when(opCode == OpCodes.Switch)
+            {
+                operandSizer = GetSwitchOperandSizer(operand);
+            }
+
+            mutable instructionSize = opCode.Size;
+            when(operandSizer != null)
+            {
+                instructionSize += operandSizer.GetOperandSize();
+            }
+
+            instructionSize;
+        }
+        
+        private GetSwitchOperandSizer([NotNull] operand : object) : IOperandSizer
+            requires operand is array[int] || operand is array[Instruction]
+        {
+            // Determine the number of jump targets
+            def jumpTargets = operand :> System.Array;
+            InlineSwitchOperandSizer(jumpTargets.Length :> uint);
+        }
+    }
+}

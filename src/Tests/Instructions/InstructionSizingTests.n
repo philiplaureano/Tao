@@ -17,19 +17,894 @@ using Tao.Metadata.Tables.Rows;
 using Tao.Metadata.Instructions;
 using Tao.Metadata.Instructions.Operands;
 
+
 using Tests.Macros;
 namespace Tests
 {  
-  public class InstructionSizingTests
-  {
-      public stub ShouldReturnCorrectSizeForAllInstructions() : void
-      {
-      }
-      
-      private TestInstruction(opCode : OpCode, expectedSize : uint) : void
-      {
-          // TODO: Write a test generator for testing the size of each instruction type
-          throw NotImplementedException();
-      }
-  }
+    public class InstructionSizingTests
+    {
+        public ShouldReturnCorrectSizeForNopInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Nop, 1);
+        }
+        public ShouldReturnCorrectSizeForBreakInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Break, 1);
+        }
+        public ShouldReturnCorrectSizeForLdarg_0Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldarg_0, 1);
+        }
+        public ShouldReturnCorrectSizeForLdarg_1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldarg_1, 1);
+        }
+        public ShouldReturnCorrectSizeForLdarg_2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldarg_2, 1);
+        }
+        public ShouldReturnCorrectSizeForLdarg_3Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldarg_3, 1);
+        }
+        public ShouldReturnCorrectSizeForLdloc_0Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldloc_0, 1);
+        }
+        public ShouldReturnCorrectSizeForLdloc_1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldloc_1, 1);
+        }
+        public ShouldReturnCorrectSizeForLdloc_2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldloc_2, 1);
+        }
+        public ShouldReturnCorrectSizeForLdloc_3Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldloc_3, 1);
+        }
+        public ShouldReturnCorrectSizeForStloc_0Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stloc_0, 1);
+        }
+        public ShouldReturnCorrectSizeForStloc_1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stloc_1, 1);
+        }
+        public ShouldReturnCorrectSizeForStloc_2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stloc_2, 1);
+        }
+        public ShouldReturnCorrectSizeForStloc_3Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stloc_3, 1);
+        }
+        public ShouldReturnCorrectSizeForLdarg_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldarg_S, 3);
+        }
+        public ShouldReturnCorrectSizeForLdarga_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldarga_S, 3);
+        }
+        public ShouldReturnCorrectSizeForStarg_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Starg_S, 3);
+        }
+        public ShouldReturnCorrectSizeForLdloc_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldloc_S, 3);
+        }
+        public ShouldReturnCorrectSizeForLdloca_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldloca_S, 3);
+        }
+        public ShouldReturnCorrectSizeForStloc_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Stloc_S, 3);
+        }
+        public ShouldReturnCorrectSizeForLdnullInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldnull, 1);
+        }
+        public ShouldReturnCorrectSizeForLdc_I4_M1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_I4_M1, 1);
+        }
+        public ShouldReturnCorrectSizeForLdc_I4_0Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_I4_0, 1);
+        }
+        public ShouldReturnCorrectSizeForLdc_I4_1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_I4_1, 1);
+        }
+        public ShouldReturnCorrectSizeForLdc_I4_2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_I4_2, 1);
+        }
+        public ShouldReturnCorrectSizeForLdc_I4_3Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_I4_3, 1);
+        }
+        public ShouldReturnCorrectSizeForLdc_I4_4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_I4_4, 1);
+        }
+        public ShouldReturnCorrectSizeForLdc_I4_5Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_I4_5, 1);
+        }
+        public ShouldReturnCorrectSizeForLdc_I4_6Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_I4_6, 1);
+        }
+        public ShouldReturnCorrectSizeForLdc_I4_7Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_I4_7, 1);
+        }
+        public ShouldReturnCorrectSizeForLdc_I4_8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_I4_8, 1);
+        }
+        public ShouldReturnCorrectSizeForLdc_I4_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_I4_S, 2);
+        }
+        public ShouldReturnCorrectSizeForLdc_I4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_I4, 3);
+        }
+        public ShouldReturnCorrectSizeForLdc_I8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_I8, 9);
+        }
+        public ShouldReturnCorrectSizeForLdc_R4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_R4, 9);
+        }
+        public ShouldReturnCorrectSizeForLdc_R8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldc_R8, 9);
+        }
+        public ShouldReturnCorrectSizeForDupInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Dup, 1);
+        }
+        public ShouldReturnCorrectSizeForPopInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Pop, 1);
+        }
+        public ShouldReturnCorrectSizeForJmpInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Jmp, 5);
+        }
+        public ShouldReturnCorrectSizeForCallInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Call, 5);
+        }
+        public ShouldReturnCorrectSizeForCalliInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Calli, 5);
+        }
+        public ShouldReturnCorrectSizeForRetInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ret, 1);
+        }
+        public ShouldReturnCorrectSizeForBr_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Br_S, 3);
+        }
+        public ShouldReturnCorrectSizeForBrfalse_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Brfalse_S, 3);
+        }
+        public ShouldReturnCorrectSizeForBrtrue_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Brtrue_S, 3);
+        }
+        public ShouldReturnCorrectSizeForBeq_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Beq_S, 3);
+        }
+        public ShouldReturnCorrectSizeForBge_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Bge_S, 3);
+        }
+        public ShouldReturnCorrectSizeForBgt_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Bgt_S, 3);
+        }
+        public ShouldReturnCorrectSizeForBle_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ble_S, 3);
+        }
+        public ShouldReturnCorrectSizeForBlt_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Blt_S, 3);
+        }
+        public ShouldReturnCorrectSizeForBne_Un_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Bne_Un_S, 3);
+        }
+        public ShouldReturnCorrectSizeForBge_Un_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Bge_Un_S, 3);
+        }
+        public ShouldReturnCorrectSizeForBgt_Un_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Bgt_Un_S, 3);
+        }
+        public ShouldReturnCorrectSizeForBle_Un_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ble_Un_S, 3);
+        }
+        public ShouldReturnCorrectSizeForBlt_Un_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Blt_Un_S, 3);
+        }
+        public ShouldReturnCorrectSizeForBrInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Br, 5);
+        }
+        public ShouldReturnCorrectSizeForBrfalseInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Brfalse, 5);
+        }
+        public ShouldReturnCorrectSizeForBrtrueInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Brtrue, 5);
+        }
+        public ShouldReturnCorrectSizeForBeqInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Beq, 5);
+        }
+        public ShouldReturnCorrectSizeForBgeInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Bge, 5);
+        }
+        public ShouldReturnCorrectSizeForBgtInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Bgt, 5);
+        }
+        public ShouldReturnCorrectSizeForBleInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ble, 5);
+        }
+        public ShouldReturnCorrectSizeForBltInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Blt, 5);
+        }
+        public ShouldReturnCorrectSizeForBne_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Bne_Un, 5);
+        }
+        public ShouldReturnCorrectSizeForBge_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Bge_Un, 5);
+        }
+        public ShouldReturnCorrectSizeForBgt_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Bgt_Un, 5);
+        }
+        public ShouldReturnCorrectSizeForBle_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ble_Un, 5);
+        }
+        public ShouldReturnCorrectSizeForBlt_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Blt_Un, 5);
+        }
+        public ShouldReturnCorrectSizeForLdind_I1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldind_I1, 1);
+        }
+        public ShouldReturnCorrectSizeForLdind_U1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldind_U1, 1);
+        }
+        public ShouldReturnCorrectSizeForLdind_I2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldind_I2, 1);
+        }
+        public ShouldReturnCorrectSizeForLdind_U2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldind_U2, 1);
+        }
+        public ShouldReturnCorrectSizeForLdind_I4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldind_I4, 1);
+        }
+        public ShouldReturnCorrectSizeForLdind_U4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldind_U4, 1);
+        }
+        public ShouldReturnCorrectSizeForLdind_I8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldind_I8, 1);
+        }
+        public ShouldReturnCorrectSizeForLdind_IInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldind_I, 1);
+        }
+        public ShouldReturnCorrectSizeForLdind_R4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldind_R4, 1);
+        }
+        public ShouldReturnCorrectSizeForLdind_R8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldind_R8, 1);
+        }
+        public ShouldReturnCorrectSizeForLdind_RefInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldind_Ref, 1);
+        }
+        public ShouldReturnCorrectSizeForStind_RefInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Stind_Ref, 1);
+        }
+        public ShouldReturnCorrectSizeForStind_I1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stind_I1, 1);
+        }
+        public ShouldReturnCorrectSizeForStind_I2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stind_I2, 1);
+        }
+        public ShouldReturnCorrectSizeForStind_I4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stind_I4, 1);
+        }
+        public ShouldReturnCorrectSizeForStind_I8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stind_I8, 1);
+        }
+        public ShouldReturnCorrectSizeForStind_R4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stind_R4, 1);
+        }
+        public ShouldReturnCorrectSizeForStind_R8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stind_R8, 1);
+        }
+        public ShouldReturnCorrectSizeForAddInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Add, 1);
+        }
+        public ShouldReturnCorrectSizeForSubInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Sub, 1);
+        }
+        public ShouldReturnCorrectSizeForMulInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Mul, 1);
+        }
+        public ShouldReturnCorrectSizeForDivInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Div, 1);
+        }
+        public ShouldReturnCorrectSizeForDiv_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Div_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForRemInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Rem, 1);
+        }
+        public ShouldReturnCorrectSizeForRem_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Rem_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForAndInstruction() : void
+        {
+            TestInstructionSize(OpCodes.And, 1);
+        }
+        public ShouldReturnCorrectSizeForOrInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Or, 1);
+        }
+        public ShouldReturnCorrectSizeForXorInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Xor, 1);
+        }
+        public ShouldReturnCorrectSizeForShlInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Shl, 1);
+        }
+        public ShouldReturnCorrectSizeForShrInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Shr, 1);
+        }
+        public ShouldReturnCorrectSizeForShr_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Shr_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForNegInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Neg, 1);
+        }
+        public ShouldReturnCorrectSizeForNotInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Not, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_I1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_I1, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_I2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_I2, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_I4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_I4, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_I8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_I8, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_R4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_R4, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_R8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_R8, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_U4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_U4, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_U8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_U8, 1);
+        }
+        public ShouldReturnCorrectSizeForCallvirtInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Callvirt, 5);
+        }
+        public ShouldReturnCorrectSizeForCpobjInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Cpobj, 5);
+        }
+        public ShouldReturnCorrectSizeForLdobjInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldobj, 5);
+        }
+        public ShouldReturnCorrectSizeForLdstrInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldstr, 5);
+        }
+        public ShouldReturnCorrectSizeForNewobjInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Newobj, 5);
+        }
+        public ShouldReturnCorrectSizeForCastclassInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Castclass, 5);
+        }
+        public ShouldReturnCorrectSizeForIsinstInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Isinst, 5);
+        }
+        public ShouldReturnCorrectSizeForConv_R_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_R_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForUnboxInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Unbox, 5);
+        }
+        public ShouldReturnCorrectSizeForThrowInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Throw, 1);
+        }
+        public ShouldReturnCorrectSizeForLdfldInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldfld, 5);
+        }
+        public ShouldReturnCorrectSizeForLdfldaInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldflda, 5);
+        }
+        public ShouldReturnCorrectSizeForStfldInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Stfld, 5);
+        }
+        public ShouldReturnCorrectSizeForLdsfldInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldsfld, 5);
+        }
+        public ShouldReturnCorrectSizeForLdsfldaInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldsflda, 5);
+        }
+        public ShouldReturnCorrectSizeForStsfldInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Stsfld, 5);
+        }
+        public ShouldReturnCorrectSizeForStobjInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Stobj, 5);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_I1_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_I1_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_I2_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_I2_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_I4_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_I4_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_I8_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_I8_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_U1_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_U1_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_U2_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_U2_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_U4_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_U4_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_U8_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_U8_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_I_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_I_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_U_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_U_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForBoxInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Box, 5);
+        }
+        public ShouldReturnCorrectSizeForNewarrInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Newarr, 5);
+        }
+        public ShouldReturnCorrectSizeForLdlenInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldlen, 1);
+        }
+        public ShouldReturnCorrectSizeForLdelemaInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldelema, 5);
+        }
+        public ShouldReturnCorrectSizeForLdelem_I1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldelem_I1, 1);
+        }
+        public ShouldReturnCorrectSizeForLdelem_U1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldelem_U1, 1);
+        }
+        public ShouldReturnCorrectSizeForLdelem_I2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldelem_I2, 1);
+        }
+        public ShouldReturnCorrectSizeForLdelem_U2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldelem_U2, 1);
+        }
+        public ShouldReturnCorrectSizeForLdelem_I4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldelem_I4, 1);
+        }
+        public ShouldReturnCorrectSizeForLdelem_U4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldelem_U4, 1);
+        }
+        public ShouldReturnCorrectSizeForLdelem_I8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldelem_I8, 1);
+        }
+        public ShouldReturnCorrectSizeForLdelem_IInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldelem_I, 1);
+        }
+        public ShouldReturnCorrectSizeForLdelem_R4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldelem_R4, 1);
+        }
+        public ShouldReturnCorrectSizeForLdelem_R8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldelem_R8, 1);
+        }
+        public ShouldReturnCorrectSizeForLdelem_RefInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldelem_Ref, 1);
+        }
+        public ShouldReturnCorrectSizeForStelem_IInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Stelem_I, 1);
+        }
+        public ShouldReturnCorrectSizeForStelem_I1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stelem_I1, 1);
+        }
+        public ShouldReturnCorrectSizeForStelem_I2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stelem_I2, 1);
+        }
+        public ShouldReturnCorrectSizeForStelem_I4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stelem_I4, 1);
+        }
+        public ShouldReturnCorrectSizeForStelem_I8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stelem_I8, 1);
+        }
+        public ShouldReturnCorrectSizeForStelem_R4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stelem_R4, 1);
+        }
+        public ShouldReturnCorrectSizeForStelem_R8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Stelem_R8, 1);
+        }
+        public ShouldReturnCorrectSizeForStelem_RefInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Stelem_Ref, 1);
+        }
+        public ShouldReturnCorrectSizeForLdelemInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldelem, 5);
+        }
+        public ShouldReturnCorrectSizeForStelemInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Stelem, 5);
+        }
+        public ShouldReturnCorrectSizeForUnbox_AnyInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Unbox_Any, 5);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_I1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_I1, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_U1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_U1, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_I2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_I2, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_U2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_U2, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_I4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_I4, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_U4Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_U4, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_I8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_I8, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_U8Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_U8, 1);
+        }
+        public ShouldReturnCorrectSizeForRefanyvalInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Refanyval, 5);
+        }
+        public ShouldReturnCorrectSizeForCkfiniteInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ckfinite, 1);
+        }
+        public ShouldReturnCorrectSizeForMkrefanyInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Mkrefany, 5);
+        }
+        public ShouldReturnCorrectSizeForLdtokenInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldtoken, 5);
+        }
+        public ShouldReturnCorrectSizeForConv_U2Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_U2, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_U1Instruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_U1, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_IInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_I, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_IInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_I, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_Ovf_UInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_Ovf_U, 1);
+        }
+        public ShouldReturnCorrectSizeForAdd_OvfInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Add_Ovf, 1);
+        }
+        public ShouldReturnCorrectSizeForAdd_Ovf_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Add_Ovf_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForMul_OvfInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Mul_Ovf, 1);
+        }
+        public ShouldReturnCorrectSizeForMul_Ovf_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Mul_Ovf_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForSub_OvfInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Sub_Ovf, 1);
+        }
+        public ShouldReturnCorrectSizeForSub_Ovf_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Sub_Ovf_Un, 1);
+        }
+        public ShouldReturnCorrectSizeForEndfinallyInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Endfinally, 1);
+        }
+        public ShouldReturnCorrectSizeForLeaveInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Leave, 5);
+        }
+        public ShouldReturnCorrectSizeForLeave_SInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Leave_S, 3);
+        }
+        public ShouldReturnCorrectSizeForStind_IInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Stind_I, 1);
+        }
+        public ShouldReturnCorrectSizeForConv_UInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Conv_U, 1);
+        }
+        public ShouldReturnCorrectSizeForArglistInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Arglist, 2);
+        }
+        public ShouldReturnCorrectSizeForCeqInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ceq, 2);
+        }
+        public ShouldReturnCorrectSizeForCgtInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Cgt, 2);
+        }
+        public ShouldReturnCorrectSizeForCgt_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Cgt_Un, 2);
+        }
+        public ShouldReturnCorrectSizeForCltInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Clt, 2);
+        }
+        public ShouldReturnCorrectSizeForClt_UnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Clt_Un, 2);
+        }
+        public ShouldReturnCorrectSizeForLdftnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldftn, 6);
+        }
+        public ShouldReturnCorrectSizeForLdvirtftnInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldvirtftn, 6);
+        }
+        public ShouldReturnCorrectSizeForLdargInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldarg, 4);
+        }
+        public ShouldReturnCorrectSizeForLdargaInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldarga, 4);
+        }
+        public ShouldReturnCorrectSizeForStargInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Starg, 4);
+        }
+        public ShouldReturnCorrectSizeForLdlocInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldloc, 4);
+        }
+        public ShouldReturnCorrectSizeForLdlocaInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Ldloca, 4);
+        }
+        public ShouldReturnCorrectSizeForStlocInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Stloc, 4);
+        }
+        public ShouldReturnCorrectSizeForLocallocInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Localloc, 2);
+        }
+        public ShouldReturnCorrectSizeForEndfilterInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Endfilter, 2);
+        }
+        public ShouldReturnCorrectSizeForUnalignedInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Unaligned, 3);
+        }
+        public ShouldReturnCorrectSizeForVolatileInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Volatile, 2);
+        }
+        public ShouldReturnCorrectSizeForTailInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Tail, 2);
+        }
+        public ShouldReturnCorrectSizeForInitobjInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Initobj, 6);
+        }
+        public ShouldReturnCorrectSizeForConstrainedInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Constrained, 6);
+        }
+        public ShouldReturnCorrectSizeForCpblkInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Cpblk, 2);
+        }
+        public ShouldReturnCorrectSizeForInitblkInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Initblk, 2);
+        }
+        public ShouldReturnCorrectSizeForNoInstruction() : void
+        {
+            TestInstructionSize(OpCodes.No, 2);
+        }
+        public ShouldReturnCorrectSizeForRethrowInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Rethrow, 2);
+        }
+        public ShouldReturnCorrectSizeForSizeofInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Sizeof, 6);
+        }
+        public ShouldReturnCorrectSizeForRefanytypeInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Refanytype, 2);
+        }
+        public ShouldReturnCorrectSizeForReadonlyInstruction() : void
+        {
+            TestInstructionSize(OpCodes.Readonly, 2);
+        }
+        public ShouldReturnCorrectSizeForSwitchInstruction() : void
+        {
+            def operand = array[1 : int, 2, 3, 4, 5];
+            def calculator = InstructionSizeCalculator();
+            calculator.GetInstructionSize(OpCodes.Switch, operand).ShouldBeEqualTo(25, "Wrong Instruction Size for the Switch instruction");
+        }        
+        private TestInstructionSize(opCode : OpCode, expectedSize : uint, operand : object = null) : void
+        {
+            def calculator = InstructionSizeCalculator();
+            calculator.GetInstructionSize(opCode, operand).ShouldBeEqualTo(expectedSize, "Wrong Instruction Size");            
+        }
+    }
 }

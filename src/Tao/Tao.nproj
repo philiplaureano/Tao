@@ -464,6 +464,9 @@
     <Compile Include="Metadata\Instructions\Operands\Sizers\InlineVarOperandSizer.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Sizers\InstructionSizeCalculator.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\Operands\Sizers\ShortInlineBrOperandSizer.n">
       <SubType>Code</SubType>
     </Compile>
