@@ -22,7 +22,7 @@ namespace Tao.Metadata.Instructions
             get;set;
         }
 
-         Operand : object
+        Operand : object
         {
             get;set;
         }

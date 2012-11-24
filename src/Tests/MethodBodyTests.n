@@ -88,6 +88,12 @@ namespace Tests
             rows[0].Rva.ShouldBeEqualTo(0x00002050, "Invalid Rva");
             rows[3].Rva.ShouldBeEqualTo(0x0000207C, "Invalid Rva");
         }
+        public stub ShouldReadExceptionHandlerBlocks() : void
+        {
+        }
+        public stub ShouldWriteExceptionHandlerBlocks() : void
+        {
+        }
         private GetData() : array[byte]
         {
             def methodData = array[0x62 : byte, 0x00, 0x72, 0x01, 0x00, 0x00, 0x70, 0x28, 0x11, 0x00, 0x00, 0x0A, 0x00, 0x72, 0x1D, 0x00,

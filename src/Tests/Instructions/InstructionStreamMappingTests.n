@@ -1,0 +1,33 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata;
+
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+using Tao.Metadata.Instructions;
+using Tao.Metadata.Instructions.Operands;
+
+using Tests.Macros;
+
+namespace Tests
+{
+  public class InstructionStreamMappingTests
+  {
+      public stub ShouldBeAbleToGenerateInstructionMapFromAListOfInstructions() : void
+      {
+          // Premise: Given an existing list of instructions from an actual method body,
+          // we should be able to create an instruction map that matches the actual offsets
+          // of every instruction in that method body stream.          
+      }
+  }
+}
