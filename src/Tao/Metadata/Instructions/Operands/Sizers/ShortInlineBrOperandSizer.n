@@ -14,7 +14,7 @@ namespace Tao.Metadata.Instructions.Operands
     {
         public GetOperandSize() : uint
         {
-            2 : uint;
+            1 : uint;
         }
     }
 }

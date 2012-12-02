@@ -1,0 +1,42 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Instructions;
+using Tao.Metadata.Instructions.Operands;
+
+namespace Tao.Metadata.Instructions
+{
+    public class InstructionMapper
+    {
+        public CreateMap([NotNull] instructions : IEnumerable.[IInstruction]) : IDictionary.[IInstruction, uint]
+        {
+            def sizeCalculator = InstructionSizeCalculator();
+            def map = Dictionary.[IInstruction, uint]();
+            mutable currentOffset : uint = 0;
+            foreach(instruction in instructions)
+            {
+                def opCode = instruction.OpCode;
+                def operand = instruction.Operand;
+                
+                // Map the instruction at the current calculated offset
+                def size = sizeCalculator.GetInstructionSize(opCode, operand);
+                map[instruction] = currentOffset;
+                
+                
+                // Move the position to the next available slot
+                currentOffset += size;
+            }
+
+            map;
+        }        
+    }
+}

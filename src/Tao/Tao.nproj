@@ -344,6 +344,9 @@
     <Compile Include="Metadata\Instructions\Instruction.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\InstructionMapper.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\InstructionReader.n">
       <SubType>Code</SubType>
     </Compile>

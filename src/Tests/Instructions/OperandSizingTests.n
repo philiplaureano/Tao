@@ -54,7 +54,7 @@ namespace Tests
         }
         public ShouldReturnCorrectOperandSizeForShortInlineBrTargetOperand() : void
         {
-            TestOperandSize.[ShortInlineBrOperandSizer](2);
+            TestOperandSize.[ShortInlineBrOperandSizer](1);
         }
         public ShouldReturnCorrectOperandSizeForInlineBrTargetOperand() : void
         {

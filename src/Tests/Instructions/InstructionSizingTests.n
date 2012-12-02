@@ -193,55 +193,55 @@ namespace Tests
         }
         public ShouldReturnCorrectSizeForBr_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Br_S, 3);
+            TestInstructionSize(OpCodes.Br_S, 2);
         }
         public ShouldReturnCorrectSizeForBrfalse_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Brfalse_S, 3);
+            TestInstructionSize(OpCodes.Brfalse_S, 2);
         }
         public ShouldReturnCorrectSizeForBrtrue_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Brtrue_S, 3);
+            TestInstructionSize(OpCodes.Brtrue_S, 2);
         }
         public ShouldReturnCorrectSizeForBeq_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Beq_S, 3);
+            TestInstructionSize(OpCodes.Beq_S, 2);
         }
         public ShouldReturnCorrectSizeForBge_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Bge_S, 3);
+            TestInstructionSize(OpCodes.Bge_S, 2);
         }
         public ShouldReturnCorrectSizeForBgt_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Bgt_S, 3);
+            TestInstructionSize(OpCodes.Bgt_S, 2);
         }
         public ShouldReturnCorrectSizeForBle_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Ble_S, 3);
+            TestInstructionSize(OpCodes.Ble_S, 2);
         }
         public ShouldReturnCorrectSizeForBlt_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Blt_S, 3);
+            TestInstructionSize(OpCodes.Blt_S, 2);
         }
         public ShouldReturnCorrectSizeForBne_Un_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Bne_Un_S, 3);
+            TestInstructionSize(OpCodes.Bne_Un_S, 2);
         }
         public ShouldReturnCorrectSizeForBge_Un_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Bge_Un_S, 3);
+            TestInstructionSize(OpCodes.Bge_Un_S, 2);
         }
         public ShouldReturnCorrectSizeForBgt_Un_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Bgt_Un_S, 3);
+            TestInstructionSize(OpCodes.Bgt_Un_S, 2);
         }
         public ShouldReturnCorrectSizeForBle_Un_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Ble_Un_S, 3);
+            TestInstructionSize(OpCodes.Ble_Un_S, 2);
         }
         public ShouldReturnCorrectSizeForBlt_Un_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Blt_Un_S, 3);
+            TestInstructionSize(OpCodes.Blt_Un_S, 2);
         }
         public ShouldReturnCorrectSizeForBrInstruction() : void
         {
@@ -773,7 +773,7 @@ namespace Tests
         }
         public ShouldReturnCorrectSizeForLeave_SInstruction() : void
         {
-            TestInstructionSize(OpCodes.Leave_S, 3);
+            TestInstructionSize(OpCodes.Leave_S, 2);
         }
         public ShouldReturnCorrectSizeForStind_IInstruction() : void
         {

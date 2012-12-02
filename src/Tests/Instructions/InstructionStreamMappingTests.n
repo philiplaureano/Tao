@@ -18,16 +18,59 @@ using Tao.Metadata.Instructions;
 using Tao.Metadata.Instructions.Operands;
 
 using Tests.Macros;
-
 namespace Tests
 {
   public class InstructionStreamMappingTests
   {
-      public stub ShouldBeAbleToGenerateInstructionMapFromAListOfInstructions() : void
+      public ShouldBeAbleToGenerateInstructionMapFromAListOfInstructions() : void
       {
           // Premise: Given an existing list of instructions from an actual method body,
           // we should be able to create an instruction map that matches the actual offsets
           // of every instruction in that method body stream.          
+          def image = Image.ReadFrom("FizzBuzz.dll");
+          def root = image.GetMetadataRoot();
+          def tableStream = root.GetTablesHeap();
+          
+          def tableHeap = TablesHeap();
+          tableHeap.ReadFrom(tableStream);
+          
+          // Find the main method
+          def stringHeap = root.GetStringHeap();
+          def methodTable = tableHeap.GetTable.[MethodDefTable]();
+          def rows = methodTable.Rows;
+          
+          def methodRow = rows.First(r => r.Name.ToString(stringHeap) == "Main");
+          def rva = methodRow.Rva;
+          
+          // Read the instructions from the method body
+          def methodStream = image.GetDataAt(rva);
+          def reader = MethodBodyReader();
+          def body = reader.Read(methodStream);
+                    
+          def userStringHeap = root.GetUserStringHeap();
+          def instructionReader = InstructionReader();
+          def instructions = instructionReader.Read(MemoryStream(body.Bytes), userStringHeap);
+          
+          // Build the expected instruction map
+          def expectedMap = Dictionary.[uint, IInstruction]();
+          foreach(instruction in instructions)
+          {
+              def offset = instruction.Offset;
+              expectedMap[offset] = instruction;
+          }
+          
+          // Test the mapper
+          def mapper = InstructionMapper();
+          def map = mapper.CreateMap(instructions);
+          
+          // The actual offsets must match the expected offsets
+          foreach(offset in expectedMap.Keys)
+          {
+              def currentInstruction = expectedMap[offset];
+              map.ContainsKey(currentInstruction).ShouldBeTrue("The instruction map is missing an instruction at expected offset '{0}'", offset);
+              
+              map[currentInstruction].ShouldBeEqualTo(offset, "Wrong Mapped Instruction Offset");
+          }         
       }
   }
 }
