@@ -1,0 +1,30 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Metadata;
+using Tests.Macros;
+namespace Tests
+{
+    public class MockStringMap : IStringMap
+    {
+        private _offset : uint;
+        private _expectedText : string;
+        public this(offset : uint, expectedText : string)
+        {
+            _offset = offset;
+            _expectedText = expectedText;
+        }
+        public GetStringOffset([NotNull] text : string) : uint
+        {
+            text.ShouldBeEqualTo(_expectedText, "Wrong Input Text!");
+            _offset;            
+        }
+    }
+}

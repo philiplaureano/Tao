@@ -371,6 +371,9 @@
     <Compile Include="Metadata\Instructions\Operands\Converters\BranchInstructionOperandConverter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\Operands\IOperandConverter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\Operands\IOperandSizer.n">
       <SubType>Code</SubType>
     </Compile>
@@ -488,6 +491,9 @@
     <Compile Include="Metadata\Instructions\Operands\Sizers\ShortInlineVarOperandSizer.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\Operands\UserStringOperandConverter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\Operands\Writers\InlineBrOperandWriter.n">
       <SubType>Code</SubType>
     </Compile>
@@ -534,6 +540,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\Writers\ShortInlineVarOperandWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\IStringMap.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\MetadataBlockReader.n">

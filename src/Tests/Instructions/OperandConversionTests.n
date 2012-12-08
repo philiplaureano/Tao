@@ -1,5 +1,6 @@
 ﻿using Nemerle;
 using Nemerle.Collections;
+using Nemerle.Extensions;
 using Nemerle.Text;
 using Nemerle.Utility;
 
@@ -35,8 +36,12 @@ namespace Tests
             def converter = BranchInstructionOperandConverter(instructionMap, branchInstruction);
             converter.ConvertOperand(branchInstruction.Operand).ShouldBeEqualTo(expectedOffset, "Wrong operand value");
         }
-        public stub ShouldConvertStringOperandsIntoUserStringOffsets() : void
+        public ShouldConvertStringOperandsIntoUserStringOffsets() : void
         {
+            def userStringMap = MockStringMap(12345 : uint, "Foo");
+            
+            def converter = UserStringOperandConverter(userStringMap);
+            converter.ConvertOperand("Foo").ShouldBeEqualTo(12345 : uint, "Wrong Operand Value");
         }
         public stub ShouldConvertSwitchTargetInstructionsIntoAnArrayOfSwitchTargetOffsets() : void
         {

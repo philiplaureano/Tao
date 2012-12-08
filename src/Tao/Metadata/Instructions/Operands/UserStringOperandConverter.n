@@ -1,0 +1,28 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Tao.Metadata;
+
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class UserStringOperandConverter : IOperandConverter
+    {
+        private _map : IStringMap;
+        public this([NotNull] map : IStringMap)
+        {
+            _map = map;
+        }
+        public ConvertOperand([NotNull] operand : object) : object
+            requires operand is string
+        {
+            def text = operand :> string;
+            _map.GetStringOffset(text);
+        }
+    }
+}

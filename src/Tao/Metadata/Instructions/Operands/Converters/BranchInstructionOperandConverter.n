@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Instructions.Operands
 {
-    public class BranchInstructionOperandConverter
+    public class BranchInstructionOperandConverter : IOperandConverter
     {
         private _instructionMap : IDictionary.[IInstruction, uint];
         private _branchInstruction : IInstruction;
