@@ -1,0 +1,727 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <NemerleVersion>Net-4.5</NemerleVersion>
+    <NemerleBinPathRoot Condition=" '$(NemerleBinPathRoot)' == '' ">$(ProgramFiles)\Nemerle</NemerleBinPathRoot>
+    <!--NoStdLib>true</NoStdLib-->
+    <Nemerle Condition=" '$(Nemerle)' == '' ">$(NemerleBinPathRoot)\$(NemerleVersion)</Nemerle>
+    <Name>Tests</Name>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>c0f7b9c1-6109-4612-baf1-4941ad4d3f14</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tests</RootNamespace>
+    <AssemblyName>Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>$(OutputPath)\$(MSBuildProjectName).xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <!--Reference Include="mscorlib" />
+    <Reference Include="Nemerle">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(Nemerle)\Nemerle.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" /-->
+    <MacroReference Include="Nemerle.Linq">
+      <HintPath>$(Nemerle)\Nemerle.Linq.dll</HintPath>
+    </MacroReference>
+    <Reference Include="Nemerle, Version=1.1.991.0, Culture=neutral, PublicKeyToken=e080a9c724e2bfcd">
+      <Name>Nemerle</Name>
+      <AssemblyName>Nemerle.dll</AssemblyName>
+      <HintPath>..\..\..\..\Program Files (x86)\Nemerle\net-4.0\Nemerle.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.core, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Name>nunit.core</Name>
+      <AssemblyName>nunit.core.dll</AssemblyName>
+      <HintPath>..\..\tools\nunit\lib\nunit.core.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.core.interfaces, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Name>nunit.core.interfaces</Name>
+      <AssemblyName>nunit.core.interfaces.dll</AssemblyName>
+      <HintPath>..\..\tools\nunit\lib\nunit.core.interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Name>nunit.framework</Name>
+      <AssemblyName>nunit.framework.dll</AssemblyName>
+      <HintPath>..\..\tools\nunit\framework\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Name>System.Configuration</Name>
+      <AssemblyName>System.configuration.dll</AssemblyName>
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Security, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Name>System.Security</Name>
+      <AssemblyName>System.Security.dll</AssemblyName>
+      <HintPath>C:\Windows\Microsoft.NET\Framework\v2.0.50727\System.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssertionExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BlobHeapTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ByteArrayExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CLIHeaderTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CLRMetadataTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CodedTokenTests.IndexSizeTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>CodedTokenTests.n</DependentUpon>
+    </Compile>
+    <Compile Include="CodedTokenTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CodedTokenTests.TagConversionTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>CodedTokenTests.n</DependentUpon>
+    </Compile>
+    <Compile Include="CodedTokenTests.TagValueMapTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>CodedTokenTests.n</DependentUpon>
+    </Compile>
+    <Compile Include="CompressedIntegerTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataDirectoryTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileBasedTest.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GUIDHeapTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HeapSizeEncodingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageGenerationTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageTests.CLRMetadataReadTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>ImageTests.n</DependentUpon>
+    </Compile>
+    <Compile Include="ImageTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageTests.RoundTrippingTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>ImageTests.n</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\InstructionReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\InstructionSizingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\InstructionStreamMappingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\OpCodeDecodingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\OpCodeEncodingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\OpCodeTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\OperandConversionTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\OperandDecodingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\OperandEncodingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\OperandReaderMappingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\OperandSizerMappingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\OperandSizingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions\OperandWriterMappingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MetadataRootTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MetadataRootTests.RoundTripping.n">
+      <SubType>Code</SubType>
+      <DependentUpon>MetadataRootTests.n</DependentUpon>
+    </Compile>
+    <Compile Include="MetadataStreamBlockReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MethodBodyTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MSDosHeaderTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CoffHeaderTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NTHeader32Tests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ObjectExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OptionalHeaderStandardFieldTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PaddedNullTerminatedStringTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.n" />
+    <Compile Include="RowReaderTests.IndexingTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>RowReaderTests.n</DependentUpon>
+    </Compile>
+    <Compile Include="RowReaderTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\CustomAttributeRowTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\CustomAttributeRowTests.ParentRowExtractionTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>Rows\CustomAttributeRowTests.n</DependentUpon>
+    </Compile>
+    <Compile Include="Rows\DummyRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\IndexExtensionTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\MemberRefRowTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\MethodDefRowTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\MockRowReference.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\RowReferenceTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\TypeDefRowTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rows\TypeRefRowTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RowWriterTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RvaMappingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionAddressWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionDataReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionHeaderTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionAddressResolutionTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionManagementTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\ArrayShapeTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\CustomAttributeSignatureTests.ElemTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>Signatures\CustomAttributeSignatureTests.n</DependentUpon>
+    </Compile>
+    <Compile Include="Signatures\CustomAttributeSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\CustomAttributeSignatureTests.TypeIdentityTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>Signatures\CustomAttributeSignatureTests.n</DependentUpon>
+    </Compile>
+    <Compile Include="Signatures\CustomAttributeSignatureWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\LocalVarSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\MethodSpecSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\SzArraySignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\CustomModTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\FieldSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\GenericInstanceTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\MethodDefSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\MethodRefSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\MVarSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\ParamSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\PointerSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\RetTypeTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\StandAloneMethodSigTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\TypeDefOrRefEncodedSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\TypeSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\ValueTypeSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signatures\VarSignatureTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SortedTableTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StartupStubTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NullTerminatedStringTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MetadataStreamHeaderTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\ProtectedStream.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\StreamDecorator.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\StreamExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\TracerStream.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\TracingTableReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\TracingTableWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\WriteOnceStream.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Streams\WriteProtectedRegion.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StringsHeapTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TablesHeaderStreamTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\AggregateTableTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\FileBasedTableTest.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\HeapIndexTestExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\AssemblyRefTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\AssemblyTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\BaseTableReaderTest.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\ClassLayoutTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\ConstantTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\CustomAttributeReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\DeclSecurityTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\EventMapTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\EventTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\ExportedTypeTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\FieldLayoutTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\FieldMarshalTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\FieldRvaTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\FieldTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\FileTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\GenericParamConstraintTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\GenericParamTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\ImplMapTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\InterfaceImplTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\ManifestResourceTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\MemberRefTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\MethodDefTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\MethodImplReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\MethodSemanticsTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\MethodSpecTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\ModuleRefTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\ModuleTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\NestedClassTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\ParamTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\PropertyMapTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\PropertyTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\StandAloneSigTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\TypeDefTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\TypeRefTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Reads\TypeSpecTableReadTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\TablesHeapTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\TableSupportTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\AssemblyRefTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\AssemblyTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\BaseTableWriterTest.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\ClassLayoutWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\ConstantTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\CustomAttributeWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\DeclSecurityTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\EventMapTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\EventTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\ExportedTypeTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\FieldLayoutTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\FieldMarshalTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\FieldRvaTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\FieldTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\FileTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\GenericParamConstraintTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\GenericParamTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\ImplMapTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\InterfaceImplTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\ManifestResourceTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\MemberRefTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\MethodDefTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\MethodImplTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\MethodSemanticsTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\MethodSpecWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\ModuleRefTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\ModuleTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\NestedClassTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\ParamTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\PropertyMapTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\PropertyTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\StandAloneSigTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\TableWriterTest.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\TypeDefTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\TypeRefTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tables\Writes\TypeSpecTableWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tester.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UserStringsTest.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UserStringTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Instructions" />
+    <Folder Include="Rows" />
+    <Folder Include="Signatures" />
+    <Folder Include="Streams" />
+    <Folder Include="Tables" />
+    <Folder Include="SampleBinaries" />
+    <Folder Include="Properties\" />
+    <Folder Include="Tables\Reads" />
+    <Folder Include="Tables\Writes" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Content</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="LocalVarSig1.dll">
+      <SubType>Content</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="LocalVarSig2.dll">
+      <SubType>Content</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="LocalVarSig3.dll">
+      <SubType>Content</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Content Include="SampleBinaries\HelloWorld.exe">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\mono-mscorlib.dll">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\MultiModuleAssembly.exe">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\NHibernate.dll">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\SampleAppWithFatMethodBody.exe">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\SampleAssemblyThatUsesTheConstantTable.exe">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\SamplePE32PlusApp.exe">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\skeleton.exe">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\skeleton.il">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <MacroProjectReference Include="Tests.Macros\Tests.Macros.nproj">
+      <Name>Tests.Macros</Name>
+      <Project>{1e8a64c1-e4d6-4b2a-9a2f-df9536217cbd}</Project>
+      <Private>False</Private>
+    </MacroProjectReference>
+    <ProjectReference Include="..\Tao\Tao.nproj">
+      <Name>Tao</Name>
+      <Project>{dc175afb-382f-477e-aa0e-abac2d1e23a5}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="SampleAssemblies\SampleCustomAttributeUsage\SampleCustomAttributeUsage.csproj">
+      <Name>SampleCustomAttributeUsage</Name>
+      <Project>{9b1f1549-8055-4002-9849-6a4a3114c134}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="SampleAssemblies\SampleEnumAttributeAssembly\SampleEnumAttributeAssembly.csproj">
+      <Name>SampleEnumAttributeAssembly</Name>
+      <Project>{fb4b8ea1-e41b-425d-8911-497dbce9536a}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="SampleAssemblies\SampleTypeDefRowUsage\SampleTypeDefRowUsage.csproj">
+      <Name>SampleTypeDefRowUsage</Name>
+      <Project>{af8e4c74-8b60-4fae-9a4b-6f2b14af14c5}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(Nemerle)\Nemerle.MSBuild.targets" />
+  <!--
+		To modify your build process, add your task inside one of the targets below and uncomment it.
+		Other similar extension points exist, see Microsoft.Common.targets.
+
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+</Project>

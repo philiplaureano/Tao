@@ -1,0 +1,30 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class BranchInstructionOperandConverter
+    {
+        private _instructionMap : IDictionary.[IInstruction, uint];
+        private _branchInstruction : IInstruction;
+        
+        public this([NotNull] instructionMap : IDictionary.[IInstruction, uint], [NotNull] sourceBranchInstruction : IInstruction)
+        {
+            _instructionMap = instructionMap;
+            _branchInstruction = sourceBranchInstruction;
+        }
+        public ConvertOperand([NotNull] operand : object) : object
+            requires operand is IInstruction
+        {
+            def targetInstruction = operand :> IInstruction;
+            _branchInstruction.GetRelativeOffsetTo(targetInstruction, _instructionMap);
+        }
+    }
+}

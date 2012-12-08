@@ -55,15 +55,6 @@ namespace Tao.Metadata.Instructions
             }
             
             result;
-        }
-        public GetRelativeOffsetTo([NotNull] otherInstruction : IInstruction, [NotNull] instructionMap : IDictionary[IInstruction, uint]) : int
-            requires instructionMap.ContainsKey(otherInstruction) otherwise throw ArgumentException("The target instruction must be a part of the given instruction map before you can calculate its relative offset from the current instruction.")
-            requires instructionMap.ContainsKey(this) otherwise throw ArgumentException("The current instruction must be a part of the given instruction map before you can calculate its relative offset to the other instruction.")
-        {
-            def currentMapOffset = instructionMap[this] :> int;
-            def targetOffset = instructionMap[otherInstruction] :> int;
-            
-            currentMapOffset - targetOffset;
-        }
+        }        
     }
 }

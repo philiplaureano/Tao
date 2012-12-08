@@ -344,6 +344,9 @@
     <Compile Include="Metadata\Instructions\Instruction.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\InstructionExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\InstructionMapper.n">
       <SubType>Code</SubType>
     </Compile>
@@ -363,6 +366,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\OpCodes.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Converters\BranchInstructionOperandConverter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\IOperandSizer.n">
@@ -1476,6 +1482,7 @@
     <Folder Include="Metadata\" />
     <Folder Include="Metadata\Instructions" />
     <Folder Include="Metadata\Instructions\Operands" />
+    <Folder Include="Metadata\Instructions\Operands\Converters" />
     <Folder Include="Metadata\Instructions\Operands\Sizers" />
     <Folder Include="Metadata\Instructions\Operands\Writers" />
     <Folder Include="Metadata\Instructions\Operands\Readers" />

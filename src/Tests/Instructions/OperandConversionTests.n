@@ -22,8 +22,18 @@ namespace Tests
 {
     public class OperandConversionTests
     {
-        public stub ShouldConvertBranchInstructionTargetsIntoStreamOffsets() : void
+        public ShouldConvertBranchInstructionTargetsIntoStreamOffsets() : void
         {
+            def mapper = InstructionMapper();
+            def branchTarget = Instruction(0, OpCodes.Nop, null);
+            def branchInstruction = Instruction(1 : uint, OpCodes.Br, branchTarget);
+            
+            // Map the instructions in order to generate the expected offset
+            def instructionMap = mapper.CreateMap(array[branchTarget, branchInstruction]);            
+            def expectedOffset = branchInstruction.GetRelativeOffsetTo(branchTarget, instructionMap);
+            
+            def converter = BranchInstructionOperandConverter(instructionMap, branchInstruction);
+            converter.ConvertOperand(branchInstruction.Operand).ShouldBeEqualTo(expectedOffset, "Wrong operand value");
         }
         public stub ShouldConvertStringOperandsIntoUserStringOffsets() : void
         {
