@@ -37,7 +37,7 @@ namespace Tao.Metadata.Instructions.Operands
         }
         
         private GetSwitchOperandSizer([NotNull] operand : object) : IOperandSizer
-            requires operand is array[int] || operand is array[Instruction]
+            requires operand is array[int] || operand is array[Instruction] || operand is array[IInstruction]
         {
             // Determine the number of jump targets
             def jumpTargets = operand :> System.Array;

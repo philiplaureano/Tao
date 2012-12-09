@@ -375,6 +375,9 @@
     <Compile Include="Streams\StreamExtensions.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Streams\StringMapTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Streams\TracerStream.n">
       <SubType>Code</SubType>
     </Compile>

@@ -43,8 +43,36 @@ namespace Tests
             def converter = UserStringOperandConverter(userStringMap);
             converter.ConvertOperand("Foo").ShouldBeEqualTo(12345 : uint, "Wrong Operand Value");
         }
-        public stub ShouldConvertSwitchTargetInstructionsIntoAnArrayOfSwitchTargetOffsets() : void
+        public ShouldConvertSwitchTargetInstructionsIntoAnArrayOfSwitchTargetOffsets() : void
         {
+            def mapper = InstructionMapper();
+            def branchTargets = List.[IInstruction]();
+            
+            // Build the list of jump targets
+            def instructions = List.[IInstruction]();
+            for(mutable i = 0; i < 100; i++)
+            {
+                def instruction = Instruction(0, OpCodes.Nop, null);
+                branchTargets.Add(instruction);
+                instructions.Add(instruction);
+            }
+            
+            // Pass the jump targets to the switch instruction
+            def switchInstruction = Instruction(0, OpCodes.Switch, branchTargets.ToArray());
+            instructions.Add(switchInstruction);
+            
+            // Generate the map
+            def map = mapper.CreateMap(instructions.ToArray());
+            
+            def converter = SwitchInstructionOperandConverter(map, switchInstruction);
+            def offsets = converter.ConvertOperand(branchTargets.ToArray()) :> array[int];
+            
+            for(mutable i = 0; i < branchTargets.Count; i++)
+            {
+                def target = branchTargets[i];
+                def expectedOffset = switchInstruction.GetRelativeOffsetTo(target, map);
+                offsets[i].ShouldBeEqualTo(expectedOffset, "Wrong operand value");
+            }
         }
     }
 }

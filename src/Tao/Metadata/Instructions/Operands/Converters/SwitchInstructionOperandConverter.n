@@ -10,22 +10,30 @@ using System.Linq;
 
 namespace Tao.Metadata.Instructions.Operands
 {
-    public class BranchInstructionOperandConverter : IOperandConverter
+    public class SwitchInstructionOperandConverter : IOperandConverter
     {
         private _instructionMap : IDictionary.[IInstruction, uint];
         private _branchInstruction : IInstruction;
-        
+
         public this([NotNull] instructionMap : IDictionary.[IInstruction, uint], [NotNull] sourceBranchInstruction : IInstruction)
         {
             _instructionMap = instructionMap;
             _branchInstruction = sourceBranchInstruction;
         }
-        
+
         public ConvertOperand([NotNull] operand : object) : object
-            requires operand is IInstruction
+            requires operand is array[IInstruction]
         {
-            def targetInstruction = operand :> IInstruction;
-            _branchInstruction.GetRelativeOffsetTo(targetInstruction, _instructionMap);
+            def targetInstructions = operand :> array[IInstruction];
+            def offsets = List.[int]();
+            
+            foreach(targetInstruction in targetInstructions)
+            {
+                def offset = _branchInstruction.GetRelativeOffsetTo(targetInstruction, _instructionMap);
+                offsets.Add(offset);
+            }
+            
+            offsets.ToArray();
         }
     }
 }

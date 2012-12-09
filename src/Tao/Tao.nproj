@@ -371,6 +371,9 @@
     <Compile Include="Metadata\Instructions\Operands\Converters\BranchInstructionOperandConverter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\Operands\Converters\SwitchInstructionOperandConverter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\Operands\IOperandConverter.n">
       <SubType>Code</SubType>
     </Compile>
