@@ -4,22 +4,55 @@ using Nemerle.Text;
 using Nemerle.Utility;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao.Metadata;
 using Tests.Macros;
 namespace Tests
 {
     public class StringMapTests
     {        
-        public stub ShouldCallStringHeapWriterAndAllocateNewSpaceForString() : void
+        public ShouldReturnOffsetForExistingString() : void
         {
+            def stringWriter = UserStringHeapWriter();
+            def strings = array["foo", "bar", "baz"];
+            
+            def map = StringMap(stringWriter, strings);
+            
+            // Forge the expected stream and map the strings
+            def expectedStringMap = Dictionary.[string, uint]();
+            def expectedStream = MemoryStream();
+            foreach(text in strings)
+            {
+                def offset = stringWriter.Write(text, expectedStream);
+                expectedStringMap[text] = offset;
+            }
+            
+            // Match the expected strings and the offsets with the actual offsets
+            foreach(key in expectedStringMap.Keys)
+            {
+                def expectedOffset = expectedStringMap[key];
+                map.Contains(key).ShouldBeTrue("Missing expected key '{0}'", key);
+                map.GetStringOffset(key).ShouldBeEqualTo(expectedOffset, "Wrong String Offset");
+            }
         }
-        public stub ShouldReturnOffsetForExistingString() : void
+        public ShouldBeAbleToFlushContentsToAnArbitraryStream() : void
         {
-        }
-        public stub ShouldBeAbleToFlushContentsToAnArbitraryStream() : void
-        {
+            def stringWriter = UserStringHeapWriter();
+            def strings = array["foo", "bar", "baz"];
+            
+            def map = StringMap(stringWriter, strings);            
+            def expectedStream = MemoryStream();
+            foreach(text in strings)
+            {
+                _ = stringWriter.Write(text, expectedStream);
+            }
+            
+            def outputStream = MemoryStream();
+            map.FlushContentsTo(outputStream);
+            expectedStream.ShouldMatch(outputStream);
         }
     }
 }

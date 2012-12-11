@@ -21,6 +21,10 @@ namespace Tests
             _offset = offset;
             _expectedText = expectedText;
         }
+        public Contains([NotNull] text : string) : bool
+        {
+            text == _expectedText;
+        }        
         public GetStringOffset([NotNull] text : string) : uint
         {
             text.ShouldBeEqualTo(_expectedText, "Wrong Input Text!");

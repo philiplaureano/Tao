@@ -836,6 +836,9 @@
     <Compile Include="Metadata\StringHeapWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\StringMap.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\TableReferenceDecoder.n">
       <SubType>Code</SubType>
     </Compile>
