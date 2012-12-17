@@ -677,6 +677,9 @@
     <Content Include="SampleBinaries\NHibernate.dll">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="SampleBinaries\SampleAppWithExceptionHandlersInMethod.exe">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="SampleBinaries\SampleAppWithFatMethodBody.exe">
       <SubType>Content</SubType>
     </Content>

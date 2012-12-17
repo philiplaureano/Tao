@@ -37,40 +37,25 @@ namespace Tests
 
             body.CodeSize.ShouldBeEqualTo(0x18, "Wrong method body size");
         }
-        
+
         public ShouldBeAbleToReadFatHeader() : void
         {
-            def imageStream = File.ReadAllBytes(@"..\..\SampleBinaries\SampleAppWithFatMethodBody.exe");
+            def assemblyFile = @"..\..\SampleBinaries\SampleAppWithFatMethodBody.exe";
             
-            def image = Image.ReadFrom(imageStream.ToStream());
-            def root = image.GetMetadataRoot();
+            def testFatBody(fatBody : FatMethodBody) : void
+            {
+                fatBody.Flags.ShouldBeEqualTo(0x3013, "Invalid Flags");
+                fatBody.MaxStack.ShouldBeEqualTo(2, "Invalid MaxStack value");
+                fatBody.LocalVarSigToken.ShouldBeEqualTo(0x11000001, "Invalid LocalVarSigToken");
+                fatBody.InitLocals.ShouldBeTrue("InitLocals should be true");
+                fatBody.CodeSize.ShouldBeEqualTo(11, "Invalid code size");
 
-            def tableStream = root.Heaps["#~"];
-            def tableHeap = TablesHeap();
-            tableHeap.ReadFrom(tableStream);
-            
-            // Find the target method
-            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();            
-            def fatMethodRow = rows[1];
-            
-            def rva = fatMethodRow.Rva;
-            def methodStream = image.GetDataAt(rva);
-            def reader = MethodBodyReader();
-            
-            def body = reader.Read(methodStream);
-            body.ShouldBeOfType.[FatMethodBody]();
-            
-            body.CodeSize.ShouldBeEqualTo(11, "Invalid code size");
-            
-            def fatBody = body.As.[FatMethodBody]();
-            fatBody.Flags.ShouldBeEqualTo(0x3013, "Invalid Flags");
-            fatBody.MaxStack.ShouldBeEqualTo(2, "Invalid MaxStack value");
-            fatBody.LocalVarSigToken.ShouldBeEqualTo(0x11000001, "Invalid LocalVarSigToken");
-            fatBody.InitLocals.ShouldBeTrue("InitLocals should be true");
-            
-            // Match the instructions in the method body
-            def expectedBytes = array[0x00 : byte, 0x02, 0x03, 0x58, 0x0A, 0x06, 0x0B, 0x2B, 0x00, 0x07, 0x2A];
-            fatBody.Bytes.ShouldMatch(expectedBytes);
+                // Match the instructions in the method body
+                def expectedBytes = array[0x00 : byte, 0x02, 0x03, 0x58, 0x0A, 0x06, 0x0B, 0x2B, 0x00, 0x07, 0x2A];
+                fatBody.Bytes.ShouldMatch(expectedBytes);
+            }
+
+            TestFatMethodBody(assemblyFile, testFatBody);
         }
         public ShouldBeAbleToExtractMethodRowsAndMethodRVAs() : void
         {
@@ -81,18 +66,50 @@ namespace Tests
             def tableStream = root.Heaps["#~"];
             def tableHeap = TablesHeap();
             tableHeap.ReadFrom(tableStream);
-            
+
             def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();
             rows.Length.ShouldBeEqualTo(4, "Invalid row count");
-                                    
+
             rows[0].Rva.ShouldBeEqualTo(0x00002050, "Invalid Rva");
             rows[3].Rva.ShouldBeEqualTo(0x0000207C, "Invalid Rva");
         }
         public stub ShouldReadExceptionHandlerBlocks() : void
         {
+
+        }
+        public stub ShouldReadSingleExceptionHandlerBlock() : void
+        {
         }
         public stub ShouldWriteExceptionHandlerBlocks() : void
         {
+        }
+        public stub ShouldWriteMultipleExceptionHandlerBlocks() : void
+        {
+        }
+        private TestFatMethodBody(assemblyFile : string, testFatBody : FatMethodBody -> void) : void
+        {
+            def imageStream = File.ReadAllBytes(assemblyFile);
+
+            def image = Image.ReadFrom(imageStream.ToStream());
+            def root = image.GetMetadataRoot();
+
+            def tableStream = root.Heaps["#~"];
+            def tableHeap = TablesHeap();
+            tableHeap.ReadFrom(tableStream);
+
+            // Find the target method
+            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();            
+            def fatMethodRow = rows[1];
+
+            def rva = fatMethodRow.Rva;
+            def methodStream = image.GetDataAt(rva);
+            def reader = MethodBodyReader();
+
+            def body = reader.Read(methodStream);
+            body.ShouldBeOfType.[FatMethodBody]();            
+
+            def fatBody = body.As.[FatMethodBody]();
+            testFatBody(fatBody);
         }
         private GetData() : array[byte]
         {
