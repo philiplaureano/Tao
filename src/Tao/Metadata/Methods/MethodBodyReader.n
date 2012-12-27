@@ -63,37 +63,7 @@ namespace Tao.Metadata
                     def slack = 4 - (size % 4);
                     _ = methodStream.Seek(slack, SeekOrigin.Current);
                     
-                    def kind = reader.ReadByte() :> MethodDataSectionFlags;
-                    def isFatExceptionBlock = (kind & MethodDataSectionFlags.FatFormat) != 0;
-                    mutable exceptionBlock : ExceptionBlockHeader = null;
-                    mutable numberOfClauses = 0;
-                    
-                    if(isFatExceptionBlock)
-                    {
-                        // Calculate the data size by reading the next three bytes
-                        _ = methodStream.Seek(-1, SeekOrigin.Current);
-                        def dataSize = reader.ReadInt32() >> 8;
-                        def fatBlock = FatExceptionBlockHeader();
-
-                        numberOfClauses = (dataSize - 4) / 24;
-                        exceptionBlock = fatBlock;
-                    }
-                    else
-                    {
-                        def dataSize = reader.ReadByte();
-                        def thinBlock = ThinExceptionBlockHeader();
-
-                        numberOfClauses = (dataSize - 4) / 12;
-                        exceptionBlock = thinBlock;
-                        
-                        // Skip the padding bytes
-                        _ = methodStream.Seek(2, SeekOrigin.Current);
-                    }
-                    
-                    exceptionBlock.Kind = kind;
-                    exceptionBlock.ReadClausesFrom(methodStream, numberOfClauses :> uint);
-
-                    body.ExceptionHandlerBlocks.Add(exceptionBlock);
+                    ReadExceptionBlocks(reader, body);
                 }
 
                 result = body;
@@ -103,6 +73,47 @@ namespace Tao.Metadata
                 throw NotSupportedException("Invalid or unknown method body type");
 
             result;
+        }
+        private ReadExceptionBlocks([NotNull] reader : BinaryReader,[NotNull] body : FatMethodBody) : void
+        {
+            def methodStream = reader.BaseStream;
+            def kind = reader.ReadByte() :> MethodDataSectionFlags;
+            def isFatExceptionBlock = (kind & MethodDataSectionFlags.FatFormat) != 0;
+            mutable exceptionBlock : ExceptionBlockHeader = null;
+            mutable numberOfClauses = 0;
+            
+            if(isFatExceptionBlock)
+            {
+                // Calculate the data size by reading the next three bytes
+                _ = methodStream.Seek(-1, SeekOrigin.Current);
+                def dataSize = reader.ReadInt32() >> 8;
+                def fatBlock = FatExceptionBlockHeader();
+
+                numberOfClauses = (dataSize - 4) / 24;
+                exceptionBlock = fatBlock;
+            }
+            else
+            {
+                def dataSize = reader.ReadByte();
+                def thinBlock = ThinExceptionBlockHeader();
+
+                numberOfClauses = (dataSize - 4) / 12;
+                exceptionBlock = thinBlock;
+                
+                // Skip the padding bytes
+                _ = methodStream.Seek(2, SeekOrigin.Current);
+            }
+            
+            exceptionBlock.Kind = kind;
+            exceptionBlock.ReadClausesFrom(methodStream, numberOfClauses :> uint);
+
+            body.ExceptionHandlerBlocks.Add(exceptionBlock);
+
+            def hasMoreSections = (kind & MethodDataSectionFlags.HasMoreSections) != 0;
+            when(hasMoreSections)
+            {
+                ReadExceptionBlocks(reader, body);
+            }
         }
     }
 }
