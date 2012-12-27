@@ -92,7 +92,8 @@ namespace Tests
                 def thinBlock = block :> ThinExceptionBlockHeader;
                 thinBlock.Clauses.Count().ShouldBeEqualTo(1, "Wrong number of expected clauses");
                 
-                def clause = thinBlock.Clauses.First();
+                thinBlock.DataSize.ShouldBeEqualTo(16, "Wrong Data Size");
+                def clause = thinBlock.Clauses.First();                
                 clause.TryOffset.ShouldBeEqualTo(1, "Wrong Try Offset");
                 clause.TryLength.ShouldBeEqualTo(0x24, "Wrong Try Length");
                 clause.HandlerOffset.ShouldBeEqualTo(0x25, "Wrong Handler Offset");

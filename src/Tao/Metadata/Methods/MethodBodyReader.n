@@ -88,7 +88,8 @@ namespace Tao.Metadata
                 _ = methodStream.Seek(-1, SeekOrigin.Current);
                 def dataSize = reader.ReadInt32() >> 8;
                 def fatBlock = FatExceptionBlockHeader();
-
+                fatBlock.DataSize = dataSize :> uint;
+                
                 numberOfClauses = (dataSize - 4) / 24;
                 exceptionBlock = fatBlock;
             }
@@ -96,6 +97,7 @@ namespace Tao.Metadata
             {
                 def dataSize = reader.ReadByte();
                 def thinBlock = ThinExceptionBlockHeader();
+                thinBlock.DataSize = dataSize;
 
                 numberOfClauses = (dataSize - 4) / 12;
                 exceptionBlock = thinBlock;
