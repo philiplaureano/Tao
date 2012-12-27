@@ -1,0 +1,20 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata
+{
+    public class FatExceptionHandlerClause : ExceptionHandlerClause
+    {
+        public Flags : uint { get; set; }
+        public TryOffset : uint { get; set; }
+        public TryLength : uint { get; set; }
+        public HandlerOffset : uint { get; set; }
+        public HandlerLength : uint { get; set; }
+    }
+}

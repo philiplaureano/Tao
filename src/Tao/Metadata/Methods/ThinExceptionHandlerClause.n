@@ -1,0 +1,20 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata
+{
+    public class ThinExceptionHandlerClause : ExceptionHandlerClause
+    {
+        public Flags : ushort { get; set; }
+        public TryOffset : ushort { get; set; }
+        public TryLength : byte { get; set; }
+        public HandlerOffset : ushort { get; set; }
+        public HandlerLength : byte { get; set; }
+    }
+}

@@ -77,16 +77,48 @@ namespace Tests
         {
 
         }
-        public stub ShouldReadSingleExceptionHandlerBlock() : void
+        public ShouldReadSingleExceptionHandlerBlock() : void
         {
+            def targetAssembly = @"..\..\SampleBinaries\SampleAppWithExceptionHandlersInMethod.exe";
+            
+            def testFatBody(fatBody : FatMethodBody) : void
+            {
+                def handlerBlocks = fatBody.ExceptionHandlerBlocks;
+                handlerBlocks.Count().ShouldBeEqualTo(1, "Wrong number of expected handler blocks");
+                
+                def block = handlerBlocks.First();
+                block.GetType().ShouldBeEqualTo(typeof(ThinExceptionBlockHeader), "Wrong header type");
+                
+                def thinBlock = block :> ThinExceptionBlockHeader;
+                thinBlock.Clauses.Count().ShouldBeEqualTo(1, "Wrong number of expected clauses");
+                
+                def clause = thinBlock.Clauses.First();
+                clause.TryOffset.ShouldBeEqualTo(1, "Wrong Try Offset");
+                clause.TryLength.ShouldBeEqualTo(0x24, "Wrong Try Length");
+                clause.HandlerOffset.ShouldBeEqualTo(0x25, "Wrong Handler Offset");
+                clause.HandlerLength.ShouldBeEqualTo(16, "Wrong Handler Length");
+            }
+            TestFatMethodBody(targetAssembly, "Main", testFatBody);
         }
+        
         public stub ShouldWriteExceptionHandlerBlocks() : void
         {
         }
         public stub ShouldWriteMultipleExceptionHandlerBlocks() : void
         {
         }
-        private TestFatMethodBody(assemblyFile : string, testFatBody : FatMethodBody -> void) : void
+        public stub ShouldBeAbleToDetermineWhetherOrNotExceptionHandlerBlocksExist() : void
+        {
+        }
+        private TestFatMethodBody(assemblyFile : string, methodName : string, testFatBody : FatMethodBody -> void) : void
+        {
+            def pickMatchingMethod(stringHeap : Stream, rows : array[MethodDefRow]) : MethodDefRow
+            {
+                rows.First(r => r.Name.ToString(stringHeap) == methodName);
+            }
+            TestFatMethodBody(assemblyFile, pickMatchingMethod, testFatBody);
+        }
+        private TestFatMethodBody(assemblyFile : string, chooseMethodRow : Stream * array[MethodDefRow] -> MethodDefRow, testFatBody : FatMethodBody -> void) : void
         {
             def imageStream = File.ReadAllBytes(assemblyFile);
 
@@ -99,7 +131,7 @@ namespace Tests
 
             // Find the target method
             def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();            
-            def fatMethodRow = rows[1];
+            def fatMethodRow = chooseMethodRow(root.GetStringHeap(), rows);
 
             def rva = fatMethodRow.Rva;
             def methodStream = image.GetDataAt(rva);
@@ -110,6 +142,15 @@ namespace Tests
 
             def fatBody = body.As.[FatMethodBody]();
             testFatBody(fatBody);
+        }
+        private TestFatMethodBody(assemblyFile : string, testFatBody : FatMethodBody -> void) : void
+        {
+            def pickFirstRow(stringHeap : Stream, rows : array[MethodDefRow]) : MethodDefRow
+            {
+                rows[1];
+            }
+
+            TestFatMethodBody(assemblyFile, pickFirstRow, testFatBody);
         }
         private GetData() : array[byte]
         {

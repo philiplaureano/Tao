@@ -11,6 +11,7 @@ namespace Tao.Metadata
 {
   public class FatMethodBody : MethodBody
   {
+      private _blocks : IList.[ExceptionBlockHeader] = List();
       public Flags : ushort
       {
           get;set;
@@ -27,6 +28,14 @@ namespace Tao.Metadata
       public InitLocals : bool
       {
           get;set;
-      }     
+      } 
+      
+      public ExceptionHandlerBlocks : IList.[ExceptionBlockHeader]
+      {
+          get
+          {
+              _blocks;
+          }          
+      }
   }
 }

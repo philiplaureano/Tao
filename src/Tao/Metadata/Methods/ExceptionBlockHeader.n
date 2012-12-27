@@ -1,0 +1,18 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata
+{
+    public abstract class ExceptionBlockHeader
+    {
+        public Kind : MethodDataSectionFlags { get; set; }
+        public abstract ReadClausesFrom(stream : Stream, numberOfClauses : uint) : void;
+    }
+}

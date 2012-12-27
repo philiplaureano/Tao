@@ -317,9 +317,6 @@
     <Compile Include="Metadata\CompressedIntegerWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\FatMethodBody.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Metadata\GuidReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -575,13 +572,43 @@
     <Compile Include="Metadata\MetadataStreamReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\MethodBody.n">
+    <Compile Include="Metadata\Methods\ExceptionBlockHeader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\MethodBodyReader.n">
+    <Compile Include="Metadata\Methods\ExceptionHandlerClause.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\MethodHeaderFlags.n">
+    <Compile Include="Metadata\Methods\ExceptionHandlerClauseFlags.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Methods\FatExceptionBlockHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Methods\FatExceptionHandlerClause.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Methods\FatMethodBody.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Methods\MethodBody.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Methods\MethodBodyReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Methods\MethodDataSectionFlags.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Methods\MethodHeaderFlags.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Methods\ThinExceptionBlockHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Methods\ThinExceptionHandlerClause.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Methods\TinyMethodBody.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Signatures\ArrayShape.n">
@@ -1382,9 +1409,6 @@
     <Compile Include="Metadata\TagValueMap.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\TinyMethodBody.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Metadata\TypeReference.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1501,6 +1525,7 @@
     <Folder Include="Metadata\Instructions\Operands\Sizers" />
     <Folder Include="Metadata\Instructions\Operands\Writers" />
     <Folder Include="Metadata\Instructions\Operands\Readers" />
+    <Folder Include="Metadata\Methods" />
     <Folder Include="Metadata\Signatures\" />
     <Folder Include="Metadata\Tables\" />
     <Folder Include="Metadata\Tables\Rows\" />
