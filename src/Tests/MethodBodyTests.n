@@ -73,9 +73,37 @@ namespace Tests
             rows[0].Rva.ShouldBeEqualTo(0x00002050, "Invalid Rva");
             rows[3].Rva.ShouldBeEqualTo(0x0000207C, "Invalid Rva");
         }
-        public stub ShouldReadExceptionHandlerBlocks() : void
+        public ShouldReadMultipleExceptionHandlerBlocks() : void
         {
+            def targetAssembly = @"..\..\SampleBinaries\SampleMultipleExceptionHandlersInMethod.exe";                    
 
+            def testClause(clause : ThinExceptionHandlerClause, tryOffset : ushort, tryLength : byte, handlerOffset : ushort, handlerLength : byte)
+            {
+                clause.TryOffset.ShouldBeEqualTo(tryOffset, "Wrong Try Offset");
+                clause.TryLength.ShouldBeEqualTo(tryLength, "Wrong Try Length");
+                clause.HandlerOffset.ShouldBeEqualTo(handlerOffset, "Wrong Handler Offset");
+                clause.HandlerLength.ShouldBeEqualTo(handlerLength, "Wrong Handler Length");
+            }
+
+            def testFatBody(fatBody : FatMethodBody) : void
+            {
+                def handlerBlocks = fatBody.ExceptionHandlerBlocks.ToArray();
+                handlerBlocks.Count().ShouldBeEqualTo(1, "Wrong number of expected handler blocks");
+
+                def block = handlerBlocks[0];
+                def thinBlock = block.As.[ThinExceptionBlockHeader]();
+                thinBlock.Clauses.Count().ShouldBeEqualTo(3, "Wrong number of expected clauses");
+                
+                def firstClause = thinBlock.Clauses[0];
+                testClause(firstClause, 0x1, 0x7, 0x8, 0x11);
+
+                def secondClause = thinBlock.Clauses[1];
+                testClause(secondClause, 0x1a, 0x7, 0x21, 0x11);
+                
+                def thirdClause = thinBlock.Clauses[2];
+                testClause(thirdClause, 0x33, 0x7, 0x3a, 0x11);
+            }
+            TestFatMethodBody(targetAssembly, "Main", testFatBody);
         }
         public ShouldReadSingleExceptionHandlerBlock() : void
         {
@@ -90,9 +118,9 @@ namespace Tests
                 block.GetType().ShouldBeEqualTo(typeof(ThinExceptionBlockHeader), "Wrong header type");
                 
                 def thinBlock = block :> ThinExceptionBlockHeader;
-                thinBlock.Clauses.Count().ShouldBeEqualTo(1, "Wrong number of expected clauses");
-                
+                thinBlock.Clauses.Count().ShouldBeEqualTo(1, "Wrong number of expected clauses");                
                 thinBlock.DataSize.ShouldBeEqualTo(16, "Wrong Data Size");
+                
                 def clause = thinBlock.Clauses.First();                
                 clause.TryOffset.ShouldBeEqualTo(1, "Wrong Try Offset");
                 clause.TryLength.ShouldBeEqualTo(0x24, "Wrong Try Length");

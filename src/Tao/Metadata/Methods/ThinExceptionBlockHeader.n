@@ -32,8 +32,19 @@ namespace Tao.Metadata
                 clause.TryLength = reader.ReadByte() :> byte;
                 clause.HandlerOffset = reader.ReadUInt16();
                 clause.HandlerLength = reader.ReadByte() :> byte;
-                clause.ClassToken = reader.ReadUInt32();
-                clause.FilterOffset = reader.ReadUInt32();
+                
+               def flags = clause.Flags :> ExceptionHandlerClauseFlags;
+
+                def tokenOrFilterValue = reader.ReadUInt32();
+                when((flags & ExceptionHandlerClauseFlags.TypedException) != 0)
+                {
+                    clause.ClassToken = tokenOrFilterValue;                    
+                }
+
+                when((flags & ExceptionHandlerClauseFlags.Filter) != 0)
+                {
+                    clause.FilterOffset = tokenOrFilterValue;                    
+                }
                 
                 Clauses.Add(clause);
             }
