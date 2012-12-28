@@ -108,9 +108,6 @@ namespace Tests
         public stub ShouldWriteMultipleExceptionHandlerBlocks() : void
         {
         }
-        public stub ShouldBeAbleToDetermineWhetherOrNotExceptionHandlerBlocksExist() : void
-        {
-        }
         private TestFatMethodBody(assemblyFile : string, methodName : string, testFatBody : FatMethodBody -> void) : void
         {
             def pickMatchingMethod(stringHeap : Stream, rows : array[MethodDefRow]) : MethodDefRow
