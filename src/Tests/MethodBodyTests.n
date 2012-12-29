@@ -73,7 +73,7 @@ namespace Tests
             rows[0].Rva.ShouldBeEqualTo(0x00002050, "Invalid Rva");
             rows[3].Rva.ShouldBeEqualTo(0x0000207C, "Invalid Rva");
         }
-        public ShouldReadMultipleExceptionHandlerBlocks() : void
+        public ShouldReadMultipleThinExceptionHandlerBlocks() : void
         {
             def targetAssembly = @"..\..\SampleBinaries\SampleMultipleExceptionHandlersInMethod.exe";                    
 
@@ -105,7 +105,7 @@ namespace Tests
             }
             TestFatMethodBody(targetAssembly, "Main", testFatBody);
         }
-        public ShouldReadSingleExceptionHandlerBlock() : void
+        public ShouldReadSingleThinExceptionHandlerBlock() : void
         {
             def targetAssembly = @"..\..\SampleBinaries\SampleAppWithExceptionHandlersInMethod.exe";
             
@@ -130,11 +130,74 @@ namespace Tests
             TestFatMethodBody(targetAssembly, "Main", testFatBody);
         }
         
-        public stub ShouldWriteExceptionHandlerBlocks() : void
+        public ShouldWriteThinExceptionHandlerBlocks() : void
+        {
+            def assemblyFile = @"..\..\SampleBinaries\SampleAppWithExceptionHandlersInMethod.exe";
+            TestThinExceptionHandlerBlockWrite(assemblyFile);
+        }
+        public ShouldWriteMultipleThinExceptionHandlerBlocks() : void
+        {
+            def assemblyFile = @"..\..\SampleBinaries\SampleMultipleExceptionHandlersInMethod.exe";                    
+            TestThinExceptionHandlerBlockWrite(assemblyFile);
+        }
+        public stub ShouldWriteMultipleFatExceptionHandlerBlocks() : void
         {
         }
-        public stub ShouldWriteMultipleExceptionHandlerBlocks() : void
+        public stub ShouldWriteSingleFatExceptionHandlerBlock() : void
+        {            
+        }
+        public stub ShouldReadMultipleFatExceptionHandlerBlocks() : void
         {
+        }
+        public stub ShouldReadSingleFatExceptionHandlerBlock() : void
+        {            
+        }
+        private TestThinExceptionHandlerBlockWrite(assemblyFile : string) : void
+        {
+            def imageStream = File.ReadAllBytes(assemblyFile);
+
+            def image = Image.ReadFrom(imageStream.ToStream());
+            def root = image.GetMetadataRoot();
+
+            def tableStream = root.Heaps["#~"];
+            def tableHeap = TablesHeap();
+            tableHeap.ReadFrom(tableStream);
+
+            def stringHeap = root.GetStringHeap();
+
+            // Find the target method
+            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();            
+            def fatMethodRow = rows.First(r => r.Name.ToString(stringHeap) == "Main");
+
+            def rva = fatMethodRow.Rva;
+            def methodStream = image.GetDataAt(rva);
+            def reader = MethodBodyReader();
+
+            def startPosition = methodStream.Position;
+            def body = reader.Read(methodStream);
+            def endPosition = methodStream.Position;            
+
+            // This test assumes that there is only one type of exception handler block per method,
+            // and each handler can have one or more clauses
+            def fatBody = body.As.[FatMethodBody]();
+            def handlerBlocks = fatBody.ExceptionHandlerBlocks;
+            handlerBlocks.Count().ShouldBeEqualTo(1, "Wrong number of expected handler blocks");
+            
+            def block = handlerBlocks.First();
+            block.GetType().ShouldBeEqualTo(typeof(ThinExceptionBlockHeader), "Wrong header type");
+            
+            def actualStream = MemoryStream();
+            def thinBlock = block :> ThinExceptionBlockHeader;
+            thinBlock.WriteClausesTo(actualStream);
+
+            // Calculate the start position of the exception header blocks
+            def exceptionBlockStartPosition = endPosition - (thinBlock.DataSize :> uint);
+
+            // Determine what the expected bytes should look like after a write operation
+            def byteCount = endPosition - exceptionBlockStartPosition;
+            def expectedStream = methodStream.ReadBytes(byteCount :> int, exceptionBlockStartPosition);
+
+            actualStream.ShouldMatch(expectedStream);
         }
         private TestFatMethodBody(assemblyFile : string, methodName : string, testFatBody : FatMethodBody -> void) : void
         {

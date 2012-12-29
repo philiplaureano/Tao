@@ -1,4 +1,5 @@
 ﻿using Nemerle;
+using Nemerle.Assertions;
 using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
@@ -26,33 +27,32 @@ namespace Tao.Metadata
                 _clauses;
             }
         }
-        public override ReadClausesFrom(stream : Stream, numberOfClauses : uint) : void
+        public override ReadClausesFrom([NotNull] stream : Stream, numberOfClauses : uint) : void
         {
             def reader = BinaryReader(stream);
             for(mutable i : uint = 0; i < numberOfClauses; i++)
-            {
-                def clause = FatExceptionHandlerClause();
-                clause.Flags = reader.ReadUInt32();
-                clause.TryOffset = reader.ReadUInt32();
-                clause.TryLength = reader.ReadUInt32() :> byte;
-                clause.HandlerOffset = reader.ReadUInt32();
-                clause.HandlerLength = reader.ReadUInt32() :> byte;
-                
-                def flags = clause.Flags :> ExceptionHandlerClauseFlags;
-
-                def tokenOrFilterValue = reader.ReadUInt32();
-                when((flags & ExceptionHandlerClauseFlags.TypedException) != 0)
-                {
-                    clause.ClassToken = tokenOrFilterValue;                    
-                }
-
-                when((flags & ExceptionHandlerClauseFlags.Filter) != 0)
-                {
-                    clause.FilterOffset = tokenOrFilterValue;                    
-                }
-
+            {                
+                def clause = ReadClauseFrom(reader);
                 Clauses.Add(clause);
             }
+        }
+        private ReadClauseFrom([NotNull] reader : BinaryReader) : FatExceptionHandlerClause
+            ensures value.ClassToken != null || value.FilterOffset != null
+        {
+            def clause = FatExceptionHandlerClause();
+            clause.Flags = reader.ReadUInt32();
+            clause.TryOffset = reader.ReadUInt32();
+            clause.TryLength = reader.ReadUInt32() :> byte;
+            clause.HandlerOffset = reader.ReadUInt32();
+            clause.HandlerLength = reader.ReadUInt32() :> byte;            
+            
+            ReadClassTokenOrFilterOffsetFrom(reader, clause, clause.Flags :> ExceptionHandlerClauseFlags);
+            clause;
+        }
+
+        public override WriteClausesTo([NotNull] stream : Stream) : void
+        {
+            throw NotImplementedException("TODO: Implement this method");
         }
     }
 }
