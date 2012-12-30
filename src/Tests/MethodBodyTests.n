@@ -140,19 +140,237 @@ namespace Tests
             def assemblyFile = @"..\..\SampleBinaries\SampleMultipleExceptionHandlersInMethod.exe";                    
             TestThinExceptionHandlerBlockWrite(assemblyFile);
         }
-        public stub ShouldWriteMultipleFatExceptionHandlerBlocks() : void
+        public ShouldWriteMultipleFatExceptionHandlerBlocks() : void
         {
+            def assemblyFile = @"..\..\SampleBinaries\SampleMultipleExceptionHandlersInMethod.exe";                    
+            
+            def forgeHeader(headerWriter : BinaryWriter) : void
+            {
+                // Write the Kind 
+                headerWriter.Write((MethodDataSectionFlags.EHTable | MethodDataSectionFlags.FatFormat) :> byte);
+
+                // Write the data size (76 bytes for three clauses)
+                headerWriter.Write(76 : byte);
+                headerWriter.Write(0 : byte);
+                headerWriter.Write(0 : byte);
+
+                def writeClause(flags : ExceptionHandlerClauseFlags, tryOffset : uint, tryLength : uint, handlerOffset : uint, handlerLength : uint, classToken : uint) : void
+                {
+                    // Write the fat clause flags
+                    headerWriter.Write(flags :> uint);
+                    
+                    // Write the TryOffset
+                    headerWriter.Write(tryOffset);
+
+                    // Write the TryLength
+                    headerWriter.Write(tryLength);
+                    
+                    // Write the HandlerOffset
+                    headerWriter.Write(handlerOffset);
+
+                    // Write the HandlerLength
+                    headerWriter.Write(handlerLength);
+
+                    // Write the ClassToken
+                    headerWriter.Write(classToken);    
+                }
+                def write = writeClause(ExceptionHandlerClauseFlags.TypedException, _, /* TryLength */ 0x7, _, /* Handler Length */ 0x11, /* ClassToken */ 0x01000014);
+
+                write(0x1, 0x8);
+                write(0x1a, 0x21);
+                write(0x33, 0x3a);
+            }
+            def methodStream = ForgeMethodStream(assemblyFile, forgeHeader);
+            TestExceptionHandlerBlockWrite(assemblyFile, methodStream, forgeHeader);
         }
-        public stub ShouldWriteSingleFatExceptionHandlerBlock() : void
+        public ShouldWriteSingleFatExceptionHandlerBlock() : void
         {            
+            def assemblyFile = @"..\..\SampleBinaries\SampleAppWithExceptionHandlersInMethod.exe";
+            def forgeHeader(headerWriter : BinaryWriter) : void
+            {
+                // Write the Kind 
+                headerWriter.Write((MethodDataSectionFlags.EHTable | MethodDataSectionFlags.FatFormat) :> byte);
+
+                // Write the data size (16)
+                headerWriter.Write(16 : byte);
+                headerWriter.Write(0 : byte);
+                headerWriter.Write(0 : byte);
+
+                // Write the fat clause
+                headerWriter.Write(ExceptionHandlerClauseFlags.TypedException :> uint);
+                
+                // Write the TryOffset
+                headerWriter.Write(0x1 : uint);
+
+                // Write the TryLength
+                headerWriter.Write(0x7 : uint);
+                
+                // Write the HandlerOffset
+                headerWriter.Write(0x8 : uint);
+
+                // Write the HandlerLength
+                headerWriter.Write(0x11 : uint);
+
+                // Write the ClassToken
+                headerWriter.Write(0x01000014 : uint);
+            }
+
+            def methodStream = ForgeMethodStream(assemblyFile, forgeHeader);
+            TestExceptionHandlerBlockWrite(assemblyFile, methodStream, forgeHeader);
         }
-        public stub ShouldReadMultipleFatExceptionHandlerBlocks() : void
+        public ShouldReadMultipleFatExceptionHandlerBlocks() : void
         {
+            def targetAssembly = @"..\..\SampleBinaries\SampleMultipleExceptionHandlersInMethod.exe";                    
+
+            def forgeHeader(headerWriter : BinaryWriter) : void
+            {
+                // Write the Kind 
+                headerWriter.Write((MethodDataSectionFlags.EHTable | MethodDataSectionFlags.FatFormat) :> byte);
+
+                // Write the data size (76 bytes for three clauses)
+                headerWriter.Write(76 : byte);
+                headerWriter.Write(0 : byte);
+                headerWriter.Write(0 : byte);
+
+                def writeClause(flags : ExceptionHandlerClauseFlags, tryOffset : uint, tryLength : uint, handlerOffset : uint, handlerLength : uint, classToken : uint) : void
+                {
+                    // Write the fat clause flags
+                    headerWriter.Write(flags :> uint);
+                    
+                    // Write the TryOffset
+                    headerWriter.Write(tryOffset);
+
+                    // Write the TryLength
+                    headerWriter.Write(tryLength);
+                    
+                    // Write the HandlerOffset
+                    headerWriter.Write(handlerOffset);
+
+                    // Write the HandlerLength
+                    headerWriter.Write(handlerLength);
+
+                    // Write the ClassToken
+                    headerWriter.Write(classToken);    
+                }
+                def write = writeClause(ExceptionHandlerClauseFlags.TypedException, _, /* TryLength */ 0x7, _, /* Handler Length */ 0x11, /* ClassToken */ 0x01000014);
+
+                write(0x1, 0x8);
+                write(0x1a, 0x21);
+                write(0x33, 0x3a);
+            }
+
+            def testClause(clause : FatExceptionHandlerClause, tryOffset : ushort, tryLength : byte, handlerOffset : ushort, handlerLength : byte)
+            {
+                clause.TryOffset.ShouldBeEqualTo(tryOffset, "Wrong Try Offset");
+                clause.TryLength.ShouldBeEqualTo(tryLength, "Wrong Try Length");
+                clause.HandlerOffset.ShouldBeEqualTo(handlerOffset, "Wrong Handler Offset");
+                clause.HandlerLength.ShouldBeEqualTo(handlerLength, "Wrong Handler Length");
+            }
+
+            def testFatBody(fatBody : FatMethodBody) : void
+            {
+                def handlerBlocks = fatBody.ExceptionHandlerBlocks.ToArray();
+                handlerBlocks.Count().ShouldBeEqualTo(1, "Wrong number of expected handler blocks");
+
+                def block = handlerBlocks[0];
+                def fatBlock = block.As.[FatExceptionBlockHeader]();
+                fatBlock.Clauses.Count().ShouldBeEqualTo(3, "Wrong number of expected clauses");
+                
+                def firstClause = fatBlock.Clauses[0];
+                def checkClause = testClause(_, _, 0x7, _, 0x11);
+
+                checkClause(firstClause, 0x1, 0x8);
+
+                def secondClause = fatBlock.Clauses[1];
+                checkClause(secondClause, 0x1a, 0x21);
+                
+                def thirdClause = fatBlock.Clauses[2];
+                checkClause(thirdClause, 0x33, 0x3a);
+            }
+
+            def inputStream = ForgeMethodStream(targetAssembly, forgeHeader);
+            TestFatMethodBody(targetAssembly, "Main", testFatBody, inputStream);            
         }
-        public stub ShouldReadSingleFatExceptionHandlerBlock() : void
+        public ShouldReadSingleFatExceptionHandlerBlock() : void        
         {            
+            def assemblyFile = @"..\..\SampleBinaries\SampleAppWithExceptionHandlersInMethod.exe";                    
+            
+            def forgeHeader(headerWriter : BinaryWriter) : void
+            {
+                // Write the Kind 
+                headerWriter.Write((MethodDataSectionFlags.EHTable | MethodDataSectionFlags.FatFormat) :> byte);
+
+                // Write the data size (28 bytes for a single fat exception clause)
+                headerWriter.Write(28 : byte);
+                headerWriter.Write(0 : byte);
+                headerWriter.Write(0 : byte);
+
+                // Write the fat clause
+                headerWriter.Write(ExceptionHandlerClauseFlags.TypedException :> uint);
+                
+                // Write the TryOffset
+                headerWriter.Write(0x1 : uint);
+
+                // Write the TryLength
+                headerWriter.Write(0x24 : uint);
+                
+                // Write the HandlerOffset
+                headerWriter.Write(0x25 : uint);
+
+                // Write the HandlerLength
+                headerWriter.Write(16 : uint);
+
+                // Write the ClassToken
+                headerWriter.Write(0x01000014 : uint);
+            }
+
+            def testFatBody(fatBody : FatMethodBody) : void
+            {
+                def handlerBlocks = fatBody.ExceptionHandlerBlocks;
+                handlerBlocks.Count().ShouldBeEqualTo(1, "Wrong number of expected handler blocks");
+                
+                def block = handlerBlocks.First();
+                block.GetType().ShouldBeEqualTo(typeof(FatExceptionBlockHeader), "Wrong header type");
+                
+                def fatBlock = block :> FatExceptionBlockHeader;
+                fatBlock.Clauses.Count().ShouldBeEqualTo(1, "Wrong number of expected clauses");                
+                fatBlock.DataSize.ShouldBeEqualTo(28, "Wrong Data Size");
+                
+                def clause = fatBlock.Clauses.First();                
+                clause.TryOffset.ShouldBeEqualTo(1, "Wrong Try Offset");
+                clause.TryLength.ShouldBeEqualTo(0x24, "Wrong Try Length");
+                clause.HandlerOffset.ShouldBeEqualTo(0x25, "Wrong Handler Offset");
+                clause.HandlerLength.ShouldBeEqualTo(16, "Wrong Handler Length");
+            }
+
+            // HACK: Forge the fat exception block bytes since 
+            // there are no known sample assemblies available 
+            def inputStream = ForgeMethodStream(assemblyFile, forgeHeader);
+            TestFatMethodBody(assemblyFile, "Main", testFatBody, inputStream);
         }
-        private TestThinExceptionHandlerBlockWrite(assemblyFile : string) : void
+        private ForgeMethodStream(assemblyFile : string, forgeHeader : BinaryWriter -> void) : Stream
+        {
+            def headerStream = MemoryStream();
+            def headerWriter = BinaryWriter(headerStream);            
+           
+            forgeHeader(headerWriter);
+
+            // Combine the two streams into an input stream            
+
+            // Copy the original method body bytes
+            def forgedMethodStream = MemoryStream();
+            def writer = BinaryWriter(forgedMethodStream);
+
+            def methodBytes = GetOriginalMethodBodyBytes(assemblyFile);
+            writer.Write(methodBytes);
+            writer.Write(headerStream.ToArray());
+
+            // Reset the stream position
+            _ = forgedMethodStream.Seek(0, SeekOrigin.Begin);
+
+            forgedMethodStream;
+        }
+        private GetOriginalMethodBodyBytes(assemblyFile : string) : array[byte]
         {
             def imageStream = File.ReadAllBytes(assemblyFile);
 
@@ -174,6 +392,79 @@ namespace Tests
             def reader = MethodBodyReader();
 
             def startPosition = methodStream.Position;
+            def originalBody = reader.Read(methodStream);
+            def endPosition = methodStream.Position;
+
+            def fatBody = originalBody.As.[FatMethodBody]();
+            def handlerBlocks = fatBody.ExceptionHandlerBlocks;
+            handlerBlocks.Count().ShouldBeEqualTo(1, "Wrong number of expected handler blocks");
+            
+            def block = handlerBlocks.First();
+            block.GetType().ShouldBeEqualTo(typeof(ThinExceptionBlockHeader), "Wrong header type");
+            
+             def actualStream = MemoryStream();            
+            block.WriteClausesTo(actualStream);
+
+            def thinBlock = block :> ThinExceptionBlockHeader;
+            thinBlock.WriteClausesTo(actualStream);
+
+            // Calculate the start position of the exception header blocks
+            def exceptionBlockStartPosition = endPosition - (thinBlock.DataSize :> uint);
+            
+            def byteCount = exceptionBlockStartPosition - startPosition;
+            def methodBodyBytes = methodStream.ReadBytes(byteCount :> int, startPosition);
+            methodBodyBytes;
+        }
+        
+        private TestThinExceptionHandlerBlockWrite(assemblyFile : string) : void
+        {
+            def getExpectedStream(endPosition : uint, block : ExceptionBlockHeader, methodStream : Stream) : Stream
+            {
+                block.GetType().ShouldBeEqualTo(typeof(ThinExceptionBlockHeader), "Wrong header type");
+                def thinBlock = block :> ThinExceptionBlockHeader;
+            
+                // Calculate the start position of the exception header blocks
+                def exceptionBlockStartPosition = endPosition - (thinBlock.DataSize :> uint);
+
+                // Determine what the expected bytes should look like after a write operation
+                def byteCount = endPosition - exceptionBlockStartPosition;
+                def expectedStream = MemoryStream(methodStream.ReadBytes(byteCount :> int, exceptionBlockStartPosition));
+                expectedStream;
+            }
+            TestExceptionHandlerBlockWrite(assemblyFile, (image, row) => image.GetDataAt(row.Rva), getExpectedStream);
+        }
+        private TestExceptionHandlerBlockWrite(assemblyFile : string, methodStream : Stream, forgeHeader : BinaryWriter -> void) : void
+        {
+            def expectedStream = MemoryStream();
+            def writer = BinaryWriter(expectedStream);
+
+            TestExceptionHandlerBlockWrite(assemblyFile, (image, row) => methodStream, (endPosition, block, methodStream) => 
+                {
+                    forgeHeader(writer);
+                    expectedStream;
+                });
+        }
+        private TestExceptionHandlerBlockWrite(assemblyFile : string, getMethodStream : IImage * MethodDefRow -> Stream, getExpectedStream : uint * ExceptionBlockHeader * Stream -> Stream) : void
+        {
+            def imageStream = File.ReadAllBytes(assemblyFile);
+
+            def image = Image.ReadFrom(imageStream.ToStream());
+            def root = image.GetMetadataRoot();
+
+            def tableStream = root.Heaps["#~"];
+            def tableHeap = TablesHeap();
+            tableHeap.ReadFrom(tableStream);
+
+            def stringHeap = root.GetStringHeap();
+
+            // Find the target method
+            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();            
+            def fatMethodRow = rows.First(r => r.Name.ToString(stringHeap) == "Main");
+
+            def methodStream = getMethodStream(image, fatMethodRow);
+            def reader = MethodBodyReader();
+
+            def startPosition = methodStream.Position;
             def body = reader.Read(methodStream);
             def endPosition = methodStream.Position;            
 
@@ -183,20 +474,14 @@ namespace Tests
             def handlerBlocks = fatBody.ExceptionHandlerBlocks;
             handlerBlocks.Count().ShouldBeEqualTo(1, "Wrong number of expected handler blocks");
             
-            def block = handlerBlocks.First();
-            block.GetType().ShouldBeEqualTo(typeof(ThinExceptionBlockHeader), "Wrong header type");
-            
-            def actualStream = MemoryStream();
-            def thinBlock = block :> ThinExceptionBlockHeader;
-            thinBlock.WriteClausesTo(actualStream);
+            def block = handlerBlocks.First();            
+            def actualStream = MemoryStream();            
+            block.WriteClausesTo(actualStream);                       
 
-            // Calculate the start position of the exception header blocks
-            def exceptionBlockStartPosition = endPosition - (thinBlock.DataSize :> uint);
+            // Reset the method stream position in order to properly construct the expected stream
+            _ = methodStream.Seek(startPosition, SeekOrigin.Begin);
 
-            // Determine what the expected bytes should look like after a write operation
-            def byteCount = endPosition - exceptionBlockStartPosition;
-            def expectedStream = methodStream.ReadBytes(byteCount :> int, exceptionBlockStartPosition);
-
+            def expectedStream = getExpectedStream(endPosition :> uint, block, methodStream);
             actualStream.ShouldMatch(expectedStream);
         }
         private TestFatMethodBody(assemblyFile : string, methodName : string, testFatBody : FatMethodBody -> void) : void
@@ -206,8 +491,34 @@ namespace Tests
                 rows.First(r => r.Name.ToString(stringHeap) == methodName);
             }
             TestFatMethodBody(assemblyFile, pickMatchingMethod, testFatBody);
-        }
+        }        
+
         private TestFatMethodBody(assemblyFile : string, chooseMethodRow : Stream * array[MethodDefRow] -> MethodDefRow, testFatBody : FatMethodBody -> void) : void
+        {
+            TestFatMethodBody(assemblyFile, chooseMethodRow, testFatBody, (image, fatMethodRow) => image.GetDataAt(fatMethodRow.Rva));
+        }
+        private TestFatMethodBody(assemblyFile : string, methodName : string, testFatBody : FatMethodBody -> void, methodStream : Stream) : void
+        {
+            def pickMatchingMethod(stringHeap : Stream, rows : array[MethodDefRow]) : MethodDefRow
+            {
+                rows.First(r => r.Name.ToString(stringHeap) == methodName);
+            }
+            TestFatMethodBody(assemblyFile, pickMatchingMethod, testFatBody, methodStream);
+        }
+        private TestFatMethodBody(assemblyFile : string, testFatBody : FatMethodBody -> void) : void
+        {
+            def pickFirstRow(stringHeap : Stream, rows : array[MethodDefRow]) : MethodDefRow
+            {
+                rows[1];
+            }
+
+            TestFatMethodBody(assemblyFile, pickFirstRow, testFatBody);
+        }
+        private TestFatMethodBody(assemblyFile : string, chooseMethodRow : Stream * array[MethodDefRow] -> MethodDefRow, testFatBody : FatMethodBody -> void, methodStream : Stream) : void
+        {
+            TestFatMethodBody(assemblyFile, chooseMethodRow, testFatBody, (image, fatMethodRow) => methodStream);            
+        }
+        private TestFatMethodBody(assemblyFile : string, chooseMethodRow : Stream * array[MethodDefRow] -> MethodDefRow, testFatBody : FatMethodBody -> void, getMethodStream : IImage * MethodDefRow -> Stream) : void
         {
             def imageStream = File.ReadAllBytes(assemblyFile);
 
@@ -222,24 +533,15 @@ namespace Tests
             def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();            
             def fatMethodRow = chooseMethodRow(root.GetStringHeap(), rows);
 
-            def rva = fatMethodRow.Rva;
-            def methodStream = image.GetDataAt(rva);
+            // Extract the method body stream
+            def methodStream = getMethodStream(image, fatMethodRow);
             def reader = MethodBodyReader();
 
             def body = reader.Read(methodStream);
             body.ShouldBeOfType.[FatMethodBody]();            
 
             def fatBody = body.As.[FatMethodBody]();
-            testFatBody(fatBody);
-        }
-        private TestFatMethodBody(assemblyFile : string, testFatBody : FatMethodBody -> void) : void
-        {
-            def pickFirstRow(stringHeap : Stream, rows : array[MethodDefRow]) : MethodDefRow
-            {
-                rows[1];
-            }
-
-            TestFatMethodBody(assemblyFile, pickFirstRow, testFatBody);
+            testFatBody(fatBody);        
         }
         private GetData() : array[byte]
         {
