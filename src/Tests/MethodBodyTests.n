@@ -191,8 +191,8 @@ namespace Tests
                 // Write the Kind 
                 headerWriter.Write((MethodDataSectionFlags.EHTable | MethodDataSectionFlags.FatFormat) :> byte);
 
-                // Write the data size (16)
-                headerWriter.Write(16 : byte);
+                // Write the data size (28)
+                headerWriter.Write(28 : byte);
                 headerWriter.Write(0 : byte);
                 headerWriter.Write(0 : byte);
 
@@ -474,7 +474,8 @@ namespace Tests
             def handlerBlocks = fatBody.ExceptionHandlerBlocks;
             handlerBlocks.Count().ShouldBeEqualTo(1, "Wrong number of expected handler blocks");
             
-            def block = handlerBlocks.First();            
+            def block = handlerBlocks.First();                        
+
             def actualStream = MemoryStream();            
             block.WriteClausesTo(actualStream);                       
 

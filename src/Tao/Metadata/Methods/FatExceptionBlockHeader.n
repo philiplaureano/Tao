@@ -52,7 +52,27 @@ namespace Tao.Metadata
 
         public override WriteClausesTo([NotNull] stream : Stream) : void
         {
-            throw NotImplementedException("TODO: Implement this method");
+            def writer = BinaryWriter(stream);
+            writer.Write(Kind :> byte);
+            writer.Write(DataSize :> byte);
+            writer.Write((DataSize >> 8) :> byte);
+            writer.Write((DataSize >> 16) :> byte);
+
+            foreach(clause in Clauses)
+            {
+                WriteClauseTo(writer, clause);
+            }
+        }
+        private WriteClauseTo([NotNull] writer : BinaryWriter, [NotNull] clause : FatExceptionHandlerClause) : void
+            requires clause.ClassToken != null || clause.FilterOffset != null
+        {
+            writer.Write(clause.Flags :> uint);
+            writer.Write(clause.TryOffset : uint);
+            writer.Write(clause.TryLength : uint);
+            writer.Write(clause.HandlerOffset : uint);
+            writer.Write(clause.HandlerLength : uint); 
+
+            WriteClassTokenOrFilterOffsetTo(writer, clause, clause.Flags :> ExceptionHandlerClauseFlags);
         }
     }
 }
