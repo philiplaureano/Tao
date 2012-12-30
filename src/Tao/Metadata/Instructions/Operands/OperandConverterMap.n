@@ -1,0 +1,48 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions.Operands
+{
+    public class OperandConverterMap : Dictionary.[OpCode, IDictionary[IInstruction, uint] * IInstruction -> IOperandConverter]
+    {
+	    public this() 
+	    {	
+			Add(OpCodes.Br_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Brfalse_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Brtrue_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Beq_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Bge_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Bgt_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Ble_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Blt_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Bne_Un_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Bge_Un_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Bgt_Un_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Ble_Un_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Blt_Un_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Br, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Brfalse, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Brtrue, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Beq, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Bge, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Bgt, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Ble, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Blt, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Bne_Un, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Bge_Un, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Bgt_Un, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Ble_Un, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Blt_Un, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Leave, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Leave_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Ldstr, (instructionMap, sourceBranchInstruction) => SwitchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+	    }
+    }
+}

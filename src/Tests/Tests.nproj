@@ -177,6 +177,9 @@
     <Compile Include="Instructions\OperandConversionTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Instructions\OperandConverterMappingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Instructions\OperandDecodingTests.n">
       <SubType>Code</SubType>
     </Compile>
@@ -684,6 +687,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="SampleBinaries\SampleAssemblyThatUsesTheConstantTable.exe">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SampleBinaries\SampleMultipleExceptionHandlersInMethod.exe">
       <SubType>Content</SubType>
     </Content>
     <Content Include="SampleBinaries\SamplePE32PlusApp.exe">

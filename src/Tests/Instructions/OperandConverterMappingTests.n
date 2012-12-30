@@ -1,0 +1,151 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Extensions;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata;
+
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+using Tao.Metadata.Instructions;
+using Tao.Metadata.Instructions.Operands;
+
+namespace Tests
+{
+	public class OperandConverterMappingTests
+	{
+		public ShouldHaveOperandConverterForBr_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Br_S);
+		}
+		public ShouldHaveOperandConverterForBrfalse_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Brfalse_S);
+		}
+		public ShouldHaveOperandConverterForBrtrue_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Brtrue_S);
+		}
+		public ShouldHaveOperandConverterForBeq_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Beq_S);
+		}
+		public ShouldHaveOperandConverterForBge_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Bge_S);
+		}
+		public ShouldHaveOperandConverterForBgt_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Bgt_S);
+		}
+		public ShouldHaveOperandConverterForBle_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Ble_S);
+		}
+		public ShouldHaveOperandConverterForBlt_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Blt_S);
+		}
+		public ShouldHaveOperandConverterForBne_Un_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Bne_Un_S);
+		}
+		public ShouldHaveOperandConverterForBge_Un_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Bge_Un_S);
+		}
+		public ShouldHaveOperandConverterForBgt_Un_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Bgt_Un_S);
+		}
+		public ShouldHaveOperandConverterForBle_Un_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Ble_Un_S);
+		}
+		public ShouldHaveOperandConverterForBlt_Un_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Blt_Un_S);
+		}
+		public ShouldHaveOperandConverterForBrInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Br);
+		}
+		public ShouldHaveOperandConverterForBrfalseInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Brfalse);
+		}
+		public ShouldHaveOperandConverterForBrtrueInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Brtrue);
+		}
+		public ShouldHaveOperandConverterForBeqInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Beq);
+		}
+		public ShouldHaveOperandConverterForBgeInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Bge);
+		}
+		public ShouldHaveOperandConverterForBgtInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Bgt);
+		}
+		public ShouldHaveOperandConverterForBleInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Ble);
+		}
+		public ShouldHaveOperandConverterForBltInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Blt);
+		}
+		public ShouldHaveOperandConverterForBne_UnInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Bne_Un);
+		}
+		public ShouldHaveOperandConverterForBge_UnInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Bge_Un);
+		}
+		public ShouldHaveOperandConverterForBgt_UnInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Bgt_Un);
+		}
+		public ShouldHaveOperandConverterForBle_UnInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Ble_Un);
+		}
+		public ShouldHaveOperandConverterForBlt_UnInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Blt_Un);
+		}
+		public ShouldHaveOperandConverterForLeaveInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Leave);
+		}
+		public ShouldHaveOperandConverterForLeave_SInstruction() : void
+		{
+		    ShouldHaveConverterForBranchInstruction(OpCodes.Leave_S);
+		}
+		public ShouldHaveOperandConverterForLdstrInstruction() : void
+		{
+			def opCode = OpCodes.Ldstr;
+			def map = OperandConverterMap();
+			map.ContainsKey(opCode).ShouldBeTrue("Missing OperandConverter for OpCode '{0}'", opCode.ToString());
+			map[opCode](Dictionary(), Instruction(0, OpCodes.Nop, null)).ShouldBeOfType.[UserStringOperandConverter]();	
+		}
+		private ShouldHaveConverterForBranchInstruction(opCode : OpCode) : void
+		{
+			def map = OperandConverterMap();
+			map.ContainsKey(opCode).ShouldBeTrue("Missing OperandConverter for OpCode '{0}'", opCode.ToString());
+			map[opCode](Dictionary(), Instruction(0, OpCodes.Nop, null)).ShouldBeOfType.[BranchInstructionOperandConverter]();
+		}
+	}
+}
