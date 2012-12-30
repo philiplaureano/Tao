@@ -162,6 +162,9 @@
     <Compile Include="Instructions\InstructionStreamMappingTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Instructions\InstructionWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Instructions\MockStringMap.n">
       <SubType>Code</SubType>
     </Compile>

@@ -42,7 +42,7 @@ namespace Tao.Metadata.Instructions.Operands
 			Add(OpCodes.Blt_Un, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
 			Add(OpCodes.Leave, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
 			Add(OpCodes.Leave_S, (instructionMap, sourceBranchInstruction) => BranchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
-			Add(OpCodes.Ldstr, (instructionMap, sourceBranchInstruction) => SwitchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
+			Add(OpCodes.Switch, (instructionMap, sourceBranchInstruction) => SwitchInstructionOperandConverter(instructionMap, sourceBranchInstruction));
 	    }
     }
 }

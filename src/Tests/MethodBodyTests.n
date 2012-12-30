@@ -19,6 +19,12 @@ namespace Tests
 {
     public class MethodBodyTests
     {
+        public stub ShouldBeAbleToCalculateMaxStackHeight() : void
+        {            
+        }
+        public stub ShouldBeAbleToRoundTripEntireMethodBody() : void
+        {            
+        }
         public ShouldBeAbleToDetermineThinHeader() : void
         {
             def bytes = GetData();

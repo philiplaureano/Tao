@@ -134,18 +134,21 @@ namespace Tests
 		{
 		    ShouldHaveConverterForBranchInstruction(OpCodes.Leave_S);
 		}
-		public ShouldHaveOperandConverterForLdstrInstruction() : void
+		public ShouldHaveOperandConverterForSwitchInstruction() : void
 		{
-			def opCode = OpCodes.Ldstr;
-			def map = OperandConverterMap();
-			map.ContainsKey(opCode).ShouldBeTrue("Missing OperandConverter for OpCode '{0}'", opCode.ToString());
-			map[opCode](Dictionary(), Instruction(0, OpCodes.Nop, null)).ShouldBeOfType.[UserStringOperandConverter]();	
+		    ShouldHaveConverterFor.[SwitchInstructionOperandConverter](OpCodes.Switch);
 		}
+		
 		private ShouldHaveConverterForBranchInstruction(opCode : OpCode) : void
 		{
+			ShouldHaveConverterFor.[BranchInstructionOperandConverter](opCode);
+		}
+		private ShouldHaveConverterFor[TConverter](opCode : OpCode) : void
+			where TConverter : IOperandConverter, class 
+		{
 			def map = OperandConverterMap();
 			map.ContainsKey(opCode).ShouldBeTrue("Missing OperandConverter for OpCode '{0}'", opCode.ToString());
-			map[opCode](Dictionary(), Instruction(0, OpCodes.Nop, null)).ShouldBeOfType.[BranchInstructionOperandConverter]();
+			map[opCode](Dictionary(), Instruction(0, OpCodes.Nop, null)).ShouldBeOfType.[TConverter]();
 		}
 	}
 }
