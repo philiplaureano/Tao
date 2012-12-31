@@ -25,7 +25,16 @@ namespace Tests
         public stub ShouldBeAbleToRoundTripEntireMethodBody() : void
         {            
         }
-        public stub ShouldBeAbleToRoundTripEntireMethodBodyIncludingExceptionBlocks() : void
+        public stub ShouldBeAbleToRoundTripEntireMethodBodyIncludingAttachedExceptionBlocks() : void
+        {            
+        }
+        public stub ShouldUseTinyMethodBodyDuringWritesWheneverPossible() : void
+        {
+        }
+        public stub ShouldUseFatMethodBodyDuringWritesWhenExceptionsArePresent() : void
+        {            
+        }
+        public stub ShouldUseFatMethodBodyWhenStackHeightIsTooHigh() : void
         {            
         }
         public ShouldBeAbleToDetermineThinHeader() : void
