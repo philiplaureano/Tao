@@ -25,6 +25,9 @@ namespace Tests
         public stub ShouldBeAbleToRoundTripEntireMethodBody() : void
         {            
         }
+        public stub ShouldBeAbleToRoundTripEntireMethodBodyIncludingExceptionBlocks() : void
+        {            
+        }
         public ShouldBeAbleToDetermineThinHeader() : void
         {
             def bytes = GetData();

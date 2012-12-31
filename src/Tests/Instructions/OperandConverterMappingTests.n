@@ -138,7 +138,405 @@ namespace Tests
 		{
 		    ShouldHaveConverterFor.[SwitchInstructionOperandConverter](OpCodes.Switch);
 		}
-		
+		public ShouldNotHaveOperandConverterForLdarg_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldarg_S);
+		}
+
+		public ShouldNotHaveOperandConverterForLdarga_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldarga_S);
+		}
+
+		public ShouldNotHaveOperandConverterForStarg_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Starg_S);
+		}
+
+		public ShouldNotHaveOperandConverterForLdloc_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldloc_S);
+		}
+
+		public ShouldNotHaveOperandConverterForLdloca_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldloca_S);
+		}
+
+		public ShouldNotHaveOperandConverterForStloc_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Stloc_S);
+		}
+
+		public ShouldNotHaveOperandConverterForLdc_I4_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldc_I4_S);
+		}
+
+		public ShouldNotHaveOperandConverterForLdc_I4Instruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldc_I4);
+		}
+
+		public ShouldNotHaveOperandConverterForLdc_I8Instruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldc_I8);
+		}
+
+		public ShouldNotHaveOperandConverterForLdc_R4Instruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldc_R4);
+		}
+
+		public ShouldNotHaveOperandConverterForLdc_R8Instruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldc_R8);
+		}
+
+		public ShouldNotHaveOperandConverterForJmpInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Jmp);
+		}
+
+		public ShouldNotHaveOperandConverterForCallInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Call);
+		}
+
+		public ShouldNotHaveOperandConverterForCalliInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Calli);
+		}
+
+		public ShouldNotHaveOperandConverterForBr_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Br_S);
+		}
+
+		public ShouldNotHaveOperandConverterForBrfalse_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Brfalse_S);
+		}
+
+		public ShouldNotHaveOperandConverterForBrtrue_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Brtrue_S);
+		}
+
+		public ShouldNotHaveOperandConverterForBeq_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Beq_S);
+		}
+
+		public ShouldNotHaveOperandConverterForBge_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Bge_S);
+		}
+
+		public ShouldNotHaveOperandConverterForBgt_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Bgt_S);
+		}
+
+		public ShouldNotHaveOperandConverterForBle_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ble_S);
+		}
+
+		public ShouldNotHaveOperandConverterForBlt_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Blt_S);
+		}
+
+		public ShouldNotHaveOperandConverterForBne_Un_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Bne_Un_S);
+		}
+
+		public ShouldNotHaveOperandConverterForBge_Un_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Bge_Un_S);
+		}
+
+		public ShouldNotHaveOperandConverterForBgt_Un_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Bgt_Un_S);
+		}
+
+		public ShouldNotHaveOperandConverterForBle_Un_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ble_Un_S);
+		}
+
+		public ShouldNotHaveOperandConverterForBlt_Un_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Blt_Un_S);
+		}
+
+		public ShouldNotHaveOperandConverterForBrInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Br);
+		}
+
+		public ShouldNotHaveOperandConverterForBrfalseInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Brfalse);
+		}
+
+		public ShouldNotHaveOperandConverterForBrtrueInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Brtrue);
+		}
+
+		public ShouldNotHaveOperandConverterForBeqInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Beq);
+		}
+
+		public ShouldNotHaveOperandConverterForBgeInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Bge);
+		}
+
+		public ShouldNotHaveOperandConverterForBgtInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Bgt);
+		}
+
+		public ShouldNotHaveOperandConverterForBleInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ble);
+		}
+
+		public ShouldNotHaveOperandConverterForBltInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Blt);
+		}
+
+		public ShouldNotHaveOperandConverterForBne_UnInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Bne_Un);
+		}
+
+		public ShouldNotHaveOperandConverterForBge_UnInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Bge_Un);
+		}
+
+		public ShouldNotHaveOperandConverterForBgt_UnInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Bgt_Un);
+		}
+
+		public ShouldNotHaveOperandConverterForBle_UnInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ble_Un);
+		}
+
+		public ShouldNotHaveOperandConverterForBlt_UnInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Blt_Un);
+		}
+
+		public ShouldNotHaveOperandConverterForSwitchInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Switch);
+		}
+
+		public ShouldNotHaveOperandConverterForCallvirtInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Callvirt);
+		}
+
+		public ShouldNotHaveOperandConverterForCpobjInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Cpobj);
+		}
+
+		public ShouldNotHaveOperandConverterForLdobjInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldobj);
+		}
+
+		public ShouldNotHaveOperandConverterForLdstrInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldstr);
+		}
+
+		public ShouldNotHaveOperandConverterForNewobjInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Newobj);
+		}
+
+		public ShouldNotHaveOperandConverterForCastclassInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Castclass);
+		}
+
+		public ShouldNotHaveOperandConverterForIsinstInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Isinst);
+		}
+
+		public ShouldNotHaveOperandConverterForUnboxInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Unbox);
+		}
+
+		public ShouldNotHaveOperandConverterForLdfldInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldfld);
+		}
+
+		public ShouldNotHaveOperandConverterForLdfldaInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldflda);
+		}
+
+		public ShouldNotHaveOperandConverterForStfldInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Stfld);
+		}
+
+		public ShouldNotHaveOperandConverterForLdsfldInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldsfld);
+		}
+
+		public ShouldNotHaveOperandConverterForLdsfldaInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldsflda);
+		}
+
+		public ShouldNotHaveOperandConverterForStsfldInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Stsfld);
+		}
+
+		public ShouldNotHaveOperandConverterForStobjInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Stobj);
+		}
+
+		public ShouldNotHaveOperandConverterForBoxInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Box);
+		}
+
+		public ShouldNotHaveOperandConverterForNewarrInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Newarr);
+		}
+
+		public ShouldNotHaveOperandConverterForLdelemaInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldelema);
+		}
+
+		public ShouldNotHaveOperandConverterForLdelemInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldelem);
+		}
+
+		public ShouldNotHaveOperandConverterForStelemInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Stelem);
+		}
+
+		public ShouldNotHaveOperandConverterForUnbox_AnyInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Unbox_Any);
+		}
+
+		public ShouldNotHaveOperandConverterForRefanyvalInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Refanyval);
+		}
+
+		public ShouldNotHaveOperandConverterForMkrefanyInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Mkrefany);
+		}
+
+		public ShouldNotHaveOperandConverterForLdtokenInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldtoken);
+		}
+
+		public ShouldNotHaveOperandConverterForLeaveInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Leave);
+		}
+
+		public ShouldNotHaveOperandConverterForLeave_SInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Leave_S);
+		}
+
+		public ShouldNotHaveOperandConverterForLdftnInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldftn);
+		}
+
+		public ShouldNotHaveOperandConverterForLdvirtftnInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldvirtftn);
+		}
+
+		public ShouldNotHaveOperandConverterForLdargInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldarg);
+		}
+
+		public ShouldNotHaveOperandConverterForLdargaInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldarga);
+		}
+
+		public ShouldNotHaveOperandConverterForStargInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Starg);
+		}
+
+		public ShouldNotHaveOperandConverterForLdlocInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldloc);
+		}
+
+		public ShouldNotHaveOperandConverterForLdlocaInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Ldloca);
+		}
+
+		public ShouldNotHaveOperandConverterForStlocInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Stloc);
+		}
+
+		public ShouldNotHaveOperandConverterForUnalignedInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Unaligned);
+		}
+
+		public ShouldNotHaveOperandConverterForInitobjInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Initobj);
+		}
+
+		public ShouldNotHaveOperandConverterForConstrainedInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Constrained);
+		}
+
+		public ShouldNotHaveOperandConverterForSizeofInstruction() : void 
+		{
+		    ShouldNotHaveOperandConverterFor(OpCodes.Sizeof);
+		}
+		private ShouldNotHaveOperandConverterFor(opCode : OpCode) : void
+		{
+			def map = OperandConverterMap();
+			map.ContainsKey(opCode).ShouldBeFalse("There should be no OperandConverter for OpCode '{0}'", opCode.ToString());			
+		}
 		private ShouldHaveConverterForBranchInstruction(opCode : OpCode) : void
 		{
 			ShouldHaveConverterFor.[BranchInstructionOperandConverter](opCode);
