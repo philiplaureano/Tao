@@ -1,0 +1,18 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Instructions
+{
+	public interface IInstructionInterpreter
+	{
+		Reinterpret(operandValue : object, opCode : OpCode, instructionMap : Dictionary.[uint, IInstruction], userStringHeap : Stream, instructionStream : Stream) : object;
+	}
+}

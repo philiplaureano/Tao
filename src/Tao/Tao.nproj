@@ -338,10 +338,19 @@
     <Compile Include="Metadata\Instructions\IInstruction.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\IInstructionInterpreter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\IInstructionReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\Instruction.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\InstructionExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\InstructionInterpreter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\InstructionMapper.n">

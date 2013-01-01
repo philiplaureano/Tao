@@ -1,0 +1,102 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Metadata.Instructions.Operands;
+namespace Tao.Metadata.Instructions
+{
+	public class InstructionInterpreter : IInstructionInterpreter
+	{
+		private static shortBrOpCodes : HashSet.[OpCode] = HashSet();
+        private static longBrOpCodes : HashSet.[OpCode] = HashSet();
+
+        static this()
+        {
+            // Keep track of the short and inline branch instructions
+
+            // Short instructions
+            _ = shortBrOpCodes.Add(OpCodes.Br_S);
+            _ = shortBrOpCodes.Add(OpCodes.Brfalse_S);
+            _ = shortBrOpCodes.Add(OpCodes.Brtrue_S);
+            _ = shortBrOpCodes.Add(OpCodes.Beq_S);
+            _ = shortBrOpCodes.Add(OpCodes.Bge_S);
+            _ = shortBrOpCodes.Add(OpCodes.Bgt_S);
+            _ = shortBrOpCodes.Add(OpCodes.Ble_S);
+            _ = shortBrOpCodes.Add(OpCodes.Blt_S);
+            _ = shortBrOpCodes.Add(OpCodes.Bne_Un_S);
+            _ = shortBrOpCodes.Add(OpCodes.Bge_Un_S);
+            _ = shortBrOpCodes.Add(OpCodes.Bgt_Un_S);
+            _ = shortBrOpCodes.Add(OpCodes.Ble_Un_S);
+            _ = shortBrOpCodes.Add(OpCodes.Blt_Un_S);
+            _ = shortBrOpCodes.Add(OpCodes.Leave_S);
+
+            // Inline branch instructions
+            _ = longBrOpCodes.Add(OpCodes.Br);
+            _ = longBrOpCodes.Add(OpCodes.Brfalse);
+            _ = longBrOpCodes.Add(OpCodes.Brtrue);
+            _ = longBrOpCodes.Add(OpCodes.Beq);
+            _ = longBrOpCodes.Add(OpCodes.Bge);
+            _ = longBrOpCodes.Add(OpCodes.Bgt);
+            _ = longBrOpCodes.Add(OpCodes.Ble);
+            _ = longBrOpCodes.Add(OpCodes.Blt);
+            _ = longBrOpCodes.Add(OpCodes.Bne_Un);
+            _ = longBrOpCodes.Add(OpCodes.Bge_Un);
+            _ = longBrOpCodes.Add(OpCodes.Bgt_Un);
+            _ = longBrOpCodes.Add(OpCodes.Ble_Un);
+            _ = longBrOpCodes.Add(OpCodes.Blt_Un);
+            _ = longBrOpCodes.Add(OpCodes.Leave);
+        }
+        
+		public Reinterpret([NotNull] operandValue : object, opCode : OpCode, [NotNull] instructionMap : Dictionary.[uint, IInstruction], [NotNull] userStringHeap : Stream, [NotNull] instructionStream : Stream) : object
+        {
+            // Leave the operand value untouched by default
+            mutable result = operandValue;
+
+            // Convert the user string offsets stored in the operand into an actual string            
+            when(opCode == OpCodes.Ldstr)
+            {
+                def offset = operandValue :> uint;
+                def reader = UserStringHeapReader();
+                result = reader.Read(offset, userStringHeap) : object;
+            }
+
+            // Convert the switch jump offsets into actual instructions
+            when(opCode == OpCodes.Switch)
+            {
+                def offsets = (operandValue :> IEnumerable[int]).ToArray();
+                def jumpTable = List.[IInstruction]();
+
+                // The starting offset will be the next instruction immediately after the switch instruction
+                def startingOffset = (instructionStream.Position :> int);
+                foreach(offset in offsets)
+                {
+                    def relativeOffset = Convert.ToInt32(offset);
+                    def targetOffset = (startingOffset + relativeOffset) :> uint;    
+                    jumpTable.Add(LazyInstruction(() => instructionMap[targetOffset]));
+                }
+
+                result = jumpTable;
+            }
+
+            // Convert the branch target offsets into actual instructions
+            when(longBrOpCodes.Contains(opCode) || shortBrOpCodes.Contains(opCode))
+            {                
+                def currentOffset = instructionStream.Position :> int;
+                def relativeOffset = Convert.ToInt32(operandValue);
+                def targetOffset = (currentOffset + relativeOffset) :> uint;
+
+                // Read the branch targets later to avoid endless loops
+                result = LazyInstruction(() => instructionMap[targetOffset]);                                
+            }
+
+            result;
+        }
+	}
+}
