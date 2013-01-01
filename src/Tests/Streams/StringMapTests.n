@@ -8,7 +8,12 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao;
 using Tao.Metadata;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+using Tao.Metadata.Instructions;
+using Tao.Metadata.Instructions.Operands;
 using Tests.Macros;
 namespace Tests
 {
@@ -18,9 +23,9 @@ namespace Tests
         {
             def stringWriter = UserStringHeapWriter();
             def strings = array["foo", "bar", "baz"];
-            
+
             def map = StringMap(stringWriter, strings);
-            
+
             // Forge the expected stream and map the strings
             def expectedStringMap = Dictionary.[string, uint]();
             def expectedStream = MemoryStream();
@@ -29,7 +34,7 @@ namespace Tests
                 def offset = stringWriter.Write(text, expectedStream);
                 expectedStringMap[text] = offset;
             }
-            
+
             // Match the expected strings and the offsets with the actual offsets
             foreach(key in expectedStringMap.Keys)
             {
@@ -38,21 +43,57 @@ namespace Tests
                 map.GetStringOffset(key).ShouldBeEqualTo(expectedOffset, "Wrong String Offset");
             }
         }
-        public stub ShouldBeAbleToGenerateStringMapFromAnExistingListOfInstructions() : void
+        public ShouldInterceptLdstrInstructionConversionsAndBuildStringMapBasedOnThoseConversions() : void
         {
-        }
+            def image = Image.ReadFrom("FizzBuzz.dll");
+            def root = image.GetMetadataRoot();
+            def tableStream = root.GetTablesHeap();
+
+            def tableHeap = TablesHeap();
+            tableHeap.ReadFrom(tableStream);
+
+            // Find the main method
+            def stringHeap = root.GetStringHeap();
+            def methodTable = tableHeap.GetTable.[MethodDefTable]();
+            def rows = methodTable.Rows;
+
+            def methodRow = rows.First(r => r.Name.ToString(stringHeap) == "Main");
+            def rva = methodRow.Rva;
+
+            // Read the instructions from the method body
+            def methodStream = image.GetDataAt(rva);
+            def reader = MethodBodyReader();
+            def body = reader.Read(methodStream);
+            def userStringHeap = root.GetUserStringHeap();
+            
+            // Hook the StringMapBuilder into the readerr
+            def map : IDictionary[string, uint] = Dictionary();
+            def builder = StringMapBuilder(InstructionInterpreter(), map);
+            def instructionReader = InstructionReader(builder);
+            def instructions = instructionReader.Read(MemoryStream(body.Bytes), userStringHeap);
+            
+            def shouldContain(text : string) : void
+            {
+                map.ContainsKey(text).ShouldBeTrue("The string map should contain the expected user string '{0}'", text);
+                map[text].ShouldNotBeEqualTo(0, "Invalid user string offset for text '{0}'", text);
+            }
+            shouldContain("Fizz");
+            shouldContain("Buzz");
+            shouldContain("FizzBuzz");
+        }       
+        
         public ShouldBeAbleToFlushContentsToAnArbitraryStream() : void
         {
             def stringWriter = UserStringHeapWriter();
             def strings = array["foo", "bar", "baz"];
-            
+
             def map = StringMap(stringWriter, strings);            
             def expectedStream = MemoryStream();
             foreach(text in strings)
             {
                 _ = stringWriter.Write(text, expectedStream);
             }
-            
+
             def outputStream = MemoryStream();
             map.FlushContentsTo(outputStream);
             expectedStream.ShouldMatch(outputStream);

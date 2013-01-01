@@ -17,7 +17,7 @@
   <Target Name="Publish" DependsOnTargets="Compile">
     <Message Importance="High" Text="Copying files to $(TargetDirectory)"/>
     <Copy SourceFiles ="@(BinFiles)" DestinationFolder="$(TargetDirectory)" />
-  </Target>  
+  </Target>
   <Target Name="RunTests" DependsOnTargets="Publish">
     <Exec Command="$(MSBuildProjectDirectory)\tools\nunit\nunit-console.exe @(UnitTestAssemblies) /nologo" WorkingDirectory="$(UnitTestDirectory)"/>
     <Message Text="Finished Running Unit Tests for @(UnitTestAssemblies)"/>

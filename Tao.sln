@@ -1,10 +1,23 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{964A6B02-747E-44BF-AB54-17914EEFB7C0}"
 	ProjectSection(SolutionItems) = preProject
 		BuildAll.MSBuild = BuildAll.MSBuild
 		go.bat = go.bat
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{D15F6A35-FC62-43A9-969A-11123AFA8AAF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implementation", "Implementation", "{D7B6D92F-15D6-4E50-9282-C0A91ADFE703}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Assemblies", "Sample Assemblies", "{6759B72C-287C-46F3-AF92-7C4BEE6A22E6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LocalVarSig", "LocalVarSig", "{63C1F671-B425-4BFD-9BAF-2944BBA9C24D}"
+	ProjectSection(SolutionItems) = preProject
+		src\Tests\SampleAssemblies\LocalVarSig\LocalVarSig1.dll = src\Tests\SampleAssemblies\LocalVarSig\LocalVarSig1.dll
+		src\Tests\SampleAssemblies\LocalVarSig\LocalVarSig2.dll = src\Tests\SampleAssemblies\LocalVarSig\LocalVarSig2.dll
+		src\Tests\SampleAssemblies\LocalVarSig\LocalVarSig3.dll = src\Tests\SampleAssemblies\LocalVarSig\LocalVarSig3.dll
 	EndProjectSection
 EndProject
 Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "Tests", "src\Tests\Tests.nproj", "{C0F7B9C1-6109-4612-BAF1-4941AD4D3F14}"
@@ -13,20 +26,7 @@ Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "Tests.Macros", "src\Tests\T
 EndProject
 Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "Tao", "src\Tao\Tao.nproj", "{DC175AFB-382F-477E-AA0E-ABAC2D1E23A5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{D15F6A35-FC62-43A9-969A-11123AFA8AAF}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implementation", "Implementation", "{D7B6D92F-15D6-4E50-9282-C0A91ADFE703}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Assemblies", "Sample Assemblies", "{6759B72C-287C-46F3-AF92-7C4BEE6A22E6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCustomAttributeUsage", "src\Tests\SampleAssemblies\SampleCustomAttributeUsage\SampleCustomAttributeUsage.csproj", "{9B1F1549-8055-4002-9849-6A4A3114C134}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LocalVarSig", "LocalVarSig", "{63C1F671-B425-4BFD-9BAF-2944BBA9C24D}"
-	ProjectSection(SolutionItems) = preProject
-		src\Tests\SampleAssemblies\LocalVarSig\LocalVarSig1.dll = src\Tests\SampleAssemblies\LocalVarSig\LocalVarSig1.dll
-		src\Tests\SampleAssemblies\LocalVarSig\LocalVarSig2.dll = src\Tests\SampleAssemblies\LocalVarSig\LocalVarSig2.dll
-		src\Tests\SampleAssemblies\LocalVarSig\LocalVarSig3.dll = src\Tests\SampleAssemblies\LocalVarSig\LocalVarSig3.dll
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleTypeDefRowUsage", "src\Tests\SampleAssemblies\SampleTypeDefRowUsage\SampleTypeDefRowUsage.csproj", "{AF8E4C74-8B60-4FAE-9A4B-6F2B14AF14C5}"
 EndProject
@@ -119,12 +119,12 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{1E8A64C1-E4D6-4B2A-9A2F-DF9536217CBD} = {D15F6A35-FC62-43A9-969A-11123AFA8AAF}
-		{C0F7B9C1-6109-4612-BAF1-4941AD4D3F14} = {D15F6A35-FC62-43A9-969A-11123AFA8AAF}
 		{6759B72C-287C-46F3-AF92-7C4BEE6A22E6} = {D15F6A35-FC62-43A9-969A-11123AFA8AAF}
+		{C0F7B9C1-6109-4612-BAF1-4941AD4D3F14} = {D15F6A35-FC62-43A9-969A-11123AFA8AAF}
+		{1E8A64C1-E4D6-4B2A-9A2F-DF9536217CBD} = {D15F6A35-FC62-43A9-969A-11123AFA8AAF}
 		{DC175AFB-382F-477E-AA0E-ABAC2D1E23A5} = {D7B6D92F-15D6-4E50-9282-C0A91ADFE703}
-		{9B1F1549-8055-4002-9849-6A4A3114C134} = {6759B72C-287C-46F3-AF92-7C4BEE6A22E6}
 		{63C1F671-B425-4BFD-9BAF-2944BBA9C24D} = {6759B72C-287C-46F3-AF92-7C4BEE6A22E6}
+		{9B1F1549-8055-4002-9849-6A4A3114C134} = {6759B72C-287C-46F3-AF92-7C4BEE6A22E6}
 		{AF8E4C74-8B60-4FAE-9A4B-6F2B14AF14C5} = {6759B72C-287C-46F3-AF92-7C4BEE6A22E6}
 		{FB4B8EA1-E41B-425D-8911-497DBCE9536A} = {6759B72C-287C-46F3-AF92-7C4BEE6A22E6}
 		{656864F5-A2EE-493C-8DF2-3B6E7B91F1A4} = {6759B72C-287C-46F3-AF92-7C4BEE6A22E6}

@@ -1,0 +1,39 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Metadata.Instructions.Operands;
+namespace Tao.Metadata.Instructions
+{
+    public class StringMapBuilder : IInstructionInterpreter
+    {
+        private _interpreter : IInstructionInterpreter;
+        private _map : IDictionary.[string, uint];
+        public this(interpreter : IInstructionInterpreter, map : IDictionary.[string, uint])
+        {
+            _interpreter = interpreter;
+            _map = map;
+        }
+        public Reinterpret([NotNull] operandValue : object, opCode : OpCode, [NotNull] instructionMap : Dictionary.[uint, IInstruction], [NotNull] userStringHeap : Stream, [NotNull] instructionStream : Stream) : object
+        {
+            def result : object = _interpreter.Reinterpret(operandValue, opCode, instructionMap, userStringHeap, instructionStream);
+            when(opCode == OpCodes.Ldstr && operandValue is uint && result is string)
+            {
+                def text = result :> string;
+                def index = operandValue :> uint;
+                
+                // Save the mapping
+                _map[text] = index;
+            }
+            
+            result;
+        }
+    }
+}
