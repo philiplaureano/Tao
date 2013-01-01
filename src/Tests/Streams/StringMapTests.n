@@ -38,6 +38,9 @@ namespace Tests
                 map.GetStringOffset(key).ShouldBeEqualTo(expectedOffset, "Wrong String Offset");
             }
         }
+        public stub ShouldBeAbleToGenerateStringMapFromAnExistingListOfInstructions() : void
+        {
+        }
         public ShouldBeAbleToFlushContentsToAnArbitraryStream() : void
         {
             def stringWriter = UserStringHeapWriter();
