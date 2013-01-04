@@ -360,6 +360,9 @@
     <Compile Include="Metadata\Instructions\InstructionReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\IIndividualInstructionReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\LazyInstruction.n">
       <SubType>Code</SubType>
     </Compile>
@@ -382,6 +385,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\Converters\UserStringOperandConverter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\Operands\IndividualInstructionReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\IOperandConverter.n">

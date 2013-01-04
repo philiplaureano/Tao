@@ -66,10 +66,10 @@ namespace Tests
             def body = reader.Read(methodStream);
             def userStringHeap = root.GetUserStringHeap();
             
-            // Hook the StringMapBuilder into the readerr
+            // Hook the StringMapBuilder into the reader
             def map : IDictionary[string, uint] = Dictionary();
             def builder = StringMapBuilder(InstructionInterpreter(), map);
-            def instructionReader = InstructionReader(builder);
+            def instructionReader = InstructionReader(IndividualInstructionReader(builder));
             def instructions = instructionReader.Read(MemoryStream(body.Bytes), userStringHeap);
             
             def shouldContain(text : string) : void
