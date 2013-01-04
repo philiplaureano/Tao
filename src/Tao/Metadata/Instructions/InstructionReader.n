@@ -14,17 +14,18 @@ namespace Tao.Metadata.Instructions
 {
     public class InstructionReader : IInstructionReader
     {
-        private static operandReaderMap : OperandReaderMap = OperandReaderMap();        
-        private _interpreter : IInstructionInterpreter;
+        private _reader : IIndividualInstructionReader;
+        
         public this()
-        {            
-            this(InstructionInterpreter());
+        {
+            this(IndividualInstructionReader());
         }
-        public this([NotNull] interpreter : IInstructionInterpreter)
-        {            
-            _interpreter = interpreter;
+        
+        public this([NotNull] reader : IIndividualInstructionReader) 
+        {
+            _reader = reader;
         }
-
+        
         public Read([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream) : array[IInstruction]
         {
             def instructionMap = Dictionary.[uint, IInstruction]();
@@ -34,7 +35,7 @@ namespace Tao.Metadata.Instructions
             while(bytesRead < codeSize)
             {
                 def startPosition = instructionStream.Position :> uint;
-                ReadInstruction(instructionStream, userStringHeap, instructionMap);
+                _reader.ReadInstruction(instructionStream, userStringHeap, instructionMap);
 
                 def currentPosition = (instructionStream.Position :> uint);
                 bytesRead += currentPosition - startPosition;                
@@ -54,45 +55,6 @@ namespace Tao.Metadata.Instructions
             }
 
             results;
-        }
-
-        private ReadInstruction([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream, instructionMap : Dictionary.[uint, IInstruction]) : void
-        {         
-            // Ensure that all instructions are read once and only once
-            def currentPosition = instructionStream.Position :> uint;
-            ReadInstructionAt(currentPosition, instructionStream, userStringHeap, instructionMap);
-        }
-
-        private ReadInstructionAt(targetOffset : uint, [NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream, [NotNull] instructionMap : Dictionary.[uint, IInstruction]) : void
-            requires _interpreter != null
-            // A new instruction should be placed at the target offset 
-            ensures instructionMap.ContainsKey(targetOffset)
-        {
-            _ = instructionStream.Seek(targetOffset, SeekOrigin.Begin);
-
-            when(!instructionMap.ContainsKey(targetOffset))
-            {
-                def decoder = OpCodeDecoder();
-
-                // Get the offset
-                def offset = instructionStream.Position :> uint;
-
-                // Read the OpCode
-                def opCode = decoder.Decode(instructionStream);
-
-                // Read the operand that corresponds with the currrent OpCode
-                mutable operand = null;
-
-                when(operandReaderMap.ContainsKey(opCode))
-                {
-                    def operandReader = operandReaderMap[opCode];
-                    def rawOperandValue = operandReader.ReadOperandFrom(instructionStream);
-                    operand = _interpreter.Reinterpret(rawOperandValue, opCode, instructionMap, userStringHeap, instructionStream);
-                }
-
-                def instruction = Instruction(offset, opCode, operand);
-                instructionMap[offset] = instruction;
-            }
-        }        
+        }            
     }
 }
