@@ -9,6 +9,9 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata;
 using Tao.Metadata.Instructions.Operands;
 namespace Tao.Metadata.Instructions
 {
@@ -17,6 +20,7 @@ namespace Tao.Metadata.Instructions
 		private static shortBrOpCodes : HashSet.[OpCode] = HashSet();
         private static longBrOpCodes : HashSet.[OpCode] = HashSet();
 
+        private _reader : IStringHeapReader;
         static this()
         {
             // Keep track of the short and inline branch instructions
@@ -54,6 +58,16 @@ namespace Tao.Metadata.Instructions
             _ = longBrOpCodes.Add(OpCodes.Leave);
         }
         
+        public this() 
+        {
+            this(UserStringHeapReader());
+        }
+        
+        public this([NotNull] reader : IStringHeapReader)
+        {
+            _reader = reader;
+        }
+        
 		public Reinterpret([NotNull] operandValue : object, opCode : OpCode, [NotNull] instructionMap : Dictionary.[uint, IInstruction], [NotNull] userStringHeap : Stream, [NotNull] instructionStream : Stream) : object
         {
             // Leave the operand value untouched by default
@@ -63,8 +77,7 @@ namespace Tao.Metadata.Instructions
             when(opCode == OpCodes.Ldstr)
             {
                 def offset = operandValue :> uint;
-                def reader = UserStringHeapReader();
-                result = reader.Read(offset, userStringHeap) : object;
+                result = _reader.Read(offset, userStringHeap) : object;
             }
 
             // Convert the switch jump offsets into actual instructions
