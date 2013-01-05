@@ -348,6 +348,9 @@
     <Compile Include="Metadata\Instructions\IInstructionReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\IInstructionWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\IndividualInstructionReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -370,6 +373,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\IIndividualInstructionReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\InstructionWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\LazyInstruction.n">

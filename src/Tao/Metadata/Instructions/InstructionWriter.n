@@ -1,0 +1,44 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Metadata.Instructions.Operands;
+
+namespace Tao.Metadata.Instructions
+{
+    public class InstructionWriter : IInstructionWriter
+    {
+        private _writer : IIndividualInstructionWriter;
+        
+        public this() 
+        {
+            this(IndividualInstructionWriter());
+        }
+        public this(writer : IIndividualInstructionWriter)
+        {
+            _writer = writer;
+        }
+        
+        public Write([NotNull] instructions  : IEnumerable.[IInstruction], [NotNull] instructionStream : Stream, 
+            [NotNull] stringMap : IStringMap) : void
+            requires instructionStream.CanWrite
+        {
+            // Create the instruction map so that the writer can map
+            // the branch targets to their actual offsets
+            def instructionMapper = InstructionMapper();
+            def instructionMap = instructionMapper.CreateMap(instructions);
+            
+            foreach(instruction in instructions)
+            {
+                _writer.WriteInstruction(instruction, instructionStream, stringMap, instructionMap);
+            }
+        }
+    }
+}

@@ -20,14 +20,11 @@ using Tao.Metadata.Instructions.Operands;
 using Tests.Macros;
 namespace Tests
 {
-	public class InstructionWriteTests
-	{
-		public stub ShouldBeAbleToWriteSingleInstruction() : void
-		{			
-		}
-		public ShouldBeAbleToWriteMultipleInstructions() : void
-		{
-		    def image = Image.ReadFrom("FizzBuzz.dll");
+    public class InstructionWriteTests
+    {
+        public ShouldBeAbleToRoundTripEntireInstructionBlock() : void
+        {			
+            def image = Image.ReadFrom("FizzBuzz.dll");
             def root = image.GetMetadataRoot();
             def tableStream = root.GetTablesHeap();
 
@@ -47,50 +44,89 @@ namespace Tests
             def reader = MethodBodyReader();
             def body = reader.Read(methodStream);
             def userStringHeap = root.GetUserStringHeap();
-            
+
             // Hook the StringMapBuilder into the reader
             def map : IDictionary[string, uint] = Dictionary();
             def builder = StringMapBuilder(InstructionInterpreter(), map);
-            
+
             def instructionMarker = Tests.InstructionEndMarker(IndividualInstructionReader(builder));            
             def instructionReader = InstructionReader(instructionMarker);
-            
+
             def methodBytes = MemoryStream(body.Bytes);
             def instructions = instructionReader.Read(methodBytes, userStringHeap);
             
-            def endPosition = methodBytes.Position :> uint;
+            // Write the instructions as one contiguous block
+            def actualStream = MemoryStream();
+            def instructionWriter = InstructionWriter();
+            def stringMap = StringMap(UserStringHeapWriter(), map);
+            instructionWriter.Write(instructions, actualStream, stringMap);
             
+            // The instructions must match the original method body bytes   
+            actualStream.ShouldMatch(methodBytes);
+        }
+        public ShouldBeAbleToWriteMultipleInstructions() : void
+        {
+            def image = Image.ReadFrom("FizzBuzz.dll");
+            def root = image.GetMetadataRoot();
+            def tableStream = root.GetTablesHeap();
+
+            def tableHeap = TablesHeap();
+            tableHeap.ReadFrom(tableStream);
+
+            // Find the main method
+            def stringHeap = root.GetStringHeap();
+            def methodTable = tableHeap.GetTable.[MethodDefTable]();
+            def rows = methodTable.Rows;
+
+            def methodRow = rows.First(r => r.Name.ToString(stringHeap) == "Main");
+            def rva = methodRow.Rva;
+
+            // Read the instructions from the method body
+            def methodStream = image.GetDataAt(rva);
+            def reader = MethodBodyReader();
+            def body = reader.Read(methodStream);
+            def userStringHeap = root.GetUserStringHeap();
+
+            // Hook the StringMapBuilder into the reader
+            def map : IDictionary[string, uint] = Dictionary();
+            def builder = StringMapBuilder(InstructionInterpreter(), map);
+
+            def instructionMarker = Tests.InstructionEndMarker(IndividualInstructionReader(builder));            
+            def instructionReader = InstructionReader(instructionMarker);
+
+            def methodBytes = MemoryStream(body.Bytes);
+            def instructions = instructionReader.Read(methodBytes, userStringHeap);
+
             // Use the instruction map to map the stream
             // and compare the individual instruction blobs
             // to the actual output
             def instructionMapper = InstructionMapper();
             def instructionMap = instructionMapper.CreateMap(instructions);
             instructionMap.Count.ShouldBeEqualTo(instructions.Count(), "There are still some unmapped instructions that need to be mapped");
-            
-            def instructionCount = instructionMap.Count;
+
             mutable index = 0;
-            
+
             def keys = instructionMap.Keys.ToArray();
             foreach(instruction in keys)
             {
                 def startPosition = instructionMap[instruction];
                 mutable instructionEndPosition : uint = instructionMarker.EndPositions[instruction];
-                
+
                 // Determine the expected instruction bytes
                 def byteCount = (instructionEndPosition - startPosition) :> int;
                 def expectedBytes = methodBytes.ReadBytes(byteCount, startPosition :> int);
-                
+
                 // Write the actual bytes
                 def actualBytes = MemoryStream();
                 def stringMap = StringMap(UserStringHeapWriter(), map);
-                
+
                 def writer = IndividualInstructionWriter();
                 writer.WriteInstruction(instruction, actualBytes, stringMap, instructionMap);
-                                           
+
                 // The two streams should be the same
                 expectedBytes.ShouldMatch(actualBytes.ToArray());
                 index++;
             }           
-		}
-	}
+        }
+    }
 }

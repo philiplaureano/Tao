@@ -29,13 +29,11 @@ namespace Tao.Metadata.Instructions.Operands
             
             // Adjust the relative offset to accommodate (subtract) the current instruction size
             // Calculate the size of the OpCode
-            def instructionSize = _branchInstruction.GetSize();
-            
+            def instructionSize = _branchInstruction.GetSize();            
             relativeOffset -= (instructionSize :> int);
             
-            def offsetValue = Math.Abs(relativeOffset);
-            
-            // Use the correct branch target size
+            // Use the correct branch target width
+            def offsetValue = Math.Abs(relativeOffset);            
             if(offsetValue < (sbyte.MaxValue :> int))
             {
                 relativeOffset :> sbyte;
