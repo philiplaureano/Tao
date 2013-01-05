@@ -91,9 +91,21 @@ namespace Tao.Metadata
                 WriteExceptionBlocks(methodStream, methodBody);
             }
         }        
+        
         private Write([NotNull] methodBody : TinyMethodBody, [NotNull] stringMap : IStringMap, [NotNull] methodStream : Stream) : void
         {
-            throw NotImplementedException("TODO: Implement this method");
+            def writer = BinaryWriter(methodStream);
+            def tinyFlags : byte = 0x2;
+            def mask : byte = 0x3f;
+            
+            // Write the TinyMethod header
+            def size = (methodBody.CodeSize :> byte) & mask;
+            def headerByte = (size << 2) + tinyFlags;
+            writer.Write(headerByte);           
+            
+            // Write the method body bytes
+            def instructionWriter = InstructionWriter();
+            instructionWriter.Write(methodBody.Instructions, methodStream, stringMap);
         }
         
         private WriteExceptionBlocks([NotNull] methodStream : Stream,[NotNull] body : FatMethodBody) : void

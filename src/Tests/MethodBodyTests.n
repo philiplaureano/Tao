@@ -29,6 +29,11 @@ namespace Tests
             def assemblyFile = "FizzBuzz.dll";            
             TestMethodBodyRoundTrippingWith(assemblyFile);
         }
+        public ShouldBeAbleToRoundTripEntireTinyMethodBody() : void
+        {
+            def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";            
+            TestMethodBodyRoundTrippingWith(assemblyFile);
+        }
         public ShouldBeAbleToRoundTripEntireMethodBodyIncludingAttachedExceptionBlocks() : void
         {            
             def targetAssembly = @"..\..\SampleBinaries\SampleMultipleExceptionHandlersInMethod.exe";

@@ -677,6 +677,7 @@
     </None>
     <Content Include="SampleBinaries\HelloWorld.exe">
       <SubType>Content</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SampleBinaries\mono-mscorlib.dll">
       <SubType>Content</SubType>
