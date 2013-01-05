@@ -9,12 +9,17 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
 using Tao.Metadata.Instructions;
+using Tao.Metadata.Instructions.Operands;
+
 namespace Tao.Metadata
 {
     public class MethodBodyReader
     {
         public Read([NotNull] methodStream : Stream) : MethodBody
+        requires methodStream.CanRead
         ensures value != null
         {          
             def leadingByte = methodStream.ReadByte() :> byte;

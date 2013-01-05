@@ -630,6 +630,9 @@
     <Compile Include="Metadata\Methods\MethodBodyReader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Methods\MethodBodyWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Methods\MethodDataSectionFlags.n">
       <SubType>Code</SubType>
     </Compile>

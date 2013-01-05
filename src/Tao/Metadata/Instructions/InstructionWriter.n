@@ -21,6 +21,7 @@ namespace Tao.Metadata.Instructions
         {
             this(IndividualInstructionWriter());
         }
+        
         public this(writer : IIndividualInstructionWriter)
         {
             _writer = writer;

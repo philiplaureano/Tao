@@ -49,8 +49,7 @@ namespace Tests
             def map : IDictionary[string, uint] = Dictionary();
             def builder = StringMapBuilder(InstructionInterpreter(), map);
 
-            def instructionMarker = Tests.InstructionEndMarker(IndividualInstructionReader(builder));            
-            def instructionReader = InstructionReader(instructionMarker);
+            def instructionReader = InstructionReader(IndividualInstructionReader(builder));
 
             def methodBytes = MemoryStream(body.Bytes);
             def instructions = instructionReader.Read(methodBytes, userStringHeap);

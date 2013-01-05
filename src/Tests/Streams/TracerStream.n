@@ -40,7 +40,7 @@ namespace Tests
 
             base.Write(buffer, offset, count);
 
-            def endPosition = _outputStream.Position;;
+            def endPosition = _outputStream.Position;
 
             // Determine the expected bytes
             def reader = BinaryReader(_expectedStream);

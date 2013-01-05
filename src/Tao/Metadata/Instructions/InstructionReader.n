@@ -43,6 +43,7 @@ namespace Tao.Metadata.Instructions
 
             def results = instructionMap.Values.ToArray();
             def keys = instructionMap.Keys.ToArray();
+            
             // Resolve all the lazy instructions            
             for(mutable i = 0; i < results.Length; i++)
             {
