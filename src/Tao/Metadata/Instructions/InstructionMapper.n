@@ -18,6 +18,7 @@ namespace Tao.Metadata.Instructions
     public class InstructionMapper
     {
         public CreateMap([NotNull] instructions : IEnumerable.[IInstruction]) : IDictionary.[IInstruction, uint]
+            ensures AllInstructionsShouldBeMapped(instructions, value)
         {
             def sizeCalculator = InstructionSizeCalculator();
             def map = Dictionary.[IInstruction, uint]();
@@ -38,5 +39,17 @@ namespace Tao.Metadata.Instructions
 
             map;
         }        
+        private AllInstructionsShouldBeMapped([NotNull] instructions : IEnumerable.[IInstruction], map : IDictionary.[IInstruction, uint]) : bool
+        {
+            foreach(instruction in instructions)
+            {
+                when(!map.ContainsKey(instruction))
+                {
+                    throw InvalidOperationException(string.Format("Instruction '{0}' at offset '{1}' should have been mapped but was not a part of the instruction map", instruction, instruction.Offset));
+                }
+            }
+            
+            true;
+        }
     }
 }

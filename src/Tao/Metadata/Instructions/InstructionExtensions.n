@@ -9,6 +9,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao.Metadata.Instructions.Operands;
+
 namespace Tao.Metadata.Instructions
 {
     public static class InstructionExtensions
@@ -20,7 +22,33 @@ namespace Tao.Metadata.Instructions
             def currentMapOffset = instructionMap[instruction] :> int;
             def targetOffset = instructionMap[otherInstruction] :> int;
             
-            currentMapOffset - targetOffset;
+            targetOffset - currentMapOffset;
+        }
+        public static GetSize(this instruction : IInstruction) : uint
+        {
+            def opCode = instruction.OpCode;
+            def opCodeSize = opCode.Size;
+            def operand = instruction.Operand;
+            
+            // Calculate the operand size
+            mutable operandSize : uint = 0;
+            when(opCode == OpCodes.Switch)
+            {
+                def items = operand :> IEnumerable.[IInstruction];
+                def itemCount = items.Count();
+                def sizer = InlineSwitchOperandSizer(itemCount :> uint);
+                operandSize = sizer.GetOperandSize();
+            }
+            
+            def operandSizerMap = OperandSizerMap();
+            when(operandSizerMap.ContainsKey(opCode))
+            {
+                def sizer = operandSizerMap[opCode];
+                operandSize = sizer.GetOperandSize();
+            }
+            
+            def instructionSize : uint = opCodeSize + operandSize;
+            instructionSize;
         }
     }
 }

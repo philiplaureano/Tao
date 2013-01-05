@@ -68,7 +68,7 @@ namespace Tao.Metadata.Instructions
             _reader = reader;
         }
         
-		public Reinterpret([NotNull] operandValue : object, opCode : OpCode, [NotNull] instructionMap : Dictionary.[uint, IInstruction], [NotNull] userStringHeap : Stream, [NotNull] instructionStream : Stream) : object
+		public Reinterpret([NotNull] operandValue : object, opCode : OpCode, [NotNull] instructionMap : IDictionary.[uint, IInstruction], [NotNull] userStringHeap : Stream, [NotNull] instructionStream : Stream) : object
         {
             // Leave the operand value untouched by default
             mutable result = operandValue;

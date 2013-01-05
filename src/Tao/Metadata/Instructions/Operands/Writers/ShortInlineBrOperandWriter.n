@@ -14,10 +14,10 @@ namespace Tao.Metadata.Instructions.Operands
     public class ShortInlineBrOperandWriter : IOperandWriter
     {
         public WriteOperandTo([NotNull] instructionStream : Stream, [NotNull] operand : object) : void
-            requires operand is short
+            requires operand is sbyte
         {
             def writer = BinaryWriter(instructionStream);
-            writer.Write(operand :> short);
+            writer.Write(operand :> sbyte);
         }
     }
 }

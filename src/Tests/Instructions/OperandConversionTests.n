@@ -31,17 +31,22 @@ namespace Tests
             
             // Map the instructions in order to generate the expected offset
             def instructionMap = mapper.CreateMap(array[branchTarget, branchInstruction]);            
-            def expectedOffset = branchInstruction.GetRelativeOffsetTo(branchTarget, instructionMap);
+            def relativeOffset = branchInstruction.GetRelativeOffsetTo(branchTarget, instructionMap);
+            
+            def expectedOffset = relativeOffset - (branchInstruction.GetSize() :> int);
             
             def converter = BranchInstructionOperandConverter(instructionMap, branchInstruction);
             converter.ConvertOperand(branchInstruction.Operand).ShouldBeEqualTo(expectedOffset, "Wrong operand value");
         }
         public ShouldConvertStringOperandsIntoUserStringOffsets() : void
         {
-            def userStringMap = MockStringMap(12345 : uint, "Foo");
+            def index : uint = 12345;
+            def tableId : uint = 0x70;
+            def token : uint = index + (tableId << 24);            
+            def userStringMap = MockStringMap(index : uint, "Foo");
             
             def converter = UserStringOperandConverter(userStringMap);
-            converter.ConvertOperand("Foo").ShouldBeEqualTo(12345 : uint, "Wrong Operand Value");
+            converter.ConvertOperand("Foo").ShouldBeEqualTo(token : uint, "Wrong Operand Value");
         }
         public ShouldConvertSwitchTargetInstructionsIntoAnArrayOfSwitchTargetOffsets() : void
         {

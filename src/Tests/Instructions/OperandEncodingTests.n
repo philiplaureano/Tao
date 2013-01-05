@@ -70,8 +70,8 @@ namespace Tests
         }
         public ShouldWriteShortInlineBrTargetOperand() : void
         {
-            def operand : short = 0x42;
-            TestWrite.[short, ShortInlineBrOperandWriter](operand, writer => writer.Write(operand));
+            def operand : sbyte = 0x42;
+            TestWrite.[sbyte, ShortInlineBrOperandWriter](operand, writer => writer.Write(operand));
         }
         public ShouldWriteInlineBrTargetOperand() : void
         {

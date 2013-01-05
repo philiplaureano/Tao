@@ -1,0 +1,47 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Metadata;
+using Tao.Metadata.Instructions;
+using Tao.Metadata.Instructions.Operands;
+namespace Tests
+{
+    public class InstructionEndMarker : IIndividualInstructionReader
+    {
+        private _reader : IIndividualInstructionReader;
+        private _markers : IDictionary.[IInstruction, uint] = Dictionary();
+        
+        public this(reader : IIndividualInstructionReader)
+        {
+            _reader = reader;
+        }
+        
+        public EndPositions : IDictionary.[IInstruction, uint]
+        {
+            get
+            {
+                _markers;
+            }
+        }
+        
+        public ReadInstruction(instructionStream : Stream, userStringHeap : Stream, instructionMap : IDictionary.[uint, IInstruction]) : void
+        {
+            def startPosition = instructionStream.Position :> uint;
+            _reader.ReadInstruction(instructionStream, userStringHeap, instructionMap);
+            
+            // Use the startPosition to find the instruction and map
+            // it to the end position
+            def endPosition = instructionStream.Position :> uint;
+            def instruction = instructionMap[startPosition];
+            _markers[instruction] = endPosition;
+        }
+    }
+}

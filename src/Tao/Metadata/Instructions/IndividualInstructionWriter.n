@@ -1,0 +1,68 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Metadata.Instructions.Operands;
+namespace Tao.Metadata.Instructions
+{
+    public class IndividualInstructionWriter : IIndividualInstructionWriter
+    {
+        public WriteInstruction([NotNull] instruction : IInstruction, [NotNull] instructionStream : Stream, [NotNull] stringMap : IStringMap, [NotNull] instructionMap : IDictionary.[IInstruction, uint]) : void
+        requires instructionMap.ContainsKey(instruction) otherwise throw ArgumentException("The instruction that you're trying to write isn't mapped as part of the method body. (Did you forget to add it to the method before writing the instruction? Oops!)")
+        requires !Equals(instruction.OpCode, null) otherwise throw ArgumentException("The instruction that you're trying to write is missing an OpCode")
+        requires instructionStream.CanWrite
+        {
+            def writer = BinaryWriter(instructionStream);
+
+            // Write the OpCode
+            def opCode = instruction.OpCode;
+            def encoder = OpCodeEncoder();
+            def opCodeBytes = encoder.Encode(opCode);
+            writer.Write(opCodeBytes);
+
+            // Write the operand
+            def operandWriterMap = OperandWriterMap();
+            when(operandWriterMap.ContainsKey(opCode))
+            {
+                mutable operand = instruction.Operand;                
+
+                // Convert the operand, if necessary
+                mutable converter : IOperandConverter = null;                               
+                when(opCode == OpCodes.Ldstr)
+                {                    
+                    converter = UserStringOperandConverter(stringMap);
+                    operand = converter.ConvertOperand(operand);
+                }
+
+                // Convert the branch instruction targets into actual offsets
+                def converterMap = OperandConverterMap();
+                when(converterMap.ContainsKey(opCode))
+                {
+                    def createConverter = converterMap[opCode];
+                    converter = createConverter(instructionMap, instruction);
+                    
+                    // Resolve any lazy branch targets
+                    when(operand is LazyInstruction)
+                    {
+                        def lazy = operand :> LazyInstruction;
+                        operand = lazy.Resolve();
+                    }
+                    
+                    operand = converter.ConvertOperand(operand);
+                }
+
+                // Note: Each writer will verify the operand value
+                // so there's no need to check it here
+                def operandWriter = operandWriterMap[opCode];
+                operandWriter.WriteOperandTo(instructionStream, operand);
+            }
+        }
+    }
+}

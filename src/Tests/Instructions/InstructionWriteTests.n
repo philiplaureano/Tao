@@ -51,7 +51,10 @@ namespace Tests
             // Hook the StringMapBuilder into the reader
             def map : IDictionary[string, uint] = Dictionary();
             def builder = StringMapBuilder(InstructionInterpreter(), map);
-            def instructionReader = InstructionReader(IndividualInstructionReader(builder));
+            
+            def instructionMarker = Tests.InstructionEndMarker(IndividualInstructionReader(builder));            
+            def instructionReader = InstructionReader(instructionMarker);
+            
             def methodBytes = MemoryStream(body.Bytes);
             def instructions = instructionReader.Read(methodBytes, userStringHeap);
             
@@ -62,6 +65,7 @@ namespace Tests
             // to the actual output
             def instructionMapper = InstructionMapper();
             def instructionMap = instructionMapper.CreateMap(instructions);
+            instructionMap.Count.ShouldBeEqualTo(instructions.Count(), "There are still some unmapped instructions that need to be mapped");
             
             def instructionCount = instructionMap.Count;
             mutable index = 0;
@@ -70,23 +74,19 @@ namespace Tests
             foreach(instruction in keys)
             {
                 def startPosition = instructionMap[instruction];
-                mutable instructionEndPosition : uint = endPosition;
-                when(index < instructionCount)
-                {
-                    def nextInstruction = keys[index];
-                    instructionEndPosition = instructionMap[nextInstruction];
-                }
+                mutable instructionEndPosition : uint = instructionMarker.EndPositions[instruction];
                 
                 // Determine the expected instruction bytes
                 def byteCount = (instructionEndPosition - startPosition) :> int;
-                def expectedBytes = methodStream.ReadBytes(byteCount, startPosition :> int);
+                def expectedBytes = methodBytes.ReadBytes(byteCount, startPosition :> int);
                 
                 // Write the actual bytes
                 def actualBytes = MemoryStream();
                 def stringMap = StringMap(UserStringHeapWriter(), map);
                 
-                throw NotImplementedException("TODO: Finish this test by inserting the writer call here");
-                            
+                def writer = IndividualInstructionWriter();
+                writer.WriteInstruction(instruction, actualBytes, stringMap, instructionMap);
+                                           
                 // The two streams should be the same
                 expectedBytes.ShouldMatch(actualBytes.ToArray());
                 index++;

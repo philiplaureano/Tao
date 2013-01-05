@@ -83,8 +83,8 @@ namespace Tests
             map[instruction] = 0;
             map[otherInstruction] = 1;
             
-            instruction.GetRelativeOffsetTo(otherInstruction, map).ShouldBeEqualTo(-1, "Wrong Offset");
-            otherInstruction.GetRelativeOffsetTo(instruction, map).ShouldBeEqualTo(1, "Wrong Offset");
+            instruction.GetRelativeOffsetTo(otherInstruction, map).ShouldBeEqualTo(1, "Wrong Offset");
+            otherInstruction.GetRelativeOffsetTo(instruction, map).ShouldBeEqualTo(-1, "Wrong Offset");
         }
     }
 }

@@ -12,8 +12,8 @@ using System.Linq;
 using Tao.Metadata.Instructions.Operands;
 namespace Tao.Metadata.Instructions
 {
-    public interface IIndividualInstructionReader
+    public interface IIndividualInstructionWriter
     {
-        ReadInstruction(instructionStream : Stream, userStringHeap : Stream, instructionMap : IDictionary.[uint, IInstruction]) : void;
+        WriteInstruction(instruction : IInstruction, instructionStream : Stream, stringMap : IStringMap, instructionMap : IDictionary.[IInstruction, uint]) : void;
     }
 }

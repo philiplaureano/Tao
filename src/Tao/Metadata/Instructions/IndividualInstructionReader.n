@@ -26,14 +26,14 @@ namespace Tao.Metadata.Instructions
             _interpreter = interpreter;
         }
         
-        public ReadInstruction([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream, instructionMap : Dictionary.[uint, IInstruction]) : void
+        public ReadInstruction([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream, [NotNull] instructionMap : IDictionary.[uint, IInstruction]) : void
         {         
             // Ensure that all instructions are read once and only once
             def currentPosition = instructionStream.Position :> uint;
             ReadInstructionAt(currentPosition, instructionStream, userStringHeap, instructionMap);
         }
 
-        private ReadInstructionAt(targetOffset : uint, [NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream, [NotNull] instructionMap : Dictionary.[uint, IInstruction]) : void
+        private ReadInstructionAt(targetOffset : uint, [NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream, [NotNull] instructionMap : IDictionary.[uint, IInstruction]) : void
             requires _interpreter != null
             // A new instruction should be placed at the target offset 
             ensures instructionMap.ContainsKey(targetOffset)

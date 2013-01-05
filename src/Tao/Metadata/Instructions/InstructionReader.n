@@ -42,7 +42,7 @@ namespace Tao.Metadata.Instructions
             }
 
             def results = instructionMap.Values.ToArray();
-
+            def keys = instructionMap.Keys.ToArray();
             // Resolve all the lazy instructions            
             for(mutable i = 0; i < results.Length; i++)
             {
@@ -50,7 +50,13 @@ namespace Tao.Metadata.Instructions
                 when(currentInstruction is LazyInstruction && currentInstruction != null)
                 {
                     def lazyInstruction = currentInstruction :> LazyInstruction;
-                    results[i] = lazyInstruction.Resolve();
+                    def realInstruction = lazyInstruction.Resolve();
+                    
+                    // Swap the lazy instruction with the actual instruction in the instruction map
+                    def offset = keys[i];
+                    instructionMap[offset] = realInstruction;
+                    
+                    results[i] = realInstruction;
                 }
             }
 

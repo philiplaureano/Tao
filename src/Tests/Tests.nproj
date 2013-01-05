@@ -154,6 +154,9 @@
       <SubType>Code</SubType>
       <DependentUpon>ImageTests.n</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\InstructionEndMarker.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Instructions\InstructionReadTests.n">
       <SubType>Code</SubType>
     </Compile>

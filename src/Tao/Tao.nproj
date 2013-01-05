@@ -336,6 +336,9 @@
     <Compile Include="Metadata\Index.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Instructions\IIndividualInstructionWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Instructions\IInstruction.n">
       <SubType>Code</SubType>
     </Compile>
@@ -343,6 +346,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\IInstructionReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\IndividualInstructionReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Instructions\IndividualInstructionWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Instruction.n">
@@ -385,9 +394,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\Converters\UserStringOperandConverter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Instructions\Operands\IndividualInstructionReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Instructions\Operands\IOperandConverter.n">
