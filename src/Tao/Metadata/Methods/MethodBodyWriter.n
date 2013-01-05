@@ -32,38 +32,78 @@ namespace Tao.Metadata
                 Write(methodBody :> TinyMethodBody, stringMap, methodStream);
             }
         }
-        
+
         private Write([NotNull] methodBody : FatMethodBody, [NotNull] stringMap : IStringMap, [NotNull] methodStream : Stream) : void
         {            
+            def startPosition = methodStream.Position :> uint;
+
             // Truncate the upper 4 bits since the flags 
             // are only supposed to occupy 12 bits
             mutable flags = methodBody.Flags;
             def bitMask : ushort = 0xFFF;
             flags = flags & bitMask;
 
+            // Add the initLocals flag
+            def initLocals : ushort = 0x10;            
+            when(methodBody.InitLocals)
+            {
+                flags |= initLocals;
+            }
+            
+            // Add the More Sections flag
+            def moreSects : ushort = 0x8;
+            when(methodBody.ExceptionHandlerBlocks.Count > 0)
+            {
+                flags |= moreSects;
+            }
+            
             // Add the header size
             def headerSize : ushort = 3;
             flags = (headerSize << 12) + flags;
 
             def writer = BinaryWriter(methodStream);
             writer.Write(flags);
-            
+
             // Write the MaxStack
             writer.Write(methodBody.MaxStack);
-            
+
             // CodeSize
             writer.Write(methodBody.CodeSize);
-            
+
             // LocalVarSigToken
             writer.Write(methodBody.LocalVarSigToken);
-            
+
             // Write the method body bytes
             def instructionWriter = InstructionWriter();
             instructionWriter.Write(methodBody.Instructions, methodStream, stringMap);            
+
+            when(methodBody.ExceptionHandlerBlocks.Count > 0)
+            {
+                def endPosition = methodStream.Position :> uint;
+                def bytesWritten : uint = endPosition - startPosition;
+
+                // Move the pointer to the next 4 byte boundary
+                def boundary : uint = 4;
+                def slack = boundary - (bytesWritten % boundary);
+                _ = methodStream.Seek(slack, SeekOrigin.Current);
+                
+                // Write the attached exception blocks
+                WriteExceptionBlocks(methodStream, methodBody);
+            }
         }        
         private Write([NotNull] methodBody : TinyMethodBody, [NotNull] stringMap : IStringMap, [NotNull] methodStream : Stream) : void
         {
             throw NotImplementedException("TODO: Implement this method");
+        }
+        
+        private WriteExceptionBlocks([NotNull] methodStream : Stream,[NotNull] body : FatMethodBody) : void
+        {
+            def blocks = System.Collections.Generic.Queue.[ExceptionBlockHeader](body.ExceptionHandlerBlocks);
+            while(blocks.Count > 0)
+            {
+                def currentBlock = blocks.Dequeue();
+                currentBlock.WriteClausesTo(methodStream);
+            }
         }
     }
 }
