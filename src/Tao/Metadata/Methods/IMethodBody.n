@@ -18,13 +18,11 @@ namespace Tao.Metadata
         CodeSize : uint
         {
             get;
-            set;
         }      
 
         Bytes : array[byte]
         {
             get;
-            set;
         }
         
         Instructions : IList.[IInstruction]
