@@ -16,9 +16,9 @@ using Tao.Metadata.Instructions.Operands;
 
 namespace Tao.Metadata
 {
-    public class MethodBodyReader
+    public class MethodBodyReader : IMethodBodyReader
     {
-        public Read([NotNull] methodStream : Stream) : MethodBody
+        public Read([NotNull] methodStream : Stream) : IMethodBody
         requires methodStream.CanRead
         ensures value != null
         {          

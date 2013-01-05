@@ -13,31 +13,23 @@ using Tao;
 using Tao.Metadata.Instructions;
 namespace Tao.Metadata
 {
-    public abstract class MethodBody : IMethodBody
+    public interface IMethodBody
     {
-        private _instructions : IList.[IInstruction] = List();
-        protected this() 
-        {
-        }     
-
-        public CodeSize : uint
+        CodeSize : uint
         {
             get;
             set;
         }      
 
-        public Bytes : array[byte]
+        Bytes : array[byte]
         {
             get;
             set;
         }
         
-        public Instructions : IList.[IInstruction]
+        Instructions : IList.[IInstruction]
         {
-            get 
-            {
-                _instructions;
-            }
+            get;
         }
     }
 }

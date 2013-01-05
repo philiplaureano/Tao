@@ -46,7 +46,7 @@ namespace Tao.Metadata.Tables.Rows
             signatureReader.Read(blob);
         }
         
-        public ReadMethodBodyFrom([NotNull]image : IImage) : MethodBody
+        public ReadMethodBodyFrom([NotNull]image : IImage) : IMethodBody
         {
             def methodRva = Rva;
             def methodStream = image.GetDataAt(methodRva);

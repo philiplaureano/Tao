@@ -16,9 +16,9 @@ using Tao.Metadata.Instructions.Operands;
 
 namespace Tao.Metadata
 {
-    public class MethodBodyWriter
+    public class MethodBodyWriter : IMethodBodyWriter
     {
-        public Write([NotNull] methodBody : MethodBody, [NotNull] stringMap : IStringMap, [NotNull] methodStream : Stream) : void
+        public Write([NotNull] methodBody : IMethodBody, [NotNull] stringMap : IStringMap, [NotNull] methodStream : Stream) : void
             requires (methodBody is FatMethodBody) || (methodBody is TinyMethodBody)
             requires methodBody.Instructions.Count() > 0 otherwise throw InvalidOperationException("You can't write a method body with no instructions")
         {            

@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+using Tao.Metadata.Instructions;
+using Tao.Metadata.Instructions.Operands;
+
+namespace Tao.Metadata
+{
+    public interface IMethodBodyWriter
+    {
+        Write(methodBody : IMethodBody, stringMap : IStringMap, methodStream : Stream) : void;
+    }
+}
