@@ -15,112 +15,45 @@ using Tao.Metadata.Instructions;
 using Tao.Metadata.Instructions.Operands;
 
 namespace Tao.Metadata
-{
-    public class MethodBodyReader : IMethodBodyReader
+{  
+    public class MethodBodyReader
     {
-        public Read([NotNull] methodStream : Stream) : IMethodBody
-        requires methodStream.CanRead
-        ensures value != null
-        {          
-            def leadingByte = methodStream.ReadByte() :> byte;
-            def mask = (leadingByte >> 1) << 1;
-            def isFat = (leadingByte ^ mask) != 0;
-
-            mutable result : MethodBody = null;
-            if(!isFat)
-            {              
-                def size = (leadingByte >> 2) :> uint;
-                def reader = BinaryReader(methodStream);
-                def bytes = reader.ReadBytes(size :> int);
-
-                def body = TinyMethodBody();
-                body.Bytes = bytes;
-                body.CodeSize = size;
-
-                result = body;
-            }
-            else
-            {
-                // Reset the header position and read the flags
-                def reader = BinaryReader(methodStream);                
-                _ = methodStream.Seek(-1, SeekOrigin.Current);
-
-                def startPosition = methodStream.Position :> int;
-                def body = FatMethodBody();
-                body.Flags = reader.ReadUInt16();
-                body.MaxStack = reader.ReadUInt16();
-                
-                def codeSize = reader.ReadUInt32();
-                body.CodeSize = codeSize;
-                
-                body.LocalVarSigToken = reader.ReadUInt32();
-                body.InitLocals = (body.Flags & (MethodHeaderFlags.InitLocals :> byte)) != 0;
-
-                def bytes = reader.ReadBytes(codeSize :> int);
-                body.Bytes = bytes;
-
-                def endPosition = methodStream.Position :> int;
-                def hasMoreSections : byte = 0x8;
-                when((body.Flags & hasMoreSections) != 0)                
-                {
-                    // Align the method stream by 4 bytes to point to the exception data
-                    def size = endPosition - startPosition;
-                    def slack = 4 - (size % 4);
-                    _ = methodStream.Seek(slack, SeekOrigin.Current);
-                    
-                    ReadExceptionBlocks(reader, body);
-                }
-
-                result = body;
-            }
-
-            when(result == null)
-                throw NotSupportedException("Invalid or unknown method body type");
-
-            result;
-        }
-        private ReadExceptionBlocks([NotNull] reader : BinaryReader,[NotNull] body : FatMethodBody) : void
+        private _reader : IMethodBodyReader;
+        private _instructionReader : IInstructionReader;
+        private _userStringHeap : Stream;
+        
+        public this([NotNull] userStringHeap : Stream)
         {
-            def methodStream = reader.BaseStream;
-            def kind = reader.ReadByte() :> MethodDataSectionFlags;
-            def isFatExceptionBlock = (kind & MethodDataSectionFlags.FatFormat) != 0;
-            mutable exceptionBlock : ExceptionBlockHeader = null;
-            mutable numberOfClauses = 0;
+            this(SimpleMethodBodyReader(), InstructionReader(), userStringHeap);
+        }
+        
+        public this([NotNull] reader : IMethodBodyReader, [NotNull] instructionReader : IInstructionReader, [NotNull] userStringHeap : Stream)
+            requires userStringHeap.CanRead
+        {
+            _reader = reader;
+            _userStringHeap = userStringHeap;
+            _instructionReader = instructionReader;
+        }
+        
+        public Read([NotNull] methodStream : Stream) : IMethodBody
+            requires methodStream.CanRead
+            requires _instructionReader != null
+            requires _userStringHeap != null && _userStringHeap.CanRead
+            ensures value != null
+        {
+            def body = _reader.Read(methodStream);
             
-            if(isFatExceptionBlock)
+            // Convert the method bytes into instructions
+            def bytes = body.Bytes;
+            def instructionStream = MemoryStream(bytes);
+            def instructions = _instructionReader.Read(instructionStream, _userStringHeap);
+            
+            foreach(instruction in instructions)
             {
-                // Calculate the data size by reading the next three bytes
-                _ = methodStream.Seek(-1, SeekOrigin.Current);
-                def dataSize = reader.ReadInt32() >> 8;
-                def fatBlock = FatExceptionBlockHeader();
-                fatBlock.DataSize = dataSize :> uint;
-                
-                numberOfClauses = (dataSize - 4) / 24;
-                exceptionBlock = fatBlock;
-            }
-            else
-            {
-                def dataSize = reader.ReadByte();
-                def thinBlock = ThinExceptionBlockHeader();
-                thinBlock.DataSize = dataSize;
-
-                numberOfClauses = (dataSize - 4) / 12;
-                exceptionBlock = thinBlock;
-                
-                // Skip the padding bytes
-                _ = methodStream.Seek(2, SeekOrigin.Current);
+                body.Instructions.Add(instruction);
             }
             
-            exceptionBlock.Kind = kind;
-            exceptionBlock.ReadClausesFrom(methodStream, numberOfClauses :> uint);
-
-            body.ExceptionHandlerBlocks.Add(exceptionBlock);
-
-            def hasMoreSections = (kind & MethodDataSectionFlags.HasMoreSections) != 0;
-            when(hasMoreSections)
-            {
-                ReadExceptionBlocks(reader, body);
-            }
+            body;
         }
     }
 }

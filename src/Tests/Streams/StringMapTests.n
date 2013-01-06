@@ -62,7 +62,7 @@ namespace Tests
 
             // Read the instructions from the method body
             def methodStream = image.GetDataAt(rva);
-            def reader = MethodBodyReader();
+            def reader = SimpleMethodBodyReader();
             def body = reader.Read(methodStream);
             def userStringHeap = root.GetUserStringHeap();
             

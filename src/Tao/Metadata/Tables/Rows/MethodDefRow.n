@@ -51,8 +51,9 @@ namespace Tao.Metadata.Tables.Rows
             def methodRva = Rva;
             def methodStream = image.GetDataAt(methodRva);
 
-            def bodyReader = MethodBodyReader();
-            bodyReader.Read(methodStream);     
+            def bodyReader = SimpleMethodBodyReader(); 
+            def body = bodyReader.Read(methodStream);  
+            body;
         }
     }
 }

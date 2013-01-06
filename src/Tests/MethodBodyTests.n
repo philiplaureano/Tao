@@ -21,6 +21,30 @@ namespace Tests
 {
     public class MethodBodyTests
     {
+        public ShouldBeAbleToLoadInstructionsWithMethodBodyReader() : void
+        {
+            def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";
+            def imageStream = File.ReadAllBytes(assemblyFile);
+
+            def image = Image.ReadFrom(imageStream.ToStream());
+            def root = image.GetMetadataRoot();
+
+            def tableStream = root.Heaps["#~"];
+            def tableHeap = TablesHeap();
+            tableHeap.ReadFrom(tableStream);
+
+            // Find the target method
+            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();            
+            def fatMethodRow = rows.First(r => r.Name.ToString(root.GetStringHeap()) == "Main");
+
+            // Extract the method body stream
+            def methodStream = image.GetDataAt(fatMethodRow.Rva);
+            def reader = MethodBodyReader(root.GetUserStringHeap());
+
+            def body = reader.Read(methodStream);         
+            (body.Instructions.Count > 0).ShouldBeTrue("The method body reader failed to load the instructions for the method body");
+        }
+        
         public stub ShouldBeAbleToCalculateMaxStackHeight() : void
         {            
         }
@@ -51,7 +75,7 @@ namespace Tests
         public ShouldBeAbleToDetermineThinHeader() : void
         {
             def bytes = GetData();
-            def reader = MethodBodyReader();
+            def reader = SimpleMethodBodyReader();
 
             def body = reader.Read(MemoryStream(bytes));
             body.ShouldBeOfType.[TinyMethodBody]();            
@@ -59,7 +83,7 @@ namespace Tests
         public ShouldBeAbleToDetermineMethodBodySize() : void
         {
             def bytes = GetData();
-            def reader = MethodBodyReader();
+            def reader = SimpleMethodBodyReader();
 
             def body = reader.Read(MemoryStream(bytes));
             body.ShouldBeOfType.[TinyMethodBody]();            
@@ -399,7 +423,7 @@ namespace Tests
             
             // Mark the start and end positions for the entire method body
             def startPosition = methodStream.Position :> uint;
-            def reader = MethodBodyReader();
+            def reader = SimpleMethodBodyReader();
             def body = reader.Read(methodStream);
             
             def endPosition = methodStream.Position :> uint;
@@ -476,7 +500,7 @@ namespace Tests
 
             def rva = fatMethodRow.Rva;
             def methodStream = image.GetDataAt(rva);
-            def reader = MethodBodyReader();
+            def reader = SimpleMethodBodyReader();
 
             def startPosition = methodStream.Position;
             def originalBody = reader.Read(methodStream);
@@ -549,7 +573,7 @@ namespace Tests
             def fatMethodRow = rows.First(r => r.Name.ToString(stringHeap) == "Main");
 
             def methodStream = getMethodStream(image, fatMethodRow);
-            def reader = MethodBodyReader();
+            def reader = SimpleMethodBodyReader();
 
             def startPosition = methodStream.Position;
             def body = reader.Read(methodStream);
@@ -623,7 +647,7 @@ namespace Tests
 
             // Extract the method body stream
             def methodStream = getMethodStream(image, fatMethodRow);
-            def reader = MethodBodyReader();
+            def reader = SimpleMethodBodyReader();
 
             def body = reader.Read(methodStream);
             body.ShouldBeOfType.[FatMethodBody]();            
