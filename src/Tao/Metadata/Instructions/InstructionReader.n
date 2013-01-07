@@ -12,6 +12,7 @@ using System.Linq;
 using Tao.Metadata.Instructions.Operands;
 namespace Tao.Metadata.Instructions
 {
+    // TODO: Refactor the UserStringHeap usage and replace it with the IStringHeapReader interface dependency
     public class InstructionReader : IInstructionReader
     {
         private _reader : IIndividualInstructionReader;

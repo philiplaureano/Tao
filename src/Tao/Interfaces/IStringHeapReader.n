@@ -10,8 +10,7 @@ using System.Linq;
 
 namespace Tao.Interfaces
 {
-  public interface IStringHeapReader
+  public interface IStringHeapReader : IStringReader
   {      
-    Read(index: uint, stream: Stream) : string;
   }
 }

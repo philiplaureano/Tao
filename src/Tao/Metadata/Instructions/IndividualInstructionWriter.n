@@ -15,9 +15,9 @@ namespace Tao.Metadata.Instructions
     public class IndividualInstructionWriter : IIndividualInstructionWriter
     {
         public WriteInstruction([NotNull] instruction : IInstruction, [NotNull] instructionStream : Stream, [NotNull] stringMap : IStringMap, [NotNull] instructionMap : IDictionary.[IInstruction, uint]) : void
-        requires instructionMap.ContainsKey(instruction) otherwise throw ArgumentException("The instruction that you're trying to write isn't mapped as part of the method body. (Did you forget to add it to the method before writing the instruction? Oops!)")
-        requires !Equals(instruction.OpCode, null) otherwise throw ArgumentException("The instruction that you're trying to write is missing an OpCode")
-        requires instructionStream.CanWrite
+            requires instructionMap.ContainsKey(instruction) otherwise throw ArgumentException("The instruction that you're trying to write isn't mapped as part of the method body. (Did you forget to add it to the method before writing the instruction? Oops!)")
+            requires !Equals(instruction.OpCode, null) otherwise throw ArgumentException("The instruction that you're trying to write is missing an OpCode")
+            requires instructionStream.CanWrite
         {
             def writer = BinaryWriter(instructionStream);
 
