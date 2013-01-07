@@ -47,12 +47,14 @@ namespace Tests
 
             // Hook the StringMapBuilder into the reader
             def map : IDictionary[string, uint] = Dictionary();
-            def builder = StringMapBuilder(InstructionInterpreter(), map);
-
+            def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);
+            def builder = StringMapBuilder(InstructionInterpreter(boundReader), map);            
             def instructionReader = InstructionReader(IndividualInstructionReader(builder));
+            
+            //def instructionReader = InstructionReader(IndividualInstructionReader(builder));
 
             def methodBytes = MemoryStream(body.Bytes);
-            def instructions = instructionReader.Read(methodBytes, userStringHeap);
+            def instructions = instructionReader.Read(methodBytes);
             
             // Write the instructions as one contiguous block
             def actualStream = MemoryStream();
@@ -88,13 +90,14 @@ namespace Tests
 
             // Hook the StringMapBuilder into the reader
             def map : IDictionary[string, uint] = Dictionary();
-            def builder = StringMapBuilder(InstructionInterpreter(), map);
+            def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);
+            def builder = StringMapBuilder(InstructionInterpreter(boundReader), map);         
 
             def instructionMarker = Tests.InstructionEndMarker(IndividualInstructionReader(builder));            
             def instructionReader = InstructionReader(instructionMarker);
 
             def methodBytes = MemoryStream(body.Bytes);
-            def instructions = instructionReader.Read(methodBytes, userStringHeap);
+            def instructions = instructionReader.Read(methodBytes);
 
             // Use the instruction map to map the stream
             // and compare the individual instruction blobs

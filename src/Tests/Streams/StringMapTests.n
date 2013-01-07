@@ -68,9 +68,10 @@ namespace Tests
             
             // Hook the StringMapBuilder into the reader
             def map : IDictionary[string, uint] = Dictionary();
-            def builder = StringMapBuilder(InstructionInterpreter(), map);
+            def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);
+            def builder = StringMapBuilder(InstructionInterpreter(boundReader), map);         
             def instructionReader = InstructionReader(IndividualInstructionReader(builder));
-            def instructions = instructionReader.Read(MemoryStream(body.Bytes), userStringHeap);
+            def instructions = instructionReader.Read(MemoryStream(body.Bytes));
             
             def shouldContain(text : string) : void
             {

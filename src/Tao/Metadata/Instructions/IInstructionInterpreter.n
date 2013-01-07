@@ -13,6 +13,6 @@ namespace Tao.Metadata.Instructions
 {
 	public interface IInstructionInterpreter
 	{
-		Reinterpret(operandValue : object, opCode : OpCode, instructionMap : IDictionary.[uint, IInstruction], userStringHeap : Stream, instructionStream : Stream) : object;
+		Reinterpret(operandValue : object, opCode : OpCode, instructionMap : IDictionary.[uint, IInstruction], instructionStream : Stream) : object;
 	}
 }

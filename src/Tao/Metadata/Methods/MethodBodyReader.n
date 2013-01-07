@@ -20,25 +20,26 @@ namespace Tao.Metadata
     {
         private _reader : IMethodBodyReader;
         private _instructionReader : IInstructionReader;
-        private _userStringHeap : Stream;
         
-        public this([NotNull] userStringHeap : Stream)
+        public this(stringReader : IBoundStringReader)
         {
-            this(SimpleMethodBodyReader(), InstructionReader(), userStringHeap);
+            this(IndividualInstructionReader(stringReader));
         }
         
-        public this([NotNull] reader : IMethodBodyReader, [NotNull] instructionReader : IInstructionReader, [NotNull] userStringHeap : Stream)
-            requires userStringHeap.CanRead
+        public this(individualInstructionReader : IIndividualInstructionReader)
+        {
+            this(SimpleMethodBodyReader(), InstructionReader(individualInstructionReader));
+        }
+        
+        public this([NotNull] reader : IMethodBodyReader, [NotNull] instructionReader : IInstructionReader)
         {
             _reader = reader;
-            _userStringHeap = userStringHeap;
             _instructionReader = instructionReader;
         }
         
         public Read([NotNull] methodStream : Stream) : IMethodBody
             requires methodStream.CanRead
             requires _instructionReader != null
-            requires _userStringHeap != null && _userStringHeap.CanRead
             ensures value != null
         {
             def body = _reader.Read(methodStream);
@@ -46,7 +47,7 @@ namespace Tao.Metadata
             // Convert the method bytes into instructions
             def bytes = body.Bytes;
             def instructionStream = MemoryStream(bytes);
-            def instructions = _instructionReader.Read(instructionStream, _userStringHeap);
+            def instructions = _instructionReader.Read(instructionStream);
             
             foreach(instruction in instructions)
             {

@@ -128,9 +128,10 @@ namespace Tests
             def body = targetRow.ReadMethodBodyFrom(image);            
 
             // Execute the reader and check the results
+            def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);
             def instructionStream = MemoryStream(body.Bytes);
-            def reader = InstructionReader();
-            def instructions = reader.Read(instructionStream, userStringHeap);
+            def reader = InstructionReader(IndividualInstructionReader(boundReader));
+            def instructions = reader.Read(instructionStream);
             testInstructions(instructions);
         }
     }

@@ -32,10 +32,10 @@ namespace Tests
             }
         }
         
-        public ReadInstruction(instructionStream : Stream, userStringHeap : Stream, instructionMap : IDictionary.[uint, IInstruction]) : void
+        public ReadInstruction(instructionStream : Stream, instructionMap : IDictionary.[uint, IInstruction]) : void
         {
             def startPosition = instructionStream.Position :> uint;
-            _reader.ReadInstruction(instructionStream, userStringHeap, instructionMap);
+            _reader.ReadInstruction(instructionStream, instructionMap);
             
             // Use the startPosition to find the instruction and map
             // it to the end position

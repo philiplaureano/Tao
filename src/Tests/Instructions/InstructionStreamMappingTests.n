@@ -48,8 +48,9 @@ namespace Tests
             def body = reader.Read(methodStream);
 
             def userStringHeap = root.GetUserStringHeap();
-            def instructionReader = InstructionReader();
-            def instructions = instructionReader.Read(MemoryStream(body.Bytes), userStringHeap);
+            def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);
+            def instructionReader = InstructionReader(IndividualInstructionReader(boundReader));
+            def instructions = instructionReader.Read(MemoryStream(body.Bytes));
 
             // Build the expected instruction map
             def expectedMap = Dictionary.[uint, IInstruction]();

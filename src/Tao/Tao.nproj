@@ -285,6 +285,9 @@
     <Compile Include="Metadata\BlobWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\BoundStringReader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\CLIHeader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -325,6 +328,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\HeapSizeFlags.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\IBoundStringReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\ICLRMetadata.n">

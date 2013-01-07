@@ -15,19 +15,14 @@ namespace Tao.Metadata.Instructions
     // TODO: Refactor the UserStringHeap usage and replace it with the IStringHeapReader interface dependency
     public class InstructionReader : IInstructionReader
     {
-        private _reader : IIndividualInstructionReader;
-        
-        public this()
-        {
-            this(IndividualInstructionReader());
-        }
+        private _reader : IIndividualInstructionReader;        
         
         public this([NotNull] reader : IIndividualInstructionReader) 
         {
             _reader = reader;
         }
         
-        public Read([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream) : array[IInstruction]
+        public Read([NotNull] instructionStream : Stream) : array[IInstruction]
         {
             def instructionMap = Dictionary.[uint, IInstruction]();
             def codeSize = instructionStream.Length;
@@ -36,7 +31,7 @@ namespace Tao.Metadata.Instructions
             while(bytesRead < codeSize)
             {
                 def startPosition = instructionStream.Position :> uint;
-                _reader.ReadInstruction(instructionStream, userStringHeap, instructionMap);
+                _reader.ReadInstruction(instructionStream, instructionMap);
 
                 def currentPosition = (instructionStream.Position :> uint);
                 bytesRead += currentPosition - startPosition;                

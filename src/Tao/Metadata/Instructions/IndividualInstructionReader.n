@@ -9,6 +9,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao.Metadata;
 using Tao.Metadata.Instructions.Operands;
 namespace Tao.Metadata.Instructions
 {
@@ -17,23 +18,24 @@ namespace Tao.Metadata.Instructions
         private static operandReaderMap : OperandReaderMap = OperandReaderMap();        
         private _interpreter : IInstructionInterpreter;
         
-        public this()
+        public this(stringReader : IBoundStringReader)
         {            
-            this(InstructionInterpreter());
+            this(InstructionInterpreter(stringReader));
         }
+        
         public this([NotNull] interpreter : IInstructionInterpreter)
         {            
             _interpreter = interpreter;
         }
         
-        public ReadInstruction([NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream, [NotNull] instructionMap : IDictionary.[uint, IInstruction]) : void
+        public ReadInstruction([NotNull] instructionStream : Stream, [NotNull] instructionMap : IDictionary.[uint, IInstruction]) : void
         {         
             // Ensure that all instructions are read once and only once
             def currentPosition = instructionStream.Position :> uint;
-            ReadInstructionAt(currentPosition, instructionStream, userStringHeap, instructionMap);
+            ReadInstructionAt(currentPosition, instructionStream, instructionMap);
         }
 
-        private ReadInstructionAt(targetOffset : uint, [NotNull] instructionStream : Stream, [NotNull] userStringHeap : Stream, [NotNull] instructionMap : IDictionary.[uint, IInstruction]) : void
+        private ReadInstructionAt(targetOffset : uint, [NotNull] instructionStream : Stream, [NotNull] instructionMap : IDictionary.[uint, IInstruction]) : void
             requires _interpreter != null
             // A new instruction should be placed at the target offset 
             ensures instructionMap.ContainsKey(targetOffset)
@@ -57,7 +59,7 @@ namespace Tao.Metadata.Instructions
                 {
                     def operandReader = operandReaderMap[opCode];
                     def rawOperandValue = operandReader.ReadOperandFrom(instructionStream);
-                    operand = _interpreter.Reinterpret(rawOperandValue, opCode, instructionMap, userStringHeap, instructionStream);
+                    operand = _interpreter.Reinterpret(rawOperandValue, opCode, instructionMap, instructionStream);
                 }
 
                 def instruction = Instruction(offset, opCode, operand);

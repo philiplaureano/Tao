@@ -21,9 +21,9 @@ namespace Tao.Metadata.Instructions
             _interpreter = interpreter;
             _map = map;
         }
-        public Reinterpret([NotNull] operandValue : object, opCode : OpCode, [NotNull] instructionMap : IDictionary.[uint, IInstruction], [NotNull] userStringHeap : Stream, [NotNull] instructionStream : Stream) : object
+        public Reinterpret([NotNull] operandValue : object, opCode : OpCode, [NotNull] instructionMap : IDictionary.[uint, IInstruction], [NotNull] instructionStream : Stream) : object
         {
-            def result : object = _interpreter.Reinterpret(operandValue, opCode, instructionMap, userStringHeap, instructionStream);
+            def result : object = _interpreter.Reinterpret(operandValue, opCode, instructionMap, instructionStream);
             when(opCode == OpCodes.Ldstr && operandValue is uint && result is string)
             {
                 def text = result :> string;

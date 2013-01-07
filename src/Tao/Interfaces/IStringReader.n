@@ -9,8 +9,7 @@ using System.Linq;
 
 namespace Tao.Interfaces
 {
-  public interface IStringReader
+  public interface IStringReader : IReader.[uint, string]
   {
-      Read(length : uint, inputStream : Stream) : string;
   }
 }

@@ -39,7 +39,8 @@ namespace Tests
 
             // Extract the method body stream
             def methodStream = image.GetDataAt(fatMethodRow.Rva);
-            def reader = MethodBodyReader(root.GetUserStringHeap());
+            def boundReader = BoundStringReader(UserStringHeapReader(), root.GetUserStringHeap());
+            def reader = MethodBodyReader(boundReader);
 
             def body = reader.Read(methodStream);         
             (body.Instructions.Count > 0).ShouldBeTrue("The method body reader failed to load the instructions for the method body");
@@ -432,11 +433,12 @@ namespace Tests
 
             // Preserve the string map from the existing method
             def map : IDictionary[string, uint] = Dictionary();
-            def builder = StringMapBuilder(InstructionInterpreter(), map);
+            def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);
+            def builder = StringMapBuilder(InstructionInterpreter(boundReader), map);         
             def instructionReader = InstructionReader(IndividualInstructionReader(builder));
 
             def methodBytes = MemoryStream(body.Bytes);
-            def instructions = instructionReader.Read(methodBytes, userStringHeap);
+            def instructions = instructionReader.Read(methodBytes);
             
             def actualStream = MemoryStream();            
             def stringMap = StringMap(UserStringHeapWriter(), map);
