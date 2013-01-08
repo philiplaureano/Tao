@@ -24,11 +24,11 @@ namespace Tao
             this(DosHeaderWriter(), CoffHeaderWriter(), OptionalHeaderStandardFieldsWriter(), DataDirectoryWriter(), SectionHeaderWriter());
         }
 
-        public this(dosHeaderWriter : IDosHeaderWriter, 
-            coffHeaderWriter : ICoffHeaderWriter, 
-            optionalHeaderStandardFieldsWriter : IOptionalHeaderStandardFieldsWriter,
-            dataDirectoryWriter : IDataDirectoryWriter,
-            sectionHeaderWriter : ISectionHeaderWriter)
+        public this([NotNull] dosHeaderWriter : IDosHeaderWriter, 
+            [NotNull] coffHeaderWriter : ICoffHeaderWriter, 
+            [NotNull] optionalHeaderStandardFieldsWriter : IOptionalHeaderStandardFieldsWriter,
+            [NotNull] dataDirectoryWriter : IDataDirectoryWriter,
+            [NotNull] sectionHeaderWriter : ISectionHeaderWriter)
         {
             _dosHeaderWriter = dosHeaderWriter;
             _coffHeaderWriter  = coffHeaderWriter;

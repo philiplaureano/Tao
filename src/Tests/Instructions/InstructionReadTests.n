@@ -59,10 +59,10 @@ namespace Tests
                 def switchInstruction = instructions[1];
                 switchInstruction.OpCode.ShouldBeEqualTo(OpCodes.Switch, "There should be a switch OpCode here");
                 (switchInstruction.Operand is IEnumerable[IInstruction]).ShouldBeTrue("Wrong Operand Type");
-                
+
                 def targets = switchInstruction.Operand :> IEnumerable[IInstruction];
                 def jumpTargets = targets.ToArray();
-                
+
                 // Match the jump targets
                 jumpTargets[0].Operand.ShouldBeEqualTo("are no bananas", "Wrong Operand Value");
                 jumpTargets[1].Operand.ShouldBeEqualTo("is one banana", "Wrong Operand Value");
@@ -70,7 +70,7 @@ namespace Tests
                 jumpTargets[3].Operand.ShouldBeEqualTo("are three bananas", "Wrong Operand Value");
                 jumpTargets[4].Operand.ShouldBeEqualTo("are four bananas", "Wrong Operand Value");
             }
-            
+
             def targetTypeName = "SampleClassWithSwitchInstruction";
             def targetMethodName = "SwitchMethod";
             def imageFile = @"..\..\SampleBinaries\SampleSwitchAssembly.dll";
@@ -125,7 +125,8 @@ namespace Tests
             def methodRows = targetTypeRow.GetMethodDefRows(tableHeap);
             def targetRow = methodRows.Where(m => m.Name.ToString(stringHeap) == targetMethodName).First();
 
-            def body = targetRow.ReadMethodBodyFrom(image);            
+            def bodyReader = SimpleMethodBodyReader(); 
+            def body = targetRow.ReadMethodBodyFrom(image, bodyReader);            
 
             // Execute the reader and check the results
             def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);

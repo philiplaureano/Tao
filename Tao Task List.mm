@@ -1,4 +1,4 @@
-<map version="0.9.0">
+<map version="0.8.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
 <node CREATED="1318023063489" ID="ID_1329837265" MODIFIED="1318036895908" TEXT="Tao Task List">
 <node CREATED="1318023206792" ID="ID_235494393" MODIFIED="1332099144738" POSITION="right" TEXT="Default Image Generation">
@@ -144,7 +144,9 @@
 <node CREATED="1332028537640" ID="ID_795063592" MODIFIED="1332664163111" TEXT="FieldSig">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1344666495654" ID="ID_1602130694" MODIFIED="1344666498244" TEXT="LocalVarSig"/>
+<node CREATED="1344666495654" ID="ID_1602130694" MODIFIED="1357601846990" TEXT="LocalVarSig">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1332028545671" ID="ID_1363591446" MODIFIED="1332664163111" TEXT="TypeSpec">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -311,7 +313,9 @@
 <node CREATED="1345412938540" ID="ID_613263410" MODIFIED="1345491571430" POSITION="right" TEXT="Linking">
 <node CREATED="1345412946813" ID="ID_166350163" MODIFIED="1345412959389" TEXT="Retrieving the related rows for each row type"/>
 <node CREATED="1345491573865" ID="ID_1770428303" MODIFIED="1345491599557" TEXT="Resolving the blob stream references for each row type"/>
-<node CREATED="1345491635346" ID="ID_748414819" MODIFIED="1345491650412" TEXT="Method body stream extraction"/>
+<node CREATED="1345491635346" ID="ID_748414819" MODIFIED="1357601500277" TEXT="Method body stream extraction">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1318026938398" ID="ID_374970568" MODIFIED="1318065194894" POSITION="left" TEXT="CLI Header Tests">
 <node CREATED="1318027497122" ID="ID_1709687722" MODIFIED="1318027692649" TEXT="Always having a MethodDef or a FileToken as the entry point for the assembly"/>
@@ -483,22 +487,41 @@
 <node CREATED="1332101875697" ID="ID_274683081" MODIFIED="1350539893909" TEXT="Reading">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1332101879321" ID="ID_1045669188" MODIFIED="1332101880665" TEXT="Writing"/>
+<node CREATED="1332101879321" ID="ID_1045669188" MODIFIED="1357602495959" TEXT="Writing">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1332101883210" ID="ID_465429709" MODIFIED="1332101885778" TEXT="Verification"/>
 </node>
 </node>
 <node CREATED="1332935366558" ID="ID_155585314" MODIFIED="1332935845503" POSITION="right" TEXT="Tao&apos;s Row Models">
-<node CREATED="1332936412915" ID="ID_1439366452" MODIFIED="1332936419509" TEXT="CustomAttributeRow">
-<node CREATED="1345152335231" ID="ID_1062555397" MODIFIED="1345152454845" TEXT="Writing the custom attribute row itself"/>
-<node CREATED="1345152455277" ID="ID_1859687540" MODIFIED="1345152460998" TEXT="Writing the custom attribute blob"/>
-<node CREATED="1345152461598" ID="ID_773847522" MODIFIED="1345152478661" TEXT="Writing the Parent table row"/>
-<node CREATED="1345152493022" ID="ID_1496980582" MODIFIED="1345152540636" TEXT="Writing the Type (the custom attribute constructor) to the method or memberref tables"/>
+<node CREATED="1332936412915" ID="ID_1439366452" MODIFIED="1357602656242" TEXT="CustomAttributeRow">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1345152335231" ID="ID_1062555397" MODIFIED="1357602656241" TEXT="Writing the custom attribute row itself">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1332936420366" ID="ID_1959302613" MODIFIED="1332936423468" TEXT="MethodDefRow">
-<node CREATED="1332936464689" ID="ID_1849813091" MODIFIED="1332936483079" TEXT="Resolving the method name from the string heap"/>
-<node CREATED="1332936483622" ID="ID_1697677608" MODIFIED="1332936494604" TEXT="Resolving the MethodDefSig from the blob heap"/>
-<node CREATED="1332936511164" ID="ID_1780903901" MODIFIED="1344666412469" TEXT="Determining the list of parameters for the given method">
-<node CREATED="1344666413998" ID="ID_601417374" MODIFIED="1344666431244" TEXT="Using the ParamList property"/>
+<node CREATED="1345152455277" ID="ID_1859687540" MODIFIED="1357602656240" TEXT="Writing the custom attribute blob">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1345152461598" ID="ID_773847522" MODIFIED="1357602656240" TEXT="Writing the Parent table row">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1345152493022" ID="ID_1496980582" MODIFIED="1357602656239" TEXT="Writing the Type (the custom attribute constructor) to the method or memberref tables">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1332936420366" ID="ID_1959302613" MODIFIED="1357601518813" TEXT="MethodDefRow">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1332936464689" ID="ID_1849813091" MODIFIED="1357601518804" TEXT="Resolving the method name from the string heap">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1332936483622" ID="ID_1697677608" MODIFIED="1357601518790" TEXT="Resolving the MethodDefSig from the blob heap">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1332936511164" ID="ID_1780903901" MODIFIED="1357601525437" TEXT="Determining the list of parameters for the given method">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1344666413998" ID="ID_601417374" MODIFIED="1357601525430" TEXT="Using the ParamList property">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1344666419575" ID="ID_288340268" MODIFIED="1344666824280" TEXT="Using the method signature blob">
 <icon BUILTIN="button_ok"/>
 </node>

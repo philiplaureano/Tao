@@ -134,6 +134,35 @@ namespace Tests
 
             bytes.GetHash();
         }
+        public static ShouldMatch(this bytes : array[byte], otherArray : array[byte], numberOfBytesToMatch : uint) : void
+        {
+            def firstStream = MemoryStream(bytes);
+            def secondStream = MemoryStream(otherArray);
+            firstStream.ShouldMatch(secondStream, numberOfBytesToMatch);
+        }
+        
+        public static ShouldMatch(this bytes : array[byte], otherStream : Stream, numberOfBytesToMatch : uint) : void
+        {
+            def firstStream = MemoryStream(bytes);
+            firstStream.ShouldMatch(otherStream, numberOfBytesToMatch);
+        }
+        
+        public static ShouldMatch(this stream : Stream, otherStream : Stream, numberOfBytesToMatch : uint) : void
+            requires stream.Length >= numberOfBytesToMatch
+            requires (otherStream.Length :> uint) >= numberOfBytesToMatch
+            requires numberOfBytesToMatch > 0
+        {
+            def firstBytes = stream.ReadBytes(numberOfBytesToMatch :> int, 0);
+            def secondBytes = otherStream.ReadBytes(numberOfBytesToMatch :> int, 0);
+            firstBytes.ShouldMatch(secondBytes);
+        }
+        
+        public static ShouldMatch(this otherArray : array[byte], stream : Stream) : void
+        {
+            def otherStream = MemoryStream(otherArray);
+            otherStream.ShouldMatch(stream);
+        }
+        
         public static ShouldMatch(this stream : Stream, otherArray : array[byte]) : void
         {
             def otherStream = MemoryStream(otherArray);
