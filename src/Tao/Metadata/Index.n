@@ -56,6 +56,13 @@ namespace Tao.Metadata
         public abstract ToUInt16() : ushort;
         public abstract ToUInt32() : uint;
         
+        public static FromSimpleToken(tableId : TableId, row : uint) : Index
+        {
+            def encoder = SimpleTokenEncoder();
+            def token = encoder.Encode(tableId, row);
+            
+            Index.Wide(token);
+        }
         public static FromCodedToken(tokenType : CodedTokenType, tableId : TableId, row : uint) : Index
         {
             def encoder = CodedTokenEncoder();

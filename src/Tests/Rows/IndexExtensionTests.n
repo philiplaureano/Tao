@@ -52,6 +52,15 @@ namespace Tests
             def expectedData = MemoryStream(expectedBytes);
             expectedData.ShouldMatch(blob);
         }
+        public ShouldBeAbleToCreateSimpleIndex() : void
+        {
+            def encoder = SimpleTokenEncoder();
+            def row : uint = 1;
+            def expectedIndex = encoder.Encode(TableId.Assembly, row : uint);
+            
+            def index = Index.FromSimpleToken(TableId.Assembly, row);
+            index.ToUInt32().ShouldBeEqualTo(expectedIndex, "Wrong Index Value");
+        }
         public ShouldBeAbleToCreateCodedTokenIndex() : void
         {
             def encoder = CodedTokenEncoder();
