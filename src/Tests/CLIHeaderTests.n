@@ -213,7 +213,7 @@ namespace Tests
     {
     }
     
-    public ignored stub ShouldRaiseErrorIfEntryPointTokenIsInvalid() : void
+    public stub ShouldRaiseErrorIfEntryPointTokenIsInvalid() : void
         expects InvalidOperationException
     {      
     }

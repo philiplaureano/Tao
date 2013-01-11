@@ -41,7 +41,7 @@ namespace Tests
 
             assert blobIndex equals 0 otherwiseprint "Invalid Blob Index";
         } 
-        public ignored ShouldAlignEntireBlobHeapToNext4ByteBoundary() : void
+        public stub ShouldAlignEntireBlobHeapToNext4ByteBoundary() : void
         {
             // TODO: Create a blob heap writer that writes the entire blob heap instead of just a single blob
             //def blobBytes = array[0x00 : byte, 0x00, 0x01, 0x42];
@@ -54,7 +54,6 @@ namespace Tests
             //def actualLength = 5;
             //def expectedLength = actualLength.GetNextBoundary(4);
             //outputStream.Length.ShouldBeEqualTo(expectedLength, "The Blob Stream should be aligned to the next 4 byte boundary");
-            throw NotImplementedException();
         }
     }
 }
