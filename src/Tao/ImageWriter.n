@@ -15,26 +15,29 @@ namespace Tao
     {
         private _dosHeaderWriter : IDosHeaderWriter;
         private _coffHeaderWriter : ICoffHeaderWriter;
-        private _fieldsWriter : IOptionalHeaderStandardFieldsWriter;
         private _dataDirectoryWriter : IDataDirectoryWriter;
         private _sectionHeaderWriter : ISectionHeaderWriter;
-
+        private _optionalHeaderWriter : IOptionalHeaderWriter;
+        private _sectionWriter : ISectionWriter;
+        
         public this() 
         {
-            this(DosHeaderWriter(), CoffHeaderWriter(), OptionalHeaderStandardFieldsWriter(), DataDirectoryWriter(), SectionHeaderWriter());
+            this(DosHeaderWriter(), CoffHeaderWriter(), DataDirectoryWriter(), SectionHeaderWriter(), OptionalHeaderWriter(), SectionWriter());
         }
 
         public this([NotNull] dosHeaderWriter : IDosHeaderWriter, 
             [NotNull] coffHeaderWriter : ICoffHeaderWriter, 
-            [NotNull] optionalHeaderStandardFieldsWriter : IOptionalHeaderStandardFieldsWriter,
             [NotNull] dataDirectoryWriter : IDataDirectoryWriter,
-            [NotNull] sectionHeaderWriter : ISectionHeaderWriter)
+            [NotNull] sectionHeaderWriter : ISectionHeaderWriter,
+            [NotNull] optionalHeaderWriter : IOptionalHeaderWriter,
+            [NotNull] sectionWriter : ISectionWriter)
         {
             _dosHeaderWriter = dosHeaderWriter;
             _coffHeaderWriter  = coffHeaderWriter;
-            _fieldsWriter = optionalHeaderStandardFieldsWriter;
             _dataDirectoryWriter = dataDirectoryWriter;
             _sectionHeaderWriter = sectionHeaderWriter;
+            _optionalHeaderWriter = optionalHeaderWriter;
+            _sectionWriter = sectionWriter;
         }
 
         public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : void
@@ -57,67 +60,20 @@ namespace Tao
             def optionalHeader = image.OptionalHeader;
 
             def directoryCount = image.DataDirectories.Count :> uint;
-            mutable sectionAlignment : uint = 0x2000;
             
-            match(optionalHeader)
-            {
-                |OptionalHeader.OptionalHeader32 =>
-                {                    
-                        def currentHeader = optionalHeader :> OptionalHeader.OptionalHeader32;
-                        def standardFields = currentHeader.StandardFields;
-                        def ntHeaderWriter = NTHeader32Writer();
-
-                        // Make sure that the number of directories is consistent with 
-                        // the value in the header
-                        currentHeader.Header.NumberOfRvaAndSizes = directoryCount;
-                        _fieldsWriter.Write(standardFields, outputStream);
-                        ntHeaderWriter.Write(currentHeader.Header, outputStream);
-                        
-                        sectionAlignment = currentHeader.Header.SectionAlignment;
-                }
-
-                |OptionalHeader.OptionalHeader64 =>
-                {
-                        def currentHeader = optionalHeader :> OptionalHeader.OptionalHeader64;
-                        def standardFields = currentHeader.StandardFields;
-                        def ntHeaderWriter = NTHeader64Writer();
-
-                        // Make sure that the number of directories is consistent with 
-                        // the value in the header
-                        currentHeader.Header.NumberOfRvaAndSizes = directoryCount;
-                        _fieldsWriter.Write(standardFields, outputStream);
-                        ntHeaderWriter.Write(currentHeader.Header, outputStream);
-                        
-                        sectionAlignment = currentHeader.Header.SectionAlignment;
-                }
-            }                
+            mutable ntHeader : INTHeader = optionalHeader.NTHeader;
+            mutable sectionAlignment = ntHeader.SectionAlignment;
+            _optionalHeaderWriter.Write(optionalHeader, directoryCount, outputStream);
 
             // Write the data directories
             _dataDirectoryWriter.Write(image.DataDirectories, outputStream);
 
-            // Write the sections      
+            // Write the section headers      
             def sectionHeaders = sections.Select(s => s.Header);
             _sectionHeaderWriter.Write(sectionHeaders, outputStream);
 
-            def writer = BinaryWriter(outputStream);
-            foreach(section in sections)
-            {
-                def sectionData = section.Data;
-                _ = sectionData.Seek(0, SeekOrigin.Begin);
-                
-                def header = section.Header;
-                def reader = BinaryReader(sectionData);
-
-                def length = header.SizeOfRawData;                    
-                def sectionBytes = reader.ReadBytes(length :> int);
-
-                def startPosition = header.PointerToRawData;
-                _ = outputStream.Seek(startPosition, SeekOrigin.Begin);
-                writer.Write(sectionBytes);
-                
-                // Align the sections to the nearest boundary
-                outputStream.Align(sectionAlignment :> int);
-            }
+            // Write the section data
+            _sectionWriter.Write(sections, sectionAlignment, outputStream);
         }
     }
 }

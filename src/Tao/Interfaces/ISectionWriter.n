@@ -1,0 +1,18 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+namespace Tao
+{
+    public interface ISectionWriter
+    {
+        Write(sections : IEnumerable[ISection], sectionAlignment : uint, outputStream : Stream) : void;
+    }
+}

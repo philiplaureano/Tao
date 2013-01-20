@@ -1,4 +1,5 @@
-﻿using Nemerle.Collections;
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 using Tao.Interfaces;
@@ -9,18 +10,63 @@ using System.Linq;
 
 namespace Tao
 {  
-  public variant OptionalHeader
-  {
-    |OptionalHeader32
+    public abstract class OptionalHeader : IOptionalHeader
+    {
+        public StandardFields : IOptionalHeaderStandardFields
         {
-          StandardFields : IOptionalHeaderStandardFields;
-          Header : INTHeader[uint];
+            get;set;
         }
-      
-    |OptionalHeader64 
+
+        public abstract NTHeader : INTHeader { get;set; };
+
+        public class OptionalHeader32 : OptionalHeader
         {
-          StandardFields : IOptionalHeaderStandardFields;
-          Header : INTHeader[ulong];
+            public this(standardFields : IOptionalHeaderStandardFields, header : INTHeader[uint])
+            {
+                base.StandardFields = standardFields;
+                Header = header;
+            }
+
+            public Header : INTHeader[uint]
+            {
+                get; set;
+            }
+
+            public override get_NTHeader() : INTHeader
+            {
+                Header;   
+            }
+
+            public override set_NTHeader(ntHeader : INTHeader) : void
+                requires ntHeader == null || (ntHeader != null && ntHeader is INTHeader[uint])
+            {
+                Header = ntHeader :> INTHeader[uint];
+            }
         }
-  }
+
+        public class OptionalHeader64 : OptionalHeader
+        {
+            public this(standardFields : IOptionalHeaderStandardFields, header : INTHeader[ulong])
+            {
+                base.StandardFields = standardFields;
+                Header = header;
+            }
+
+            public Header : INTHeader[ulong]
+            {
+                get;set;
+            }
+
+            public override get_NTHeader() : INTHeader
+            {
+                Header;   
+            }
+
+            public override set_NTHeader(ntHeader : INTHeader) : void
+                requires ntHeader == null || (ntHeader != null && ntHeader is INTHeader[ulong])
+            {
+                Header = ntHeader :> INTHeader[ulong];
+            }
+        }        
+    }
 }

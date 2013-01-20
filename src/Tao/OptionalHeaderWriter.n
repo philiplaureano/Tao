@@ -1,0 +1,59 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class OptionalHeaderWriter : IOptionalHeaderWriter
+    {
+        private _fieldsWriter : IOptionalHeaderStandardFieldsWriter;
+        public this() 
+        {
+            this(OptionalHeaderStandardFieldsWriter());
+        }
+        
+        public this([NotNull] fieldsWriter : IOptionalHeaderStandardFieldsWriter)
+        {
+            _fieldsWriter = fieldsWriter;
+        }
+        
+        public Write([NotNull] optionalHeader : IOptionalHeader, directoryCount : uint, outputStream : Stream) : void
+        {
+            match(optionalHeader)
+            {
+                |OptionalHeader.OptionalHeader32 =>
+                {                    
+                        def currentHeader = optionalHeader :> OptionalHeader.OptionalHeader32;
+                        def standardFields = currentHeader.StandardFields;
+                        def ntHeaderWriter = NTHeader32Writer();
+
+                        // Make sure that the number of directories is consistent with 
+                        // the value in the header
+                        currentHeader.Header.NumberOfRvaAndSizes = directoryCount;
+                        _fieldsWriter.Write(standardFields, outputStream);
+                        ntHeaderWriter.Write(currentHeader.Header, outputStream);                        
+                }
+
+                |OptionalHeader.OptionalHeader64 =>
+                {
+                        def currentHeader = optionalHeader :> OptionalHeader.OptionalHeader64;
+                        def standardFields = currentHeader.StandardFields;
+                        def ntHeaderWriter = NTHeader64Writer();
+
+                        // Make sure that the number of directories is consistent with 
+                        // the value in the header
+                        currentHeader.Header.NumberOfRvaAndSizes = directoryCount;
+                        _fieldsWriter.Write(standardFields, outputStream);
+                        ntHeaderWriter.Write(currentHeader.Header, outputStream);                        
+                }
+            }  
+        }
+    }
+}

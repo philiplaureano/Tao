@@ -219,6 +219,9 @@
     <Compile Include="Interfaces\INTHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interfaces\IOptionalHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Interfaces\IOptionalHeaderStandardFields.n">
       <SubType>Code</SubType>
     </Compile>
@@ -226,6 +229,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interfaces\IOptionalHeaderStandardFieldsWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IOptionalHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interfaces\IReader.n">
@@ -247,6 +253,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interfaces\ISectionResolver.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\ISectionWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interfaces\IStreamHeader.n">
@@ -1512,6 +1521,9 @@
     <Compile Include="OptionalHeaderStandardFieldsWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="OptionalHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PaddedNullTerminatedStringReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1544,6 +1556,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionResolver.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectionWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StartupStubWriter.n">

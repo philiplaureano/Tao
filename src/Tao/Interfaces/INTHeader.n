@@ -8,29 +8,33 @@ using System.Linq;
 
 namespace Tao.Interfaces
 {
-  public interface INTHeader[TSize]
-  where TSize : struct
-  {
-    ImageBase : TSize { get; set; }
-    SectionAlignment : uint { get; set; }
-    FileAlignment : uint { get; set; }
-    MajorOperatingSystemVersion : ushort { get; set; }
-    MinorOperatingSystemVersion : ushort { get; set; }
-    MajorImageVersion : ushort { get; set; }
-    MinorImageVersion : ushort { get; set; }    
-    MajorSubsystemVersion : ushort { get; set; }
-    MinorSubsystemVersion : ushort { get; set; }
-    Win32VersionValue : uint { get;set; }
-    SizeOfImage : uint { get; set; }
-    SizeOfHeaders : uint { get; set; }
-    CheckSum : uint { get; set; }
-    Subsystem : Subsystem { get; set; }
-    DllCharacteristics : DLLCharacteristics { get; set; }
-    SizeOfStackReserve : TSize { get; set; }
-    SizeOfStackCommit : TSize { get; set; }
-    SizeOfHeapReserve : TSize { get; set; }
-    SizeOfHeapCommit : TSize { get; set; }
-    LoaderFlags : uint { get; set; }
-    NumberOfRvaAndSizes : uint { get; set; }
-  }
+    public interface INTHeader
+    {
+        SectionAlignment : uint { get; set; }
+        FileAlignment : uint { get; set; }
+        MajorOperatingSystemVersion : ushort { get; set; }
+        MinorOperatingSystemVersion : ushort { get; set; }
+        MajorImageVersion : ushort { get; set; }
+        MinorImageVersion : ushort { get; set; }    
+        MajorSubsystemVersion : ushort { get; set; }
+        MinorSubsystemVersion : ushort { get; set; }
+        Win32VersionValue : uint { get;set; }
+        SizeOfImage : uint { get; set; }
+        SizeOfHeaders : uint { get; set; }
+        CheckSum : uint { get; set; }
+        Subsystem : Subsystem { get; set; }
+        DllCharacteristics : DLLCharacteristics { get; set; }
+        LoaderFlags : uint { get; set; }
+        NumberOfRvaAndSizes : uint { get; set; }
+    }
+    
+    public interface INTHeader[TSize] : INTHeader
+        where TSize : struct
+    {
+        ImageBase : TSize { get; set; }        
+        SizeOfStackReserve : TSize { get; set; }
+        SizeOfStackCommit : TSize { get; set; }
+        SizeOfHeapReserve : TSize { get; set; }
+        SizeOfHeapCommit : TSize { get; set; }        
+    }
 }
