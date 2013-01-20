@@ -12,6 +12,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao;
+using Tao.Interfaces;
 namespace Tests
 {
     public partial class ImageTests
@@ -46,6 +48,6 @@ namespace Tests
             def writer = ImageWriter();
             writer.Write(image, outputStream);
             outputStream.PEVerifyIt();
-        }
+        }       
     }
 }

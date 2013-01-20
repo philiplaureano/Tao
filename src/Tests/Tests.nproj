@@ -48,6 +48,16 @@
     <MacroReference Include="Nemerle.Linq">
       <HintPath>$(Nemerle)\Nemerle.Linq.dll</HintPath>
     </MacroReference>
+    <Reference Include="Castle.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
+      <Name>Castle.Core</Name>
+      <AssemblyName>Castle.Core.dll</AssemblyName>
+      <HintPath>..\..\packages\Castle.Core.3.1.0\lib\net35\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FakeItEasy, Version=1.7.4626.65, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c">
+      <Name>FakeItEasy</Name>
+      <AssemblyName>FakeItEasy.dll</AssemblyName>
+      <HintPath>..\..\packages\FakeItEasy.1.7.4626.65\lib\NET40\FakeItEasy.dll</HintPath>
+    </Reference>
     <Reference Include="Nemerle">
       <Name>Nemerle</Name>
       <AssemblyName>Nemerle.dll</AssemblyName>
@@ -675,6 +685,9 @@
       <SubType>Content</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="packages.config">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="SampleBinaries\HelloWorld.exe">
       <SubType>Content</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

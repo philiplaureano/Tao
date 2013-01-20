@@ -53,6 +53,7 @@ namespace Tao
                         _fieldsWriter.Write(standardFields, outputStream);
                         ntHeaderWriter.Write(currentHeader.Header, outputStream);                        
                 }
+                |_ => { throw NotSupportedException(string.Format("Optional Header Type Not Supported: '{0}'", optionalHeader.GetType()));}
             }  
         }
     }
