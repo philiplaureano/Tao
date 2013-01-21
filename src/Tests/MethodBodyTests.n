@@ -21,6 +21,9 @@ namespace Tests
 {
     public class MethodBodyTests
     {
+        public stub ShouldBeAbleToCombineMultipleMethodBodiesIntoASingleStreamFromAGivenSetOfMethodDefRows() : void
+        {
+        }
         public ShouldBeAbleToLoadInstructionsWithMethodBodyReader() : void
         {
             def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";

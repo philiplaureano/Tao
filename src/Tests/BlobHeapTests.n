@@ -41,7 +41,7 @@ namespace Tests
 
             assert blobIndex equals 0 otherwiseprint "Invalid Blob Index";
         } 
-        public stub ShouldAlignEntireBlobHeapToNext4ByteBoundary() : void
+        public ignored stub ShouldAlignEntireBlobHeapToNext4ByteBoundary() : void
         {
             // TODO: Create a blob heap writer that writes the entire blob heap instead of just a single blob
             //def blobBytes = array[0x00 : byte, 0x00, 0x01, 0x42];

@@ -38,13 +38,13 @@ namespace Tests
         
         outputStream.ShouldMatch(createExpectedStream());
     }
-    public stub ShouldWriteStartupStubForAmd64Machine() : void
+    public ignored stub ShouldWriteStartupStubForAmd64Machine() : void
     {
     }    
-    public stub ShouldWriteStartupStubForIA64Machine() : void
+    public ignored stub ShouldWriteStartupStubForIA64Machine() : void
     {
     }    
-    public stub ShouldWriteStartupStubImmediatelyAfterImportDirectoryPosition() : void
+    public ignored stub ShouldWriteStartupStubImmediatelyAfterImportDirectoryPosition() : void
     {
     }
   }
