@@ -288,6 +288,9 @@
     <Compile Include="Machine.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Mapper.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\BlobReader.n">
       <SubType>Code</SubType>
     </Compile>

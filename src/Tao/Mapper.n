@@ -1,0 +1,50 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class Mapper[TItem]    
+    {
+        private _getItemSize : TItem -> uint;
+        
+        public this(getItemSize : TItem -> uint)
+        {
+            _getItemSize = getItemSize;
+        }
+
+        public CreateMap([NotNull] items : IEnumerable.[TItem]) : IDictionary.[TItem, uint]
+            ensures AllItemsShouldBeMapped(items, value)
+        {
+            def map = Dictionary.[TItem, uint]();
+            mutable currentOffset : uint = 0;
+            foreach(item in items)
+            {
+                def size = _getItemSize(item);
+                map[item] = currentOffset;
+
+                currentOffset += size;
+            }
+            map;
+        }
+        
+        private AllItemsShouldBeMapped([NotNull] items : IEnumerable.[TItem], map : IDictionary.[TItem, uint]) : bool
+        {
+            foreach(item in items)
+            {
+                when(!map.ContainsKey(item))
+                {
+                    throw InvalidOperationException(string.Format("Item '{0}' should have been mapped but was not a part of the resulting map", item));
+                }
+            }
+
+            true;
+        }
+    }
+}

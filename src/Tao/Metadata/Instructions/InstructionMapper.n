@@ -15,41 +15,21 @@ using Tao.Metadata.Instructions.Operands;
 
 namespace Tao.Metadata.Instructions
 {
-    public class InstructionMapper
-    {
-        public CreateMap([NotNull] instructions : IEnumerable.[IInstruction]) : IDictionary.[IInstruction, uint]
-            ensures AllInstructionsShouldBeMapped(instructions, value)
+    public class InstructionMapper : Mapper[IInstruction]
+    {        
+        public this()
+        {
+            base(GetInstructionSize);
+        }
+        
+        private static GetInstructionSize(instruction : IInstruction) : uint
         {
             def sizeCalculator = InstructionSizeCalculator();
-            def map = Dictionary.[IInstruction, uint]();
-            mutable currentOffset : uint = 0;
-            foreach(instruction in instructions)
-            {
-                def opCode = instruction.OpCode;
-                def operand = instruction.Operand;
-                
-                // Map the instruction at the current calculated offset
-                def size = sizeCalculator.GetInstructionSize(opCode, operand);
-                map[instruction] = currentOffset;
-                
-                
-                // Move the position to the next available slot
-                currentOffset += size;
-            }
-
-            map;
-        }        
-        private AllInstructionsShouldBeMapped([NotNull] instructions : IEnumerable.[IInstruction], map : IDictionary.[IInstruction, uint]) : bool
-        {
-            foreach(instruction in instructions)
-            {
-                when(!map.ContainsKey(instruction))
-                {
-                    throw InvalidOperationException(string.Format("Instruction '{0}' at offset '{1}' should have been mapped but was not a part of the instruction map", instruction, instruction.Offset));
-                }
-            }
+            def opCode = instruction.OpCode;
+            def operand = instruction.Operand;
+            def size = sizeCalculator.GetInstructionSize(opCode, operand);
             
-            true;
+            size;
         }
     }
 }
