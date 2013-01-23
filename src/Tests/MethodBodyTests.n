@@ -21,8 +21,54 @@ namespace Tests
 {
     public class MethodBodyTests
     {
-        public stub ShouldBeAbleToCombineMultipleMethodBodiesIntoASingleStreamFromAGivenSetOfMethodDefRows() : void
+        public ShouldBeAbleToWriteMultipleMethodBodiesIntoASingleStreamFromAGivenSetOfMethodDefRows() : void
         {
+            def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";
+            def image = Image.ReadFrom(assemblyFile);
+            def root = image.GetMetadataRoot();
+
+            def tableStream = root.GetTablesHeap();
+            def tableHeap = TablesHeap();            
+            tableHeap.ReadFrom(tableStream);
+
+            // Grab all the rows from the MethodDef table
+            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();
+
+            // Manually forge the expected stream
+            def expectedStream = MemoryStream();
+
+            def map : IDictionary[string, uint] = Dictionary();
+            def userStringHeap = root.GetUserStringHeap();            
+            def stringMap = StringMap(UserStringHeapWriter(), map);
+
+            def bodyMap = Dictionary.[MethodDefRow, IMethodBody * uint]();
+            
+            def boundReader = BoundStringReader(UserStringHeapReader(), root.GetStringHeap());
+            def bodyReader = MethodBodyReader(boundReader); 
+            
+            foreach(row in rows)
+            {                
+                
+                def body = row.ReadMethodBodyFrom(image, bodyReader);            
+                
+                // Map the row to its corresponding method body and rva
+                def rva : uint = expectedStream.Position :> uint;
+                bodyMap[row] = (body, rva);
+                
+                def writer = MethodBodyWriter();                
+                writer.Write(body, stringMap, expectedStream);
+            }
+
+            def blockWriter = MethodStreamWriter();
+            def actualStream = MemoryStream();
+            foreach(row in rows)
+            {
+                // Writing the method body should yield the expected RVA
+                def (body, rva) = bodyMap[row];
+                blockWriter.Write(body, stringMap, actualStream).ShouldBeEqualTo(rva, "Wrong RVA value");
+            }
+            
+            actualStream.ShouldMatch(expectedStream);
         }
         public ShouldBeAbleToLoadInstructionsWithMethodBodyReader() : void
         {
@@ -48,7 +94,7 @@ namespace Tests
             def body = reader.Read(methodStream);         
             (body.Instructions.Count > 0).ShouldBeTrue("The method body reader failed to load the instructions for the method body");
         }
-        
+
         public ignored stub ShouldBeAbleToCalculateMaxStackHeight() : void
         {            
         }
@@ -424,14 +470,14 @@ namespace Tests
 
             // Read the instructions from the method body
             def methodStream = image.GetDataAt(rva);
-            
+
             // Mark the start and end positions for the entire method body
             def startPosition = methodStream.Position :> uint;
             def reader = SimpleMethodBodyReader();
             def body = reader.Read(methodStream);
-            
+
             def endPosition = methodStream.Position :> uint;
-            
+
             def userStringHeap = root.GetUserStringHeap();
 
             // Preserve the string map from the existing method
@@ -442,21 +488,21 @@ namespace Tests
 
             def methodBytes = MemoryStream(body.Bytes);
             def instructions = instructionReader.Read(methodBytes);
-            
+
             def actualStream = MemoryStream();            
             def stringMap = StringMap(UserStringHeapWriter(), map);
-            
+
             def count = endPosition - startPosition;
             def expectedStream = methodStream.ReadBytes(count :> int, startPosition);
-            
+
             def tracerStream = TracerStream(MemoryStream(expectedStream), actualStream);
-            
+
             // Copy the instructions to the method body
             foreach(instruction in instructions)
             {
                 body.Instructions.Add(instruction);
             }
-            
+
             // Write the method body
             def writer = MethodBodyWriter();
             writer.Write(body, stringMap, tracerStream);                        

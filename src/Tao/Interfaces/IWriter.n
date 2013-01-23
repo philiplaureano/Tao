@@ -9,12 +9,16 @@ using System.Linq;
 
 namespace Tao.Interfaces
 {
-  public interface IWriter[THeader]
-  {
-      Write(header : THeader, stream : Stream) : void;
-  }
-  public interface IWriter[T1, THeader]
-  {
-      Write(arg1 : T1, header : THeader, stream : Stream) : void;
-  }
+    public interface IWriter
+    {
+        Write(stream : Stream) : void;
+    }
+    public interface IWriter[THeader]
+    {
+        Write(header : THeader, stream : Stream) : void;
+    }
+    public interface IWriter[T1, THeader]
+    {
+        Write(arg1 : T1, header : THeader, stream : Stream) : void;
+    }
 }

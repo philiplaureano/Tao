@@ -23,7 +23,16 @@ namespace Tests
         public stub ShouldWriteMethodBodyBlock() : void
         {
         }
-        public stub ShouldWriteResourcesWhenAvailable() : void
+        public stub ShouldWriteResourceSectionWhenAvailable() : void
+        {
+        }
+        public stub ShouldWriteMetadataHeader() : void
+        {
+        }
+        public stub ShouldWriteStartupStub() : void
+        {
+        }
+        public stub ShouldWriteImportHintNameTable() : void
         {
         }
     }

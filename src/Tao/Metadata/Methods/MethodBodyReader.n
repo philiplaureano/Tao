@@ -16,7 +16,7 @@ using Tao.Metadata.Instructions.Operands;
 
 namespace Tao.Metadata
 {  
-    public class MethodBodyReader
+    public class MethodBodyReader : IMethodBodyReader
     {
         private _reader : IMethodBodyReader;
         private _instructionReader : IInstructionReader;
