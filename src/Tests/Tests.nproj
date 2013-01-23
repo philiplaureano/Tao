@@ -653,6 +653,9 @@
     <Compile Include="Tester.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TextSectionWriteTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="UserStringsTest.n">
       <SubType>Code</SubType>
     </Compile>
