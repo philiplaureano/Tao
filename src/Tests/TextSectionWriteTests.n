@@ -35,5 +35,8 @@ namespace Tests
         public stub ShouldWriteImportHintNameTable() : void
         {
         }
+        public stub ShouldGenerateCorrectHeapSizeByteFromGivenHeaps() : void
+        {
+        }
     }
 }
