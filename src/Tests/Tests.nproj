@@ -61,7 +61,7 @@
     <Reference Include="Nemerle">
       <Name>Nemerle</Name>
       <AssemblyName>Nemerle.dll</AssemblyName>
-      <HintPath>..\..\..\..\Program Files (x86)\Nemerle\net-4.0\Nemerle.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\Nemerle\net-4.5\Nemerle.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="nunit.core, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
@@ -213,6 +213,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Instructions\OperandWriterMappingTests.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MapperTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MetadataRootTests.n">

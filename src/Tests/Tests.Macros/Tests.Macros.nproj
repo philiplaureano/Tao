@@ -46,12 +46,12 @@
     <Reference Include="Nemerle.Compiler, Version=1.1.1046.0, Culture=neutral, PublicKeyToken=5291d186334f6101">
       <Name>Nemerle.Compiler</Name>
       <AssemblyName>Nemerle.Compiler.dll</AssemblyName>
-      <HintPath>C:\Program Files (x86)\Nemerle\net-4.5\Nemerle.Compiler.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Nemerle\net-4.5\Nemerle.Compiler.dll</HintPath>
     </Reference>
     <Reference Include="Nemerle.Macros, Version=1.1.1046.0, Culture=neutral, PublicKeyToken=5291d186334f6101">
       <Name>Nemerle.Macros</Name>
       <AssemblyName>Nemerle.Macros.dll</AssemblyName>
-      <HintPath>C:\Program Files (x86)\Nemerle\net-4.5\Nemerle.Macros.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Nemerle\net-4.5\Nemerle.Macros.dll</HintPath>
     </Reference>
     <Reference Include="nunit.core, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <Name>nunit.core</Name>

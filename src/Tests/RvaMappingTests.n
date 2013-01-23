@@ -1,6 +1,8 @@
 ﻿using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using NUnit;
+using NUnit.Core;
 using Tao;
 using Tao.Interfaces;
 using Tao.Metadata;
@@ -40,7 +42,7 @@ namespace Tests
       {
         def actualSection : ISectionHeader = sectionResolver.Resolve(inputSections, rva);
         def sectionName = actualSection.Name;
-        assert sectionName equals name otherwiseprint string.Format("The section resolver should have returned the {0} section", name);
+        sectionName.ShouldBeEqualTo(name, string.Format("The section resolver should have returned the {0} section", name));
       }                  
       
       // This call should return the .text section
@@ -48,8 +50,8 @@ namespace Tests
       testHeader(".reloc", 0x4000);
     }
     
+    [NUnit.Framework.ExpectedException(typeof(ArgumentException))]
     public ShouldThrowArgumentExceptionIfRvaDoesNotMatchAnyExistingSections() : void 
-        expects ArgumentException
     {
       def sectionResolver = SectionResolver();
       def header = SectionHeader();
@@ -67,7 +69,7 @@ namespace Tests
       def resolver = MetadataRootRvaResolver();
       def rva = resolver.ResolveFrom(image).Rva;
       
-      assert rva equals 0x2060 otherwiseprint "Invalid Metadata Rva";
+      rva.ShouldBeEqualTo(0x2060, "Invalid Metadata Rva");
     }        
   }
 }

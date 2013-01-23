@@ -235,8 +235,8 @@ namespace Tests
             TestCustomAttributeRead("SampleClassWithObjectAttributeUsage", 42, typeof(Int32));
         }
 
+        [NUnit.Framework.ExpectedException(typeof(CustomAttributeSignaturePrologNotFoundException))]
         public ShouldFailIfPrologNotEncountered() : void
-            expects CustomAttributeSignaturePrologNotFoundException
         {
             def targetClassName = "SampleClassWithFooAttribute";
 

@@ -1,0 +1,57 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tests.Macros;
+
+using Tao;
+
+namespace Tests
+{
+    public class MapperTests
+    {
+        public ShouldBeAbleToConvertMappedItemsToRanges() : void
+        {
+            // Generate the sample mappings
+            def mappings = Dictionary.[string, uint]();
+            mappings["Foo"] = 0;
+            mappings["Bar"] = 5;
+            mappings["Baz"] = 10;
+            
+            // Hardcode the sizes for each item
+            def sizes = Dictionary.[string, uint]();
+            sizes["Foo"] = 5;
+            sizes["Bar"] = 5;
+            sizes["Baz"] = 6;
+            
+            def getSize(text : string) : uint
+            {
+                sizes[text];
+            }
+            
+            def expectedResults = Dictionary.[string, uint * uint]();
+            expectedResults["Foo"] = (0 : uint, 5 : uint);
+            expectedResults["Bar"] = (5 : uint, 5 : uint);
+            expectedResults["Baz"] = (10 : uint, 6 : uint);
+            
+            def results : IDictionary.[string, uint *  uint] =  mappings.GetRanges(getSize);
+            foreach(text in expectedResults.Keys)
+            {
+                results.ContainsKey(text).ShouldBeTrue("Missing key '{0}'", text);
+                
+                def (expectedStart, expectedLength) = expectedResults[text];
+                def (start, length) = results[text];
+                
+                expectedStart.ShouldBeEqualTo(start, "Wrong start value");
+                expectedLength.ShouldBeEqualTo(length, "Wrong length");
+            }            
+        }
+    }
+}
