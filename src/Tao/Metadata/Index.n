@@ -5,9 +5,12 @@ using Nemerle.Text;
 using Nemerle.Utility;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao;
+using Tao.Interfaces;
 using Tao.Metadata.Tables;
 
 namespace Tao.Metadata
@@ -69,6 +72,69 @@ namespace Tao.Metadata
             def token = encoder.Encode(tokenType, tableId, row);
             
             Index.Wide(token);
+        }
+        
+        public static FromString(text : string, [NotNull] stringHeap : Stream) : Index
+        {
+            FromString(text, StringHeapWriter(), stringHeap);
+        }
+        
+        public static FromString(text : string, [NotNull] writer : IStringHeapWriter, [NotNull] stringHeap : Stream) : Index
+        {
+            def value = writer.Write(text, stringHeap);
+            
+            // Use the appropriate index width
+            Index.Auto(value);
+        }
+        
+        public static FromGuid(guid : Guid, [NotNull] guidHeap : Stream) : Index
+        {
+            FromGuid(guid, GuidWriter(), guidHeap);
+        }
+        
+        public static FromGuid(guid : Guid, [NotNull] writer : IGuidWriter, [NotNull] guidHeap : Stream) : Index
+        {
+            def value = guidHeap.Position :> uint + 1;
+            writer.Write(array[guid], guidHeap);
+            
+            // Use the appropriate index width
+            Index.Auto(value);
+        }
+        
+        public static FromBlob(blob : Stream, [NotNull] blobHeap : Stream) : Index
+        {
+            FromBlob(blob, BlobWriter(), blobHeap);
+        }
+        
+        public static FromBlob(blob : array[byte], [NotNull] blobHeap : Stream) : Index
+        {
+            FromBlob(blob, BlobWriter(), blobHeap);
+        }
+        
+        public static FromBlob(blob : array[byte], [NotNull] writer : IBlobWriter, [NotNull] blobHeap : Stream) : Index
+        {
+            FromBlob(MemoryStream(blob), writer, blobHeap);
+        }
+        
+        public static FromBlob(blob : Stream, [NotNull] writer : IBlobWriter, [NotNull] blobHeap : Stream) : Index
+        {
+            def value = blobHeap.Position :> uint + 1;
+            writer.Write(blob, blobHeap);
+            
+            // Use the appropriate index width
+            Index.Auto(value);
+        }
+        
+        public static Auto(value : uint) : Index
+        {
+            if(value <= ushort.MaxValue)
+            {
+                Index.Narrow(value :> ushort);
+            }
+            else
+            {
+                Index.Wide(value);
+            }
         }
     }  
 }

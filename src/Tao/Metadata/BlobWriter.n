@@ -11,24 +11,25 @@ using System.Linq;
 
 namespace Tao.Metadata
 {
-  public class BlobWriter
-  {
-    public Write([NotNull] blobData : Stream, [NotNull] outputStream : Stream) : uint
+    public class BlobWriter : IBlobWriter
     {
-      // The blob index will mark the start write position
-      def blobIndex = outputStream.Position :> uint;
-      // Write the blob length as a compressed integer
-      def length = blobData.Length :> uint;
-      def integerWriter = CompressedIntegerWriter();
-      integerWriter.WriteInteger(length, outputStream);
-      
-      def reader = BinaryReader(blobData);
-      def blobBytes = reader.ReadBytes(length :> int);
-      
-      def writer = BinaryWriter(outputStream);
-      writer.Write(blobBytes);           
-      
-      blobIndex;
+        public Write([NotNull] blobData : Stream, [NotNull] outputStream : Stream) : uint
+        {
+            // The blob index will mark the start write position
+            def blobIndex = outputStream.Position :> uint;
+            
+            // Write the blob length as a compressed integer
+            def length = blobData.Length :> uint;
+            def integerWriter = CompressedIntegerWriter();
+            integerWriter.WriteInteger(length, outputStream);
+
+            def reader = BinaryReader(blobData);
+            def blobBytes = reader.ReadBytes(length :> int);
+
+            def writer = BinaryWriter(outputStream);
+            writer.Write(blobBytes);           
+
+            blobIndex;
+        }
     }
-  }
 }

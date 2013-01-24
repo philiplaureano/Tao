@@ -11,15 +11,15 @@ using System.Linq;
 
 namespace Tao.Metadata
 {
-  public class GuidWriter
-  {
-    public Write([NotNull] guids: IEnumerable[Guid], [NotNull] guidStream: Stream) : void
+    public class GuidWriter : IGuidWriter
     {
-      def writer = BinaryWriter(guidStream);
-      foreach(guid in guids)
-      {
-          writer.Write(guid.ToByteArray());
-      }
+        public Write([NotNull] guids: IEnumerable[Guid], [NotNull] guidStream: Stream) : void
+        {
+            def writer = BinaryWriter(guidStream);
+            foreach(guid in guids)
+            {
+                writer.Write(guid.ToByteArray());
+            }
+        }
     }
-  }
 }

@@ -344,10 +344,16 @@
     <Compile Include="Metadata\HeapSizeFlags.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\IBlobWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\IBoundStringReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\ICLRMetadata.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\IGuidWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\IIndex.n">

@@ -18,6 +18,41 @@ namespace Tests
 {
     public class IndexExtensionTests
     {
+        public ShouldBeAbleToGetStringIndexUsingExtensionMethod() : void
+        {
+            def text = "Foo";
+            def writer = StringHeapWriter();
+            def outputStream = MemoryStream();
+            
+            // The written string should match
+            // the output from the extension method
+            def indexValue = writer.Write(text, outputStream);
+            def actualIndex = Index.FromString(text, writer, MemoryStream());
+            actualIndex.ToUInt32().ShouldBeEqualTo(indexValue, "Wrong Index Value");
+        }
+        
+        public ShouldBeAbleToGetGuidIndexUsingExtensionMethod() : void
+        {
+            def guid = Guid.NewGuid();
+            
+            // The written guid should match
+            // the output from the extension method
+            def indexValue : uint = 1;
+            def actualIndex = Index.FromGuid(guid, MemoryStream());
+            actualIndex.ToUInt32().ShouldBeEqualTo(indexValue, "Wrong Index Value");
+        }
+        
+        public ShouldBeAbleToGetBlobIndexUsingExtensionMethod() : void
+        {
+            def bytes = array[1 : byte, 2, 3, 4, 5];
+            
+            // The written guid should match
+            // the output from the extension method
+            def indexValue : uint = 1;
+            def actualIndex = Index.FromBlob(bytes, MemoryStream());
+            actualIndex.ToUInt32().ShouldBeEqualTo(indexValue, "Wrong Index Value");
+        }
+        
         public ShouldBeAbleToDecodeStringIndex() : void
         {
             def stringHeap = MemoryStream();
