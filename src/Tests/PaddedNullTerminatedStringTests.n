@@ -12,30 +12,39 @@ using System.Linq;
 
 namespace Tests
 {
-  public class PaddedNullTerminatedStringTests
-  {
-    public ShouldPadWrittenStringToNearestFourByteBoundary() : void
+    public class PaddedNullTerminatedStringTests
     {
-      def expectedBytes = array[0x23 : byte, 0x53, 0x74, 0x72, 0x69, 0x6E, 0x67, 0x73, 0x00, 0x00, 0x00, 0x00];      
-      def outputStream = MemoryStream();
-      def writer = PaddedNullTerminatedStringWriter();
-      writer.Write("#Strings", outputStream);
-      
-      def expectedHash = expectedBytes.GetHash();
-      def actualHash = outputStream.GetHash();
-      assert actualHash equals expectedHash otherwiseprint "Invalid written padded string";
+        public ShouldPadBlobStringToNearestFourByteBoundary() : void
+        {
+            def expectedBytes = array[0x23 : byte, 0x42, 0x6C, 0x6F, 0x62, 0x00, 0x00, 0x00];            
+            def outputStream = MemoryStream();
+            def writer = PaddedNullTerminatedStringWriter();
+            writer.Write("#Blob", outputStream);            
+            
+            outputStream.ShouldMatch(expectedBytes);
+        }
+        public ShouldPadWrittenStringToNearestFourByteBoundary() : void
+        {
+            def expectedBytes = array[0x23 : byte, 0x53, 0x74, 0x72, 0x69, 0x6E, 0x67, 0x73, 0x00, 0x00, 0x00, 0x00];      
+            def outputStream = MemoryStream();
+            def writer = PaddedNullTerminatedStringWriter();
+            writer.Write("#Strings", outputStream);
+
+            def expectedHash = expectedBytes.GetHash();
+            def actualHash = outputStream.GetHash();
+            assert actualHash equals expectedHash otherwiseprint "Invalid written padded string";
+        }
+        public ShouldReadPaddedString() : void
+        {        
+            def bytes = array[0x76 : byte, 0x34, 0x2E, 0x30, 0x2E, 0x33, 0x30, 0x33, 0x31, 0x39, 0x00, 0x00, 0x00];
+            def stream = MemoryStream(bytes);
+            def reader = PaddedNullTerminatedStringReader();
+            def maxLength = bytes.Count() :> uint;
+            def result = reader.Read(maxLength, stream);
+            def actualPosition = stream.Position;
+
+            assert result equals "v4.0.30319" otherwiseprint "Invalid padded string";
+            assert actualPosition equals 0xC otherwiseprint "Invalid stream position after padded string read";
+        }
     }
-    public ShouldReadPaddedString() : void
-    {        
-      def bytes = array[0x76 : byte, 0x34, 0x2E, 0x30, 0x2E, 0x33, 0x30, 0x33, 0x31, 0x39, 0x00, 0x00, 0x00];
-      def stream = MemoryStream(bytes);
-      def reader = PaddedNullTerminatedStringReader();
-      def maxLength = bytes.Count() :> uint;
-      def result = reader.Read(maxLength, stream);
-      def actualPosition = stream.Position;
-      
-      assert result equals "v4.0.30319" otherwiseprint "Invalid padded string";
-      assert actualPosition equals 0xC otherwiseprint "Invalid stream position after padded string read";
-    }
-  }
 }
