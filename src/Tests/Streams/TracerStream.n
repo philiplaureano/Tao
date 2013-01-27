@@ -40,17 +40,23 @@ namespace Tests
 
             base.Write(buffer, offset, count);
 
-            def endPosition = _outputStream.Position;
-
-            // Determine the expected bytes
-            def reader = BinaryReader(_expectedStream);
-            def length = endPosition - startPosition;
-            when(length > 0)
+            def endPosition = _outputStream.Position :> uint;                        
+            when(ShouldCompare(buffer, startPosition :> uint, endPosition))
             {
-                _ = _expectedStream.Seek(startPosition, SeekOrigin.Begin);
-                def expectedBytes = reader.ReadBytes(length :> int);
-                expectedBytes.ShouldMatch(actualBytes);
+                // Determine the expected bytes
+                def reader = BinaryReader(_expectedStream);
+                def length = endPosition - startPosition;
+                when(length > 0)
+                {
+                    _ = _expectedStream.Seek(startPosition, SeekOrigin.Begin);
+                    def expectedBytes = reader.ReadBytes(length :> int);
+                    expectedBytes.ShouldMatch(actualBytes);
+                }
             }
+        }
+        protected virtual ShouldCompare(buffer : array[byte], startPosition : uint, endPosition : uint) : bool
+        {
+            true;
         }
     }
 }
