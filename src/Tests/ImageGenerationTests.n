@@ -71,10 +71,6 @@ namespace Tests
     {
 
     }
-    public stub ShouldGenerateDefaultImportAddressTableData() : void
-    {
-
-    }
     public stub ShouldWriteEmptyExportTableDirectory() : void
     {
 
