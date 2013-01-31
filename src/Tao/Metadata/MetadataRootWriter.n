@@ -21,6 +21,11 @@ namespace Tao.Metadata
             this(StreamHeaderUpdater(), StreamHeaderWriter());
         }
 
+        public this(updater : IStreamHeaderUpdater) 
+        {
+            this(updater, StreamHeaderWriter());
+        }
+        
         public this(updater : IStreamHeaderUpdater, headerWriter : IStreamHeaderWriter) 
         {
             _updater = updater;
