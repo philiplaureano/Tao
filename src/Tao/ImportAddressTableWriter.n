@@ -1,0 +1,27 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+using Tao.Metadata;
+
+namespace Tao
+{
+    public class ImportAddressTableWriter : IWriter[uint]
+    {        
+        public Write(hintNameTableRva : uint, [NotNull] outputStream : Stream) : void
+            requires outputStream.CanWrite
+        {
+            def writer = BinaryWriter(outputStream);
+            writer.Write(hintNameTableRva);
+            writer.Write(0 :uint);
+        }
+    }
+}

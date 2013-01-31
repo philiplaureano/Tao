@@ -157,6 +157,30 @@ namespace Tests
             firstBytes.ShouldMatch(secondBytes);
         }
         
+        public static ShouldCompletelyMatch(this otherArray : array[byte], stream : Stream) : void
+        {
+            // Match the contents
+            def otherStream = MemoryStream(otherArray);
+            otherStream.ShouldMatch(stream);
+            (stream.Length == otherArray.Length).ShouldBeTrue("The two stream sizes don't match each other");
+        }
+        
+        public static ShouldCompletelyMatch(this stream : Stream, otherStream : Stream) : void
+        {
+            otherStream.ShouldMatch(stream);
+            (stream.Length == otherStream.Length).ShouldBeTrue("The two stream sizes don't match each other");
+        }
+        
+        public static ShouldCompletelyMatch(this stream : Stream, otherArray : array[byte]) : void
+        {
+            // Match the contents
+            def otherStream = MemoryStream(otherArray);
+            stream.ShouldMatch(otherStream);
+            
+            // Match the length
+            (stream.Length == otherArray.Length).ShouldBeTrue("The two stream sizes don't match each other");
+        }    
+        
         public static ShouldMatch(this otherArray : array[byte], stream : Stream) : void
         {
             def otherStream = MemoryStream(otherArray);

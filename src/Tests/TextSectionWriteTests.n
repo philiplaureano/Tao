@@ -4,15 +4,38 @@ using Nemerle.Utility;
 
 using Tests.Macros;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata;
 
 namespace Tests
 {
     public class TextSectionWriteTests
     {
-        public stub ShouldGenerateImportAddressTable() : void
+        public ShouldGenerateImportAddressTable() : void
         {
+            def assemblyFile = @"..\..\SampleBinaries\Skeleton.exe";
+            def image = Image.ReadFrom(assemblyFile);
+            def iatDirectory = image.DataDirectories[12];
+            def iatRva = iatDirectory.Rva;
+            def iatSize = iatDirectory.Size;
+            
+            // Read the actual IAT contents
+            def expectedStream = image.ReadBlock(Location.ImportAddressTable);            
+            def reader = BinaryReader(expectedStream);
+            def nameTableRva = reader.ReadUInt32();
+                        
+            // Given the name table RVA, the 
+            // writer should produce exactly the same output
+            def actualStream = MemoryStream();
+            def writer = ImportAddressTableWriter();
+            writer.Write(nameTableRva, actualStream);
+            
+            actualStream.ShouldMatch(expectedStream);
         }
         public stub ShouldGenerateCLIHeader() : void
         {
