@@ -1,0 +1,55 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+
+namespace Tao.Metadata
+{
+    public class StreamHeaderUpdater : IStreamHeaderUpdater
+    {
+        public UpdateHeaders([NotNull] root : IMetadataRoot, startPosition : long, [NotNull] outputStream : Stream) : void
+            requires startPosition >= 0
+        {
+            // Write the headers first in order to calculate
+            // the size of each heap
+            def streamHeaderWriter = StreamHeaderWriter();
+            streamHeaderWriter.Write(root.StreamHeaders, outputStream);
+
+            def writer = BinaryWriter(outputStream);
+            def heaps = root.Heaps;
+            foreach(header in root.StreamHeaders)
+            {
+                def currentPosition = outputStream.Position;
+                def offset = currentPosition - startPosition;
+                def name = header.Name;
+
+                when(!heaps.ContainsKey(name))
+                {
+                    def message = string.Format("There is no corresponding heap stream that matches the '{0}' metadata stream header", name);
+                    throw BadImageFormatException(message);
+                }
+
+                def heap = heaps[name];
+
+                // Reset the heap position
+                _ = heap.Seek(0, SeekOrigin.Begin);
+
+                def heapReader = BinaryReader(heap);
+                def heapBytes = heapReader.ReadBytes(heap.Length :> int);
+                writer.Write(heapBytes);
+
+                header.Offset = offset :> uint;                    
+                header.Size = heapBytes.Length :> uint;
+            }
+        }
+    }
+}

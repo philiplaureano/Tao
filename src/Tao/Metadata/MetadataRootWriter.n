@@ -11,84 +11,74 @@ using System.Linq;
 
 namespace Tao.Metadata
 {  
-  public class MetadataRootWriter : IMetadataRootWriter
-  {
-    public Write([NotNull] root : IMetadataRoot, [NotNull] outputStream : Stream) : void
+    public class MetadataRootWriter : IMetadataRootWriter
     {
-      // Keep track of the metadata root start position 
-      def startPosition = outputStream.Position;
-      def writer = BinaryWriter(outputStream);
-      writer.Write(root.Signature);
-      writer.Write(root.MajorVersion);
-      writer.Write(root.MinorVersion);
-          
-      // Skip the reserved block
-      writer.Write(0 : uint);
-          
-      // Write the Version string length
-      def version =  root.Version;
-      when (string.IsNullOrEmpty(version))
-        throw BadImageFormatException("The version string in the MetadataRoot header cannot be null");              
-          
-      // Write the version string
-      def stringStream = MemoryStream();
-      def stringWriter = PaddedNullTerminatedStringWriter();
-      stringWriter.Write(root.Version, stringStream);
-      
-      def length = stringStream.Length;
-      writer.Write(length :> uint);
-      
-      def versionStringBytes = stringStream.ToArray();
-      writer.Write(versionStringBytes);
-          
-      // Write the flags field
-      writer.Write(0 : ushort);
-          
-      def streamCount = root.StreamHeaders.Count;
-      writer.Write(streamCount :> ushort);
-                  
-      def writeHeaders() : void
-      {
-        def streamHeaderWriter = StreamHeaderWriter();
-        streamHeaderWriter.Write(root.StreamHeaders, outputStream);
-      }
-      
-      // Determine the length of the headers
-      // before writing the actual header values
-      def headerStartPosition = outputStream.Position;      
-      writeHeaders();
-      
-      def heaps = root.Heaps;
-      foreach(header in root.StreamHeaders)
-      {
-        def currentPosition = outputStream.Position;
-        def offset = currentPosition - startPosition;
-        def name = header.Name;
-        
-        when(!heaps.ContainsKey(name))
+        private _updater : IStreamHeaderUpdater;
+        private _headerWriter : IStreamHeaderWriter;
+
+        public this() 
         {
-            def message = string.Format("There is no corresponding heap stream that matches the '{0}' metadata stream header", name);
-            throw BadImageFormatException(message);
+            this(StreamHeaderUpdater(), StreamHeaderWriter());
         }
-        
-        def heap = heaps[name];
-        
-        // Reset the heap position
-        _ = heap.Seek(0, SeekOrigin.Begin);
-        
-        def heapReader = BinaryReader(heap);
-        def heapBytes = heapReader.ReadBytes(heap.Length :> int);
-        writer.Write(heapBytes);
-          
-        header.Offset = offset :> uint;                    
-        header.Size = heapBytes.Length :> uint;
-      }
-      
-      // Write the actual header values using
-      // the stream info gathered during the 
-      // heap writing operations
-      _ = outputStream.Seek(headerStartPosition, SeekOrigin.Begin);
-      writeHeaders();
+
+        public this(updater : IStreamHeaderUpdater, headerWriter : IStreamHeaderWriter) 
+        {
+            _updater = updater;
+            _headerWriter = headerWriter;
+        }
+
+        public Write([NotNull] root : IMetadataRoot, [NotNull] outputStream : Stream) : void        
+        {
+            // Keep track of the metadata root start position 
+            def startPosition = outputStream.Position;
+            def writer = BinaryWriter(outputStream);
+            writer.Write(root.Signature);
+            writer.Write(root.MajorVersion);
+            writer.Write(root.MinorVersion);
+
+            // Skip the reserved block
+            writer.Write(0 : uint);
+
+            // Write the Version string length
+            def version =  root.Version;
+            when (string.IsNullOrEmpty(version))
+                throw BadImageFormatException("The version string in the MetadataRoot header cannot be null");              
+
+            // Write the version string
+            def stringStream = MemoryStream();
+            def stringWriter = PaddedNullTerminatedStringWriter();
+            stringWriter.Write(root.Version, stringStream);
+
+            def length = stringStream.Length;
+            writer.Write(length :> uint);
+
+            def versionStringBytes = stringStream.ToArray();
+            writer.Write(versionStringBytes);
+
+            // Write the flags field
+            writer.Write(0 : ushort);
+
+            def streamCount = root.StreamHeaders.Count;
+            writer.Write(streamCount :> ushort);
+
+            // Determine the length of the headers
+            // before writing the actual header values
+            def headerStartPosition = outputStream.Position; 
+
+            // Recalculate the stream header sizes, if possible
+            when(_updater != null)
+            {
+                _updater.UpdateHeaders(root, startPosition, outputStream);
+            }
+
+            // Write the actual header values using
+            // the stream info gathered during the 
+            // heap writing operations
+            when(_headerWriter != null)
+            {
+                _ = outputStream.Seek(headerStartPosition, SeekOrigin.Begin);
+                _headerWriter.Write(root.StreamHeaders, outputStream);
+            }
+        }
     }
-  }
 }
