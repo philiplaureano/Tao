@@ -54,7 +54,7 @@ namespace Tests
         }
         public ShouldWriteStartupStub() : void
         {
-            def assemblyFile = @"..\..\SampleBinaries\Skeleton.exe";
+            def assemblyFile = @"..\..\SampleBinaries\NHibernate.dll";
             def image = Image.ReadFrom(assemblyFile);
             def optionalHeader = image.OptionalHeader;
             def ntHeader = optionalHeader.NTHeader :> NTHeader.[uint];
