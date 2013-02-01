@@ -52,8 +52,31 @@ namespace Tests
         public stub ShouldWriteMetadataHeader() : void
         {
         }
-        public stub ShouldWriteStartupStub() : void
+        public ShouldWriteStartupStub() : void
         {
+            def assemblyFile = @"..\..\SampleBinaries\Skeleton.exe";
+            def image = Image.ReadFrom(assemblyFile);
+            def optionalHeader = image.OptionalHeader;
+            def ntHeader = optionalHeader.NTHeader :> NTHeader.[uint];
+            
+            // Get the ImageBase and IAT RVA from the original image
+            def iatDirectory = image.DataDirectories[12];
+            def iatRva = iatDirectory.Rva;
+            def imageBase = ntHeader.ImageBase;
+            
+            // Find the entry point RVA
+            def standardFields = optionalHeader.StandardFields;
+            def entryPointRva = standardFields.AddressOfEntryPoint;
+            
+            // The standard size for the x86 stub is 6 bytes
+            def entryPointLength : uint = 6;
+            def expectedStream = image.ReadBlock(entryPointRva, entryPointLength);
+            
+            def actualStream = MemoryStream();
+            def writer = StartupStubWriter();
+            writer.Write(imageBase, iatRva, actualStream);
+            
+            actualStream.ShouldMatch(expectedStream);
         }
         public stub ShouldWriteImportHintNameTable() : void
         {
