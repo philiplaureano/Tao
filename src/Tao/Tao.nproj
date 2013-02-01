@@ -113,6 +113,9 @@
     <Compile Include="DosHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HintNameTableWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Image.n">
       <SubType>Code</SubType>
     </Compile>
