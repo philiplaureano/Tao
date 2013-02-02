@@ -146,6 +146,9 @@
     <Compile Include="ImportAddressTableWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ImportTableWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Interfaces\IAddress.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1506,6 +1509,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\UserStringHeapWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MscorlibNameWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NTHeader.n">

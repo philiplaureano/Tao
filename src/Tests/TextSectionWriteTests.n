@@ -52,6 +52,33 @@ namespace Tests
         public stub ShouldWriteMetadataHeader() : void
         {
         }
+        public ShouldWriteMscorlibName() : void
+        {
+            // The bytes should always be "mscoree.dll" followed by two null terminators            
+            def expectedBytes = array[0x6D : byte, 0x73, 0x63, 0x6F, 0x72, 0x65, 0x65, 0x2E, 0x64, 0x6C, 0x6C, 0x00, 0x00];
+            def outputStream = MemoryStream();
+            
+            def writer = MscorlibNameWriter();
+            writer.Write(outputStream);
+            
+            expectedBytes.ShouldCompletelyMatch(outputStream);
+        }
+        public ShouldWriteImportTable() : void
+        {
+            def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";
+            def image = Image.ReadFrom(assemblyFile);
+            
+            // Read the import table
+            def directories = image.DataDirectories;
+            def expectedStream = image.ReadBlock(Location.ImportTable);
+            def importTableRva = directories[1].Rva;
+            def iatRva = directories[12].Rva;
+            def isDll = assemblyFile.EndsWith("dll");
+            
+            def writer = ImportTableWriter();
+            def outputStream = TracerStream(expectedStream, MemoryStream());
+            writer.Write(importTableRva, iatRva, isDll, outputStream);            
+        }
         public ShouldWriteStartupStub() : void
         {
             def assemblyFile = @"..\..\SampleBinaries\NHibernate.dll";

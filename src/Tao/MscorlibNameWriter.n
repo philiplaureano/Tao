@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+namespace Tao
+{
+    public class MscorlibNameWriter : IWriter
+    {
+        public Write([NotNull] outputStream : Stream) : void
+        {
+            def writer = BinaryWriter(outputStream);
+            writer.Write(array[0x6D : byte, 0x73, 0x63, 0x6F, 0x72, 0x65, 0x65, 0x2E, 0x64, 0x6C, 0x6C, 0x00, 0x00]);
+        }
+    }
+}

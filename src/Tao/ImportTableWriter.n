@@ -1,0 +1,60 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+
+namespace Tao
+{
+    public class ImportTableWriter : IWriter.[uint, uint, bool]
+    {
+        public Write(importTableRva : uint, iatRva : uint, isDll : bool, outputStream : Stream) : void
+        {
+            def writer = BinaryWriter(outputStream);
+            
+            // Write the ILT Rva
+            def iltOffset = 40u;
+            def iltRva = importTableRva + iltOffset;            
+            writer.Write(iltRva);
+            
+            // Write the DateTimeStamp (always zero)
+            writer.Write(0 : uint);
+            
+            // Write the Forwarder chain (always zero)
+            writer.Write(0 : uint);
+            
+            // Write the NameRva
+            def nameRvaOffset = 62u;
+            def nameRva = importTableRva + nameRvaOffset;
+            writer.Write(nameRva : uint);
+            
+            // Write the IAT
+            writer.Write(iatRva : uint);
+            
+            // Write the blank import table entry, signifying the end of the directory itself
+            def emptyImportEntry = array(20) : array[byte];
+            writer.Write(emptyImportEntry);
+            
+            // Write the ILT (which identical to the IAT on disk)
+            def iatWriter = ImportAddressTableWriter();
+            def hintNameTableOffset = 48u;
+            def hintNameTableRva = importTableRva + hintNameTableOffset;
+            iatWriter.Write(hintNameTableRva, outputStream);
+            
+            // Write the hint name table
+            def hintWriter = HintNameTableWriter();
+            hintWriter.Write(isDll, outputStream);
+            
+            // Write "mscoree.dll"
+            def nameWriter = MscorlibNameWriter();
+            nameWriter.Write(outputStream);
+        }
+    }
+}
