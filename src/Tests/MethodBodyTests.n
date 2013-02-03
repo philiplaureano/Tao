@@ -33,31 +33,42 @@ namespace Tests
 
             // Grab all the rows from the MethodDef table
             def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();
+            
+            def codeBlockRva : uint = 0x2050;
+            def length : uint = 0x21;
+
+            // Match the method body in the .text section
+            def codeBlock = image.ReadBlock(codeBlockRva, length);
 
             // Manually forge the expected stream
-            def expectedStream = MemoryStream();
-
+            def expectedStream = TracerStream(codeBlock, MemoryStream());
+            
             def map : IDictionary[string, uint] = Dictionary();
+            map["Hello, World!"] = 1;
+            map["Hello, World Again!"] = 0x1d;
+            
             def userStringHeap = root.GetUserStringHeap();            
             def stringMap = StringMap(UserStringHeapWriter(), map);
 
             def bodyMap = Dictionary.[MethodDefRow, IMethodBody * uint]();
-            
-            def boundReader = BoundStringReader(UserStringHeapReader(), root.GetStringHeap());
+
+            def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);
             def bodyReader = MethodBodyReader(boundReader); 
+
             
             foreach(row in rows)
-            {                
-                
+            {                                
                 def body = row.ReadMethodBodyFrom(image, bodyReader);            
-                
-                // Map the row to its corresponding method body and rva
+
+                // Map the row to its corresponding method body and rva from the start of the method block
                 def rva : uint = expectedStream.Position :> uint;
                 bodyMap[row] = (body, rva);
-                
+
                 def writer = MethodBodyWriter();                
                 writer.Write(body, stringMap, expectedStream);
             }
+
+
 
             def blockWriter = MethodStreamWriter();
             def actualStream = MemoryStream();
@@ -67,7 +78,7 @@ namespace Tests
                 def (body, rva) = bodyMap[row];
                 blockWriter.Write(body, stringMap, actualStream).ShouldBeEqualTo(rva, "Wrong RVA value");
             }
-            
+
             actualStream.ShouldMatch(expectedStream);
         }
         public ShouldBeAbleToLoadInstructionsWithMethodBodyReader() : void

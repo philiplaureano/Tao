@@ -37,9 +37,6 @@ namespace Tests
 
             actualStream.ShouldCompletelyMatch(expectedStream);
         }
-        public stub ShouldGenerateCLIHeader() : void
-        {
-        }
         public stub ShouldReturnCorrectSizeForCLIHeader() : void
         {
         }
@@ -78,6 +75,17 @@ namespace Tests
             def writer = ImportTableWriter();
             def outputStream = TracerStream(expectedStream, MemoryStream());
             writer.Write(importTableRva, iatRva, isDll, outputStream);            
+        }
+        public ShouldWriteCLIHeader() : void
+        {
+            def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";
+            def image = Image.ReadFrom(assemblyFile);
+            def expectedStream = image.ReadBlock(Location.CLIHeader);
+            
+            def outputStream = MemoryStream();
+            def cliHeader = image.GetCLRHeader();
+            def writer = CLIHeaderWriter();
+            writer.Write(cliHeader, TracerStream(expectedStream, outputStream));
         }
         public ShouldWriteStartupStub() : void
         {
