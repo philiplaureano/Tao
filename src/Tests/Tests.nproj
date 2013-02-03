@@ -381,6 +381,9 @@
     <Compile Include="Signatures\VarSignatureTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SkeletonImageGenerationTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SortedTableTests.n">
       <SubType>Code</SubType>
     </Compile>

@@ -134,6 +134,9 @@
     <Compile Include="ImageAddressWriterMap.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ImageBuilder.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ImageExtensions.n">
       <SubType>Code</SubType>
     </Compile>

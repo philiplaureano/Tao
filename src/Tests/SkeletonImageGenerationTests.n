@@ -1,0 +1,52 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+
+namespace Tests
+{
+    public class SkeletonImageGenerationTests
+    {
+        public ShouldHaveDosHeader() : void
+        {
+            VerifyDosHeader(header => header.ShouldBeNotNull("The image must have a DOS header"));
+        }        
+        
+        private VerifyDosHeader(doTest : IDosHeader -> void) : void
+        {
+            Verify.[IImage, IDosHeader](CreateImage, image => image.DOSHeader, doTest);
+        }
+
+        private Verify[TSource, TSubject](createSource : void -> TSource, 
+            getItem : TSource -> TSubject, doTest : TSubject -> void) : void
+        {
+            def runTest(source : TSource) : void
+            {
+                def subject = getItem(source);
+                doTest(subject);
+            }
+            
+            Verify(createSource, runTest);            
+        }
+        
+        private Verify[TSource](createSource : void -> TSource, doTest : TSource-> void) : void
+        {
+            def source = createSource();
+            doTest(source);
+        }
+
+        private CreateImage() : IImage
+        {
+            def builder = ImageBuilder();
+            def image = builder.CreateImage();     
+            image;
+        }
+    }
+}

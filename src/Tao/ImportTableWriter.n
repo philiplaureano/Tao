@@ -35,7 +35,7 @@ namespace Tao
             def nameRva = importTableRva + nameRvaOffset;
             writer.Write(nameRva : uint);
             
-            // Write the IAT
+            // Write the IAT Rva
             writer.Write(iatRva : uint);
             
             // Write the blank import table entry, signifying the end of the directory itself

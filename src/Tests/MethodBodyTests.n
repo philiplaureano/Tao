@@ -68,8 +68,6 @@ namespace Tests
                 writer.Write(body, stringMap, expectedStream);
             }
 
-
-
             def blockWriter = MethodStreamWriter();
             def actualStream = MemoryStream();
             foreach(row in rows)
