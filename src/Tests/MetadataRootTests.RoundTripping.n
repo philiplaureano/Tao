@@ -39,8 +39,8 @@ namespace Tests
             def outputStream = WriteOnceStream(MemoryStream());
             image.Write(root, rootRva);
 
-            def writer = ImageWriter();
-            writer.Write(image, outputStream);                         
+            def writer = ImageWriter(image);
+            writer.Write(outputStream);                         
             
             def originalBytes = File.ReadAllBytes(targetFile);
             outputStream.ShouldMatch(originalBytes);                       

@@ -279,8 +279,8 @@ namespace Tests
             inputImage.Sections.Clear();
 
             def outputStream = MemoryStream();
-            def writer = ImageWriter();
-            writer.Write(inputImage, outputStream);  
+            def writer = ImageWriter(inputImage);
+            writer.Write(outputStream);    
 
             def startPosition = 0x86;
             _ = outputStream.Seek(startPosition, SeekOrigin.Begin);
@@ -296,10 +296,10 @@ namespace Tests
             def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
             def inputImage = Image.ReadFrom(imageFile);
 
-    // Write the entire image to the output stream
+            // Write the entire image to the output stream
             def outputStream = MemoryStream();
-            def writer = ImageWriter();
-            writer.Write(inputImage, outputStream);                  
+            def writer = ImageWriter(inputImage);
+            writer.Write(outputStream);    
 
             def startPosition = 0xF4;
 
@@ -319,17 +319,17 @@ namespace Tests
             def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
             def inputImage = Image.ReadFrom(imageFile);
 
-    // Write the entire image to the output stream
+            // Write the entire image to the output stream
             def outputStream = MemoryStream();
-            def writer = ImageWriter();
-            writer.Write(inputImage, outputStream);                  
+            def writer = ImageWriter(inputImage);
+            writer.Write(outputStream);    
 
             def lfaNew = inputImage.DOSHeader.LfaNew;
 
-    // Read only up to the size of the COFF header
+            // Read only up to the size of the COFF header
             def outputHeaderSize : uint = 24;
 
-    // The output image should match the input image
+            // The output image should match the input image
             using(inputStream = FileStream(@"..\..\SampleBinaries\Skeleton.exe", FileMode.Open))
             {
                 def outputHeaderBlock = outputStream.GetData(lfaNew, outputHeaderSize);
@@ -346,18 +346,18 @@ namespace Tests
             def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
             def inputImage = Image.ReadFrom(imageFile);
 
-    // Write the entire image to the output stream
+            // Write the entire image to the output stream
             def outputStream = MemoryStream();
-            def writer = ImageWriter();
-            writer.Write(inputImage, outputStream);    
+            def writer = ImageWriter(inputImage);
+            writer.Write(outputStream);    
 
-    // Determine the starting offset for the optional header
+            // Determine the starting offset for the optional header
             def lfaNew = inputImage.DOSHeader.LfaNew;
             def coffHeaderSize : uint = 24;
             def startPosition = lfaNew + coffHeaderSize;
 
-    // Read the optional header bytes that were written to the output stream
-    // and exclude the data directories
+            // Read the optional header bytes that were written to the output stream
+            // and exclude the data directories
             _ = outputStream.Seek(startPosition, SeekOrigin.Begin);
             def optionalHeaderSize = 0x60 : uint;
 
@@ -381,12 +381,12 @@ namespace Tests
             def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
             def inputImage = Image.ReadFrom(imageFile);
 
-    // Write the entire image to the output stream
+            // Write the entire image to the output stream
             def outputStream = MemoryStream();
-            def writer = ImageWriter();
-            writer.Write(inputImage, outputStream);    
+            def writer = ImageWriter(inputImage);
+            writer.Write(outputStream);    
 
-    // Set the expected start position of the first data directory
+                // Set the expected start position of the first data directory
             def startPosition : uint = 0xF8;
             def dataDirectoryBlockLength : uint = 0x80;
 
@@ -402,10 +402,10 @@ namespace Tests
         {        
             def inputImage = Image.ReadFrom(imageFile);
 
-    // Write the entire image to the output stream
+            // Write the entire image to the output stream
             def outputStream = MemoryStream();
-            def writer = ImageWriter();
-            writer.Write(inputImage, outputStream); 
+            def writer = ImageWriter(inputImage);
+            writer.Write(outputStream); 
 
             using(inputFile =  FileStream(imageFile, FileMode.Open))
             {
@@ -449,8 +449,8 @@ namespace Tests
 
             using(def outputStream = FileStream(outputFile, FileMode.Create))
             {
-                def writer = ImageWriter();
-                writer.Write(image, outputStream);
+                def writer = ImageWriter(image);
+                writer.Write(outputStream);
 
                 outputStream.Close();      
             }      

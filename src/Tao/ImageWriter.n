@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {  
-    public class ImageWriter
+    public class ImageWriter : IImageWriter
     {
         private _dosHeaderWriter : IDosHeaderWriter;
         private _coffHeaderWriter : ICoffHeaderWriter;
@@ -19,13 +19,14 @@ namespace Tao
         private _sectionHeaderWriter : ISectionHeaderWriter;
         private _optionalHeaderWriter : IOptionalHeaderWriter;
         private _sectionWriter : ISectionWriter;
+        private _image : IImage;
         
-        public this() 
+        public this([NotNull] image : IImage) 
         {
-            this(DosHeaderWriter(), CoffHeaderWriter(), DataDirectoryWriter(), SectionHeaderWriter(), OptionalHeaderWriter(), SectionWriter());
+            this(image, DosHeaderWriter(), CoffHeaderWriter(), DataDirectoryWriter(), SectionHeaderWriter(), OptionalHeaderWriter(), SectionWriter());
         }
 
-        public this([NotNull] dosHeaderWriter : IDosHeaderWriter, 
+        public this([NotNull] image : IImage, [NotNull] dosHeaderWriter : IDosHeaderWriter, 
             [NotNull] coffHeaderWriter : ICoffHeaderWriter, 
             [NotNull] dataDirectoryWriter : IDataDirectoryWriter,
             [NotNull] sectionHeaderWriter : ISectionHeaderWriter,
@@ -38,10 +39,12 @@ namespace Tao
             _sectionHeaderWriter = sectionHeaderWriter;
             _optionalHeaderWriter = optionalHeaderWriter;
             _sectionWriter = sectionWriter;
+            _image = image;
         }
 
-        public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : void
+        public Write([NotNull] outputStream : Stream) : void
         {
+            def image = _image;
             def dosHeader = image.DOSHeader;
             _dosHeaderWriter.Write(dosHeader, outputStream);
 
