@@ -14,7 +14,7 @@ namespace Tests
 {
   public class StartupStubTests
   {
-    public ShouldWriteStartupStubForI386Machine() : void
+    public stub ShouldWriteStartupStubForI386Machine() : void
     {
         def imageBase : uint = 0x400000;
         def importAddressTableRva = 0x2000;
@@ -33,8 +33,10 @@ namespace Tests
         }
         
         def outputStream = MemoryStream();
-        def stubWriter = StartupStubWriter();
-        stubWriter.Write(imageBase, importAddressTableRva :> uint, outputStream);
+        
+        def expectedStream = MemoryStream();
+        // TODO: Write the startup stub here
+        throw NotImplementedException("TODO: Create the StartupStubWriter implementation");
         
         outputStream.ShouldMatch(createExpectedStream());
     }

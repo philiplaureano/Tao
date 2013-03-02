@@ -72,10 +72,9 @@ namespace Tests
             def iatRva = directories[12].Rva;
             def isDll = assemblyFile.EndsWith("dll");
             
-            def writer = ImportTableWriter();
-            def outputStream = TracerStream(expectedStream, MemoryStream());
-            writer.Write(importTableRva, iatRva, isDll, outputStream);            
+            throw NotImplementedException("TODO: Implement the ImportTableWriter");
         }
+        
         public ShouldWriteCLIHeader() : void
         {
             def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";
@@ -87,31 +86,8 @@ namespace Tests
             def writer = CLIHeaderWriter();
             writer.Write(cliHeader, TracerStream(expectedStream, outputStream));
         }
-        public ShouldWriteStartupStub() : void
-        {
-            def assemblyFile = @"..\..\SampleBinaries\NHibernate.dll";
-            def image = Image.ReadFrom(assemblyFile);
-            def optionalHeader = image.OptionalHeader;
-            def ntHeader = optionalHeader.NTHeader :> NTHeader.[uint];
-
-            // Get the ImageBase and IAT RVA from the original image
-            def iatDirectory = image.DataDirectories[12];
-            def iatRva = iatDirectory.Rva;
-            def imageBase = ntHeader.ImageBase;
-
-            // Find the entry point RVA
-            def standardFields = optionalHeader.StandardFields;
-            def entryPointRva = standardFields.AddressOfEntryPoint;
-
-            // The standard size for the x86 stub is 6 bytes
-            def entryPointLength : uint = 6;
-            def expectedStream = image.ReadBlock(entryPointRva, entryPointLength);
-
-            def actualStream = MemoryStream();
-            def writer = StartupStubWriter();
-            writer.Write(imageBase, iatRva, actualStream);
-
-            actualStream.ShouldCompletelyMatch(expectedStream);
+        public stub ShouldWriteStartupStub() : void
+        {            
         }
         public ShouldWriteImportHintNameTableForDllFile() : void
         {

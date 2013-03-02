@@ -152,9 +152,6 @@
     <Compile Include="ImportAddressTableWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ImportTableWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Interfaces\IAddress.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1597,9 +1594,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SectionWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="StartupStubWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StreamExtensions.n">
