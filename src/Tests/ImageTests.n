@@ -271,15 +271,15 @@ namespace Tests
             def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
             def inputImage = Image.ReadFrom(imageFile);
 
-    // The original image should have two sections
+            // The original image should have two sections
             assert inputImage.CoffHeader.NumberOfSections equals 2 otherwiseprint "Invalid number of sections in the input image";
 
-    // The image writer should write "0" sections if we remove
-    // all sections from the input image
+            // The image writer should write "0" sections if we remove
+            // all sections from the input image
             inputImage.Sections.Clear();
 
             def outputStream = MemoryStream();
-            def writer = ImageWriter(inputImage);
+            def writer = CreateWriter(inputImage);
             writer.Write(outputStream);    
 
             def startPosition = 0x86;
@@ -298,7 +298,7 @@ namespace Tests
 
             // Write the entire image to the output stream
             def outputStream = MemoryStream();
-            def writer = ImageWriter(inputImage);
+            def writer = CreateWriter(inputImage);
             writer.Write(outputStream);    
 
             def startPosition = 0xF4;
@@ -321,7 +321,7 @@ namespace Tests
 
             // Write the entire image to the output stream
             def outputStream = MemoryStream();
-            def writer = ImageWriter(inputImage);
+            def writer = CreateWriter(inputImage);
             writer.Write(outputStream);    
 
             def lfaNew = inputImage.DOSHeader.LfaNew;
@@ -348,7 +348,7 @@ namespace Tests
 
             // Write the entire image to the output stream
             def outputStream = MemoryStream();
-            def writer = ImageWriter(inputImage);
+            def writer = CreateWriter(inputImage);
             writer.Write(outputStream);    
 
             // Determine the starting offset for the optional header
@@ -383,7 +383,7 @@ namespace Tests
 
             // Write the entire image to the output stream
             def outputStream = MemoryStream();
-            def writer = ImageWriter(inputImage);
+            def writer = CreateWriter(inputImage);
             writer.Write(outputStream);    
 
                 // Set the expected start position of the first data directory
@@ -398,13 +398,17 @@ namespace Tests
                 assert expectedOptionalHeaderData.GetHash() equals actualOptionalHeaderData.GetHash() otherwiseprint "The written Data Directories don't match the expected entries";
             }      
         }
+        private CreateWriter(image : IImage) : IImageWriter
+        {
+            ImageWriter(image);
+        }
         private TestImageBlockWrite(imageFile : string, startPosition : uint, size : uint, failureMessage : string, params args : array[object]) : void
         {        
             def inputImage = Image.ReadFrom(imageFile);
 
             // Write the entire image to the output stream
             def outputStream = MemoryStream();
-            def writer = ImageWriter(inputImage);
+            def writer = CreateWriter(inputImage);
             writer.Write(outputStream); 
 
             using(inputFile =  FileStream(imageFile, FileMode.Open))
@@ -449,7 +453,7 @@ namespace Tests
 
             using(def outputStream = FileStream(outputFile, FileMode.Create))
             {
-                def writer = ImageWriter(image);
+                def writer = CreateWriter(image);
                 writer.Write(outputStream);
 
                 outputStream.Close();      

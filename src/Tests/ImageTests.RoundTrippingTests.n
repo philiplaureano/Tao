@@ -24,7 +24,7 @@ namespace Tests
             def image = Image.ReadFrom(targetFile);
 
             def outputStream = WriteOnceStream(MemoryStream());
-            def writer = ImageWriter(image);
+            def writer = CreateWriter(image);
 
             writer.Write(outputStream);
 
@@ -45,7 +45,7 @@ namespace Tests
             image.Write(clrHeader); 
             
             def outputStream = WriteOnceStream(MemoryStream());
-            def writer = ImageWriter(image);
+            def writer = CreateWriter(image);
             writer.Write(outputStream);
             outputStream.PEVerifyIt();
         }       

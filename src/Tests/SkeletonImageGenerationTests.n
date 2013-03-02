@@ -14,9 +14,9 @@ namespace Tests
 {
     public class SkeletonImageGenerationTests
     {
-        public ShouldHaveDosHeader() : void
+        public stub ShouldHaveDosHeader() : void
         {
-            VerifyDosHeader(header => header.ShouldBeNotNull("The image must have a DOS header"));
+            
         }        
         
         private VerifyDosHeader(doTest : IDosHeader -> void) : void
