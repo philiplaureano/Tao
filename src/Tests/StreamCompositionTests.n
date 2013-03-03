@@ -1,0 +1,115 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Metadata;
+
+using Tests.Macros;
+namespace Tests
+{
+    public class StreamCompositionTests
+    {        
+        public ShouldWriteUInt64() : void
+		{
+		    def expectedValue = ulong.MaxValue;
+            TestWrite(expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+		}
+		public ShouldWriteInt64() : void
+		{
+		    def expectedValue = long.MaxValue;
+            TestWrite(expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+		}
+        public ShouldWriteUInt32() : void
+        {
+            def expectedValue = 42 : uint;
+            TestWrite(expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+        }
+        public ShouldWriteInt32() : void
+        {
+            def expectedValue = -5 : int;
+            TestWrite(expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+        }
+        public ShouldWriteUInt16() : void
+        {
+            def expectedValue = 16 : ushort;
+            TestWrite(expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+        }
+        public ShouldWriteInt16() : void
+        {
+            def expectedValue = -16 : short;
+            TestWrite(expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+        }
+        public ShouldWriteByte() : void
+        {
+            def expectedValue = 254 : byte;
+            TestWrite(expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+        }
+
+        public ShouldWriteUInt32FromGetter() : void
+        {
+            def expectedValue = 42 : uint;
+            TestWrite(() => expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+        }
+        public ShouldWriteInt32FromGetter() : void
+        {
+            def expectedValue = 256 : int;
+            TestWrite(() => expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+        }
+        public ShouldWriteUInt64FromGetter() : void
+        {
+            def expectedValue = ulong.MaxValue;
+            TestWrite(() => expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+        }
+        public ShouldWriteInt64FromGetter() : void
+        {
+            def expectedValue = long.MaxValue;
+            TestWrite(() => expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+        }
+        public ShouldWriteUInt16FromGetter() : void
+        {
+            def expectedValue = 35 : ushort;
+            TestWrite(() => expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+        }
+        public ShouldWriteInt16FromGetter() : void
+        {
+            def expectedValue = -36 : short;
+            TestWrite(() => expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+        }
+        public ShouldWriteByteFromGetter() : void
+        {
+            def expectedValue = 91 : byte;
+            TestWrite(() => expectedValue, (writer, value) => writer.Write(value), StreamBuilder.Write(expectedValue));
+        }        
+        private TestWrite[TValue](getValue : void -> TValue, writeValue : BinaryWriter * TValue -> void, 
+            createActualStream : void -> Stream) : void
+        {
+            def expectedValue = getValue();                        
+            TestWrite(expectedValue, writeValue, createActualStream);
+        }
+        
+        private TestWrite[TValue](value : TValue, writeValue : BinaryWriter * TValue -> void, 
+            createActualStream : void -> Stream) : void
+        {            
+            def expectedStream = MemoryStream();
+            def writer = BinaryWriter(expectedStream);
+            writeValue(writer, value);
+
+            TestDeferredWrite(expectedStream, createActualStream);
+        }
+        private TestDeferredWrite(expectedStream : Stream, createActualStream : void -> Stream) : void
+        {                        
+            def actualStream = createActualStream();
+            
+            expectedStream.Seek(0, SeekOrigin.Begin);
+            expectedStream.ShouldCompletelyMatch(actualStream);
+        }
+    }
+}

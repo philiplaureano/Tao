@@ -396,6 +396,9 @@
     <Compile Include="MetadataStreamHeaderTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="StreamCompositionTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Streams\ProtectedStream.n">
       <SubType>Code</SubType>
     </Compile>

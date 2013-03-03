@@ -1,0 +1,77 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public module StreamBuilder
+    {
+        public Write(value : ulong) : void -> Stream
+        {
+            () => Write(value, (writer, value) => writer.Write(value));
+        }    
+        public Write(value : long) : void -> Stream
+        {
+            () => Write(value, (writer, value) => writer.Write(value));
+        }    
+        public Write(value : uint) : void -> Stream
+        {
+            () => Write(value, (writer, value) => writer.Write(value));
+        }    
+        public Write(value : int) : void -> Stream
+        {
+            () => Write(value, (writer, value) => writer.Write(value));
+        }
+        public Write(value : ushort) : void -> Stream
+        {
+            () => Write(value, (writer, value) => writer.Write(value));
+        }
+        public Write(value : short) : void -> Stream
+        {
+            () => Write(value, (writer, value) => writer.Write(value));
+        }        
+        public Write(value : byte) : void -> Stream
+        {
+            () => Write(value, (writer, value) => writer.Write(value));
+        }
+        public Write([NotNull] getValue : void -> int) : void -> Stream
+        {
+            () => Write(getValue(), (writer, value) => writer.Write(value));
+        }
+        public Write([NotNull] getValue : void -> uint) : void -> Stream
+        {
+            () => Write(getValue(), (writer, value) => writer.Write(value));
+        }        
+        public Write([NotNull] getValue : void -> short) : void -> Stream
+        {
+            () => Write.[short](getValue(), (writer, value) => writer.Write(value));
+        }
+        public Write([NotNull] getValue : void -> ushort) : void -> Stream
+        {
+            () => Write(getValue(), (writer, value) => writer.Write(value));
+        }
+        public Write([NotNull] getValue : void -> long) : void -> Stream
+        {
+            () => Write(getValue(), (writer, value) => writer.Write(value));
+        }
+        public Write([NotNull] getValue : void -> ulong) : void -> Stream
+        {
+            () => Write(getValue(), (writer, value) => writer.Write(value));
+        }
+        private Write[TValue](value : TValue, [NotNull] doWrite : BinaryWriter * TValue -> void) : Stream
+        {
+            def stream = MemoryStream();
+            def writer = BinaryWriter(stream);
+            doWrite(writer, value);
+
+            stream;
+        }
+    }
+}
