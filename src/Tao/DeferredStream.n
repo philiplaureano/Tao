@@ -1,0 +1,26 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class DeferredStream : BaseDeferredStream
+    {
+        private _createStream : void -> Stream;
+        public this(createStream : void -> Stream)
+        {
+            _createStream = createStream;
+        }        
+        
+        public override CreateStream() : Stream
+        {
+            _createStream();
+        }
+    }
+}

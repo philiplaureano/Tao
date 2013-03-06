@@ -1,0 +1,43 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public abstract class BaseDeferredStream
+    {
+        public static @: [TStream](deferred : TStream) : void -> Stream
+            where TStream : BaseDeferredStream
+        {
+            deferred.CreateStream;
+        }
+        public static @+ [TStream](first : TStream, second : TStream) : void -> Stream
+            where TStream : BaseDeferredStream
+        {
+            def combineStreams() : Stream
+            {
+                def firstStream = first.CreateStream();
+                def secondStream = second.CreateStream();
+                
+                def result = MemoryStream();
+                def writer = BinaryWriter(result);
+                
+                def firstBytes = firstStream.ReadAllBytes();
+                def secondBytes = secondStream.ReadAllBytes();
+                
+                writer.Write(firstBytes);
+                writer.Write(secondBytes);
+                
+                result;
+            }
+            combineStreams;
+        }
+        public abstract CreateStream() : Stream;
+    }
+}

@@ -15,7 +15,7 @@ using Tao.Metadata;
 using Tests.Macros;
 namespace Tests
 {
-    public class StreamCompositionTests
+    public partial class StreamCompositionTests
     {        
         public ShouldWriteUInt64() : void
 		{

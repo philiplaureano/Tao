@@ -65,6 +65,9 @@
     <Compile Include="AlignmentExtensions.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BaseDeferredStream.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CallingConvention.n">
       <SubType>Code</SubType>
     </Compile>
@@ -99,6 +102,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataDirectoryWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DeferredStream.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DLLCharacteristics.n">

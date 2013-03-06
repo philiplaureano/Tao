@@ -11,42 +11,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
+using Tao;
+
 namespace Tests
 {
     public static class StreamExtensions
-    {
-        public static WriteAllBytesTo([NotNull] this bytes : array[byte], filename : string) : void
-        {
-            def stream = MemoryStream(bytes);
-            stream.WriteAllBytesTo(filename);
-        }
-
-        public static WriteAllBytesTo([NotNull] this stream : Stream, filename : string) : void
-        {
-            _ = stream.Seek(0, SeekOrigin.Begin);
-
-            def reader = BinaryReader(stream);
-            def bytes = reader.ReadBytes(stream.Length:> int);
-
-            File.WriteAllBytes(filename, bytes);
-        }
-        
-        public ReadAllBytes([NotNull] this stream : Stream) : array[byte]
-        {
-            stream.ReadBytes(stream.Length :> int);
-        }
-        public ReadBytes([NotNull] this stream : Stream, count : int, startPosition : long = 0) : array[byte]
-        {
-            stream.Seek(startPosition);
-            def reader = BinaryReader(stream);
-            reader.ReadBytes(count);
-        }
-        
-        public Seek([NotNull] this stream : Stream, position : long, origin : SeekOrigin = SeekOrigin.Begin) : void
-        {
-            stream.Seek(position, origin);
-        }
-        
+    {        
         public static PEVerifyIt([NotNull] this bytes : array[byte]) : void
         {
             def stream = MemoryStream(bytes);

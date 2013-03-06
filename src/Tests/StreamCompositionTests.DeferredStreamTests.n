@@ -1,0 +1,50 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tests.Macros;
+namespace Tests
+{
+    public partial class StreamCompositionTests
+    {
+        public ShouldBeAbleToImplicitlyCastDeferredStreamsToStreamFunctors() : void
+        {
+            def createdStreams = System.Collections.Generic.Stack.[Stream]();
+            def createDummyStream() : Stream
+            {
+                def result = MemoryStream();
+                createdStreams.Push(result);
+                result;
+            }
+            
+            def functor : void -> Stream = DeferredStream(createDummyStream);
+            functor();
+            
+            createdStreams.Count.ShouldBeEqualTo(1, "Unable to cast the deferred stream to a stream functor");
+        }
+        public ShouldBeAbleToCombineDeferredStreams() : void
+        {
+            def firstStream = DeferredStream(StreamBuilder.Write(42 : uint));
+            def secondStream = DeferredStream(StreamBuilder.Write(43 : uint));
+            
+            // The resulting functor should combine both the first and second deferred streams
+            def createStream = firstStream + secondStream;
+            
+            // Manually forge the expected stream
+            def expectedStream = MemoryStream();
+            def writer = BinaryWriter(expectedStream);
+            writer.Write(42 : uint);
+            writer.Write(43 : uint);
+            
+            def result = createStream();
+            result.ShouldCompletelyMatch(expectedStream);
+        }
+    }
+}
