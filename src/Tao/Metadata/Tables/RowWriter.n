@@ -1,6 +1,7 @@
 ﻿using Nemerle;
 using Nemerle.Assertions;
 using Nemerle.Collections;
+using Nemerle.Imperative;
 using Nemerle.Text;
 using Nemerle.Utility;
 
@@ -24,48 +25,17 @@ namespace Tao.Metadata.Tables
             _rowCounts     = rowCounts;
             _writer        = writer;
         }
-
         public WriteStringIndex(value : void -> IIndex) : void
-        requires (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideStringIndex) && value() is Index.Wide) ||
-            (!_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideStringIndex) && value() is Index.Narrow)
         {
-            def index = value();
-            if (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideStringIndex))
-            {
-                _writer.Write(index.ToUInt32());
-            }
-            else
-            {
-                _writer.Write(index.ToUInt16());
-            }
+            WriteIndex(HeapSizeFlags.RequiresWideStringIndex, value);
         }
         public WriteGuidIndex(value : void -> IIndex) : void
-        requires (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideGuidIndex) && value() is Index.Wide) ||
-                (!_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideGuidIndex) && value() is Index.Narrow)
         {
-            def index = value();
-            if (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideGuidIndex))
-            {
-                _writer.Write(index.ToUInt32());
-            }
-            else
-            {
-                _writer.Write(index.ToUInt16());
-            }
+            WriteIndex(HeapSizeFlags.RequiresWideGuidIndex, value);
         }
         public WriteBlobIndex(value : void -> IIndex) : void
-        requires (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideBlobIndex) && value() is Index.Wide) ||
-                (!_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideBlobIndex) && value() is Index.Narrow)
         {
-            def index = value();
-            if (_heapSizeFlags.Contains(HeapSizeFlags.RequiresWideBlobIndex))
-            {
-                _writer.Write(index.ToUInt32());
-            }
-            else
-            {
-                _writer.Write(index.ToUInt16());
-            }
+            WriteIndex(HeapSizeFlags.RequiresWideBlobIndex, value);
         }
         public WriteDword(value : uint) : void
         {
@@ -80,26 +50,36 @@ namespace Tao.Metadata.Tables
             _writer.Write(value : byte);
         }    
         public WriteIndex(tableId : TableId, value : void -> IIndex) : void
-        requires (_rowCounts.RequiresWideIndices(tableId) && value() is Index.Wide) ||
-            (!_rowCounts.RequiresWideIndices(tableId) && value() is Index.Narrow)
+            requires (_rowCounts.RequiresWideIndices(tableId) && value() is Index.Wide) ||
+                (!_rowCounts.RequiresWideIndices(tableId) && value() is Index.Narrow)
+                && value() != null
         {
             def useWideIndex = _rowCounts.RequiresWideIndices(tableId);
             def index = value();
-            if (useWideIndex)
-            {
-                _writer.Write(index.ToUInt32());
-            }
-            else
-            {
-                _writer.Write(index.ToUInt16());
-            }
+            WriteIndexValue(useWideIndex, index);
         }
+        
         public WriteIndex(tokenType : CodedTokenType, value : void -> IIndex) : void
-        requires (_rowCounts.RequiresWideIndices(tokenType) && value() is Index.Wide) ||
-            (!_rowCounts.RequiresWideIndices(tokenType) && value() is Index.Narrow)
+            requires (_rowCounts.RequiresWideIndices(tokenType) && value() is Index.Wide) ||
+                (!_rowCounts.RequiresWideIndices(tokenType) && value() is Index.Narrow)
+                && value() != null
         {
             def useWideIndex = _rowCounts.RequiresWideIndices(tokenType);
             def index = value();
+            WriteIndexValue(useWideIndex, index);
+        }
+        
+        private WriteIndex(targetFlag : HeapSizeFlags, value : void -> IIndex) : void
+            requires (_heapSizeFlags.Contains(targetFlag) && value() is Index.Wide) ||
+            (!_heapSizeFlags.Contains(targetFlag) && value() is Index.Narrow) && value() != null
+        {
+            def index = value();
+            def useWideIndex = _heapSizeFlags.Contains(targetFlag);
+            WriteIndexValue(useWideIndex, index);
+        }
+        
+        private WriteIndexValue(useWideIndex : bool, index : IIndex) : void
+        {
             if (useWideIndex)
             {
                 _writer.Write(index.ToUInt32());
