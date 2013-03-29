@@ -11,17 +11,19 @@ using System.Linq;
 
 namespace Tao
 {
-  public class DataDirectoryWriter : IDataDirectoryWriter
-  {
-    public Write([NotNull] directories : IEnumerable[IDataDirectory], [NotNull] stream : Stream) : void
+    public class DataDirectoryWriter : IDataDirectoryWriter
+    {
+        public Write([NotNull] directories : IEnumerable[IDataDirectory], [NotNull] stream : Stream) : uint
         requires directories.Count() > 0 otherwise throw ArgumentException("There are no data directories to be written")
-    {          
-      def writer = BinaryWriter(stream);
-      foreach(directory in directories)
-      {
-          writer.Write(directory.Rva);
-          writer.Write(directory.Size);
-      }         
+        {          
+            def writer = BinaryWriter(stream);
+            foreach(directory in directories)
+            {
+                writer.Write(directory.Rva);
+                writer.Write(directory.Size);
+            }         
+            
+            stream.Position :> uint;
+        }
     }
-  }
 }

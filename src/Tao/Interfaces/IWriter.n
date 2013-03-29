@@ -15,7 +15,7 @@ namespace Tao.Interfaces
     }
     public interface IWriter[THeader]
     {
-        Write(header : THeader, stream : Stream) : void;
+        Write(header : THeader, stream : Stream) : uint;
     }
     public interface IWriter[T1, THeader]
     {

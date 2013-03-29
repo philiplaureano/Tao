@@ -11,24 +11,27 @@ using System.Linq;
 
 namespace Tao.Metadata
 {
-  public class StreamHeaderWriter : IStreamHeaderWriter
-  {
-    public Write([NotNull] headers : IEnumerable[IStreamHeader], [NotNull] outputStream : Stream) : void        
+    public class StreamHeaderWriter : IStreamHeaderWriter
     {
-      def writer = BinaryWriter(outputStream);
-      def stringWriter = PaddedNullTerminatedStringWriter();
-      foreach(header in headers)
-      {
-        writer.Write(header.Offset);
-        writer.Write(header.Size);
-              
-        def name : string = header.Name;
-        when (string.IsNullOrEmpty(name))
+        public Write([NotNull] headers : IEnumerable[IStreamHeader], [NotNull] outputStream : Stream) : uint
         {
-          throw BadImageFormatException("Invalid Metadata StreamHeader name");
-        }
-        stringWriter.Write(name, outputStream);              
-      }
-    }          
-  }
+            def startPosition = outputStream.Position :> uint;
+            def writer = BinaryWriter(outputStream);
+            def stringWriter = PaddedNullTerminatedStringWriter();
+            foreach(header in headers)
+            {
+                writer.Write(header.Offset);
+                writer.Write(header.Size);
+
+                def name : string = header.Name;
+                when (string.IsNullOrEmpty(name))
+                {
+                    throw BadImageFormatException("Invalid Metadata StreamHeader name");
+                }
+                stringWriter.Write(name, outputStream);              
+            }            
+            
+            startPosition;
+        }          
+    }
 }

@@ -293,10 +293,13 @@ namespace Tests
           CLIHeader();
       }
         
-      def writeValue = fun(header : ICLIHeader, outputStream : Stream) : void
+      def writeValue = fun(header : ICLIHeader, outputStream : Stream) : uint
       {
+          def startPosition = outputStream.Position :> uint;
           def writer = CLIHeaderWriter();
           writer.Write(header, outputStream);  
+          
+          startPosition;
       }
         
       Tester.TestWrite(propertyName, expectedValue, createHeader, readActualValue, writeValue);

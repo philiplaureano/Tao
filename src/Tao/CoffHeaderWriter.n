@@ -11,22 +11,24 @@ using System.Linq;
 
 namespace Tao
 {  
-  public class CoffHeaderWriter : ICoffHeaderWriter
-  {
-    public Write(header : ICoffHeader, [NotNull] outputStream : Stream) : void
-        ensures outputStream.Length >= 24
+    public class CoffHeaderWriter : ICoffHeaderWriter
     {
-      def writer = BinaryWriter(outputStream);
-          
-      // Write the PE magic signature
-      writer.Write(0x00004550 :> uint);      
-      writer.Write(header.Machine :> ushort);
-      writer.Write(header.NumberOfSections : ushort);
-      writer.Write(header.TimeDateStamp : uint);
-      writer.Write(header.PointerToSymbolTable : uint);
-      writer.Write(header.NumberOfSymbols : uint);
-      writer.Write(header.OptionalHeaderSize : ushort);
-      writer.Write(header.Characteristics :> ushort);
+        public Write(header : ICoffHeader, [NotNull] outputStream : Stream) : uint
+            ensures outputStream.Length >= 24
+        {
+            def startPosition = outputStream.Position :> uint;
+            def writer = BinaryWriter(outputStream);
+
+            // Write the PE magic signature
+            writer.Write(0x00004550 :> uint);      
+            writer.Write(header.Machine :> ushort);
+            writer.Write(header.NumberOfSections : ushort);
+            writer.Write(header.TimeDateStamp : uint);
+            writer.Write(header.PointerToSymbolTable : uint);
+            writer.Write(header.NumberOfSymbols : uint);
+            writer.Write(header.OptionalHeaderSize : ushort);
+            writer.Write(header.Characteristics :> ushort);
+            startPosition;
+        }
     }
-  }
 }

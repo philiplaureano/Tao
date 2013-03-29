@@ -11,18 +11,21 @@ using System.Linq;
 
 namespace Tao
 {
-  public class DosHeaderWriter : IDosHeaderWriter
-  {
-    public Write([NotNull] header : IDosHeader, [NotNull] outputStream : Stream) : void
-    {         
-      def data = header.Data;
-      def length = data.Length;
-      def bytes = array(length :> int) : array[byte];
-      
-      _ = data.Seek(0, SeekOrigin.Begin);
-      _ = data.Read(bytes, 0, length :> int);
-      
-      outputStream.Write(bytes, 0, length :> int);
+    public class DosHeaderWriter : IDosHeaderWriter
+    {
+        public Write([NotNull] header : IDosHeader, [NotNull] outputStream : Stream) : uint
+        {         
+            def startPosition = outputStream.Position :> uint;
+            def data = header.Data;
+            def length = data.Length;
+            def bytes = array(length :> int) : array[byte];
+
+            _ = data.Seek(0, SeekOrigin.Begin);
+            _ = data.Read(bytes, 0, length :> int);
+
+            outputStream.Write(bytes, 0, length :> int);
+            
+            startPosition;
+        }
     }
-  }
 }

@@ -11,27 +11,29 @@ using System.Linq;
 
 namespace Tao
 {
-  public class PaddedNullTerminatedStringWriter : IStringWriter
-  {
-    public Write([NotNull] text : string, [NotNull] outputStream : Stream) : void
+    public class PaddedNullTerminatedStringWriter : IStringWriter
     {
-      def writer = BinaryWriter(outputStream);
-      def startPosition = outputStream.Position;
-      foreach(ch in text)
-      {
-        writer.Write(ch :> byte);
-      }
-              
-      writer.Write('\0' :> byte);
-      
-      def nextBoundary = ((startPosition + text.Length) / 4 + 1) * 4;      
-      mutable bytesToPad = nextBoundary - outputStream.Position;
-      
-      // Pad the text to the nearest boundary                    
-      for(mutable i = 0; i < bytesToPad; i++)
-      {
-        writer.Write('\0' :> byte);
-      }
+        public Write([NotNull] text : string, [NotNull] outputStream : Stream) : uint
+        {
+            def writer = BinaryWriter(outputStream);
+            def startPosition = outputStream.Position;
+            foreach(ch in text)
+            {
+                writer.Write(ch :> byte);
+            }
+
+            writer.Write('\0' :> byte);
+
+            def nextBoundary = ((startPosition + text.Length) / 4 + 1) * 4;      
+            mutable bytesToPad = nextBoundary - outputStream.Position;
+
+            // Pad the text to the nearest boundary                    
+            for(mutable i = 0; i < bytesToPad; i++)
+            {
+                writer.Write('\0' :> byte);
+            }
+            
+            startPosition :> uint;
+        }
     }
-  }
 }

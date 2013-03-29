@@ -11,19 +11,22 @@ using System.Linq;
 
 namespace Tao
 {
-  public class NullTerminatedStringWriter : IStringWriter
-  {
-    public Write([NotNull] inputText : string, [NotNull] outputStream : Stream) : void
-    {   
-      def writer = BinaryWriter(outputStream);
-      for(mutable i = 0; i < inputText.Length; i++)
-      {
-        def currentCharacter = inputText[i] :> byte; 
-        writer.Write(currentCharacter);
-      }
-      
-      def nullTerminator = 0 :> byte;
-      writer.Write(nullTerminator);
+    public class NullTerminatedStringWriter : IStringWriter
+    {
+        public Write([NotNull] inputText : string, [NotNull] outputStream : Stream) : uint
+        {   
+            def startPosition = outputStream.Position :> uint;
+            def writer = BinaryWriter(outputStream);
+            for(mutable i = 0; i < inputText.Length; i++)
+            {
+                def currentCharacter = inputText[i] :> byte; 
+                writer.Write(currentCharacter);
+            }
+
+            def nullTerminator = 0 :> byte;
+            writer.Write(nullTerminator);
+           
+            startPosition;
+        }
     }
-  }
 }

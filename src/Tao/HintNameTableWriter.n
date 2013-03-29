@@ -14,19 +14,22 @@ namespace Tao
 {
     public class HintNameTableWriter : IWriter.[bool]
     {
-        public Write(isDll : bool, [NotNull] outputStream : Stream) : void
+        public Write(isDll : bool, [NotNull] outputStream : Stream) : uint
         {
+            def startPosition = outputStream.Position :> uint;
             def writer = BinaryWriter(outputStream);
             writer.Write(0 : ushort);
-            
+
             mutable importName = "_CorExeMain";            
             when(isDll)
             {
                 importName = "_CorDllMain";
             }
-            
+
             def stringWriter = NullTerminatedStringWriter();
-            stringWriter.Write(importName, outputStream);            
+            stringWriter.Write(importName, outputStream);   
+            
+            startPosition;
         }
     }
 }

@@ -25,14 +25,14 @@ namespace Tao.Metadata
         {
             this(updater, StreamHeaderWriter());
         }
-        
+
         public this(updater : IStreamHeaderUpdater, headerWriter : IStreamHeaderWriter) 
         {
             _updater = updater;
             _headerWriter = headerWriter;
         }
 
-        public Write([NotNull] root : IMetadataRoot, [NotNull] outputStream : Stream) : void        
+        public Write([NotNull] root : IMetadataRoot, [NotNull] outputStream : Stream) : uint
         {
             // Keep track of the metadata root start position 
             def startPosition = outputStream.Position;
@@ -84,6 +84,8 @@ namespace Tao.Metadata
                 _ = outputStream.Seek(headerStartPosition, SeekOrigin.Begin);
                 _headerWriter.Write(root.StreamHeaders, outputStream);
             }
+            
+            startPosition :> uint;
         }
     }
 }

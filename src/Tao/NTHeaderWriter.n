@@ -14,8 +14,9 @@ namespace Tao
   public abstract class NTHeaderWriter[TSize] : INTHeaderWriter[TSize]
     where TSize : struct
   {
-      public Write([NotNull] header : INTHeader[TSize], [NotNull] stream : Stream) : void
+      public Write([NotNull] header : INTHeader[TSize], [NotNull] stream : Stream) : uint
       {
+          def startPosition = stream.Position :> uint;
           def writer = BinaryWriter(stream);
           
           WriteValue(header.ImageBase, writer);
@@ -50,6 +51,8 @@ namespace Tao
           writer.Write(0 : uint);
           
           writer.Write(header.NumberOfRvaAndSizes);
+          
+          startPosition;
       }
       
       protected abstract WriteValue(value : TSize, writer : BinaryWriter) : void;

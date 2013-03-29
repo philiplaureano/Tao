@@ -12,191 +12,191 @@ using System.Linq;
 
 namespace Tests
 {
-  public static class Tester
-  {      
-    public TestRead[TValue, THeader, THeaderReader](propertyName : string, expectedValue : TValue, getSampleHeader : void->array[byte]) : void
+    public static class Tester
+    {      
+        public TestRead[TValue, THeader, THeaderReader](propertyName : string, expectedValue : TValue, getSampleHeader : void->array[byte]) : void
         where THeaderReader : IReader[THeader], new()
+        {
+            def testHeaderRead = fun(doTest: THeader-> void) : void
     {
-      def testHeaderRead = fun(doTest: THeader-> void) : void
-      {
         TestRead.[THeader, THeaderReader](getSampleHeader, doTest);
-      }
-        
-      Tester.TestRead(propertyName, expectedValue, testHeaderRead);
     }
-    
-    public TestRead[T1, THeader, THeaderReader](arg1 : T1, getSampleHeader : void-> array[byte], doTest: THeader-> void) : void
+
+            Tester.TestRead(propertyName, expectedValue, testHeaderRead);
+        }
+
+        public TestRead[T1, THeader, THeaderReader](arg1 : T1, getSampleHeader : void-> array[byte], doTest: THeader-> void) : void
         where THeaderReader : IReader[T1, THeader], new()
-    {
-      def bytes = getSampleHeader();
-      def inputStream = MemoryStream(bytes);
-      def reader = THeaderReader();
-      def header = reader.Read(arg1, inputStream);
-        
-      doTest(header);
-    }
-    
-    public TestRead[THeader, THeaderReader](getSampleHeader : void-> array[byte], doTest: THeader-> void) : void
+        {
+            def bytes = getSampleHeader();
+            def inputStream = MemoryStream(bytes);
+            def reader = THeaderReader();
+            def header = reader.Read(arg1, inputStream);
+
+            doTest(header);
+        }
+
+        public TestRead[THeader, THeaderReader](getSampleHeader : void-> array[byte], doTest: THeader-> void) : void
         where THeaderReader : IReader[THeader], new()
-    {
-      def bytes = getSampleHeader();
-      def inputStream = MemoryStream(bytes);
-      def reader = THeaderReader();
-      def header = reader.Read(inputStream);
-        
-      doTest(header);
-    }
-    public TestRead[TValue, THeader](propertyName : string, expectedValue : TValue, doReadTest: (THeader->void) ->void) : void
-    {
-      def readValue = fun(header : THeader) : TValue
+        {
+            def bytes = getSampleHeader();
+            def inputStream = MemoryStream(bytes);
+            def reader = THeaderReader();
+            def header = reader.Read(inputStream);
+
+            doTest(header);
+        }
+        public TestRead[TValue, THeader](propertyName : string, expectedValue : TValue, doReadTest: (THeader->void) ->void) : void
+        {
+            def readValue = fun(header : THeader) : TValue
         {
             def property = typeof(THeader).GetProperty(propertyName);
             def value = property.GetValue(header, null) :> TValue;
-            
+
             value;
         };
-        
-      def failureMessage = string.Format("Invalid {0}", propertyName);
-      TestRead(readValue, expectedValue, failureMessage, doReadTest);
-    }
 
-    public TestRead[TValue, THeader](readValue: THeader->TValue, expectedValue : TValue, failureMessage : string, doReadTest: (THeader->void) ->void) : void
-    {
-      def doTest = fun(header: THeader) : void
+            def failureMessage = string.Format("Invalid {0}", propertyName);
+            TestRead(readValue, expectedValue, failureMessage, doReadTest);
+        }
+
+        public TestRead[TValue, THeader](readValue: THeader->TValue, expectedValue : TValue, failureMessage : string, doReadTest: (THeader->void) ->void) : void
+        {
+            def doTest = fun(header: THeader) : void
         {
             def value : TValue = readValue(header);
             assert value equals expectedValue otherwiseprint failureMessage;
         };
-        
-      doReadTest(doTest);
-    }
-    public TestRead[T1, TValue, THeader, THeaderReader](arg1 : T1, propertyName : string, expectedValue : TValue, getSampleHeader: void -> array[byte]) : void
+
+            doReadTest(doTest);
+        }
+        public TestRead[T1, TValue, THeader, THeaderReader](arg1 : T1, propertyName : string, expectedValue : TValue, getSampleHeader: void -> array[byte]) : void
         where THeaderReader : IReader[T1, THeader], new()
-    {
-      Tester.TestRead.[T1, THeader, THeaderReader](arg1, getSampleHeader, PropertyShouldEqual(propertyName, expectedValue));
-    }
-    public TestElementRead[T1, THeader, THeaderReader, TValue](targetIndex : uint, arg1 : T1, propertyName : string, expectedValue : TValue, getSampleHeader: void -> array[byte]) : void
+        {
+            Tester.TestRead.[T1, THeader, THeaderReader](arg1, getSampleHeader, PropertyShouldEqual(propertyName, expectedValue));
+        }
+        public TestElementRead[T1, THeader, THeaderReader, TValue](targetIndex : uint, arg1 : T1, propertyName : string, expectedValue : TValue, getSampleHeader: void -> array[byte]) : void
         where THeaderReader : IReader[T1, IEnumerable[THeader]], new()
-    {
-      TestRead.[T1, IEnumerable[THeader], THeaderReader](arg1, getSampleHeader, CollectionItemPropertyShouldEqual(targetIndex, propertyName, expectedValue));
-    }    
-    
-    public TestElementRead[T1, THeader, THeaderReader, TValue](targetIndex : ushort, arg1 : T1, propertyName : string, expectedValue : TValue, getSampleHeader: void -> array[byte]) : void
+        {
+            TestRead.[T1, IEnumerable[THeader], THeaderReader](arg1, getSampleHeader, CollectionItemPropertyShouldEqual(targetIndex, propertyName, expectedValue));
+        }    
+
+        public TestElementRead[T1, THeader, THeaderReader, TValue](targetIndex : ushort, arg1 : T1, propertyName : string, expectedValue : TValue, getSampleHeader: void -> array[byte]) : void
         where THeaderReader : IReader[T1, IEnumerable[THeader]], new()
-    {
-      TestRead.[T1, IEnumerable[THeader], THeaderReader](arg1, getSampleHeader, CollectionItemPropertyShouldEqual(targetIndex, propertyName, expectedValue));
-    } 
-              
-    public TestElementWrite[TValue, TItem, THeaderWriter](propertyName : string, expectedValue : TValue,
-        createHeader: void-> IEnumerable[TItem], readValue: BinaryReader->TValue, setPropertyValue: IEnumerable[TItem]->void = null) : void
+        {
+            TestRead.[T1, IEnumerable[THeader], THeaderReader](arg1, getSampleHeader, CollectionItemPropertyShouldEqual(targetIndex, propertyName, expectedValue));
+        } 
+
+        public TestElementWrite[TValue, TItem, THeaderWriter](propertyName : string, expectedValue : TValue,
+        createHeader: void-> IEnumerable[TItem], readValue: BinaryReader->TValue, setPropertyValue: IEnumerable[TItem] -> void = null) : void
         where THeaderWriter : IWriter[IEnumerable[TItem]], new()
-    {
-      def writeValue(items : IEnumerable[TItem], outputStream : Stream)
-      {
-        def writer = THeaderWriter();
-        writer.Write(items, outputStream);
-      };
-        
-      TestWrite.[TValue, IEnumerable[TItem]](propertyName, expectedValue, createHeader, readValue, writeValue, setPropertyValue);
-    }
-    public TestWrite[TValue, THeader, THeaderWriter, THeaderReader](propertyName : string, expectedValue : TValue) : void
+        {
+            def writeValue(items : IEnumerable[TItem], outputStream : Stream) : uint
+            {
+                def writer = THeaderWriter();
+                writer.Write(items, outputStream);
+            };
+
+            TestWrite.[TValue, IEnumerable[TItem]](propertyName, expectedValue, createHeader, readValue, writeValue, setPropertyValue);
+        }
+        public TestWrite[TValue, THeader, THeaderWriter, THeaderReader](propertyName : string, expectedValue : TValue) : void
         where THeader : new()
         where THeaderWriter : IWriter[THeader], new()
         where THeaderReader : IReader[THeader], new()
-    {
-      TestWrite.[TValue, THeader, THeader, THeaderWriter, THeaderReader](propertyName, expectedValue);
-    }
-    
-    public TestWrite[TValue, THeaderBase, THeader, THeaderWriter, THeaderReader](propertyName : string, expectedValue : TValue) : void
+        {
+            TestWrite.[TValue, THeader, THeader, THeaderWriter, THeaderReader](propertyName, expectedValue);
+        }
+
+        public TestWrite[TValue, THeaderBase, THeader, THeaderWriter, THeaderReader](propertyName : string, expectedValue : TValue) : void
         where THeader : THeaderBase, new()
         where THeaderWriter : IWriter[THeaderBase], new()
         where THeaderReader : IReader[THeaderBase], new()
-    {
-      def targetProperty = typeof(THeaderBase).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
-      def createHeader() : THeaderBase
-      {
+        {
+            def targetProperty = typeof(THeaderBase).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+            def createHeader() : THeaderBase
+            {
         // This is equivalent to:
         // var header = new Header() { TargetProperty = expectedValue; } in C#
-        def header = THeader();
-        targetProperty.SetValue(header, expectedValue, null);
-            
-        header;
-      };
-        
-      def readValue(reader : BinaryReader) : TValue
-      {
-        def headerReader = THeaderReader();
-        def underlyingStream = reader.BaseStream;
-        def header = headerReader.Read(underlyingStream);
-        def actualValue = targetProperty.GetValue(header, null) :> TValue;
-            
-        actualValue;
-      };
-        
-      TestWrite.[TValue, THeaderBase, THeaderWriter](propertyName, expectedValue, createHeader, readValue);
-    }
-    
-    public TestWrite[TValue, THeader, THeaderWriter](propertyName : string, expectedValue : TValue,
-        createHeader: void->THeader, readValue: BinaryReader->TValue) : void
+                def header = THeader();
+                targetProperty.SetValue(header, expectedValue, null);
+
+                header;
+            };
+
+            def readValue(reader : BinaryReader) : TValue
+            {
+                def headerReader = THeaderReader();
+                def underlyingStream = reader.BaseStream;
+                def header = headerReader.Read(underlyingStream);
+                def actualValue = targetProperty.GetValue(header, null) :> TValue;
+
+                actualValue;
+            };
+
+            TestWrite.[TValue, THeaderBase, THeaderWriter](propertyName, expectedValue, createHeader, readValue);
+        }
+
+        public TestWrite[TValue, THeader, THeaderWriter](propertyName : string, expectedValue : TValue,
+        createHeader: void-> THeader, readValue: BinaryReader->TValue) : void
         where THeaderWriter : IWriter[THeader], new()
+        {
+            def writeValue(header : THeader, outputStream : Stream) : uint
+            {
+                def writer = THeaderWriter();
+                writer.Write(header, outputStream);
+            };
+
+            TestWrite.[TValue, THeader](propertyName, expectedValue, createHeader, readValue, writeValue);
+        }
+        public TestWrite[TValue, THeader](propertyName : string, expectedValue : TValue,
+        createHeader: void->THeader, readValue: BinaryReader->TValue, writeValue: (THeader * Stream)-> uint) : void
+        {                 
+            def setPropertyValue(header : THeader) : void
+            {
+                def property = typeof(THeader).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+                property.SetValue(header, expectedValue, null);
+            };
+
+            TestWrite(propertyName, expectedValue, createHeader, readValue, writeValue, setPropertyValue);
+        }
+
+        public TestWrite[TValue, THeader](propertyName : string, expectedValue : TValue,
+        createHeader: void->THeader, readValue: BinaryReader->TValue, writeValue: (THeader * Stream)-> uint, setPropertyValue: THeader->void) : void
+        {
+            def header = createHeader(); 
+            when (setPropertyValue != null)
+                setPropertyValue(header);
+
+            def outputStream = MemoryStream();
+            writeValue(header, outputStream);
+
+            _ = outputStream.Seek(0, SeekOrigin.Begin);
+            def reader = BinaryReader(outputStream);      
+            def actualValue = readValue(reader);      
+            def message = string.Format("Invalid {0} value -- expected '{1}', actual value = '{2}'", propertyName, expectedValue, actualValue);
+
+            assert actualValue equals expectedValue otherwiseprint message;
+        }
+        private CollectionItemPropertyShouldEqual[TValue, TItem](targetIndex : uint, propertyName : string, expectedValue : TValue) : IEnumerable[TItem] -> void
+        {      
+            fun(items : IEnumerable[TItem])
+            {
+                def targetProperty = typeof(TItem).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+                def targetItems = items.ToArray();
+                def header = targetItems[targetIndex :> int];
+                def actualValue = targetProperty.GetValue(header, null) :> TValue;
+                assert actualValue equals expectedValue otherwiseprint string.Format("Invalid property '{0}'. Expected: '{1}', ActualVaue: '{2}'", propertyName, expectedValue, actualValue);
+            };
+        }
+        private PropertyShouldEqual[TValue, THeader](propertyName : string, expectedValue : TValue) : THeader -> void
+        {
+            def targetProperty = typeof(THeader).GetProperty(propertyName, BindingFlags.Public);
+
+    fun(header : THeader)
     {
-      def writeValue(header : THeader, outputStream : Stream)
-      {
-        def writer = THeaderWriter();
-        writer.Write(header, outputStream);
-      };
-        
-      TestWrite.[TValue, THeader](propertyName, expectedValue, createHeader, readValue, writeValue);
+        def actualValue = targetProperty.GetValue(header, null) :> TValue;
+        assert actualValue equals expectedValue otherwiseprint string.Format("Invalid property '{0}'. Expected: '{1}', ActualVaue: '{2}'", propertyName, expectedValue, actualValue);
+    };
+        }
     }
-    public TestWrite[TValue, THeader](propertyName : string, expectedValue : TValue,
-        createHeader: void->THeader, readValue: BinaryReader->TValue, writeValue: (THeader * Stream)->void) : void
-    {                 
-      def setPropertyValue(header : THeader) : void
-      {
-        def property = typeof(THeader).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
-        property.SetValue(header, expectedValue, null);
-      };
-      
-      TestWrite(propertyName, expectedValue, createHeader, readValue, writeValue, setPropertyValue);
-    }
-    
-    public TestWrite[TValue, THeader](propertyName : string, expectedValue : TValue,
-        createHeader: void->THeader, readValue: BinaryReader->TValue, writeValue: (THeader * Stream)->void, setPropertyValue: THeader->void) : void
-    {
-      def header = createHeader(); 
-      when (setPropertyValue != null)
-        setPropertyValue(header);
-      
-      def outputStream = MemoryStream();
-      writeValue(header, outputStream);
-      
-      _ = outputStream.Seek(0, SeekOrigin.Begin);
-      def reader = BinaryReader(outputStream);      
-      def actualValue = readValue(reader);      
-      def message = string.Format("Invalid {0} value -- expected '{1}', actual value = '{2}'", propertyName, expectedValue, actualValue);
-      
-      assert actualValue equals expectedValue otherwiseprint message;
-    }
-    private CollectionItemPropertyShouldEqual[TValue, TItem](targetIndex : uint, propertyName : string, expectedValue : TValue) : IEnumerable[TItem] -> void
-    {      
-      fun(items : IEnumerable[TItem])
-      {
-          def targetProperty = typeof(TItem).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
-          def targetItems = items.ToArray();
-          def header = targetItems[targetIndex :> int];
-          def actualValue = targetProperty.GetValue(header, null) :> TValue;
-          assert actualValue equals expectedValue otherwiseprint string.Format("Invalid property '{0}'. Expected: '{1}', ActualVaue: '{2}'", propertyName, expectedValue, actualValue);
-      };
-    }
-    private PropertyShouldEqual[TValue, THeader](propertyName : string, expectedValue : TValue) : THeader -> void
-    {
-      def targetProperty = typeof(THeader).GetProperty(propertyName, BindingFlags.Public);
-      
-      fun(header : THeader)
-      {
-          def actualValue = targetProperty.GetValue(header, null) :> TValue;
-          assert actualValue equals expectedValue otherwiseprint string.Format("Invalid property '{0}'. Expected: '{1}', ActualVaue: '{2}'", propertyName, expectedValue, actualValue);
-      };
-    }
-  }
 }
