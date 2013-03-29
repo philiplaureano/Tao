@@ -30,5 +30,9 @@ namespace Tests
             text.ShouldBeEqualTo(_expectedText, "Wrong Input Text!");
             _offset;            
         }
+        public FlushContentsTo([NotNull ]outputStream : System.IO.Stream) : uint
+        {
+            throw NotSupportedException();
+        }
     }
 }

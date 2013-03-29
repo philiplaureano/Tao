@@ -4,15 +4,19 @@ using Nemerle.Text;
 using Nemerle.Utility;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao;
+using Tao.Interfaces;
 namespace Tao.Metadata
 {
-    public interface IMap[TItem]
+    public interface IMap[TItem] 
         where TItem : class
     {
         Contains(item : TItem) : bool;
         GetOffset(item : TItem) : uint;
+        FlushContentsTo(outputStream : Stream) : uint;
     }
 }

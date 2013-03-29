@@ -14,7 +14,7 @@ using Tao;
 using Tao.Interfaces;
 namespace Tao.Metadata
 {
-    public class Map[TItem]
+    public class Map[TItem] : IWriter
         where TItem : class
     {        
         private _map : IDictionary.[TItem, uint] = ConcurrentDictionary.[TItem, uint]();
@@ -51,15 +51,19 @@ namespace Tao.Metadata
             result;
         }
 
-        public FlushContentsTo([NotNull] outputStream : Stream) : void
+        public FlushContentsTo([NotNull] outputStream : Stream) : uint
+            implements IWriter.Write
             requires outputStream.CanWrite
         {   
-            _heap.Seek(0);
-            outputStream.Seek(0);
+            def startPosition = 0;
+            _heap.Seek(startPosition);
+            outputStream.Seek(startPosition);
 
             def bytes = _heap.ToArray();
             def writer = BinaryWriter(outputStream);
             writer.Write(bytes);
+            
+            startPosition :> uint;
         }
 
         private AddItem([NotNull] item : TItem) : void
