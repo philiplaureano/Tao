@@ -989,6 +989,9 @@
     <Compile Include="Metadata\Tables\AssemblyTable.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\BlobMap.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\ClassLayoutTable.n">
       <SubType>Code</SubType>
     </Compile>

@@ -35,18 +35,18 @@ namespace Tao.Metadata
             }
         }
 
-        public Contains([NotNull] item : TItem) : bool
+        public virtual Contains([NotNull] item : TItem) : bool
         {            
             _map.ContainsKey(item);
         }        
-        public GetOffset([NotNull] text : TItem) : uint
+        public virtual GetOffset([NotNull] item : TItem) : uint
         {
-            when(!Contains(text))
+            when(!Contains(item))
             {
-                AddItem(text);
+                AddItem(item);
             }
 
-            def result : uint = _map[text];
+            def result : uint = _map[item];
 
             result;
         }
@@ -66,10 +66,12 @@ namespace Tao.Metadata
             startPosition :> uint;
         }
 
-        private AddItem([NotNull] item : TItem) : void
+        protected virtual AddItem([NotNull] item : TItem) : uint
         {
             def offset = _writer.Write(item, _heap);
             _map[item] = offset;
+            
+            offset;
         }
     }
 }

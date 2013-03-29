@@ -41,9 +41,29 @@ namespace Tests
 
             assert blobIndex equals 0 otherwiseprint "Invalid Blob Index";
         } 
+        public ShouldOnlyWriteEachUniqueBlobOnce() : void
+        {
+            def dummyData = array[5 : byte, 4, 3, 2, 1];
+            
+            def blobData = array[1 : byte, 2, 3, 4, 5, 6];
+            def duplicateBlobData = array[1 : byte, 2, 3, 4, 5, 6];
+            
+            def blobMap = BlobMap();
+            
+            // Add the dummy data blob to rule out cases where the method
+            // might return zero for the offset, and not write anything
+            def dummyOffset = blobMap.GetOffset(MemoryStream(dummyData));
+            
+            def expectedOffset = blobMap.GetOffset(MemoryStream(blobData));
+            blobMap.GetOffset(MemoryStream(duplicateBlobData)).ShouldBeEqualTo(expectedOffset, "Every unique blob should be written only once");
+            
+            def outputStream = MemoryStream();
+            blobMap.FlushContentsTo(outputStream);
+                       
+            outputStream.Length.ShouldBeEqualTo(13, "Wrong stream length");
+        }
         public ignored stub ShouldAlignEntireBlobHeapToNext4ByteBoundary() : void
         {
-            // TODO: Create a blob heap writer that writes the entire blob heap instead of just a single blob
             //def blobBytes = array[0x00 : byte, 0x00, 0x01, 0x42];
             //def blobData = MemoryStream(blobBytes);
 

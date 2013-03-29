@@ -10,6 +10,8 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 
+using Tao;
+
 namespace Tests
 {
   /// <summary>
@@ -17,11 +19,6 @@ namespace Tests
   /// </summary>
   public class ByteArrayExtensions
   {
-      public static GetHash(this byteArray : array[byte]) : string
-      {
-         def provider = SHA1CryptoServiceProvider();
-         BitConverter.ToString(provider.ComputeHash(byteArray));    
-      }
       public static ToStream(this byteArray : array[byte]) : Stream
       {
           MemoryStream(byteArray);

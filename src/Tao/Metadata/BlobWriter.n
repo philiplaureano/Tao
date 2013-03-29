@@ -22,9 +22,8 @@ namespace Tao.Metadata
             def length = blobData.Length :> uint;
             def integerWriter = CompressedIntegerWriter();
             integerWriter.WriteInteger(length, outputStream);
-
-            def reader = BinaryReader(blobData);
-            def blobBytes = reader.ReadBytes(length :> int);
+            
+            def blobBytes = blobData.ReadAllBytes();
 
             def writer = BinaryWriter(outputStream);
             writer.Write(blobBytes);           
