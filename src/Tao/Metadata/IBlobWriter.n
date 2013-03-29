@@ -12,8 +12,7 @@ using Tao.Interfaces;
 
 namespace Tao.Metadata
 {
-    public interface IBlobWriter
+    public interface IBlobWriter : IWriter.[Stream]
     {
-        Write(blob : Stream, blobHeap : Stream) : uint;
     }
 }

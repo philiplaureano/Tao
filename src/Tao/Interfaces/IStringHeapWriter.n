@@ -10,8 +10,7 @@ using System.Linq;
 
 namespace Tao.Interfaces
 {
-  public interface IStringHeapWriter
-  {
-      Write(text : string, stream: Stream) : uint;
-  }
+    public interface IStringHeapWriter : IWriter.[string]
+    {
+    }
 }

@@ -14,26 +14,26 @@ using System.Linq;
 
 namespace Tao.Metadata
 {
-  public class StringHeapWriter : IStringHeapWriter
-  {
-    public Write([NotNull] text : string, [NotNull] stream: Stream) : uint
+    public class StringHeapWriter : IStringHeapWriter
     {
-      // Write the null string entry "0" by default
-      when(stream.Length == 0)
-      {
-        _ = DoWrite(string.Empty, stream);
-      }
-     
-      DoWrite(text, stream);
+        public Write([NotNull] text : string, [NotNull] stream: Stream) : uint
+        {
+            // Write the null string entry "0" by default
+            when(stream.Length == 0)
+            {
+                _ = DoWrite(string.Empty, stream);
+            }
+
+            DoWrite(text, stream);
+        }
+        private DoWrite([NotNull] text : string, [NotNull] stream: Stream) : uint
+        {
+            mutable startPosition = stream.Position :> uint;
+
+            def writer = NullTerminatedStringWriter();
+            _ = writer.Write(text, stream);
+
+            startPosition;
+        }
     }
-    private DoWrite([NotNull] text : string, [NotNull] stream: Stream) : uint
-    {
-      mutable startPosition = stream.Position :> uint;
-      
-      def writer = NullTerminatedStringWriter();
-      writer.Write(text, stream);
-      
-      startPosition;
-    }
-  }
 }

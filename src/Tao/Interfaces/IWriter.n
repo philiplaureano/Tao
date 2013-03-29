@@ -19,14 +19,14 @@ namespace Tao.Interfaces
     }
     public interface IWriter[T1, THeader]
     {
-        Write(arg1 : T1, header : THeader, stream : Stream) : void;
+        Write(arg1 : T1, header : THeader, stream : Stream) : uint;
     }
     public interface IWriter[T1, T2, THeader]
     {
-        Write(arg1 : T1, arg2 : T2, header : THeader, stream : Stream) : void;
+        Write(arg1 : T1, arg2 : T2, header : THeader, stream : Stream) : uint;
     }
     public interface IWriter[T1, T2, T3, THeader]
     {
-        Write(arg1 : T1, arg2 : T2, arg3 : T3, header : THeader, stream : Stream) : void;
+        Write(arg1 : T1, arg2 : T2, arg3 : T3, header : THeader, stream : Stream) : uint;
     }
 }

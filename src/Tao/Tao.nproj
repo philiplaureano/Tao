@@ -377,6 +377,9 @@
     <Compile Include="Metadata\IIndex.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\IMap.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Index.n">
       <SubType>Code</SubType>
     </Compile>
@@ -624,6 +627,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\IStringMap.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Map.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\MetadataBlockReader.n">

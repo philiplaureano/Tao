@@ -9,7 +9,10 @@ using System.Linq;
 
 namespace Tao.Metadata
 {
-    public interface IStringMap : IMap.[string]
-    {        
+    public interface IMap[TItem]
+        where TItem : class
+    {
+        Contains(item : TItem) : bool;
+        GetOffset(item : TItem) : uint;
     }
 }

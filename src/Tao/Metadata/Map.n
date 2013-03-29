@@ -1,0 +1,71 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+namespace Tao.Metadata
+{
+    public class Map[TItem]
+        where TItem : class
+    {        
+        private _map : IDictionary.[TItem, uint] = ConcurrentDictionary.[TItem, uint]();
+        private _heap : MemoryStream = MemoryStream();
+        private _writer : IWriter.[TItem];
+        
+        public this([NotNull] writer : IWriter.[TItem], map : IDictionary.[TItem, uint])
+        {
+            _writer = writer;
+            _map = map;
+        }
+        public this([NotNull] writer : IWriter.[TItem], params items : array[TItem])
+        {
+            _writer = writer;
+            foreach(item in items)
+            {
+                AddItem(item);
+            }
+        }
+
+        public Contains([NotNull] item : TItem) : bool
+        {            
+            _map.ContainsKey(item);
+        }        
+        public GetOffset([NotNull] text : TItem) : uint
+        {
+            when(!Contains(text))
+            {
+                AddItem(text);
+            }
+
+            def result : uint = _map[text];
+
+            result;
+        }
+
+        public FlushContentsTo([NotNull] outputStream : Stream) : void
+            requires outputStream.CanWrite
+        {   
+            _heap.Seek(0);
+            outputStream.Seek(0);
+
+            def bytes = _heap.ToArray();
+            def writer = BinaryWriter(outputStream);
+            writer.Write(bytes);
+        }
+
+        private AddItem([NotNull] item : TItem) : void
+        {
+            def offset = _writer.Write(item, _heap);
+            _map[item] = offset;
+        }
+    }
+}

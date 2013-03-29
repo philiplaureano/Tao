@@ -13,56 +13,18 @@ using Tao;
 using Tao.Interfaces;
 namespace Tao.Metadata
 {
-    public class StringMap : IStringMap
+    public class StringMap : Map.[string], IStringMap
     {
         private _map : IDictionary.[string, uint] = Dictionary.[string, uint]();
         private _heap : MemoryStream = MemoryStream();
         private _writer : IStringHeapWriter;
         public this([NotNull] stringWriter : IStringHeapWriter, map : IDictionary.[string, uint])
         {
-            _writer = stringWriter;
-            _map = map;
+            base(stringWriter, map);
         }
         public this([NotNull] stringWriter : IStringHeapWriter, params strings : array[string])
         {
-            _writer = stringWriter;
-            foreach(text in strings)
-            {
-                AddString(text);
-            }
-        }
-
-        public Contains([NotNull] text : string) : bool
-        {            
-            _map.ContainsKey(text);
+            base(stringWriter, strings);
         }        
-        public GetOffset([NotNull] text : string) : uint
-        {
-            when(!Contains(text))
-            {
-                AddString(text);
-            }
-
-            def result : uint = _map[text];
-
-            result;
-        }
-
-        public FlushContentsTo([NotNull] stringHeap : Stream) : void
-            requires stringHeap.CanWrite
-        {   
-            _heap.Seek(0, SeekOrigin.Begin);
-            stringHeap.Seek(0, SeekOrigin.Begin);
-
-            def bytes = _heap.ToArray();
-            def writer = BinaryWriter(stringHeap);
-            writer.Write(bytes);
-        }
-
-        private AddString([NotNull] text : string) : void
-        {
-            def offset = _writer.Write(text, _heap);
-            _map[text] = offset;
-        }
     }
 }
