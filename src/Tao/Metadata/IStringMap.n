@@ -12,6 +12,6 @@ namespace Tao.Metadata
     public interface IStringMap
     {
         Contains(text : string) : bool;
-        GetStringOffset(text : string) : uint;
+        GetOffset(text : string) : uint;
     }
 }

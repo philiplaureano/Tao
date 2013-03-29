@@ -25,7 +25,7 @@ namespace Tests
         {
             text == _expectedText;
         }        
-        public GetStringOffset([NotNull] text : string) : uint
+        public GetOffset([NotNull] text : string) : uint
         {
             text.ShouldBeEqualTo(_expectedText, "Wrong Input Text!");
             _offset;            

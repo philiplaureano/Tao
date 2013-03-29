@@ -36,7 +36,7 @@ namespace Tao.Metadata
         {            
             _map.ContainsKey(text);
         }        
-        public GetStringOffset([NotNull] text : string) : uint
+        public GetOffset([NotNull] text : string) : uint
         {
             when(!Contains(text))
             {

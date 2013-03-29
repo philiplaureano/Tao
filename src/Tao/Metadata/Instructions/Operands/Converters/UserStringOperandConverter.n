@@ -22,7 +22,7 @@ namespace Tao.Metadata.Instructions.Operands
             requires operand is string
         {
             def text = operand :> string;
-            def stringIndex =_map.GetStringOffset(text);
+            def stringIndex =_map.GetOffset(text);
             def tableId : uint  = 0x70;         
             def token : uint = stringIndex + (tableId << 24);
             

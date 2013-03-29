@@ -40,7 +40,7 @@ namespace Tests
             {
                 def expectedOffset = expectedStringMap[key];
                 map.Contains(key).ShouldBeTrue("Missing expected key '{0}'", key);
-                map.GetStringOffset(key).ShouldBeEqualTo(expectedOffset, "Wrong String Offset");
+                map.GetOffset(key).ShouldBeEqualTo(expectedOffset, "Wrong String Offset");
             }
         }
         public ShouldInterceptLdstrInstructionConversionsAndBuildStringMapBasedOnThoseConversions() : void
