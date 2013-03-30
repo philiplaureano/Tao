@@ -1,0 +1,62 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata
+{
+    public class BlobMap : Map.[Stream], IBlobMap
+    {
+        private _hashMap : IDictionary.[string, uint]  = ConcurrentDictionary();
+        public this()
+        {
+            base(BlobWriter(), ConcurrentDictionary());
+        }
+        public override Contains(stream : Stream) : bool
+        {
+            def hash = stream.GetHash();
+            _hashMap.ContainsKey(hash) || base.Contains(stream);
+        }
+        protected override AddItem(stream : Stream) : uint
+        {
+            def hash = stream.GetHash();
+            
+            // Add the item only if it doesn't already exist in the map
+            mutable offset : uint;
+            if(_hashMap.ContainsKey(hash))
+            {
+                offset = _hashMap[hash];
+            }
+            else
+            {
+                offset = base.AddItem(stream);                                
+                _hashMap[hash] = offset;
+            }
+            
+            offset;
+        }
+        
+        public override GetOffset(stream : Stream) : uint
+        {
+            def hash = stream.GetHash();
+            mutable offset : uint;
+            if(_hashMap.ContainsKey(hash))
+            {
+                offset = _hashMap[hash];
+            }
+            else
+            {
+                offset = base.GetOffset(stream);
+            }
+            
+            offset;
+        }
+    }
+}

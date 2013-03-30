@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata
+{
+    public class GuidMap : Map.[Guid], IGuidMap
+    {
+        public this([NotNull] guidWriter : IGuidWriter, map : IDictionary.[Guid, uint])
+        {
+            base(guidWriter, map);
+        }
+        public this([NotNull] guidWriter : IGuidWriter, params guids : array[Guid])
+        {
+            base(guidWriter, strings);
+        }
+    }
+}
