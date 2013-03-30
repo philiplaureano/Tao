@@ -40,7 +40,7 @@ namespace Tests
       def binaryReader = BinaryReader(headerStream);
       def bytesRead = binaryReader.ReadBytes(headerStream.Length :> System.Int32);
       def currentHash = bytesRead.GetHash();
-      def expectedHash = "F1-16-65-C8-72-14-66-F7-8A-96-C1-06-B0-8F-17-FC-29-A1-2F-6C";
+      def expectedHash = "D1-79-60-D4-11-9D-47-57-44-58-87-0D-FB-13-94-C3-F9-50-B0-C8-C1-2D-61-90-DE-6C-AC-52-75-89-4D-26-B8-5A-7C-C0-69-9F-1E-20-D5-5B-D0-97-13-5F-89-16-22-26-D9-54-10-6F-DC-E0-87-E1-27-FC-0E-98-6D-D9";
       
       assert headerStream.Length equals 128 otherwiseprint "Invalid header stream length";
       assert expectedHash equals currentHash otherwiseprint "Wrong Hash Code";            

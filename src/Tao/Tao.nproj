@@ -311,6 +311,9 @@
     <Compile Include="MappingExtensions.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\BlobMap.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\BlobReader.n">
       <SubType>Code</SubType>
     </Compile>
@@ -360,6 +363,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\HeapSizeFlags.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\IBlobMap.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\IBlobWriter.n">
@@ -987,9 +993,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\AssemblyTable.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\BlobMap.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\ClassLayoutTable.n">

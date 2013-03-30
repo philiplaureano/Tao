@@ -15,9 +15,6 @@ namespace Tao.Metadata
 {
     public class StringMap : Map.[string], IStringMap
     {
-        private _map : IDictionary.[string, uint] = Dictionary.[string, uint]();
-        private _heap : MemoryStream = MemoryStream();
-        private _writer : IStringHeapWriter;
         public this([NotNull] stringWriter : IStringHeapWriter, map : IDictionary.[string, uint])
         {
             base(stringWriter, map);

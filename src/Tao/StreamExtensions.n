@@ -25,7 +25,7 @@ namespace Tao
         }        
         public static GetHash(this byteArray : array[byte]) : string
         {
-            def provider = SHA1CryptoServiceProvider();
+            def provider = System.Security.Cryptography.SHA512CryptoServiceProvider();
             BitConverter.ToString(provider.ComputeHash(byteArray));    
         }
         
