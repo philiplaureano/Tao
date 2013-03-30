@@ -21,10 +21,10 @@ namespace Tests
     {        
         public ShouldReturnOffsetForExistingString() : void
         {
-            def stringWriter = UserStringHeapWriter();
             def strings = array["foo", "bar", "baz"];
 
-            def map = StringMap(stringWriter, strings);
+            def stringWriter = UserStringHeapWriter();
+            def map = UserStringMap(strings);
 
             // Forge the expected stream and map the strings
             def expectedStringMap = Dictionary.[string, uint]();
@@ -88,7 +88,7 @@ namespace Tests
             def stringWriter = UserStringHeapWriter();
             def strings = array["foo", "bar", "baz"];
 
-            def map = StringMap(stringWriter, strings);            
+            def map = UserStringMap(strings);            
             def expectedStream = MemoryStream();
             foreach(text in strings)
             {

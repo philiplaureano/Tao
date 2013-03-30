@@ -18,7 +18,7 @@ namespace Tao.Metadata
 {
     public class MethodBodyWriter : IMethodBodyWriter
     {
-        public Write([NotNull] methodBody : IMethodBody, [NotNull] stringMap : IStringMap, [NotNull] methodStream : Stream) : void
+        public Write([NotNull] methodBody : IMethodBody, [NotNull] stringMap : IUserStringMap, [NotNull] methodStream : Stream) : void
             requires (methodBody is FatMethodBody) || (methodBody is TinyMethodBody)
             requires methodBody.Instructions.Count() > 0 otherwise throw InvalidOperationException("You can't write a method body with no instructions")
         {            
@@ -33,7 +33,7 @@ namespace Tao.Metadata
             }
         }
 
-        private Write([NotNull] methodBody : FatMethodBody, [NotNull] stringMap : IStringMap, [NotNull] methodStream : Stream) : void
+        private Write([NotNull] methodBody : FatMethodBody, [NotNull] stringMap : IUserStringMap, [NotNull] methodStream : Stream) : void
         {            
             def startPosition = methodStream.Position :> uint;
 
@@ -92,7 +92,7 @@ namespace Tao.Metadata
             }
         }        
         
-        private Write([NotNull] methodBody : TinyMethodBody, [NotNull] stringMap : IStringMap, [NotNull] methodStream : Stream) : void
+        private Write([NotNull] methodBody : TinyMethodBody, [NotNull] stringMap : IUserStringMap, [NotNull] methodStream : Stream) : void
         {
             def writer = BinaryWriter(methodStream);
             def tinyFlags : byte = 0x2;

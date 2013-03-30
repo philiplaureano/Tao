@@ -59,7 +59,7 @@ namespace Tests
             // Write the instructions as one contiguous block
             def actualStream = MemoryStream();
             def instructionWriter = InstructionWriter();
-            def stringMap = StringMap(UserStringHeapWriter(), map);
+            def stringMap = UserStringMap(map);
             instructionWriter.Write(instructions, actualStream, stringMap);
             
             // The instructions must match the original method body bytes   
@@ -120,7 +120,7 @@ namespace Tests
 
                 // Write the actual bytes
                 def actualBytes = MemoryStream();
-                def stringMap = StringMap(UserStringHeapWriter(), map);
+                def stringMap = UserStringMap(map);
 
                 def writer = IndividualInstructionWriter();
                 writer.WriteInstruction(instruction, actualBytes, stringMap, instructionMap);

@@ -28,7 +28,7 @@ namespace Tao.Metadata.Instructions
         }
         
         public Write([NotNull] instructions  : IEnumerable.[IInstruction], [NotNull] instructionStream : Stream, 
-            [NotNull] stringMap : IStringMap) : void
+            [NotNull] stringMap : IUserStringMap) : void
             requires instructionStream.CanWrite
         {
             // Create the instruction map so that the writer can map

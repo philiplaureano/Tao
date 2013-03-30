@@ -21,7 +21,7 @@ namespace Tao
 {
     public class MethodStreamWriter
     {
-        public Write([NotNull] methodBody : IMethodBody, [NotNull] stringMap : IStringMap, [NotNull] methodStream : Stream) : uint
+        public Write([NotNull] methodBody : IMethodBody, [NotNull] stringMap : IUserStringMap, [NotNull] methodStream : Stream) : uint
         {
             def rva = methodStream.Position :> uint;
             def writer = MethodBodyWriter();                

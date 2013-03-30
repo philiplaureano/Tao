@@ -48,7 +48,7 @@ namespace Tests
             map["Hello, World Again!"] = 0x1d;
             
             def userStringHeap = root.GetUserStringHeap();            
-            def stringMap = StringMap(UserStringHeapWriter(), map);
+            def stringMap = UserStringMap(map);
 
             def bodyMap = Dictionary.[MethodDefRow, IMethodBody * uint]();
 
@@ -499,7 +499,7 @@ namespace Tests
             def instructions = instructionReader.Read(methodBytes);
 
             def actualStream = MemoryStream();            
-            def stringMap = StringMap(UserStringHeapWriter(), map);
+            def stringMap = UserStringMap(map);
 
             def count = endPosition - startPosition;
             def expectedStream = methodStream.ReadBytes(count :> int, startPosition);

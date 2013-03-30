@@ -635,6 +635,9 @@
     <Compile Include="Metadata\IStringMap.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\IUserStringMap.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Map.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1530,6 +1533,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\UserStringHeapWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\UserStringMap.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MscorlibNameWriter.n">

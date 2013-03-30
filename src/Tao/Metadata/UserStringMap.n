@@ -5,23 +5,22 @@ using Nemerle.Text;
 using Nemerle.Utility;
 
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
 using Tao;
-using Tao.Interfaces;
 namespace Tao.Metadata
 {
-    public class StringMap : Map.[string], IStringMap
+    public class UserStringMap : Map.[string], IUserStringMap
     {
-        public this(map : IDictionary.[string, uint])
+        public this([NotNull] map : IDictionary.[string, uint])
         {
-            base(StringHeapWriter(), map);
+            
+            base(UserStringHeapWriter(), map);
         }
         public this(params strings : array[string])
         {
-            base(StringHeapWriter(), strings);
-        }        
+            base(UserStringHeapWriter(), strings);
+        } 
     }
 }

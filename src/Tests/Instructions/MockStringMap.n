@@ -12,7 +12,7 @@ using Tao.Metadata;
 using Tests.Macros;
 namespace Tests
 {
-    public class MockStringMap : IStringMap
+    public class MockStringMap : IStringMap, IUserStringMap
     {
         private _offset : uint;
         private _expectedText : string;

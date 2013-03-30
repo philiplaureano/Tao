@@ -18,6 +18,6 @@ namespace Tao.Metadata
 {
     public interface IMethodBodyWriter
     {
-        Write(methodBody : IMethodBody, stringMap : IStringMap, methodStream : Stream) : void;
+        Write(methodBody : IMethodBody, stringMap : IUserStringMap, methodStream : Stream) : void;
     }
 }

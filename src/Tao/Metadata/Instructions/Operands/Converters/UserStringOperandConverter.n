@@ -13,8 +13,8 @@ namespace Tao.Metadata.Instructions.Operands
 {
     public class UserStringOperandConverter : IOperandConverter
     {
-        private _map : IStringMap;
-        public this([NotNull] map : IStringMap)
+        private _map : IUserStringMap;
+        public this([NotNull] map : IUserStringMap)
         {
             _map = map;
         }

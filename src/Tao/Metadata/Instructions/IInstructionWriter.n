@@ -15,6 +15,6 @@ namespace Tao.Metadata.Instructions
 {
     public interface IInstructionWriter
     {
-        Write(instructions : IEnumerable.[IInstruction], instructionStream : Stream, stringMap : IStringMap) : void;
+        Write(instructions : IEnumerable.[IInstruction], instructionStream : Stream, stringMap : IUserStringMap) : void;
     }
 }
