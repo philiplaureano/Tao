@@ -95,7 +95,7 @@ namespace Tao.Metadata
         public static FromGuid(guid : Guid, [NotNull] writer : IGuidWriter, [NotNull] guidHeap : Stream) : Index
         {
             def value = guidHeap.Position :> uint + 1;
-            writer.Write(array[guid], guidHeap);
+            _ = writer.Write(guid, guidHeap);
             
             // Use the appropriate index width
             Index.Auto(value);

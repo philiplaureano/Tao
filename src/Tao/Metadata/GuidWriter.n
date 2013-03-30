@@ -13,14 +13,11 @@ namespace Tao.Metadata
 {
     public class GuidWriter : IGuidWriter
     {
-        public Write([NotNull] guids: IEnumerable[Guid], [NotNull] guidStream: Stream) : uint
+        public Write([NotNull] guid: Guid, [NotNull] guidStream: Stream) : uint
         {
             def startPosition = guidStream.Position :> uint;
             def writer = BinaryWriter(guidStream);
-            foreach(guid in guids)
-            {
-                writer.Write(guid.ToByteArray());
-            }
+            writer.Write(guid.ToByteArray());
             
             startPosition;
         }

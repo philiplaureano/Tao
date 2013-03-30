@@ -73,7 +73,8 @@ namespace Tests
       def guids = array[firstExpectedGuid, secondExpectedGuid];
       
       def writer = GuidWriter();
-      writer.Write(guids, guidStream);
+      _ = writer.Write(firstExpectedGuid, guidStream);
+      _ = writer.Write(secondExpectedGuid, guidStream);
       
       guidStream.ShouldMatch(expectedGuidData);
     }
@@ -83,10 +84,9 @@ namespace Tests
       def expectedGuidData = array[0xF2 : byte, 0x5F, 0xF8, 0x3B, 0x3F, 0x90, 0xC6, 0x46, 0xA7, 0x08, 0xA7, 0xED, 0x90, 0xDF, 0x9A, 0xF0];
       
       def guidStream = MemoryStream();
-      def guids = array[Guid(expectedGuidData)];
       
       def writer = GuidWriter();
-      writer.Write(guids, guidStream);
+      writer.Write(Guid(expectedGuidData), guidStream);
       
       guidStream.ShouldMatch(expectedGuidData);
     }    
