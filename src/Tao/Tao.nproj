@@ -1620,21 +1620,6 @@
     <Compile Include="Subsystem.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Visitors\ActionExtensions.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Visitors\FunctorVisitor.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Visitors\IVisitor.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Visitors\TreeWalker.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Visitors\VisitorExtensions.n">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
@@ -1653,7 +1638,6 @@
     <Folder Include="Metadata\Tables\Schemas\Readers\" />
     <Folder Include="Metadata\Tables\Schemas\Writers\" />
     <Folder Include="Properties\" />
-    <Folder Include="Visitors\" />
   </ItemGroup>
   <Import Project="$(Nemerle)\Nemerle.MSBuild.targets" />
   <!--
