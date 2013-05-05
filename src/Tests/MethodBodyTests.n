@@ -64,8 +64,8 @@ namespace Tests
                 def rva : uint = expectedStream.Position :> uint;
                 bodyMap[row] = (body, rva);
 
-                def writer = MethodBodyWriter();                
-                writer.Write(body, stringMap, expectedStream);
+                def writer = MethodBodyWriter(stringMap);                
+                writer.Write(body, expectedStream);
             }
 
             def blockWriter = MethodStreamWriter();
@@ -513,8 +513,8 @@ namespace Tests
             }
 
             // Write the method body
-            def writer = MethodBodyWriter();
-            writer.Write(body, stringMap, tracerStream);                        
+            def writer = MethodBodyWriter(stringMap);
+            writer.Write(body, tracerStream);                        
 
             // The written method body must match the original method body bytes   
             actualStream.ShouldMatch(expectedStream);

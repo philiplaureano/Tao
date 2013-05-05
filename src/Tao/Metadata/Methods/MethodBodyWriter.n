@@ -18,22 +18,32 @@ namespace Tao.Metadata
 {
     public class MethodBodyWriter : IMethodBodyWriter
     {
-        public Write([NotNull] methodBody : IMethodBody, [NotNull] stringMap : IUserStringMap, [NotNull] methodStream : Stream) : void
+        private _stringMap : IUserStringMap;
+        
+        public this([NotNull] stringMap : IUserStringMap)
+        {
+            _stringMap = stringMap;
+        }        
+        
+        public Write([NotNull] methodBody : IMethodBody, [NotNull] methodStream : Stream) : uint
             requires (methodBody is FatMethodBody) || (methodBody is TinyMethodBody)
             requires methodBody.Instructions.Count() > 0 otherwise throw InvalidOperationException("You can't write a method body with no instructions")
         {            
+            mutable rva : uint = 0;
             when(methodBody is FatMethodBody)
             {
-                Write(methodBody :> FatMethodBody, stringMap, methodStream);
+                rva = Write(methodBody :> FatMethodBody, _stringMap, methodStream);
             }
 
             when(methodBody is TinyMethodBody)
             {
-                Write(methodBody :> TinyMethodBody, stringMap, methodStream);
+                rva = Write(methodBody :> TinyMethodBody, _stringMap, methodStream);
             }
+            
+            rva;
         }
 
-        private Write([NotNull] methodBody : FatMethodBody, [NotNull] stringMap : IUserStringMap, [NotNull] methodStream : Stream) : void
+        private Write([NotNull] methodBody : FatMethodBody, [NotNull] stringMap : IUserStringMap, [NotNull] methodStream : Stream) : uint
         {            
             def startPosition = methodStream.Position :> uint;
 
@@ -90,10 +100,13 @@ namespace Tao.Metadata
                 // Write the attached exception blocks
                 WriteExceptionBlocks(methodStream, methodBody);
             }
+            
+            startPosition;
         }        
         
-        private Write([NotNull] methodBody : TinyMethodBody, [NotNull] stringMap : IUserStringMap, [NotNull] methodStream : Stream) : void
+        private Write([NotNull] methodBody : TinyMethodBody, [NotNull] stringMap : IUserStringMap, [NotNull] methodStream : Stream) : uint
         {
+            def startPosition = methodStream.Position :> uint;
             def writer = BinaryWriter(methodStream);
             def tinyFlags : byte = 0x2;
             def mask : byte = 0x3f;
@@ -106,6 +119,8 @@ namespace Tao.Metadata
             // Write the method body bytes
             def instructionWriter = InstructionWriter();
             instructionWriter.Write(methodBody.Instructions, methodStream, stringMap);
+            
+            startPosition;
         }
         
         private WriteExceptionBlocks([NotNull] methodStream : Stream,[NotNull] body : FatMethodBody) : void

@@ -9,6 +9,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao;
+using Tao.Interfaces;
 using Tao.Metadata.Tables;
 using Tao.Metadata.Tables.Rows;
 using Tao.Metadata.Instructions;
@@ -16,8 +18,7 @@ using Tao.Metadata.Instructions.Operands;
 
 namespace Tao.Metadata
 {
-    public interface IMethodBodyWriter
+    public interface IMethodBodyWriter : IWriter.[IMethodBody]
     {
-        Write(methodBody : IMethodBody, stringMap : IUserStringMap, methodStream : Stream) : void;
     }
 }
