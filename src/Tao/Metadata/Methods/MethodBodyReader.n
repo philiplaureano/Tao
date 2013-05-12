@@ -9,6 +9,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao;
+using Tao.Interfaces;
 using Tao.Metadata.Tables;
 using Tao.Metadata.Tables.Rows;
 using Tao.Metadata.Instructions;
@@ -21,12 +23,19 @@ namespace Tao.Metadata
         private _reader : IMethodBodyReader;
         private _instructionReader : IInstructionReader;
         
-        public this(stringReader : IBoundStringReader)
+        public this([NotNull] root : IMetadataRoot)
+        {
+            def userStringHeap = root.GetUserStringHeap();
+            def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);
+            this(boundReader);
+        }
+        
+        public this([NotNull] stringReader : IBoundStringReader)
         {
             this(IndividualInstructionReader(stringReader));
         }
         
-        public this(individualInstructionReader : IIndividualInstructionReader)
+        public this([NotNull] individualInstructionReader : IIndividualInstructionReader)
         {
             this(SimpleMethodBodyReader(), InstructionReader(individualInstructionReader));
         }

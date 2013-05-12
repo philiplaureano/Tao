@@ -20,6 +20,12 @@ namespace Tao.Metadata
     {
         private _stringMap : IUserStringMap;
         
+        public this([NotNull] stringMap : IDictionary.[string, uint])
+        {
+            def userStringMap = UserStringMap(stringMap);
+            this(userStringMap);
+        }
+        
         public this([NotNull] stringMap : IUserStringMap)
         {
             _stringMap = stringMap;
