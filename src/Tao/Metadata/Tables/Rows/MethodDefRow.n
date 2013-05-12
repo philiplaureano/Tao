@@ -15,23 +15,23 @@ using Tao.Metadata.Signatures;
 
 namespace Tao.Metadata.Tables.Rows
 {
-    public class MethodDefRow : ICustomAttributeTypeRow, IHasCustomAttributeRow, IMemberRefParentRow
+    public class MethodDefRow : IMethodDefRow
     {
-        public virtual Rva : uint { get; set; }
-        public virtual ImplFlags : ushort {get; set; }
-        public virtual Flags : ushort { get; set; }
-        public virtual Name : IIndex { get; set; }
-        public virtual Signature : IIndex { get; set; }
-        public virtual ParamList : IIndex { get; set; }
-        public virtual RowIndex : uint { get; set; }
-        public virtual TableId : TableId 
+        public Rva : uint { get; set; }
+        public ImplFlags : ushort {get; set; }
+        public Flags : ushort { get; set; }
+        public Name : IIndex { get; set; }
+        public Signature : IIndex { get; set; }
+        public ParamList : IIndex { get; set; }
+        public RowIndex : uint { get; set; }
+        public TableId : TableId 
         { 
             get
             {
                 TableId.MethodDef;
             }
         }
-        public virtual GetMethodSignature([NotNull] blobStream : Stream) : IMethodSignature
+        public GetMethodSignature([NotNull] blobStream : Stream) : IMethodSignature
         requires Signature != null otherwise throw InvalidOperationException("You can't retrieve a method signature if the Signature property itself is null")        
         {
             _ = blobStream.Seek(0, SeekOrigin.Begin);
@@ -46,7 +46,7 @@ namespace Tao.Metadata.Tables.Rows
             signatureReader.Read(blob);
         }
         
-        public virtual ReadMethodBodyFrom([NotNull]image : IImage, bodyReader : IMethodBodyReader) : IMethodBody
+        public ReadMethodBodyFrom([NotNull]image : IImage, bodyReader : IMethodBodyReader) : IMethodBody
         {
             def methodRva = Rva;
             def methodStream = image.GetDataAt(methodRva);

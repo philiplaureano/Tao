@@ -46,7 +46,7 @@ namespace Tao
             rowMap[TableId.InterfaceImpl] = () => heap.GetRow.[InterfaceImplRow](Row);
             rowMap[TableId.ManifestResource] = () => heap.GetRow.[ManifestResourceRow](Row);
             rowMap[TableId.MemberRef] = () => heap.GetRow.[MemberRefRow](Row);
-            rowMap[TableId.MethodDef] = () => heap.GetRow.[MethodDefRow](Row);
+            rowMap[TableId.MethodDef] = () => heap.GetRow.[IMethodDefRow](Row);
             rowMap[TableId.MethodImpl] = () => heap.GetRow.[MethodImplRow](Row);
             rowMap[TableId.MethodSemantics] = () => heap.GetRow.[MethodSemanticsRow](Row);
             rowMap[TableId.MethodSpec] = () => heap.GetRow.[MethodSpecRow](Row);

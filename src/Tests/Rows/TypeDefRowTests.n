@@ -77,12 +77,12 @@ namespace Tests
 
         public ShouldGetListOfMethodRows() : void
         {
-            def matchMethodName(rows : array[MethodDefRow],  index : int, expectedMethodName : string, stringHeap : Stream) : void
+            def matchMethodName(rows : array[IMethodDefRow],  index : int, expectedMethodName : string, stringHeap : Stream) : void
             {
                 rows[index].Name.ToString(stringHeap).ShouldBeEqualTo(expectedMethodName, "Wrong method name");
             }
             
-            def testResults(rows : array[MethodDefRow], stringHeap : Stream) : void
+            def testResults(rows : array[IMethodDefRow], stringHeap : Stream) : void
             {
                 rows.Length.ShouldBeEqualTo(3, "Wrong number of expected methods");
                 
@@ -92,7 +92,7 @@ namespace Tests
                 testMethodName(2, ".ctor");
             }
             
-            def getRows(row : TypeDefRow, tablesHeap : ITablesHeap) : IEnumerable.[MethodDefRow]
+            def getRows(row : TypeDefRow, tablesHeap : ITablesHeap) : IEnumerable.[IMethodDefRow]
             {
                 row.GetMethodDefRows(tablesHeap);
             }

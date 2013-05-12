@@ -376,7 +376,7 @@ namespace Tests
             typeRef.TableId.ShouldBeEqualTo(TableId.MethodDef, "Wrong Type TableId");
             
             def methodIndex = typeRef.Row;
-            def methodRow = heap.GetRow.[MethodDefRow](methodIndex);
+            def methodRow = heap.GetRow.[IMethodDefRow](methodIndex);
             
             def signature = methodRow.GetMethodSignature(blobStream);
             signature.ParameterCount.ShouldBeEqualTo(1, "Wrong Parameter Count");

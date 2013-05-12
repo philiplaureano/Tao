@@ -13,11 +13,15 @@ using Tao.Metadata.Tables.Schemas.Writers;
 
 namespace Tao.Metadata.Tables
 {
-  public class MethodDefTable : MetadataTable[MethodDefRow]
-  {
-    public this()
+    public class MethodDefTable : AbstractMetadataTable[IMethodDefRow]
     {
-      base(TableId.MethodDef, MethodDefSchemaReader(), MethodDefSchemaWriter());
+        public this()
+        {
+            base(TableId.MethodDef, MethodDefSchemaReader(), MethodDefSchemaWriter());
+        }
+        protected override CreateRow() : IMethodDefRow
+        {
+            MethodDefRow();
+        }
     }
-  }
 }

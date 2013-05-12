@@ -29,6 +29,7 @@ namespace Tao.Metadata
             _tablesHeap.ReadFrom(tableStream);            
         }
         
+        
         public ReadBlob(index : uint) : Stream
             requires _root.Heaps != null && _root.Heaps.ContainsKey("#Blob")
         {

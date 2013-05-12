@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Tests
 {
-    public class MethodDefTableReadTests : BaseTableReaderTest[MethodDefRow, MethodDefTable]
+    public class MethodDefTableReadTests : BaseTableReaderTest[IMethodDefRow, MethodDefTable]
     {
         public this()
         {

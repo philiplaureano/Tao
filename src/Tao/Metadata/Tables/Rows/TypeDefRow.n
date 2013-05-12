@@ -43,7 +43,7 @@ namespace Tao.Metadata.Tables.Rows
             def nameSpace = TypeNamespace.ToString(stringHeap);
 
             def assemblyRow = GetAssemblyRow(tablesHeap);            
-            def assemblyName = assemblyRow.Name.ToString(stringHeap);                                                 
+            def assemblyName = assemblyRow.Name.ToString(stringHeap);                                                
 
             def format = "{0}.{1}, {2}";
             def qualifiedName = string.Format(format, nameSpace, typeName, assemblyName);
@@ -64,7 +64,7 @@ namespace Tao.Metadata.Tables.Rows
                 }
             }
         }
-        public GetMethodDefRows([NotNull] tablesHeap : ITablesHeap) : IEnumerable.[MethodDefRow]
+        public GetMethodDefRows([NotNull] tablesHeap : ITablesHeap) : IEnumerable.[IMethodDefRow]
             requires RowIndex > 0 otherwise throw InvalidOperationException("The row index for any given type row should never be zero")
         {
             GetRelatedRows(this, tablesHeap, row => row.MethodList.ToUInt32());

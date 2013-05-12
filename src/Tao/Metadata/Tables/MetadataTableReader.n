@@ -14,22 +14,25 @@ using Tao.Metadata.Tables.Schemas;
 namespace Tao.Metadata.Tables
 {
     public class MetadataTableReader[TRow] : IMetadataTableReader[TRow]
-    where TRow : IRow, new(), class
+    where TRow : IRow, class
     {
         private _schema : ISchemaReader[TRow];
-
-        public this([NotNull] schema : ISchemaReader[TRow])
+        private _createRow : void -> TRow;
+        
+        public this([NotNull] schema : ISchemaReader[TRow], [NotNull] createRow : void -> TRow)
         {
             _schema = schema;
+            _createRow = createRow;
         }
 
         public ReadRows(numberOfRowsToRead : uint, heapSizes : byte, [NotNull] rowCounts : IDictionary[TableId, uint], sortedTables : IEnumerable.[TableId], indexes: IDictionary.[HeapSizeFlags, ISet.[uint]], [NotNull] inputStream : Stream) : IEnumerable[TRow]
+            requires _createRow() != null
         {
             def reader = BinaryReader(inputStream);          
 
             for(mutable i : uint = 0; i < numberOfRowsToRead; i++)
             {
-                def row = TRow();
+                def row = _createRow();
 
                 // Tag the row with its row index
                 row.RowIndex = i + 1;

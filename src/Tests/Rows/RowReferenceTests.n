@@ -38,7 +38,7 @@ namespace Tests
         }
         public ShouldResolveRowInstanceFromRowReferenceForMethodDefRow() : void
         {
-            TestRowRef.[MethodDefRow](TableId.MethodDef);
+            TestRowRef.[IMethodDefRow](TableId.MethodDef);
         }
         public ShouldResolveRowInstanceFromRowReferenceForParamRow() : void
         {
@@ -101,7 +101,8 @@ namespace Tests
             def rowRef = RowReference(tableId, 1);
 
             def row = rowRef.GetRowFrom(tablesHeap);
-            row.GetType().ShouldBeEqualTo(typeof(TRow), "Wrong Row Type");
+            def actualType = row.GetType();
+            typeof(TRow).IsAssignableFrom(actualType).ShouldBeTrue("Wrong Row Type");
         }
     }
 }

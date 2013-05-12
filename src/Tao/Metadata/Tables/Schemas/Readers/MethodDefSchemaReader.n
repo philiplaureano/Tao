@@ -12,9 +12,9 @@ using System.Linq;
 using Tao.Metadata.Tables.Rows;
 namespace Tao.Metadata.Tables.Schemas.Readers
 {
-    public class MethodDefSchemaReader : ISchemaReader[MethodDefRow]
+    public class MethodDefSchemaReader : ISchemaReader[IMethodDefRow]
     {
-        public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], _sortedTables: IEnumerable.[TableId], [NotNull] rowReader : IRowReader.[MethodDefRow]) : void
+        public ReadRowInto([NotNull] rowCounts : IDictionary[TableId, uint], _sortedTables: IEnumerable.[TableId], [NotNull] rowReader : IRowReader.[IMethodDefRow]) : void
         {        
             rowReader.ReadDword(r => r.set_Rva);
             rowReader.ReadWord(r => r.set_ImplFlags);

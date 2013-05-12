@@ -10,17 +10,17 @@ using System.Linq;
 using Tao.Metadata.Tables.Rows;
 namespace Tao.Metadata.Tables.Schemas.Writers
 {
-  public class MethodDefSchemaWriter : ISchemaWriter[MethodDefRow]
-  {
-    public WriteRow([NotNull] row : MethodDefRow, [NotNull] rowCounts : IDictionary[TableId, uint], 
-        [NotNull] rowWriter : IRowWriter[MethodDefRow]) : void
+    public class MethodDefSchemaWriter : ISchemaWriter[IMethodDefRow]
     {
-      rowWriter.WriteDword(row.Rva);
-      rowWriter.WriteWord(row.ImplFlags);
-      rowWriter.WriteWord(row.Flags);
-      rowWriter.WriteStringIndex(row.get_Name);
-      rowWriter.WriteBlobIndex(row.get_Signature);
-      rowWriter.WriteIndex(TableId.Param, row.get_ParamList);      
+        public WriteRow([NotNull] row : IMethodDefRow, [NotNull] rowCounts : IDictionary[TableId, uint], 
+        [NotNull] rowWriter : IRowWriter[IMethodDefRow]) : void
+        {
+            rowWriter.WriteDword(row.Rva);
+            rowWriter.WriteWord(row.ImplFlags);
+            rowWriter.WriteWord(row.Flags);
+            rowWriter.WriteStringIndex(row.get_Name);
+            rowWriter.WriteBlobIndex(row.get_Signature);
+            rowWriter.WriteIndex(TableId.Param, row.get_ParamList);      
+        }
     }
-  }
 }

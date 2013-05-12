@@ -8,8 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 namespace Tao.Metadata.Tables.Schemas
 {
-  public interface ISchemaWriter[TRow]
-  {    
-    WriteRow(row : TRow, rowCounts : IDictionary[TableId, uint], rowWriter : IRowWriter.[TRow]) : void;
-  }
+    public interface ISchemaWriter[TRow]
+    {    
+        WriteRow(row : TRow, rowCounts : IDictionary[TableId, uint], rowWriter : IRowWriter.[TRow]) : void;
+    }
 }

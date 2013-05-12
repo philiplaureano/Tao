@@ -77,7 +77,7 @@ namespace Tao.Metadata.Tables.Rows
             when(rowRef.TableId == TableId.MethodDef)
             {
                 def table = heap.Tables.Where(t => t is MethodDefTable).First() :> MethodDefTable;                
-                result = GetRowFrom.[MethodDefRow, ICustomAttributeTypeRow](codedTokenType, get_Type, table);
+                result = GetRowFrom.[IMethodDefRow, ICustomAttributeTypeRow](codedTokenType, get_Type, table);
             }
 
             result;

@@ -30,7 +30,7 @@ namespace Tests
             
             // Search for the get_Value method
             def stringHeap = root.Heaps["#Strings"];
-            def rows = heap.GetRows.[MethodDefRow]();
+            def rows = heap.GetRows.[IMethodDefRow]();
             def targetRow = rows.Where(r=> r.Name.ToString(stringHeap) == "get_Value").First();
             
             // Match the method name            

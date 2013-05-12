@@ -1,0 +1,28 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata.Signatures;
+
+namespace Tao.Metadata.Tables.Rows
+{
+    public interface IMethodDefRow : ICustomAttributeTypeRow, IHasCustomAttributeRow, IMemberRefParentRow
+    {
+        Rva : uint { get; set; }
+        ImplFlags : ushort {get; set; }
+        Flags : ushort { get; set; }
+        Name : IIndex { get; set; }
+        Signature : IIndex { get; set; }
+        ParamList : IIndex { get; set; } 
+        
+        ReadMethodBodyFrom(image : IImage, bodyReader : IMethodBodyReader) : IMethodBody;        
+    }
+}

@@ -14,7 +14,7 @@ using System.Linq;
 namespace Tao.Metadata.Tables.Schemas
 {
   public interface ISchemaReader[TRow]
-    where TRow : new(), class
+    where TRow : class
   {    
     ReadRowInto(rowCounts : IDictionary[TableId, uint], sortedTables: IEnumerable.[TableId], rowReader : IRowReader.[TRow]) : void;
   }

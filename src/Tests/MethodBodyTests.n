@@ -49,7 +49,7 @@ namespace Tests
             def userStringHeap = root.GetUserStringHeap();
             def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);
             def bodyReader = MethodBodyReader(boundReader); 
-            def rows = tableHeap.GetRows.[MethodDefRow]();
+            def rows = tableHeap.GetRows.[IMethodDefRow]();
                         
             def bodyRvaMap = Dictionary.[IMethodBody, uint]();
             foreach(row in rows)
@@ -87,7 +87,7 @@ namespace Tests
             tableHeap.ReadFrom(tableStream);
 
             // Grab all the rows from the MethodDef table
-            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();
+            def rows = tableHeap.GetRows.[IMethodDefRow]().ToArray();
 
             def codeBlockRva : uint = 0x2050;
             def length : uint = 0x21;
@@ -105,7 +105,7 @@ namespace Tests
             def userStringHeap = root.GetUserStringHeap();            
             def stringMap = UserStringMap(map);
 
-            def bodyMap = Dictionary.[MethodDefRow, IMethodBody * uint]();
+            def bodyMap = Dictionary.[IMethodDefRow, IMethodBody * uint]();
 
             def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);
             def bodyReader = MethodBodyReader(boundReader); 
@@ -147,7 +147,7 @@ namespace Tests
             tableHeap.ReadFrom(tableStream);
 
             // Find the target method
-            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();            
+            def rows = tableHeap.GetRows.[IMethodDefRow]().ToArray();            
             def fatMethodRow = rows.First(r => r.Name.ToString(root.GetStringHeap()) == "Main");
 
             // Extract the method body stream
@@ -234,7 +234,7 @@ namespace Tests
             def tableHeap = TablesHeap();
             tableHeap.ReadFrom(tableStream);
 
-            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();
+            def rows = tableHeap.GetRows.[IMethodDefRow]().ToArray();
             rows.Length.ShouldBeEqualTo(4, "Invalid row count");
 
             rows[0].Rva.ShouldBeEqualTo(0x00002050, "Invalid Rva");
@@ -611,7 +611,7 @@ namespace Tests
             def stringHeap = root.GetStringHeap();
 
             // Find the target method
-            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();            
+            def rows = tableHeap.GetRows.[IMethodDefRow]().ToArray();            
             def fatMethodRow = rows.First(r => r.Name.ToString(stringHeap) == "Main");
 
             def rva = fatMethodRow.Rva;
@@ -671,7 +671,7 @@ namespace Tests
                                                                                        expectedStream;
                 });
         }
-        private TestExceptionHandlerBlockWrite(assemblyFile : string, getMethodStream : IImage * MethodDefRow -> Stream, getExpectedStream : uint * ExceptionBlockHeader * Stream -> Stream) : void
+        private TestExceptionHandlerBlockWrite(assemblyFile : string, getMethodStream : IImage * IMethodDefRow -> Stream, getExpectedStream : uint * ExceptionBlockHeader * Stream -> Stream) : void
         {
             def imageStream = File.ReadAllBytes(assemblyFile);
 
@@ -685,7 +685,7 @@ namespace Tests
             def stringHeap = root.GetStringHeap();
 
             // Find the target method
-            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();            
+            def rows = tableHeap.GetRows.[IMethodDefRow]().ToArray();            
             def fatMethodRow = rows.First(r => r.Name.ToString(stringHeap) == "Main");
 
             def methodStream = getMethodStream(image, fatMethodRow);
@@ -714,20 +714,20 @@ namespace Tests
         }
         private TestFatMethodBody(assemblyFile : string, methodName : string, testFatBody : FatMethodBody -> void) : void
         {
-            def pickMatchingMethod(stringHeap : Stream, rows : array[MethodDefRow]) : MethodDefRow
+            def pickMatchingMethod(stringHeap : Stream, rows : array[IMethodDefRow]) : IMethodDefRow
             {
                 rows.First(r => r.Name.ToString(stringHeap) == methodName);
             }
             TestFatMethodBody(assemblyFile, pickMatchingMethod, testFatBody);
         }        
 
-        private TestFatMethodBody(assemblyFile : string, chooseMethodRow : Stream * array[MethodDefRow] -> MethodDefRow, testFatBody : FatMethodBody -> void) : void
+        private TestFatMethodBody(assemblyFile : string, chooseMethodRow : Stream * array[IMethodDefRow] -> IMethodDefRow, testFatBody : FatMethodBody -> void) : void
         {
             TestFatMethodBody(assemblyFile, chooseMethodRow, testFatBody, (image, fatMethodRow) => image.GetDataAt(fatMethodRow.Rva));
         }
         private TestFatMethodBody(assemblyFile : string, methodName : string, testFatBody : FatMethodBody -> void, methodStream : Stream) : void
         {
-            def pickMatchingMethod(stringHeap : Stream, rows : array[MethodDefRow]) : MethodDefRow
+            def pickMatchingMethod(stringHeap : Stream, rows : array[IMethodDefRow]) : IMethodDefRow
             {
                 rows.First(r => r.Name.ToString(stringHeap) == methodName);
             }
@@ -735,18 +735,18 @@ namespace Tests
         }
         private TestFatMethodBody(assemblyFile : string, testFatBody : FatMethodBody -> void) : void
         {
-            def pickFirstRow(stringHeap : Stream, rows : array[MethodDefRow]) : MethodDefRow
+            def pickFirstRow(stringHeap : Stream, rows : array[IMethodDefRow]) : IMethodDefRow
             {
                 rows[1];
             }
 
             TestFatMethodBody(assemblyFile, pickFirstRow, testFatBody);
         }
-        private TestFatMethodBody(assemblyFile : string, chooseMethodRow : Stream * array[MethodDefRow] -> MethodDefRow, testFatBody : FatMethodBody -> void, methodStream : Stream) : void
+        private TestFatMethodBody(assemblyFile : string, chooseMethodRow : Stream * array[IMethodDefRow] -> IMethodDefRow, testFatBody : FatMethodBody -> void, methodStream : Stream) : void
         {
             TestFatMethodBody(assemblyFile, chooseMethodRow, testFatBody, (image, fatMethodRow) => methodStream);            
         }
-        private TestFatMethodBody(assemblyFile : string, chooseMethodRow : Stream * array[MethodDefRow] -> MethodDefRow, testFatBody : FatMethodBody -> void, getMethodStream : IImage * MethodDefRow -> Stream) : void
+        private TestFatMethodBody(assemblyFile : string, chooseMethodRow : Stream * array[IMethodDefRow] -> IMethodDefRow, testFatBody : FatMethodBody -> void, getMethodStream : IImage * IMethodDefRow -> Stream) : void
         {
             def imageStream = File.ReadAllBytes(assemblyFile);
 
@@ -758,7 +758,7 @@ namespace Tests
             tableHeap.ReadFrom(tableStream);
 
             // Find the target method
-            def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();            
+            def rows = tableHeap.GetRows.[IMethodDefRow]().ToArray();            
             def fatMethodRow = chooseMethodRow(root.GetStringHeap(), rows);
 
             // Extract the method body stream

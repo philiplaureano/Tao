@@ -989,6 +989,9 @@
     <Compile Include="Metadata\TablesHeap.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\AbstractMetadataTable.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\AggregateTable.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1206,6 +1209,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\IMemberRefParentRow.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\Rows\IMethodDefRow.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Tables\Rows\ImplMapRow.n">

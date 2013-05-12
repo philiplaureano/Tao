@@ -20,7 +20,7 @@ namespace Tests
     {
         public ShouldBeAbleToExtractParentTableRowForMethodDefRows() : void
         {
-            ShouldBeAbleToExtractParentTableRow.[MethodDefTable, MethodDefRow]();
+            ShouldBeAbleToExtractParentTableRow.[MethodDefTable, IMethodDefRow](MethodDefRow);
         }        
         public ShouldBeAbleToExtractParentTableRowForFieldRows() : void
         {
@@ -136,6 +136,17 @@ namespace Tests
             actualParents.Contains(typeRows[0]).ShouldBeTrue("Missing parent type row");
             actualParents.Contains(typeRows[1]).ShouldBeTrue("Missing parent type row");
         }
+        private ShouldBeAbleToExtractParentTableRow[TTable, TRow](createRow : void -> TRow) : void
+            where TTable : new(), IMetadataTable[TRow]
+            where TRow : IHasCustomAttributeRow
+        {
+            def table = TTable();
+            def info = table :> IMetadataTableInfo;
+            def tableId = info.TableId;
+
+            TestExtractingParentTableRow.[TTable, TRow](tableId, createRow);
+        }
+        
         private ShouldBeAbleToExtractParentTableRow[TTable, TRow]() : void
             where TTable : new(), IMetadataTable[TRow]
             where TRow : IHasCustomAttributeRow, new()
@@ -144,12 +155,12 @@ namespace Tests
             def info = table :> IMetadataTableInfo;
             def tableId = info.TableId;
 
-            TestExtractingParentTableRow.[TTable, TRow](tableId);
+            TestExtractingParentTableRow.[TTable, TRow](tableId, () => TRow());
         }
 
-        private TestExtractingParentTableRow[TTable, TRow](tableId : TableId) : void
+        private TestExtractingParentTableRow[TTable, TRow](tableId : TableId, createRow : void -> TRow) : void
             where TTable : IMetadataTable[TRow], new()
-            where TRow : IHasCustomAttributeRow, new()
+            where TRow : IHasCustomAttributeRow
         {
             def index = Index.FromCodedToken(CodedTokenType.HasCustomAttribute, tableId, 1);
 
@@ -157,11 +168,12 @@ namespace Tests
             row.Parent= index;
 
             def table = TTable();
-            def otherRow = TRow();
+            def otherRow = createRow();
             table.Rows.Add(otherRow);
 
             def actualRow : IHasCustomAttributeRow = row.GetParentRowFrom(table);
-            actualRow.GetType().ShouldBeEqualTo(typeof(TRow), "Wrong Row Type");
+            def actualType = actualRow.GetType();
+            typeof(TRow).IsAssignableFrom(actualType).ShouldBeTrue("Wrong Row Type");
         }
     }
 }
