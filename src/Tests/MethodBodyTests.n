@@ -21,6 +21,61 @@ namespace Tests
 {
     public class MethodBodyTests
     {
+        public ShouldBeAbleToWriteMethodBodyToAStreamMap() : void
+        {
+            def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";
+            def image = Image.ReadFrom(assemblyFile);
+            def root = image.GetMetadataRoot();
+            
+            // Read the tables heap
+            def tableStream = root.GetTablesHeap();
+            def tableHeap = TablesHeap();            
+            tableHeap.ReadFrom(tableStream);
+            
+            // Read the original method body block
+            def codeBlockRva : uint = 0x2050;
+            def length : uint = 0x21;
+                        
+            def codeBlock = image.ReadBlock(codeBlockRva, length);
+            def expectedStream = TracerStream(codeBlock, MemoryStream());   
+            
+            // Create the writer itself
+            def map : IDictionary[string, uint] = Dictionary();
+            map["Hello, World!"] = 1;
+            map["Hello, World Again!"] = 0x1d;
+                        
+            
+            // Grab all the rows from the MethodDef table
+            def userStringHeap = root.GetUserStringHeap();
+            def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);
+            def bodyReader = MethodBodyReader(boundReader); 
+            def rows = tableHeap.GetRows.[MethodDefRow]();
+                        
+            def bodyRvaMap = Dictionary.[IMethodBody, uint]();
+            foreach(row in rows)
+            {
+                // Convert the rows into method bodies
+                def body = row.ReadMethodBodyFrom(image, bodyReader);            
+                
+                // Map the body code block to its relative position in the stream
+                def relativePosition = row.Rva - codeBlockRva;
+                bodyRvaMap[body] = relativePosition;
+            }                        
+            
+            
+            def userStringMap = UserStringMap(map);
+            def codeWriter : IMethodBodyWriter = MethodBodyWriter(userStringMap);
+            
+            // Invoking the codemap should yield the correct relative offsets
+            def codeMap = Map.[IMethodBody](codeWriter);
+            
+            foreach(body in bodyRvaMap.Keys)
+            {
+                def expectedOffset = bodyRvaMap[body];
+                codeMap.GetOffset(body).ShouldBeEqualTo(expectedOffset, "Wrong Code Body RVA");
+            }            
+        }
+        
         public ShouldBeAbleToWriteMultipleMethodBodiesIntoASingleStreamFromAGivenSetOfMethodDefRows() : void
         {
             def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";
@@ -33,7 +88,7 @@ namespace Tests
 
             // Grab all the rows from the MethodDef table
             def rows = tableHeap.GetRows.[MethodDefRow]().ToArray();
-            
+
             def codeBlockRva : uint = 0x2050;
             def length : uint = 0x21;
 
@@ -42,11 +97,11 @@ namespace Tests
 
             // Manually forge the expected stream
             def expectedStream = TracerStream(codeBlock, MemoryStream());
-            
+
             def map : IDictionary[string, uint] = Dictionary();
             map["Hello, World!"] = 1;
             map["Hello, World Again!"] = 0x1d;
-            
+
             def userStringHeap = root.GetUserStringHeap();            
             def stringMap = UserStringMap(map);
 
@@ -55,7 +110,7 @@ namespace Tests
             def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);
             def bodyReader = MethodBodyReader(boundReader); 
 
-            
+
             foreach(row in rows)
             {                                
                 def body = row.ReadMethodBodyFrom(image, bodyReader);            
@@ -403,6 +458,7 @@ namespace Tests
             def inputStream = ForgeMethodStream(targetAssembly, forgeHeader);
             TestFatMethodBody(targetAssembly, "Main", testFatBody, inputStream);            
         }
+
         public ShouldReadSingleFatExceptionHandlerBlock() : void        
         {            
             def assemblyFile = @"..\..\SampleBinaries\SampleAppWithExceptionHandlersInMethod.exe";                    
