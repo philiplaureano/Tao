@@ -50,7 +50,12 @@ namespace Tao.Metadata
 
             result;
         }
-
+        
+        public GetDeferredOffsetFunctionFrom([NotNull] item : TItem) : uint -> uint
+        {
+            baseRva => GetOffset(item) + baseRva;
+        }
+        
         public FlushContentsTo([NotNull] outputStream : Stream) : uint
             implements IWriter.Write
             requires outputStream.CanWrite

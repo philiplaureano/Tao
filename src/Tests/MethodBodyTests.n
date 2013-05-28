@@ -21,6 +21,16 @@ namespace Tests
 {
     public class MethodBodyTests
     {
+        public ShouldBeAbleToGetDeferredOffsetCalculationFromMap() : void
+        {
+            def baseRva : uint = 0x2050;
+            def relativeOffset : uint = 1;
+            def map = StringMap();
+            map.GetOffset("Foo").ShouldBeEqualTo(relativeOffset, "Wrong Offset");
+            
+            def getActualRva = map.GetDeferredOffsetFunctionFrom("Foo");
+            getActualRva(baseRva).ShouldBeEqualTo(baseRva + relativeOffset, "Wrong Offset");
+        }
         public ShouldBeAbleToWriteMethodBodyToAStreamMap() : void
         {
             def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";
@@ -46,7 +56,6 @@ namespace Tests
                         
             
             // Grab all the rows from the MethodDef table
-            def userStringHeap = root.GetUserStringHeap();
             def bodyReader = MethodBodyReader(root); 
             def rows = tableHeap.GetRows.[IMethodDefRow]();
                         
