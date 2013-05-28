@@ -156,10 +156,9 @@ namespace Tests
             def rows = tableHeap.GetRows.[IMethodDefRow]().ToArray();            
             def fatMethodRow = rows.First(r => r.Name.ToString(root.GetStringHeap()) == "Main");
 
-            // Extract the method body stream
-            def methodStream = image.GetDataAt(fatMethodRow.Rva);
-            def boundReader = BoundStringReader(UserStringHeapReader(), root.GetUserStringHeap());
-            def reader = MethodBodyReader(boundReader);
+            // Extract the method body stream            
+            def methodStream = image.GetDataAt(fatMethodRow.Rva);            
+            def reader = MethodBodyReader(root.GetUserStringHeap());
 
             def body = reader.Read(methodStream);         
             (body.Instructions.Count > 0).ShouldBeTrue("The method body reader failed to load the instructions for the method body");

@@ -29,7 +29,12 @@ namespace Tao.Metadata
             def boundReader = BoundStringReader(UserStringHeapReader(), userStringHeap);
             this(boundReader);
         }
-        
+        public this([NotNull] userStringHeap : Stream) 
+        {
+            def stringReader = UserStringHeapReader();
+            def boundReader = stringReader.BindTo(userStringHeap);
+            this(boundReader);
+        }
         public this([NotNull] stringReader : IBoundStringReader)
         {
             this(IndividualInstructionReader(stringReader));
