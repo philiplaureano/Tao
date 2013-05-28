@@ -14,9 +14,18 @@ using Tao.Metadata.Tables.Schemas;
 
 namespace Tao.Metadata.Tables
 {
-    public class MetadataTable[TRow] : MetadataTable[TRow, TRow] 
+    public class MetadataTable[TRow] : AbstractMetadataTable[TRow]
         where TRow : IRow, new(), class
-    {        
+    {
+        public this(targetTable : TableId, schemaReader : ISchemaReader[TRow], schemaWriter : ISchemaWriter[TRow])
+        {
+            base(targetTable, schemaReader, schemaWriter);
+        }
+
+        protected override CreateRow() : TRow
+        {
+            TRow();
+        }
     }
     
     public class MetadataTable[TRow, TConcreteRow] : AbstractMetadataTable[TRow]
