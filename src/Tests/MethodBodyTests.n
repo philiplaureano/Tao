@@ -21,6 +21,12 @@ namespace Tests
 {
     public class MethodBodyTests
     {
+        public stub ShouldBeAbleToCreateDeferredMethodDefRowFromMethodBody() : void
+        {
+            // Premise: Given a method body and a signature, Tao should be able to 
+            // generate a method def row that automatically adjusts its RVA to point
+            // to the correct location of the method body bytes
+        }
         public ShouldBeAbleToGetDeferredOffsetCalculationFromMap() : void
         {
             def baseRva : uint = 0x2050;
@@ -47,8 +53,6 @@ namespace Tests
             def length : uint = 0x21;
                         
             def codeBlock = image.ReadBlock(codeBlockRva, length);
-            def expectedStream = TracerStream(codeBlock, MemoryStream());   
-            
             // Create the writer itself
             def map : IDictionary[string, uint] = Dictionary();
             map["Hello, World!"] = 1;
