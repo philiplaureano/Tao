@@ -11,6 +11,7 @@ using Tao.Metadata.Tables.Rows;
 using Tao.Metadata.Instructions;
 using Tao.Metadata.Instructions.Operands;
 
+using FakeItEasy;
 using Tests.Macros;
 using System;
 using System.IO;
@@ -31,10 +32,15 @@ namespace Tests
         {
             def baseRva : uint = 0x2050;
             def relativeOffset : uint = 1;
-            def map = StringMap();
-            map.GetOffset("Foo").ShouldBeEqualTo(relativeOffset, "Wrong Offset");
+                                               
+            def codeWriter : IMethodBodyWriter = A.Fake.[IMethodBodyWriter]();
+            A.CallTo(() => codeWriter.Write(null, null)).WithAnyArguments().Returns(1);
             
-            def getActualRva = map.GetDeferredOffsetFunctionFrom("Foo");
+            def body = A.Fake.[IMethodBody]();
+            def map = Map.[IMethodBody](codeWriter);                        
+            map.GetOffset(body).ShouldBeEqualTo(relativeOffset, "Wrong Offset");
+            
+            def getActualRva = map.GetDeferredOffsetFunctionFrom(body);
             getActualRva(baseRva).ShouldBeEqualTo(baseRva + relativeOffset, "Wrong Offset");
         }
         public ShouldBeAbleToWriteMethodBodyToAStreamMap() : void
