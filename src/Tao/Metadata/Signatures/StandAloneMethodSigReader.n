@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Signatures
 {
-    public class StandAloneMethodSigReader : MethodSignatureReader[StandAloneMethodSignature]
+    public class StandAloneMethodSigReader : MethodSignatureReader[IMethodSignature, StandAloneMethodSignature]
     {
         protected override HasAlternateCallingConvention(nextByte : byte) : bool
         {

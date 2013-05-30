@@ -12,7 +12,7 @@ using System.Linq;
 namespace Tao.Metadata.Signatures
 {
     public abstract class MethodSignatureWriter[TSignature] : IMethodSignatureWriter[TSignature]
-        where TSignature : IMethodSignature, new()
+        where TSignature : IMethodSignature
     {
         public virtual Write(signature : TSignature, [NotNull] stream : Stream) : void
             requires !ReferenceEquals(signature.ReturnType, null) otherwise throw ArgumentException("The signature must have a valid return type")            

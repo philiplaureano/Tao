@@ -11,9 +11,9 @@ using System.Linq;
 
 namespace Tao.Metadata.Signatures
 {
-    public class MethodDefSignatureWriter : ManagedMethodSignatureWriter[MethodDefSignature]
+    public class MethodDefSignatureWriter : ManagedMethodSignatureWriter[IManagedMethodSignature]
     {        
-        public override Write(signature : MethodDefSignature, [NotNull] stream : Stream) : void
+        public override Write(signature : IManagedMethodSignature, [NotNull] stream : Stream) : void
             requires object.Equals(signature.Parameters.Count, signature.ParameterCount :> int) 
                 otherwise throw ArgumentException("The signature's parameter count does not match the number of parameters in its parameter collection")
         {

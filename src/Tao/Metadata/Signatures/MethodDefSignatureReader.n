@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Signatures
 {  
-    public class MethodDefSignatureReader : ManagedMethodSignatureReader[MethodDefSignature]
+    public class MethodDefSignatureReader : ManagedMethodSignatureReader[IManagedMethodSignature, MethodDefSignature]
     {        
     }
 }

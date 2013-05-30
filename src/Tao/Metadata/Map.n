@@ -14,7 +14,7 @@ using Tao;
 using Tao.Interfaces;
 namespace Tao.Metadata
 {
-    public class Map[TItem] : IWriter
+    public class Map[TItem] : IWriter, IMap[TItem]
         where TItem : class
     {        
         private _map : IDictionary.[TItem, uint] = ConcurrentDictionary.[TItem, uint]();

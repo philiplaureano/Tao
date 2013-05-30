@@ -11,7 +11,7 @@ using System.Linq;
 namespace Tao.Metadata.Signatures
 {
     public abstract class ManagedMethodSignatureWriter[TSignature] : MethodSignatureWriter[TSignature]
-    where TSignature : IManagedMethodSignature, new()
+    where TSignature : IManagedMethodSignature
     {
         protected override HasAlternateCallingConvention(signature : TSignature) : bool
         {

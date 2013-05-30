@@ -11,8 +11,9 @@ using System.Linq;
 
 namespace Tao.Metadata.Signatures
 {
-    public abstract class ManagedMethodSignatureReader[TSignature] : MethodSignatureReader[TSignature]
-        where TSignature : IManagedMethodSignature, new()
+    public abstract class ManagedMethodSignatureReader[TSignature, TSignatureImpl] : MethodSignatureReader[TSignature, TSignatureImpl]
+        where TSignature : IManagedMethodSignature
+        where TSignatureImpl : TSignature, new()
     {
         protected override HasAlternateCallingConvention(nextByte : byte) : bool
         {
@@ -22,7 +23,7 @@ namespace Tao.Metadata.Signatures
             conventionByte == (CallingConvention.Generic :> byte);
         }
 
-        protected override ReadAlternateCallingConvention(nextByte : byte, signature : TSignature,  stream : Stream) : void
+        protected override ReadAlternateCallingConvention(nextByte : byte, signature : TSignatureImpl,  stream : Stream) : void
         {
             // Read the number of generic parameters as a compressed unsigned int                
             def integerReader = CompressedIntegerReader();            

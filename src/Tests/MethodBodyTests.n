@@ -6,6 +6,8 @@ using Nemerle.Utility;
 using Tao;
 using Tao.Interfaces;
 using Tao.Metadata;
+using Tao.Metadata.Methods;
+using Tao.Metadata.Signatures;
 using Tao.Metadata.Tables;
 using Tao.Metadata.Tables.Rows;
 using Tao.Metadata.Instructions;
@@ -22,21 +24,53 @@ namespace Tests
 {
     public class MethodBodyTests
     {
+        public ShouldBeAbleToCreateMethodDefRowFromMethodBody() : void
+        {
+            def codeWriter : IMethodBodyWriter = A.Fake.[IMethodBodyWriter]();
+            A.CallTo(() => codeWriter.Write(null, null)).WithAnyArguments().Returns(1);
+
+            def body = A.Fake.[IMethodBody]();
+
+            def methodMap = Map.[IMethodBody](codeWriter);
+            def blobMap = A.Fake.[IMap.[Stream]]();
+            def entries = Dictionary.[string, uint]();
+            def stringMap : IMap.[string] = UserStringMap(entries);
+
+            def baseRva : uint = 0x2050;
+            def getBaseRva() : uint
+            {
+                baseRva;
+            }
+
+            def flags : uint = 1;
+            def implFlags : uint = 1;
+
+            def signature = A.Fake.[IManagedMethodSignature]();
+            def builder = MethodDefRowBuilder(methodMap, blobMap, stringMap, getBaseRva);
+            def row = builder.CreateRow("Foo", flags, implFlags, body, signature);
+
+            methodMap.Contains(body).ShouldBeTrue("The method def row builder should have added the method body to the method map");
+            A.CallTo(() =>blobMap.GetOffset(null)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() =>stringMap.GetOffset("Foo")).MustHaveHappened();
+
+            def expectedRva : uint = 1;
+            row.Rva.ShouldBeEqualTo(baseRva + expectedRva, "Wrong Rva");
+        }
         public ShouldBeAbleToCreateDeferredMethodDefRowFromDeferredRva() : void
         {
             // Premise: Given a deferred code block base RVA and a method signature, Tao should be able to 
             // generate a method def row that automatically adjusts its RVA to point
             // to the correct location of the method body bytes
-            
+
             def name = A.Fake.[IIndex]();
             def signature = A.Fake.[IIndex]();
             def paramList = A.Fake.[IIndex]();
             def flags : ushort = 0;
             def implFlags : ushort = 0;
-            
+
             def baseRva : uint = 0x2050;
             def rva : uint = 1;           
-            
+
             def row : IMethodDefRow = DeferredMethodDefRow(name, signature, paramList, implFlags, flags, () => baseRva, baseRva : uint => baseRva + rva);
             row.Rva.ShouldBeEqualTo(baseRva + rva, "Wrong Rva");
         }
@@ -44,14 +78,14 @@ namespace Tests
         {
             def baseRva : uint = 0x2050;
             def relativeOffset : uint = 1;
-                                               
+
             def codeWriter : IMethodBodyWriter = A.Fake.[IMethodBodyWriter]();
             A.CallTo(() => codeWriter.Write(null, null)).WithAnyArguments().Returns(1);
-            
+
             def body = A.Fake.[IMethodBody]();
             def map = Map.[IMethodBody](codeWriter);                        
             map.GetOffset(body).ShouldBeEqualTo(relativeOffset, "Wrong Offset");
-            
+
             def getActualRva = map.GetDeferredOffsetFunctionFrom(body);
             getActualRva(baseRva).ShouldBeEqualTo(baseRva + relativeOffset, "Wrong Offset");
         }
@@ -60,50 +94,50 @@ namespace Tests
             def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";
             def image = Image.ReadFrom(assemblyFile);
             def root = image.GetMetadataRoot();
-            
+
             // Read the tables heap
             def tableStream = root.GetTablesHeap();
             def tableHeap = TablesHeap();            
             tableHeap.ReadFrom(tableStream);
-            
+
             // Read the original method body block
             def codeBlockRva : uint = 0x2050;
             def length : uint = 0x21;
-                        
+
             def codeBlock = image.ReadBlock(codeBlockRva, length);
             // Create the writer itself
             def map : IDictionary[string, uint] = Dictionary();
             map["Hello, World!"] = 1;
             map["Hello, World Again!"] = 0x1d;
-                        
-            
+
+
             // Grab all the rows from the MethodDef table
             def bodyReader = MethodBodyReader(root); 
             def rows = tableHeap.GetRows.[IMethodDefRow]();
-                        
+
             def bodyRvaMap = Dictionary.[IMethodBody, uint]();
             foreach(row in rows)
             {
                 // Convert the rows into method bodies
                 def body = row.ReadMethodBodyFrom(image, bodyReader);            
-                
+
                 // Map the body code block to its relative position in the stream
                 def relativePosition = row.Rva - codeBlockRva;
                 bodyRvaMap[body] = relativePosition;
             }                        
-                        
+
             def codeWriter : IMethodBodyWriter = MethodBodyWriter(map);
-            
+
             // Invoking the codemap should yield the correct relative offsets
             def codeMap = Map.[IMethodBody](codeWriter);
-            
+
             foreach(body in bodyRvaMap.Keys)
             {
                 def expectedOffset = bodyRvaMap[body];
                 codeMap.GetOffset(body).ShouldBeEqualTo(expectedOffset, "Wrong Code Body RVA");
             }            
         }
-        
+
         public ShouldBeAbleToWriteMultipleMethodBodiesIntoASingleStreamFromAGivenSetOfMethodDefRows() : void
         {
             def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";
