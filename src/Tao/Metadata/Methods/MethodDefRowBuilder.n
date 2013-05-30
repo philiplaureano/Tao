@@ -1,0 +1,53 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Metadata;
+using Tao.Metadata.Signatures;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+namespace Tao.Metadata.Methods
+{
+    public class MethodDefRowBuilder
+    {       
+        private _methodMap : IMap.[IMethodBody];
+        private _blobMap : IMap.[Stream];
+        private _stringMap : IMap.[string];
+        private _getCodeBlockRva : void -> uint;
+        
+        public this([NotNull] methodMap : IMap.[IMethodBody], [NotNull] blobMap : IMap.[Stream], 
+            [NotNull] stringMap : IMap.[string], [NotNull] getCodeBlockRva : void -> uint)
+        {
+            _methodMap = methodMap;
+            _blobMap = blobMap;
+            _stringMap = stringMap;
+            _getCodeBlockRva = getCodeBlockRva;
+        }
+        
+        public CreateRow([NotNull] methodName : string, flags : uint, implFlags : uint, [NotNull] body : IMethodBody, [NotNull] signature : IManagedMethodSignature) : IMethodDefRow
+            ensures value != null
+        {   
+            def signatureStream = MemoryStream();
+            def signatureWriter = MethodDefSignatureWriter();
+            signatureWriter.Write(signature, signatureStream);
+            
+            def nameRva = _stringMap.GetOffset(methodName);            
+            def rva = _methodMap.GetOffset(body);
+            def getActualRva() : uint
+            {
+                def baseRva = _getCodeBlockRva();
+                baseRva + rva;
+            }
+            
+            throw NotImplementedException("TODO: Implement this method");
+        }
+    }
+}
