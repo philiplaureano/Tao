@@ -1,0 +1,23 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+
+namespace Tao.Metadata
+{
+  public static class StringReaderExtensions
+  {
+      public static BindTo([NotNull] this reader : IStringReader, [NotNull] stringStream : Stream) : IBoundStringReader
+      {
+          BoundStringReader(reader, stringStream);
+      }
+  }
+}

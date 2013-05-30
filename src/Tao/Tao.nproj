@@ -1172,6 +1172,9 @@
     <Compile Include="Metadata\Tables\Rows\DeclSecurityRow.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Tables\Rows\DeferredMethodDefRow.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Tables\Rows\EventMapRow.n">
       <SubType>Code</SubType>
     </Compile>

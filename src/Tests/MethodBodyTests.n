@@ -22,11 +22,23 @@ namespace Tests
 {
     public class MethodBodyTests
     {
-        public stub ShouldBeAbleToCreateDeferredMethodDefRowFromMethodBody() : void
+        public ShouldBeAbleToCreateDeferredMethodDefRowFromDeferredRva() : void
         {
-            // Premise: Given a method body and a signature, Tao should be able to 
+            // Premise: Given a deferred code block base RVA and a method signature, Tao should be able to 
             // generate a method def row that automatically adjusts its RVA to point
             // to the correct location of the method body bytes
+            
+            def name = A.Fake.[IIndex]();
+            def signature = A.Fake.[IIndex]();
+            def paramList = A.Fake.[IIndex]();
+            def flags : ushort = 0;
+            def implFlags : ushort = 0;
+            
+            def baseRva : uint = 0x2050;
+            def rva : uint = 1;           
+            
+            def row : IMethodDefRow = DeferredMethodDefRow(name, signature, paramList, implFlags, flags, () => baseRva, baseRva : uint => baseRva + rva);
+            row.Rva.ShouldBeEqualTo(baseRva + rva, "Wrong Rva");
         }
         public ShouldBeAbleToGetDeferredOffsetCalculationFromMap() : void
         {

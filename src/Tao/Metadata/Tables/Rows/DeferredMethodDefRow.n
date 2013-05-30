@@ -1,0 +1,53 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao.Metadata.Tables.Rows
+{
+    public class DeferredMethodDefRow : MethodDefRow
+    {
+        private _getMethodRva : void -> uint;
+
+        public this([NotNull] name : IIndex, [NotNull] signature : IIndex, [NotNull] paramList : IIndex, implFlags : ushort, flags : ushort, 
+            [NotNull] getBaseRva : void -> uint, [NotNull] getActualRva : uint -> uint)
+        {
+            def getMethodRva() : uint
+            {
+                def baseRva = getBaseRva();
+                getActualRva(baseRva);
+            }
+            
+            this(name, signature, paramList, implFlags, flags, getMethodRva);
+        }
+        
+        public this([NotNull] name : IIndex, [NotNull] signature : IIndex, [NotNull] paramList : IIndex, implFlags : ushort, flags : ushort, 
+            [NotNull] getMethodRva : void -> uint)
+        {
+            Name = name;
+            Signature  = signature;
+            ParamList = paramList;
+            ImplFlags = implFlags;
+            Flags = flags;
+
+            _getMethodRva = getMethodRva;
+        }
+
+        public override Rva : uint
+        {
+            get
+            {
+                _getMethodRva();
+            }
+            set
+            {
+                throw NotSupportedException("Deferred method rows are read-only by default and cannot be modified");
+            }
+        }
+    }
+}

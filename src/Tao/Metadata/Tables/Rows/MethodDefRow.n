@@ -17,12 +17,12 @@ namespace Tao.Metadata.Tables.Rows
 {
     public class MethodDefRow : IMethodDefRow
     {
-        public Rva : uint { get; set; }
-        public ImplFlags : ushort {get; set; }
-        public Flags : ushort { get; set; }
-        public Name : IIndex { get; set; }
-        public Signature : IIndex { get; set; }
-        public ParamList : IIndex { get; set; }
+        public virtual Rva : uint { get; set; }
+        public virtual ImplFlags : ushort {get; set; }
+        public virtual Flags : ushort { get; set; }
+        public virtual Name : IIndex { get; set; }
+        public virtual Signature : IIndex { get; set; }
+        public virtual ParamList : IIndex { get; set; }
         public RowIndex : uint { get; set; }
         public TableId : TableId 
         { 
