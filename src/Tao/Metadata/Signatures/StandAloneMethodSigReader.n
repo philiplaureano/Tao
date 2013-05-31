@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Signatures
 {
-    public class StandAloneMethodSigReader : MethodSignatureReader[IMethodSignature, StandAloneMethodSignature]
+    public class StandAloneMethodSigReader : MethodSignatureReader[IMethodSignature]
     {
         protected override HasAlternateCallingConvention(nextByte : byte) : bool
         {
@@ -36,7 +36,7 @@ namespace Tao.Metadata.Signatures
             
             result;
         }
-        protected override ReadAlternateCallingConvention(nextByte : byte, [NotNull] signature : StandAloneMethodSignature, [NotNull] stream : Stream) : void
+        protected override ReadAlternateCallingConvention(nextByte : byte, [NotNull] signature : IMethodSignature, [NotNull] stream : Stream) : void
         {
             def actions = System.Collections.Generic.Dictionary.[CallingConvention, StandAloneMethodSignature-> void]();
             
@@ -53,10 +53,15 @@ namespace Tao.Metadata.Signatures
                 def hasFlag = conventionByte == (convention :> byte);
                 when(hasFlag && !flagAlreadyFound)
                 {
-                    actions[convention](signature);
+                    actions[convention](signature :> StandAloneMethodSignature);
                     flagAlreadyFound = true;
                 }
             }
+        }
+        
+        protected override CreateSignature() : IMethodSignature
+        {
+            StandAloneMethodSignature();
         }
     }
 }

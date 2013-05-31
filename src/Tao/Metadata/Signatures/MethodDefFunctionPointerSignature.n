@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tao.Metadata.Signatures
 {
-  public class MethodDefFunctionPointerSignature : FunctionPointerSignature[MethodDefSignature]
+  public class MethodDefFunctionPointerSignature : FunctionPointerSignature[IManagedMethodSignature]
   {
       public this() 
       {

@@ -11,16 +11,15 @@ using System.Linq;
 
 namespace Tao.Metadata.Signatures
 {
-    public abstract class MethodSignatureReader[TSignature, TSignatureImpl] : IMethodSignatureReader[TSignature]
+    public abstract class MethodSignatureReader[TSignature] : IMethodSignatureReader[TSignature]
         where TSignature : IMethodSignature
-        where TSignatureImpl : TSignature, new()
     {
         public Read([NotNull] stream : Stream) : TSignature
             requires stream.CanRead
             requires stream.Position < stream.Length otherwise throw InvalidOperationException("Unable to read past the end of the stream. (Did you forget to reset the stream pointer?)")
             ensures !ReferenceEquals(value, null)
         {
-            def signature = TSignatureImpl();
+            def signature = CreateSignature();
 
             ReadCallingConvention(signature, stream);
 
@@ -80,8 +79,9 @@ namespace Tao.Metadata.Signatures
             }
         }
 
+        protected abstract CreateSignature() : TSignature;        
         protected abstract HasAlternateCallingConvention(nextByte : byte) : bool;       
-        protected abstract ReadAlternateCallingConvention(nextByte : byte, signature : TSignatureImpl,  stream : Stream) : void;
+        protected abstract ReadAlternateCallingConvention(nextByte : byte, signature : TSignature,  stream : Stream) : void;
 
         protected virtual ReadParameters(parameterCount : uint, [NotNull] stream : Stream, signature : TSignature) : void
             requires parameterCount == 0 || (parameterCount > 0 && stream.Position < stream.Length) otherwise throw InvalidOperationException("Unable to read past the end of the stream")

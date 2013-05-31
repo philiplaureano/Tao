@@ -33,7 +33,7 @@ namespace Tao.Metadata.Methods
         }
         
         public CreateRow([NotNull] methodName : string, flags : uint, implFlags : uint, [NotNull] body : IMethodBody, [NotNull] signature : IManagedMethodSignature) : IMethodDefRow
-            ensures value != null
+            ensures value != null            
         {   
             def signatureStream = MemoryStream();
             def signatureWriter = MethodDefSignatureWriter();

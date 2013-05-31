@@ -11,13 +11,15 @@ using System.Linq;
 
 namespace Tao.Metadata.Signatures
 {
-    public class MethodRefSignatureReader : ManagedMethodSignatureReader[IManagedMethodSignature, MethodRefSignature]
+    public class MethodRefSignatureReader : ManagedMethodSignatureReader[IManagedMethodSignature]
     {
         protected override ReadParameters(parameterCount : uint, [NotNull] stream : Stream, signature : IManagedMethodSignature) : void
         {
+            def methodRefSignature = signature :> MethodRefSignature;
             mutable sentinelReached = false;
+            mutable parameters = methodRefSignature.Parameters;
+
             for(mutable i : uint = 0; i < parameterCount; i++)
-            mutable parameters = signature.Parameters;
             {
                 def nextByte = stream.PeekByte();
                 when(!sentinelReached && nextByte == MethodSignature.Sentinel)
@@ -26,17 +28,22 @@ namespace Tao.Metadata.Signatures
                     sentinelReached = true;
                     _ = stream.Seek(1, SeekOrigin.Current);
                 }
-                
+
                 def paramReader = ParamReader();
                 def currentParam = paramReader.Read(stream);
-                
+
+
                 when(sentinelReached)
                 {
-                    parameters = signature.AdditionalParameters;
+                    parameters = methodRefSignature.AdditionalParameters;
                 }
-                
+
                 parameters.Add(currentParam);
             }
+        }
+        protected override CreateSignature() : IManagedMethodSignature
+        {
+            MethodRefSignature();
         }
     }
 }

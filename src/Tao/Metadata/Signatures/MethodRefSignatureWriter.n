@@ -11,14 +11,16 @@ using System.Linq;
 
 namespace Tao.Metadata.Signatures
 {
-    public class MethodRefSignatureWriter : ManagedMethodSignatureWriter[MethodRefSignature]
+    public class MethodRefSignatureWriter : ManagedMethodSignatureWriter[IManagedMethodSignature]
     {
-        protected override WriteParameters([NotNull] signature : MethodRefSignature, [NotNull] stream : Stream) : void
-            requires Equals(signature.ParameterCount, ((signature.AdditionalParameters.Count + signature.Parameters.Count) :> uint))
+        protected override WriteParameters([NotNull] signature : IManagedMethodSignature, [NotNull] stream : Stream) : void
+            requires Equals((signature :> MethodRefSignature).ParameterCount, 
+            (((signature :> MethodRefSignature).AdditionalParameters.Count + (signature :> MethodRefSignature).Parameters.Count) :> uint))
                 otherwise throw ArgumentException("Invalid MethodRefSignature; the total ParameterCount doesn't match the actual number of parameters in the signature")
         {
             def paramWriter = ParamWriter();
-            foreach(currentParam in signature.Parameters)
+            def methodSignature = signature :> MethodRefSignature;
+            foreach(currentParam in methodSignature.Parameters)
             {
                 paramWriter.Write(currentParam, stream);
             }
@@ -27,7 +29,7 @@ namespace Tao.Metadata.Signatures
             stream.WriteByte(MethodSignature.Sentinel);            
             
             // Write the additional parameters
-            foreach(currentParam in signature.AdditionalParameters)
+            foreach(currentParam in methodSignature.AdditionalParameters)
             {
                 paramWriter.Write(currentParam, stream);
             }

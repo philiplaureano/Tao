@@ -45,7 +45,10 @@ namespace Tests
             def flags : uint = 1;
             def implFlags : uint = 1;
 
-            def signature = A.Fake.[IManagedMethodSignature]();
+            def signature = MethodDefSignature();
+            signature.ReturnType = RetType(VoidSignature.Instance);
+            signature.UsesDefaultCallingConvention = true;
+            
             def builder = MethodDefRowBuilder(methodMap, blobMap, stringMap, getBaseRva);
             def row = builder.CreateRow("Foo", flags, implFlags, body, signature);
 

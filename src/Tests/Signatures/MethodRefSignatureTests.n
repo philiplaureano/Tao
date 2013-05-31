@@ -25,7 +25,7 @@ namespace Tests
             def inputStream = MemoryStream(GetSampleSignatureBytes());
             def reader = MethodRefSignatureReader();
             
-            def signature = reader.Read(inputStream);
+            def signature = reader.Read(inputStream) :> MethodRefSignature;
             signature.ShouldBeNotNull("There should be a valid signature here");
             signature.Parameters.Count.ShouldBeEqualTo(1, "Wrong Parameter Count");
             signature.Parameters[0].Type.ElementType.ShouldBeEqualTo(ElementType.I4, "Wrong Element Type");

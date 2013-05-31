@@ -25,28 +25,28 @@ namespace Tests
       {
           def inputStream = MemoryStream(GetSampleBytes(CallingConvention.C));
           def reader = StandAloneMethodSigReader();
-          def signature = reader.Read(inputStream);
+          def signature = reader.Read(inputStream) :> StandAloneMethodSignature;
           signature.UsesCCallingConvention.ShouldBeTrue("This signature should be using the C calling convention");
       }
       public ShouldBeAbleToReadSignatureWithThisCallCallingConvention() : void
       {
           def inputStream = MemoryStream(GetSampleBytes(CallingConvention.ThisCall));
           def reader = StandAloneMethodSigReader();
-          def signature = reader.Read(inputStream);
+          def signature = reader.Read(inputStream) :> StandAloneMethodSignature;
           signature.UsesThisCallCallingConvention.ShouldBeTrue("This signature should be using the ThisCall calling convention");
       }
       public ShouldBeAbleToReadSignatureWithFastCallCallingConvention() : void
       {
           def inputStream = MemoryStream(GetSampleBytes(CallingConvention.FastCall));
           def reader = StandAloneMethodSigReader();
-          def signature = reader.Read(inputStream);
+          def signature = reader.Read(inputStream) :> StandAloneMethodSignature;
           signature.UsesFastCallCallingConvention.ShouldBeTrue("This signature should be using the FastCall calling convention");
       }
       public ShouldBeAbleToReadSignatureWithStdCallingConvention() : void
       {
           def inputStream = MemoryStream(GetSampleBytes(CallingConvention.StdCall));
           def reader = StandAloneMethodSigReader();
-          def signature = reader.Read(inputStream);
+          def signature = reader.Read(inputStream) :> StandAloneMethodSignature;
           signature.UsesStdCallingConvention.ShouldBeTrue("This signature should be using the StdCall calling convention");
       }      
       public ShouldBeAbleToWriteSignatureWithCCallingConvention() : void
