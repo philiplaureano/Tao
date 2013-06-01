@@ -42,20 +42,21 @@ namespace Tests
                 baseRva;
             }
 
-            def flags : uint = 1;
-            def implFlags : uint = 1;
+            def flags : ushort = 1;
+            def implFlags : ushort = 1;
 
             def signature = MethodDefSignature();
             signature.ReturnType = RetType(VoidSignature.Instance);
             signature.UsesDefaultCallingConvention = true;
             
             def builder = MethodDefRowBuilder(methodMap, blobMap, stringMap, getBaseRva);
-            def row = builder.CreateRow("Foo", flags, implFlags, body, signature);
+            def row = builder.CreateRow("Foo", flags, implFlags, body, signature, Index.Auto(0));
 
             methodMap.Contains(body).ShouldBeTrue("The method def row builder should have added the method body to the method map");
             A.CallTo(() =>blobMap.GetOffset(null)).WithAnyArguments().MustHaveHappened();
-            A.CallTo(() =>stringMap.GetOffset("Foo")).MustHaveHappened();
 
+            stringMap.Contains("Foo").ShouldBeTrue("The string map should contain the name of the method that was just recently added");
+            
             def expectedRva : uint = 1;
             row.Rva.ShouldBeEqualTo(baseRva + expectedRva, "Wrong Rva");
         }
