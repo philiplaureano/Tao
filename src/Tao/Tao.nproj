@@ -698,7 +698,13 @@
     <Compile Include="Metadata\Methods\IMethodBodyWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Methods\MethodAttributes.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Methods\MethodDefRowBuilder.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Methods\MethodImplAttributes.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Methods\MethodStreamWriter.n">
