@@ -37,9 +37,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="Nemerle, Version=1.1.1100.0, Culture=neutral, PublicKeyToken=e080a9c724e2bfcd">
+    <Reference Include="Nemerle, Culture=neutral, PublicKeyToken=e080a9c724e2bfcd">
       <Name>Nemerle</Name>
       <AssemblyName>Nemerle.dll</AssemblyName>
+      <SpecificVersion>false</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Nemerle\net-4.0\Nemerle.dll</HintPath>
     </Reference>
     <Reference Include="System" />
