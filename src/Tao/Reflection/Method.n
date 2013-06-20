@@ -17,13 +17,13 @@ using Tao.Metadata.Tables.Rows;
 
 namespace Tao.Reflection
 {
-    public class Method
+    public class Method : IMethod
     {
         [Accessor(Name, flags = WantSetter)] private mutable _name	: string;
         [Accessor(Flags, flags = WantSetter)] private mutable _flags : MethodAttributes;    
         [Accessor(ImplFlags, flags = WantSetter)] private mutable _implFlags : MethodImplAttributes;
         [Accessor(Body, flags = WantSetter)] private mutable _body : IMethodBody;
-        [Accessor(Signature, flags = WantSetter)] private mutable _signature : IMethodSignature;
+        [Accessor(Signature, flags = WantSetter)] private mutable _signature : IManagedMethodSignature;
         [Accessor(ParamList, flags = WantSetter)] private mutable _paramList : IIndex;
     }
 }

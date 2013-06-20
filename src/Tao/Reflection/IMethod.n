@@ -1,0 +1,29 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata;
+using Tao.Metadata.Methods;
+using Tao.Metadata.Signatures;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+
+namespace Tao.Reflection
+{
+    public interface IMethod
+    {
+        Name : string { get; set; }
+        Flags : MethodAttributes { get; set; }
+        ImplFlags : MethodImplAttributes { get; set; }
+        Body : IMethodBody { get;set; }
+        Signature : IManagedMethodSignature { get; set; }
+        ParamList : IIndex { get; set; }
+    }
+}

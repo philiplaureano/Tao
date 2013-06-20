@@ -705,6 +705,9 @@
     <Compile Include="Metadata\Methods\MethodDefRowBuilder.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Metadata\Methods\MethodDefRowBuilderExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Metadata\Methods\MethodImplAttributes.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1615,6 +1618,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
+    <Compile Include="Reflection\IMethod.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Reflection\Method.n">
       <SubType>Code</SubType>
     </Compile>
