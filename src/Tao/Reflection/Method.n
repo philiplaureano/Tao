@@ -1,0 +1,29 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Metadata;
+using Tao.Metadata.Methods;
+using Tao.Metadata.Signatures;
+using Tao.Metadata.Tables;
+using Tao.Metadata.Tables.Rows;
+
+namespace Tao.Reflection
+{
+    public class Method
+    {
+        [Accessor(Name, flags = WantSetter)] private mutable _name	: string;
+        [Accessor(Flags, flags = WantSetter)] private mutable _flags : MethodAttributes;    
+        [Accessor(ImplFlags, flags = WantSetter)] private mutable _implFlags : MethodImplAttributes;
+        [Accessor(Body, flags = WantSetter)] private mutable _body : IMethodBody;
+        [Accessor(Signature, flags = WantSetter)] private mutable _signature : IMethodSignature;
+        [Accessor(ParamList, flags = WantSetter)] private mutable _paramList : IIndex;
+    }
+}

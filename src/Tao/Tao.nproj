@@ -1615,6 +1615,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
+    <Compile Include="Reflection\Method.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RuntimeFlags.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1671,6 +1674,7 @@
     <Folder Include="Metadata\Tables\Schemas\" />
     <Folder Include="Metadata\Tables\Schemas\Readers\" />
     <Folder Include="Metadata\Tables\Schemas\Writers\" />
+    <Folder Include="Reflection" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(Nemerle)\Nemerle.MSBuild.targets" />
