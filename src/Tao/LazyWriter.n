@@ -1,0 +1,31 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+using Tao.Interfaces;
+
+namespace Tao
+{
+    public class LazyWriter[T] : IWriter
+    {
+        private _getItem : void -> T;
+        private _writer : IWriter.[T];
+        public this([NotNull] getItem : void -> T, [NotNull] writer : IWriter.[T])
+        {
+            _getItem = getItem;
+            _writer = writer;
+        }
+
+        public Write([NotNull] stream : Stream) : uint
+        {
+            _writer.Write(_getItem(), stream);
+        }
+    }
+}

@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+
+namespace Tao
+{
+    public static class WriterExtensions
+    {
+        public static AsLazyWriter[T]([NotNull] this writer : IWriter.[T], resolveItem : void -> T) : IWriter
+        {
+            LazyWriter(resolveItem, writer);
+        }        
+    }
+}

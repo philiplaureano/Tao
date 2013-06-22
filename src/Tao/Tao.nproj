@@ -1657,6 +1657,9 @@
     <Compile Include="SectionWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SlackWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="StreamBuilder.n">
       <SubType>Code</SubType>
     </Compile>

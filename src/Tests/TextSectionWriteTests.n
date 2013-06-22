@@ -16,7 +16,21 @@ namespace Tests
 {
     public class TextSectionWriteTests
     {
-        public stub ShouldBeAbleToWriteCLIHeaderWithPadding() :void
+        public ShouldBeAbleToWriteZeroPaddingIntoSlackSpace() : void
+        {
+            def getNextRva : void -> uint = () => 0x2054 : uint;
+            def getPreviousRva : void -> uint = () => 0x2008 : uint;
+            def getPreviousSize : void -> uint = () => 0x48 : uint;
+            
+            def expectedBytes = array[0 : byte, 0, 0, 0];
+            
+            def outputStream = MemoryStream();
+            def slackWriter = SlackWriter(getNextRva, getPreviousRva, getPreviousSize);
+            slackWriter.Write(outputStream);
+            
+            expectedBytes.ShouldMatch(outputStream);
+        }
+        public stub ShouldBeAbleToWriteCLIHeaderWithPadding() : void
         {
             def assemblyFile = @"..\..\SampleBinaries\Skeleton.exe";
             def image = Image.ReadFrom(assemblyFile);
