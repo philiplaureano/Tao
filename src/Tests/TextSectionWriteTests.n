@@ -16,6 +16,38 @@ namespace Tests
 {
     public class TextSectionWriteTests
     {
+        public stub ShouldBeAbleToWriteCLIHeaderWithPadding() :void
+        {
+            def assemblyFile = @"..\..\SampleBinaries\Skeleton.exe";
+            def image = Image.ReadFrom(assemblyFile);
+
+            def textSection = GetTextSectionFrom(assemblyFile);
+            def sectionData = textSection.Data;
+
+            def header = textSection.Header;
+            def clrDirectory = image.DataDirectories[15];
+            def clrRva = clrDirectory.Rva - header.VirtualAddress;
+            
+            // Grab the CLI Header data
+            def cliHeaderData = image.ReadBlock(clrDirectory.Rva, clrDirectory.Size);
+
+            def methodBodyRva : uint = 0x2050;
+            
+            // TODO: Create the expected stream, which is a combination of the CLI header and the padding block
+            // TODO: Execute the block writer
+            // TODO: Assert that the written block matches the expected block
+        }
+
+        private GetTextSectionFrom(assemblyFile : string) : ISection
+        {
+            def image = Image.ReadFrom(assemblyFile);
+            def headers = image.Sections.Select(s => s.Header);
+            headers.Where(s => s.Name == ".text").Count().ShouldNotBeEqualTo(0, "There should be a .text section here");
+
+            def textSection = image.Sections.Where(s => s.Header != null && s.Header.Name == ".text").First();
+            textSection.ShouldBeNotNull("There should be a .text section here");
+            textSection;
+        }
         public ShouldGenerateImportAddressTable() : void
         {
             def assemblyFile = @"..\..\SampleBinaries\Skeleton.exe";
@@ -54,33 +86,33 @@ namespace Tests
             // The bytes should always be "mscoree.dll" followed by two null terminators            
             def expectedBytes = array[0x6D : byte, 0x73, 0x63, 0x6F, 0x72, 0x65, 0x65, 0x2E, 0x64, 0x6C, 0x6C, 0x00, 0x00];
             def outputStream = MemoryStream();
-            
+
             def writer = MscorlibNameWriter();
             writer.Write(outputStream);
-            
+
             expectedBytes.ShouldCompletelyMatch(outputStream);
         }
         public ShouldWriteImportTable() : void
         {
             def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";
             def image = Image.ReadFrom(assemblyFile);
-            
+
             // Read the import table
             def directories = image.DataDirectories;
             def expectedStream = image.ReadBlock(Location.ImportTable);
             def importTableRva = directories[1].Rva;
             def iatRva = directories[12].Rva;
             def isDll = assemblyFile.EndsWith("dll");
-            
+
             throw NotImplementedException("TODO: Implement the ImportTableWriter");
         }
-        
+
         public ShouldWriteCLIHeader() : void
         {
             def assemblyFile = @"..\..\SampleBinaries\HelloWorld.exe";
             def image = Image.ReadFrom(assemblyFile);
             def expectedStream = image.ReadBlock(Location.CLIHeader);
-            
+
             def outputStream = MemoryStream();
             def cliHeader = image.GetCLRHeader();
             def writer = CLIHeaderWriter();
@@ -108,15 +140,15 @@ namespace Tests
             def image = Image.ReadFrom(assemblyFile);
             def iatDirectory = image.DataDirectories[12];
             def iatStream = image.ReadBlock(Location.ImportAddressTable);            
-            
+
             // Find the hint name table rva
             def reader = BinaryReader(iatStream);
             def hintNameTableRva = reader.ReadUInt32();
-            
+
             // Read the original hint name table
             def nameTableData = image.ReadBlock(hintNameTableRva, 0xE :> uint);
             def writer = HintNameTableWriter();
-            
+
             def actualStream = MemoryStream();
             writer.Write(isDll, actualStream);            
             nameTableData.ShouldCompletelyMatch(actualStream);

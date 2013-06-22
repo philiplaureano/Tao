@@ -300,6 +300,9 @@
     <Compile Include="Interfaces\IWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LazyWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Location.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1661,6 +1664,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Subsystem.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WriterExtensions.n">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

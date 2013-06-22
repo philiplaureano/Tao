@@ -12,9 +12,9 @@ using System.Linq;
 
 namespace Tao.Metadata
 {
-  public class CLIHeaderWriter
+  public class CLIHeaderWriter : IWriter.[ICLIHeader]
   {
-      public Write([NotNull] header : ICLIHeader, [NotNull] outputStream : Stream) : void
+      public Write([NotNull] header : ICLIHeader, [NotNull] outputStream : Stream) : uint
       {
           def writer = BinaryWriter(outputStream);
           writer.Write(header.Cb);
@@ -44,6 +44,8 @@ namespace Tao.Metadata
           
           writer.Write(header.ManagedNativeHeaderRva);
           writer.Write(header.ManagedNativeHeaderSize);
+          
+          outputStream.Position :> uint;
       }
   }
 }
