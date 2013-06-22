@@ -32,8 +32,8 @@ namespace Tests
             // Given the name table RVA, the 
             // writer should produce exactly the same output
             def actualStream = MemoryStream();
-            def writer = ImportAddressTableWriter();
-            writer.Write(nameTableRva, actualStream);
+            def writer = ImportAddressTableWriter(() => nameTableRva);
+            writer.Write(actualStream);
 
             actualStream.ShouldCompletelyMatch(expectedStream);
         }

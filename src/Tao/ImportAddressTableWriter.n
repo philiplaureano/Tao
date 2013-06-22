@@ -15,11 +15,19 @@ using Tao.Metadata;
 
 namespace Tao
 {
-    public class ImportAddressTableWriter : IWriter[uint]
-    {        
-        public Write(hintNameTableRva : uint, [NotNull] outputStream : Stream) : uint
+    public class ImportAddressTableWriter : IWriter
+    {    
+        private _getHintNameTableRva : void -> uint;
+        public this([NotNull] getHintNameTableRva : void -> uint)
+        {
+            _getHintNameTableRva = getHintNameTableRva;
+        }
+        
+        public Write([NotNull] outputStream : Stream) : uint
+            requires !object.ReferenceEquals(_getHintNameTableRva, null)
             requires outputStream.CanWrite
         {
+            def hintNameTableRva = _getHintNameTableRva();
             def startPosition = outputStream.Position :> uint;
             def writer = BinaryWriter(outputStream);
             writer.Write(hintNameTableRva);
