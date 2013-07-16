@@ -83,18 +83,7 @@ namespace Tests
 
             actualStream.ShouldCompletelyMatch(expectedStream);
         }
-        public stub ShouldReturnCorrectSizeForCLIHeader() : void
-        {
-        }
-        public stub ShouldWriteMethodBodyBlock() : void
-        {
-        }
-        public stub ShouldWriteResourceSectionWhenAvailable() : void
-        {
-        }
-        public stub ShouldWriteMetadataHeader() : void
-        {
-        }
+       
         public ShouldWriteMscorlibName() : void
         {
             // The bytes should always be "mscoree.dll" followed by two null terminators            

@@ -15,8 +15,7 @@ namespace Tests
     public class SkeletonImageGenerationTests
     {
         public stub ShouldHaveDosHeader() : void
-        {
-            
+        {            
         }        
         
         private VerifyDosHeader(doTest : IDosHeader -> void) : void

@@ -14,12 +14,6 @@ using Tests.Macros;
 namespace Tests
 {
     public partial class ImageTests
-    {
-        public stub ShouldWriteRelocSection() : void
-        {
-        }
-        public stub ShouldWriteResourceSection() : void
-        {
-        }
+    {        
     }
 }
