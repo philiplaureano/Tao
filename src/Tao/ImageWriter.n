@@ -9,6 +9,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao.Interfaces;
 namespace Tao
 {  
     public class ImageWriter : IImageWriter
@@ -19,14 +20,13 @@ namespace Tao
         private _sectionHeaderWriter : ISectionHeaderWriter;
         private _optionalHeaderWriter : IOptionalHeaderWriter;
         private _sectionWriter : ISectionWriter;
-        private _image : IImage;
         
-        public this([NotNull] image : IImage) 
+        public this() 
         {
-            this(image, DosHeaderWriter(), CoffHeaderWriter(), DataDirectoryWriter(), SectionHeaderWriter(), OptionalHeaderWriter(), SectionWriter());
+            this(DosHeaderWriter(), CoffHeaderWriter(), DataDirectoryWriter(), SectionHeaderWriter(), OptionalHeaderWriter(), SectionWriter());
         }
 
-        public this([NotNull] image : IImage, [NotNull] dosHeaderWriter : IDosHeaderWriter, 
+        public this([NotNull] dosHeaderWriter : IDosHeaderWriter, 
             [NotNull] coffHeaderWriter : ICoffHeaderWriter, 
             [NotNull] dataDirectoryWriter : IDataDirectoryWriter,
             [NotNull] sectionHeaderWriter : ISectionHeaderWriter,
@@ -39,12 +39,12 @@ namespace Tao
             _sectionHeaderWriter = sectionHeaderWriter;
             _optionalHeaderWriter = optionalHeaderWriter;
             _sectionWriter = sectionWriter;
-            _image = image;
         }
 
-        public Write([NotNull] outputStream : Stream) : void
+        public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : uint
         {
-            def image = _image;
+            def startPosition = outputStream.Position;
+            
             def dosHeader = image.DOSHeader;
             _dosHeaderWriter.Write(dosHeader, outputStream);
 
@@ -77,6 +77,8 @@ namespace Tao
 
             // Write the section data
             _sectionWriter.Write(sections, sectionAlignment, outputStream);
+            
+            startPosition :> uint;
         }
     }
 }
