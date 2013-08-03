@@ -1,5 +1,4 @@
 ﻿using Nemerle;
-using Nemerle.Collections;
 using Nemerle.Compiler;
 using Nemerle.Compiler.Parsetree;
 using Nemerle.Compiler.Typedtree;
@@ -111,6 +110,54 @@ namespace Tests.Macros
       }
     }
     
+    private static GetTestMethodName(methodName : string) : string
+    {
+        def characters : array[char] = methodName.ToCharArray();
+        def chars = System.Collections.Generic.Queue.[char](characters);        
+
+        mutable text = string.Empty;
+        while(chars.Count > 0)
+        {
+            def nextChar = chars.Peek();
+            def currentChar = chars.Dequeue();
+
+            when(char.IsUpper(nextChar))
+            {
+                text += ",";
+            }
+
+            text += currentChar.ToString();
+        }
+
+        def words = text.Split(',');
+        mutable newMethodName = string.Empty;
+
+        mutable wordCount = 0;
+        mutable totalWordCount = words.Length;
+        mutable index = 0;
+        foreach(word in words)
+        {
+            when(!string.IsNullOrEmpty(word))
+            {
+                if(wordCount == 0)
+                {
+                    newMethodName += word;
+                }
+                else
+                {
+                    newMethodName += word.ToLowerInvariant();
+                }
+                when(index < totalWordCount - 1)
+                {
+                    newMethodName += "_";
+                }
+                wordCount++;
+            }
+            index++;
+        }
+        
+        newMethodName;
+    }
     private IsSetupOrTearDownMethod(method: IMethod) : bool
     {
       def methodName = method.Name;

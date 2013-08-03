@@ -4,6 +4,7 @@ using Nemerle.Utility;
 
 using Tests.Macros;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,38 +15,28 @@ namespace Tests
 {
     public class SkeletonImageGenerationTests
     {
-        public stub ShouldHaveDosHeader() : void
-        {            
-        }        
-        
-        private VerifyDosHeader(doTest : IDosHeader -> void) : void
-        {
-            Verify.[IImage, IDosHeader](CreateImage, image => image.DOSHeader, doTest);
-        }
-
-        private Verify[TSource, TSubject](createSource : void -> TSource, 
-            getItem : TSource -> TSubject, doTest : TSubject -> void) : void
-        {
-            def runTest(source : TSource) : void
-            {
-                def subject = getItem(source);
-                doTest(subject);
-            }
+        public ShouldHaveDosHeader() : void
+        {   
+            def originalImageLocation = @"..\..\SampleBinaries\Skeleton.exe";
+            def originalBytes = MemoryStream(File.ReadAllBytes(originalImageLocation));
+            // TODO: Generate the DOS header using the image
+            // TODO: Get the end position of the header and compare all the bytes up to that point
+            // TODO: The two headers must match
+            // TODO: Use the composite pattern to incrementally build the image
             
-            Verify(createSource, runTest);            
-        }
-        
-        private Verify[TSource](createSource : void -> TSource, doTest : TSource-> void) : void
-        {
-            def source = createSource();
-            doTest(source);
-        }
-
-        private CreateImage() : IImage
-        {
+            def outputStream = MemoryStream();
+            def tracerStream = TracerStream(originalBytes, outputStream);
+            
+            def header = DosHeader();
+            header.LfaNew = 0x80;
+            
             def builder = ImageBuilder();
-            def image = builder.CreateImage();     
-            image;
-        }
+            builder.DOSHeader = header;            
+            builder.CreateImage(tracerStream);
+            
+            // Compare the resulting streams
+            def dosHeaderLength : uint = 0x3C;
+            outputStream.ShouldMatch(tracerStream, dosHeaderLength);
+        }                        
     }
 }
