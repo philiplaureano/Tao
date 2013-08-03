@@ -9,9 +9,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using Tao.Interfaces;
 namespace Tao
 {
-    public class DataDirectoryWriter : IDataDirectoryWriter
+    public class DataDirectoryWriter : IDataDirectoryWriter, IImageWriter
     {
         public Write([NotNull] directories : IEnumerable[IDataDirectory], [NotNull] stream : Stream) : uint
         requires directories.Count() > 0 otherwise throw ArgumentException("There are no data directories to be written")
@@ -24,6 +25,11 @@ namespace Tao
             }         
             
             stream.Position :> uint;
+        }
+        public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : uint
+            requires image.DataDirectories != null
+        {
+            Write(image.DataDirectories, outputStream);
         }
     }
 }

@@ -9,11 +9,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using Tao.Interfaces;
 namespace Tao
 {  
-    public class CoffHeaderWriter : ICoffHeaderWriter
+    public class CoffHeaderWriter : ICoffHeaderWriter, IImageWriter
     {
-        public Write(header : ICoffHeader, [NotNull] outputStream : Stream) : uint
+        public Write([NotNull]header : ICoffHeader, [NotNull] outputStream : Stream) : uint
             ensures outputStream.Length >= 24
         {
             def startPosition = outputStream.Position :> uint;
@@ -29,6 +30,22 @@ namespace Tao
             writer.Write(header.OptionalHeaderSize : ushort);
             writer.Write(header.Characteristics :> ushort);
             startPosition;
+        }
+        
+        public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : uint
+            requires image.CoffHeader != null 
+            requires image.DOSHeader != null
+            requires image.Sections != null
+            requires image.CoffHeader.NumberOfSections == image.Sections.Count()
+        {
+            def dosHeader = image.DOSHeader;
+
+            // Seek the COFF header position
+            def lfaNew = dosHeader.LfaNew;
+            _ = outputStream.Seek(lfaNew, SeekOrigin.Begin);
+            
+            def header = image.CoffHeader;
+            Write(header, outputStream);
         }
     }
 }

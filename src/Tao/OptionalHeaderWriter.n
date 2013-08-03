@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-    public class OptionalHeaderWriter : IOptionalHeaderWriter
+    public class OptionalHeaderWriter : IOptionalHeaderWriter, IImageWriter
     {
         private _fieldsWriter : IOptionalHeaderStandardFieldsWriter;
         public this() 
@@ -55,6 +55,20 @@ namespace Tao
                 }
                 |_ => { throw NotSupportedException(string.Format("Optional Header Type Not Supported: '{0}'", optionalHeader.GetType()));}
             }  
+        }
+        
+        public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : uint
+            requires image.DataDirectories != null
+            requires image.OptionalHeader != null
+        {
+            def startPosition = outputStream.Position :> uint;
+            
+            def dataDirectories = image.DataDirectories;
+            def optionalHeader = image.OptionalHeader;
+            
+            Write(optionalHeader, dataDirectories.Count() :> uint, outputStream);
+            
+            startPosition;
         }
     }
 }

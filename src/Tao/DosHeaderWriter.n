@@ -9,9 +9,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using Tao.Interfaces;
 namespace Tao
 {
-    public class DosHeaderWriter : IDosHeaderWriter
+    public class DosHeaderWriter : IDosHeaderWriter, IImageWriter
     {
         public Write([NotNull] header : IDosHeader, [NotNull] outputStream : Stream) : uint
         {         
@@ -26,6 +27,13 @@ namespace Tao
             outputStream.Write(bytes, 0, length :> int);
             
             startPosition;
+        }
+        
+        public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : uint
+            requires image.DOSHeader != null
+        {
+            def dosHeader : IDosHeader = image.DOSHeader;            
+            Write(dosHeader, outputStream);
         }
     }
 }

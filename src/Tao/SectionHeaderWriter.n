@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tao
 {
-    public class SectionHeaderWriter : ISectionHeaderWriter
+    public class SectionHeaderWriter : ISectionHeaderWriter, IImageWriter
     {
         public Write([NotNull] headers : IEnumerable[ISectionHeader], [NotNull] outputStream : Stream) : uint
         {
@@ -20,9 +20,9 @@ namespace Tao
             def writer = BinaryWriter(outputStream);
             foreach(header in headers)
             {
-            // Truncate the name string length to a maximum of 8 bytes
+                // Truncate the name string length to a maximum of 8 bytes
                 def nameStream = MemoryStream(array(8) : array[byte]);              
-                stringWriter.Write(header.Name, nameStream);              
+                _ = stringWriter.Write(header.Name, nameStream);              
                 writer.Write(nameStream.ToArray());
 
                 writer.Write(header.VirtualSize);
@@ -37,6 +37,12 @@ namespace Tao
             }          
 
             startPosition;
+        }
+        
+        public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : uint
+            requires image.Sections != null
+        {
+            Write(image.Sections.Select(s => s.Header), outputStream);
         }
     }
 }

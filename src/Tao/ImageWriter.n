@@ -13,71 +13,26 @@ using Tao.Interfaces;
 namespace Tao
 {  
     public class ImageWriter : IImageWriter
-    {
-        private _dosHeaderWriter : IDosHeaderWriter;
-        private _coffHeaderWriter : ICoffHeaderWriter;
-        private _dataDirectoryWriter : IDataDirectoryWriter;
-        private _sectionHeaderWriter : ISectionHeaderWriter;
-        private _optionalHeaderWriter : IOptionalHeaderWriter;
-        private _sectionWriter : ISectionWriter;
-        
+    {        
+        private _writers : IEnumerable.[IImageWriter];
         public this() 
         {
-            this(DosHeaderWriter(), CoffHeaderWriter(), DataDirectoryWriter(), SectionHeaderWriter(), OptionalHeaderWriter(), SectionWriter());
+            def writers = array[DosHeaderWriter(), CoffHeaderWriter(), OptionalHeaderWriter(), DataDirectoryWriter(), SectionHeaderWriter(), SectionWriter()];
+            this(writers);
         }
-
-        public this([NotNull] dosHeaderWriter : IDosHeaderWriter, 
-            [NotNull] coffHeaderWriter : ICoffHeaderWriter, 
-            [NotNull] dataDirectoryWriter : IDataDirectoryWriter,
-            [NotNull] sectionHeaderWriter : ISectionHeaderWriter,
-            [NotNull] optionalHeaderWriter : IOptionalHeaderWriter,
-            [NotNull] sectionWriter : ISectionWriter)
+        
+        public this(writers : IEnumerable.[IImageWriter])
         {
-            _dosHeaderWriter = dosHeaderWriter;
-            _coffHeaderWriter  = coffHeaderWriter;
-            _dataDirectoryWriter = dataDirectoryWriter;
-            _sectionHeaderWriter = sectionHeaderWriter;
-            _optionalHeaderWriter = optionalHeaderWriter;
-            _sectionWriter = sectionWriter;
+            _writers = writers;
         }
 
         public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : uint
         {
             def startPosition = outputStream.Position;
-            
-            def dosHeader = image.DOSHeader;
-            _dosHeaderWriter.Write(dosHeader, outputStream);
-
-            // Seek the COFF header position
-            def lfaNew = dosHeader.LfaNew;
-            _ = outputStream.Seek(lfaNew, SeekOrigin.Begin);
-
-            def coffHeader = image.CoffHeader;
-
-            // Write the number of sections to the COFF header
-            def sections = image.Sections;
-            coffHeader.NumberOfSections = sections.Count :> ushort;
-
-            _coffHeaderWriter.Write(coffHeader, outputStream);
-
-            def optionalHeader = image.OptionalHeader;
-
-            def directoryCount = image.DataDirectories.Count :> uint;
-            
-            mutable ntHeader : INTHeader = optionalHeader.NTHeader;
-            mutable sectionAlignment = ntHeader.SectionAlignment;
-            _optionalHeaderWriter.Write(optionalHeader, directoryCount, outputStream);
-
-            // Write the data directories
-            _dataDirectoryWriter.Write(image.DataDirectories, outputStream);
-
-            // Write the section headers      
-            def sectionHeaders = sections.Select(s => s.Header);
-            _sectionHeaderWriter.Write(sectionHeaders, outputStream);
-
-            // Write the section data
-            _sectionWriter.Write(sections, sectionAlignment, outputStream);
-            
+            foreach(writer in _writers)
+            {
+                _ = writer.Write(image, outputStream);
+            }            
             startPosition :> uint;
         }
     }

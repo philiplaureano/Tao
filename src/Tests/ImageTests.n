@@ -264,32 +264,7 @@ namespace Tests
             def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
             def outputFile = "output32.exe";
             TestImageRoundTripping(imageFile, outputFile);
-        }
-
-        public ShouldWriteCorrectNumberOfSectionsThatCorrespondWithTheNumberOfSectionObjectsOnTheImage() : void
-        {
-            def imageFile = @"..\..\SampleBinaries\Skeleton.exe";
-            def inputImage = Image.ReadFrom(imageFile);
-
-            // The original image should have two sections
-            assert inputImage.CoffHeader.NumberOfSections equals 2 otherwiseprint "Invalid number of sections in the input image";
-
-            // The image writer should write "0" sections if we remove
-            // all sections from the input image
-            inputImage.Sections.Clear();
-
-            def outputStream = MemoryStream();
-            def writer = CreateWriter();
-            writer.Write(inputImage, outputStream);    
-
-            def startPosition = 0x86;
-            _ = outputStream.Seek(startPosition, SeekOrigin.Begin);
-
-            def reader = BinaryReader(outputStream);
-            def actualNumberOfSections = reader.ReadUInt16();
-
-            assert actualNumberOfSections equals 0 otherwiseprint "The number of written sections doesn't match the expected number of sections";
-        }
+        }        
 
         public ShouldWriteNumberOfRvaAndSizesThatCorrespondWithTheNumberOfDataDirectories() : void
         {
