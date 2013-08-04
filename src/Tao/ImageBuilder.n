@@ -14,16 +14,12 @@ namespace Tao
 {
     public class ImageBuilder
     {
-        public DOSHeader : DosHeader { get; set ;}
-        public CreateImage([NotNull] outputStream : Stream) : void
-            requires outputStream.CanWrite
-            requires DOSHeader != null
+        public CreateImage() : IImage
         {
-            // Move to the beginning of the stream
-            _ = outputStream.Seek(0, SeekOrigin.Begin);
+            def image = Image();
+            image.DOSHeader = DosHeader();
             
-            def dosWriter = DosHeaderWriter();
-            _ = dosWriter.Write(DOSHeader, outputStream);
+            image;
         }
     }
 }

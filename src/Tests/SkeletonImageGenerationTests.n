@@ -18,11 +18,7 @@ namespace Tests
         public ShouldHaveDosHeader() : void
         {   
             def originalImageLocation = @"..\..\SampleBinaries\Skeleton.exe";
-            def originalBytes = MemoryStream(File.ReadAllBytes(originalImageLocation));
-            // TODO: Generate the DOS header using the image
-            // TODO: Get the end position of the header and compare all the bytes up to that point
-            // TODO: The two headers must match
-            // TODO: Use the composite pattern to incrementally build the image
+            def originalBytes = MemoryStream(File.ReadAllBytes(originalImageLocation));           
             
             def outputStream = MemoryStream();
             def tracerStream = TracerStream(originalBytes, outputStream);
@@ -30,9 +26,11 @@ namespace Tests
             def header = DosHeader();
             header.LfaNew = 0x80;
             
-            def builder = ImageBuilder();
-            builder.DOSHeader = header;            
-            builder.CreateImage(tracerStream);
+            def builder = ImageBuilder();            
+            def image = builder.CreateImage();
+            
+            def writer = ImageWriter(array[DosHeaderWriter()]);
+            writer.Write(image, tracerStream);
             
             // Compare the resulting streams
             def dosHeaderLength : uint = 0x3C;
