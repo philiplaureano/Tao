@@ -14,10 +14,28 @@ namespace Tao
 {
     public class ImageBuilder
     {
+        private BaseDate : DateTime = DateTime(1970, 1, 1);
+        public this()
+        {
+            TimeStamp = DateTime.UtcNow;
+        }
+        public TimeStamp : DateTime { get;set; }
         public CreateImage() : IImage
         {
             def image = Image();
             image.DOSHeader = DosHeader();
+            
+            def difference = TimeStamp - BaseDate;
+            def numberOfSeconds = difference.TotalSeconds;
+            
+            def coffHeader = CoffHeader();
+            coffHeader.Machine = Machine.I386;
+            coffHeader.NumberOfSections = 2;
+            coffHeader.TimeDateStamp = numberOfSeconds :> uint;
+            coffHeader.OptionalHeaderSize = 0xE0;
+            coffHeader.Characteristics = Characteristics.ExecutableImage | Characteristics.Is32BitMachine;
+            
+            image.CoffHeader = coffHeader;
             
             image;
         }
