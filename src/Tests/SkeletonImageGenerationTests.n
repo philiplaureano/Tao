@@ -24,7 +24,8 @@ namespace Tests
             def tracerStream = TracerStream(originalBytes, outputStream);
 
             def builder = ImageBuilder();            
-            def image = builder.CreateImage();
+            def image = Image();
+            builder.BuildImage(image);
 
             def writer = ImageWriter(array[DosHeaderWriter()]);
             writer.Write(image, tracerStream);
@@ -46,12 +47,12 @@ namespace Tests
             def seconds : uint = 0x4AD286DD;
             def timeStamp = baseDate.AddSeconds(seconds);
 
-            def builder = ImageBuilder();
+            def builder = ImageBuilder();            
             builder.TimeStamp = timeStamp;
-
-            def image = builder.CreateImage();
-
             
+            def image = Image();
+            builder.BuildImage(image);           
+
             // Ensure that the builder created the correct image contents
             def coffHeader = image.CoffHeader;
             def machine = coffHeader.Machine;
@@ -63,7 +64,7 @@ namespace Tests
             // Add the required number of sections so that the assertion doesn't fail
             image.Sections.Add(Section());
             image.Sections.Add(Section());
-            
+
             def writer = ImageWriter(array[DosHeaderWriter(), CoffHeaderWriter()]);
             writer.Write(image, tracerStream);
 

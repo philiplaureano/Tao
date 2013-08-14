@@ -12,7 +12,7 @@ using System.Linq;
 using Tao.Interfaces;
 namespace Tao
 {
-    public class ImageBuilder
+    public class ImageBuilder : IImageBuilder
     {
         private BaseDate : DateTime = DateTime(1970, 1, 1);
         public this()
@@ -20,9 +20,8 @@ namespace Tao
             TimeStamp = DateTime.UtcNow;
         }
         public TimeStamp : DateTime { get;set; }
-        public CreateImage() : IImage
+        public BuildImage([NotNull] image : IImage) : void
         {
-            def image = Image();
             image.DOSHeader = DosHeader();
             
             def difference = TimeStamp - BaseDate;
@@ -35,9 +34,7 @@ namespace Tao
             coffHeader.OptionalHeaderSize = 0xE0;
             coffHeader.Characteristics = Characteristics.ExecutableImage | Characteristics.Is32BitMachine;
             
-            image.CoffHeader = coffHeader;
-            
-            image;
+            image.CoffHeader = coffHeader;            
         }
     }
 }
