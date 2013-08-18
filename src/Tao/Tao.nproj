@@ -69,97 +69,182 @@
     <Compile Include="BaseDeferredStream.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CallingConvention.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Characteristics.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CLRImage.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CoffHeader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CoffHeaderReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CoffHeaderWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataDirectory.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataDirectoryAddressResolver.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataDirectoryAddressWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataDirectoryLocationMap.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataDirectoryReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataDirectoryWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DeferredStream.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DLLCharacteristics.n">
+    <Compile Include="Images\CallingConvention.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DosHeader.n">
+    <Compile Include="Images\Characteristics.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DosHeaderReader.n">
+    <Compile Include="Images\CLRImage.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DosHeaderWriter.n">
+    <Compile Include="Images\CoffHeader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="HintNameTableWriter.n">
+    <Compile Include="Images\CoffHeaderImageBuilder.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IImageBuilder.n">
+    <Compile Include="Images\CoffHeaderReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IImageWriter.n">
+    <Compile Include="Images\CoffHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Image.n">
+    <Compile Include="Images\CompositeImageBuilder.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Image.ReaderExtensions.n">
+    <Compile Include="Images\CompositeImageWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ImageAddressReader.n">
+    <Compile Include="Images\DataDirectory.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ImageAddressResolverMap.n">
+    <Compile Include="Images\DataDirectoryAddressResolver.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ImageAddressWriter.n">
+    <Compile Include="Images\DataDirectoryAddressWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ImageAddressWriterMap.n">
+    <Compile Include="Images\DataDirectoryLocationMap.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ImageBuilder.n">
+    <Compile Include="Images\DataDirectoryReader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ImageExtensions.n">
+    <Compile Include="Images\DataDirectoryWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ImageReader.n">
+    <Compile Include="Images\DLLCharacteristics.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ImageWriter.n">
+    <Compile Include="Images\DosHeader.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ImportAddressTableWriter.n">
+    <Compile Include="Images\DosHeaderImageBuilder.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\DosHeaderReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\DosHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\HintNameTableWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\IImageBuilder.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\IImageWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\Image.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\Image.ReaderExtensions.n">
+      <SubType>Code</SubType>
+      <DependentUpon>Images\Image.n</DependentUpon>
+    </Compile>
+    <Compile Include="Images\ImageAddressReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\ImageAddressResolverMap.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\ImageAddressWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\ImageAddressWriterMap.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\ImageBuilder.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\ImageExtensions.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\ImageReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\ImageWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\ImportAddressTableWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\Machine.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\NTHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\NTHeader32Reader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\NTHeader32Writer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\NTHeader64Reader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\NTHeader64Writer.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\NTHeaderReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\NTHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\OptionalHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\OptionalHeaderStandardFields.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\OptionalHeaderStandardFieldsReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\OptionalHeaderStandardFieldsWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\OptionalHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\RuntimeFlags.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\Section.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\SectionDataReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\SectionDataWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\SectionFlags.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\SectionHeader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\SectionHeaderReader.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\SectionHeaderWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\SectionResolver.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\SectionWriter.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Images\Subsystem.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interfaces\IAddress.n">
@@ -307,9 +392,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Location.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Machine.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Mapper.n">
@@ -1575,46 +1657,10 @@
     <Compile Include="MscorlibNameWriter.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NTHeader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NTHeader32Reader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NTHeader32Writer.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NTHeader64Reader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NTHeader64Writer.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NTHeaderReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NTHeaderWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="NullTerminatedStringReader.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NullTerminatedStringWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OptionalHeader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OptionalHeaderStandardFields.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OptionalHeaderStandardFieldsReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OptionalHeaderStandardFieldsWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OptionalHeaderWriter.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PaddedNullTerminatedStringReader.n">
@@ -1630,36 +1676,6 @@
     <Compile Include="Reflection\Method.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RuntimeFlags.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Section.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SectionDataReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SectionDataWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SectionFlags.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SectionHeader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SectionHeaderReader.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SectionHeaderWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SectionResolver.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SectionWriter.n">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SlackWriter.n">
       <SubType>Code</SubType>
     </Compile>
@@ -1667,9 +1683,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StreamExtensions.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Subsystem.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WriterExtensions.n">
@@ -1692,6 +1705,7 @@
     <Folder Include="Metadata\Tables\Schemas\" />
     <Folder Include="Metadata\Tables\Schemas\Readers\" />
     <Folder Include="Metadata\Tables\Schemas\Writers\" />
+    <Folder Include="Images" />
     <Folder Include="Reflection" />
     <Folder Include="Properties\" />
   </ItemGroup>

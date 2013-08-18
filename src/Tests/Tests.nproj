@@ -150,6 +150,15 @@
     <Compile Include="HeapSizeEncodingTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ImageGeneration\SkeletonCoffHeaderImageBuilder.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageGeneration\SkeletonImageGenerationTestRunner.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageGeneration\SkeletonImageGenerationTests.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ImageTests.CLRMetadataReadTests.n">
       <SubType>Code</SubType>
       <DependentUpon>ImageTests.n</DependentUpon>
@@ -376,9 +385,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Signatures\VarSignatureTests.n">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SkeletonImageGenerationTests.n">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SortedTableTests.n">
@@ -676,6 +682,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Instructions" />
+    <Folder Include="ImageGeneration" />
     <Folder Include="Rows" />
     <Folder Include="Signatures" />
     <Folder Include="Streams" />

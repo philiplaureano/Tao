@@ -1,0 +1,39 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class OptionalHeaderStandardFieldsWriter : IOptionalHeaderStandardFieldsWriter
+    {
+        public Write([NotNull] fields : IOptionalHeaderStandardFields, [NotNull] outputStream : Stream) : uint
+        ensures outputStream.Length > 0
+        {
+            def startPosition = outputStream.Position :> uint;
+            def writer = BinaryWriter(outputStream);
+            writer.Write(fields.ImageType :> ushort);
+            writer.Write(fields.MajorLinkerVersion);
+            writer.Write(fields.MinorLinkerVersion);
+            writer.Write(fields.SizeOfCode);
+            writer.Write(fields.SizeOfInitializedData);
+            writer.Write(fields.SizeOfUninitializedData);
+            writer.Write(fields.AddressOfEntryPoint);
+            writer.Write(fields.BaseOfCode);
+
+            unless (fields.ImageType == ImageType.PE32Plus)
+            {
+                def baseOfData = fields.BaseOfData.Value;
+                writer.Write(baseOfData);
+            }
+
+            startPosition;
+        }
+    }
+}

@@ -1,0 +1,57 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+namespace Tao.Images
+{
+    public class CoffHeaderImageBuilder : IImageBuilder
+    {
+        private BaseDate : DateTime = DateTime(1970, 1, 1);
+
+        private _timeStamp : DateTime;
+        public this()
+        {
+            this(DateTime.UtcNow);
+        }
+
+        public this(timeStamp : DateTime)
+        {
+            _timeStamp = timeStamp;
+        }
+
+        public BuildImage([NotNull] image : IImage) : void
+        {            
+            def coffHeader = CoffHeader();            
+            BuildCoffHeader(coffHeader);
+            
+            image.CoffHeader = coffHeader;
+            
+            ModifyCreatedImage(image);
+        }           
+        
+        protected virtual ModifyCreatedImage([NotNull] image : IImage) : void
+        {
+            // Do nothing - this is just a method stub
+        }
+        protected virtual BuildCoffHeader([NotNull] coffHeader : CoffHeader) : void
+        {
+            def difference = _timeStamp - BaseDate;
+            def numberOfSeconds = difference.TotalSeconds;
+
+            coffHeader.Machine = Machine.I386;
+            coffHeader.NumberOfSections = 2;
+            coffHeader.TimeDateStamp = numberOfSeconds :> uint;
+            coffHeader.OptionalHeaderSize = 0xE0;
+            coffHeader.Characteristics = Characteristics.ExecutableImage | Characteristics.Is32BitMachine;
+        }
+    }
+}

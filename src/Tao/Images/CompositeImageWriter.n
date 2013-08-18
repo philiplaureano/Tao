@@ -1,0 +1,36 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+namespace Tao
+{
+    public class CompositeImageWriter : IImageWriter
+    {
+        private _writers : IEnumerable.[IImageWriter];        
+        public this([NotNull] writers : IEnumerable.[IImageWriter])
+        {
+            _writers = writers;
+        }        
+        public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : uint
+        {
+            def startPosition = outputStream.Position :> uint;
+            foreach(writer in _writers)
+            {
+                when(writer != null)
+                {
+                    // TODO: Keep track of the start position for each write operation?
+                    _ = writer.Write(image, outputStream);
+                }
+            }
+            startPosition;
+        }
+    }
+}

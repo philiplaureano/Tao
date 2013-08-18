@@ -1,0 +1,51 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+using Tao.Interfaces;
+namespace Tao
+{  
+    public class CoffHeaderWriter : ICoffHeaderWriter, IImageWriter
+    {
+        public Write([NotNull]header : ICoffHeader, [NotNull] outputStream : Stream) : uint
+            ensures outputStream.Length >= 24
+        {
+            def startPosition = outputStream.Position :> uint;
+            def writer = BinaryWriter(outputStream);
+
+            // Write the PE magic signature
+            writer.Write(0x00004550 :> uint);      
+            writer.Write(header.Machine :> ushort);
+            writer.Write(header.NumberOfSections : ushort);
+            writer.Write(header.TimeDateStamp : uint);
+            writer.Write(header.PointerToSymbolTable : uint);
+            writer.Write(header.NumberOfSymbols : uint);
+            writer.Write(header.OptionalHeaderSize : ushort);
+            writer.Write(header.Characteristics :> ushort);
+            startPosition;
+        }
+        
+        public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : uint
+            requires image.CoffHeader != null 
+            requires image.DOSHeader != null
+            requires image.Sections != null
+            requires image.CoffHeader.NumberOfSections == image.Sections.Count()
+        {
+            def dosHeader = image.DOSHeader;
+
+            // Seek the COFF header position
+            def lfaNew = dosHeader.LfaNew;
+            _ = outputStream.Seek(lfaNew, SeekOrigin.Begin);
+            
+            def header = image.CoffHeader;
+            Write(header, outputStream);
+        }
+    }
+}

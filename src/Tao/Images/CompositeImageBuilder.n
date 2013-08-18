@@ -1,0 +1,34 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+namespace Tao
+{
+    public class CompositeImageBuilder : IImageBuilder
+    {
+        private _imageBuilders : IEnumerable.[IImageBuilder];
+        public this([NotNull] imageBuilders : IEnumerable.[IImageBuilder])
+            requires imageBuilders.Count() > 0        
+        {
+            _imageBuilders = imageBuilders;
+        }
+        
+        public BuildImage([NotNull] image : IImage) : void
+        {            
+            foreach(builder in _imageBuilders)
+            {
+                when(builder != null)
+                {
+                    builder.BuildImage(image);
+                }
+            }
+        }
+    }
+}

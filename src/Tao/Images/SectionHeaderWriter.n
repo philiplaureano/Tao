@@ -1,0 +1,48 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+    public class SectionHeaderWriter : ISectionHeaderWriter, IImageWriter
+    {
+        public Write([NotNull] headers : IEnumerable[ISectionHeader], [NotNull] outputStream : Stream) : uint
+        {
+            def startPosition = outputStream.Position :> uint;
+            def stringWriter = NullTerminatedStringWriter();
+            def writer = BinaryWriter(outputStream);
+            foreach(header in headers)
+            {
+                // Truncate the name string length to a maximum of 8 bytes
+                def nameStream = MemoryStream(array(8) : array[byte]);              
+                _ = stringWriter.Write(header.Name, nameStream);              
+                writer.Write(nameStream.ToArray());
+
+                writer.Write(header.VirtualSize);
+                writer.Write(header.VirtualAddress);
+                writer.Write(header.SizeOfRawData);
+                writer.Write(header.PointerToRawData);
+                writer.Write(header.PointerToRelocations);
+                writer.Write(header.PointerToLineNumbers);
+                writer.Write(header.NumberOfRelocations);
+                writer.Write(header.NumberOfLineNumbers);
+                writer.Write(header.Characteristics :> uint);
+            }          
+
+            startPosition;
+        }
+        
+        public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : uint
+            requires image.Sections != null
+        {
+            Write(image.Sections.Select(s => s.Header), outputStream);
+        }
+    }
+}

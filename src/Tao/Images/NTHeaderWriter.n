@@ -1,0 +1,60 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using Tao.Interfaces;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Tao
+{
+  public abstract class NTHeaderWriter[TSize] : INTHeaderWriter[TSize]
+    where TSize : struct
+  {
+      public Write([NotNull] header : INTHeader[TSize], [NotNull] stream : Stream) : uint
+      {
+          def startPosition = stream.Position :> uint;
+          def writer = BinaryWriter(stream);
+          
+          WriteValue(header.ImageBase, writer);
+          writer.Write(header.SectionAlignment : uint);
+          writer.Write(header.FileAlignment : uint);
+          
+          writer.Write(header.MajorOperatingSystemVersion);
+          writer.Write(header.MinorOperatingSystemVersion);
+          
+          writer.Write(header.MajorImageVersion);
+          writer.Write(header.MinorImageVersion);
+          
+          writer.Write(header.MajorSubsystemVersion);
+          writer.Write(header.MinorSubsystemVersion);
+          
+          // Write a blank Win32VersionValue
+          writer.Write(0 : uint);
+          writer.Write(header.SizeOfImage);
+          writer.Write(header.SizeOfHeaders);
+          writer.Write(header.CheckSum);
+          
+          writer.Write(header.Subsystem :> ushort);
+          writer.Write(header.DllCharacteristics :> ushort);
+          
+          // PE32/64 size-specific fields
+          WriteValue(header.SizeOfStackReserve, writer);
+          WriteValue(header.SizeOfStackCommit, writer);
+          WriteValue(header.SizeOfHeapReserve, writer);
+          WriteValue(header.SizeOfHeapCommit, writer);
+          
+          // Write an empty loader flags field
+          writer.Write(0 : uint);
+          
+          writer.Write(header.NumberOfRvaAndSizes);
+          
+          startPosition;
+      }
+      
+      protected abstract WriteValue(value : TSize, writer : BinaryWriter) : void;
+  }
+}

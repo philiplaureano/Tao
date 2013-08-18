@@ -1,0 +1,88 @@
+﻿using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using Tests.Macros;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Images;
+
+using Tests.ImageGeneration;
+
+namespace Tests
+{
+    public class SkeletonImageGenerationTests
+    {
+        private mutable _runner : SkeletonImageGenerationTestRunner;
+
+        public Setup() : void
+        {
+            _runner = SkeletonImageGenerationTestRunner();
+        }
+
+        public Teardown() : void
+        {
+            _runner = null;
+        }
+
+        public ShouldHaveDosHeader() : void
+        {               
+            AddImageSet(DosHeaderImageBuilder(), DosHeaderWriter());
+
+            def testImage = fun(image : IImage) : void
+            {
+                image.DOSHeader.ShouldBeNotNull("There should be a DOS header here");
+            };
+
+            def dosHeaderLength : uint = 0x3C;
+            _runner.RunTest(testImage, dosHeaderLength);
+        } 
+
+        public ShouldHaveCoffHeader() : void
+        {
+            def seconds : uint = 0x4AD286DD;
+            def baseDate = DateTime(1970, 1,1);
+            def timeStamp = baseDate.AddSeconds(seconds);
+            
+            def testImage = fun(image : IImage) : void
+            {
+                // Ensure that the builder created the correct image contents
+                def coffHeader = image.CoffHeader;
+                def machine = coffHeader.Machine;                
+                
+                coffHeader.ShouldBeNotNull("There should be a COFF header here");                       
+                machine.ShouldBeEqualTo(Machine.I386, "Wrong Machine");            
+                coffHeader.TimeDateStamp.ShouldBeEqualTo(seconds, "Wrong Timestamp");
+            };
+            
+            def coffHeaderEndPosition : uint = 0x98;
+            AddImageSet(DosHeaderImageBuilder(), DosHeaderWriter());
+            AddImageSet(SkeletonCoffHeaderImageBuilder(timeStamp), CoffHeaderWriter());
+            _runner.RunTest(testImage, coffHeaderEndPosition);
+        }
+        
+        private AddImageSet([NotNull] builder : IImageBuilder, [NotNull] writer : IImageWriter) : void
+        {
+            AddBuilder(builder);
+            AddWriter(writer);
+        }
+
+        private AddBuilder([NotNull] builder : IImageBuilder) : void
+            requires _runner != null
+        {
+            _runner.ImageBuilders.Add(builder);
+        }
+
+        private AddWriter([NotNull] writer : IImageWriter) : void
+            requires _runner != null
+        {
+            _runner.ImageWriters.Add(writer);
+        }
+    }
+}

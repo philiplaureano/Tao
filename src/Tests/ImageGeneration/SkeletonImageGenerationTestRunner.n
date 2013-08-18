@@ -1,0 +1,85 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+
+namespace Tests.ImageGeneration
+{
+    public class SkeletonImageGenerationTestRunner
+    {
+        private _imageBuilders : IList.[IImageBuilder] = List();
+        private _imageWriters : IList[IImageWriter] = List();
+        
+        public this()
+        {
+        }
+        
+        public this([NotNull] imageBuilders : IEnumerable.[IImageBuilder], [NotNull] imageWriters : IEnumerable.[IImageWriter])
+        {
+            foreach(builder in imageBuilders)
+            {
+                _imageBuilders.Add(builder);
+            }
+            
+            foreach(writer in imageWriters)
+            {
+                _imageWriters.Add(writer);
+            }
+        }
+        public ImageWriters : IList.[IImageWriter]
+        {
+            get
+            {
+                _imageWriters;
+            }
+        }
+        
+        public ImageBuilders : IList.[IImageBuilder]
+        {
+            get
+            {
+                _imageBuilders;
+            }
+        }
+        
+        public RunTest([NotNull] testConstructedImage : IImage -> void, expectedLength : uint) : void
+            requires expectedLength > 0
+        {
+            // Read the sample binary and construct the tracer stream
+            def originalImageLocation = @"..\..\SampleBinaries\Skeleton.exe";
+            def originalBytes = MemoryStream(File.ReadAllBytes(originalImageLocation));           
+
+            def outputStream = MemoryStream();
+            def tracerStream = TracerStream(originalBytes, outputStream);
+            
+            // Construct the composite image builder
+            def imageBuilder = CompositeImageBuilder(_imageBuilders);
+            
+            // Create the image
+            def image = Image();
+            imageBuilder.BuildImage(image);
+            
+            // Test the constructed image 
+            testConstructedImage(image);
+            
+            // Construct the composite image writer
+            def writer = CompositeImageWriter(_imageWriters);
+            
+            // Write the image
+            writer.Write(image, tracerStream);
+            
+            // Compare the output stream with the tracer stream
+            // all the way up to the last expected byte written
+            outputStream.ShouldMatch(tracerStream, expectedLength);
+        }
+    }
+}

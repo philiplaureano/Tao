@@ -1,0 +1,39 @@
+﻿
+using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+using Tao.Metadata;
+
+namespace Tao
+{
+    public class ImportAddressTableWriter : IWriter
+    {    
+        private _getHintNameTableRva : void -> uint;
+        public this([NotNull] getHintNameTableRva : void -> uint)
+        {
+            _getHintNameTableRva = getHintNameTableRva;
+        }
+        
+        public Write([NotNull] outputStream : Stream) : uint
+            requires !object.ReferenceEquals(_getHintNameTableRva, null)
+            requires outputStream.CanWrite
+        {
+            def hintNameTableRva = _getHintNameTableRva();
+            def startPosition = outputStream.Position :> uint;
+            def writer = BinaryWriter(outputStream);
+            writer.Write(hintNameTableRva);
+            writer.Write(0 :uint);
+            
+            startPosition;
+        }
+    }
+}

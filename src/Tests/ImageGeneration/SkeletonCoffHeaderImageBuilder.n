@@ -1,0 +1,32 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao;
+using Tao.Interfaces;
+using Tao.Images;
+
+namespace Tests.ImageGeneration
+{
+    public class SkeletonCoffHeaderImageBuilder : CoffHeaderImageBuilder
+    {
+        public this(timeStamp : DateTime) 
+        {
+            base(timeStamp);
+        }        
+        protected override ModifyCreatedImage([NotNull] image : IImage) : void
+            requires image.Sections != null
+        {
+            // Add two sections to be consistent with the number of sections specified in the Coff Header
+            def sections = image.Sections;
+            sections.Add(Section());
+            sections.Add(Section());
+        }
+    }
+}
