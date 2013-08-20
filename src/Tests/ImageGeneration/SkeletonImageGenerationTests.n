@@ -67,6 +67,41 @@ namespace Tests
             _runner.RunTest(testImage, coffHeaderEndPosition);
         }
         
+        public ShouldHaveOptionalHeaderStandardFields() : void
+        {
+            def seconds : uint = 0x4AD286DD;
+            def baseDate = DateTime(1970, 1,1);
+            def timeStamp = baseDate.AddSeconds(seconds);
+            
+            def testImage = fun(image : IImage) : void
+            {
+                def optionalHeader = image.OptionalHeader;
+                optionalHeader.ShouldBeNotNull("There should be an OptionalHeader here");
+                
+                def standardFields = optionalHeader.StandardFields;
+                standardFields.ShouldBeNotNull("There should be StandardFields here");
+                
+                standardFields.ImageType.ShouldBeEqualTo(ImageType.PE32, "Wrong ImageType");
+                standardFields.MajorLinkerVersion.ShouldBeEqualTo(8 : byte, "Wrong MajorLinkerVersion");
+                standardFields.MinorLinkerVersion.ShouldBeEqualTo(0 : byte, "Wrong MinorLinkerVersion");
+                
+                standardFields.SizeOfCode.ShouldBeEqualTo(0x200 : uint, "Wrong SizeOfCode");                
+                standardFields.SizeOfInitializedData.ShouldBeEqualTo(0x200 : uint, "Wrong SizeOfInitializedData");
+                
+                standardFields.AddressOfEntryPoint.ShouldBeEqualTo(0x21CE : uint, "Wrong AddressOfEntryPoint");
+                
+                standardFields.BaseOfCode.ShouldBeEqualTo(0x2000 : uint, "Wrong BaseOfCode");
+                standardFields.BaseOfData.ShouldBeEqualTo(0x4000 : uint, "Wrong BaseOfData");
+            };
+            
+            def endPosition : uint = 0xB0;
+            AddImageSet(DosHeaderImageBuilder(), DosHeaderWriter());
+            AddImageSet(SkeletonCoffHeaderImageBuilder(timeStamp), CoffHeaderWriter());
+            AddImageSet(OptionalHeaderStandardFieldsBuilder(), OptionalHeaderStandardFieldsWriter());
+            
+            _runner.RunTest(testImage, endPosition);
+        }
+        
         private AddImageSet([NotNull] builder : IImageBuilder, [NotNull] writer : IImageWriter) : void
         {
             AddBuilder(builder);

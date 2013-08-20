@@ -11,10 +11,17 @@ using System.Linq;
 
 namespace Tao
 {
-    public class OptionalHeaderStandardFieldsWriter : IOptionalHeaderStandardFieldsWriter
+    public class OptionalHeaderStandardFieldsWriter : IOptionalHeaderStandardFieldsWriter, IImageWriter
     {
+        public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : uint
+            requires image.OptionalHeader != null
+            requires image.OptionalHeader.StandardFields != null
+        {
+            Write(image.OptionalHeader.StandardFields, outputStream);
+        }
+        
         public Write([NotNull] fields : IOptionalHeaderStandardFields, [NotNull] outputStream : Stream) : uint
-        ensures outputStream.Length > 0
+            ensures outputStream.Length > 0
         {
             def startPosition = outputStream.Position :> uint;
             def writer = BinaryWriter(outputStream);
