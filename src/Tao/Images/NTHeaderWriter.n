@@ -9,11 +9,23 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
+using Tao.Images;
+
 namespace Tao
 {
-  public abstract class NTHeaderWriter[TSize] : INTHeaderWriter[TSize]
+  public abstract class NTHeaderWriter[TSize] : INTHeaderWriter[TSize], IImageWriter
     where TSize : struct
   {
+      public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : uint        
+        requires image.OptionalHeader != null
+        requires image.OptionalHeader.NTHeader != null
+        requires image.OptionalHeader.NTHeader is INTHeader.[TSize]
+      {
+          def optionalHeader = image.OptionalHeader;
+          def ntHeader = optionalHeader.NTHeader;
+          Write(ntHeader :> INTHeader.[TSize], outputStream);
+      }
+      
       public Write([NotNull] header : INTHeader[TSize], [NotNull] stream : Stream) : uint
       {
           def startPosition = stream.Position :> uint;
