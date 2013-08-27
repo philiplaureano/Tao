@@ -202,6 +202,9 @@
     <Compile Include="Images\OptionalHeader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Images\OptionalHeaderBuilder.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Images\OptionalHeaderStandardFields.n">
       <SubType>Code</SubType>
     </Compile>

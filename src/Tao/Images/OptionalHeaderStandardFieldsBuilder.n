@@ -1,0 +1,37 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+using Tao.Images;
+namespace Tao
+{
+    public class OptionalHeaderStandardFieldsBuilder : IImageBuilder
+    {
+        public BuildImage([NotNull] image : IImage) : void
+            ensures image.OptionalHeader != null
+            ensures image.OptionalHeader.StandardFields != null
+        {
+            def standardFields : IOptionalHeaderStandardFields = OptionalHeaderStandardFields();
+            standardFields.ImageType = ImageType.PE32;
+            standardFields.MajorLinkerVersion = 8;
+            standardFields.MinorLinkerVersion = 0;
+            
+            standardFields.SizeOfCode = 0x200;
+            standardFields.SizeOfInitializedData = 0x200;
+            
+            standardFields.AddressOfEntryPoint = 0x21CE : uint;
+            standardFields.BaseOfCode = 0x2000 : uint;
+            standardFields.BaseOfData = 0x4000 : uint;
+            
+            def ntHeader = NTHeader();
+            image.OptionalHeader = OptionalHeader.OptionalHeader32(standardFields, ntHeader);
+        }
+    }
+}

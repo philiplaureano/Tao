@@ -1,0 +1,54 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+using Tao.Images;
+
+namespace Tao
+{
+    public class OptionalHeaderBuilder : IImageBuilder
+    {
+        public BuildImage([NotNull] image : IImage) : void
+            requires image.OptionalHeader != null
+            requires image.DataDirectories != null
+        {
+            def optionalHeader = image.OptionalHeader;
+            def ntHeader = NTHeader.[uint]();
+
+            ntHeader.ImageBase = 0x00400000;
+            ntHeader.SectionAlignment = 0x2000;
+            ntHeader.FileAlignment = 0x200;
+            ntHeader.MajorOperatingSystemVersion = 4;
+            ntHeader.MajorSubsystemVersion = 4;
+            ntHeader.SizeOfImage = 0x6000;
+            ntHeader.SizeOfHeaders = 0x200;
+            ntHeader.Subsystem = Subsystem.WindowsConsole;
+            ntHeader.DllCharacteristics = DLLCharacteristics.TerminalServerAware | 
+                                          DLLCharacteristics.NoSEH | DLLCharacteristics.CanMove | DLLCharacteristics.NxCompat;
+
+            ntHeader.SizeOfStackReserve = 0x00100000;
+            ntHeader.SizeOfStackCommit = 0x00001000;
+            ntHeader.SizeOfHeapReserve = 0x00100000;
+            ntHeader.SizeOfHeapCommit = 0x00001000;
+            ntHeader.NumberOfRvaAndSizes = 0x10;
+            
+            // Add the matching number of data directories
+            def directories = image.DataDirectories;
+            def directoryCount = ntHeader.NumberOfRvaAndSizes :> int;
+            for(mutable i = 0; i < directoryCount; i++)
+            {
+                directories.Add(DataDirectory());
+            }
+            
+            optionalHeader.NTHeader = ntHeader;                       
+        }
+    }
+}

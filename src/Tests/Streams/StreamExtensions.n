@@ -204,7 +204,7 @@ namespace Tests
                 def expected = other.ReadByte();
                 def actual = stream.ReadByte();
                 
-                NUnit.Framework.Assert.Fail("Streams don't match, starting at byte position {0}; Expected Value: {1}, Actual Value: {2}", mismatchPosition, expected, actual);
+                NUnit.Framework.Assert.Fail("Streams don't match, starting at byte position {0}; Expected Value: {1}, Actual Value: {2}", mismatchPosition.ToString("x"), expected, actual);
             }
         }   
         public static GetReader([NotNull] this stream: Stream) : BinaryReader

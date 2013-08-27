@@ -46,62 +46,107 @@ namespace Tests
 
         public ShouldHaveCoffHeader() : void
         {
-            def seconds : uint = 0x4AD286DD;
-            def baseDate = DateTime(1970, 1,1);
-            def timeStamp = baseDate.AddSeconds(seconds);
-            
+            def timeStamp = GetTimeStamp();
+
             def testImage = fun(image : IImage) : void
             {
+                def seconds : uint = 0x4AD286DD;
+
                 // Ensure that the builder created the correct image contents
                 def coffHeader = image.CoffHeader;
                 def machine = coffHeader.Machine;                
-                
+
                 coffHeader.ShouldBeNotNull("There should be a COFF header here");                       
                 machine.ShouldBeEqualTo(Machine.I386, "Wrong Machine");            
                 coffHeader.TimeDateStamp.ShouldBeEqualTo(seconds, "Wrong Timestamp");
             };
-            
+
             def coffHeaderEndPosition : uint = 0x98;
             AddImageSet(DosHeaderImageBuilder(), DosHeaderWriter());
             AddImageSet(SkeletonCoffHeaderImageBuilder(timeStamp), CoffHeaderWriter());
             _runner.RunTest(testImage, coffHeaderEndPosition);
         }
-        
+
         public ShouldHaveOptionalHeaderStandardFields() : void
         {
-            def seconds : uint = 0x4AD286DD;
-            def baseDate = DateTime(1970, 1,1);
-            def timeStamp = baseDate.AddSeconds(seconds);
-            
+            def timeStamp = GetTimeStamp();
+
             def testImage = fun(image : IImage) : void
             {
                 def optionalHeader = image.OptionalHeader;
                 optionalHeader.ShouldBeNotNull("There should be an OptionalHeader here");
-                
+
                 def standardFields = optionalHeader.StandardFields;
                 standardFields.ShouldBeNotNull("There should be StandardFields here");
-                
+
                 standardFields.ImageType.ShouldBeEqualTo(ImageType.PE32, "Wrong ImageType");
                 standardFields.MajorLinkerVersion.ShouldBeEqualTo(8 : byte, "Wrong MajorLinkerVersion");
                 standardFields.MinorLinkerVersion.ShouldBeEqualTo(0 : byte, "Wrong MinorLinkerVersion");
-                
+
                 standardFields.SizeOfCode.ShouldBeEqualTo(0x200 : uint, "Wrong SizeOfCode");                
                 standardFields.SizeOfInitializedData.ShouldBeEqualTo(0x200 : uint, "Wrong SizeOfInitializedData");
-                
+
                 standardFields.AddressOfEntryPoint.ShouldBeEqualTo(0x21CE : uint, "Wrong AddressOfEntryPoint");
-                
+
                 standardFields.BaseOfCode.ShouldBeEqualTo(0x2000 : uint, "Wrong BaseOfCode");
                 standardFields.BaseOfData.ShouldBeEqualTo(0x4000 : uint, "Wrong BaseOfData");
             };
-            
+
             def endPosition : uint = 0xB0;
             AddImageSet(DosHeaderImageBuilder(), DosHeaderWriter());
             AddImageSet(SkeletonCoffHeaderImageBuilder(timeStamp), CoffHeaderWriter());
             AddImageSet(OptionalHeaderStandardFieldsBuilder(), OptionalHeaderStandardFieldsWriter());
+
+            _runner.RunTest(testImage, endPosition);
+        }
+        public ShouldHaveOptionalHeaderPE32SpecificFields() : void
+        {            
+            def timeStamp = GetTimeStamp();
+            def testImage = fun(image : IImage) : void
+            {
+                def optionalHeader = image.OptionalHeader;
+                optionalHeader.ShouldBeNotNull("There should be an OptionalHeader here");
+
+                def ntHeader = optionalHeader.NTHeader :> INTHeader.[uint];
+                ntHeader.ShouldBeNotNull("There should be an NTHeader here");
+                ntHeader.ImageBase.ShouldBeEqualTo(0x00400000, "Wrong ImageBase Value");
+                ntHeader.SectionAlignment.ShouldBeEqualTo(0x2000, "Wrong Section Alignment");
+                ntHeader.FileAlignment.ShouldBeEqualTo(0x200, "Wrong File Alignment");
+                ntHeader.MajorOperatingSystemVersion.ShouldBeEqualTo(4, "Wrong MajorOperatingSystemVersion");
+                ntHeader.MajorSubsystemVersion.ShouldBeEqualTo(4, "Wrong MajorSubsystemVersion");
+                ntHeader.SizeOfImage.ShouldBeEqualTo(0x6000, "Wrong SizeOfImage");
+                ntHeader.SizeOfHeaders.ShouldBeEqualTo(0x200, "Wrong SizeOfHeaders");
+                ntHeader.Subsystem.ShouldBeEqualTo(Subsystem.WindowsConsole, "Wrong Subsystem");
+
+                def dllCharacteristics = ntHeader.DllCharacteristics :> ushort;
+                dllCharacteristics.ShouldBeEqualTo(0x8540, "Wrong DLLCharacteristics");
+
+                ntHeader.SizeOfStackReserve.ShouldBeEqualTo(0x00100000, "Wrong SizeOfStackReserve");
+                ntHeader.SizeOfStackCommit.ShouldBeEqualTo(0x00001000, "Wrong SizeOfStackCommit");
+                ntHeader.SizeOfHeapReserve.ShouldBeEqualTo(0x00100000, "Wrong SizeOfHeapReserve");
+                ntHeader.SizeOfHeapCommit.ShouldBeEqualTo(0x00001000, "Wrong SizeOfHeapCommit");
+                ntHeader.NumberOfRvaAndSizes.ShouldBeEqualTo(0x10, "Wrong NumberOfRvaAndSizes");
+            };
+
+
+            def endPosition : uint = 0xB0;
+            AddImageSet(DosHeaderImageBuilder(), DosHeaderWriter());
+            AddImageSet(SkeletonCoffHeaderImageBuilder(timeStamp), CoffHeaderWriter());
+            AddBuilder(OptionalHeaderStandardFieldsBuilder());
+            AddBuilder(OptionalHeaderBuilder());
+            AddWriter(OptionalHeaderWriter());
             
             _runner.RunTest(testImage, endPosition);
         }
-        
+
+        private GetTimeStamp() : DateTime
+        {
+            def seconds : uint = 0x4AD286DD;
+            def baseDate = DateTime(1970, 1,1);
+            def timeStamp = baseDate.AddSeconds(seconds);
+
+            timeStamp;
+        }
         private AddImageSet([NotNull] builder : IImageBuilder, [NotNull] writer : IImageWriter) : void
         {
             AddBuilder(builder);
