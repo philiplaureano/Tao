@@ -99,6 +99,9 @@
     <Compile Include="Images\CompositeImageWriter.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Images\DataDirectoriesBuilder.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Images\DataDirectory.n">
       <SubType>Code</SubType>
     </Compile>

@@ -1,0 +1,39 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+namespace Tao
+{
+    public class DataDirectoriesBuilder : IImageBuilder
+    {
+        public BuildImage([NotNull] image : IImage) : void
+            requires image.DataDirectories != null && image.DataDirectories.Count() == 16
+        {            
+            def directories = image.DataDirectories;
+            
+            // Define the Import Directory Entry
+            directories[1].Rva = 0x217C;
+            directories[1].Size = 0x4f;
+            
+            // Define the Relocation Directory Entry
+            directories[5].Rva = 0x4000;
+            directories[5].Size = 0xC;
+            
+            // IAT Directory Entry
+            directories[12].Rva = 0x2000;
+            directories[12].Size = 0x8;
+            
+            // CLR Directory Entry
+            directories[14].Rva = 0x2008;
+            directories[14].Size = 0x48;
+        }
+    }
+}

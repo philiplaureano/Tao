@@ -99,6 +99,40 @@ namespace Tests
 
             _runner.RunTest(testImage, endPosition);
         }
+        public ShouldHaveMatchingDataDirectories() : void
+        {
+            def timeStamp = GetTimeStamp();
+            def testImage = fun(image : IImage) : void
+            {
+                def directories = image.DataDirectories;
+                
+                // Match the Import Directory entry
+                directories[1].Rva.ShouldBeEqualTo(0x217C, "Wrong Import Directory RVA");
+                directories[1].Size.ShouldBeEqualTo(0x4F, "Wrong Import Directory Size");
+                
+                // Match the Relocation Directory entry
+                directories[5].Rva.ShouldBeEqualTo(0x4000, "Wrong Relocation Directory RVA");
+                directories[5].Size.ShouldBeEqualTo(0xC, "Wrong Relocation Directory Size");
+                
+                // Match the IAT directory entry
+                directories[12].Size.ShouldBeEqualTo(8, "Wrong IAT Directory size");
+                
+                // Match the CLR Data Directory entry
+                directories[14].Rva.ShouldBeEqualTo(0x2008, "Wrong CLR Data Directory RVA");
+                directories[14].Size.ShouldBeEqualTo(0x48, "Wrong CLR Data Directory Size");               
+            };
+            
+            def endPosition : uint = 0x16C;
+            AddImageSet(DosHeaderImageBuilder(), DosHeaderWriter());
+            AddImageSet(SkeletonCoffHeaderImageBuilder(timeStamp), CoffHeaderWriter());
+            AddBuilder(OptionalHeaderStandardFieldsBuilder());
+            AddBuilder(OptionalHeaderBuilder());
+            AddWriter(OptionalHeaderWriter());
+            
+            AddImageSet(DataDirectoriesBuilder(),DataDirectoryWriter());
+            
+            _runner.RunTest(testImage, endPosition);
+        }
         public ShouldHaveOptionalHeaderPE32SpecificFields() : void
         {            
             def timeStamp = GetTimeStamp();
