@@ -15,7 +15,7 @@ using Tao.Metadata;
 
 namespace Tao
 {
-    public class ImportAddressTableWriter : IWriter
+    public class ImportAddressTableWriter : IWriter, IImageWriter
     {    
         private _getHintNameTableRva : void -> uint;
         public this([NotNull] getHintNameTableRva : void -> uint)
@@ -34,6 +34,14 @@ namespace Tao
             writer.Write(0 :uint);
             
             startPosition;
+        }
+        
+        public Write([NotNull] image : IImage, [NotNull] outputStream : Stream) : uint
+            requires image.DataDirectories.Count() >= 12
+            requires image.DataDirectories[12].Rva > 0
+            requires image.DataDirectories[12].Size > 0
+        {
+            throw NotImplementedException();
         }
     }
 }

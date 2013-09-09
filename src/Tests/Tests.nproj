@@ -159,6 +159,10 @@
     <Compile Include="ImageGeneration\SkeletonImageGenerationTests.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ImageGeneration\SkeletonImageGenerationTests.TextSectionWriteTests.n">
+      <SubType>Code</SubType>
+      <DependentUpon>ImageGeneration\SkeletonImageGenerationTests.n</DependentUpon>
+    </Compile>
     <Compile Include="ImageTests.CLRMetadataReadTests.n">
       <SubType>Code</SubType>
       <DependentUpon>ImageTests.n</DependentUpon>

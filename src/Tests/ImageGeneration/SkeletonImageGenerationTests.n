@@ -17,7 +17,7 @@ using Tests.ImageGeneration;
 
 namespace Tests
 {
-    public class SkeletonImageGenerationTests
+    public partial class SkeletonImageGenerationTests
     {
         private mutable _runner : SkeletonImageGenerationTestRunner;
 
