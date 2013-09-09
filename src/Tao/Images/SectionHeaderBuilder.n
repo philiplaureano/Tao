@@ -1,0 +1,48 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+using Tao.Interfaces;
+namespace Tao
+{
+    public class SectionHeaderBuilder : IImageBuilder
+    {
+        public BuildImage([NotNull] image : IImage) : void
+            requires image.Sections != null
+        {
+            def sections = image.Sections;
+            def textSection = Section();
+
+            def textSectionHeader = SectionHeader();
+            textSectionHeader.Name = ".text";
+            textSectionHeader.VirtualSize = 0x1D4;
+            textSectionHeader.VirtualAddress = 0x2000;
+            textSectionHeader.SizeOfRawData = 0x200;
+            textSectionHeader.PointerToRawData = 0x200;
+            textSectionHeader.Characteristics = 0x60000020 :> SectionFlags;
+                
+            textSection.Header = textSectionHeader;
+
+            def relocSection = Section();
+            def relocSectionHeader = SectionHeader();
+            relocSectionHeader.Name = ".reloc";
+            relocSectionHeader.VirtualSize = 0xC;
+            relocSectionHeader.VirtualAddress = 0x4000;
+            relocSectionHeader.SizeOfRawData = 0x200;
+            relocSectionHeader.PointerToRawData = 0x400;
+            relocSectionHeader.Characteristics = 0x42000040 :> SectionFlags;
+            
+            relocSection.Header = relocSectionHeader;
+
+            sections.Add(textSection);
+            sections.Add(relocSection);
+        }
+    }
+}

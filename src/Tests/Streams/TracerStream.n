@@ -39,7 +39,7 @@ namespace Tests
             def startPosition = _outputStream.Position;
 
             base.Write(buffer, offset, count);
-
+            
             def endPosition = _outputStream.Position :> uint;                        
             when(ShouldCompare(buffer, startPosition :> uint, endPosition))
             {

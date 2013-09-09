@@ -63,6 +63,7 @@ namespace Tests
 
             def coffHeaderEndPosition : uint = 0x98;
             AddImageSet(DosHeaderImageBuilder(), DosHeaderWriter());
+            AddBuilder(SectionHeaderBuilder());
             AddImageSet(SkeletonCoffHeaderImageBuilder(timeStamp), CoffHeaderWriter());
             _runner.RunTest(testImage, coffHeaderEndPosition);
         }
@@ -94,6 +95,7 @@ namespace Tests
 
             def endPosition : uint = 0xB0;
             AddImageSet(DosHeaderImageBuilder(), DosHeaderWriter());
+            AddBuilder(SectionHeaderBuilder());
             AddImageSet(SkeletonCoffHeaderImageBuilder(timeStamp), CoffHeaderWriter());
             AddImageSet(OptionalHeaderStandardFieldsBuilder(), OptionalHeaderStandardFieldsWriter());
 
@@ -124,12 +126,13 @@ namespace Tests
             
             def endPosition : uint = 0x16C;
             AddImageSet(DosHeaderImageBuilder(), DosHeaderWriter());
+            AddBuilder(SectionHeaderBuilder());
             AddImageSet(SkeletonCoffHeaderImageBuilder(timeStamp), CoffHeaderWriter());
             AddBuilder(OptionalHeaderStandardFieldsBuilder());
             AddBuilder(OptionalHeaderBuilder());
             AddWriter(OptionalHeaderWriter());
             
-            AddImageSet(DataDirectoriesBuilder(),DataDirectoryWriter());
+            AddImageSet(DataDirectoriesBuilder(), DataDirectoryWriter());
             
             _runner.RunTest(testImage, endPosition);
         }
@@ -165,6 +168,7 @@ namespace Tests
 
             def endPosition : uint = 0xB0;
             AddImageSet(DosHeaderImageBuilder(), DosHeaderWriter());
+            AddBuilder(SectionHeaderBuilder());
             AddImageSet(SkeletonCoffHeaderImageBuilder(timeStamp), CoffHeaderWriter());
             AddBuilder(OptionalHeaderStandardFieldsBuilder());
             AddBuilder(OptionalHeaderBuilder());
@@ -173,6 +177,48 @@ namespace Tests
             _runner.RunTest(testImage, endPosition);
         }
 
+        public ShouldHaveSectionHeaders() : void
+        {
+            def timeStamp = GetTimeStamp();
+            def testImage = fun(image : IImage) : void
+            {
+                def sections = image.Sections;
+                sections.ShouldBeNotNull("There should be some sections here");
+                sections.Count().ShouldBeEqualTo(2, "There should be two sections here");
+                
+                def headers = sections.Select(s=>s.Header).ToArray();
+                
+                def textHeader = headers[0];
+                textHeader.Name.ShouldBeEqualTo(".text", "Wrong Section Header Name");
+                textHeader.VirtualSize.ShouldBeEqualTo(0x1D4, "Wrong VirtualSize");
+                textHeader.VirtualAddress.ShouldBeEqualTo(0x2000, "Wrong VirtualAddress");
+                textHeader.SizeOfRawData.ShouldBeEqualTo(0x200, "Wrong RawSize");
+                textHeader.PointerToRawData.ShouldBeEqualTo(0x200, "Wrong RawAddress");
+                (textHeader.Characteristics :> uint).ShouldBeEqualTo(0x60000020, "Wrong Characteristics");
+                
+                def relocHeader = headers[1];
+                relocHeader.Name.ShouldBeEqualTo(".reloc", "Wrong Section Header Name");
+                relocHeader.VirtualSize.ShouldBeEqualTo(0xC, "Wrong VirtualSize");
+                relocHeader.VirtualAddress.ShouldBeEqualTo(0x4000, "Wrong VirtualAddressSize");
+                relocHeader.SizeOfRawData.ShouldBeEqualTo(0x200, "Wrong RawSize");
+                relocHeader.PointerToRawData.ShouldBeEqualTo(0x400, "Wrong RawAddress");                                
+                (relocHeader.Characteristics :> uint).ShouldBeEqualTo(0x42000040, "Wrong Characteristics");
+                
+            };
+            
+            def endPosition : uint = 0x1A0;
+            
+            AddImageSet(DosHeaderImageBuilder(), DosHeaderWriter());
+            AddBuilder(SectionHeaderBuilder());
+            AddImageSet(SkeletonCoffHeaderImageBuilder(timeStamp), CoffHeaderWriter());
+            AddBuilder(OptionalHeaderStandardFieldsBuilder());
+            AddBuilder(OptionalHeaderBuilder());
+            AddWriter(OptionalHeaderWriter());
+            AddImageSet(DataDirectoriesBuilder(), DataDirectoryWriter());
+            AddWriter(SectionHeaderWriter());
+            
+            _runner.RunTest(testImage, endPosition);
+        }
         private GetTimeStamp() : DateTime
         {
             def seconds : uint = 0x4AD286DD;

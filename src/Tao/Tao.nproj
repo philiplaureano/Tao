@@ -241,6 +241,9 @@
     <Compile Include="Images\SectionHeader.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Images\SectionHeaderBuilder.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Images\SectionHeaderReader.n">
       <SubType>Code</SubType>
     </Compile>

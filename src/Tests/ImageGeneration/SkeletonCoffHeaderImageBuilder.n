@@ -20,13 +20,5 @@ namespace Tests.ImageGeneration
         {
             base(timeStamp);
         }        
-        protected override ModifyCreatedImage([NotNull] image : IImage) : void
-            requires image.Sections != null
-        {
-            // Add two sections to be consistent with the number of sections specified in the Coff Header
-            def sections = image.Sections;
-            sections.Add(Section());
-            sections.Add(Section());
-        }
     }
 }
