@@ -77,6 +77,13 @@ namespace Tests.ImageGeneration
             // Write the image
             writer.Write(image, tracerStream);
             
+            // Dump the images if the match fails
+            when(!outputStream.Matches(tracerStream, 0, expectedLength))
+            {
+                def dumpDirectory = @"..\..\BinaryDumps";
+                outputStream.WriteAllBytesTo(Path.Combine(dumpDirectory, "originalbinary.exe"));
+                outputStream.WriteAllBytesTo(Path.Combine(dumpDirectory, "forgedbinary.exe"));
+            }
             // Compare the output stream with the tracer stream
             // all the way up to the last expected byte written
             outputStream.ShouldMatch(tracerStream, expectedLength);

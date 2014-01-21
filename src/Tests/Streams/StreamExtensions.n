@@ -220,7 +220,8 @@ namespace Tests
             {
                 NUnit.Framework.Assert.Fail(failureMessage, args);
             }
-        }
+        }        
+        
         public static Matches([NotNull] this currentStream : Stream, [NotNull] otherStream : Stream, startPosition : uint, length : uint) : bool
         requires startPosition <= currentStream.Length
         {

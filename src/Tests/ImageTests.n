@@ -344,7 +344,7 @@ namespace Tests
                 assert expectedOptionalHeaderData.GetHash() equals actualOptionalHeaderData.GetHash() otherwiseprint "Invalid Optional Header";
             }
         }    
-        public ShouldBeAbleToRoundTripAnEntire64BitImage() : void
+        public ignored ShouldBeAbleToRoundTripAnEntire64BitImage() : void
         {
             def imageFile = @"..\..\SampleBinaries\SamplePE32PlusApp.exe";
             def outputFile = "output64.exe";
